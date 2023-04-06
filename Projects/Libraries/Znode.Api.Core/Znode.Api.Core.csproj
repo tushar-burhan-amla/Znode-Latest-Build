@@ -217,7 +217,7 @@
       <HintPath>..\..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
     </Reference>
     <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Znode.Libraries.Framework.Business.9.7.5\lib\net48\Znode.Libraries.Framework.Business.dll</HintPath>
+      <HintPath>..\..\Znode.Engine.Admin\bin\Znode.Libraries.Framework.Business.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -745,6 +745,10 @@
     <ProjectReference Include="..\ZNode.Libraries.Data\Znode.Libraries.Data.csproj">
       <Project>{786f7274-2f78-4282-b91c-978cb79fb2f3}</Project>
       <Name>Znode.Libraries.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZNode.Libraries.ECommerce.Entities\Znode.Libraries.ECommerce.Entities.csproj">
+      <Project>{C0E80BD4-5D88-4B0B-9F2F-23D51C2F973A}</Project>
+      <Name>Znode.Libraries.ECommerce.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\ZNode.Libraries.ECommerce.ShoppingCart\Znode.Libraries.ECommerce.ShoppingCart.csproj">
       <Project>{A001D843-7AC0-456E-BBCA-23737091F804}</Project>
