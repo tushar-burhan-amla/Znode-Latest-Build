@@ -1,0 +1,193 @@
+﻿@model Znode.Engine.Admin.ViewModels.ContentContainerViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Models;
+@using Znode.Engine.Admin.Helpers
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateContentContainer", CancelUrl = "/ContentContainer/List", IsSaveCloseEnable = true, Callback = "ContentContainer.prototype.ValidateData" };
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "btnSaveNClose", ControlId = "btnSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "SaveCancel.prototype.SubmitForm('frmCreateContentContainer','ContentContainer.prototype.ValidateData', '/ContentContainer/List')" });
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "linkSave", ControlId = "dvSave", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "SaveCancel.prototype.SubmitForm('frmCreateContentContainer', 'ContentContainer.prototype.ValidateData')" });
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "btnPublish", ControlId = "PublishProductLink", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.ButtonPublish, OnClick = "$('#PublishContainer').modal('show');" });
+}
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgContentContainer">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelContentContainer)<em class="z-minus"></em><span>@Model.Name</span></h1>
+    <div class="pull-right btn-container">
+        <a href=@actionModel.CancelUrl class="btn-text-icon" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonBack</a>
+        @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+    </div>
+</div>
+
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateContentContainer" }))
+    {
+        <div class="content-widget-section">
+
+            <h3 class="section-heading margin-bottom-20 padding-bottom">@Admin_Resources.HeaderGeneralInformation</h3>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.ContainerKey, new { @data_test_selector = "lblContainerKey" })
+                    </div>
+                    <div class="control-md">
+                        <div id="areaList">
+                            @if (Model.ContentContainerId > 0)
+                            {
+                                @Html.TextBoxFor(m => m.ContainerKey, new { @data_test_selector = "txtContainerKey", @readonly = "readonly" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.ContainerKey, new { @data_test_selector = "txtContainerKey" })
+                            }
+                            @Html.ValidationMessageFor(model => model.ContainerKey, "", new { @data_test_selector = "valContainerKey", @id = "errorSpanContainerKey" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.Name, new { @class = "required", @data_test_selector = "lblContainerName" })
+                </div>
+                <div class="control-md">
+                    <div id="areaList">
+                        @Html.TextBoxFor(m => m.Name, new { @data_test_selector = "txtContainerName", @id = "ContainerName" })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @data_test_selector = "valContainerName" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.Tags, new { @data_test_selector = "lblContainerTag" })
+                </div>
+                <div class="control-md">
+                    <div id="areaList">
+                        @Html.TextAreaFor(m => m.Tags, new { @data_test_selector = "txtContainerTag" })
+                        @Html.ValidationMessageFor(model => model.Tags, "", new { @data_test_selector = "valContainerTag" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.FamilyCode, new { @data_test_selector = "lblFamilyName", @class = "required" })
+                </div>
+                <div class="control-md">
+                    <div id="areaList">
+                        @Html.TextBoxFor(m => m.FamilyName, new { @data_test_selector = "txtFamilyName", @readonly = "readonly" })
+
+                        @Html.ValidationMessageFor(model => model.FamilyCode, "", new { @data_test_selector = "valFamilyName" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        if (Model.ContentContainerId > 0)
+        {
+            <div class="form-group margin-top-25 padding-top-bottom">
+                <div class="col-sm-6 nopadding">
+                    <h3 class="section-heading content-widget-heading nopadding">@Admin_Resources.HeadingVariants</h3>
+                </div>
+                <div class="col-sm-6 nopadding">
+                    <a id="getVariants" onclick="ContentContainer.prototype.GetVariants();" class="btn-text btn-text-secondary dirtyignore pull-right padding-right" data-test-selector="btnGetVariants">@Admin_Resources.TextAddNewVariant</a>
+                </div>
+            </div>
+
+        }
+
+        @Html.HiddenFor(x => x.ContentContainerId)
+        @Html.HiddenFor(x => x.TargetPublishState)
+    }
+
+    <div class="col-sm-12 nopadding">
+        <div class="variant-list" id="variantListDiv"></div>
+        <div id="loader-variantList">@Html.Partial("_Loader")</div>
+    </div>
+</section>
+
+<div id="VariantPanel" class="aside-popup-panel modal-dialog " width="10000"></div>
+<div id="AssociatedGroups" class="col-sm-12 associated-group"></div>
+<div id="EditVariants" class="edit-variants aside-popup-panel modal-dialog modal-xl modal-xxl"></div>
+<div>
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                               new PopupModel()
+                               {
+                                   Title = @Admin_Resources.HeaderConfirmDelete,
+                                   Description = Admin_Resources.DeleteVariant,
+                                   ModalPopUpId = "DeleteContainerVariant",
+                                   Buttons = new List<PopUpButtonModel>() {
+                                   new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal", OnClickFunctionName = "ContentContainer.prototype.DeleteVariant(this)" },
+                                   }
+                               })
+
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+        new PopupModel()
+        {
+            Title = @Admin_Resources.ConfirmText,
+
+        Description = @Admin_Resources.DeactivateMultipleVariantConfirmationMessage,
+        ModalPopUpId = "PopUpConfirmDeactivate",
+        Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes = "data-dismiss=modal", OnClickFunctionName = "ContentContainer.prototype.ActivateDeactivateVariant('false')" } }
+    })
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+            new PopupModel()
+            {
+                Title = @Admin_Resources.ConfirmText,
+                Description = @Admin_Resources.ActivateMultipleVariantConfirmationMessage,
+                ModalPopUpId = "PopUpConfirmActivate",
+                Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes = "data-dismiss=modal", OnClickFunctionName = "ContentContainer.prototype.ActivateDeactivateVariant('true')" } }
+            })
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.ConfirmText,
+
+                        Description = @Admin_Resources.DeactivateMultipleVariantConfirmationMessage,
+                        ModalPopUpId = "PopUpConfirmDisable",
+                        Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes = "data-dismiss=modal", OnClickFunctionName = "ContentContainer.prototype.ActivateDeactivateVariant('false')" } }
+                    })
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+            new PopupModel()
+            {
+                Title = @Admin_Resources.ConfirmText,
+                Description = @Admin_Resources.ActivateMultipleVariantConfirmationMessage,
+                ModalPopUpId = "PopUpConfirmEnable",
+                Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes = "data-dismiss=modal", OnClickFunctionName = "ContentContainer.prototype.ActivateDeactivateVariant('true')" } }
+            })
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+    new PopupModel()
+    {
+        Title = @Admin_Resources.TitlePublishConfirm,
+        Description = @Admin_Resources.PublishContainerConfirmationMessage,
+        NoChoiceDescription = string.Format(@Admin_Resources.PublishConfirmationMessageNoChoice, "content container"),
+        ModalPopUpId = "PublishContainer",
+        ModalSizeClass = "model-smd dirtyignore",
+        AdditionalNote = @Admin_Resources.PublishContainerWithSpecificLocaleDisclaimerMessage,
+        InputFields = new List<PopupInputField>
+    {
+    new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = HelperMethods.GetAvailablePublishStates(), RequiredNumberOfItemsToDisplay = 2 }
+    },
+        Buttons = new List<PopUpButtonModel>() {
+            new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal", OnClickFunctionName = "ContentContainer.prototype.UpdateAndPublishContentContainer()" }
+                                                 }
+    })
+</div>
+@Html.Hidden("hdnEnableDisableActionURL")
+<script src="~/Scripts/References/DynamicValidation.js"></script>
+<script>
+    $(document).ready(function () {
+        ContentContainer.prototype.GetAssociatedAttributes();
+        ContentContainer.prototype.GetVariantsList();
+        $("#frmGlobalAttribute").find('.panel-collapse').first().attr("style", "display:block")
+    });
+</script>

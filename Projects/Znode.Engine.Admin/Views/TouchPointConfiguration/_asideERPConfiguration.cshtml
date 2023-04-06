@@ -1,0 +1,11 @@
+﻿@model string
+<aside>
+    <button type="button" id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(Model + " " + @ERP_Resources.TextLogStatus, "SchedulerLogList", "TouchPointConfiguration", new { @IsAllScheduler = true })</li>
+            <li>@Html.AuthorizedRawActionLink(Model + " " + @ERP_Resources.TitleERPConfiguratorList, "List", "TouchPointConfiguration", null)</li>
+            <li>@Html.AuthorizedRawActionLink(Model + " " + @ERP_Resources.TextConnection, "CreateConnectionAttributes", "ERPConnector", null)</li>
+        </ul>
+    </div>
+</aside>

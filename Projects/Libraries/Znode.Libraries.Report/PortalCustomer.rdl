@@ -1,0 +1,1659 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily">
+  <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="PortalCustomerDataSource">
+      <DataSourceReference>DevReportDataSource</DataSourceReference>
+      <rd:SecurityType>DataBase</rd:SecurityType>
+      <rd:DataSourceID>45364c5a-8b20-42a7-8486-de8a0ccb4e98</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="Portal">
+      <Query>
+        <DataSourceName>PortalCustomerDataSource</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@LoginUserId">
+            <Value>=Parameters!LoginUserId.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>ZnodeReport_GetUserAssociatedPortal</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="PortalId">
+          <DataField>PortalId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="StoreName">
+          <DataField>StoreName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="Customer">
+      <Query>
+        <DataSourceName>PortalCustomerDataSource</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@Portal">
+            <Value>=Parameters!Portal.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@StartDate">
+            <Value>=Parameters!StartDate.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@EndDate">
+            <Value>=Parameters!EndDate.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@FirstName">
+            <Value>=Parameters!FirstName.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@LastName">
+            <Value>=Parameters!LastName.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>SELECT ZU.* ,F.PortalId,F.StoreName
+FROM AspNetUsers ANU
+INNER JOIN AspNetUserRoles ANUR ON (ANUR.UserId=ANU.Id )
+INNER JOIN AspNetRoles ANR ON (ANR.Id = ANUR.RoleId)
+INNER JOIN ZnodeUser ZU ON (Zu.AspNetUserId = ANU.Id)
+INNER JOIN ZnodeUserPortal ZUP ON (ZUP.AspNetUserId = ANU.Id  AND ( ZUP.PortalId in(@Portal) OR ZUP.PortalId IS NULL))
+INNER JOIN AspNetZnodeUser ANZU ON (ANZU.AspNetZnodeUserId = ANU.UserName AND ( ANZU.PortalId = ZUP.PortalId OR ZUP.PortalId IS NULL ))
+INNER JOIN ZnodePortal AS F ON ZUP.PortalId = F.PortalId
+WHERE  (ANR.Name = 'Customer' OR ANR.TypeOfRole = 'B2B')
+AND Zu.CreatedDate BETWEEN @StartDate  AND @EndDate
+AND (Zu.FirstName like '%' + @FirstName + '%' OR @FirstName  = '' ) 
+AND (Zu.LastName like '%' + @LastName + '%' OR @LastName  = '' ) </CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="UserId">
+          <DataField>UserId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="AccountId">
+          <DataField>AccountId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="AspNetUserId">
+          <DataField>AspNetUserId</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FirstName">
+          <DataField>FirstName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LastName">
+          <DataField>LastName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="MiddleName">
+          <DataField>MiddleName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CustomerPaymentGUID">
+          <DataField>CustomerPaymentGUID</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BudgetAmount">
+          <DataField>BudgetAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="Email">
+          <DataField>Email</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PhoneNumber">
+          <DataField>PhoneNumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="EmailOptIn">
+          <DataField>EmailOptIn</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="ReferralStatus">
+          <DataField>ReferralStatus</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ReferralCommission">
+          <DataField>ReferralCommission</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ReferralCommissionTypeId">
+          <DataField>ReferralCommissionTypeId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="IsActive">
+          <DataField>IsActive</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="ExternalId">
+          <DataField>ExternalId</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CreatedBy">
+          <DataField>CreatedBy</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CreatedDate">
+          <DataField>CreatedDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ModifiedBy">
+          <DataField>ModifiedBy</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ModifiedDate">
+          <DataField>ModifiedDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="PortalId">
+          <DataField>PortalId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="StoreName">
+          <DataField>StoreName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Chart Name="Chart2">
+            <ChartCategoryHierarchy>
+              <ChartMembers>
+                <ChartMember>
+                  <Group Name="Chart2_CategoryGroup1">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!StoreName.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Group>
+                  <SortExpressions>
+                    <SortExpression>
+                      <Value>=Fields!StoreName.Value</Value>
+                    </SortExpression>
+                  </SortExpressions>
+                  <Label>=Fields!StoreName.Value</Label>
+                </ChartMember>
+              </ChartMembers>
+            </ChartCategoryHierarchy>
+            <ChartSeriesHierarchy>
+              <ChartMembers>
+                <ChartMember>
+                  <Label>Store Name</Label>
+                </ChartMember>
+              </ChartMembers>
+            </ChartSeriesHierarchy>
+            <ChartData>
+              <ChartSeriesCollection>
+                <ChartSeries Name="PortalId">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <X>=Fields!StoreName.Value</X>
+                        <Y>=Count(Fields!StoreName.Value)</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <FontSize>8pt</FontSize>
+                          <FontWeight>Normal</FontWeight>
+                          <Color>#29343b</Color>
+                        </Style>
+                        <Label>=(Fields!StoreName.Value)</Label>
+                        <Visible>true</Visible>
+                        <Position>Outside</Position>
+                        <ToolTip>=(Fields!StoreName.Value)</ToolTip>
+                      </ChartDataLabel>
+                      <ToolTip>=Fields!StoreName.Value &amp;"(" &amp; Count(Fields!StoreName.Value) &amp; ")"</ToolTip>
+                      <Style />
+                      <ChartMarker>
+                        <Style />
+                      </ChartMarker>
+                      <DataElementOutput>Output</DataElementOutput>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <CustomProperties>
+                    <CustomProperty>
+                      <Name>PieLabelStyle</Name>
+                      <Value>Outside</Value>
+                    </CustomProperty>
+                    <CustomProperty>
+                      <Name>CollectedSliceExploded</Name>
+                      <Value>false</Value>
+                    </CustomProperty>
+                  </CustomProperties>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+              </ChartSeriesCollection>
+            </ChartData>
+            <ChartAreas>
+              <ChartArea Name="Default">
+                <ChartCategoryAxes>
+                  <ChartAxis Name="Primary">
+                    <Style>
+                      <Border>
+                        <Color>Gainsboro</Color>
+                        <Style>None</Style>
+                      </Border>
+                      <FontSize>8pt</FontSize>
+                      <Color>#5c5c5c</Color>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                        <Color>#5c5c5c</Color>
+                      </Style>
+                    </ChartAxisTitle>
+                    <ChartMajorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>Dotted</Style>
+                        </Border>
+                      </Style>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                      <Length>0.5</Length>
+                    </ChartMinorTickMarks>
+                    <CrossAt>NaN</CrossAt>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                  <ChartAxis Name="Secondary">
+                    <Style>
+                      <Border>
+                        <Color>Gainsboro</Color>
+                        <Style>None</Style>
+                      </Border>
+                      <FontSize>8pt</FontSize>
+                      <Color>#5c5c5c</Color>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                        <Color>#5c5c5c</Color>
+                      </Style>
+                    </ChartAxisTitle>
+                    <ChartMajorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>Dotted</Style>
+                        </Border>
+                      </Style>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                      <Length>0.5</Length>
+                    </ChartMinorTickMarks>
+                    <CrossAt>NaN</CrossAt>
+                    <Location>Opposite</Location>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                </ChartCategoryAxes>
+                <ChartValueAxes>
+                  <ChartAxis Name="Primary">
+                    <Style>
+                      <Border>
+                        <Color>Gainsboro</Color>
+                        <Style>None</Style>
+                      </Border>
+                      <FontSize>8pt</FontSize>
+                      <Color>#5c5c5c</Color>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                        <Color>#5c5c5c</Color>
+                      </Style>
+                    </ChartAxisTitle>
+                    <ChartMajorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>Dotted</Style>
+                        </Border>
+                      </Style>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                      <Length>0.5</Length>
+                    </ChartMinorTickMarks>
+                    <CrossAt>NaN</CrossAt>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                  <ChartAxis Name="Secondary">
+                    <Style>
+                      <Border>
+                        <Color>Gainsboro</Color>
+                        <Style>None</Style>
+                      </Border>
+                      <FontSize>8pt</FontSize>
+                      <Color>#5c5c5c</Color>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                        <Color>#5c5c5c</Color>
+                      </Style>
+                    </ChartAxisTitle>
+                    <ChartMajorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>Dotted</Style>
+                        </Border>
+                      </Style>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                      <Length>0.5</Length>
+                    </ChartMinorTickMarks>
+                    <CrossAt>NaN</CrossAt>
+                    <Location>Opposite</Location>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                </ChartValueAxes>
+                <ChartThreeDProperties>
+                  <Enabled>true</Enabled>
+                </ChartThreeDProperties>
+                <Style>
+                  <BackgroundColor>#00ffffff</BackgroundColor>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                </Style>
+              </ChartArea>
+            </ChartAreas>
+            <ChartTitles>
+              <ChartTitle Name="Default">
+                <Caption>Customer Details (Pie)</Caption>
+                <Style>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                  <FontSize>9pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <TextAlign>Left</TextAlign>
+                  <VerticalAlign>Top</VerticalAlign>
+                  <Color>#29343b</Color>
+                </Style>
+                <Position>TopLeft</Position>
+              </ChartTitle>
+            </ChartTitles>
+            <Palette>Custom</Palette>
+            <ChartCustomPaletteColors>
+              <ChartCustomPaletteColor>#f9a94b</ChartCustomPaletteColor>
+              <ChartCustomPaletteColor>#fde9d2</ChartCustomPaletteColor>
+              <ChartCustomPaletteColor>#7c4a0f</ChartCustomPaletteColor>
+              <ChartCustomPaletteColor>#fcd4a5</ChartCustomPaletteColor>
+              <ChartCustomPaletteColor>#fabe78</ChartCustomPaletteColor>
+              <ChartCustomPaletteColor>#f7931e</ChartCustomPaletteColor>
+              <ChartCustomPaletteColor>#b96e17</ChartCustomPaletteColor>
+            </ChartCustomPaletteColors>
+            <ChartBorderSkin>
+              <Style>
+                <BackgroundColor>Gray</BackgroundColor>
+                <BackgroundGradientType>None</BackgroundGradientType>
+                <Color>White</Color>
+              </Style>
+            </ChartBorderSkin>
+            <ChartNoDataMessage Name="NoDataMessage">
+              <Caption>No Data Available</Caption>
+              <Style>
+                <BackgroundGradientType>None</BackgroundGradientType>
+                <FontWeight>Bold</FontWeight>
+                <TextAlign>General</TextAlign>
+                <VerticalAlign>Top</VerticalAlign>
+              </Style>
+            </ChartNoDataMessage>
+            <DataSetName>Customer</DataSetName>
+            <Top>0.18667in</Top>
+            <Left>1.03417in</Left>
+            <Height>3.58334in</Height>
+            <Width>6.03799in</Width>
+            <Style>
+              <Border>
+                <Color>#29343b</Color>
+                <Style>Solid</Style>
+              </Border>
+              <BackgroundGradientType>None</BackgroundGradientType>
+            </Style>
+          </Chart>
+          <Tablix Name="Tablix3">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>2.55086in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.55086in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.55086in</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.29167in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox14">
+                          <CanGrow>true</CanGrow>
+                          <UserSort>
+                            <SortExpression>=Fields!UserId.Value</SortExpression>
+                          </UserSort>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>User Id</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox14</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>#dddddd</Color>
+                              <Style>Solid</Style>
+                              <Width>0.25pt</Width>
+                            </Border>
+                            <TopBorder>
+                              <Color>#dddddd</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>#dddddd</Color>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>#dddddd</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>#dddddd</Color>
+                            </RightBorder>
+                            <BackgroundColor>#29343b</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>5pt</PaddingLeft>
+                            <PaddingRight>5pt</PaddingRight>
+                            <PaddingTop>5pt</PaddingTop>
+                            <PaddingBottom>5pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox16">
+                          <CanGrow>true</CanGrow>
+                          <UserSort>
+                            <SortExpression>=Fields!FirstName.Value</SortExpression>
+                          </UserSort>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>First Name</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox16</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>#dddddd</Color>
+                              <Style>Solid</Style>
+                              <Width>0.25pt</Width>
+                            </Border>
+                            <TopBorder>
+                              <Color>#dddddd</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>#dddddd</Color>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>#dddddd</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>#dddddd</Color>
+                            </RightBorder>
+                            <BackgroundColor>#29343b</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>5pt</PaddingLeft>
+                            <PaddingRight>5pt</PaddingRight>
+                            <PaddingTop>5pt</PaddingTop>
+                            <PaddingBottom>5pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox18">
+                          <CanGrow>true</CanGrow>
+                          <UserSort>
+                            <SortExpression>=Fields!LastName.Value</SortExpression>
+                          </UserSort>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Last Name</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox18</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>#dddddd</Color>
+                              <Style>Solid</Style>
+                              <Width>0.25pt</Width>
+                            </Border>
+                            <TopBorder>
+                              <Color>#dddddd</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>#dddddd</Color>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>#dddddd</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>#dddddd</Color>
+                            </RightBorder>
+                            <BackgroundColor>#29343b</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>5pt</PaddingLeft>
+                            <PaddingRight>5pt</PaddingRight>
+                            <PaddingTop>5pt</PaddingTop>
+                            <PaddingBottom>5pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.27084in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="UserId">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!UserId.Value</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>UserId</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>#dddddd</Color>
+                              <Style>Solid</Style>
+                              <Width>0.25pt</Width>
+                            </Border>
+                            <TopBorder>
+                              <Color>#dddddd</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>#dddddd</Color>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>#dddddd</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>#dddddd</Color>
+                            </RightBorder>
+                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#f9f9f9", "#fff")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>5pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="FirstName">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!FirstName.Value</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>FirstName</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>#dddddd</Color>
+                              <Style>Solid</Style>
+                              <Width>0.25pt</Width>
+                            </Border>
+                            <TopBorder>
+                              <Color>#dddddd</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>#dddddd</Color>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>#dddddd</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>#dddddd</Color>
+                            </RightBorder>
+                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#f9f9f9", "#fff")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>5pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="LastName">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!LastName.Value</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>LastName</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>#dddddd</Color>
+                              <Style>Solid</Style>
+                              <Width>0.25pt</Width>
+                            </Border>
+                            <TopBorder>
+                              <Color>#dddddd</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>#dddddd</Color>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>#dddddd</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>#dddddd</Color>
+                            </RightBorder>
+                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#f9f9f9", "#fff")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>5pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <FixedData>true</FixedData>
+                  <KeepWithGroup>After</KeepWithGroup>
+                  <RepeatOnNewPage>true</RepeatOnNewPage>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Details" />
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>Customer</DataSetName>
+            <Top>8.18625in</Top>
+            <Left>0.16403in</Left>
+            <Height>0.56251in</Height>
+            <Width>7.65258in</Width>
+            <ZIndex>1</ZIndex>
+            <Visibility>
+              <Hidden>= IIf (CountRows() &gt; 0, false, true)</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Chart Name="Chart1">
+            <ChartCategoryHierarchy>
+              <ChartMembers>
+                <ChartMember>
+                  <Group Name="Chart1_CategoryGroup">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!StoreName.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Group>
+                  <SortExpressions>
+                    <SortExpression>
+                      <Value>=Fields!StoreName.Value</Value>
+                    </SortExpression>
+                  </SortExpressions>
+                  <Label>=Fields!StoreName.Value</Label>
+                </ChartMember>
+              </ChartMembers>
+            </ChartCategoryHierarchy>
+            <ChartSeriesHierarchy>
+              <ChartMembers>
+                <ChartMember>
+                  <Label>Store Name</Label>
+                </ChartMember>
+              </ChartMembers>
+            </ChartSeriesHierarchy>
+            <ChartData>
+              <ChartSeriesCollection>
+                <ChartSeries Name="PortalId">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <X>=Fields!StoreName.Value</X>
+                        <Y>=Count(Fields!StoreName.Value)</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <FontSize>8pt</FontSize>
+                          <FontWeight>Normal</FontWeight>
+                          <Color>#29343b</Color>
+                        </Style>
+                        <UseValueAsLabel>true</UseValueAsLabel>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ToolTip>=Fields!StoreName.Value &amp;"(" &amp; Count(Fields!StoreName.Value) &amp; ")"</ToolTip>
+                      <Style />
+                      <ChartMarker>
+                        <Style />
+                      </ChartMarker>
+                      <DataElementOutput>Output</DataElementOutput>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+              </ChartSeriesCollection>
+            </ChartData>
+            <ChartAreas>
+              <ChartArea Name="Default">
+                <ChartCategoryAxes>
+                  <ChartAxis Name="Primary">
+                    <Style>
+                      <Border>
+                        <Color>Gainsboro</Color>
+                        <Style>None</Style>
+                      </Border>
+                      <FontFamily>Arial</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Color>#29343b</Color>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                        <Color>#5c5c5c</Color>
+                      </Style>
+                    </ChartAxisTitle>
+                    <ChartMajorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>Dotted</Style>
+                        </Border>
+                      </Style>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                      <Length>0.5</Length>
+                    </ChartMinorTickMarks>
+                    <CrossAt>NaN</CrossAt>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                  <ChartAxis Name="Secondary">
+                    <Style>
+                      <Border>
+                        <Color>Gainsboro</Color>
+                        <Style>None</Style>
+                      </Border>
+                      <FontSize>8pt</FontSize>
+                      <Color>#5c5c5c</Color>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                        <Color>#5c5c5c</Color>
+                      </Style>
+                    </ChartAxisTitle>
+                    <ChartMajorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>Dotted</Style>
+                        </Border>
+                      </Style>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                      <Length>0.5</Length>
+                    </ChartMinorTickMarks>
+                    <CrossAt>NaN</CrossAt>
+                    <Location>Opposite</Location>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                </ChartCategoryAxes>
+                <ChartValueAxes>
+                  <ChartAxis Name="Primary">
+                    <Style>
+                      <Border>
+                        <Color>Gainsboro</Color>
+                        <Style>None</Style>
+                      </Border>
+                      <FontFamily>Arial</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Color>#29343b</Color>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                        <Color>#5c5c5c</Color>
+                      </Style>
+                    </ChartAxisTitle>
+                    <ChartMajorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>#dddddd</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>Dotted</Style>
+                        </Border>
+                      </Style>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                      <Length>0.5</Length>
+                    </ChartMinorTickMarks>
+                    <CrossAt>NaN</CrossAt>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                  <ChartAxis Name="Secondary">
+                    <Style>
+                      <Border>
+                        <Color>Gainsboro</Color>
+                        <Style>None</Style>
+                      </Border>
+                      <FontSize>8pt</FontSize>
+                      <Color>#5c5c5c</Color>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                        <Color>#5c5c5c</Color>
+                      </Style>
+                    </ChartAxisTitle>
+                    <ChartMajorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>Dotted</Style>
+                        </Border>
+                      </Style>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                      <Length>0.5</Length>
+                    </ChartMinorTickMarks>
+                    <CrossAt>NaN</CrossAt>
+                    <Location>Opposite</Location>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                </ChartValueAxes>
+                <ChartThreeDProperties>
+                  <Enabled>true</Enabled>
+                </ChartThreeDProperties>
+                <Style>
+                  <BackgroundColor>#00ffffff</BackgroundColor>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                </Style>
+              </ChartArea>
+            </ChartAreas>
+            <ChartTitles>
+              <ChartTitle Name="Default">
+                <Caption>Customer Details (Bar) </Caption>
+                <Style>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                  <FontSize>9pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <TextAlign>Left</TextAlign>
+                  <VerticalAlign>Top</VerticalAlign>
+                  <Color>#29343b</Color>
+                </Style>
+                <Position>TopLeft</Position>
+              </ChartTitle>
+            </ChartTitles>
+            <Palette>Custom</Palette>
+            <ChartCustomPaletteColors>
+              <ChartCustomPaletteColor>#694417</ChartCustomPaletteColor>
+              <ChartCustomPaletteColor>#4b2c08</ChartCustomPaletteColor>
+              <ChartCustomPaletteColor>#7c4a0f</ChartCustomPaletteColor>
+              <ChartCustomPaletteColor>#797673</ChartCustomPaletteColor>
+              <ChartCustomPaletteColor>#f2880e</ChartCustomPaletteColor>
+            </ChartCustomPaletteColors>
+            <ChartBorderSkin>
+              <Style>
+                <BackgroundColor>Gray</BackgroundColor>
+                <BackgroundGradientType>None</BackgroundGradientType>
+                <Color>White</Color>
+              </Style>
+            </ChartBorderSkin>
+            <ChartNoDataMessage Name="NoDataMessage">
+              <Caption>No Data Available</Caption>
+              <Style>
+                <BackgroundGradientType>None</BackgroundGradientType>
+                <FontWeight>Bold</FontWeight>
+                <TextAlign>General</TextAlign>
+                <VerticalAlign>Top</VerticalAlign>
+              </Style>
+            </ChartNoDataMessage>
+            <DataSetName>Customer</DataSetName>
+            <Top>4.06167in</Top>
+            <Left>1.03417in</Left>
+            <Height>3.58334in</Height>
+            <Width>6.03799in</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Color>#29343b</Color>
+                <Style>Solid</Style>
+              </Border>
+              <BackgroundColor>White</BackgroundColor>
+              <BackgroundGradientType>None</BackgroundGradientType>
+            </Style>
+          </Chart>
+          <Textbox Name="Textbox22">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Customer Details List</Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox22</rd:DefaultName>
+            <Top>7.85451in</Top>
+            <Left>0.15917in</Left>
+            <Height>0.21875in</Height>
+            <Width>2.05208in</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox24">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>No Data </Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>Available</Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox24</rd:DefaultName>
+            <Top>8.91667in</Top>
+            <Left>3.40514in</Left>
+            <Height>0.25in</Height>
+            <Width>1.18971in</Width>
+            <ZIndex>4</ZIndex>
+            <Visibility>
+              <Hidden>=IIF(Parameters!StartDate.Value&gt;Parameters!EndDate.Value, True, IIF(CountRows("Customer") &lt; 1,False,True))</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox26">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Error: Start Date should be less than End Date</Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>Red</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox24</rd:DefaultName>
+            <Top>7.82326in</Top>
+            <Left>2.85306in</Left>
+            <Height>0.25in</Height>
+            <Width>4.41888in</Width>
+            <ZIndex>5</ZIndex>
+            <Visibility>
+              <Hidden>=IIF(Parameters!StartDate.Value &gt; Parameters!EndDate.Value, False, True)</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+        </ReportItems>
+        <Height>9.33334in</Height>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Body>
+      <Width>8in</Width>
+      <Page>
+        <PageHeader>
+          <Height>0.58in</Height>
+          <PrintOnFirstPage>true</PrintOnFirstPage>
+          <PrintOnLastPage>true</PrintOnLastPage>
+          <ReportItems>
+            <Rectangle Name="Report_Header">
+              <ReportItems>
+                <Textbox Name="Textbox3">
+                  <CanGrow>true</CanGrow>
+                  <KeepTogether>true</KeepTogether>
+                  <Paragraphs>
+                    <Paragraph>
+                      <TextRuns>
+                        <TextRun>
+                          <Value>Portal Based Customer Report</Value>
+                          <Style>
+                            <FontSize>9pt</FontSize>
+                            <FontWeight>Bold</FontWeight>
+                            <Color>White</Color>
+                          </Style>
+                        </TextRun>
+                      </TextRuns>
+                      <Style>
+                        <TextAlign>Right</TextAlign>
+                      </Style>
+                    </Paragraph>
+                  </Paragraphs>
+                  <rd:DefaultName>Textbox1</rd:DefaultName>
+                  <Top>0.08694in</Top>
+                  <Left>2.56403in</Left>
+                  <Height>0.21528in</Height>
+                  <Width>5.28125in</Width>
+                  <Style>
+                    <Border>
+                      <Style>None</Style>
+                    </Border>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingRight>2pt</PaddingRight>
+                    <PaddingTop>2pt</PaddingTop>
+                    <PaddingBottom>2pt</PaddingBottom>
+                  </Style>
+                </Textbox>
+                <Image Name="Image1">
+                  <Source>Embedded</Source>
+                  <Value>multifrontlogo</Value>
+                  <Sizing>FitProportional</Sizing>
+                  <Top>0.12861in</Top>
+                  <Left>0.19271in</Left>
+                  <Height>0.17361in</Height>
+                  <Width>1.31706in</Width>
+                  <ZIndex>1</ZIndex>
+                  <Style>
+                    <Border>
+                      <Style>None</Style>
+                    </Border>
+                  </Style>
+                </Image>
+              </ReportItems>
+              <KeepTogether>true</KeepTogether>
+              <Height>0.41889in</Height>
+              <Width>8in</Width>
+              <Style>
+                <Border>
+                  <Color>CornflowerBlue</Color>
+                  <Style>None</Style>
+                </Border>
+                <BackgroundColor>#29343b</BackgroundColor>
+              </Style>
+            </Rectangle>
+          </ReportItems>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </PageHeader>
+        <PageFooter>
+          <Height>0.3in</Height>
+          <PrintOnFirstPage>true</PrintOnFirstPage>
+          <PrintOnLastPage>true</PrintOnLastPage>
+          <ReportItems>
+            <Textbox Name="PageNumber">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>="Page " &amp; Globals!PageNumber</Value>
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                        <FontWeight>Normal</FontWeight>
+                        <Color>White</Color>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>PageNumber</rd:DefaultName>
+              <Top>0.01667in</Top>
+              <Left>6.82583in</Left>
+              <Height>0.25in</Height>
+              <Width>1in</Width>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+          </ReportItems>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <BackgroundColor>#29343b</BackgroundColor>
+          </Style>
+        </PageFooter>
+        <LeftMargin>0.2084in</LeftMargin>
+        <RightMargin>0.2084in</RightMargin>
+        <TopMargin>0.2084in</TopMargin>
+        <BottomMargin>0.2084in</BottomMargin>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="LoginUserId">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>0</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>UserId</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="StartDate">
+      <DataType>DateTime</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=DateSerial(YEAR(TODAY), MONTH(TODAY), 1)</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>StartDate</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="EndDate">
+      <DataType>DateTime</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=DateSerial(Year(TODAY), Month(TODAY)+1, 0)</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>EndDate</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Portal">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>Portal</DataSetName>
+          <ValueField>PortalId</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Prompt>Store *</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>Portal</DataSetName>
+          <ValueField>PortalId</ValueField>
+          <LabelField>StoreName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+    <ReportParameter Name="FirstName">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>First Name</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="LastName">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Last Name</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>4</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+      <CellDefinitions>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>StartDate</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>EndDate</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>3</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>Portal</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>FirstName</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>LastName</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>LoginUserId</ParameterName>
+        </CellDefinition>
+      </CellDefinitions>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
+  <EmbeddedImages>
+    <EmbeddedImage Name="logo">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+    <EmbeddedImage Name="multifrontlogored">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+    <EmbeddedImage Name="multifrontlogo">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>6b2cf7bb-a3b9-4942-8833-ee19683cfeee</rd:ReportID>
+</Report>

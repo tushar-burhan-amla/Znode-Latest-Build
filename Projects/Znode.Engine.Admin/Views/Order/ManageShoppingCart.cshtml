@@ -1,0 +1,167 @@
+﻿@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.Helpers;
+@model CartViewModel
+
+@{
+    int OrderId = HelperUtility.IsNotNull(Request.UrlReferrer) ? Convert.ToInt32(HttpUtility.ParseQueryString(Request.UrlReferrer.Query)["OmsOrderId"]) : 0;
+    string _display = OrderId > 1 ? "display:block;" : "display:none;";
+    string _displayPartialRefund = (Model?.ShoppingCartItems?.Any(x => x.PartialRefundAmount > 0)).GetValueOrDefault() ? "display:block;" : "display:none;";
+    string _displayTh = OrderId > 1 ? "display:none;" : "display:block;";
+    bool _IsPartialRefund = (Model?.ShoppingCartItems?.Any(x => x.PartialRefundAmount > 0)).GetValueOrDefault();
+    int cartCount = (Model.ShoppingCartItems?.Count).GetValueOrDefault();
+    List<CartItemViewModel> cartItemViewModel = Model.ShoppingCartItems?.ToList();
+    var consolidatedCartItems = cartItemViewModel.AsEnumerable()?.Reverse()?.GroupBy(x => new { x.SKU, x.GroupId })?.Select(c => new CartItemGroupListViewModel
+    {
+        SKU = c.Key.SKU,
+        GroupId = c.Key.GroupId,
+        Children = c.ToList(),
+        Sequence = c.FirstOrDefault().GroupSequence,
+    }).ToList();
+    cartItemViewModel?.ToList()?.ForEach(c => c.IsOrderPartialRefund = _IsPartialRefund);
+}
+<div id="divShoppingCart">
+
+    @*Don't delete this code
+        @if (Model.UserId > 0)
+        {
+            if (Model?.OrderState != AdminConstants.SHIPPED)
+                {
+                    <div id="productListDiv" data-test-selector="divProductList" style="" class="pull-right margin-top-15 margin-right-15 margin-bottom-15 margin-left-20">
+                        <button type="button" id="addProducts" data-test-selector="linkAddProducts" onclick="Order.prototype.GetProductsList();" class="btn-text btn-text-secondary dirtyignore">@Admin_Resources.LabelAddProduct</button>
+                    </div>
+                }
+        }*@
+
+    <div id="layout-cart">
+        <div class="panel-heading">
+            <h4 class="panel-title panel-title-edit" data-test-selector="hdgItemsOrdered">@Admin_Resources.LabelProductsOrdered</h4>
+        </div>
+        @* TO DO : This code is temporary. *@
+        @if (Model?.ShoppingCartItems?.Any() ?? false)
+        {
+            <div class="col-xs-12 cart-products nopadding margin-bottom">
+                <div class="table" data-test-selector="tblItemsOrdered">
+                    <div class="col-xs-12 nopadding table-head">
+                        <ul class="col-xs-12 nopadding">
+                            <li class="imageicon sp-image" data-test-selector="tblHdImage">
+                                <span data-test-selector="spnImage">@Admin_Resources.LabelImage</span>
+                            </li>
+                            <li class="sp-sku" data-test-selector="tblHdSKU">
+                                <span data-test-selector="spnSKU">@Admin_Resources.LabelSKU</span>
+                            </li>
+                            <li class="sp-product-name" data-test-selector="tblHdProduct">
+                                <span data-test-selector="spnProduct">@Admin_Resources.LabelProduct</span>
+                            </li>
+                            <li class="sp-status" data-test-selector="tblHdStatus">
+                                <span data-test-selector="spnStatus">@Admin_Resources.LabelStatus</span>
+                            </li>
+                            <li class="sp-tracking-number" data-test-selector="tblHdTrackingNumber">
+                                <span data-test-selector="spnTrackingNumber">@Admin_Resources.LabelTrackingNumber</span>
+                            </li>
+                            <li data-test-selector="tblHdReturnShipping" style="display:none;" class="sp-shipping-status" id="returnShipping">
+                                <span data-test-selector="spnReturnShipping">@Admin_Resources.LabelReturnShipping</span>
+                            </li>
+                            <li data-test-selector="tblHdReason" style="display:none;" id="reasonForReturn" class="sp-returned-reason">
+                                <span data-test-selector="spnReason">@Admin_Resources.LabelReason</span>
+                            </li>
+                            <li data-test-selector="tblHdUnitPrice" class="table-unitprice sp-unit-price">
+                                <span data-test-selector="spnUnitPrice">@Admin_Resources.LabelUnitPrice</span>
+                            </li>
+                            <li data-test-selector="tblHdQuantity" class="table-quantity sp-quantity">
+                                <span data-test-selector="spnQuantity">@Admin_Resources.LabelQuantity</span>
+                            </li>
+                            <li data-test-selector="tblHdPartialRefund" id="partialRefund" style="@_displayPartialRefund;width:100px">
+                                <span data-test-selector="spnPartialRefund">@Admin_Resources.LabelPartialRefund</span>
+                            </li>
+                            <li data-test-selector="tblHdShipping" class="sp-shipping">
+                                <span data-test-selector="spnShipping">@Admin_Resources.LabelShipping</span>
+                            </li>
+                            <li data-test-selector="tblHdTotal" class="table-total sp-total">
+                                <span data-test-selector="spnTotal">@Admin_Resources.LabelTotal</span>
+                            </li>
+                            <li class="sp-actions" data-test-selector="tblHdAction">
+                                <span data-test-selector="spnAction">@Admin_Resources.LabelAction</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <ul class="col-xs-12 table-body">
+                        @if (Model.ShoppingCartItems != null)
+                        {
+                            foreach (CartItemGroupListViewModel cartItemGroup in consolidatedCartItems.OrderBy(x => x.Sequence))
+                            {
+                                if (cartItemGroup?.Children != null)
+                                {
+                                    if (cartItemGroup?.Children.Count == 1)
+                                    {
+
+                                        string guid = cartItemGroup?.Children.FirstOrDefault()?.ExternalId;
+                                        <li class="cartItem" onchange="Order.prototype.UpdateCartItem('@guid')" data-cart-lineitem="@guid">
+                                            <ul class="line-items">
+                                                @Html.Partial("_ManageCartRow", cartItemGroup.Children.FirstOrDefault())
+                                            </ul>
+                                        </li>
+                                    }
+                                    else if (cartItemGroup?.Children.Count > 1)
+                                    {
+                                        <li>
+                                            <ul class="item-variant">
+
+                                                @foreach (CartItemViewModel variation in cartItemGroup.Children.OrderBy(x => x.Sequence))
+                                                {
+                                                    <li class="cartItem" onchange="Order.prototype.UpdateCartItem('@variation.ExternalId')" data-cart-lineitem="@variation.ExternalId">
+                                                        <ul class="line-items">
+                                                            @Html.Partial("_ManageCartRow", variation)
+                                                        </ul>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-sm-12 nopadding cart-summary">
+                <p class="text-center margin-top-bottom no-record">@Admin_Resources.TextNoOrderedItems</p>
+            </div>
+
+        }
+        <div class="cart-total col-sm-6 col-md-6 col-lg-5 nopadding pull-right margin-bottom manage-order-total" id="divTotal">
+            @Html.Partial("_ManageTotalTable", Model)
+        </div>
+
+        @Html.Hidden("hdnTotalAmt", Model.Total)
+        @Html.Hidden("hdnCurrencyCode", Model.CurrencyCode)
+        @Html.Hidden("isGiftcardValid", Model.GiftCardValid)
+        @Html.Hidden("hdnShoppingCartCount", Model.ShoppingCartItems?.Count)
+        @Html.Hidden("hdnIsAnyProductOutOfStock", Model.ShoppingCartItems?.Any(b => b.InsufficientQuantity))
+        @Html.HiddenFor(m => m.FreeShipping, new { @id = "cartFreeShipping" })
+        @Html.Hidden("hdnHasError", Model.HasError)
+        @Html.Hidden("hdnShippiingErrorMessage", Model.ShippingErrorMessage)
+        @Html.Hidden("hdnOverDueAmount", Model.OverDueAmount)
+        <div>
+            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                new PopupModel()
+                                {
+                                    Title = "Cancle Order",
+                                    Description = "Item can not be returned. Please Cancel the order.",
+                                    ModalPopUpId = "CancleOrder",
+                                })
+        </div>
+    </div>
+</div>
+@Html.Hidden("hdnCartCount", cartCount)
+@Html.HiddenFor(model => model.LocaleId)
+<script>
+    $(document).ready(function () {
+        Order.prototype.FreezManageOrderForCartCount();
+    });
+</script>

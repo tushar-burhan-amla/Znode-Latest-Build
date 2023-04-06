@@ -1,0 +1,92 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model BrandListViewModel
+@using Znode.Engine.Admin.Models
+@{
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div id="BrandAssociatedProductList">
+    <div id="@Model.GridModel.FrontObjectName">
+        <div class="col-sm-12 title-container">
+            <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelBrand)<em class="z-minus"></em><span>@Model.BrandName</span></h1>
+            <div class="pull-right btn-container">
+                @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "List", "Brand", null, new { @class = "btn-text-icon" })
+                <div class="pull-right padding-left">
+                    @Html.AuthorizedPrototypeRawActionLink(PIM_Resources.AssociateProducts, "UnAssociatedProductList", "Brand", new { @class = "btn-text btn-text-secondary", @id = "addTaxClassSKU", onclick = "ZnodeBase.prototype.BrowseAsidePoupPanel('/PIM/Brand/UnAssociatedProductList?brandCode=" + Model.BrandCode + "&localeId=" + Model.LocaleId + "','divBrandProductListPopup')" })
+                </div>
+            </div>
+        </div>
+        <div class="main-wrapper">
+            <!--Left Panel-->
+            <aside>
+                <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+                <div class="slide-container">
+                    <ul class="aside-panel">
+                        <li>@Html.AuthorizedRawActionLink(@PIM_Resources.TitleBrand, "Edit", "Brand", new { area = "PIM", BrandId = Model.BrandId }, new { @data_test_selector = "linkBrands" })</li>
+                        <li>@Html.AuthorizedRawActionLink(@PIM_Resources.TitleAssociatedProducts, "AssociatedProductList", "Brand", new { area = "PIM", brandId = Model.BrandId, brandCode = Model.BrandCode, brandName = Server.UrlEncode(Model.BrandName) }, new { @data_test_selector = "linkAssociatedProducts" })</li>
+                        @*<li>@Html.AuthorizedRawActionLink(@Admin_Resources.TitleAssociatedStores, "AssociatedStoreList", "Brand", new { area = "PIM", BrandId = Model.BrandId, brandCode = Model.BrandCode, brandName = Server.UrlEncode(Model.BrandName), localeId = Model.LocaleId }, null)</li>*@
+                    </ul>
+                </div>
+            </aside>
+            <!--Main Container-->
+            <section class="main-container">
+                @using (Ajax.BeginForm("AssociatedProductList", "Brand", new { area = "PIM", brandId = Model.BrandId, localeId = Model.LocaleId, brandCode = Model.BrandCode, brandName = Server.UrlEncode(Model.BrandName) }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+                {
+                    <div id="filterComponent">
+                        @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                    </div>
+                }
+                <div class="col-sm-12 list-container">
+                    @{
+                        @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                    }
+                </div>
+
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderConfirmDelete,
+
+                        Description = @Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "BrandAssociatedPopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Brand.prototype.UnassociateBrandProduct(this)"}
+                         }
+                    })
+            </section>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.BrandId)
+    @Html.HiddenFor(model => model.BrandCode)
+    @Html.HiddenFor(model => model.LocaleId)
+    <input type="hidden" id="BrandName" value='@Server.UrlEncode(Model.BrandName)' />
+</div>
+<div id="divBrandProductListPopup" class="aside-popup-panel modal-dialog modal-xl"></div>
+
+<script>
+    $(function () {
+        $("a[data-managelink='Delete']").each(function () {
+            var _onclick = $(this).attr("onclick");
+            _onclick = _onclick.replace('brand=@Model.BrandName', 'AttributeValue=@string.Empty')
+            _onclick = _onclick.replace('brand=', 'AttributeValue=@Model.BrandName')
+            $(this).attr("onclick", _onclick);
+        })
+    })
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("a[data-managelink='Delete']").each(function () {
+            var _onclick = $(this).attr("onclick");
+            _onclick = _onclick.replace('attributeValue=@Model.BrandCode', 'attributeValue=@string.Empty')
+            _onclick = _onclick.replace('attributeValue=', 'attributeValue=@Model.BrandCode')
+            $(this).attr("onclick", _onclick);
+        })
+    })
+</script>
+<script type="text/javascript">
+    jQuery('img').each(function (e) {
+        if ($(this).attr('src') == "")
+            this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>

@@ -1,0 +1,20 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model CartViewModel
+@*
+    This partial will be used on the cart and cart review page.
+    When those pages loads, this partial should loop through any applied promo codes
+    Even if there are no applied codes, this partial needs to be on the page as front-end handling may need it
+*@
+
+
+<div class="col-12 p-0 cart-promocode-status">
+    @* Loop start *@
+    @if (Model?.Coupons?.Count > 0)
+    {
+        foreach (CouponViewModel coupon in Model.Coupons)
+        {
+            <p @(coupon.CouponApplied ? "class=success-msg padding-top" : "class=error-msg") id="promocodeerror"><a data-coupon="@coupon.Code" class="rmvCoupon"><i class="close-icon"></i>&nbsp;</a> <strong>@coupon.Code</strong> - @coupon.PromotionMessage</p>
+        }
+    }
+    @* Loop end *@
+</div>

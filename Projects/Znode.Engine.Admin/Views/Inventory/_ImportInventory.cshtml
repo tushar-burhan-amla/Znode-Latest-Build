@@ -1,0 +1,52 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model InventorySKUViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCSS", Callback = "Theme.prototype.ValidateCSSFileType" };
+}
+
+<div class="modal-dialog modal-md">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" id="btnClosePopup" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+            <h4 class="modal-title">@Admin_Resources.ButtonImport</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group" id="divSelectTemplate">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.TemplateId)
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.TemplateId, new SelectList(Model.TemplateTypeList, "Value", "Text"), new { id = "templateList" })
+                        <span class="field-validation-error" id="error-templatename"></span>
+                        @Html.Hidden("ChangedFileName")
+                        @Html.Hidden("ImportHeadId")
+                        @Html.Hidden("ImportType")
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.FilePath, new { @class = "required" })
+                        <span class="sub">@Admin_Resources.SelectCSVFileInstructionText</span>
+                    </div>
+                    <div class="control-md">
+                        @Html.EditorFor(model => model.FilePath, new { htmlAttributes = new { @onchange = "GetFileHeaders()" } })
+                        <span class="field-validation-error" id="error-file-upload"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-md control-non">
+                        <button type="button" id="btnImportInventory" class="btn-text btn-margin-left" onclick="Inventory.prototype.ImportInventory();">@Admin_Resources.ButtonImport</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

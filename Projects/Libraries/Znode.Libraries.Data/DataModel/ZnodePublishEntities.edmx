@@ -1,0 +1,1938 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Znode_PublishModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ZnodePublishAddonEntity">
+          <Key>
+            <PropertyRef Name="PublishAddonEntityId" />
+          </Key>
+          <Property Name="PublishAddonEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="ZnodeProductId" Type="int" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="int" Nullable="false" />
+          <Property Name="AssociatedZnodeProductId" Type="int" Nullable="false" />
+          <Property Name="AssociatedProductDisplayOrder" Type="int" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="GroupName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DisplayType" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsRequired" Type="bit" Nullable="false" />
+          <Property Name="RequiredType" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishBlogNewsEntity">
+          <Key>
+            <PropertyRef Name="PublishBlogNewsEntityId" />
+          </Key>
+          <Property Name="PublishBlogNewsEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="BlogNewsId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="MediaId" Type="int" />
+          <Property Name="CMSContentPagesId" Type="int" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="BlogNewsType" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="BlogNewsTitle" Type="nvarchar" MaxLength="1200" />
+          <Property Name="BodyOverview" Type="varchar(max)" />
+          <Property Name="Tags" Type="nvarchar" MaxLength="2000" />
+          <Property Name="BlogNewsContent" Type="nvarchar(max)" />
+          <Property Name="MediaPath" Type="varchar" MaxLength="300" />
+          <Property Name="IsBlogNewsActive" Type="bit" Nullable="false" />
+          <Property Name="IsAllowGuestComment" Type="bit" Nullable="false" />
+          <Property Name="ActivationDate" Type="datetime" />
+          <Property Name="ExpirationDate" Type="datetime" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="BlogNewsCode" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishBundleProductEntity">
+          <Key>
+            <PropertyRef Name="PublishBundleProductEntityId" />
+          </Key>
+          <Property Name="PublishBundleProductEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="ZnodeProductId" Type="int" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="int" Nullable="false" />
+          <Property Name="AssociatedZnodeProductId" Type="int" Nullable="false" />
+          <Property Name="AssociatedProductDisplayOrder" Type="int" Nullable="false" />
+          <Property Name="AssociatedProductBundleQuantity" Type="int" />
+        </EntityType>
+        <EntityType Name="ZnodePublishCatalogAttributeEntity">
+          <Key>
+            <PropertyRef Name="PublishCatalogAttributeEntityId" />
+          </Key>
+          <Property Name="PublishCatalogAttributeEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="int" Nullable="false" />
+          <Property Name="AttributeCode" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="AttributeTypeName" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="IsPromoRuleCondition" Type="bit" Nullable="false" />
+          <Property Name="IsComparable" Type="bit" Nullable="false" />
+          <Property Name="IsHtmlTags" Type="bit" Nullable="false" />
+          <Property Name="IsFacets" Type="bit" Nullable="false" />
+          <Property Name="IsUseInSearch" Type="bit" Nullable="false" />
+          <Property Name="IsPersonalizable" Type="bit" Nullable="false" />
+          <Property Name="IsConfigurable" Type="bit" Nullable="false" />
+          <Property Name="AttributeName" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="SelectValues" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishCatalogEntity">
+          <Key>
+            <PropertyRef Name="PublishCatalogEntityId" />
+          </Key>
+          <Property Name="PublishCatalogEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="int" Nullable="false" />
+          <Property Name="CatalogName" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="RevisionType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="IsAllowIndexing" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishCategoryEntity">
+          <Key>
+            <PropertyRef Name="PublishCategoryEntityId" />
+          </Key>
+          <Property Name="PublishCategoryEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="ZnodeCategoryId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="CategoryCode" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="int" Nullable="false" />
+          <Property Name="CatalogName" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="ZnodeParentCategoryIds" Type="varchar" MaxLength="2000" />
+          <Property Name="ProductIds" Type="varchar(max)" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="Attributes" Type="varchar(max)" Nullable="false" />
+          <Property Name="ActivationDate" Type="datetime" />
+          <Property Name="ExpirationDate" Type="datetime" />
+          <Property Name="CategoryIndex" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishConfigurableProductEntity">
+          <Key>
+            <PropertyRef Name="PublishConfigurableProductEntityId" />
+          </Key>
+          <Property Name="PublishConfigurableProductEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="ZnodeProductId" Type="int" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="int" Nullable="false" />
+          <Property Name="AssociatedZnodeProductId" Type="int" Nullable="false" />
+          <Property Name="AssociatedProductDisplayOrder" Type="int" Nullable="false" />
+          <Property Name="SelectValues" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ConfigurableAttributeCodes" Type="nvarchar(max)" />
+          <Property Name="IsDefault" Type="bit" />
+        </EntityType>
+        <EntityType Name="ZnodePublishContainerWidgetEntity">
+          <Key>
+            <PropertyRef Name="PublishContainerWidgetEntity" />
+          </Key>
+          <Property Name="PublishContainerWidgetEntity" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="ContainerConfigurationId" Type="int" Nullable="false" />
+          <Property Name="MappingId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="TypeOFMapping" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="WidgetsKey" Type="varchar" MaxLength="50" />
+          <Property Name="ContainerKey" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ZnodePublishContentContainerEntity">
+          <Key>
+            <PropertyRef Name="PublishContentContainerEntityId" />
+          </Key>
+          <Property Name="PublishContentContainerEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ContainerKey" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="FamilyId" Type="int" Nullable="false" />
+          <Property Name="Tags" Type="nvarchar" MaxLength="1000" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishContentPageConfigEntity">
+          <Key>
+            <PropertyRef Name="PublishContentPageConfigEntityId" />
+          </Key>
+          <Property Name="PublishContentPageConfigEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="ContentPageId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="FileName" Type="varchar" MaxLength="300" />
+          <Property Name="ProfileId" Type="varchar" MaxLength="300" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="PageTitle" Type="varchar" MaxLength="300" />
+          <Property Name="PageName" Type="nvarchar" MaxLength="400" />
+          <Property Name="ActivationDate" Type="datetime" />
+          <Property Name="ExpirationDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishErrorLogEntity">
+          <Key>
+            <PropertyRef Name="PublishErrorLogEntityId" />
+          </Key>
+          <Property Name="PublishErrorLogEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EntityName" Type="varchar" MaxLength="100" />
+          <Property Name="ErrorDescription" Type="nvarchar(max)" />
+          <Property Name="ProcessStatus" Type="varchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="VersionId" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ZnodePublishGlobalMessageEntity">
+          <Key>
+            <PropertyRef Name="PublishGlobalMessageEntityId" />
+          </Key>
+          <Property Name="PublishGlobalMessageEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="MessageKey" Type="varchar" MaxLength="300" />
+          <Property Name="Message" Type="nvarchar(max)" />
+          <Property Name="Area" Type="varchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="ZnodePublishGlobalVersionEntity">
+          <Key>
+            <PropertyRef Name="PublishGlobalVersionEntityId" />
+          </Key>
+          <Property Name="PublishGlobalVersionEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="PublishState" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishGroupProductEntity">
+          <Key>
+            <PropertyRef Name="PublishGroupProductEntityId" />
+          </Key>
+          <Property Name="PublishGroupProductEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="ZnodeProductId" Type="int" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="int" Nullable="false" />
+          <Property Name="AssociatedZnodeProductId" Type="int" Nullable="false" />
+          <Property Name="AssociatedProductDisplayOrder" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishMediaWidgetEntity">
+          <Key>
+            <PropertyRef Name="PublishMediaWidgetEntityId" />
+          </Key>
+          <Property Name="PublishMediaWidgetEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="MediaWidgetConfigurationId" Type="int" Nullable="false" />
+          <Property Name="MappingId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="TypeOFMapping" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="MediaPath" Type="varchar" MaxLength="300" />
+          <Property Name="WidgetsKey" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ZnodePublishMessageEntity">
+          <Key>
+            <PropertyRef Name="PublishMessageEntityId" />
+          </Key>
+          <Property Name="PublishMessageEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" />
+          <Property Name="MessageKey" Type="varchar" MaxLength="200" />
+          <Property Name="Message" Type="varchar(max)" />
+          <Property Name="Area" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ZnodePublishPortalBrandEntity">
+          <Key>
+            <PropertyRef Name="PublishPortalBrandEntityId" />
+          </Key>
+          <Property Name="PublishPortalBrandEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="PortalId" Type="int" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="BrandId" Type="int" Nullable="false" />
+          <Property Name="BrandCode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="BrandName" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="MediaId" Type="int" />
+          <Property Name="WebsiteLink" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="PublishState" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SEOTitle" Type="nvarchar(max)" />
+          <Property Name="SEOKeywords" Type="nvarchar(max)" />
+          <Property Name="SEODescription" Type="nvarchar(max)" />
+          <Property Name="SEOFriendlyPageName" Type="nvarchar(max)" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="MediaPath" Type="varchar" MaxLength="300" />
+          <Property Name="CMSSEODetailId" Type="int" />
+          <Property Name="CMSSEODetailLocaleId" Type="int" />
+          <Property Name="BrandDetailLocaleId" Type="int" Nullable="false" />
+          <Property Name="ImageName" Type="varchar" MaxLength="300" />
+          <Property Name="Custom1" Type="nvarchar(max)" />
+          <Property Name="Custom2" Type="nvarchar(max)" />
+          <Property Name="Custom3" Type="nvarchar(max)" />
+          <Property Name="Custom4" Type="nvarchar(max)" />
+          <Property Name="Custom5" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ZnodePublishPortalCustomCssEntity">
+          <Key>
+            <PropertyRef Name="PublishPortalCustomCssEntityId" />
+          </Key>
+          <Property Name="PublishPortalCustomCssEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="DynamicStyle" Type="nvarchar(max)" />
+          <Property Name="PublishState" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishPortalErrorLogEntity">
+          <Key>
+            <PropertyRef Name="PublishPortalErrorLogEntityId" />
+          </Key>
+          <Property Name="PublishPortalErrorLogEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EntityName" Type="varchar" MaxLength="100" />
+          <Property Name="ErrorDescription" Type="nvarchar(max)" />
+          <Property Name="ProcessStatus" Type="varchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="VersionId" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ZnodePublishPortalGlobalAttributeEntity">
+          <Key>
+            <PropertyRef Name="PublishPortalGlobalAttributeEntityId" />
+          </Key>
+          <Property Name="PublishPortalGlobalAttributeEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="PortalName" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="GlobalAttributeGroups" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ZnodePublishPreviewLogEntity">
+          <Key>
+            <PropertyRef Name="PublishPreviewLogEntityId" />
+          </Key>
+          <Property Name="PublishPreviewLogEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="IsDisposed" Type="bit" />
+          <Property Name="SourcePublishState" Type="varchar" MaxLength="30" />
+          <Property Name="EntityId" Type="int" />
+          <Property Name="EntityType" Type="varchar" MaxLength="30" />
+          <Property Name="LogMessage" Type="varchar(max)" />
+          <Property Name="LogCreatedDate" Type="datetime" />
+          <Property Name="PreviousVersionId" Type="int" />
+          <Property Name="LocaleId" Type="int" />
+          <Property Name="LocaleDisplayValue" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ZnodePublishProductEntity">
+          <Key>
+            <PropertyRef Name="PublishProductEntityId" />
+          </Key>
+          <Property Name="PublishProductEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="IndexId" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="ZnodeProductId" Type="int" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="int" Nullable="false" />
+          <Property Name="SKU" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="ZnodeCategoryIds" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="Attributes" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Brands" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CategoryName" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="CatalogName" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="RevisionType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AssociatedProductDisplayOrder" Type="int" Nullable="false" />
+          <Property Name="ProductIndex" Type="int" Nullable="false" />
+          <Property Name="SalesPrice" Type="varchar" MaxLength="50" />
+          <Property Name="RetailPrice" Type="varchar" MaxLength="50" />
+          <Property Name="CultureCode" Type="varchar" MaxLength="50" />
+          <Property Name="CurrencySuffix" Type="varchar" MaxLength="50" />
+          <Property Name="CurrencyCode" Type="varchar" MaxLength="50" />
+          <Property Name="SeoDescription" Type="varchar" MaxLength="1000" />
+          <Property Name="SeoKeywords" Type="varchar" MaxLength="1000" />
+          <Property Name="SeoTitle" Type="varchar" MaxLength="1000" />
+          <Property Name="SeoUrl" Type="varchar" MaxLength="1000" />
+          <Property Name="ImageSmallPath" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="SKULower" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ElasticSearchEvent" Type="int" />
+          <Property Name="ZnodeParentCategoryIds" Type="varchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="ZnodePublishProductPageEntity">
+          <Key>
+            <PropertyRef Name="PublishProductPageEntityId" />
+          </Key>
+          <Property Name="PublishProductPageEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="ProductPageId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="ProductType" Type="varchar" MaxLength="500" />
+          <Property Name="TemplateName" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="ZnodePublishProgressNotifierEntity">
+          <Key>
+            <PropertyRef Name="PublishProgressNotifierEntityId" />
+          </Key>
+          <Property Name="PublishProgressNotifierEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="JobId" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="JobName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ProgressMark" Type="int" Nullable="false" />
+          <Property Name="IsCompleted" Type="bit" Nullable="false" />
+          <Property Name="IsFailed" Type="bit" Nullable="false" />
+          <Property Name="ExceptionMessage" Type="varchar" MaxLength="1000" />
+          <Property Name="StartedBy" Type="int" Nullable="false" />
+          <Property Name="StartedByFriendlyName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishSearchProfileEntity">
+          <Key>
+            <PropertyRef Name="PublishSearchProfileEntityId" />
+          </Key>
+          <Property Name="PublishSearchProfileEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SearchProfileId" Type="int" />
+          <Property Name="SearchProfileName" Type="nvarchar" MaxLength="800" />
+          <Property Name="ZnodeCatalogId" Type="int" />
+          <Property Name="FeaturesList" Type="nvarchar(max)" />
+          <Property Name="QueryTypeName" Type="nvarchar" MaxLength="800" />
+          <Property Name="SearchQueryType" Type="nvarchar" MaxLength="800" />
+          <Property Name="QueryBuilderClassName" Type="nvarchar" MaxLength="800" />
+          <Property Name="SubQueryType" Type="nvarchar" MaxLength="800" />
+          <Property Name="FieldValueFactor" Type="nvarchar(max)" />
+          <Property Name="Operator" Type="varchar" MaxLength="20" />
+          <Property Name="PublishStateId" Type="int" />
+          <Property Name="SearchProfileAttributeMappingJson" Type="nvarchar(max)" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+          <Property Name="SearchProfilePublishLogId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishSearchWidgetEntity">
+          <Key>
+            <PropertyRef Name="PublishSearchWidgetEntityId" />
+          </Key>
+          <Property Name="PublishSearchWidgetEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="CMSSearchWidgetId" Type="int" Nullable="false" />
+          <Property Name="MappingId" Type="int" Nullable="false" />
+          <Property Name="WidgetsId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="TypeOFMapping" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="WidgetsKey" Type="varchar" MaxLength="300" />
+          <Property Name="AttributeCode" Type="varchar" MaxLength="300" />
+          <Property Name="SearchKeyword" Type="varchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="ZnodePublishSeoEntity">
+          <Key>
+            <PropertyRef Name="PublishSeoEntityId" />
+          </Key>
+          <Property Name="PublishSeoEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="ItemName" Type="varchar" MaxLength="300" />
+          <Property Name="CMSSEODetailId" Type="int" Nullable="false" />
+          <Property Name="CMSSEODetailLocaleId" Type="int" Nullable="false" />
+          <Property Name="CMSSEOTypeId" Type="int" Nullable="false" />
+          <Property Name="SEOId" Type="int" />
+          <Property Name="SEOTypeName" Type="varchar" MaxLength="50" />
+          <Property Name="SEOTitle" Type="nvarchar(max)" />
+          <Property Name="SEODescription" Type="nvarchar(max)" />
+          <Property Name="SEOKeywords" Type="nvarchar(max)" />
+          <Property Name="SEOUrl" Type="nvarchar(max)" />
+          <Property Name="IsRedirect" Type="bit" />
+          <Property Name="MetaInformation" Type="nvarchar(max)" />
+          <Property Name="LocaleId" Type="int" />
+          <Property Name="OldSEOURL" Type="nvarchar(max)" />
+          <Property Name="CMSContentPagesId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" />
+          <Property Name="SEOCode" Type="varchar" MaxLength="500" />
+          <Property Name="CanonicalURL" Type="varchar" MaxLength="200" />
+          <Property Name="RobotTag" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ZnodePublishTextWidgetEntity">
+          <Key>
+            <PropertyRef Name="PublishTextWidgetEntityId" />
+          </Key>
+          <Property Name="PublishTextWidgetEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="TextWidgetConfigurationId" Type="int" Nullable="false" />
+          <Property Name="MappingId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="TypeOFMapping" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="WidgetsKey" Type="varchar" MaxLength="50" />
+          <Property Name="Text" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ZnodePublishVersionEntity">
+          <Key>
+            <PropertyRef Name="PublishVersionEntityId" />
+          </Key>
+          <Property Name="PublishVersionEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="int" Nullable="false" />
+          <Property Name="RevisionType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="IsPublishSuccess" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishWebstoreEntity">
+          <Key>
+            <PropertyRef Name="PublishWebstoreEntityId" />
+          </Key>
+          <Property Name="PublishWebstoreEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="PortalThemeId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="ThemeId" Type="int" Nullable="false" />
+          <Property Name="ThemeName" Type="varchar" MaxLength="200" />
+          <Property Name="CSSId" Type="int" Nullable="false" />
+          <Property Name="CSSName" Type="nvarchar" MaxLength="2000" />
+          <Property Name="WebsiteLogo" Type="varchar" MaxLength="300" />
+          <Property Name="WebsiteTitle" Type="nvarchar" MaxLength="400" />
+          <Property Name="FaviconImage" Type="varchar" MaxLength="300" />
+          <Property Name="WebsiteDescription" Type="nvarchar(max)" />
+          <Property Name="PublishState" Type="varchar" MaxLength="100" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishWidgetBrandEntity">
+          <Key>
+            <PropertyRef Name="PublishWidgetBrandEntityId" />
+          </Key>
+          <Property Name="PublishWidgetBrandEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartDate" Type="datetime" />
+          <Property Name="BrandId" Type="int" Nullable="false" />
+          <Property Name="MappingId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="WidgetsKey" Type="varchar" MaxLength="500" />
+          <Property Name="TypeOfMapping" Type="varchar" MaxLength="50" />
+          <Property Name="DisplayOrder" Type="int" />
+        </EntityType>
+        <EntityType Name="ZnodePublishWidgetCategoryEntity">
+          <Key>
+            <PropertyRef Name="PublishWidgetCategoryEntityId" />
+          </Key>
+          <Property Name="PublishWidgetCategoryEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="WidgetCategoryId" Type="int" Nullable="false" />
+          <Property Name="ZnodeCategoryId" Type="int" Nullable="false" />
+          <Property Name="MappingId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="WidgetsKey" Type="nvarchar" MaxLength="500" />
+          <Property Name="TypeOFMapping" Type="varchar" MaxLength="100" />
+          <Property Name="DisplayOrder" Type="int" />
+          <Property Name="CategoryCode" Type="varchar" MaxLength="600" />
+        </EntityType>
+        <EntityType Name="ZnodePublishWidgetProductEntity">
+          <Key>
+            <PropertyRef Name="PublishWidgetProductEntityId" />
+          </Key>
+          <Property Name="PublishWidgetProductEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="WidgetProductId" Type="int" Nullable="false" />
+          <Property Name="ZnodeProductId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="MappingId" Type="int" Nullable="false" />
+          <Property Name="WidgetsKey" Type="varchar" MaxLength="50" />
+          <Property Name="TypeOFMapping" Type="varchar" MaxLength="50" />
+          <Property Name="DisplayOrder" Type="int" />
+          <Property Name="SKU" Type="varchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="ZnodePublishWidgetSliderBannerEntity">
+          <Key>
+            <PropertyRef Name="PublishWidgetSliderBannerEntityId" />
+          </Key>
+          <Property Name="PublishWidgetSliderBannerEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="WidgetSliderBannerId" Type="int" Nullable="false" />
+          <Property Name="MappingId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="100" />
+          <Property Name="Navigation" Type="varchar" MaxLength="100" />
+          <Property Name="AutoPlay" Type="bit" Nullable="false" />
+          <Property Name="AutoplayTimeOut" Type="int" />
+          <Property Name="AutoplayHoverPause" Type="bit" Nullable="false" />
+          <Property Name="TransactionStyle" Type="varchar" MaxLength="100" />
+          <Property Name="WidgetsKey" Type="varchar" MaxLength="300" />
+          <Property Name="TypeOFMapping" Type="varchar" MaxLength="100" />
+          <Property Name="SliderId" Type="int" Nullable="false" />
+          <Property Name="SliderBanners" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ZnodePublishWidgetTitleEntity">
+          <Key>
+            <PropertyRef Name="PublishWidgetTitleEntityId" />
+          </Key>
+          <Property Name="PublishWidgetTitleEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VersionId" Type="int" Nullable="false" />
+          <Property Name="PublishStartTime" Type="datetime" />
+          <Property Name="WidgetTitleConfigurationId" Type="int" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="MappingId" Type="int" Nullable="false" />
+          <Property Name="MediaPath" Type="varchar" MaxLength="300" />
+          <Property Name="Title" Type="varchar" MaxLength="300" />
+          <Property Name="Url" Type="varchar" MaxLength="300" />
+          <Property Name="WidgetsKey" Type="varchar" MaxLength="300" />
+          <Property Name="TypeOFMapping" Type="varchar" MaxLength="50" />
+          <Property Name="ActivationDate" Type="datetime" />
+          <Property Name="ExpirationDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="LocaleId" Type="int" Nullable="false" />
+          <Property Name="TitleCode" Type="varchar" MaxLength="50" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsNewTab" Type="bit" />
+        </EntityType>
+        <EntityContainer Name="Znode_PublishModelStoreContainer">
+          <EntitySet Name="ZnodePublishAddonEntity" EntityType="Self.ZnodePublishAddonEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishBlogNewsEntity" EntityType="Self.ZnodePublishBlogNewsEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishBundleProductEntity" EntityType="Self.ZnodePublishBundleProductEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishCatalogAttributeEntity" EntityType="Self.ZnodePublishCatalogAttributeEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishCatalogEntity" EntityType="Self.ZnodePublishCatalogEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishCategoryEntity" EntityType="Self.ZnodePublishCategoryEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishConfigurableProductEntity" EntityType="Self.ZnodePublishConfigurableProductEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishContainerWidgetEntity" EntityType="Self.ZnodePublishContainerWidgetEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishContentContainerEntity" EntityType="Self.ZnodePublishContentContainerEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishContentPageConfigEntity" EntityType="Self.ZnodePublishContentPageConfigEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishErrorLogEntity" EntityType="Self.ZnodePublishErrorLogEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishGlobalMessageEntity" EntityType="Self.ZnodePublishGlobalMessageEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishGlobalVersionEntity" EntityType="Self.ZnodePublishGlobalVersionEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishGroupProductEntity" EntityType="Self.ZnodePublishGroupProductEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishMediaWidgetEntity" EntityType="Self.ZnodePublishMediaWidgetEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishMessageEntity" EntityType="Self.ZnodePublishMessageEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishPortalBrandEntity" EntityType="Self.ZnodePublishPortalBrandEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishPortalCustomCssEntity" EntityType="Self.ZnodePublishPortalCustomCssEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishPortalErrorLogEntity" EntityType="Self.ZnodePublishPortalErrorLogEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishPortalGlobalAttributeEntity" EntityType="Self.ZnodePublishPortalGlobalAttributeEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishPreviewLogEntity" EntityType="Self.ZnodePublishPreviewLogEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishProductEntity" EntityType="Self.ZnodePublishProductEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishProductPageEntity" EntityType="Self.ZnodePublishProductPageEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishProgressNotifierEntity" EntityType="Self.ZnodePublishProgressNotifierEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishSearchProfileEntity" EntityType="Self.ZnodePublishSearchProfileEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishSearchWidgetEntity" EntityType="Self.ZnodePublishSearchWidgetEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishSeoEntity" EntityType="Self.ZnodePublishSeoEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishTextWidgetEntity" EntityType="Self.ZnodePublishTextWidgetEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishVersionEntity" EntityType="Self.ZnodePublishVersionEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishWebstoreEntity" EntityType="Self.ZnodePublishWebstoreEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishWidgetBrandEntity" EntityType="Self.ZnodePublishWidgetBrandEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishWidgetCategoryEntity" EntityType="Self.ZnodePublishWidgetCategoryEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishWidgetProductEntity" EntityType="Self.ZnodePublishWidgetProductEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishWidgetSliderBannerEntity" EntityType="Self.ZnodePublishWidgetSliderBannerEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePublishWidgetTitleEntity" EntityType="Self.ZnodePublishWidgetTitleEntity" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Znode_PublishModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ZnodePublishWebstoreEntity">
+          <Key>
+            <PropertyRef Name="PublishWebstoreEntityId" />
+          </Key>
+          <Property Name="PublishWebstoreEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="PortalThemeId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="ThemeId" Type="Int32" Nullable="false" />
+          <Property Name="ThemeName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CSSId" Type="Int32" Nullable="false" />
+          <Property Name="CSSName" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="WebsiteLogo" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="WebsiteTitle" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="FaviconImage" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="WebsiteDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PublishState" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="ZnodePublish_Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ZnodePublishWebstoreEntities" EntityType="Self.ZnodePublishWebstoreEntity" />
+          <EntitySet Name="ZnodePublishContentPageConfigEntities" EntityType="Znode_PublishModel.ZnodePublishContentPageConfigEntity" />
+          <EntitySet Name="ZnodePublishErrorLogEntities" EntityType="Znode_PublishModel.ZnodePublishErrorLogEntity" />
+          <EntitySet Name="ZnodePublishMessageEntities" EntityType="Znode_PublishModel.ZnodePublishMessageEntity" />
+          <EntitySet Name="ZnodePublishPortalBrandEntities" EntityType="Znode_PublishModel.ZnodePublishPortalBrandEntity" />
+          <EntitySet Name="ZnodePublishCategoryEntities" EntityType="Znode_PublishModel.ZnodePublishCategoryEntity" />
+          <EntitySet Name="ZnodePublishConfigurableProductEntities" EntityType="Znode_PublishModel.ZnodePublishConfigurableProductEntity" />
+		 <EntitySet Name="ZnodePublishGlobalMessageEntities" EntityType="Znode_PublishModel.ZnodePublishGlobalMessageEntity" />
+          <EntitySet Name="ZnodePublishGlobalVersionEntities" EntityType="Znode_PublishModel.ZnodePublishGlobalVersionEntity" />
+          <EntitySet Name="ZnodePublishMediaWidgetEntities" EntityType="Znode_PublishModel.ZnodePublishMediaWidgetEntity" />
+          <EntitySet Name="ZnodePublishPortalCustomCssEntities" EntityType="Znode_PublishModel.ZnodePublishPortalCustomCssEntity" />
+          <EntitySet Name="ZnodePublishPortalErrorLogEntities" EntityType="Znode_PublishModel.ZnodePublishPortalErrorLogEntity" />
+          <EntitySet Name="ZnodePublishPortalGlobalAttributeEntities" EntityType="Znode_PublishModel.ZnodePublishPortalGlobalAttributeEntity" />
+          <EntitySet Name="ZnodePublishPreviewLogEntities" EntityType="Znode_PublishModel.ZnodePublishPreviewLogEntity" />
+          <EntitySet Name="ZnodePublishProductPageEntities" EntityType="Znode_PublishModel.ZnodePublishProductPageEntity" />
+          <EntitySet Name="ZnodePublishSearchWidgetEntities" EntityType="Znode_PublishModel.ZnodePublishSearchWidgetEntity" />
+          <EntitySet Name="ZnodePublishSeoEntities" EntityType="Znode_PublishModel.ZnodePublishSeoEntity" />
+          <EntitySet Name="ZnodePublishTextWidgetEntities" EntityType="Znode_PublishModel.ZnodePublishTextWidgetEntity" />
+          <EntitySet Name="ZnodePublishVersionEntities" EntityType="Znode_PublishModel.ZnodePublishVersionEntity" />
+          <EntitySet Name="ZnodePublishWidgetBrandEntities" EntityType="Znode_PublishModel.ZnodePublishWidgetBrandEntity" />
+          <EntitySet Name="ZnodePublishWidgetCategoryEntities" EntityType="Znode_PublishModel.ZnodePublishWidgetCategoryEntity" />
+          <EntitySet Name="ZnodePublishWidgetProductEntities" EntityType="Znode_PublishModel.ZnodePublishWidgetProductEntity" />
+          <EntitySet Name="ZnodePublishWidgetSliderBannerEntities" EntityType="Znode_PublishModel.ZnodePublishWidgetSliderBannerEntity" />
+          <EntitySet Name="ZnodePublishWidgetTitleEntities" EntityType="Znode_PublishModel.ZnodePublishWidgetTitleEntity" />
+          <EntitySet Name="ZnodePublishBlogNewsEntities" EntityType="Znode_PublishModel.ZnodePublishBlogNewsEntity" />
+          <EntitySet Name="ZnodePublishBundleProductEntities" EntityType="Znode_PublishModel.ZnodePublishBundleProductEntity" />
+          <EntitySet Name="ZnodePublishAddonEntities" EntityType="Znode_PublishModel.ZnodePublishAddonEntity" />
+          <EntitySet Name="ZnodePublishCatalogAttributeEntities" EntityType="Znode_PublishModel.ZnodePublishCatalogAttributeEntity" />
+          <EntitySet Name="ZnodePublishCatalogEntities" EntityType="Znode_PublishModel.ZnodePublishCatalogEntity" />
+          <EntitySet Name="ZnodePublishGroupProductEntities" EntityType="Znode_PublishModel.ZnodePublishGroupProductEntity" />
+          <EntitySet Name="ZnodePublishProgressNotifierEntities" EntityType="Znode_PublishModel.ZnodePublishProgressNotifierEntity" />
+          <EntitySet Name="ZnodePublishProductEntities" EntityType="Znode_PublishModel.ZnodePublishProductEntity" />
+          <EntitySet Name="ZnodePublishContainerWidgetEntities" EntityType="Znode_PublishModel.ZnodePublishContainerWidgetEntity" />
+          <EntitySet Name="ZnodePublishContentContainerEntities" EntityType="Znode_PublishModel.ZnodePublishContentContainerEntity" />
+          <EntitySet Name="ZnodePublishSearchProfileEntities" EntityType="Znode_PublishModel.ZnodePublishSearchProfileEntity" />
+        </EntityContainer>
+        <EntityType Name="ZnodePublishContentPageConfigEntity">
+          <Key>
+            <PropertyRef Name="PublishContentPageConfigEntityId" />
+          </Key>
+          <Property Name="PublishContentPageConfigEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="ContentPageId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="FileName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="ProfileId" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="PageTitle" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="PageName" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="ActivationDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpirationDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishErrorLogEntity">
+          <Key>
+            <PropertyRef Name="PublishErrorLogEntityId" />
+          </Key>
+          <Property Name="PublishErrorLogEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EntityName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ErrorDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="VersionId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishMessageEntity">
+          <Key>
+            <PropertyRef Name="PublishMessageEntityId" />
+          </Key>
+          <Property Name="PublishMessageEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" />
+          <Property Name="MessageKey" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Area" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishPortalBrandEntity">
+          <Key>
+            <PropertyRef Name="PublishPortalBrandEntityId" />
+          </Key>
+          <Property Name="PublishPortalBrandEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="PortalId" Type="Int32" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="BrandId" Type="Int32" Nullable="false" />
+          <Property Name="BrandCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BrandName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="MediaId" Type="Int32" />
+          <Property Name="WebsiteLink" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PublishState" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SEOTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SEOKeywords" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SEODescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SEOFriendlyPageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="MediaPath" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="CMSSEODetailId" Type="Int32" />
+          <Property Name="CMSSEODetailLocaleId" Type="Int32" />
+          <Property Name="BrandDetailLocaleId" Type="Int32" Nullable="false" />
+          <Property Name="ImageName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Custom1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Custom2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Custom3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Custom4" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Custom5" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ZnodePublishCategoryEntity">
+          <Key>
+            <PropertyRef Name="PublishCategoryEntityId" />
+          </Key>
+          <Property Name="PublishCategoryEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="CategoryCode" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ZnodeCatalogId" Type="Int32" Nullable="false" />
+          <Property Name="CatalogName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="ZnodeParentCategoryIds" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="ProductIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="Attributes" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ActivationDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpirationDate" Type="DateTime" Precision="3" />
+          <Property Name="CategoryIndex" Type="Int32" Nullable="false" />
+        </EntityType>
+		 <EntityType Name="ZnodePublishConfigurableProductEntity">
+          <Key>
+            <PropertyRef Name="PublishConfigurableProductEntityId" />
+          </Key>
+          <Property Name="PublishConfigurableProductEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeProductId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="Int32" Nullable="false" />
+          <Property Name="AssociatedZnodeProductId" Type="Int32" Nullable="false" />
+          <Property Name="AssociatedProductDisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="SelectValues" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ConfigurableAttributeCodes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsDefault" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="ZnodePublishGlobalMessageEntity">
+          <Key>
+            <PropertyRef Name="PublishGlobalMessageEntityId" />
+          </Key>
+          <Property Name="PublishGlobalMessageEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="MessageKey" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Area" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishGlobalVersionEntity">
+          <Key>
+            <PropertyRef Name="PublishGlobalVersionEntityId" />
+          </Key>
+          <Property Name="PublishGlobalVersionEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="PublishState" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishMediaWidgetEntity">
+          <Key>
+            <PropertyRef Name="PublishMediaWidgetEntityId" />
+          </Key>
+          <Property Name="PublishMediaWidgetEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="MediaWidgetConfigurationId" Type="Int32" Nullable="false" />
+          <Property Name="MappingId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="TypeOFMapping" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="MediaPath" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="WidgetsKey" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishPortalCustomCssEntity">
+          <Key>
+            <PropertyRef Name="PublishPortalCustomCssEntityId" />
+          </Key>
+          <Property Name="PublishPortalCustomCssEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="DynamicStyle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PublishState" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishPortalErrorLogEntity">
+          <Key>
+            <PropertyRef Name="PublishPortalErrorLogEntityId" />
+          </Key>
+          <Property Name="PublishPortalErrorLogEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EntityName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ErrorDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="VersionId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishPortalGlobalAttributeEntity">
+          <Key>
+            <PropertyRef Name="PublishPortalGlobalAttributeEntityId" />
+          </Key>
+          <Property Name="PublishPortalGlobalAttributeEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="PortalName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="GlobalAttributeGroups" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ZnodePublishPreviewLogEntity">
+          <Key>
+            <PropertyRef Name="PublishPreviewLogEntityId" />
+          </Key>
+          <Property Name="PublishPreviewLogEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDisposed" Type="Boolean" />
+          <Property Name="SourcePublishState" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="EntityId" Type="Int32" />
+          <Property Name="EntityType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LogMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LogCreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="PreviousVersionId" Type="Int32" />
+          <Property Name="LocaleId" Type="Int32" />
+          <Property Name="LocaleDisplayValue" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishProductPageEntity">
+          <Key>
+            <PropertyRef Name="PublishProductPageEntityId" />
+          </Key>
+          <Property Name="PublishProductPageEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="ProductPageId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="ProductType" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="TemplateName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishSearchWidgetEntity">
+          <Key>
+            <PropertyRef Name="PublishSearchWidgetEntityId" />
+          </Key>
+          <Property Name="PublishSearchWidgetEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="CMSSearchWidgetId" Type="Int32" Nullable="false" />
+          <Property Name="MappingId" Type="Int32" Nullable="false" />
+          <Property Name="WidgetsId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="TypeOFMapping" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="WidgetsKey" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="AttributeCode" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="SearchKeyword" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishSeoEntity">
+          <Key>
+            <PropertyRef Name="PublishSeoEntityId" />
+          </Key>
+          <Property Name="PublishSeoEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="ItemName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="CMSSEODetailId" Type="Int32" Nullable="false" />
+          <Property Name="CMSSEODetailLocaleId" Type="Int32" Nullable="false" />
+          <Property Name="CMSSEOTypeId" Type="Int32" Nullable="false" />
+          <Property Name="SEOId" Type="Int32" />
+          <Property Name="SEOTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SEOTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SEODescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SEOKeywords" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SEOUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsRedirect" Type="Boolean" />
+          <Property Name="MetaInformation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LocaleId" Type="Int32" />
+          <Property Name="OldSEOURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CMSContentPagesId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" />
+          <Property Name="SEOCode" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CanonicalURL" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="RobotTag" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ZnodePublishTextWidgetEntity">
+          <Key>
+            <PropertyRef Name="PublishTextWidgetEntityId" />
+          </Key>
+          <Property Name="PublishTextWidgetEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="TextWidgetConfigurationId" Type="Int32" Nullable="false" />
+          <Property Name="MappingId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="TypeOFMapping" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="WidgetsKey" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ZnodePublishVersionEntity">
+          <Key>
+            <PropertyRef Name="PublishVersionEntityId" />
+          </Key>
+          <Property Name="PublishVersionEntityId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="Int32" Nullable="false" />
+          <Property Name="RevisionType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="IsPublishSuccess" Type="Boolean" Nullable="false" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishWidgetBrandEntity">
+          <Key>
+            <PropertyRef Name="PublishWidgetBrandEntityId" />
+          </Key>
+          <Property Name="PublishWidgetBrandEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartDate" Type="DateTime" Precision="3" />
+          <Property Name="BrandId" Type="Int32" Nullable="false" />
+          <Property Name="MappingId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="WidgetsKey" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="TypeOfMapping" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DisplayOrder" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ZnodePublishWidgetCategoryEntity">
+          <Key>
+            <PropertyRef Name="PublishWidgetCategoryEntityId" />
+          </Key>
+          <Property Name="PublishWidgetCategoryEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="WidgetCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="MappingId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="WidgetsKey" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TypeOFMapping" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DisplayOrder" Type="Int32" />
+          <Property Name="CategoryCode" Type="String" MaxLength="600" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishWidgetProductEntity">
+          <Key>
+            <PropertyRef Name="PublishWidgetProductEntityId" />
+          </Key>
+          <Property Name="PublishWidgetProductEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="WidgetProductId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeProductId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="MappingId" Type="Int32" Nullable="false" />
+          <Property Name="WidgetsKey" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TypeOFMapping" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DisplayOrder" Type="Int32" />
+          <Property Name="SKU" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishWidgetSliderBannerEntity">
+          <Key>
+            <PropertyRef Name="PublishWidgetSliderBannerEntityId" />
+          </Key>
+          <Property Name="PublishWidgetSliderBannerEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="WidgetSliderBannerId" Type="Int32" Nullable="false" />
+          <Property Name="MappingId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Navigation" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AutoPlay" Type="Boolean" Nullable="false" />
+          <Property Name="AutoplayTimeOut" Type="Int32" />
+          <Property Name="AutoplayHoverPause" Type="Boolean" Nullable="false" />
+          <Property Name="TransactionStyle" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="WidgetsKey" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="TypeOFMapping" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SliderId" Type="Int32" Nullable="false" />
+          <Property Name="SliderBanners" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ZnodePublishWidgetTitleEntity">
+          <Key>
+            <PropertyRef Name="PublishWidgetTitleEntityId" />
+          </Key>
+          <Property Name="PublishWidgetTitleEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="WidgetTitleConfigurationId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="MappingId" Type="Int32" Nullable="false" />
+          <Property Name="MediaPath" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="WidgetsKey" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="TypeOFMapping" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ActivationDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpirationDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="TitleCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsNewTab" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="ZnodePublishBlogNewsEntity">
+          <Key>
+            <PropertyRef Name="PublishBlogNewsEntityId" />
+          </Key>
+          <Property Name="PublishBlogNewsEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="BlogNewsId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="MediaId" Type="Int32" />
+          <Property Name="CMSContentPagesId" Type="Int32" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="BlogNewsType" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="BlogNewsTitle" Type="String" MaxLength="1200" FixedLength="false" Unicode="true" />
+          <Property Name="BodyOverview" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Tags" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="BlogNewsContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MediaPath" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="IsBlogNewsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsAllowGuestComment" Type="Boolean" Nullable="false" />
+          <Property Name="ActivationDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpirationDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="BlogNewsCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishBundleProductEntity">
+          <Key>
+            <PropertyRef Name="PublishBundleProductEntityId" />
+          </Key>
+          <Property Name="PublishBundleProductEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeProductId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="Int32" Nullable="false" />
+          <Property Name="AssociatedZnodeProductId" Type="Int32" Nullable="false" />
+          <Property Name="AssociatedProductDisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="AssociatedProductBundleQuantity" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ZnodePublishAddonEntity">
+          <Key>
+            <PropertyRef Name="PublishAddonEntityId" />
+          </Key>
+          <Property Name="PublishAddonEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeProductId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="Int32" Nullable="false" />
+          <Property Name="AssociatedZnodeProductId" Type="Int32" Nullable="false" />
+          <Property Name="AssociatedProductDisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="GroupName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DisplayType" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsRequired" Type="Boolean" Nullable="false" />
+          <Property Name="RequiredType" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishCatalogAttributeEntity">
+          <Key>
+            <PropertyRef Name="PublishCatalogAttributeEntityId" />
+          </Key>
+          <Property Name="PublishCatalogAttributeEntityId" Type="Int32" Nullable="false" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="Int32" Nullable="false" />
+          <Property Name="AttributeCode" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="AttributeTypeName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="IsPromoRuleCondition" Type="Boolean" Nullable="false" />
+          <Property Name="IsComparable" Type="Boolean" Nullable="false" />
+          <Property Name="IsHtmlTags" Type="Boolean" Nullable="false" />
+          <Property Name="IsFacets" Type="Boolean" Nullable="false" />
+          <Property Name="IsUseInSearch" Type="Boolean" Nullable="false" />
+          <Property Name="IsPersonalizable" Type="Boolean" Nullable="false" />
+          <Property Name="IsConfigurable" Type="Boolean" Nullable="false" />
+          <Property Name="AttributeName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="SelectValues" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ZnodePublishCatalogEntity">
+          <Key>
+            <PropertyRef Name="PublishCatalogEntityId" />
+          </Key>
+          <Property Name="PublishCatalogEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="Int32" Nullable="false" />
+          <Property Name="CatalogName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="RevisionType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="IsAllowIndexing" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishGroupProductEntity">
+          <Key>
+            <PropertyRef Name="PublishGroupProductEntityId" />
+          </Key>
+          <Property Name="PublishGroupProductEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeProductId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="Int32" Nullable="false" />
+          <Property Name="AssociatedZnodeProductId" Type="Int32" Nullable="false" />
+          <Property Name="AssociatedProductDisplayOrder" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishProgressNotifierEntity">
+          <Key>
+            <PropertyRef Name="PublishProgressNotifierEntityId" />
+          </Key>
+          <Property Name="PublishProgressNotifierEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="JobId" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="JobName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProgressMark" Type="Int32" Nullable="false" />
+          <Property Name="IsCompleted" Type="Boolean" Nullable="false" />
+          <Property Name="IsFailed" Type="Boolean" Nullable="false" />
+          <Property Name="ExceptionMessage" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="StartedBy" Type="Int32" Nullable="false" />
+          <Property Name="StartedByFriendlyName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishProductEntity">
+          <Key>
+            <PropertyRef Name="PublishProductEntityId" />
+          </Key>
+          <Property Name="PublishProductEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="IndexId" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="ZnodeProductId" Type="Int32" Nullable="false" />
+          <Property Name="ZnodeCatalogId" Type="Int32" Nullable="false" />
+          <Property Name="SKU" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="ZnodeCategoryIds" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="Attributes" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Brands" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="CatalogName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="RevisionType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AssociatedProductDisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="ProductIndex" Type="Int32" Nullable="false" />
+          <Property Name="SalesPrice" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RetailPrice" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CultureCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CurrencySuffix" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CurrencyCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SeoDescription" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="SeoKeywords" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="SeoTitle" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="SeoUrl" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="ImageSmallPath" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="SKULower" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ElasticSearchEvent" Type="Int32" />
+          <Property Name="ZnodeParentCategoryIds" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodePublishContainerWidgetEntity">
+          <Key>
+            <PropertyRef Name="PublishContainerWidgetEntity" />
+          </Key>
+          <Property Name="PublishContainerWidgetEntity" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VersionId" Type="Int32" Nullable="false" />
+          <Property Name="PublishStartTime" Type="DateTime" Precision="3" />
+          <Property Name="ContainerConfigurationId" Type="Int32" Nullable="false" />
+          <Property Name="MappingId" Type="Int32" Nullable="false" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="TypeOFMapping" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="WidgetsKey" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ContainerKey" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+		<EntityType Name="ZnodePublishContentContainerEntity">
+			  <Key>
+				  <PropertyRef Name="PublishContentContainerEntityId" />
+			  </Key>
+			  <Property Name="PublishContentContainerEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+			  <Property Name="VersionId" Type="Int32" Nullable="false" />
+			  <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+			  <Property Name="ContainerKey" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+			  <Property Name="FamilyId" Type="Int32" Nullable="false" />
+			  <Property Name="Tags" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+			  <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+			  <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+			  <Property Name="ModifiedBy" Type="Int32" Nullable="false" />
+			  <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+		  </EntityType>
+        <EntityType Name="ZnodePublishSearchProfileEntity">
+          <Key>
+            <PropertyRef Name="PublishSearchProfileEntityId" />
+          </Key>
+          <Property Name="PublishSearchProfileEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SearchProfileId" Type="Int32" />
+          <Property Name="SearchProfileName" Type="String" MaxLength="800" FixedLength="false" Unicode="true" />
+          <Property Name="ZnodeCatalogId" Type="Int32" />
+          <Property Name="FeaturesList" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="QueryTypeName" Type="String" MaxLength="800" FixedLength="false" Unicode="true" />
+          <Property Name="SearchQueryType" Type="String" MaxLength="800" FixedLength="false" Unicode="true" />
+          <Property Name="QueryBuilderClassName" Type="String" MaxLength="800" FixedLength="false" Unicode="true" />
+          <Property Name="SubQueryType" Type="String" MaxLength="800" FixedLength="false" Unicode="true" />
+          <Property Name="FieldValueFactor" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Operator" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PublishStateId" Type="Int32" />
+          <Property Name="SearchProfileAttributeMappingJson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" Nullable="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SearchProfilePublishLogId" Type="Int32" Nullable="false" />
+        </EntityType>
+	  </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Znode_PublishModelStoreContainer" CdmEntityContainer="ZnodePublish_Entities">
+          <EntitySetMapping Name="ZnodePublishWebstoreEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishWebstoreEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishWebstoreEntity">
+                <ScalarProperty Name="PublishWebstoreEntityId" ColumnName="PublishWebstoreEntityId" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="PortalThemeId" ColumnName="PortalThemeId" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="ThemeId" ColumnName="ThemeId" />
+                <ScalarProperty Name="ThemeName" ColumnName="ThemeName" />
+                <ScalarProperty Name="CSSId" ColumnName="CSSId" />
+                <ScalarProperty Name="CSSName" ColumnName="CSSName" />
+                <ScalarProperty Name="WebsiteLogo" ColumnName="WebsiteLogo" />
+                <ScalarProperty Name="WebsiteTitle" ColumnName="WebsiteTitle" />
+                <ScalarProperty Name="FaviconImage" ColumnName="FaviconImage" />
+                <ScalarProperty Name="WebsiteDescription" ColumnName="WebsiteDescription" />
+                <ScalarProperty Name="PublishState" ColumnName="PublishState" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishContentPageConfigEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishContentPageConfigEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishContentPageConfigEntity">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="ActivationDate" ColumnName="ActivationDate" />
+                <ScalarProperty Name="PageName" ColumnName="PageName" />
+                <ScalarProperty Name="PageTitle" ColumnName="PageTitle" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="ContentPageId" ColumnName="ContentPageId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishContentPageConfigEntityId" ColumnName="PublishContentPageConfigEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishErrorLogEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishErrorLogEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishErrorLogEntity">
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ProcessStatus" ColumnName="ProcessStatus" />
+                <ScalarProperty Name="ErrorDescription" ColumnName="ErrorDescription" />
+                <ScalarProperty Name="EntityName" ColumnName="EntityName" />
+                <ScalarProperty Name="PublishErrorLogEntityId" ColumnName="PublishErrorLogEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishMessageEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishMessageEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishMessageEntity">
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="MessageKey" ColumnName="MessageKey" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishMessageEntityId" ColumnName="PublishMessageEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishPortalBrandEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishPortalBrandEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishPortalBrandEntity">
+                <ScalarProperty Name="Custom5" ColumnName="Custom5" />
+                <ScalarProperty Name="Custom4" ColumnName="Custom4" />
+                <ScalarProperty Name="Custom3" ColumnName="Custom3" />
+                <ScalarProperty Name="Custom2" ColumnName="Custom2" />
+                <ScalarProperty Name="Custom1" ColumnName="Custom1" />
+                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+                <ScalarProperty Name="BrandDetailLocaleId" ColumnName="BrandDetailLocaleId" />
+                <ScalarProperty Name="CMSSEODetailLocaleId" ColumnName="CMSSEODetailLocaleId" />
+                <ScalarProperty Name="CMSSEODetailId" ColumnName="CMSSEODetailId" />
+                <ScalarProperty Name="MediaPath" ColumnName="MediaPath" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="SEOFriendlyPageName" ColumnName="SEOFriendlyPageName" />
+                <ScalarProperty Name="SEODescription" ColumnName="SEODescription" />
+                <ScalarProperty Name="SEOKeywords" ColumnName="SEOKeywords" />
+                <ScalarProperty Name="SEOTitle" ColumnName="SEOTitle" />
+                <ScalarProperty Name="PublishState" ColumnName="PublishState" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="WebsiteLink" ColumnName="WebsiteLink" />
+                <ScalarProperty Name="MediaId" ColumnName="MediaId" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BrandCode" ColumnName="BrandCode" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishPortalBrandEntityId" ColumnName="PublishPortalBrandEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishCategoryEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishCategoryEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishCategoryEntity">
+                <ScalarProperty Name="CategoryIndex" ColumnName="CategoryIndex" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="ActivationDate" ColumnName="ActivationDate" />
+                <ScalarProperty Name="Attributes" ColumnName="Attributes" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="ProductIds" ColumnName="ProductIds" />
+                <ScalarProperty Name="ZnodeParentCategoryIds" ColumnName="ZnodeParentCategoryIds" />
+                <ScalarProperty Name="CatalogName" ColumnName="CatalogName" />
+                <ScalarProperty Name="ZnodeCatalogId" ColumnName="ZnodeCatalogId" />
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ZnodeCategoryId" ColumnName="ZnodeCategoryId" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishCategoryEntityId" ColumnName="PublishCategoryEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+		  <EntitySetMapping Name="ZnodePublishConfigurableProductEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishConfigurableProductEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishConfigurableProductEntity">
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="ConfigurableAttributeCodes" ColumnName="ConfigurableAttributeCodes" />
+                <ScalarProperty Name="SelectValues" ColumnName="SelectValues" />
+                <ScalarProperty Name="AssociatedProductDisplayOrder" ColumnName="AssociatedProductDisplayOrder" />
+                <ScalarProperty Name="AssociatedZnodeProductId" ColumnName="AssociatedZnodeProductId" />
+                <ScalarProperty Name="ZnodeCatalogId" ColumnName="ZnodeCatalogId" />
+                <ScalarProperty Name="ZnodeProductId" ColumnName="ZnodeProductId" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishConfigurableProductEntityId" ColumnName="PublishConfigurableProductEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishGlobalMessageEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishGlobalMessageEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishGlobalMessageEntity">
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="MessageKey" ColumnName="MessageKey" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishGlobalMessageEntityId" ColumnName="PublishGlobalMessageEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishGlobalVersionEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishGlobalVersionEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishGlobalVersionEntity">
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="PublishState" ColumnName="PublishState" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishGlobalVersionEntityId" ColumnName="PublishGlobalVersionEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishMediaWidgetEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishMediaWidgetEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishMediaWidgetEntity">
+                <ScalarProperty Name="WidgetsKey" ColumnName="WidgetsKey" />
+                <ScalarProperty Name="MediaPath" ColumnName="MediaPath" />
+                <ScalarProperty Name="TypeOFMapping" ColumnName="TypeOFMapping" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="MappingId" ColumnName="MappingId" />
+                <ScalarProperty Name="MediaWidgetConfigurationId" ColumnName="MediaWidgetConfigurationId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishMediaWidgetEntityId" ColumnName="PublishMediaWidgetEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishPortalCustomCssEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishPortalCustomCssEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishPortalCustomCssEntity">
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="PublishState" ColumnName="PublishState" />
+                <ScalarProperty Name="DynamicStyle" ColumnName="DynamicStyle" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishPortalCustomCssEntityId" ColumnName="PublishPortalCustomCssEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishPortalErrorLogEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishPortalErrorLogEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishPortalErrorLogEntity">
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ProcessStatus" ColumnName="ProcessStatus" />
+                <ScalarProperty Name="ErrorDescription" ColumnName="ErrorDescription" />
+                <ScalarProperty Name="EntityName" ColumnName="EntityName" />
+                <ScalarProperty Name="PublishPortalErrorLogEntityId" ColumnName="PublishPortalErrorLogEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishPortalGlobalAttributeEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishPortalGlobalAttributeEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishPortalGlobalAttributeEntity">
+                <ScalarProperty Name="GlobalAttributeGroups" ColumnName="GlobalAttributeGroups" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="PortalName" ColumnName="PortalName" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishPortalGlobalAttributeEntityId" ColumnName="PublishPortalGlobalAttributeEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishPreviewLogEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishPreviewLogEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishPreviewLogEntity">
+                <ScalarProperty Name="LocaleDisplayValue" ColumnName="LocaleDisplayValue" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="PreviousVersionId" ColumnName="PreviousVersionId" />
+                <ScalarProperty Name="LogCreatedDate" ColumnName="LogCreatedDate" />
+                <ScalarProperty Name="LogMessage" ColumnName="LogMessage" />
+                <ScalarProperty Name="EntityType" ColumnName="EntityType" />
+                <ScalarProperty Name="EntityId" ColumnName="EntityId" />
+                <ScalarProperty Name="SourcePublishState" ColumnName="SourcePublishState" />
+                <ScalarProperty Name="IsDisposed" ColumnName="IsDisposed" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishPreviewLogEntityId" ColumnName="PublishPreviewLogEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishProductPageEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishProductPageEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishProductPageEntity">
+                <ScalarProperty Name="TemplateName" ColumnName="TemplateName" />
+                <ScalarProperty Name="ProductType" ColumnName="ProductType" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="ProductPageId" ColumnName="ProductPageId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishProductPageEntityId" ColumnName="PublishProductPageEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishSearchWidgetEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishSearchWidgetEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishSearchWidgetEntity">
+                <ScalarProperty Name="SearchKeyword" ColumnName="SearchKeyword" />
+                <ScalarProperty Name="AttributeCode" ColumnName="AttributeCode" />
+                <ScalarProperty Name="WidgetsKey" ColumnName="WidgetsKey" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="TypeOFMapping" ColumnName="TypeOFMapping" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="WidgetsId" ColumnName="WidgetsId" />
+                <ScalarProperty Name="MappingId" ColumnName="MappingId" />
+                <ScalarProperty Name="CMSSearchWidgetId" ColumnName="CMSSearchWidgetId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishSearchWidgetEntityId" ColumnName="PublishSearchWidgetEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishSeoEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishSeoEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishSeoEntity">
+                <ScalarProperty Name="RobotTag" ColumnName="RobotTag" />
+                <ScalarProperty Name="CanonicalURL" ColumnName="CanonicalURL" />
+                <ScalarProperty Name="SEOCode" ColumnName="SEOCode" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="CMSContentPagesId" ColumnName="CMSContentPagesId" />
+                <ScalarProperty Name="OldSEOURL" ColumnName="OldSEOURL" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="MetaInformation" ColumnName="MetaInformation" />
+                <ScalarProperty Name="IsRedirect" ColumnName="IsRedirect" />
+                <ScalarProperty Name="SEOUrl" ColumnName="SEOUrl" />
+                <ScalarProperty Name="SEOKeywords" ColumnName="SEOKeywords" />
+                <ScalarProperty Name="SEODescription" ColumnName="SEODescription" />
+                <ScalarProperty Name="SEOTitle" ColumnName="SEOTitle" />
+                <ScalarProperty Name="SEOTypeName" ColumnName="SEOTypeName" />
+                <ScalarProperty Name="SEOId" ColumnName="SEOId" />
+                <ScalarProperty Name="CMSSEOTypeId" ColumnName="CMSSEOTypeId" />
+                <ScalarProperty Name="CMSSEODetailLocaleId" ColumnName="CMSSEODetailLocaleId" />
+                <ScalarProperty Name="CMSSEODetailId" ColumnName="CMSSEODetailId" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishSeoEntityId" ColumnName="PublishSeoEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishTextWidgetEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishTextWidgetEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishTextWidgetEntity">
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="WidgetsKey" ColumnName="WidgetsKey" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="TypeOFMapping" ColumnName="TypeOFMapping" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="MappingId" ColumnName="MappingId" />
+                <ScalarProperty Name="TextWidgetConfigurationId" ColumnName="TextWidgetConfigurationId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishTextWidgetEntityId" ColumnName="PublishTextWidgetEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishVersionEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishVersionEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishVersionEntity">
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="IsPublishSuccess" ColumnName="IsPublishSuccess" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="RevisionType" ColumnName="RevisionType" />
+                <ScalarProperty Name="ZnodeCatalogId" ColumnName="ZnodeCatalogId" />
+                <ScalarProperty Name="PublishVersionEntityId" ColumnName="PublishVersionEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishWidgetBrandEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishWidgetBrandEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishWidgetBrandEntity">
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="TypeOfMapping" ColumnName="TypeOfMapping" />
+                <ScalarProperty Name="WidgetsKey" ColumnName="WidgetsKey" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="MappingId" ColumnName="MappingId" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="PublishStartDate" ColumnName="PublishStartDate" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishWidgetBrandEntityId" ColumnName="PublishWidgetBrandEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishWidgetCategoryEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishWidgetCategoryEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishWidgetCategoryEntity">
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="TypeOFMapping" ColumnName="TypeOFMapping" />
+                <ScalarProperty Name="WidgetsKey" ColumnName="WidgetsKey" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="MappingId" ColumnName="MappingId" />
+                <ScalarProperty Name="ZnodeCategoryId" ColumnName="ZnodeCategoryId" />
+                <ScalarProperty Name="WidgetCategoryId" ColumnName="WidgetCategoryId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishWidgetCategoryEntityId" ColumnName="PublishWidgetCategoryEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishWidgetProductEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishWidgetProductEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishWidgetProductEntity">
+                <ScalarProperty Name="SKU" ColumnName="SKU" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="TypeOFMapping" ColumnName="TypeOFMapping" />
+                <ScalarProperty Name="WidgetsKey" ColumnName="WidgetsKey" />
+                <ScalarProperty Name="MappingId" ColumnName="MappingId" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="ZnodeProductId" ColumnName="ZnodeProductId" />
+                <ScalarProperty Name="WidgetProductId" ColumnName="WidgetProductId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishWidgetProductEntityId" ColumnName="PublishWidgetProductEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishWidgetSliderBannerEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishWidgetSliderBannerEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishWidgetSliderBannerEntity">
+                <ScalarProperty Name="SliderBanners" ColumnName="SliderBanners" />
+                <ScalarProperty Name="SliderId" ColumnName="SliderId" />
+                <ScalarProperty Name="TypeOFMapping" ColumnName="TypeOFMapping" />
+                <ScalarProperty Name="WidgetsKey" ColumnName="WidgetsKey" />
+                <ScalarProperty Name="TransactionStyle" ColumnName="TransactionStyle" />
+                <ScalarProperty Name="AutoplayHoverPause" ColumnName="AutoplayHoverPause" />
+                <ScalarProperty Name="AutoplayTimeOut" ColumnName="AutoplayTimeOut" />
+                <ScalarProperty Name="AutoPlay" ColumnName="AutoPlay" />
+                <ScalarProperty Name="Navigation" ColumnName="Navigation" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="MappingId" ColumnName="MappingId" />
+                <ScalarProperty Name="WidgetSliderBannerId" ColumnName="WidgetSliderBannerId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishWidgetSliderBannerEntityId" ColumnName="PublishWidgetSliderBannerEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishWidgetTitleEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishWidgetTitleEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishWidgetTitleEntity">
+                <ScalarProperty Name="IsNewTab" ColumnName="IsNewTab" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="TitleCode" ColumnName="TitleCode" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="ActivationDate" ColumnName="ActivationDate" />
+                <ScalarProperty Name="TypeOFMapping" ColumnName="TypeOFMapping" />
+                <ScalarProperty Name="WidgetsKey" ColumnName="WidgetsKey" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="MediaPath" ColumnName="MediaPath" />
+                <ScalarProperty Name="MappingId" ColumnName="MappingId" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="WidgetTitleConfigurationId" ColumnName="WidgetTitleConfigurationId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishWidgetTitleEntityId" ColumnName="PublishWidgetTitleEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishBlogNewsEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishBlogNewsEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishBlogNewsEntity">
+                <ScalarProperty Name="BlogNewsCode" ColumnName="BlogNewsCode" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="ActivationDate" ColumnName="ActivationDate" />
+                <ScalarProperty Name="IsAllowGuestComment" ColumnName="IsAllowGuestComment" />
+                <ScalarProperty Name="IsBlogNewsActive" ColumnName="IsBlogNewsActive" />
+                <ScalarProperty Name="MediaPath" ColumnName="MediaPath" />
+                <ScalarProperty Name="BlogNewsContent" ColumnName="BlogNewsContent" />
+                <ScalarProperty Name="Tags" ColumnName="Tags" />
+                <ScalarProperty Name="BodyOverview" ColumnName="BodyOverview" />
+                <ScalarProperty Name="BlogNewsTitle" ColumnName="BlogNewsTitle" />
+                <ScalarProperty Name="BlogNewsType" ColumnName="BlogNewsType" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="CMSContentPagesId" ColumnName="CMSContentPagesId" />
+                <ScalarProperty Name="MediaId" ColumnName="MediaId" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="BlogNewsId" ColumnName="BlogNewsId" />
+                <ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishBlogNewsEntityId" ColumnName="PublishBlogNewsEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishBundleProductEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishBundleProductEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishBundleProductEntity">
+                <ScalarProperty Name="AssociatedProductBundleQuantity" ColumnName="AssociatedProductBundleQuantity" />
+                <ScalarProperty Name="AssociatedProductDisplayOrder" ColumnName="AssociatedProductDisplayOrder" />
+                <ScalarProperty Name="AssociatedZnodeProductId" ColumnName="AssociatedZnodeProductId" />
+                <ScalarProperty Name="ZnodeCatalogId" ColumnName="ZnodeCatalogId" />
+                <ScalarProperty Name="ZnodeProductId" ColumnName="ZnodeProductId" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishBundleProductEntityId" ColumnName="PublishBundleProductEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishAddonEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishAddonEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishAddonEntity">
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="RequiredType" ColumnName="RequiredType" />
+                <ScalarProperty Name="IsRequired" ColumnName="IsRequired" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="DisplayType" ColumnName="DisplayType" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="AssociatedProductDisplayOrder" ColumnName="AssociatedProductDisplayOrder" />
+                <ScalarProperty Name="AssociatedZnodeProductId" ColumnName="AssociatedZnodeProductId" />
+                <ScalarProperty Name="ZnodeCatalogId" ColumnName="ZnodeCatalogId" />
+                <ScalarProperty Name="ZnodeProductId" ColumnName="ZnodeProductId" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishAddonEntityId" ColumnName="PublishAddonEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishCatalogAttributeEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishCatalogAttributeEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishCatalogAttributeEntity">
+                <ScalarProperty Name="SelectValues" ColumnName="SelectValues" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="AttributeName" ColumnName="AttributeName" />
+                <ScalarProperty Name="IsConfigurable" ColumnName="IsConfigurable" />
+                <ScalarProperty Name="IsPersonalizable" ColumnName="IsPersonalizable" />
+                <ScalarProperty Name="IsUseInSearch" ColumnName="IsUseInSearch" />
+                <ScalarProperty Name="IsFacets" ColumnName="IsFacets" />
+                <ScalarProperty Name="IsHtmlTags" ColumnName="IsHtmlTags" />
+                <ScalarProperty Name="IsComparable" ColumnName="IsComparable" />
+                <ScalarProperty Name="IsPromoRuleCondition" ColumnName="IsPromoRuleCondition" />
+                <ScalarProperty Name="AttributeTypeName" ColumnName="AttributeTypeName" />
+                <ScalarProperty Name="AttributeCode" ColumnName="AttributeCode" />
+                <ScalarProperty Name="ZnodeCatalogId" ColumnName="ZnodeCatalogId" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishCatalogAttributeEntityId" ColumnName="PublishCatalogAttributeEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishCatalogEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishCatalogEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishCatalogEntity">
+                <ScalarProperty Name="IsAllowIndexing" ColumnName="IsAllowIndexing" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="RevisionType" ColumnName="RevisionType" />
+                <ScalarProperty Name="CatalogName" ColumnName="CatalogName" />
+                <ScalarProperty Name="ZnodeCatalogId" ColumnName="ZnodeCatalogId" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishCatalogEntityId" ColumnName="PublishCatalogEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishGroupProductEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishGroupProductEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishGroupProductEntity">
+                <ScalarProperty Name="AssociatedProductDisplayOrder" ColumnName="AssociatedProductDisplayOrder" />
+                <ScalarProperty Name="AssociatedZnodeProductId" ColumnName="AssociatedZnodeProductId" />
+                <ScalarProperty Name="ZnodeCatalogId" ColumnName="ZnodeCatalogId" />
+                <ScalarProperty Name="ZnodeProductId" ColumnName="ZnodeProductId" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishGroupProductEntityId" ColumnName="PublishGroupProductEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishProgressNotifierEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishProgressNotifierEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishProgressNotifierEntity">
+                <ScalarProperty Name="StartedByFriendlyName" ColumnName="StartedByFriendlyName" />
+                <ScalarProperty Name="StartedBy" ColumnName="StartedBy" />
+                <ScalarProperty Name="ExceptionMessage" ColumnName="ExceptionMessage" />
+                <ScalarProperty Name="IsFailed" ColumnName="IsFailed" />
+                <ScalarProperty Name="IsCompleted" ColumnName="IsCompleted" />
+                <ScalarProperty Name="ProgressMark" ColumnName="ProgressMark" />
+                <ScalarProperty Name="JobName" ColumnName="JobName" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishProgressNotifierEntityId" ColumnName="PublishProgressNotifierEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+		  <EntitySetMapping Name="ZnodePublishProductEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishProductEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishProductEntity">
+               <ScalarProperty Name="ElasticSearchEvent" ColumnName="ElasticSearchEvent" />
+                <ScalarProperty Name="ZnodeParentCategoryIds" ColumnName="ZnodeParentCategoryIds" />
+                <ScalarProperty Name="SKULower" ColumnName="SKULower" />
+                <ScalarProperty Name="ImageSmallPath" ColumnName="ImageSmallPath" />
+                <ScalarProperty Name="SeoUrl" ColumnName="SeoUrl" />
+                <ScalarProperty Name="SeoTitle" ColumnName="SeoTitle" />
+                <ScalarProperty Name="SeoKeywords" ColumnName="SeoKeywords" />
+                <ScalarProperty Name="SeoDescription" ColumnName="SeoDescription" />
+                <ScalarProperty Name="CurrencyCode" ColumnName="CurrencyCode" />
+                <ScalarProperty Name="CurrencySuffix" ColumnName="CurrencySuffix" />
+                <ScalarProperty Name="CultureCode" ColumnName="CultureCode" />
+                <ScalarProperty Name="RetailPrice" ColumnName="RetailPrice" />
+                <ScalarProperty Name="SalesPrice" ColumnName="SalesPrice" />
+                <ScalarProperty Name="ProductIndex" ColumnName="ProductIndex" />
+                <ScalarProperty Name="AssociatedProductDisplayOrder" ColumnName="AssociatedProductDisplayOrder" />
+                <ScalarProperty Name="RevisionType" ColumnName="RevisionType" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="CatalogName" ColumnName="CatalogName" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="Brands" ColumnName="Brands" />
+                <ScalarProperty Name="Attributes" ColumnName="Attributes" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ZnodeCategoryIds" ColumnName="ZnodeCategoryIds" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="SKU" ColumnName="SKU" />
+                <ScalarProperty Name="ZnodeCatalogId" ColumnName="ZnodeCatalogId" />
+                <ScalarProperty Name="ZnodeProductId" ColumnName="ZnodeProductId" />
+                <ScalarProperty Name="IndexId" ColumnName="IndexId" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="PublishProductEntityId" ColumnName="PublishProductEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishContainerWidgetEntities">
+				<EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishContainerWidgetEntity">
+					<MappingFragment StoreEntitySet="ZnodePublishContainerWidgetEntity">
+						<ScalarProperty Name="ContainerKey" ColumnName="ContainerKey" />
+						<ScalarProperty Name="WidgetsKey" ColumnName="WidgetsKey" />
+						<ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+						<ScalarProperty Name="TypeOFMapping" ColumnName="TypeOFMapping" />
+						<ScalarProperty Name="PortalId" ColumnName="PortalId" />
+						<ScalarProperty Name="MappingId" ColumnName="MappingId" />
+						<ScalarProperty Name="ContainerConfigurationId" ColumnName="ContainerConfigurationId" />
+						<ScalarProperty Name="PublishStartTime" ColumnName="PublishStartTime" />
+						<ScalarProperty Name="VersionId" ColumnName="VersionId" />
+						<ScalarProperty Name="PublishContainerWidgetEntity" ColumnName="PublishContainerWidgetEntity" />
+					</MappingFragment>
+				</EntityTypeMapping>
+			</EntitySetMapping>
+			<EntitySetMapping Name="ZnodePublishContentContainerEntities">
+				<EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishContentContainerEntity">
+					<MappingFragment StoreEntitySet="ZnodePublishContentContainerEntity">
+						<ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+						<ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+						<ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+						<ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+						<ScalarProperty Name="Tags" ColumnName="Tags" />
+						<ScalarProperty Name="FamilyId" ColumnName="FamilyId" />
+						<ScalarProperty Name="ContainerKey" ColumnName="ContainerKey" />
+						<ScalarProperty Name="Name" ColumnName="Name" />
+						<ScalarProperty Name="VersionId" ColumnName="VersionId" />
+						<ScalarProperty Name="PublishContentContainerEntityId" ColumnName="PublishContentContainerEntityId" />
+					</MappingFragment>
+				</EntityTypeMapping>
+			</EntitySetMapping>
+          <EntitySetMapping Name="ZnodePublishSearchProfileEntities">
+            <EntityTypeMapping TypeName="Znode_PublishModel.ZnodePublishSearchProfileEntity">
+              <MappingFragment StoreEntitySet="ZnodePublishSearchProfileEntity">
+                <ScalarProperty Name="SearchProfilePublishLogId" ColumnName="SearchProfilePublishLogId" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="SearchProfileAttributeMappingJson" ColumnName="SearchProfileAttributeMappingJson" />
+                <ScalarProperty Name="PublishStateId" ColumnName="PublishStateId" />
+                <ScalarProperty Name="Operator" ColumnName="Operator" />
+                <ScalarProperty Name="FieldValueFactor" ColumnName="FieldValueFactor" />
+                <ScalarProperty Name="SubQueryType" ColumnName="SubQueryType" />
+                <ScalarProperty Name="QueryBuilderClassName" ColumnName="QueryBuilderClassName" />
+                <ScalarProperty Name="SearchQueryType" ColumnName="SearchQueryType" />
+                <ScalarProperty Name="QueryTypeName" ColumnName="QueryTypeName" />
+                <ScalarProperty Name="FeaturesList" ColumnName="FeaturesList" />
+                <ScalarProperty Name="ZnodeCatalogId" ColumnName="ZnodeCatalogId" />
+                <ScalarProperty Name="SearchProfileName" ColumnName="SearchProfileName" />
+                <ScalarProperty Name="SearchProfileId" ColumnName="SearchProfileId" />
+                <ScalarProperty Name="PublishSearchProfileEntityId" ColumnName="PublishSearchProfileEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+		</EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

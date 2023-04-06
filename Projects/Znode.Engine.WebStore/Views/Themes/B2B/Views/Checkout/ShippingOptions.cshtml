@@ -1,0 +1,27 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ShippingOptionListViewModel
+
+<div class="container">
+    <div class="row multiple-checkout">
+        <div class="col-xs-12 nopadding">
+            <h1 class="page-title">SHIPPING METHOD</h1>
+        </div>
+        <div class="col-xs-12 checkout-step nopadding">
+            <h3>Checkout Step 2 of 4</h3>
+        </div>
+        @{ Html.RenderPartial("_ShippingOptions", Model);}
+    </div>
+
+    <div>
+        @{ Html.RenderAction("DisplayShippingAddress", "Checkout");}
+    </div>
+    <div class="col-xs-12 nopadding">
+        <div class="pull-right">
+            <a href="/Checkout/CartReview" class="btn-text btn-bg-primary">Next Step</a>
+
+            <a href="/cart" class="btn-text btn-bg-secondary">Cancel</a>
+        </div>
+    </div>
+</div>
+
+
+

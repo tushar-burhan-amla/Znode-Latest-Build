@@ -1,0 +1,100 @@
+﻿@using Znode.Engine.WebStore.Agents
+@{
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    bool isHomeRecommendationEnabled = (PortalAgent.CurrentPortal?.RecommendationSetting?.IsHomeRecommendation).GetValueOrDefault();
+    string ContentContainerPartialViewPath = "~/Views/Themes/Templates/_Container.cshtml";
+    string HomePageTickerContainerPartialViewPath = "~/Views/Themes/Templates/_HomePageTicker.cshtml";
+    string AdSpacePartialViewPath = "~/Views/Themes/Templates/_HomePageAdSpace.cshtml";
+}
+@if (Request.IsAuthenticated)
+{
+    string message = GlobalAttributeHelper.GetUserMessage();
+    if (!string.IsNullOrEmpty(message))
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col p-0">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 text-center user-promotion-msg text-break">
+                                @message
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+}
+
+<div class="container-fluid p-0 content-container">
+    <!--Home Page Container Widget-->
+    <z-widget>@Html.WidgetPartialAuto("ContentContainer", "Content Container", "1786", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), HomePageTickerContainerPartialViewPath, portalId)</z-widget>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col p-0 home-slider">
+            <!--Home Page Slider Widget-->
+            <z-widget>@Html.WidgetPartialAuto("BannerSlider", "Slider", "555", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId)</z-widget>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col offer-banner">
+            <!--Advertisement Banner Widget-->
+            <z-widget>@Html.WidgetPartialAuto("OfferBanner", "AdvertisementBanner", "110", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId)</z-widget>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid content-container">
+    <!--Home Page Container Widget-->
+    <z-widget>@Html.WidgetPartialAuto("ContentContainer", "Content Container", "1787", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), AdSpacePartialViewPath, portalId)</z-widget>
+</div>
+
+<div class="col-12 carousel-card">
+    <div class="container featured-products">
+        <div class="row">
+            <div class="col featured-products-block">
+                <z-widget>@Html.WidgetPartialAuto("ProductList", "Featured Products", "666", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId) </z-widget>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid content-container">
+    <!--Home Page Container Widget-->
+    <z-widget>@Html.WidgetPartialAuto("ContentContainer", "Content Container", "1788", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), ContentContainerPartialViewPath, portalId)</z-widget>
+</div>
+
+<div class="col-12 carousel-card">
+    <div class="container">
+        <div class="row">
+            <div class="col p-0">
+                <!--BestSelling Widget-->
+                <z-widget>@Html.WidgetPartialAuto("CategoryList", "Category List", "1992", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId)</z-widget>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (isHomeRecommendationEnabled == true)
+{
+    <div class="container featured-products">
+        <div class="row">
+            <!--Recommended Products Widget, will be displayed on home page-->
+            <div class="col featured-products-block" data-test-selector="divRecommendedProductList">
+                <z-widget>
+                    @Html.WidgetPartial("HomeRecommendations", "RecommendedProducts", "6611", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())
+                </z-widget>
+            </div>
+        </div>
+    </div>
+}
+
+
+

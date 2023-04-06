@@ -1,0 +1,193 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Libraries.ECommerce.Utilities;
+@model ERPTaskSchedulerViewModel
+@{
+    string panelContainerId = Equals(Model.SchedulerCallFor, ZnodeConstant.SearchIndex) || Equals(Model.SchedulerCallFor, ZnodeConstant.PublishCatalog) ? "aside-popup-panel" : "";
+    string panelContainerClass = Equals(Model.SchedulerCallFor, ZnodeConstant.SearchIndex) || Equals(Model.SchedulerCallFor, ZnodeConstant.PublishCatalog) ? "" : "";
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string cancelUrl = "/TouchPointConfiguration/List";
+    switch (Model.SchedulerCallFor)
+    {
+        case ZnodeConstant.ProductFeed:
+            cancelUrl = "/ProductFeed/List";
+            break;
+        case ZnodeConstant.PublishCatalog:
+            cancelUrl = "/PIM/Catalog/CatalogList";
+            break;
+        case ZnodeConstant.RecommendationDataGeneration:
+            cancelUrl = "/Recommendation/GetRecommendationSetting?portalId=" + Model.PortalId;
+            break;
+        case ZnodeConstant.PublishContentContainer:
+            cancelUrl = "/ContentContainer/List";
+            break;
+        default:
+            cancelUrl = "/TouchPointConfiguration/List";
+            break;
+    }
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmERPTaskScheduler", CancelUrl = cancelUrl, IsSaveCloseEnable = true };
+}
+<div id="@panelContainerId" class="@panelContainerClass">
+    <div class="col-sm-12 title-container">
+        @if (Equals(Model.SchedulerCallFor, ZnodeConstant.SearchIndex))
+        {
+            if (Model.ERPTaskSchedulerId > 0)
+            {<h1 data-test-selector="hgdScheduler">@Admin_Resources.LabelUpdateScheduler<em class="z-minus"></em><span>@Model.TouchPointName</span></h1>}
+        else
+        { <h1 data-test-selector="hgdScheduler">@Admin_Resources.LabelCreateScheduler<em class="z-minus"></em><span>@Model.TouchPointName</span></h1>}
+
+    <div class="pull-right btn-container">
+        <button type="button" data-test-selector="popLinkCancel" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('divCreateScheduler')"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+        <div class="pull-right">
+            <button type="button" data-test-selector="popLinkSave" class="btn-text btn-text-secondary margin-left-10" onclick="SearchConfiguration.prototype.CreateScheduler()">@Admin_Resources.ButtonSave</button>
+        </div>
+    </div>
+}
+else if (Equals(Model.SchedulerCallFor, ZnodeConstant.ProductFeed))
+{
+    if (Model.ERPTaskSchedulerId > 0)
+    { <h1 data-test-selector="hgdScheduler">@Admin_Resources.LabelUpdateScheduler<em class="z-minus"></em><span>@Model.TouchPointName</span></h1>}
+else
+{ <h1 data-test-selector="hgdScheduler">@Admin_Resources.LabelCreateScheduler<em class="z-minus"></em><span>@Model.TouchPointName</span></h1>}
+
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+}
+else if (Equals(Model.SchedulerCallFor, ZnodeConstant.PublishCatalog))
+{
+    controllerName = "TouchPointConfiguration";
+    actionName = Model.ERPTaskSchedulerId > 0 ? "Edit" : "Create";
+
+    if (Model.ERPTaskSchedulerId > 0)
+    { <h1 data-test-selector="hgdScheduler">@Admin_Resources.LabelUpdateScheduler<em class="z-minus"></em><span>@Model.TouchPointName</span></h1>}
+else
+{ <h1 data-test-selector="hgdScheduler">@Admin_Resources.LabelCreateScheduler<em class="z-minus"></em><span>@Model.TouchPointName</span></h1>}
+
+    <div class="pull-right btn-container">
+        <button type="button" data-test-selector="popLinkCancel" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('divCreateSchedularForCatalog')"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+        <div class="pull-right">
+            <button type="button" data-test-selector="popLinkSave" class="btn-text btn-text-secondary margin-left-10" onclick="Catalog.prototype.CreateScheduler()">Save</button>
+        </div>
+    </div>
+}
+else if (Equals(Model.SchedulerCallFor, ZnodeConstant.RecommendationDataGeneration))
+{
+    controllerName = "TouchPointConfiguration";
+    actionName = Model.ERPTaskSchedulerId > 0 ? "Edit" : "Create";
+
+    if (Model.ERPTaskSchedulerId > 0)
+    { <h1 data-test-selector="hgdScheduler">@Admin_Resources.LabelUpdateScheduler<em class="z-minus"></em><span>@Model.TouchPointName</span></h1>}
+else
+{ <h1 data-test-selector="hgdScheduler">@Admin_Resources.LabelCreateScheduler<em class="z-minus"></em><span>@Model.TouchPointName</span></h1>}
+
+    <div class="pull-right btn-container">
+        <button type="button" data-test-selector="popLinkCancel" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('divCreateSchedulerForRecommendation')"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+        <div class="pull-right">
+            <button type="button" data-test-selector="popLinkSave" class="btn-text btn-text-secondary margin-left-10" onclick="Recommendation.prototype.CreateScheduler()">@Admin_Resources.ButtonSave</button>
+        </div>
+    </div>
+
+}
+else if (Equals(Model.SchedulerCallFor, ZnodeConstant.PublishContentContainer))
+{
+    controllerName = "TouchPointConfiguration";
+    actionName = Model.ERPTaskSchedulerId > 0 ? "Edit" : "Create";
+
+    if (Model.ERPTaskSchedulerId > 0)
+    { <h1 data-test-selector="hgdScheduler">@Admin_Resources.LabelUpdateScheduler<em class="z-minus"></em><span>@Model.TouchPointName</span></h1>}
+else
+{ <h1 data-test-selector="hgdScheduler">@Admin_Resources.LabelCreateScheduler<em class="z-minus"></em><span>@Model.TouchPointName</span></h1>}
+
+    <div class="pull-right btn-container">
+        <button type="button" data-test-selector="popLinkCancel" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('divCreateSchedularForContentContainer')"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+        <div class="pull-right">
+            <button type="button" data-test-selector="popLinkSave" class="btn-text btn-text-secondary margin-left-10" onclick="ContentContainer.prototype.ContentContainerCreateScheduler()">@Admin_Resources.ButtonSave</button>
+        </div>
+    </div>
+}
+else
+{
+    if (Model.ERPTaskSchedulerId > 0)
+    {
+        <h1 data-test-selector="hgdScheduler">@string.Format(@Admin_Resources.LabelUpdateScheduler, Model.ERPClassName) <em class="z-minus"></em><span>@Model.TouchPointName</span></h1>}
+    else
+    {<h1 data-test-selector="hgdScheduler">@Admin_Resources.LabelCreateScheduler<em class="z-minus"></em><span>@Model.TouchPointName</span></h1> }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+
+}
+    </div>
+    <section class="col-sm-12 page-container scheduler-status">
+       
+        <form method="POST" action="/@controllerName/@actionName" id="frmERPTaskScheduler">
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.TouchPointName, new { @class = "required", @data_test_selector = "lblTouchPointName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.TouchPointName, new { Readonly = "true", @data_test_selector = "txtTouchPointName" })
+                        @Html.ValidationMessageFor(model => model.TouchPointName, "", new { @id = "valTouchPointName", @data_test_selector = "valTouchPointName" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.SchedulerType, new { @data_test_selector = "lblSchedulerType" })
+                    </div>
+                    <div class="control-md">
+                        <label class="padding-right"> @Html.RadioButtonFor(model => model.SchedulerType, "Scheduled", new { @data_test_selector = "chkScheduled" })<span class="lbl padding-8" data-test-selector="lblScheduled">@ERP_Resources.LabelScheduler</span></label>
+                        @if (Equals(Model.SchedulerCallFor, ZnodeConstant.ERP) || string.IsNullOrEmpty(Model.SchedulerCallFor))
+                        {
+                            <label class="padding-right"> @Html.RadioButtonFor(model => model.SchedulerType, "RealTime", new { @data_test_selector = "chkRealTime" })<span class="lbl padding-8" data-test-selector="lblRealTime">@ERP_Resources.LabelRealTime</span></label>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.SchedulerName, new { @class = "required", @data_test_selector = "lblSchedulerName" })
+                    </div>
+                    <div class="control-md">
+                        @if (Model.ERPTaskSchedulerId == 0)
+                        { @Html.TextBoxFor(model => model.SchedulerName, new { @data_test_selector = "txtSchedulerName" })}
+                    else
+                    { @Html.TextBoxFor(model => model.SchedulerName, new { Readonly = "true", @data_test_selector = "txtSchedulerName" })}
+                        @Html.ValidationMessageFor(model => model.SchedulerName, "", new { @id = "valSchedulerName", @data_test_selector = "valSchedulerName" })
+                    </div>
+                </div>
+            </div>
+            @if (Model.SchedulerType == "Scheduled")
+            {
+                <div id="divSchedulerSetting" class="catalog-schedular-block create-schedular">
+                    @{Html.RenderPartial("~/Views/TouchPointConfiguration/_SchedulerSetting.cshtml", Model);}
+                </div>
+            }
+            else
+            {
+                <div id="divSchedulerSetting" style="display:none">
+                    @{Html.RenderPartial("~/Views/TouchPointConfiguration/_SchedulerSetting.cshtml", Model);}
+                </div>
+            }
+            @Html.HiddenFor(model => model.ERPTaskSchedulerId)
+            @Html.HiddenFor(model => model.SchedulerCallFor)
+            @Html.HiddenFor(model => model.PortalId)
+            @Html.HiddenFor(model => model.CatalogId)
+            @Html.HiddenFor(model => model.IndexName)
+            @Html.HiddenFor(model => model.CatalogIndexId)
+            @Html.HiddenFor(model => model.HangfireJobId)
+
+        </form>
+    </section>
+
+</div>
+@Scripts.Render("~/bundles/jqueryval")

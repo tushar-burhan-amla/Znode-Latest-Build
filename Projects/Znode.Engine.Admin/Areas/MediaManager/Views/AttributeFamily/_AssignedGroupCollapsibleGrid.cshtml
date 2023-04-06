@@ -1,0 +1,48 @@
+﻿@model AttributeGroupListViewModel
+@using Znode.Engine.Admin.ViewModels;
+
+@{
+    string area = "MediaManager";
+    string controller = ViewContext.RouteData.Values["controller"].ToString();
+    string action = "AssignedAttributes";
+}
+
+<div class="collapsible-grid dirtyignore">
+    <table class="table" aria-describedby="Media Attributes Family Table">
+        <thead>
+            <tr>
+                <th scope="col">@Attributes_Resources.LabelFamilyGroupCode</th>
+                <th scope="col">@Admin_Resources.LabelType</th>
+                <th scope="col">@Admin_Resources.LabelRequired</th>
+                <th scope="col">@Attributes_Resources.LabelAttributeLocalizable</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{foreach (AttributeGroupViewModel item in Model.AttributeGroups)
+                {
+                    <tr>
+                                    <td colspan="6">
+                                        <table class="table child-table" aria-describedby="Media Attributes Family Child Table">
+                                            <thead>
+                                                <tr class="header">
+                                                    <th class="th-header" scope="col" colspan="7">
+                                                        <button type="button" class="btn-dropdown" onclick="javascript: var _CollapsibleGrid = new CollapsibleGrid(); _CollapsibleGrid.HideShowExpandOption(this,'@area','@controller','@action');" data-attributegroupid="@item.MediaAttributeGroupId"><em class="z-add"></em></button>
+                                                        @item.GroupCode
+                                                        @Html.AuthorizedRawActionLink("<i class='z-delete'></i>", "UnAssignAttributeGroups", "AttributeFamily", new { attributeGroupId = item.MediaAttributeGroupId }, new { @class = "pull-right" })
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="attributeData">
+
+                                                @*Attribute Data will be rendered here*@
+
+                                            </tbody>
+                                        </table>
+                                    </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

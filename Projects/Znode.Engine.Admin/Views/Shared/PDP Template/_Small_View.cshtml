@@ -1,0 +1,13 @@
+﻿@if (User.Identity.IsAuthenticated && Session[Znode.Engine.MvcDemo.Helpers.MvcDemoConstants.AccountKey] != null)
+{
+	using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logout-form" }))
+		{
+            @Html.ActionLink(User.Identity.Name, "Dashboard", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Manage account" })        
+			@Html.AntiForgeryToken()
+			<a href="#" class="account-logout"> | @Resources.ZnodeResource.LinkTextLogOff</a>
+		}
+}
+else
+{
+    @Html.ActionLink("Log in / Register", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })   
+}

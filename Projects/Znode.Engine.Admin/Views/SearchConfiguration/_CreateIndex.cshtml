@@ -1,0 +1,155 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalIndexViewModel
+@using Znode.Engine.Admin.Models
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers
+@using Znode.Engine.Admin.ViewModels;
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string schedulerButtonLabel = Model.SchedulerData.ERPTaskSchedulerId > 0 ? Admin_Resources.LabelEditScheduler : Admin_Resources.LabelCreateScheduler;
+    List<PopupInputFieldDataItem> revisionType = HelperMethods.GetAvailablePublishStates();
+
+    string schedulerNameLabel = Model.SchedulerData.ERPTaskSchedulerId <= 0 ? "Scheduler Name" : "";
+    PopupModel publishPopupModel = new PopupModel()
+    {
+        Title = @Admin_Resources.TitleIndexConfirm,
+        Description = @Admin_Resources.IndexConfirmationMessage,
+        NoChoiceDescription = @Admin_Resources.IndexConfirmationMessageNoChoice,
+        ModalPopUpId = "PortalIndexPopup",
+        ModalSizeClass = "modal-smd",
+        AdditionalNote = string.Format(Admin_Resources.CreateAllStoreLocaleDisclaimerMessage, ""),
+        InputFields = new List<PopupInputField>(){
+new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = revisionType, RequiredNumberOfItemsToDisplay = 2 },
+},
+        Buttons = new List<PopUpButtonModel>() {
+new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "SearchConfiguration.prototype.CreateIndexSection()"}
+}
+    };
+}
+<div id="divCreateIndex">
+    @using (Ajax.BeginForm("InsertCreateIndexData", controllerName, null, new AjaxOptions() { UpdateTargetId = "createIndexSection", OnSuccess = "SearchConfiguration.prototype.GetSearchIndexMonitorList()" }, new { @id = "frmCreateIndexData" }))
+    {
+        <div class="d-flex manage-index-section">
+            <div class="catalog-field">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.TitleCatalog, new { @class = "required", @data_test_selector = "lblCatalog" })
+                </div>
+                <div class="control-md">
+                    @Html.FastSelectFor(model => model.CatalogName, model => model.PublishCatalogId, "GetSuggestions", "Typeahead", "SearchConfiguration.prototype.OnSelectPubCatalogDataBind", 1, true,
+                new
+                {
+                    htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectCatalog, @class = "", @id = "txtCatalogName", @data_test_selector = "txtCatalog" },
+                    parameters = new { @type = ZnodeTypeAheadEnum.CatalogList.ToString() }
+                })
+                    @CustomHtmlHelper.HiddenField("PublishCatalogId", "hdnPublishCatalogId", "hidden", Convert.ToString(Model.PublishCatalogId))
+                    @CustomHtmlHelper.HiddenField("CatalogName", "hdnPublishCatalogName", "hidden", Convert.ToString(Model.CatalogName))
+                </div>
+            </div>
+
+            <div class="create-section">
+                <div class="index-name-field">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.IndexName, new { @class = "required", @data_test_selector = "lblIndexName" })
+                        <div class="help-text">
+                            <em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-html="true" data-original-title="@(Admin_Resources.HelpTextIndexName)"></em>
+                        </div>
+                    </div>
+                    <div class="control-md">
+                        @if ((Model.CatalogIndexId > 0 || !string.IsNullOrEmpty(Model.IndexName)) && !Model.HasError)
+                        {
+                            @Html.TextBoxFor(model => model.IndexName, new { @onblur = "SearchConfiguration.prototype.ValidateIndexName();" })}
+                        else
+                        {@Html.TextBoxFor(model => model.IndexName, new { @data_test_selector = "txtIndexName", @onblur = "SearchConfiguration.prototype.ValidateIndexName();" })}
+                        @Html.ValidationMessageFor(model => model.IndexName, "", new { id = "errorSpanIndexName", @data_test_selector = "valIndexName" })
+                    </div>
+                </div>
+
+                <div class="create-index-btn field-automated">
+
+                    <input type="button" data-test-selector="linkCreateIndex" id="PublishCatalogCategoryLink" name="PublishCatalogCategoryLink" class="btn-text btn-text-secondary" value="@Admin_Resources.ButtonCreateIndex" onclick="SearchConfiguration.prototype.RevisionTypePopUp()" />
+
+                </div>
+            </div>
+
+            <div class="edit-section">
+                @if (Model.SchedulerData.ERPTaskSchedulerId > 0)
+                {
+
+                    <div class="schedular-name-field">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.SchedulerData.SchedulerName, new { @data_test_selector = "txtSchedulerName" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.SchedulerData.SchedulerName, new { @readonly = "readonly", @data_test_selector = "txtSchedulerName" })
+                        </div>
+                    </div>
+
+                }
+                else
+                {
+                    <div class="hidden" id="schedulerName">
+                        <div class="schedular-name-field">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.SchedulerData.SchedulerName, new { @data_test_selector = "txtSchedulerName" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBox("schedulerName", null, new { @readonly = "readonly", @id = "schedulerNameText", @data_test_selector = "txtSchedulerName" })
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="create-schedular-btn ">
+                    <div class="control-label">
+                        <label data-test-selector="txtSchedulerLabel" id="schedulerLabel">@schedulerNameLabel</label>
+                    </div>
+                    <div class="control-md">
+                        <input type="button" data-test-selector="linkCreateIndexScheduler" id="searchScheduler" name="searchScheduler" class="btn-text btn-text-secondary" value="@schedulerButtonLabel" onclick="SearchConfiguration.prototype.GetCreateIndexSchedulerView()" />
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        @Html.HiddenFor(model => model.PublishCatalogId)
+        @Html.HiddenFor(model => model.CatalogName)
+        @Html.HiddenFor(model => model.RevisionType, new { @Value = revisionType.FirstOrDefault().Value })
+
+        <input type="hidden" id="DirectCalling" name="DirectCalling" value="true" />
+        <input type="hidden" id="ErrorMessage" value="@Model.ErrorMessage" />
+        <input type="hidden" id="HasError" value="@Model.HasError.ToString()" />
+        <input type="hidden" id="SearchCreateIndexMonitorId" name="SearchCreateIndexMonitorId" value="@Model.SearchCreateIndexMonitorId" />
+        <input type="hidden" id="CatalogIndexId" name="CatalogIndexId" value="@Model.CatalogIndexId" />
+        <input type="hidden" id="SearchConfigurationType" name="searchConfigurationType" value="CreateIndex" />
+    }
+</div>
+@Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml", publishPopupModel)
+
+<div id="searchIndexMonitorList">
+    @*Monitor list will be displayed here*@
+</div>
+<div id="divCataloglistPopup" class="aside-popup-panel modal-dialog modal-lg">
+
+</div>
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+    ZnodeBase.prototype.RemoveAndAddUnobtrusiveValidation();
+
+    $(document).ready(function () {
+        $('*[data-url]').each(function () { fastselectwrapper($(this), $(this).data("onselect-function")); });
+
+        //Responsive for create and edit schedular
+        if ($('#schedulerName').length > 0){
+            $('.create-section').css('display', 'flex');
+        }
+    });
+
+</script>
+@* Here Store List will display *@
+<div id="divStoreListAsidePanel" class="aside-popup-panel"></div>
+<div id="divSearchIndexServerStatusList" class="aside-popup-panel modal-dialog modal-xl"></div>
+<div id="divCreateScheduler" class="aside-popup-panel modal-dialog create-schedular modal-xl">
+</div>
+<script src="~/Content/bootstrap-3.3.7/js/moment-with-locales.js"></script>
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-datetimepicker.js"></script>

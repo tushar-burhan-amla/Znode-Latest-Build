@@ -1,0 +1,35 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalShippingViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmEditShippings", CancelUrl = "/Store/List", Callback = null, IsSaveCloseEnable = true };
+    ViewBag.Title = @Admin_Resources.TitleStoreAndReps + " | " + @Admin_Resources.TitleMultifront;
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelStore)<em class="z-minus"></em><span>@Model.PortalName</span></h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        @*Div for creating tabs*@
+        <div class="nopadding padding-top">
+            @if (DefaultSettingHelper.IsDataSeparationAllowedforAppType())
+            {
+                Html.RenderAction("GetTabStructureForShippingOrigin", controllerName, new { @portalId = @Model.PortalId });
+            }
+            else
+            {
+                Html.RenderAction("GetShippingOriginForProduction", controllerName, new { @portalId = @Model.PortalId });
+            }
+        </div>
+    </section>
+</div>

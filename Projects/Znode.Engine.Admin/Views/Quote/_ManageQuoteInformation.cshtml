@@ -1,0 +1,171 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@model QuoteInfoViewModel
+@{
+    string shippingTypeClass = Model.ShippingTypeClassName == "ZnodeCustomerShipping" ? "display:block" : "display:none";
+}
+<div class="col-sm-12 nopadding dashboard-panel ">
+    <div class=" dashboard-panel-heading">
+        <h4 class="dashboard-panel-title" data-test-selector="hdgOrderInformation">@Model.StoreName @Admin_Resources.HeaderQuoteInformation</h4>
+    </div>
+    <div class="col-sm-12 nopadding margin-bottom-15">
+        <div class="order-subtitle">
+            <h4>@Admin_Resources.LabelQuoteSummary</h4>
+        </div>
+        <div class="col-xs-12">
+            <div class="col-xs-6 padding-none">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding ">
+                        <div class="control-label order-label">
+                            @Html.Label(Admin_Resources.LabelQuoteDate, new { @data_test_selector = "lblQuoteDate" })
+                        </div>
+                        <div class="control-lg update-order-status dirtyignore order-controLg-width" data-test-selector="divOrderDate">
+                            @Html.RenderBlock(Model?.QuoteDateWithTime)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label order-label">
+                            @Html.Label(Admin_Resources.QuoteNumberLabel, new { @data_test_selector = "lblQuoteNumber" }).
+                        </div>
+                        <div class="control-lg update-order-status dirtyignore order-controLg-width text-break" data-test-selector="divOrderNumber">
+                            @Html.RenderBlock(Model?.QuoteNumber)
+                        </div>
+                    </div>
+                </div>
+                @if (HelperUtility.IsNotNull(Model?.OrderNumber))
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label order-label">
+                                @Html.Label(Admin_Resources.LabelConvertedtoOrder, new { @data_test_selector = "lblConvertedtoOrder" })
+                            </div>
+                            <div class="control-lg update-order-status dirtyignore order-controLg-width" data-test-selector="divConvertedtoOrder">
+                                @Html.ActionLink(linkText: Model.OrderNumber, actionName: "Manage", controllerName: "Order", routeValues: new { OmsOrderId = Model?.OmsOrderId }, htmlAttributes: new { target = "_blank" })
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="form-group expiration-quote-fields">
+                    <div class="col-sm-12 nopadding" id="divQuoteExpirationDate">
+                        <div class="control-label order-label">
+                            @Html.Label(Admin_Resources.LabelQuoteExpirationDate, new { @data_test_selector = "lblQuoteExpirationDate" })
+                        </div>
+                        @Html.Partial("_ManageQuoteExpirationDate", Model)
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 padding-none">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label order-label">
+                                @Html.Label(Admin_Resources.LabelQuoteStatus, new { @data_test_selector = "lblQuoteStatus" })
+                            </div>
+                            <div class="control-lg">
+                                @{Html.RenderAction("ManageQuoteStatus", "Quote", new { quoteStatus = Model.OmsQuoteStatus, omsQuoteId = Model.OmsQuoteId });}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="order-created-by">
+                            <div class="control-label order-label">
+                                @Html.Label(Admin_Resources.LabelQuoteCreatedBy, new { @data_test_selector = "lblQuoteCreatedBy" })
+                            </div>
+                            <div class="control-lg update-order-status dirtyignore text-break" data-test-selector="divOrderCreatedBy">
+                                @Html.RenderBlock(Model?.CreatedByName + " (" + Model.UserName + ")" )
+                            </div>
+                        </div>
+                    </div>
+                 
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label order-label" data-test-selector="divJobName">
+                                @Html.Label(Admin_Resources.LabelJobName, new { @data_test_selector = "lblJobName" })
+                            </div>
+                            <div class="control-lg orderInfo-control-lg" data-test-selector="divManageJobName">
+                                @Html.Partial("_ManageJobName", Model)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 padding-none margin-top billing-info">
+            <div class="order-subtitle padding-bottom">
+                <h4>@Admin_Resources.LabelShippingInformation</h4>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group inhand-field" id="divlblInHandsDate">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelQuoteInHandsDate, new { @data_test_selector = "lblInHandsDate" })
+                        </div>
+                        @Html.Partial("_ManageInHandDate", Model)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.ShippingType, new { @data_test_selector = "lblShippingType" })
+                        </div>
+                        <div class="control-lg">
+                            <span id="lblShippingType" data-test-selector="divShippingType">
+                                <select id="shippingTypes" data-test-selector="drpShippingTypes" value="@Model.ShippingTypeDescription" onchange="Quote.prototype.GetSelectedShipping(this)">
+                                    <option selected>@Model.ShippingTypeDescription</option>
+                                </select>
+
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 nopadding" id="customerShippingDiv" style="@shippingTypeClass">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Admin_Resources.LabelAccountNumber, new { @class = "required", @data_test_selector = "lblAccountNumber" })
+                            </div>
+                            <div class="control-lg">
+                                @Html.Partial("_ManageShippingAccountNumber", Model)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Admin_Resources.LabelShippingMethod, new { @class = "required", @data_test_selector = "lblShippingMethod" })
+                            </div>
+                            <div class="control-lg">
+                                @Html.Partial("_ManageShippingMethod", Model)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 padding-none pull-right margin-top shipping-info">
+            <div class="order-subtitle">
+                <h4>&nbsp;</h4>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left" data-test-selector="divShippingConstraintCode">
+                        @Html.Label(Admin_Resources.LabelShippingConstraintsCode, new { @data_test_selector = "lblShippingConstraintCode" })
+                    </div>
+                    <div class="control-lg orderInfo-control-lg" data-test-selector="divManageShippingConstraintCode">
+                        @Html.Partial("_ManageShippingConstraintCode", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.PortalId)
+    @Html.HiddenFor(model => model.userId, new { @id = "hdnUserId" })
+    @Html.HiddenFor(model => model.OmsQuoteId)
+    @Html.HiddenFor(model => model.OmsQuoteStatus, new { @id = "hdnQuoteStatus" })
+    @Html.HiddenFor(model => model.ShippingTypeClassName, new { @id = "hndShippingclassName" })
+    @Html.HiddenFor(model => model.ShippingId, new { @id = "hndShippingTypeId" })
+</div>

@@ -1,0 +1,61 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    Layout = null;
+    bool IsCallForPricing = Convert.ToBoolean(Model.Attributes?.Value("CallForPricing"));
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+    Model.IsQuickView = true;
+}
+<div class="row">
+    <div id="layout-product" class="product-meta col" data-id="@Model.PublishProductId">
+        <div class="row product-view-details">
+            <div class="col-12 col-lg-5 product-images" id="ProductImage">
+                <div class="col-12 p-0 image-view text-center">
+                    @if (Convert.ToBoolean(Model.Attributes?.Value("NewProduct")))
+                    {
+                        <img src="@_fileLocation/Images/new-product-tag.png" alt="New Product" class="img-fluid new-product-tag hvr-pulse" />
+                    }
+                    <div class="image">
+                        @{
+                            string imageSrc = string.IsNullOrEmpty(Model.ImageLargePath) ? "/no-image.png" : Model.ImageLargePath;
+                        }
+                        <img id="@Model.PublishProductId" src="@imageSrc" class="img-fluid" data-src="@imageSrc" alt="@(Model.Attributes?.Value("ImageAltText"))" />
+                    </div>
+
+                </div>
+
+                <div class="col-12 p-0 product-altimages">
+                    @if (Model?.AlternateImages?.Count > 0)
+                    {
+                        <div id="alt-images" class="owl-carousel alternate-img">
+
+                            @foreach (var image in Model.AlternateImages)
+                            {
+                                <div class="item">
+                                    <a href="@image.OriginalImagePath" data-standard="@image.OriginalImagePath">
+                                        <img src="@image.ImageThumbNailPath" alt="" />
+                                    </a>
+                                </div>
+                            }
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-12 col-lg-7 product-overview">
+                <h1 class="product-name" data-test-selector="lblProductName">@Html.RenderBlock(WebUtility.HtmlDecode(Model.Name))</h1>
+                @Html.Partial("_ProductInfo", Model)
+            </div>
+
+            @Html.Hidden("categoryIds", string.Join(",", Model.CategoryHierarchy.Select(category => category.CategoryId)), new { @id = "categoryIds" })
+            <input id="isQuickView" name="true" type="hidden" value="true">
+        </div>
+    </div>
+</div>
+<script>
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>
+@Html.Partial("~/Views/Shared/Enhanced Ecommerce/_PDPTracking.cshtml", Model.GetEcommerceDetailsOfProduct())

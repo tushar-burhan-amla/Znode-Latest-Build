@@ -1,0 +1,135 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@model StoreLocatorViewModel
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    var lattitude = 0.0; var longitude = 0.0;
+    if (Model?.PortalList?.Count > 0)
+    {
+        lattitude = Convert.ToDouble(Model?.PortalList[0]?.Latitude);
+        longitude = Convert.ToDouble(Model?.PortalList[0]?.Longitude);
+    }
+    else
+    {
+        //set the co-ordinates of the center of USA map. 
+        lattitude = 37.0902;
+        longitude = 95.7129;
+    }
+}
+
+<div class="col">
+    <div class="row">
+
+        <div class="container">
+            <div class="row contain-pages">
+                <div class="col-12">
+                    <h1 class="page-title">@WebStore_Resources.LabelFindABranch</h1>
+                </div>
+                <div class="col-12 mb-5">
+                    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="row d-block">
+                            <div class="col-12 col-md-4 col-lg-3 mb-4 float-left">
+                                <div class="form-group">
+                                    <div class="col-12 p-0">
+                                        @Html.LabelFor(model => model.PostalCode)
+                                    </div>
+                                    <div class="col-12 p-0">
+                                        @Html.TextBoxFor(model => model.PostalCode)
+                                        @Html.ValidationMessageFor(model => model.PostalCode)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-12 p-0">
+                                        @Html.LabelFor(model => model.CityName)
+                                    </div>
+                                    <div class="col-12 p-0">
+                                        @Html.TextBoxFor(model => model.CityName)
+                                        @Html.ValidationMessageFor(model => model.CityName)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-12 p-0">
+                                        @Html.LabelFor(model => model.StateName)
+                                    </div>
+                                    <div class="col-12 p-0">
+                                        @Html.TextBoxFor(model => model.StateName)
+                                        @Html.ValidationMessageFor(model => model.StateName)
+                                    </div>
+                                </div>
+                                <div class="col-12 p-0">
+                                    <div class="text-right">
+                                        <button id="btnSubmit" title="Submit" type="button" value="submit" class="btn btn-primary btn-block" onclick="initMap()">@WebStore_Resources.ButtonSubmit</button>
+                                        @Html.ActionLink(WebStore_Resources.ButtonCancel, "Index", controllerName, null, new { @class = "btn btn-secondary mt-3 d-block" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-8 col-lg-9 float-right">
+                                @if (!Equals(Model, null) && !Equals(Model.PortalList, null) && Model.PortalList.Count > 0)
+                                {
+                                    <div class="col-12 p-0 locator-map my-4">
+                                        <div id="map" style="height:560px;"></div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-12 col-md-4 col-lg-3 mb-4 store-locator-block float-left">
+                                @if (!Equals(Model, null) && !Equals(Model.PortalList, null) && Model.PortalList.Count > 0)
+                                {
+                                    @Html.Partial("_PortalList", Model.PortalList)
+                                    <div class="col-12 p-0 locator-info-panel">
+                                        <div class="form-group">
+                                            <div class="col-12 p-0"><strong>@Html.LabelFor(model => model.Radius)</strong></div>
+                                            <div class="col-12 p-0">@Html.DropDownListFor(model => model.Radius, Model.RadiusList, new { @onchange = "StoreLocator.prototype.showDistanceWiseData()" })</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-12 p-0"><strong>@WebStore_Resources.TravelMode: </strong></div>
+                                            <div class="col-12 p-0">
+                                                <label for="mode" class="visuallyhidden">@WebStore_Resources.TravelMode</label>
+                                                <select id="mode" onchange="initMap();">
+                                                    <option value="DRIVING">Driving</option>
+                                                    <option value="TRANSIT">Transit</option>
+                                                    <option value="WALKING">Walking</option>
+                                                    <option value="BICYCLING">Bicycling</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-12 p-0"><strong>Directions: </strong></div>
+                                            <div class="col-12 p-0"><div id="right-panel" class="right-side-locator scroll-default"></div></div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-12 p-0 error-msg">
+                            @Html.Label("", Model.ErrorMessage)
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/Core/Znode/StoreLocatorMap.js"></script>
+<!--Keys to be fetched from config file-->
+@Html.Hidden("gocoderGoogleAPI", ZnodeWebstoreSettings.ZnodeGocoderGoogleAPI)
+@Html.Hidden("gocoderGoogleAPIKey", ZnodeWebstoreSettings.ZnodeGoogleMapKey)
+<script async defer src="@ZnodeWebstoreSettings.ZnodeGoogleAPIDomainKey/maps/api/js?key=@(ZnodeWebstoreSettings.ZnodeGoogleMapKey)&callback=showUSmap" type="text/javascript"></script>
+
+<script type="text/javascript">
+    function showUSmap() {
+        // The location of first store in portal list
+        var store = { lat: @lattitude, lng: @longitude };
+        // The map, centered at first store in portal list
+        var map = new google.maps.Map(
+            document.getElementById('map'), {
+                zoom: 6, center: store, minZoom: 3, mapTypeId: 'hybrid', animation: 'bounce'
+            });
+        // The marker, positioned at first portal location store locator list
+        var marker = new google.maps.Marker({ position: store, map: map, animation: google.maps.Animation.BOUNCE });
+    }
+</script>

@@ -1,0 +1,112 @@
+﻿@model Znode.Engine.Admin.ViewModels.CartItemViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@using Newtonsoft.Json
+@using Znode.Custom.Common.Helper
+@{
+    string imagePath = string.Empty;
+    int productId = Model.ParentProductId > 0 ? Model.ParentProductId : !string.IsNullOrEmpty(Model.ProductId) ? Convert.ToInt32(Model.ProductId) : 0;
+    string colorValue = Model?.ProductAttributes?.Where(x => x.AttributeCode == "OMSColorCode")?.Select(x => x.AttributeValues)?.FirstOrDefault();
+    string sizeValue = Model?.ProductAttributes?.Where(x => x.AttributeCode == "OMSSizeCode")?.Select(x => x.AttributeValues)?.FirstOrDefault();
+    string omsColorCode = Model?.ProductAttributes.Where(y => y.AttributeCode == "OMSColorCode")?.Select(x => x.AttributeValueCode)?.FirstOrDefault();
+    string omsColorName = Model?.ProductAttributes.Where(y => y.AttributeCode == "OMSColorName")?.Select(x => x.AttributeValues)?.FirstOrDefault();
+    string styleNumber = Model?.ProductAttributes?.Where(x => x.AttributeCode == "StyleNumber")?.Select(x => x.AttributeValues)?.FirstOrDefault();
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    string culture = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    Dictionary<string, object> personaliseValuesList = Model?.PersonaliseValuesList;
+    PersonalizationDataHelper personalizedData = new PersonalizationDataHelper(Model?.PersonaliseValuesDetail);
+    List<string> artifiLogoPaths = new List<string>();
+    string artifiSKU = string.Empty;
+    if (string.IsNullOrEmpty(styleNumber?.Trim()))
+    {
+        artifiSKU = Model?.ProductAttributes?.Where(y => y.AttributeCode == "CatalogProductId")?.FirstOrDefault()?.AttributeValues?.Trim() ?? string.Empty;
+    }
+    else
+    {
+        artifiSKU = string.IsNullOrEmpty(omsColorCode) ? styleNumber : string.Concat(styleNumber.Trim(), "_", omsColorCode.Trim());
+    }
+
+    if (personalizedData.IsPersonalizationExist())
+    {
+        imagePath = personalizedData.GetArtifiPersonalizeImagePath();
+
+        artifiLogoPaths = personalizedData.GetArtifiPersonalizeLogoPaths();
+    }
+    if (!string.IsNullOrEmpty(imagePath))
+    {
+        Model.ImagePath = imagePath;
+    }
+
+    string designId = Model?.PersonaliseValuesDetail?.FirstOrDefault()?.DesignId;
+}
+<li></li>
+<li class="td-image">
+    <div class="cartImage">
+        <a href="#" data-sku="@artifiSKU" data-customizeproductid="@designId" id="artifi-previewproduct" class="cart-item-title artifi-previewproduct" data-toggle="modal" data-target=".preview-popup"><img src="@Model.ImagePath" data-src="@Model.ImagePath" class="img-responsive b-lazy" alt=""></a>
+    </div>
+</li>
+<li class="td-name">
+    <!--Product Title-->
+    <span data-sku="@artifiSKU" data-omssavedcartlineitem="@Model.OmsSavedcartLineItemId" data-parentomssavedcartlineitem="@Model.ParentOmsSavedcartLineItemId" data-productid="@productId" id="artifi-design-edit" class="artifi-design-edit cart-item-title">@Html.RenderBlock(Model.ProductName)</span>
+
+    @if (!string.IsNullOrEmpty(Model.ConfigurableProductSKUs))
+    {
+        <div class="item-color">
+            @Html.RenderBlock(omsColorName)
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.ConfigurableProductSKUs))
+    {
+        <div class="item-size">
+            @Html.RenderBlock(sizeValue)
+        </div>
+    }
+    @if (!Model.IsAllowedTerritories)
+    {
+        <div id="dynamic-allowesterritories" class="status-outofstock hvr-pulse error-msg">@WebStore_Resources.AllowedTerritoriesProductError</div>
+    }
+    <!--Product Description-->
+    @if (Model?.GroupProducts?.Count > 0)
+    {
+        <div class="group-product-list">
+            @foreach (var item in Model.GroupProducts)
+            {
+                <p>@Html.RenderBlock(item.ProductName)</p>
+            }
+        </div>
+    }
+</li>
+<li class="td-price">
+    <!--Product Unit Price-->
+    <div class=" table-unitprice unitPrice">
+        @if (Model?.GroupProducts?.Count > 0)
+        {
+            foreach (var item in Model.GroupProducts)
+            {
+                <div class="group-product-list">
+                    @HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, culture)
+                </div>
+            }
+        }
+        else
+        {
+            <div class="group-product-list">
+                @HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, culture, Model.UOM)
+            </div>
+        }
+    </div>
+</li>
+<li class="td-quantity">
+
+    @Html.TextBoxFor(model => model.Quantity, new { @readonly = "readonly", @class = "quantity" })
+
+
+</li>
+<li class="td-total">
+    @HelperMethods.FormatPriceWithCurrency(Model.ExtendedPrice, culture)
+</li>
+<script>
+    jQuery('img').bind('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>

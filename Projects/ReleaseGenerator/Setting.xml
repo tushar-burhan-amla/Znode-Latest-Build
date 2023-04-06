@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Folders>
+  <Folder source="..\SharedLibraries"
+                 target="..\SharedLibraries" action="Copy"></Folder>
+
+  <Folder source="Libraries\ZNode.Libraries.Report"
+              target="..\Projects\Libraries\ZNode.Libraries.Report" action="Copy"></Folder>
+
+  <Solution source="Znode.Multifront.sln"
+            target="..\Projects" sharedlibpath="..\SharedLibraries" configEvn="Release">
+
+    <Project name="Znode.Engine.Admin" action="Copy">
+      <Generate name="Content" action="Copy"/>
+      <Generate name="TypeScriptCompile" action="Copy"/>
+      <Generate name="Compile" action="Copy"/>
+    </Project>
+	
+    <Project name="Znode.Engine.Api" action="Copy">
+      <Generate name="Content" action="Copy"/>
+      <Generate name="TypeScriptCompile" action="Copy"/>
+      <Generate name="Compile" action="Copy"/>
+    </Project>
+    
+	<Project name="Znode.Engine.WebStore" action="Copy">
+      <Generate name="Content" action="Copy"/>
+      <Generate name="TypeScriptCompile" action="Copy"/>
+      <Generate name="Compile" action="Copy"/>
+    </Project>
+    
+    <Project name="Znode.Engine.Connector" directory="Libraries"  action="Copy">
+      <Generate name="Content" action="Copy"/>
+      <Generate name="TypeScriptCompile" action="Copy"/>
+      <Generate name="Compile" action="Copy"/>
+	    <Generate name="EmbeddedResource" action="Copy"/>
+    </Project>
+	
+    <Project name="Znode.Engine.ERPConnector" directory="Libraries" action="Copy">
+      <Generate name="Content" action="Copy"/>
+      <Generate name="TypeScriptCompile" action="Copy"/>
+      <Generate name="Compile" action="Copy"/>
+	  <Generate name="EmbeddedResource" action="Copy"/>
+    </Project>
+    
+	<Project name="ZNode.Libraries.Resources" directory="Libraries" action="Copy">
+      <Generate name="Content" action="Copy"/>
+      <Generate name="TypeScriptCompile" action="Copy"/>
+      <Generate name="Compile" action="Copy"/>
+	    <Generate name="EmbeddedResource" action="Copy"/>
+    </Project>
+
+    <SharedLib name="Znode.Engine.ABSConnector" />
+    <SharedLib name="Znode.Engine.Api.Client" />
+    <SharedLib name="Znode.Engine.Api.Models" />
+    <SharedLib name="Znode.Engine.Connector" />
+    <SharedLib name="Znode.Engine.ERPConnector" />
+    <SharedLib name="Znode.Engine.Exceptions" />
+    <SharedLib name="Znode.Engine.Promotions" />
+    <SharedLib name="Znode.Engine.Services" />
+    <SharedLib name="Znode.Engine.Shipping" />
+    <SharedLib name="Znode.Engine.Tasks" />
+    <SharedLib name="Znode.Engine.TaskScheduler" />
+    <SharedLib name="Znode.Engine.Taxes" />
+    <SharedLib name="Znode.Admin.Core" />
+    <SharedLib name="Znode.Api.Core" />
+    <SharedLib name="Znode.Custom.WebStore" />
+    <SharedLib name="Znode.Infrastructure.PluginInterfaces" />
+    <SharedLib name="Znode.Infrastructure.PluginManager" />
+    <SharedLib name="Znode.Libaries.AmazonOAuthProvider" />
+    <SharedLib name="ZNode.Libraries.Admin" />
+    <SharedLib name="ZNode.Libraries.Data" />
+    <SharedLib name="ZNode.Libraries.ECommerce.Entities" />
+    <SharedLib name="ZNode.Libraries.ECommerce.Fulfillment" />
+    <SharedLib name="ZNode.Libraries.ECommerce.ShoppingCart" />
+    <SharedLib name="ZNode.Libraries.ECommerce.Utilities" />
+    <SharedLib name="ZNode.Libraries.ElasticSearch" />
+    <SharedLib name="Znode.Libraries.MediaStorage" />
+    <SharedLib name="ZNode.Libraries.MongoDB.Data" />
+    <SharedLib name="Znode.Libraries.Observer" />
+    <SharedLib name="ZNode.Libraries.Resources" />
+    <SharedLib name="Znode.Libraries.SAML" />
+    <SharedLib name="Znode.Libraries.SAMLWeb" />
+    <SharedLib name="ZNode.Libraries.Search" />
+    <SharedLib name="Znode.Web.WindsorInstallers" />
+    <SharedLib name="Znode.WebStore.Core" />
+  </Solution>
+</Folders>

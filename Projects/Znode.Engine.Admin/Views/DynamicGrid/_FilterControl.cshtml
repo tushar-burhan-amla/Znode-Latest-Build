@@ -1,0 +1,23 @@
+﻿@using Znode.Engine.Admin.Helpers
+@using Znode.Engine.Admin.Extensions
+@model  List<Znode.Engine.Admin.Models.FilterColumnModel>
+@{
+    string dateFormat = HelperMethods.GetDateFormat();
+}
+@foreach (Znode.Engine.Admin.Models.FilterColumnModel column in Model.ToList())
+{
+    string textValue = (column.Value.IndexOf("''") >= 0) ? column.Value.Replace("''", "'") : column.Value;
+    string mxlen = Equals(column.DataType, "Int32") ? "maxlength=20" : string.Empty;
+    if ((Equals(column.DataType.ToLower(), "date") || Equals(column.DataType.ToLower(), "datetime")) && !string.IsNullOrEmpty(column.Value))
+    {
+        textValue = (column.Value.IndexOf("'") >= 0) ? column.Value.Replace("'", "") : column.Value;
+        textValue = Convert.ToDateTime(textValue).ToDateTimeFormat();
+    }
+    <div class="pull-left filter-option" id="filter-control-@column.Id">
+        <label class="popovercontent btn-dropdown" data-text-value="@textValue" data-datype="@column.DataType" data-max-length="@mxlen" data-columnname="@column.ColumnName" data-options-list="@column.SelectListOfDatatype" data-column-datatype="@column.DataType" data-column-dateformat="@dateFormat" data-toggle="popover">
+            @column.HeaderText &nbsp;<span class="data-val-label"></span><strong>@textValue</strong><span class="z-down"></span>
+        </label>
+    </div>
+}
+
+

@@ -1,0 +1,10 @@
+﻿@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.ViewModels
+@model PIMAttributeValueListViewModel
+@{
+
+    DropDownOptions _data = new DropDownOptions() { DropDownId = "DropDownId2", DropDownList = Model.baseDropDownList, assignable = true, Action = "AssignPersonalizedAttributes", Controller = "PIM/Products", IsAjax = true, SuccessCallBack = "Products.prototype.AssignPersonilizeAttributeCreate", IsMultiple = true, IsDraggable = true, IsAllowCheckAll = false, SelectOptionName = "Add Attributes", ShowSubmitButton = false, EntityId = Convert.ToInt32(Model?.PimProductId) };
+}
+<div class="pull-right padding-left action-dropdown dropdown-associate">
+    @Html.Partial("~/Views/Shared/Controls/_CheckBoxDropDown.cshtml", _data)
+</div>

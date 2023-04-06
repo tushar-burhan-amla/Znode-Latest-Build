@@ -1,0 +1,12 @@
+﻿<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">        
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelGeneral, "CreateEdit", "RMAConfiguration", null)</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelReasonForReturn, "GetReasonForReturnList", "RMAConfiguration", null)</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelRequestStatus, "GetRequestStatusList", "RMAConfiguration", null)</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.HeaderIssueGiftCard, "IssueGiftCard", "RMAConfiguration", null)</li>
+        </ul>
+    </div>
+</aside>
+

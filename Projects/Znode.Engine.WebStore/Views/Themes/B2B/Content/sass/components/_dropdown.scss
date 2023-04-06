@@ -1,0 +1,24 @@
+﻿.dropdown-btn, select{
+    border:0;
+    background:$white url('../../Images/drop-arrow.png') no-repeat right 5px center;
+    background-size:10px;
+    border-bottom:1px solid $base-primary-light;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    text-align:left;
+    border-radius:0;
+    &:after{display:none;}
+}
+select::-ms-expand { display: none; -webkit-transition: all 0s ease; -moz-transition: all 0s ease; -o-transition: all 0s ease; -ms-transition: all 0s ease; transition: all 0s ease; }
+.ie select { display: none; -webkit-transition: all 0s ease; -moz-transition: all 0s ease; -o-transition: all 0s ease; -ms-transition: all 0s ease; transition: all 0s ease; }
+select:-webkit-autofill{background:$white url('../../Images/drop-arrow.png') no-repeat right 5px center !important;}
+@include screensize(x-small) {
+    .dropdown-btn, select {
+        padding: 0 27px 0 5px;
+    }
+}
+@include screensize(xl-small) {
+    .dropdown-btn, select {
+        padding: 0 35px 0 5px;
+    }
+}

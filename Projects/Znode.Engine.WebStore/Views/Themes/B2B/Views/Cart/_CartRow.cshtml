@@ -1,0 +1,137 @@
+﻿@model Znode.Engine.WebStore.ViewModels.CartItemViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    int productId = Model.ParentProductId > 0 ? Model.ParentProductId : !string.IsNullOrEmpty(Model.ProductId) ? Convert.ToInt32(Model.ProductId) : 0;
+    string _displayRemoveLink = Request.Path.Contains("Checkout") ? Model.IsAllowedTerritories ? "display:none" : "" : "";
+    //To check the request is from checkout page or not
+    bool displaySaveForLaterButton = Request.Path.ToLower().Contains("checkout");
+    bool isShowPriceAndInventoryToLoggedInCustomersOnly = GlobalAttributeHelper.IsShowPriceAndInventoryToLoggedInUsersOnly();
+    string removeItemOnClickEvent = Helper.IsEnhancedEcommerceTrackingEnabled() ? "SendEcommerceDataForRemoveSingleCartItem(this,'" + Url.Encode(Model.SKU) + "')" : "javascript:$($(this).closest('form').submit());";
+}
+<div class="row b2b-cart-row align-items-top position-relative">
+    <div class="b2b-cart-item-details pt-0">
+        <a data-test-selector="linkCartItemDetails" href="@Url.GetProductUrl(Model?.SeoPageName, productId.ToString())"><img src="@Model.ImagePath" data-src="@Model.ImagePath" class="img-fluid b-lazy" alt="@Html.RenderBlock(Model.ProductName)"></a>
+        <div class="b2b-col-item-title font-weight-bold">
+            @WebStore_Resources.ColumnTitleItem
+            <div class="cart-description d-flex flex-wrap align-content-center">
+                <a data-test-selector="linkCartItemName" href="@Url.GetProductUrl(Model?.SeoPageName, productId.ToString())" class="cart-item-title">@Html.RenderBlock(Model.ProductName)</a>
+
+                <div class="col-12 p-0 cart-item-description" data-test-selector="divCartItemDescription">
+                    @if (Model?.PersonaliseValuesDetail?.Count > 0)
+                    {
+                        foreach (var item in Model.PersonaliseValuesDetail)
+                        {
+                            if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                            {
+                                <p data-test-selector="paraCartItemDescription">@item.PersonalizeName : @item.PersonalizeValue</p>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+            <div class="col-12 p-0 group-product-list">
+                @if (Model?.GroupProducts?.Count > 0)
+                {
+                    foreach (var item in Model.GroupProducts)
+                    {
+                        <p>@Html.RenderBlock(item.ProductName)</p>
+                    }
+                }
+            </div>
+            <div class="col-12 p-0 mb-2 cart-item-description" data-test-selector="divCartItemDescription">@Html.RenderBlock(Model.CartDescription)</div>
+            <div class="b2b-cart-item-links d-flex" data-test-selector="divRemoveCartItems">
+                @using (Html.BeginForm("RemoveCartItem", "Cart", new { guid = Model.ExternalId }, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <a href="JavaScript:void(0);" class="cart-item-remove font-weight-normal mr-3" onclick=@removeItemOnClickEvent title="Remove Item" data-test-selector="linkCartItemRemove">@WebStoreConstants.LabelRemove</a>
+                }
+
+                @if (Request.IsAuthenticated && !displaySaveForLaterButton && PortalAgent.CurrentPortal.EnableSaveForLater)
+                {
+                    using (Html.BeginForm("SaveForLater", "SaveForLater", new { guiId = Model.ExternalId }, FormMethod.Post, new { id = "FormRemoveTemplateCartItem" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <a href="JavaScript:void(0);" class="save-for-later font-weight-normal" onclick="javascript: $($(this).closest('form').submit());" title="Save for Later" data-test-selector="linkSaveForLater">@WebStoreConstants.SaveForLater</a>
+                    }
+                }
+            </div>
+
+            @if (!Model.IsAllowedTerritories)
+            {
+                <div id="dynamic-allowesterritories" class="status-outofstock hvr-pulse error-msg">@WebStore_Resources.AllowedTerritoriesProductError</div>
+            }
+        </div>
+    </div>
+    <div class="w-100 d-md-none"></div>
+    <div class="b2b-col-width pl-4 pb-4 p-md-0 cart-item-unitprice" data-test-selector="colCartItemUnitPrice">
+        @if (Model?.GroupProducts?.Count > 0)
+        {
+            foreach (var item in Model.GroupProducts)
+            {
+                <div class="b2b-col-item-title" data-test-selector="divPriceText">@WebStore_Resources.LabelTierPrice</div>
+                @*if store level flag - 'show price to logged-in users only' is set to yes and user is logged off then do not show price to users.*@
+                if (isShowPriceAndInventoryToLoggedInCustomersOnly && !Request.IsAuthenticated)
+                {
+                    <div class="loged-out-product-details p-0">
+                        <div class="loged-out-product-text">
+                            <a href="JavaScript:void(0);" data-target="#sign-in-nav" class="OpenNav" onclick="User.prototype.LoginInPopup()">@WebStore_Resources.LabelSignIn</a>
+                            @WebStore_Resources.TextOR
+                            <a href="/User/Signup/@("?returnUrl=" + HttpContext.Current.Request.Url.LocalPath.ToString())">@WebStore_Resources.LabelRegister</a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @Helper.FormatPriceWithCurrency(Model.UnitPrice, Model.CultureCode)
+                }
+            }
+        }
+        else
+        {
+            <div class="b2b-col-item-title" data-test-selector="divPriceText">@WebStore_Resources.LabelTierPrice</div>
+            if (isShowPriceAndInventoryToLoggedInCustomersOnly && !Request.IsAuthenticated)
+            {
+                <div class="loged-out-product-details p-0">
+                    <div class="loged-out-product-text">
+                        <a href="JavaScript:void(0);" data-target="#sign-in-nav" class="OpenNav" onclick="User.prototype.LoginInPopup()">@WebStore_Resources.LabelSignIn</a>
+                        @WebStore_Resources.TextOR
+                        <a href="/User/Signup/@("?returnUrl=" + HttpContext.Current.Request.Url.LocalPath.ToString())">@WebStore_Resources.LabelRegister</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                @Helper.FormatPriceWithCurrency(Model.UnitPrice, Model.CultureCode, Model.UOM)
+            }
+        }
+    </div>
+    <div class="b2b-col-width pb-4 px-3 p-md-0 cart-item-quantity">
+        <div class="b2b-col-item-title">@WebStore_Resources.ColumnTitleQuantity</div>
+        @Html.Partial("_Quantity", Model)
+    </div>
+    @if (isShowPriceAndInventoryToLoggedInCustomersOnly && !Request.IsAuthenticated)
+    {
+        <div class="b2b-col-width pb-4 px-3 p-md-0 cart-item-total">
+            <div class="b2b-col-item-title pl-2" data-test-selector ="divTotalText">@WebStore_Resources.ColumnTitleTotal</div>
+            <div class="loged-out-product-details p-0 pl-2">
+                <div class="loged-out-product-text">
+                    <a href="JavaScript:void(0);" data-target="#sign-in-nav" class="OpenNav" onclick="User.prototype.LoginInPopup()">@WebStore_Resources.LabelSignIn</a>
+                    @WebStore_Resources.TextOR
+                    <a href="/User/Signup/@("?returnUrl=" + HttpContext.Current.Request.Url.LocalPath.ToString())">@WebStore_Resources.LabelRegister</a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="b2b-col-width pb-4 px-3 p-md-0 cart-item-total" title="@Helper.FormatPriceWithCurrency(Model.ExtendedPrice, Model.CultureCode)">
+            <div class="b2b-col-item-title pl-3" data-test-selector ="divTotalText">@WebStore_Resources.ColumnTitleTotal</div>
+            <div class="cart-item-price pl-3" data-test-selector="spnCartRowPrice">@Helper.FormatPriceWithCurrency(Model.ExtendedPrice, Model.CultureCode)</div>
+        </div>
+    }
+</div>
+<script>
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>

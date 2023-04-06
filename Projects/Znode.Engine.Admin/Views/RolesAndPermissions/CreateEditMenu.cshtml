@@ -1,0 +1,170 @@
+﻿@model Znode.Engine.Admin.ViewModels.MenuViewModel
+@using Znode.Engine.Admin.ViewModels;
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmMenu", CancelUrl = "/RoleAndAccessRight/MenuList", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    @{
+        if (actionName.ToLower() == "CreateMenu".ToLower())
+        {
+            <h1 data-test-selector="hdgMenuList">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelMenu)</h1>
+        }
+        else
+        {
+            <h1 data-test-selector="hdgMenuList">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelMenu)<em class="z-minus"></em><span data-test-selector="spnMenuName">@Model.MenuName</span></h1>
+        }
+
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmMenu" }))
+    {
+        string isActiveStatus = (!Equals(Model, null) && Model.IsActive) ? "checked='checked'" : string.Empty;
+        string isParentMenuStatus = (!Equals(Model, null) && Model.IsParentMenu) ? "checked='checked'" : string.Empty;
+        if (actionName.ToLower() == "CreateMenu".ToLower())
+        {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.MenuName, new { @class = "required", @data_test_selector = "lblMenuName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.MenuName, new { @data_test_selector = "txtMenuName" })
+                        @Html.ValidationMessageFor(m => m.MenuName, "", new { @data_test_selector = "valMenuName" })
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.MenuName, new { @class = "required", @data_test_selector = "lblMenuName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.MenuName, new { @data_test_selector = "txtMenuName" })
+                        @Html.ValidationMessageFor(m => m.MenuName, "", new { @data_test_selector = "valMenuName" })
+                    </div>
+                </div>
+            </div>
+        }
+        if (actionName.ToLower() == "createmenu")
+        {
+            <div class="form-group">
+                <div class="control-md control-non">
+                    <label>
+                        <input @isParentMenuStatus data-val="true" data-test-selector="chkIsParentMenu" data-val-required="The IsParentMenu field is required." id="IsParentMenu" name="IsParentMenu" onclick="javascript: var roleAndAccessRight = new RoleAndAccessRight(); roleAndAccessRight.CheckedIsParentMenu();" type="checkbox" value="true">
+                        <span class="lbl padding-8" data-test-selector="spnIsParentMenu">@Admin_Resources.LabelIsParentMenu</span><input name="IsParentMenu" type="hidden">
+                    </label>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+                <div class="control-md control-non">
+                    <label>
+                        <input @isParentMenuStatus data-val="true" data-test-selector="chkIsParentMenu" data-val-required="The IsParentMenu field is required." id="IsParentMenu" name="IsParentMenu" onclick="javascript: var roleAndAccessRight = new RoleAndAccessRight(); roleAndAccessRight.CheckedIsParentMenu();" type="checkbox" disabled="disabled">
+                        <span class="lbl padding-8" data-test-selector="spnIsParentMenu">@Admin_Resources.LabelIsParentMenu</span><input name="IsParentMenu" type="hidden">
+                    </label>
+                </div>
+            </div>
+        }
+        if (!Model.IsParentMenu)
+        {
+            <div id="divParentMenuList" class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ParentMenuList, new { @data_test_selector = "lblParentMenuList" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.ParentMenuId, new SelectList(Model.ParentMenuList, "MenuId", "MenuName"), "---Select---", new { @data_test_selector = "drpParentMenuList" })
+                        @Html.ValidationMessageFor(m => m.ParentMenuList, "", new { @data_test_selector = "valParentMenuList" })
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.MenuSequence, new { @class = "required", @data_test_selector = "lblMenuSequence" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.MenuSequence, new { @data_test_selector = "txtMenuSequence" })
+                    @Html.ValidationMessageFor(m => m.MenuSequence, "", new { @data_test_selector = "valMenuSequence" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.AreaName, new { @data_test_selector = "lblAreaName" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.AreaName, new { @data_test_selector = "txtAreaName" })
+                    @Html.ValidationMessageFor(m => m.AreaName, "", new { @data_test_selector = "valAreaName" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.ControllerName, new { @class = "required", @data_test_selector = "lblControllerName" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.ControllerName, new { @data_test_selector = "txtControllerName" })
+                    @Html.ValidationMessageFor(m => m.ControllerName, "", new { @data_test_selector = "valControllerName" })
+                </div>
+            </div>
+        </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ActionName, new { @class = "required", @data_test_selector = "lblActionName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ActionName, new { @data_test_selector = "txtActionName" })
+                        @Html.ValidationMessageFor(m => m.ActionName, "", new { @data_test_selector = "valActionName" })
+                    </div>
+                </div>
+            </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.CSSClassName, new { @data_test_selector = "lblCSSClassName" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.CSSClassName, new { @data_test_selector = "txtCSSClassName" })
+                                @Html.ValidationMessageFor(m => m.CSSClassName, "", new { @data_test_selector = "valCSSClassName" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control-md control-non">
+                            <label>
+                                <input @isActiveStatus id="IsActive" data-test-selector="chkIsActive" name="IsActive" type="checkbox" value="true">
+                                <span class="lbl padding-8" data-test-selector="spnEnableMenu">@Admin_Resources.LabelEnableMenu</span>
+                                <input name="IsActive" type="hidden" value="false">
+                            </label>
+                        </div>
+                    </div>
+                    @Html.Hidden("menuid", Model.MenuId)
+    }
+</section>

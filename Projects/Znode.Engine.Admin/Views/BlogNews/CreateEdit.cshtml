@@ -1,0 +1,321 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Extensions
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.Models
+@model BlogNewsViewModel
+@{
+    Model.TakeFromDraftFirst = true;
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string FormId = "frmCreateBlogNews";
+    string CancelUrl = "/BlogNews/BlogNewsList";
+    string Callback = "BlogNews.prototype.Validate";
+
+    PopupModel publishPopupModel = new PopupModel()
+    {
+        Title = @Admin_Resources.TitlePublishConfirm,
+        Description = string.Format(@Admin_Resources.PublishConfirmationMessage, "blog/news page"),
+        NoChoiceDescription = string.Format(@Admin_Resources.PublishConfirmationMessageNoChoice, "blog/news page"),
+        ModalPopUpId = "PublishBlogNewsPagePopdiv",
+        ModalSizeClass = "model-smd",
+        AdditionalNote = string.Format(Admin_Resources.PublishAllLocaleDisclaimerMessage, "blog/news page"),
+        InputFields = new List<PopupInputField>
+{
+new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = HelperMethods.GetAvailablePublishStates(), RequiredNumberOfItemsToDisplay = 2 }
+},
+        Buttons = new List<PopUpButtonModel>()
+{
+new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "BlogNews.prototype.UpdateAndPublishBlogNewsPage(this,'frmCreateBlogNews','"+CancelUrl+"')" }
+}
+    };
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "btnSaveNClose", DataTestSelector = "linkSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = Admin_Resources.ButtonSaveClose, OnClick = "SaveCancel.prototype.SubmitForm('" + @FormId + "','" + @Callback + "', '" + @CancelUrl + "')" });
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "dvSave", DataTestSelector = "linkSave", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "SaveCancel.prototype.SubmitForm('" + @FormId + "', '" + @Callback + "')" });
+    if (string.Equals(actionName, "editblognews", StringComparison.InvariantCultureIgnoreCase))
+    {
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "PublishBlogNewsLink", DataTestSelector = "linkPublish", LinkType = LinkType.OnClick, LinkDisplayName = @PIM_Resources.ButtonReady, OnClick = "BlogNews.prototype.PublishBlogNewsPopup()" });
+    }
+    string mediapath = string.IsNullOrEmpty(Model?.MediaPath) ? ZnodeAdminSettings.DefaultImagePath : Model?.MediaPath;
+    int? mediaId = Model?.MediaId > 0 ? Model?.MediaId : null;
+    string portalName = string.IsNullOrEmpty(Model?.StoreName) ? @Admin_Resources.TitleStore : Model?.StoreName;
+    string pageName = string.IsNullOrEmpty(Model?.PageName) ? Admin_Resources.LabelContentPage : Model?.PageName;
+    int cultureId = Model.LocaleId;
+    if (!Equals(HttpContext.Current.Request.Cookies["_blogNewsCulture"], null))
+        cultureId = !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies["_blogNewsCulture"].Value) ? Convert.ToInt32(HttpContext.Current.Request.Cookies["_blogNewsCulture"].Value) : Model.LocaleId;
+}
+<div class="col-sm-12 title-container">
+    @if (string.Equals(actionName, "editblognews", StringComparison.InvariantCultureIgnoreCase))
+    {
+        <h1 data-test-selector="hdgEditBlogAndNews">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelBlogNews)<em class="z-minus"></em><span>@Model.BlogNewsTitle</span></h1>
+    }
+    else
+    {
+        <h1 data-test-selector="hdgAddBlogAndNews">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelBlogNews)</h1>
+    }
+
+    <div id="dvSubmitCancel" class="btn-container">
+        <div class="pull-right ">
+            @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+        </div>
+        <div id="btnCancel" class="pull-right">
+            @{
+                string returnurl = string.IsNullOrEmpty(@CancelUrl) ? HttpUtility.UrlDecode(Model.ReturnUrl) : @CancelUrl;
+                <a href="@returnurl" class="btn-text-icon" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+            }
+        </div>
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/_CultureDropdown.cshtml", Model.Locale)
+        </div>
+    </div>
+
+</div>
+<!--Main Container-->
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @if (Equals(actionName.ToLower(), "editblognews"))
+    {
+        <aside aria-labelledby="Side Menu">
+            <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+            <div class="slide-container">
+                <ul class="aside-panel" id="BlogNewsAsidePannel" data-test-selector="listBlogNewsAsidePannelContainer">
+                    <li class="groupPannel tab-selected" data-groupCode="BlogNews"><a href="#" onclick="BlogNews.prototype.EnableTab('div-loginForm')" data-test-selector="linkBlogNewsTab" id="BlogNewsTab">@Admin_Resources.TitleBlogNewsInfo</a></li>
+                    <li class="groupPannel" data-groupCode="Content"><a href="#" onclick="BlogNews.prototype.EnableTab('div-ContentPage')" data-test-selector="linkContentPageTab" id="ContentPageTab">@Admin_Resources.TitleContentSource</a></li>
+                </ul>
+            </div>
+        </aside>
+    }
+    else
+    {
+        <aside aria-labelledby="Side Menu">
+            <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+            <div class="slide-container">
+                <ul class="aside-panel">
+                    <li class="groupPannel tab-selected"><a href="#" onclick="BlogNews.prototype.EnableTab('loginForm')" data-test-selector="linkBlogNewsTab" id="BlogNewsTab">@Admin_Resources.TitleBlogNewsInfo</a></li>
+                </ul>
+            </div>
+        </aside>
+    }
+
+    <section class="main-container">
+        <div id="divMainContainer" class="blogs-news-container">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateBlogNews" }))
+            {
+                <div style="display : none" id="div-loginForm" class="">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.BlogNewsType, new { @class = "required", @data_test_selector = "lblBlogNewsType" })
+                            </div>
+                            @if (Equals(actionName.ToLower(), "editblognews"))
+                            {
+                                <div class="control-md">
+                                    <input type="text" data-test-selector="txtBlogNewsType" value="@Model.BlogNewsTypeValue" disabled="disabled" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="control-md">
+                                    @Html.EnumDropDownListFor(model => model.BlogNewsTypeValue, new { @data_test_selector = "drpBlogNewsType" })
+                                    @Html.ValidationMessageFor(model => model.BlogNewsTypeValue, "", new { @id = "errorRequiredType", @data_test_selector = "valBlogNewsType" })
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.BlogNewsCode, new { @class = "required", @data_test_selector = "lblBlogNewsCode" })
+                            </div>
+                            <div class="control-md">
+                                @if (Equals(actionName.ToLower(), "editblognews"))
+                                {
+                                    @Html.TextBoxFor(m => m.BlogNewsCode, new { @Readonly = "Readonly", @data_test_selector = "txtBlogNewsCode" })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(m => m.BlogNewsCode, new { @data_test_selector = "txtBlogNewsCode" })
+                                    @Html.ValidationMessageFor(m => m.BlogNewsCode, "", new { @data_test_selector = "valBlogNewsCode" })
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.PortalId, new { @class = "required", @data_test_selector = "lblStore" })
+                            </div>
+                            @if (Equals(actionName.ToLower(), "editblognews"))
+                            {
+                                <div class="control-md">
+                                    <input type="text" data-test-selector="txtStore" value="@Model.StoreName" disabled="disabled" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="control-md">
+                                    @Html.FastSelectFor(model => model.StoreName, model => model.PortalId, "GetSuggestions", "Typeahead", "BlogNews.prototype.OnSelectPortalResult", 1, true,
+                                   new
+                                   {
+                                       htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStoreName" },
+                                       parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                                   })
+                                    @CustomHtmlHelper.HiddenField(Convert.ToString(Model.PortalId), "hdnPortalId", "hidden", Convert.ToString(Model.PortalId))
+                                    @Html.ValidationMessageFor(model => model.StoreName, null, new { id = "errorRequiredStore", @data_test_selector = "valStore" })
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label data-test-selector="lblMedia">@Admin_Resources.LabelImage</label>
+                            </div>
+                            <div class="control-md">
+                                <div class="upload-images" id="divMediaId">
+                                    <img id="MediaId" data-test-selector="imgMedia" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')" src="@mediapath" alt="Blog/News Image"  class="img-responsive dev-upload-single">
+                                    <span class="change-image" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')">@Admin_Resources.LinkChange</span>
+                                    <input type="hidden" id="MediaId" name="MediaId" value="@mediaId">
+                                    <input type='hidden' value=@AdminConstants.ImageExtensions Id='hdnMediaId' />
+                                    @if (!Equals(mediapath, null) && !Equals(mediapath, ZnodeAdminSettings.DefaultImagePath))
+                                    {
+                                        <a class="upload-images-close" data-test-selector="linkCloseMedia" data-toggle="tooltip" data-placement="top" title="Remove" onclick="EditableText.prototype.RemoveImage('MediaId')"><em class="z-close-circle"></em></a>
+                                    }
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.MediaId, "", new { @data_test_selector = "valMedia" })
+                            <div id="UploadMediaId" class="appendMediaModel">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="div_blog_news_for_locale">
+                        @{ Html.RenderPartial("_BlogNewsForLocale", Model); }
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.SEOUrl, new { @data_test_selector = "lblSEOUrl" })
+                            </div>
+                            <div class="control-md">
+                                @if (string.IsNullOrEmpty(Model.SEOUrl) || Model.LocaleId == (Convert.ToInt32(DefaultSettingHelper.DefaultLocale)))
+                                {
+                                    @Html.TextBoxFor(model => model.SEOUrl, new { @data_test_selector = "txtSEOUrl" })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(model => model.SEOUrl, new { @readonly = "readonly", @data_test_selector = "txtSEOUrl" })
+                                }
+                                @Html.ValidationMessageFor(model => model.SEOUrl, "", new { id = "errorSpanSEOUrl", @data_test_selector = "valSEOUrl" })
+                            </div>
+                            @Html.Partial("_HelpText", Admin_Resources.HelptextSEOUrl)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6 nopadding control-non">
+                            <div class="control-label">
+                            </div>
+                            <div class="control-md">
+                                <label>
+                                    @if (Model.BlogNewsId < 1)
+                                    {
+                                        <input @("checked='checked'") id="IsBlogNewsActive" data-test-selector="txtIsBlogNewsActive" name="IsBlogNewsActive" type="checkbox" value="true">
+                                    }
+                                    else
+                                    {
+                                        <input @(Model.IsBlogNewsActive ? "checked='checked'" : "") id="IsBlogNewsActive" data-test-selector="txtIsBlogNewsActive" name="IsBlogNewsActive" type="checkbox" value="true">
+                                    }
+                                    <span class="lbl padding-8" data-test-selector="lblIsActive">@Admin_Resources.LabelIsActive</span>
+                                    <input name="IsBlogNewsActive" type="hidden" value="false">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6 nopadding control-non">
+                            <div class="control-md">
+                                <label>
+                                    @if (Model.BlogNewsId < 1)
+                                    {
+                                        <input @("checked='checked'") id="IsAllowGuestComment" data-test-selector="txtIsAllowGuestComment" name="IsAllowGuestComment" type="checkbox" value="true">
+                                    }
+                                    else
+                                    {
+                                        <input @(Model.IsAllowGuestComment ? "checked='checked'" : "") id="IsAllowGuestComment" data-test-selector="txtIsAllowGuestComment" name="IsAllowGuestComment" type="checkbox" value="true">
+                                    }
+                                    <span class="lbl padding-8" data-test-selector="lblIsAllowGuestComment">@Admin_Resources.LabelIsAllowGuestComment</span>
+                                    <input name="IsAllowGuestComment" type="hidden" value="false">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.ActivationDate, new { @data_test_selector = "lblActivationDate" })
+                            </div>
+                            @Html.Partial("_HelpText", @Admin_Resources.TimeZoneHelpText)
+                            <div class="control-sm">
+                                <div class="right-inner-icon">
+                                    @Html.TextBox("ActivationDate", Model.ActivationDate != null ? Model.ActivationDate.ToDateTimeFormat() : string.Empty, new { @id = "ActivationDateId", @data_test_selector = "txtActivationDate", @mindate = "", @class = "datepicker", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat() })
+                                    <i class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                                    <span id="activationdaterrror" data-test-selector="valActivationDate" class="contenterrormessage error-msg"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.ExpirationDate, new { @data_test_selector = "lblExpirationDate" })
+                            </div>
+                            @Html.Partial("_HelpText", @Admin_Resources.TimeZoneHelpText)
+                            <div class="control-sm">
+                                <div class="right-inner-icon">
+                                    @Html.TextBox("ExpirationDate", Model.ExpirationDate != null ? Model.ExpirationDate.ToDateTimeFormat() : string.Empty, new { @id = "ExpirationDateId", @data_test_selector = "txtExpirationDate", @class = "datepicker", @maxdate = "", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat() })
+                                    <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                                    <span id="expirationdaterrror" data-test-selector="valExpirationDate" class="error-msg"></span>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.HiddenFor(model => model.PortalId)
+                        @Html.HiddenFor(model => model.SEOId)
+                        @Html.HiddenFor(model => model.StoreName)
+                        @Html.HiddenFor(model => model.PageName)
+                        @Html.HiddenFor(model => model.LocaleId)
+                        @Html.HiddenFor(model => model.BlogNewsId)
+                        @Html.HiddenFor(model => model.BlogNewsType)
+                        @Html.HiddenFor(model => model.BlogNewsTypeValue)
+                        @Html.HiddenFor(model => model.CMSSEOTypeId)
+                        @Html.HiddenFor(model => model.CMSSEODetailId)
+                        @Html.HiddenFor(model => model.SelectedTab)
+                        @Html.HiddenFor(model => model.TargetPublishState)
+                        @Html.HiddenFor(model => model.TakeFromDraftFirst)
+                        @Html.HiddenFor(model => model.PublishStateId)
+                    </div>
+                </div>
+
+                <div style="display : none" id="div-ContentPage" data-container="ContentPage" class="">
+                    @{ Html.RenderPartial("_ContentSource", Model); }
+                </div>
+            }
+            <div id="divBlogNewsContentPageList" class="aside-popup-panel modal-dialog modal-xl"></div>
+        </div>
+    </section>
+</div>
+<div id="divBlogNewsStoreList" class="aside-popup-panel modal-dialog modal-xl"></div>
+
+<div id="divMediaUploaderPopup"></div>
+@Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml", publishPopupModel)
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Content/bootstrap-3.3.7/js/datepicker.js" type="text/javascript"></script>
+
+

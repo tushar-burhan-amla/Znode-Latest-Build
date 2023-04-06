@@ -1,0 +1,110 @@
+﻿<div class="manage-order-tabs">
+    <ul class="nav nav-tabs" id="OrderAsidePannel">
+
+        <!-- Tabs button Starts -->
+        <li id="customer-tab-link" class="active">
+            <a data-toggle="tab" href="#customer-tab" data-attr="data-toggle-tab">@Admin_Resources.CustomerHeader</a>
+        </li>
+
+        <li id="shipping-cart-tab-link" class="disabled">
+            <a data-toggle="tab" href="#shipping-cart-tab" data-attr="data-toggle-tab">@Admin_Resources.LabelCartAndShipping</a>
+        </li>
+
+        <li id="review-placeorder-tab-link" class="disabled">
+            <a data-toggle="tab" href="#review-placeorder-tab" data-attr="data-toggle-tab">@Admin_Resources.LableReview</a>
+        </li>
+
+        <li id="payment-tab-link" class="disabled">
+            <a data-toggle="tab" href="#payment-tab" data-attr="data-toggle-tab">@Admin_Resources.LablePaymentAndPlaceOrder</a>
+        </li>
+
+        
+        <!-- Tabs button Ends -->
+        <!-- Next tab option button Starts -->
+        @*<a class="btn-text btn-text-secondary pull-right" style="display:none" id="btnPlaceOrder" data-test-selector="btnPlaceOrder" onclick="Order.prototype.SubmitOrder();">
+            @Admin_Resources.LabelPlaceYourOrder
+        </a>*@
+        <button class="btn-text btn-text-secondary pull-right" id="btnNextTab" data-test-selector="btnNextTabSelect" onclick="OrderTabs.prototype.ContinueOrder();">
+            <span>Next: </span>
+            <span id="btnNextTabName">@Admin_Resources.LabelAddProduct</span>
+        </button>
+
+        <!-- Next tab option button Ends -->
+
+        <!-- Place Order button Starts -->
+        <a class="btn-text btn-text-secondary pull-right" style="display:none" id="btnPlaceOrder" data-test-selector="btnPlaceOrder" onclick="Order.prototype.SubmitOrder();">
+            @Admin_Resources.LabelPlaceYourOrder
+        </a>
+        <!-- Place Order button Ends -->
+
+    </ul>
+
+</div>
+
+
+
+
+
+@*<aside>
+        <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            <ul class="aside-panel orders-aside-panel" id="OrderAsidePannel">
+                <li class="groupPannel tab-selected" id="z-customers">
+                    <a onclick="Order.prototype.AddressDivShowHide(this)" id="z-customers" href="javascript:void(0)" data-test-selector="linkChangeCustomer">
+                        @Admin_Resources.CustomerHeader<div class="pull-right change" style="display:none;">@Admin_Resources.LinkChange</div>
+                    </a>
+                    <div class="tab-details" style="display:none;">
+                        <p class="user-name" data-test-selector="paraUsername">Customer Name: <span id="spnUserName" data-test-selector="spnAddedUsername"></span></p>
+                        <p data-test-selector="paraStore">Store: <span id="spnStoreName" data-test-selector="spnStore"></span></p>
+                    </div>
+                </li>
+                <li class="groupPannel disabled" id="z-address">
+                    <a onclick="Order.prototype.AddressDivShowHide(this)" id="z-address" href="javascript:void(0)" data-test-selector="linkChangeAddress">
+                        @Admin_Resources.LabelAddress<div class="pull-right change" style="display:none;">@Admin_Resources.LinkChange</div>
+                    </a>
+                    <div class="tab-details" style="display:none;">
+                        <p data-test-selector="paraBillingAddress">Billing: <span id="spnBillingAddressName" data-test-selector="spnBillingAddress"></span></p>
+                        <p data-test-selector="paraShippingAddress">Shipping: <span id="spnShippingAddressName" data-test-selector="spnShippingAddress"></span></p>
+                    </div>
+                </li>
+                <li class="groupPannel disabled" id="z-shopping-cart">
+                    <a onclick="Order.prototype.AddressDivShowHide(this)" id="z-shopping-cart" href="javascript:void(0)" data-test-selector="linkChangeShoppingCart">
+                        @Admin_Resources.LabelShoppingCart<div class="pull-right change" style="display:none;">@Admin_Resources.LinkChange</div>
+                    </a>
+                    <div class="tab-details" style="display:none;">
+                        <table data-test-selector="tblShoppingCart" aria-describedby="Shopping cart">
+                            <thead>
+                                <tr>
+                                    <th scope="col" data-test-selector="tblHdSKU">SKU</th>
+                                    <th scope="col" data-test-selector="tblHdName">Name</th>
+                                    <th scope="col" data-test-selector="tblHdQty">Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyCartItems"></tbody>
+                        </table>
+                    </div>
+                </li>
+                <li class="groupPannel disabled" id="z-shipping-methods">
+                    <a onclick="Order.prototype.AddressDivShowHide(this)" id="z-shipping-methods" href="javascript:void(0)" data-test-selector="linkChangeShippingMethod">
+                        @Admin_Resources.LabelShippingMethod<div class="pull-right change" style="display:none;" id="div-shipping-method-change">@Admin_Resources.LinkChange</div>
+                    </a>
+                    <div class="tab-details" style="display:none;">
+                        <p data-test-selector="paraShipping">Shipping: <span id="spnShippingName" data-test-selector="spnSelectedShippingName"></span></p>
+                    </div>
+                </li>
+                <li class="groupPannel disabled" id="z-payment">
+                    <a onclick="Order.prototype.AddressDivShowHide(this)" id="z-payment" href="javascript:void(0)" data-test-selector="linkChangePaymentMethod">
+                        @Admin_Resources.LabelPayment <div class="pull-right change" style="display:none;">@Admin_Resources.LinkChange</div>
+                    </a>
+                    <div class="tab-details" style="display:none;">
+                        <p data-test-selector="paraShipping">Payment: <span id="spnPaymentName" data-test-selector="spnSelectedPaymentName"></span></p>
+                    </div>
+                </li>
+                <li class="groupPannel disabled" id="z-review">
+                    <a onclick="Order.prototype.AddressDivShowHide(this)" id="z-review" href="javascript:void(0)">
+                        @Admin_Resources.LabelReview
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>*@

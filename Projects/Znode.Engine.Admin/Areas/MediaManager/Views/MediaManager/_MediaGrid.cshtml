@@ -1,0 +1,21 @@
+﻿@model Znode.Engine.Admin.Models.GridModel
+@{
+    ViewBag.Title = "MediaManager";
+    Layout = null;
+}
+@if (!Equals(Model, null))
+{
+    using (Ajax.BeginForm("List", "MediaManager", new { displayMode = Model.ViewMode, folderId = Model.FolderId }, new AjaxOptions() { UpdateTargetId = Model.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+    {
+        <div id="filterComponent">
+            @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.FilterColumn)
+        </div>
+    }
+    <div class="col-sm-12 list-container" id="mediaList">
+        @{
+            @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model)
+        }
+    </div>
+}
+
+<script>$("section[update-container-id=View_GetMediaPathDetail] table tr td.imageicon .tile-view-container").click(function () {$("body").css('overflow', 'auto') });</script>

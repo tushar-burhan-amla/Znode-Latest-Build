@@ -1,0 +1,41 @@
+﻿@model Znode.Engine.Admin.ViewModels.ShippingListViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+}
+
+<div id="@Model.GridModel.FrontObjectName">
+    <div id="aside-popup-panel">
+        <div class="col-sm-12 title-container">
+            <h1>@Admin_Resources.LabelAssociateShipping</h1>
+            <div class="pull-right btn-container">
+                <button id="cancle-associated-profileCategory" data-test-selector="linkCancel" type="button" class="btn-text-icon margin-bottom" onclick="ZnodeBase.prototype.CancelUpload('divUnassociatedShippingListPopup')"><em class='z-back'></em>@Admin_Resources.ButtonCancel</button>
+                <div class="pull-right padding-left">
+                    <button type="button" class="btn-text btn-text-secondary" data-test-selector="linkSave" onclick="Profiles.prototype.AssociateShipping(@Model.ProfileId)">@Admin_Resources.ButtonSave</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 page-container">
+            <div id="divAssociatedProfileShippingError" class="text-danger" style="display:none">
+                <div class="messageBoxContainer error-msg text-center" data-test-selector="valMessageBoxContainer" id="messageBoxContainerId">@Admin_Resources.PleaseSelectAtleastOneRecord</div>
+            </div>
+            @using (Ajax.BeginForm("GetUnAssociatedShippingList", "Profiles", new { profileId = Model.ProfileId, portalId = Model.PortalId }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "" }, new { @id = "searchform" }))
+            {
+                <div id="filterComponent">
+                    @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                </div>
+            }
+            <div class="col-sm-12 list-container">
+                @{
+                    @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                }
+            </div>
+            @Html.HiddenFor(m => m.ProfileId)
+            @Html.HiddenFor(m => m.PortalId)
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#divUnassociatedShippingListPopup, #filterComponent").find("tr").addClass('preview-link');
+    });
+</script>

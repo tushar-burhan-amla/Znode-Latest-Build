@@ -1,0 +1,174 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities
+@model PublishProductsViewModel
+@{
+    string callForPricingMessage = Admin_Resources.LabelCallForPrice;
+    ProductPromotionViewModel promotionCallForPricing = Model?.Promotions?.FirstOrDefault(x => x.PromotionType == ZnodeConstant.PromotionCallForPricing);
+    bool isGroupProduct = string.Equals(Model.Attributes?.SelectAttributeList(ZnodeConstant.ProductType)?.FirstOrDefault()?.Code, ZnodeConstant.GroupedProduct, StringComparison.OrdinalIgnoreCase);
+    var PersonliseValues = Model?.Attributes?.Where(x => x.IsPersonalizable && x.AttributeTypeName == "Text").ToList();
+    string productType = Model.Attributes?.SelectAttributeList(ZnodeConstant.ProductType)?.FirstOrDefault()?.Code;
+    var autoAddonSKUList = Model?.AddOns?.Where(x => x.IsAutoAddon)?.Select(y => y.AutoAddonSKUs);
+    string autoAddonSku = Equals(autoAddonSKUList, null) ? string.Empty : string.Join(",", autoAddonSKUList);
+    string isQuote = Model.IsQuote.ToString();
+}
+<div class="col-xs-12 product-price margin-bottom-15">
+    <div class="price">
+        <div class="d-flex">
+            <div class="col-sm-7 nopadding">
+                <span class="sku-code">@Model.SKU</span>
+                <h2>@Model.Name</h2>
+            </div>
+
+            <div class="col-sm-5 nopadding d-flex justify-content-end align-items-end">
+                @if (!isGroupProduct)
+                {
+                    <div class="price text-right" data-test-selector="divProductPrice">
+                        @if (!Equals(Model.SalesPrice, null))
+                        {
+                            @*<h4>Price</h4>*@
+
+                            if (Model.SalesPrice != @Model.RetailPrice)
+                            {
+                                <span class="cut-price">
+                                    @HelperMethods.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode)
+                                </span>
+                            }
+
+                            <h2 id="oms_pdp_price">@HelperMethods.FormatPriceWithCurrency(Model.SalesPrice, Model.CultureCode)</h2>
+                        }
+                        else if (Model.AddOns.Count > 0)
+                        {
+                            <h2 id="oms_pdp_price">@HelperMethods.FormatPriceWithCurrency(Model.ProductPrice, Model.CultureCode)</h2>
+                        }
+                        else
+                        {
+                            <h2 id="oms_pdp_price">@HelperMethods.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode)</h2>
+                        }
+                    </div>
+                }
+                @if (isGroupProduct)
+                {
+                    <h2><span id="groupproductmessage"></span></h2>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="col-xs-12 product-variations" id="scrollReview">
+    @if (productType == ZnodeConstant.GroupedProduct)
+    {
+        <h4 data-test-selector="hdgProductVariants">Product Variants</h4>
+    }
+    else if (Model.IsConfigurable)
+    {
+        <h4 data-test-selector="hdgProductVariants">Product Variants</h4>
+    }
+
+    <div class="col-sm-12 nopadding">
+        @if (PersonliseValues?.Count > 0)
+        {
+            Dictionary<string, string> PersonliseCodeValue = new Dictionary<string, string>();
+            PersonliseValues.ForEach(x => PersonliseCodeValue.Add(x.AttributeCode, x.AttributeValues));
+            Html.RenderAction("GetPersonalisedAttributes", "Order", new { productId = Model.PublishProductId, PersonliseValues = PersonliseCodeValue });
+        }
+    </div>
+    <div class="col-sm-12 product-customize nopadding">
+        <div class="addrons-attributs">
+            @if (isGroupProduct)
+            {
+                <div id="groupProductList">
+                    @{Html.RenderAction("GetGroupProductList", "Order", new { productId = Model?.PublishProductId, localeid = Model?.LocaleId, portalId = Model.PortalId, userId = Model.UserId, catalogId = Model?.ZnodeCatalogId });}
+                </div>
+            }
+            else
+            {
+                <div class="col-xs-12 nopadding" id="dynamic-product-variations">
+                    @Html.Partial("_ProductAttributes")
+                </div>
+            }
+            <div class="col-xs-12 nopadding" id="dynamic-product-addons">
+                @Html.Partial("_AddOns")
+            </div>
+        </div>
+    </div>
+    @if (Model.TierPriceList?.Count > 0)
+    {
+        <div class="col-xs-12 nopadding tier-price margin-top">
+
+            <table class="table table-bordered" data-test-selector="tblTierPrice" aria-describedby="Tier List">
+                <thead>
+                    <tr>
+                        <th scope="col">Tier Quantity</th>
+                        <th scope="col">Tier Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.TierPriceList)
+                    {
+                        <tr>
+                            <td>@Convert.ToDouble(item.Quantity)</td>
+
+                            <td>@HelperMethods.FormatPriceWithCurrency(item.Price, Model?.CultureCode)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            
+        </div>
+    }
+
+        <hr />
+
+        @using (Ajax.BeginForm("AddToCartProduct", "Order", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "Order.prototype.AddToCartSuccessCallBack(data)" }, new { name = "checkoutform", id = "checkoutform" }))
+        {
+            <input type="hidden" id="dynamic-productId" name="PublishProductId" value="@Model.PublishProductId" />
+            <input type="hidden" id="dynamic-parentproductId" name="parentproductId" value="@Model.ParentProductId" />
+            <input type="hidden" id="dynamic-sku" name="sku" value="@Model.SKU" />
+            <input type="hidden" id="dynamic-portalId" name="PortalId" />
+            <input type="hidden" id="dynamic-catalogId" name="CatalogId" value="@Model.ZnodeCatalogId" />
+            <input type="hidden" id="dynamic-userId" name="UserId" />
+            <input type="hidden" id="dynamic-localeId" name="LocaleId" />
+            <input type="hidden" id="dynamic-producttype" name="ProductType" value="@productType" />
+            <input type="hidden" id="dynamic-addonProductSKU" name="AddOnProductSKUs" />
+            <input type="hidden" id="dynamic-bundleProductSKU" name="BundleProductSKUs" />
+            <input type="hidden" id="dynamic-quantity" name="Quantity" />
+            <input type="hidden" id="dynamic-groupProductsQuantity" name="GroupProductsQuantity" />
+            <input type="hidden" id="dynamic-groupProductSKUs" name="GroupProductSKUs" />
+            <input type="hidden" id="dynamic-configurableProductSKUs" name="ConfigurableProductSKUs" value="@Model.ConfigurableProductSKU" />
+            <input type="hidden" id="dynamic-personalisedcodes" name="PersonalisedCodes" value="">
+            <input type="hidden" id="dynamic-personalisedvalues" name="PersonalisedValues" value="">
+            <input type="hidden" id="dynamic-groupProductNames" name="GroupProductNames" />
+            <input type="hidden" id="dynamic-autoaddonskus" name="AutoAddonSKUs" value="@autoAddonSku">
+            <input type="hidden" id="IsQuote" name="IsQuote" value="@isQuote">
+            <div class="col-sm-12 nopadding padding-bottom">
+                @if (Model.ShowAddToCart)
+                {
+                    <button type="submit" onclick="return Order.prototype.BindAddOnProductSKU(event);" class="btn-text btn-text-secondary btn-margin-left pull-right margin-top" id="button-addtocart" data-test-selector="btnAddToCart">@string.Format(Admin_Resources.ButtonAddToCart, "")</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn-text btn-text-secondary btn-margin-left  pull-right" disabled="disabled" id="button-addtocart" data-test-selector="btnAddToCart">@string.Format(Admin_Resources.ButtonAddToCart, "")</button>
+                }
+            </div>
+        }
+        <div class="col-xs-12 nopadding">
+            @{
+                if (string.Equals(productType, "BundleProduct", StringComparison.OrdinalIgnoreCase))
+                {
+                    Html.RenderAction("GetBundleProduct", "Order", new { productId = Model?.PublishProductId });
+                }
+            }
+        </div>
+    </div>
+<script>
+    $("#groupproductmessage").text($("#groupproductmessage").val());
+    $("#product_Detail_Price_Div .dynamic-product-price").text($("#productTotalPrice").val());
+    if ($("#isAddToCart").val() === "False") {
+        $("#button-addtocart").prop("disabled", false);
+        $("#button-addtocart").attr("onclick", "return Order.prototype.BindAddOnProductSKU(event);");
+    }
+</script>

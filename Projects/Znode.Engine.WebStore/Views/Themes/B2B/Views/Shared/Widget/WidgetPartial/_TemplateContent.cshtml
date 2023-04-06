@@ -1,0 +1,21 @@
+﻿@model Znode.Engine.WebStore.ViewModels.WidgetTextViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+}
+@if (!Equals(Model, null))
+{
+                    <div class="col-12 p-0">
+                        @Html.RenderBlock(HttpUtility.HtmlDecode(Model.Text))
+                    </div>
+}
+@if (HttpContext.Current.Request.QueryString["cmsmode"] == "CMS_MODE")
+{
+    if (Equals(Model, null))
+    {
+        <div class="col-12 p-0 cms-icon-container">
+            <img src="@_fileLocation/Images/content-block.png" alt="New Product" class="img-responsive cms-img-icon" />
+        </div>
+    }
+}

@@ -1,0 +1,38 @@
+@using Znode.Engine.WebStore.Agents
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    Layout = null;
+}
+<style>
+    .margin-bottom {margin-bottom: 15px;}
+    .template-title {padding: 20px;text-align: center;color: #fff;font-weight: 600;}
+</style>
+
+<div class="container-fluid">
+    <div class="row default-template">
+        <div class="container-fluid">
+            <div class="row">
+                <!--Template Title-->
+                <div class="col-sm-12 template-title border-bottom nopadding col-12 p-0">
+                    <z-widget>@Html.WidgetPartial("TemplateTextEditor", "TemplateTitle", "72771", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+            </div>
+        </div>
+        <div class="container margin-top">
+            <div class="row">
+                <aside class="col-xs-12 col-sm-3 side-bar">
+                    <z-widget>@Html.WidgetPartial("Facet", "Facet", "72772", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </aside>
+                <div class="col-xs-12 col-sm-9">
+                    <div class="col-sm-12 nopadding margin-bottom col-12 p-0">
+                        <z-widget>@Html.WidgetPartial("OfferBanner", "Advertisement", "72773", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                    </div>
+                    <div class="col-sm-12 nopadding margin-bottom col-12 p-0">
+                        <z-widget>@Html.WidgetPartial("CategoryList", "DealsCategoryList", "72774", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

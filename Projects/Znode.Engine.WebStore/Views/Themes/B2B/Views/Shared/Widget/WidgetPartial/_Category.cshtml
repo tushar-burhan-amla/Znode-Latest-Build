@@ -1,0 +1,52 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Agents
+@{
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+}
+@model WidgetCategoryListViewModel
+
+@if (Model?.Categories?.Count > 0)
+{
+    string _id = string.Empty;
+    _id = string.IsNullOrEmpty(_id) ? "Category_List_Widget" : _id;
+    bool navigationFlag = Model?.Categories?.Count > 4 ? true : false;
+    <div class="col-12 p-0 featured-departments">
+        @if (!Model.Categories.All(x => x.CategoryViewModel == null))
+        {
+            <h3 class="product-list-title key-FeaturedDepartmentTitle" data-test-selector="hdgDepartTitle">@Html.RenderMessage("FeaturedDepartmentTitle")</h3>
+        }
+        <div class="col-12 category-list-widget">
+            <div id="@_id" class="owl-carousel view-option-category p-0">
+                @foreach (var category in Model.Categories)
+                {
+                    if (!Equals(category.CategoryViewModel, null))
+                    {
+                        @Html.Partial("_CategoryList", category.CategoryViewModel)
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#@_id").owlCarousel({
+            autoPlay: false,
+            navigation: @navigationFlag.ToString().ToLower(),
+            items: 4,
+            itemsCustom: [
+                [0, 1],
+                [320, 1],
+                [480, 2],
+                [600, 2],
+                [768, 3],
+                [992, 4],
+                [1200, 6],
+
+            ],
+            navigationText: [
+                "<span class='left-icon'></span>",
+                "<span class='right-icon'></span>"
+            ]
+        });
+    </script>
+}

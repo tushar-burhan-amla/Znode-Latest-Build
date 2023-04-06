@@ -1,0 +1,68 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@using System.Globalization;
+@model DashboardItemsListViewModel
+@{
+    int labelTotalQuotes = Model?.DashboardViewModelList?.Count != 0 ? Model.DashboardViewModelList.FirstOrDefault().TotalQuotes : 0;
+    string labelTotalSales = Model?.DashboardViewModelList?.Count != 0 ? Model.DashboardViewModelList.FirstOrDefault()?.Symbol + Convert.ToDouble(Model.DashboardViewModelList.FirstOrDefault()?.TotalSales).ToString("N", new CultureInfo("")) : Model.DashboardViewModelList.FirstOrDefault()?.Symbol + "0";
+    int labelTotalOrders = Model?.DashboardViewModelList?.Count != 0 ? Model.DashboardViewModelList.FirstOrDefault().TotalOrders : 0;
+    int labelTotalReturns = Model?.DashboardViewModelList?.Count != 0 ? Model.DashboardViewModelList.FirstOrDefault().TotalReturns : 0;
+}
+<div id="salesDetailsOfSelectedPortal">
+    <div class="col-sm-12 nopadding d-flex justify-content-between margin-bottom-20">
+        <div class="sales-container margin-left-15 margin-right-15">
+            <p>@Admin_Resources.LabelTotalSales</p>
+            <div class="d-flex justify-content-between align-content-center align-items-center total-sales">
+                @if (Html.IsAuthorized("List", "Order"))
+                {
+                    @labelTotalSales
+                }
+                else
+                {
+                    @ZnodeConstant.Zero
+                }
+            </div>
+        </div>
+        <div class="sales-container">
+            <p>@Admin_Resources.LabelTotalOrders</p>
+            <div class="d-flex justify-content-between align-content-center align-items-center total-sales">
+                @if (Html.IsAuthorized("List", "Order"))
+                {
+                    @labelTotalOrders
+                }
+                else
+                {
+                    @ZnodeConstant.Zero
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 nopadding d-flex justify-content-between">
+        <div class="sales-container margin-left-15 margin-right-15">
+            <p>@Admin_Resources.LabelTotalQuotes</p>
+            <div class="d-flex justify-content-between align-content-center align-items-center total-sales">
+                @if (Html.IsAuthorized("QuoteList", "Quote"))
+                {
+                    @labelTotalQuotes
+                }
+                else
+                {
+                    @ZnodeConstant.Zero
+                }
+            </div>
+        </div>
+        <div class="sales-container">
+            <p>@Admin_Resources.LabelTotalReturns</p>
+            <div class="d-flex justify-content-between align-content-center align-items-center total-sales">
+                @if (Html.IsAuthorized("List", "RMAReturn"))
+                {
+                    @labelTotalReturns
+                }
+                else
+                {
+                    @ZnodeConstant.Zero
+                }
+            </div>
+        </div>
+    </div>
+</div>

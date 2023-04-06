@@ -1,0 +1,105 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model SearchProfileViewModel
+<div id="searchfields">
+    <div class="panel-body">
+        <div class="tab-pane fade in active padding-bottom">
+            <div class="col-xs-12 nopadding padding-top">
+                @if (Model.PublishCatalogId > 0)
+                {
+
+                    <div>
+                        <span id="errorSearchableAttributes" class="error-msg one-attribute-msg text-center padding-top"></span>
+                    </div>
+                    <div class="col-xs-12 nopadding clearfix">
+                        <div class="row padding-bottom-15 nomargin">
+                            <div class="Field Name col-md-4">
+                                <label  data-test-selector="lblFieldName"> Field Name</label>
+                            </div>
+                            <div class="col-md-3 nopadding">
+                                <label data-test-selector="lblBoostScore"> Boost Score </label>
+                            </div>
+                            <div class="col-md-3 nopadding padding-left-15">
+                                <label  data-test-selector="lblEnableNGram">Enable N-Gram</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label></label>
+                            </div>
+                        </div>
+                        @if (Model?.SearchableAttributesList?.Count > 0)
+                        {
+                            <div class="form-group">
+                                <div id="searchableAttributes" class="searchable-attribute-block">
+                                    @{
+                                        var count = Model.SearchableAttributesList?.Count > 0 ? Model.SearchableAttributesList?.Count : 0;
+                                        for (int i = 0; i < count; i++)
+                                        {
+                                            string divId = $"div{Model.SearchableAttributesList[i].AttributeCode}";
+                                            <div class="row">
+                                                <div id="@divId" class="col-xs-12 attributes clearfix">
+                                                    <div class=" col-md-4 padding-right-0">
+                                                        <label class="addedattributes" data-test-selector="label@(Model.SearchableAttributesList[i].AttributeName)">@Model.SearchableAttributesList[i].AttributeName</label>
+                                                        <input type="hidden" id="SearchableAttributesList[@i].AttributeName" name="SearchableAttributesList.Index" value=@i data-test-selector="lblSearchableAttributesList[@i].AttributeName">
+                                                        <input type="hidden" id="SearchableAttributesList[@i].AttributeCode" name="SearchableAttributesList[@i].AttributeCode" value="@Model.SearchableAttributesList[i].AttributeCode" class="AttributeCodes" data-test-selector="lbl@(Model.SearchableAttributesList[i].AttributeCode)">
+                                                        <input type="hidden" id="SearchableAttributesList[@i].IsUseInSearch" name="SearchableAttributesList[@i].IsUseInSearch" value="true" data-test-selector="lblSearchableAttributesList[@i].IsUseInSearch">
+                                                    </div>
+                                                    <div class="search-field-input col-md-3 nopadding">
+                                                        @Html.TextBoxFor(m => Model.SearchableAttributesList[i].BoostValue, new { Name = "SearchableAttributesList[" + i + "].BoostValue", id = "SearchableAttributesList[" + i + "].BoostValue",value = Model.SearchableAttributesList[i].BoostValue, @class = "BoostValue", @data_test_selector="txtBoostValue", @number = i, @onblur = "Search.prototype.ShowHideValidationMessage()"})
+                                                        @Html.ValidationMessageFor(model => model.SearchableAttributesList[i].BoostValue, null, new { id = "errorAttributeLength" + i })
+                                                    </div>
+                                                    <div class="col-md-3 Enable N-Gram" id="divIsEventLoggingEnabled">
+                                                        <div class="nopadding log-switch">
+                                                            <div class="control-sm">
+                                                                @if (Model.SearchableAttributesList[i].IsNgramEnabled)
+                                                                {
+                                                                 <div class="switch-field control-yes-no">
+                                                                    @Html.RadioButtonFor(x => x.SearchableAttributesList[i].IsNgramEnabled, "true", new { @checked = true, @id = "IsNgramEnabled" + i, @data_test_selector = "chkEventLoggingEnabledLeft", @class = "yes" })
+                                                                    <label onclick="EditableText.prototype.labelClick('yes','IsNgramEnabled' + @i)" data-test-selector="lblEventLoggingEnabledLeft" for="IsNgramEnabled @i">Yes</label>
+                                                                    @Html.RadioButtonFor(x => x.SearchableAttributesList[i].IsNgramEnabled, "false", new { @id = "IsNgramEnabled" + i, @data_test_selector = "chkEventLoggingEnabledRight", @class = "no" })
+                                                                    <label onclick="EditableText.prototype.labelClick('no', 'IsNgramEnabled' + @i)" data-test-selector="lblEventLoggingEnabledRight" for="IsNgramDisable @i">No</label>
+                                                                </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                 <div class="switch-field control-yes-no">
+                                                                    @Html.RadioButtonFor(x => x.SearchableAttributesList[i].IsNgramEnabled, "true", new {@id = "IsNgramEnabled" + i, @data_test_selector = "chkEventLoggingEnabledLeft", @class = "yes" })
+                                                                    <label onclick="EditableText.prototype.labelClick('yes','IsNgramEnabled' + @i)" data-test-selector="lblEventLoggingEnabledLeft" for="IsNgramEnabled @i">Yes</label>
+                                                                    @Html.RadioButtonFor(x => x.SearchableAttributesList[i].IsNgramEnabled, "false", new { @checked = true, @id = "IsNgramEnabled" + i, @data_test_selector = "chkEventLoggingEnabledRight", @class = "no" })
+                                                                    <label onclick="EditableText.prototype.labelClick('no', 'IsNgramEnabled' + @i)" data-test-selector="lblEventLoggingEnabledRight" for="IsNgramDisable @i">No</label>
+                                                                </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 close-icon">
+                                                        <a onclick="Search.prototype.RemoveAttribute('@divId')" class="search-close-icon" data-test-selector="linkCloseCircle"><em class="z-close-circle"></em></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    if (Model.SearchableAttributesList?.Count > 0)
+                    {
+                        <div class="col-xs-12 add-fields">
+                            <div class="pull-right margin-top-bottom">
+                                <button type="button" onclick="return Search.prototype.AddAttribute()" class="btn-text btn-text-secondary pull-right" data-test-selector="btnAddFields">Add Fields</button>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-xs-12 nopadding margin-top-bottom">
+                        <span class="padding-rl-5" data-test-selector="val@(Admin_Resources.ErrorPleaseSelectCatalog)">
+                            @Admin_Resources.ErrorPleaseSelectCatalog
+                        </span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div id="searchableAttributesHidden" hidden></div>

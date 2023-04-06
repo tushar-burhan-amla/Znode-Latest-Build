@@ -1,0 +1,76 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model  List<BrandViewModel>
+@using Znode.Engine.WebStore.Agents
+@{
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+}
+<div id="Brands" class="main-wrapper col">
+    @Html.Partial("../_LearnMore", Model)
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a>@WebStore_Resources.TitleBrand</div>
+            </div>
+        </div>
+    </div>
+    <div class="row b2b-brand-list">
+        <div class="container">
+            <div class="row brand-container">
+                <div class="col-12 col-xl-4">
+                    <h1 class="page-title">@WebStore_Resources.TitleShopByBrand</h1>
+                </div>
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0 d-flex align-items-center">
+                    <div class="col-12 p-0 pl-md-0 align-self-center">
+                        <ul class="brand-filter p-0">
+                            <li class="col p-0">
+                                <a href="/Brand/BrandList?brandName=num">#</a>
+                            </li>
+                            @for (char character = 'A'; character <= 'Z'; character++)
+                            {
+                                <li class="col p-0">
+                                    <a href='@($"/Brand/BrandList?brandName={character}")'>@character</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-12 p-0 mb-4">
+                    <ul id="view-option-category" class="view-option-category brand-list product-grid-ul grid-view">
+                        @foreach (var brand in Model)
+                        {
+                            if (brand.MediaId > 0)
+                            {
+                                <li>
+                                    <a href="@Url.GetBrandUrl(brand.SEOFriendlyPageName, null, brand.BrandId)" data-lightbox="enlarge">
+                                        <img src="@brand.ImageSmallPath" class="img-fluid" data-src="@brand.ImageSmallPath" alt="" />
+                                        <label>@brand.BrandName</label>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a href="@Url.GetBrandUrl(brand.SEOFriendlyPageName, null, brand.BrandId)" data-lightbox="enlarge">
+                                        <img src="@brand.ImageSmallPath" class="img-fluid" data-src="@brand.ImageSmallPath" alt="" />
+                                        <label>@brand.BrandName</label>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <div class="col offer-banner mt-4 mt-md-0">
+                    <!--Advertisement Banner Widget-->
+                    <z-widget>@Html.WidgetPartial("OfferBanner", "AdvertisementBanner", "110", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId)</z-widget>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

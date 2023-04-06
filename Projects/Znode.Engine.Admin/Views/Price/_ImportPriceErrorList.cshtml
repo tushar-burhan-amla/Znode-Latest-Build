@@ -1,0 +1,16 @@
+﻿@using Znode.Engine.Admin.Models
+@model GridModel
+
+<div id=grid-container>
+    <div class="col-sm-12 list-container">
+        <div class="file-upload pull-right">
+            @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonDownload, "DownLoadInValidImportPriceData", "Price", "btn-text btn-text-secondary", "Price.prototype.DownloadImportErrorList()")
+        </div>
+        <div class="import-grid">
+            @{
+                @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model)
+            }
+        </div>
+    </div>    
+</div>
+

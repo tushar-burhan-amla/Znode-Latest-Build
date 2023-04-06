@@ -1,0 +1,38 @@
+﻿@model Znode.Engine.Admin.ViewModels.ContentPageListViewModel
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.Models
+
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+}
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.TitleContentPagesList</h1>
+    <div class="pull-right btn-container">
+        @Html.Partial("~/Views/Shared/_CultureDropdown.cshtml", Model?.Locales)
+    </div>   
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    <div class="form-group">
+        <div class="col-sm-12 nopadding margin-bottom">
+            <div class="control-label">
+                @Html.LabelFor(model => model.PortalId, new { @data_test_selector = "lblPortalId" })
+            </div>
+            <div class="control-md">
+            @Html.FastSelectFor(model => model.PortalName, model => model.PortalId, "GetSuggestions", "Typeahead", "SEO.prototype.OnSelectPortalResult", 1, true,
+               new
+               {
+                   htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStoreName" },
+                   parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+               })
+              @CustomHtmlHelper.HiddenField(Convert.ToString(Model.PortalId), "hdnPortalId", "hidden", Convert.ToString(Model.PortalId))
+              @CustomHtmlHelper.HiddenField(Convert.ToString(Model.SEOTypeId), "hdnSEOTypeId", "hidden", Convert.ToString(Model.SEOTypeId))
+            </div>
+        </div>
+    </div>
+    <div id="contentPageList">
+        @Html.Partial("_contentPageListView", Model)
+    </div>
+    @Html.Hidden("HdnseoId")
+</section>
+<div id="divStoreListAsidePanel" class="aside-popup-panel modal-dialog modal-lg"></div>

@@ -1,0 +1,22 @@
+﻿@*---Payment View PopUp----*@
+<div class="modal fade payment-view-popup" id="payment-view-popup-ipad" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <button type="button" class="btn close close-circle-icon" data-dismiss="modal" data-test-selector="btnPaymentViewClose" onclick="Checkout.prototype.HideLoader()"></button>
+            <div class="modal-body">
+                <div id="payment-view-content" class="payment-view-content"></div>
+                <div id="errorPayment" class="field-validation-error pl-4"></div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="Quote.prototype.ClosePopup(this)" id="btnClosePopup" name="closePopup" class="btn btn-secondary">
+                    @WebStore_Resources.ButtonCancel
+                </button>
+                <button onclick="Quote.prototype.ConvertQuoteToOrder(this)" id="btnConvertQuoteToOrder" data-isquote="true" name="ConvertQuoteToOrder" class="btn btn-primary">
+                    @WebStore_Resources.btnPlaceOrder
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

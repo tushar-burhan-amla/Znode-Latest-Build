@@ -1,0 +1,3 @@
+﻿<div itemscope itemtype="https://schema.org/SiteNavigationElement">
+    @{ Html.RenderAction("GetMegaMenuList", "Category", new { profileId = Helper.GetProfileId(), portalId = Helper.GetCurrentPortalId(), localeId = Helper.GetLocaleId(), publishState = Helper.GetPublishState(), accountId = Helper.GetUserAccountId(), catalogId = Helper.GetUserProfileCatalogId() }); }
+</div>

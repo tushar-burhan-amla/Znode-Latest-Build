@@ -1,0 +1,53 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalUnitViewModel
+@using Znode.Libraries.Resources
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelManage<em class="z-minus"></em><span>@Model.PortalName</span></h1>
+    <div class="pull-right">
+        @Html.AuthorizedRawActionLink("<em class='z-edit'></em>" + Admin_Resources.ButtonEdit, "CreateEditStoreUnit", "Store", new { @portalId = Model.PortalId }, new { @class = "btn-text-icon" })
+        @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "List", "Store", null, new { @class = "btn-text-icon" })
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        <h3 class="section-heading">@Admin_Resources.LabelUnitSettings</h3>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.WeightUnit)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.WeightUnit" disabled="disabled" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.DimensionUnit)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.DimensionUnit" disabled="disabled" />
+                </div>
+            </div>
+        </div>
+        <h3 class="section-heading margin-top-25">@Admin_Resources.LabelCurrencySettings</h3>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.LabelPreview)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.CurrencyPreview" disabled="disabled" />
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.PortalId)
+    </section>
+</div>

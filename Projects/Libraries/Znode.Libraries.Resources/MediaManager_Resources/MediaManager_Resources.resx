@@ -1,0 +1,360 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddFolderTree" xml:space="preserve">
+    <value>Folder added successfully.</value>
+  </data>
+  <data name="ButtonMediaSettings" xml:space="preserve">
+    <value>Media Settings</value>
+  </data>
+  <data name="ButtonMoveMedia" xml:space="preserve">
+    <value>Move Media</value>
+  </data>
+  <data name="CopyFolderError" xml:space="preserve">
+    <value>Error while Copying the folder.</value>
+  </data>
+  <data name="CopyFolderSuccess" xml:space="preserve">
+    <value>Folder copied successfully.</value>
+  </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Date created</value>
+  </data>
+  <data name="DeleteMediaFailed" xml:space="preserve">
+    <value>Error occurred while deleting the record.</value>
+  </data>
+  <data name="DeleteMediaSuccess" xml:space="preserve">
+    <value>Media deleted successfully.</value>
+  </data>
+  <data name="DescriptionFileAlreadyExists" xml:space="preserve">
+    <value>File already present in this folder, do you want to override the existing file?</value>
+  </data>
+  <data name="ErrorDeleteAttribute" xml:space="preserve">
+    <value>Failed to delete some attribute because it is either system defined or associated.</value>
+  </data>
+  <data name="ErrorFolderDelete" xml:space="preserve">
+    <value>Failed to delete folder because it is associated.</value>
+  </data>
+  <data name="ErrorMediaDelete" xml:space="preserve">
+    <value>Failed to delete some media because it is associated.</value>
+  </data>
+  <data name="ErrorMediaId" xml:space="preserve">
+    <value>Please select at least one media file to delete.</value>
+  </data>
+  <data name="ErrorMediaShare" xml:space="preserve">
+    <value>Unable to share the Media Folder.</value>
+  </data>
+  <data name="ErrorPermissionDeleteFolder" xml:space="preserve">
+    <value>You do not have permission to delete this folder.</value>
+  </data>
+  <data name="ErrorPermissionDeleteMedia" xml:space="preserve">
+    <value>You do not have permission to delete media.</value>
+  </data>
+  <data name="ErrorPermissionMoveFolder" xml:space="preserve">
+    <value>You do not have permission to move this folder.</value>
+  </data>
+  <data name="ErrorPermissionRenameFolder" xml:space="preserve">
+    <value>You do not have permission to rename this folder.</value>
+  </data>
+  <data name="ErrorSelectFolder" xml:space="preserve">
+    <value>Select a folder to continue.</value>
+  </data>
+  <data name="ErrorUpdateMediaAttributeValue" xml:space="preserve">
+    <value>Error while updating the Media Attribute Value.</value>
+  </data>
+  <data name="ErrorValidServerCredentials" xml:space="preserve">
+    <value>Enter valid server credentials.</value>
+  </data>
+  <data name="FailedAddFolder" xml:space="preserve">
+    <value>Failed to add a folder.</value>
+  </data>
+  <data name="FailedRenameFolder" xml:space="preserve">
+    <value>Failed to rename  the folder.</value>
+  </data>
+  <data name="FolderName" xml:space="preserve">
+    <value>SyncMedia</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="HostedURL" xml:space="preserve">
+    <value>Hosted URL</value>
+  </data>
+  <data name="LabelAccessKey" xml:space="preserve">
+    <value>Access Key</value>
+  </data>
+  <data name="LabelAmazonBucketName" xml:space="preserve">
+    <value>Amazon Bucket Name</value>
+  </data>
+  <data name="LabelAzureBucketName" xml:space="preserve">
+    <value>Container Name</value>
+  </data>
+  <data name="LabelCDNUrl" xml:space="preserve">
+    <value>CDN Url</value>
+  </data>
+  <data name="LabelCode" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="LabelLocalServer" xml:space="preserve">
+    <value>Local Server</value>
+  </data>
+  <data name="LabelManageOption" xml:space="preserve">
+    <value>To manage options, please save the Attribute first</value>
+  </data>
+  <data name="LabelOtherServer" xml:space="preserve">
+    <value>Other Service</value>
+  </data>
+  <data name="LabelSecretKey" xml:space="preserve">
+    <value>Secret Key</value>
+  </data>
+  <data name="LabelSelectStorageServer" xml:space="preserve">
+    <value>Select a Storage Service</value>
+  </data>
+  <data name="LabelStorageAccountName" xml:space="preserve">
+    <value>Storage Account Name</value>
+  </data>
+  <data name="LabelStorageServer" xml:space="preserve">
+    <value>Storage Server</value>
+  </data>
+  <data name="LabelSyncExistingData" xml:space="preserve">
+    <value>Sync Existing Data</value>
+  </data>
+  <data name="LabelTree" xml:space="preserve">
+    <value>Tree</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="MediaAlreadyShared" xml:space="preserve">
+    <value>Media folder is already shared with this user.</value>
+  </data>
+  <data name="MediaPathCode" xml:space="preserve">
+    <value>EN</value>
+  </data>
+  <data name="MediaSharedSuccess" xml:space="preserve">
+    <value>Media folder shared successfully.</value>
+  </data>
+  <data name="MetaInformation" xml:space="preserve">
+    <value>Meta Information</value>
+  </data>
+  <data name="ModifiedDate" xml:space="preserve">
+    <value>Modified Date</value>
+  </data>
+  <data name="MoveFolderError" xml:space="preserve">
+    <value>Error while moving this folder.</value>
+  </data>
+  <data name="MoveFolderSuccess" xml:space="preserve">
+    <value>Folder moved successfully.</value>
+  </data>
+  <data name="MoveMediaSuccess" xml:space="preserve">
+    <value>Media moved to the folder successfully.</value>
+  </data>
+  <data name="MoveMediaToFolderError" xml:space="preserve">
+    <value>File already present in this folder.</value>
+  </data>
+  <data name="MoveMediaToFolderSuccess" xml:space="preserve">
+    <value>Media moved to the folder successfully.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NetworkDrivePath" xml:space="preserve">
+    <value>Network Drive Path</value>
+  </data>
+  <data name="NotPermittedToShareMedia" xml:space="preserve">
+    <value>You can not share the media folder with a currently logged in user.</value>
+  </data>
+  <data name="PleaseSelectAtleastOneItem" xml:space="preserve">
+    <value>Please select at least one media.</value>
+  </data>
+  <data name="RenameFolder" xml:space="preserve">
+    <value>Folder renamed successfully.</value>
+  </data>
+  <data name="RequiredAccessKey" xml:space="preserve">
+    <value>Enter a Server Access Key.</value>
+  </data>
+  <data name="RequiredBucketName" xml:space="preserve">
+    <value>Enter a Server Bucket Name.</value>
+  </data>
+  <data name="RequiredInput" xml:space="preserve">
+    <value>Input is required.</value>
+  </data>
+  <data name="RequiredSecretKey" xml:space="preserve">
+    <value>Enter a Server Secret Key.</value>
+  </data>
+  <data name="RootFolder" xml:space="preserve">
+    <value>Root</value>
+  </data>
+  <data name="SelectFoldertouploadfileError" xml:space="preserve">
+    <value>Please select a folder to upload the file into.</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="TextConfirmDeleteformediaDefaultValue" xml:space="preserve">
+    <value>Do you want to delete the default value permanently?</value>
+  </data>
+  <data name="TextDelete" xml:space="preserve">
+    <value>Are you sure you want to delete this media?</value>
+  </data>
+  <data name="TextFileAlreadyExists" xml:space="preserve">
+    <value>File already exists!</value>
+  </data>
+  <data name="TextFolderConfirmDelete" xml:space="preserve">
+    <value>Are you sure you want to delete this folder and all of its content permanently?</value>
+  </data>
+  <data name="TextMediaConfirmDelete" xml:space="preserve">
+    <value>This will delete this media and all its content permanently?</value>
+  </data>
+  <data name="TitleAttributeFamily" xml:space="preserve">
+    <value>Attribute Family</value>
+  </data>
+  <data name="TitleAttributeGroups" xml:space="preserve">
+    <value>Attribute Groups</value>
+  </data>
+  <data name="TitleAttributes" xml:space="preserve">
+    <value>Attributes</value>
+  </data>
+  <data name="TitleConfigureMediaSetting" xml:space="preserve">
+    <value>Configuration Settings</value>
+  </data>
+  <data name="TitleContentPageFolder" xml:space="preserve">
+    <value>Content Page Folders</value>
+  </data>
+  <data name="TitleInvalidFileName" xml:space="preserve">
+    <value>Invalid file type selected.</value>
+  </data>
+  <data name="TitleMediaFolders" xml:space="preserve">
+    <value>Media Folders</value>
+  </data>
+  <data name="TitleMediaManager" xml:space="preserve">
+    <value>Media Manager</value>
+  </data>
+  <data name="TitleMediaUploader" xml:space="preserve">
+    <value>Media Uploader</value>
+  </data>
+  <data name="TitleSelectServer" xml:space="preserve">
+    <value>Select Server</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+</root>

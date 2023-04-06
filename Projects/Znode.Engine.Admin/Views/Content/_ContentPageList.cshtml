@@ -1,0 +1,54 @@
+﻿@model Znode.Engine.Admin.ViewModels.ContentPageListViewModel
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+
+@if (!Equals(Model, null))
+{
+    using (Ajax.BeginForm("ContentPageList", "Content", new { folderId = Model.FolderId, isRootFolder = Model.IsRootFolder }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+    {
+        <div id="filterComponent">
+            @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+        </div>
+    }
+
+    PopupModel publishPopupModel = new PopupModel()
+    {
+        Title = @Admin_Resources.TitlePublishConfirm,
+        Description = string.Format(@Admin_Resources.PublishConfirmationMessage, "content page"),
+        NoChoiceDescription = string.Format(@Admin_Resources.PublishConfirmationMessageNoChoice, "content page"),
+        ModalPopUpId = "PublishContentPage",
+        ModalSizeClass = "model-smd",
+        AdditionalNote = string.Format(Admin_Resources.PublishAllLocaleDisclaimerMessage, "content page"),
+        InputFields =new List<PopupInputField>
+        {
+            new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = HelperMethods.GetAvailablePublishStates(), RequiredNumberOfItemsToDisplay = 2 }
+        },
+        Buttons = new List<PopUpButtonModel>() {
+                    new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Content.prototype.PublishContentPage(this)"}
+                                                         }
+    };
+
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+            new PopupModel()
+            {
+                Title = @Admin_Resources.HeaderConfirmDelete,
+                Description = @Admin_Resources.TextConfirmDelete,
+                ModalPopUpId = "ContentPageDeletePopup",
+                Buttons = new List<PopUpButtonModel>() {
+                    new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Content.prototype.DeleteContentPage(this)"}
+                }
+            })
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml", publishPopupModel)
+    
+    <div class="list-container col-sm-12" id="mediaList">
+        @{
+            @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+        }
+    </div>
+    <script>
+        $(document).ready(function () {
+            $(".z-publish").off("click").on("click", function () { Content.prototype.PublishContentPagePopup($(this)); });
+            $("[data-managelink='Edit']").off("click").on("click", function () { Content.prototype.EditContentPage($(this)); });           
+        });      
+    </script>
+}

@@ -1,0 +1,160 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model TemplateViewModel
+
+@{
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    int inventoryRoundOffValue = string.IsNullOrEmpty(inventoryRoundOff) ? 0 : Convert.ToInt32(inventoryRoundOff);
+    Layout = null;
+    int defaultInventoryCount = 0;
+}
+
+@if (Model?.TemplateCartItems?.Count > 0)
+{
+    <div class="col-12 cart-products p-0 no-shadow" id="layout-template-cartItem">
+        <div class="col-12 b2b-cart p-0" data-test-selector="divSaveCartItems">
+            @foreach (TemplateCartItemViewModel cartItem in Model.TemplateCartItems.AsEnumerable().Reverse().Where(x => x.IsActive != false))
+            {
+
+                string errorMessage = string.Empty;
+                int.TryParse(cartItem.DefaultInventoryCount, out defaultInventoryCount);
+
+
+                @* To check the product is Out Of Stock and set the message accordingly *@
+            bool isObsolete = cartItem.IsObsolete;
+            bool isProductOutOfStock = defaultInventoryCount < 1;
+            if (cartItem.OutOfStockMessage == "DontTrackInventory")
+            {
+                isProductOutOfStock = false;
+            }
+            bool isProductExceedingQuantity = false;
+            if(!(cartItem.OutOfStockMessage == "DontTrackInventory"))
+            {
+                isProductExceedingQuantity = cartItem.Quantity > defaultInventoryCount;
+            }
+
+            if (HelperUtility.IsNotNull(cartItem.GroupProducts) && cartItem.GroupProducts?.Count > 0)
+            {
+                foreach (var groupProduct in cartItem.GroupProducts)
+                {
+                    if (String.IsNullOrEmpty(groupProduct.BackOrderMessage))
+                    {
+                        int groupProductDefaultInventoryCount = string.IsNullOrEmpty(groupProduct?.DefaultInventoryCount) ? 0 : Int32.Parse(groupProduct?.DefaultInventoryCount);
+
+                        if (groupProduct.Quantity > defaultInventoryCount)
+                        {
+                            isProductOutOfStock = true;
+                        }
+                    }
+                }
+            }
+
+                @*To disable the Move to Cart button based on the condition*@
+                string disableMoveToCartButtom = isProductOutOfStock || isObsolete ? "disabled = 'disabled'" : string.Empty;
+
+                @*Set error messages based on the precedence conditions*@
+                if (isProductOutOfStock)
+                {
+                    errorMessage = WebStore_Resources.OutofStockMessage;
+                }
+                else if (isObsolete)
+                {
+                    errorMessage = WebStore_Resources.IsObsoleteMessage;
+                }
+                else if (isProductExceedingQuantity)
+                {
+
+                    errorMessage = WebStore_Resources.ExceedingAvailableWithoutQuantity;
+                }
+                else
+                {
+                    errorMessage = string.Empty;
+                }
+                <div class="row b2b-cart-row align-items-center">
+                    <div class="b2b-cart-item-details" data-test-selector="divSaveCartItemDetails">
+                        <a data-test-selector="linkCartItemDetails" href="@Url.GetProductUrl(cartItem?.SeoPageName, cartItem?.ProductId.ToString())"><img src="@cartItem.ImagePath" data-src="@cartItem.ImagePath" class="img-fluid b-lazy" alt="@Html.RenderBlock(cartItem?.ProductName)" data-test-selector="imgProduct_@cartItem.SKU"></a>
+                        <div class="b2b-col-item-title font-weight-bold">
+                            @WebStore_Resources.ColumnTitleItem 
+                            <div class="cart-description d-flex flex-wrap align-content-center">
+                                <a href="@Url.GetProductUrl(cartItem?.SEOUrl, cartItem?.ProductId.ToString())" class="cart-item-title" data-test-selector="linkCartProduct_@cartItem.ProductName">@Html.RenderBlock(cartItem.ProductName)</a>
+                                <div class="col-12 p-0 group-product-list" data-test-selector="divProductName_@cartItem.ProductName">
+                                    @if (cartItem?.GroupProducts?.Count > 0)
+                                    {
+                                        foreach (var item in cartItem.GroupProducts)
+                                        {
+                                            <p><span data-test-selector="spnProductName_@cartItem.ProductName" class="right-icon"></span>@item.ProductName</p>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div>
+                                @if (cartItem?.PersonaliseValuesDetail?.Count() > 0)
+                                {
+                                    foreach (var personalisedValue in cartItem.PersonaliseValuesDetail)
+                                    {
+                                         <p data-test-selector="paraCartItemDescription">@personalisedValue.PersonalizeName : @personalisedValue.PersonalizeValue</p>
+                                    }
+                                }
+                            </div>
+                            <div class="col-12 mb-2 p-0 cart-item-description" data-test-selector="divCartItemDescription_@cartItem.CartDescription">@Html.RenderBlock(cartItem.CartDescription)</div>
+                            <div class="b2b-cart-item-links">
+                                @if (!Model.IsViewMode)
+                                {
+                                    using (Html.BeginForm("RemoveTemplateCartItem", "SaveForLater", new { omsTemplateId = cartItem?.OmsTemplateId, omsTemplateLineItemId = cartItem?.OmsTemplateLineItemId }, FormMethod.Post, new { id = "FormRemoveTemplateCartItem" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <a href="JavaScript:void(0);" class="template-cart-item-remove cart-item-remove font-weight-normal" onclick="javascript: $($(this).closest('form').submit());" title="Remove Item" data-test-selector="linkCartItemRemove_@cartItem.SKU">@WebStoreConstants.LabelRemove</a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-100 d-md-none"></div>
+                    <div class="b2b-col-width pl-4 pb-4 p-lg-0 cart-item-unitprice">
+                        <div class="b2b-col-item-title" data-test-selector="divItemLabelPrice_@cartItem.UnitPrice">@WebStore_Resources.LabelTierPrice</div>
+                        @if (cartItem?.GroupProducts?.Count > 0)
+                        {
+                            foreach (var item in cartItem.GroupProducts)
+                            {
+                                <div class="group-product-list">
+                                    <span data-test-selector="divItemPrice_@cartItem.UnitPrice"> @Helper.FormatPriceWithCurrency(item.UnitPrice, Model.CultureCode)</span>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <span data-test-selector="divItemPrice_@cartItem.UnitPrice">@Helper.FormatPriceWithCurrency(cartItem.UnitPrice, Model.CultureCode)</span>
+                        }
+                    </div>
+                    <div class="b2b-col-width pb-4 px-3 p-md-0 cart-item-quantity">
+                        <div class="b2b-col-item-title" data-test-selector="divItemLabelQuantity_@cartItem.Quantity">@WebStore_Resources.ColumnTitleQuantity</div>
+
+                        @if (cartItem?.GroupProducts?.Count > 0)
+                        {
+                            foreach (var item in cartItem.GroupProducts)
+                            {
+                                <div class="group-product-quantity">
+                                    <span class="pl-3" data-test-selector="spnItemQuantity_@cartItem.Quantity"> @Html.Label("Quantity", @Math.Round(item.Quantity, inventoryRoundOffValue).ToString(), new { @readonly = "readonly" , data_test_selector = "ProductQuantity" + @cartItem.Quantity }) </span>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="product-quantity">
+                                <span class="pl-3" data-test-selector="spnItemQuantity_@cartItem.Quantity">@Html.Label("Quantity", (cartItem.Quantity).ToString(), new { @readonly = "readonly", data_test_selector = "ProductQuantity" + @cartItem.Quantity })</span>
+                            </div>
+                        }
+                        <div class="error-msg" data-test-selector="divErrorMessage">@errorMessage</div>
+                    </div>
+                    <div class="b2b-col-width move-to-cart-btn pl-3 pl-xl-0 pr-xl-3">
+                        <button type="submit" @disableMoveToCartButtom id="checkOut-link" onclick="return User.prototype.MoveToCartForSavedLaterItem(@cartItem.OmsTemplateLineItemId)" class="btn btn-primary" data-test-selector="btnMoveToCart_@cartItem.SKU">@WebStore_Resources.LabelMoveToCart</button>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+    @Html.HiddenFor(x => x.OmsTemplateId);
+}
+
+@Html.Hidden("hdnSavedCartItemCount", Model?.TemplateCartItems?.Count ?? 0)

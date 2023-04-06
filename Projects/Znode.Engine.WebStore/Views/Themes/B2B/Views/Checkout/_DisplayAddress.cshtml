@@ -1,0 +1,159 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model AddressViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    string _displayAddress = string.IsNullOrEmpty(Model.PostalCode) ? "display:none;" : "display:block;";
+    string addressType = this.ViewData.ContainsKey("addressType") ? this.ViewData["addressType"].ToString() : string.Empty;
+    bool isAddEditAddressAllow = Helper.IsAddEditAddressAllow(Model.RoleName);
+    string _mode = Convert.ToString(Request.QueryString["mode"]);
+    string customId = string.Empty;
+    UserViewModel user = (new WebstoreHelper()).GetUserViewModelFromSession();
+    var globalAttributes = user?.UserGlobalAttributes;
+
+    bool enableUserShippingAddressSuggestion = Convert.ToBoolean(globalAttributes?.FirstOrDefault(o => o.AttributeCode == "EnableUserShippingAddressSuggestion")?.AttributeValue);
+    bool enableStoreShippingAddressSuggestion = Convert.ToBoolean(PortalAgent.CurrentPortal.GlobalAttributes?.Attributes?.FirstOrDefault(o => o.AttributeCode == "EnableStoreShippingAddressSuggestion")?.AttributeValue);
+
+    bool showReceipent = false;
+    if (Equals(addressType, "shipping"))
+    {
+        if (enableStoreShippingAddressSuggestion && enableUserShippingAddressSuggestion)
+        {
+            showReceipent = true;
+        }
+        else if (enableStoreShippingAddressSuggestion && !enableUserShippingAddressSuggestion)
+        {
+            showReceipent = false;
+        }
+        else if (!enableStoreShippingAddressSuggestion && enableUserShippingAddressSuggestion)
+        {
+            showReceipent = false;
+        }
+        else if (!enableStoreShippingAddressSuggestion && !enableUserShippingAddressSuggestion)
+        {
+            showReceipent = false;
+        }
+    }
+    int quoteId = Convert.ToInt32(Request.QueryString["QuoteId"] ?? "0");
+    if (showReceipent)
+    {
+        //Set logged in user name as recipient if it is available, otherwise set recipient name as that  of available for the address.
+        Model.FirstName = user?.FirstName ?? Model.FirstName;
+        Model.LastName = user?.LastName ?? Model.LastName;
+    }
+    string updatedTargetId = Equals(addressType, "shipping") ? "shipping-address-content" : "billing-content";
+}
+
+
+@if (quoteId == 0 && !string.IsNullOrEmpty(Model.FirstName) && isAddEditAddressAllow)
+{
+    <div class="create-new-address d-flex align-items-center" data-test-selector="divCreateNewAddress">
+        @Ajax.ActionLink("Add New", "CreateNewAddress", "Checkout", new { AddressId = 0, OtherAddressId = Model.OtherAddressId, type = addressType, mode = _mode, isNewAddress = true },
+    new AjaxOptions
+    {
+        UpdateTargetId = updatedTargetId,
+        InsertionMode = InsertionMode.Replace,
+        OnBegin = "$('.address-popup').modal('hide');",
+        OnSuccess = "$('form').removeData('validator'); $('form').removeData('unobtrusiveValidation'); $.validator.unobtrusive.parse('form');",
+        HttpMethod = "GET"
+    }, new { @data_isquickview = "true",  @data_addressId = Model.AddressId, @id = customId, @data_test_selector="linkCreateNewAddress" })
+    </div>
+}
+
+@if (showReceipent || (quoteId > 0 && Equals(addressType, "shipping")))
+{
+    <div id="SearchShippingAddressContainer" class="col-12 p-0 my-3" data-test-selector="@(Equals(addressType, "shipping")?"AddNewShippingAddress":"AddNewBillingAddress")">
+        @{ Html.RenderPartial("../Checkout/_SearchAddressAutocomplete", new AutoComplete(), new ViewDataDictionary { { "addressType", "shipping" } });}
+    </div>
+    <div class="clearfix"></div>
+}
+
+<div class="col-12 p-0 block-content address-block">
+
+
+        @if (showReceipent || !string.IsNullOrEmpty(Model.FirstName) || (Equals(addressType, "shipping") && !string.IsNullOrEmpty(Model.EmailAddress)))
+        {
+            <div class="address-details text-break" style="@_displayAddress">
+                @if (showReceipent)
+                {
+                    <p>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <input type="hidden" value="@user.FirstName" class="address-shopper-firstname" />
+                                <input type="hidden" value="@user.LastName" class="address-shopper-lastname" />
+                                @Html.Label(WebStore_Resources.RecipientNameLabel, new { @class = "required" })
+                                <input type="text" class="address-recipient" onkeyup="Checkout.prototype.SetReceipentNameAddressData('@addressType.ToLower()')" placeholder="FirstName LastName" value="@($"{Model.FirstName} {Model.LastName}")" required />
+                            </div>
+                        </div>
+                        <br />
+                    </p>
+                }
+                
+                    <p class="address-name address-firstlastname" @Html.RenderBlock(showReceipent ? "style=\"display:none\"" : "") data-address-fname="@Model.FirstName" data-address-lname="@Model.LastName">@Model.FirstName @Model.LastName</p>
+                    <p class="address-name address-company-name" data-address-companyname="@Model.CompanyName">@Model.CompanyName</p>
+                    <p class="address-street" data-address-address1="@Model.Address1">@Model.Address1<br />@Model.Address2</p>
+                    <p class="address-citystate" data-address-cityname="@Model.CityName" data-address-statecode="@Model.StateName" data-address-countryname="@Model.CountryName" data-address-postalcode="@Model.PostalCode">@Model.CityName, @Model.StateName, @Model.CountryName @Model.PostalCode</p>
+                    <p class="address-phonenumber">Ph: @Model.PhoneNumber</p>
+                
+                @if (Equals(addressType, "shipping") && !string.IsNullOrEmpty(Model.EmailAddress))
+                {
+                    @Html.Hidden("ShippingAddressId", Model.AddressId)
+                    <p class="address-emailaddress">Email: @Model.EmailAddress</p>
+                    customId = "default-shipping-address";
+                }
+                else
+                {
+                    @Html.Hidden("BillingAddressId", Model.AddressId)
+                }
+            </div>
+        }
+
+    @if (!showReceipent && quoteId == 0 && isAddEditAddressAllow)
+    {
+        if (!string.IsNullOrEmpty(Model.PostalCode) && !string.IsNullOrEmpty(Model.FirstName))
+        {
+            <div class="col-12 p-0 address-change">
+                @Ajax.ActionLink("Edit", "EditAddress", "Checkout", new { AddressId = Model.AddressId, OtherAddressId = Model.OtherAddressId, type = addressType, mode = _mode, UserId = Model.UserId, IsFromEdit = true },
+                new AjaxOptions
+                {
+                UpdateTargetId = updatedTargetId,
+                InsertionMode = InsertionMode.Replace,
+                OnBegin = "$('.address-popup').modal('hide');",
+                OnSuccess = "$('form').removeData('validator'); $('form').removeData('unobtrusiveValidation'); $.validator.unobtrusive.parse('form');",
+                HttpMethod = "GET"
+                }, new { @data_isquickview = "true", @data_addressId = Model.AddressId, @id = customId })
+            </div>
+        }
+        else
+        {
+            Html.RenderAction("CreateNewAddress", "Checkout", new { AddressId = Model.AddressId, otherAddressId = Model.OtherAddressId, type = addressType });
+        }
+    }
+    else if (Equals(addressType, "billing") && quoteId == 0 && isAddEditAddressAllow)
+    {
+        <div class="address-change">
+            @Ajax.ActionLink("Edit Billing Address", "ChangeAddress", "Checkout", new { AddressId = Model.AddressId, OtherAddressId = Model.OtherAddressId, type = addressType, mode = _mode },
+                        new AjaxOptions
+                        {
+                            UpdateTargetId = updatedTargetId,
+                            InsertionMode = InsertionMode.Replace,
+                            OnBegin = "",
+                            OnSuccess = "$('form').removeData('validator'); $('form').removeData('unobtrusiveValidation'); $.validator.unobtrusive.parse('form');",
+                            HttpMethod = "GET"
+                        }, new { @data_isquickview = "true", @data_toggle = "modal", @data_target = ".address-popup", @data_addressId = Model.AddressId, @class="pull-right", @id = customId })
+        </div>
+    }
+
+
+    @Html.HiddenFor(x => x.AddressId)
+    @Html.HiddenFor(x => x.AddressCount)
+    @Html.HiddenFor(x => x.RoleName)
+    @Html.HiddenFor(x => x.OtherAddressId)
+    @Html.Hidden("addressType", addressType)
+    @Html.Hidden("accountId", Model.AccountId)
+</div>
+
+<script>
+    $(document).ready(function () {
+        Checkout.prototype.HideChangeAddressLink();
+    });
+</script>

@@ -1,0 +1,18 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model ContentPageViewModel
+
+<div class="col-xs-12 nopadding">
+	@Html.ListBoxFor(model => model.ProfileIds, Model.ProfileList, new { @multiple = "multiple", @id = "ProfileId", @data_test_selector = "listProfileContainer" })
+	@Html.Partial("_HelpText", Admin_Resources.HelpTextForProfile)
+	<span id="error-profile" data-test-selector="valProfileError" class="error-msg" />
+</div>
+
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"> </script>
+<script>
+    $("#ProfileId").multiselect({ includeSelectAllOption: true, enableCaseInsensitiveFiltering: false });
+    $('input[type="checkbox"]').css('opacity', '5');
+    $(window).on('load', function () {
+        Content.prototype.CheckIsAllProfileSelected();
+    });
+</script>
+

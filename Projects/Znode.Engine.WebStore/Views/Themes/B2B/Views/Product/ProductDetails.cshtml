@@ -1,0 +1,9 @@
+﻿@using Znode.Engine.WebStore.Agents
+
+@{
+    int productId =Convert.ToInt32(ViewBag.ProductId);
+    string _seo =Convert.ToString(ViewBag.Seo);
+    bool _isQuickView = Convert.ToBoolean(ViewBag.IsQuickView);
+
+    Html.RenderAction("DetailsContent", "Product", new { id = productId, seo = _seo, isQuickView = _isQuickView, publishState = PortalAgent.CurrentPortal.PublishState, localeId = Helper.GetLocaleId(), profileId = Helper.GetProfileId(), accountId = Helper.GetUserAccountId(), catalogId = Helper.GetUserProfileCatalogId() });
+}

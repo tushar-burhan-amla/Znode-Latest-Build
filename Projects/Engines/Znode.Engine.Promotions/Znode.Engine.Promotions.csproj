@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0B46A894-D427-4372-A4C3-C47CC2C7E036}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Znode.Engine.Promotions</RootNamespace>
+    <AssemblyName>Znode.Engine.Promotions</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Int|AnyCPU'">
+    <OutputPath>bin\Int\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'loadtest|AnyCPU'">
+    <OutputPath>bin\loadtest\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'automation|AnyCPU'">
+    <OutputPath>bin\automation\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'B2B|AnyCPU'">
+    <OutputPath>bin\B2B\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LB|AnyCPU'">
+    <OutputPath>bin\LB\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.4.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Znode.Libraries.Framework.Business.9.7.5\lib\net48\Znode.Libraries.Framework.Business.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Helper\IZnodeOrderDiscountHelper.cs" />
+    <Compile Include="Helper\IZnodePromotionHelper.cs" />
+    <Compile Include="Helper\ZnodeOrderDiscountHelper.cs" />
+    <Compile Include="IZnodeCartPromotionManager.cs" />
+    <Compile Include="IZnodeCartPromotionType.cs" />
+    <Compile Include="IZnodePricePromotionType.cs" />
+    <Compile Include="IZnodeProductPromotionType.cs" />
+    <Compile Include="IZnodePromotionsType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZnodeCartPromotionAmountOffBrand.cs" />
+    <Compile Include="ZnodeCartPromotionAmountOffCatalog.cs" />
+    <Compile Include="ZnodeCartPromotionAmountOffCategory.cs" />
+    <Compile Include="ZnodeCartPromotionAmountOffOrder.cs" />
+    <Compile Include="ZnodeCartPromotionAmountOffProduct.cs" />
+    <Compile Include="ZnodeCartPromotionAmountOffShipping.cs" />
+    <Compile Include="ZnodeCartPromotionAmountOffShippingWithCarrier.cs" />
+    <Compile Include="ZnodeCartPromotionAmountOffXifYPurchased.cs" />
+    <Compile Include="ZnodeCartPromotionManager.cs" />
+    <Compile Include="ZnodeCartPromotionPercentOffBrand.cs" />
+    <Compile Include="ZnodeCartPromotionPercentOffCatalog.cs" />
+    <Compile Include="ZnodeCartPromotionPercentOffCategory.cs" />
+    <Compile Include="ZnodeCartPromotionPercentOffOrder.cs" />
+    <Compile Include="ZnodeCartPromotionPercentOffProduct.cs" />
+    <Compile Include="ZnodeCartPromotionPercentOffShipping.cs" />
+    <Compile Include="ZnodeCartPromotionPercentOffShippingWithCarrier.cs" />
+    <Compile Include="ZnodeCartPromotionPercentOffXifYPurchased.cs" />
+    <Compile Include="ZnodeCartPromotionType.cs" />
+    <Compile Include="ZnodeCoupon.cs" />
+    <Compile Include="ZnodePricePromotionAmountOffProduct.cs" />
+    <Compile Include="ZnodePricePromotionManager.cs" />
+    <Compile Include="ZnodePricePromotionPercentOffProduct.cs" />
+    <Compile Include="ZnodePricePromotionType.cs" />
+    <Compile Include="ZnodeProductPromotionCallForPricing.cs" />
+    <Compile Include="ZnodeProductPromotionManager.cs" />
+    <Compile Include="ZnodeProductPromotionProductDetails.cs" />
+    <Compile Include="ZnodeProductPromotionType.cs" />
+    <Compile Include="ZnodePromotionBag.cs" />
+    <Compile Include="ZnodePromotionControl.cs" />
+    <Compile Include="Helper\ZnodePromotionHelper.cs" />
+    <Compile Include="ZnodePromotionManager.cs" />
+    <Compile Include="ZnodePromotionsType.cs" />
+    <Compile Include="ZnodePromotionTypeExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.Data\Znode.Libraries.Data.csproj">
+      <Project>{786f7274-2f78-4282-b91c-978cb79fb2f3}</Project>
+      <Name>Znode.Libraries.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.ECommerce.Entities\Znode.Libraries.ECommerce.Entities.csproj">
+      <Project>{c0e80bd4-5d88-4b0b-9f2f-23d51c2f973a}</Project>
+      <Name>Znode.Libraries.ECommerce.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.ECommerce.Utilities\Znode.Libraries.ECommerce.Utilities.csproj">
+      <Project>{f3703cce-eec4-46b0-a54f-83857d4014df}</Project>
+      <Name>Znode.Libraries.ECommerce.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Znode.Libraries.MongoDB.Data\Znode.Libraries.MongoDB.Data.csproj">
+      <Project>{5b6482f4-7b81-4d7c-a099-78237c8a55b3}</Project>
+      <Name>Znode.Libraries.MongoDB.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.Resources\Znode.Libraries.Resources.csproj">
+      <Project>{0461ba0d-6141-47d7-a78e-c166ff5a75f0}</Project>
+      <Name>Znode.Libraries.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Engine.Api.Models\Znode.Engine.Api.Models.csproj">
+      <Project>{05a4b1d5-82d1-4e47-afd9-4b01ac5917bd}</Project>
+      <Name>Znode.Engine.Api.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Ionic.Zip.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

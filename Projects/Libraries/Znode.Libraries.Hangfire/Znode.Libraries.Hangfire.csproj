@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3004178B-DEF8-4FAB-B6C6-97EC4C97986D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Znode.Libraries.Hangfire</RootNamespace>
+    <AssemblyName>Znode.Libraries.Hangfire</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
+    <Reference Include="StructureMap">
+      <HintPath>..\..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Znode.Libraries.Framework.Business.9.7.5\lib\net48\Znode.Libraries.Framework.Business.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ERPTaskScheduler\ERPTaskScheduler.cs" />
+    <Compile Include="Export\ExportHelper.cs" />
+    <Compile Include="ImageHelper\ImageHelper.cs" />
+    <Compile Include="ImageHelper\ImageHelperModel.cs" />
+    <Compile Include="Base\BaseScheduler.cs" />
+    <Compile Include="ISchedulerProviders.cs" />
+    <Compile Include="PaymentToken\PaymentAuthTokenHelper.cs" />
+    <Compile Include="ProductFeed\ProductFeedHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublishCatalog\PublishCatalogHelper.cs" />
+    <Compile Include="PublishContentContainer\PublishContentContainerHelper.cs" />
+    <Compile Include="RecommendationScheduler\RecommendationDataGenerationHelper.cs" />
+    <Compile Include="SearchScheduler\Indexer.cs" />
+    <Compile Include="SearchScheduler\PortalIndexModel.cs" />
+    <Compile Include="StockNotification\StockNotificationHelper.cs" />
+    <Compile Include="UserRegistrationAttempt\UserRegistrationAttemptHelper.cs" />
+    <Compile Include="VoucherEmail\VoucherEmailHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.Api.Client\Znode.Engine.Api.Client.csproj">
+      <Project>{4FF2A227-F7EB-41EE-ADA9-F46A297E7BE8}</Project>
+      <Name>Znode.Engine.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.Api.Models\Znode.Engine.Api.Models.csproj">
+      <Project>{05A4B1D5-82D1-4E47-AFD9-4B01AC5917BD}</Project>
+      <Name>Znode.Engine.Api.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZNode.Libraries.ECommerce.Utilities\Znode.Libraries.ECommerce.Utilities.csproj">
+      <Project>{F3703CCE-EEC4-46B0-A54F-83857D4014DF}</Project>
+      <Name>Znode.Libraries.ECommerce.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Libraries.MediaStorage\Znode.Libraries.MediaStorage.csproj">
+      <Project>{7395f84c-8c0e-4b9a-b1fd-72f27aaa1422}</Project>
+      <Name>Znode.Libraries.MediaStorage</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

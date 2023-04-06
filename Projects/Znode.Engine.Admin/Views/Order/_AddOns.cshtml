@@ -1,0 +1,122 @@
+﻿@model Znode.Engine.Admin.ViewModels.PublishProductsViewModel
+@using Znode.Engine.Admin.Helpers;
+@{
+    string productSku = string.IsNullOrEmpty(Model.ConfigurableProductSKU) ? Model.SKU : Model.ConfigurableProductSKU;
+    int addonGroupId = 1;
+}
+@if (Model?.AddOns?.Count > 0)
+{
+    <h4 class="section-header" data-test-selector="hdgAddOnOptions">@Admin_Resources.AddOnOptionsLabel</h4>
+
+    foreach (var addon in Model.AddOns)
+    {
+        if (addon.IsAutoAddon)
+        {
+            <div class="form-group">
+                <div class="col-xs-12 nopadding">
+                    @if (addon.AddOnValues?.Count > 0)
+                    {
+                        foreach (var addonValues in addon.AddOnValues)
+                        {
+                            string addonText = addonValues.SalesPrice > 0 ? $"{addonValues.Name} + {@HelperMethods.FormatPriceWithCurrency(addonValues.SalesPrice, addonValues.CultureCode)}" : addonValues.Name;
+                            <span>@addonText</span><br />
+                        }
+                    }
+                </div>
+            </div>
+        }
+
+        if (!addon.IsAutoAddon)
+        {
+            if (addon.DisplayType == "DropDown")
+            {
+                <div class="form-group">
+                    <div class="col-xs-12 nopadding">
+                        <label for="AddOn-@addon.AddOnId" data-test-selector="lblPackaging">@addon.GroupName</label>
+                    </div>
+                    <div class="col-xs-12 nopadding">
+                        @if (addon.IsRequired)
+                        {
+                            <select id="AddonId_@addon.AddOnId" data-addOnGroupId=@addonGroupId data-sku="@productSku" data-parentsku="@Model.SKU" data-parentProductId="@Model.ParentProductId" class="AddOn" onchange="Order.prototype.OnAddonSelect()" data-test-selector="drpPackaging">
+                                @foreach (var addonValues in addon.AddOnValues)
+                                {
+                                    string addonText = addonValues.SalesPrice > 0 ? $"{addonValues.Name}{" + "}{@HelperMethods.FormatPriceWithCurrency(addonValues.SalesPrice, addonValues.CultureCode)}" : addonValues.Name;
+                                    <option value="@addonValues.SKU" data-addonsku="@addonValues.SKU">@addonText</option>
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            <select id="AddonId_@addon.AddOnId" data-addOnGroupId=@addonGroupId data-sku="@productSku" data-parentsku="@Model.SKU" data-parentProductId="@Model.ParentProductId" class="AddOn" onchange="Order.prototype.OnAddonSelect()" data-test-selector="drpPackaging">
+                                <option value="0">@WebStore_Resources.TextSelect</option>
+                                @foreach (var addonValues in addon.AddOnValues)
+                                {
+                                    string addonText = addonValues.SalesPrice > 0 ? $"{addonValues.Name}{" + "}{@HelperMethods.FormatPriceWithCurrency(addonValues.SalesPrice, addonValues.CultureCode)}" : addonValues.Name;
+                                    <option value="@addonValues.SKU" data-addonsku="@addonValues.SKU">@addonText</option>
+                                }
+                            </select>
+                        }
+                        <div id="dynamic-addOninventory" style="display:none" class="error-msg"></div>
+                    </div>
+                </div>
+                addonGroupId++;
+            }
+
+            if (addon.DisplayType == "RadioButton")
+            {
+                <div class="form-group">
+                    <div class="col-xs-12 nopadding">
+                        <label>@addon.GroupName</label>
+                    </div>
+                    <div class="col-xs-12 nopadding">
+                        @foreach (var addonValues in addon.AddOnValues)
+                        {
+                            <label>
+                                <input type="radio" id="AddOnValue-@addonValues.PublishProductId" data-sku="@productSku" data-parentsku="@Model.SKU" data-parentProductId="@Model.ParentProductId" data-addonsku="@addonValues.SKU" name="AddOnValue_@addon.GroupName" value="@addonValues.SKU" class="AddOn" @((addon.IsRequired && addon.SelectedAddOnValue!= null && addon.SelectedAddOnValue.Contains(addonValues.PublishProductId)) ? "checked=checked" : "") onchange="Order.prototype.OnAddonSelect()" />
+                                @if (!Equals(addonValues.SalesPrice, null))
+                                {
+                                    <span class="lbl padding-8" for="AddOnValue-@addonValues.PublishProductId">@addonValues.Name (+@HelperMethods.FormatPriceWithCurrency(addonValues.SalesPrice, addonValues.CultureCode))</span>
+                                }
+                                else
+                                {
+                                    <span class="lbl padding-8" for="AddOnValue-@addonValues.PublishProductId">@addonValues.Name</span>
+                                }
+                            </label>
+                        }
+                        <div id="dynamic-addOninventory" style="display:none" class="error-msg"></div>
+                    </div>
+                </div>
+            }
+
+            if (addon.DisplayType == "CheckBox")
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <label>@addon.GroupName</label>
+                    </div>
+                    <div class="col-sm-12 nopadding">
+                        <div class="chk-product-addons" id="chk-@addon.AddOnId" data-addOnGroupId=@addonGroupId data-isoptional="@addon.IsRequired" data-addonid="@addon.GroupName">
+                            @foreach (var addonValues in addon.AddOnValues)
+                            {
+                               <div class="col-sm-12 nopadding multiple-add-ons">
+                                    <input type="checkbox" id="AddOnChk-@addonValues.PublishProductId" data-sku="@productSku" data-parentsku="@Model.SKU" data-parentProductId="@Model.ParentProductId" data-addonsku="@addonValues.SKU" name="AddOnValueId_@addon.GroupName" value="@addonValues.SKU" class="AddOn" @((addon.IsRequired && addon.SelectedAddOnValue!= null && addon.SelectedAddOnValue.Contains(addonValues.PublishProductId)) ? "checked=checked" : "") onchange="Order.prototype.OnAddonSelect()" />
+                                    @if (!Equals(addonValues.SalesPrice, null))
+                                    {
+                                        <span class="lbl" for="AddOnChk-@addonValues.PublishProductId">@addonValues.Name (+@HelperMethods.FormatPriceWithCurrency(addonValues.SalesPrice, addonValues.CultureCode))</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="lbl padding-8" for="AddOnChk-@addonValues.PublishProductId">@addonValues.Name</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <p id="paraComment-@addonGroupId" style="display:none" class="error-msg">@string.Format(WebStore_Resources.rfvAddOnCheckBox, addon.GroupName)</p>
+                        <div id="dynamic-addOninventory" style="display:none" class="error-msg"></div>
+                    </div>
+                </div>
+                addonGroupId++;
+            }
+        }
+    }
+}

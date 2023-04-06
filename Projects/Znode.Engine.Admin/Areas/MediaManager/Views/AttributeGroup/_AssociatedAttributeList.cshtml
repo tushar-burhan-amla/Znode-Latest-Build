@@ -1,0 +1,19 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model AttributeGroupMapperListViewModel
+
+<div id=@Model.GridModel.FrontObjectName>
+
+    @{
+        <div class="pull-right padding-left action-dropdown ">
+            @{Html.RenderAction("GetUnAssignedAttribute", "AttributeGroup", new { @id = @Model.MediaAttributeGroupId });}
+        </div>
+                <div class="col-sm-12 list-container margin-top">
+                    <div class="attribut-list">
+                        @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                    </div>
+                </div>
+    }
+</div>
+<script>
+    $("#DropDownId1").closest(".dropdown").hide()
+</script>

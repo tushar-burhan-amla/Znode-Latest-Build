@@ -1,0 +1,110 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model ShippingRuleViewModel
+@using Znode.Engine.Admin.Helpers;
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string shippingCode = Model.ShippingRuleTypeList.Find(x => x.Value == Model.ShippingRuleTypeCode).Text;
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "EditShippingRuleForm", CancelUrl = "/Shippings/ShippingRuleList?shippingId=" + Model.ShippingId + "&shippingTypeId=" + Model.ShippingTypeId, Callback = "Shippings.prototype.CheckMinMaxValue", IsSaveCloseEnable = true };
+}
+
+@using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "EditShippingRuleForm", enctype = "multipart/form-data" }))
+{
+    <div class="col-sm-12 title-container">
+        <h1>@string.Format(@Admin_Resources.TitleEdit, "Rule")<em class="z-minus"></em><span>@shippingCode</span></h1>
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+    <section class="col-sm-12 page-container">
+        <div id="createFormRule">
+            <div class="col-sm-12 nopadding" id="generalSettings">
+                <h3 class="section-heading">@Admin_Resources.EditRule</h3>
+                <div class="form-group" id="ruletype-content">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label class="required">@Admin_Resources.RuleType</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.ShippingRuleTypeCode, Model.ShippingRuleTypeList, Admin_Resources.LabelSelectShippingRuleType, new { @id = "ddlShippingRuleTypeList", @onchange = "Shippings.prototype.SetPriceLimitVisiblity(this)", disabled = "disabled" , @data_test_selector = "drpShippingRuleType" })
+                        </div>
+                        <div class="col-sm-9 control-non nopadding">@Html.ValidationMessageFor(model => model.ShippingRuleTypeCode,"", new { @data_test_selector = "valShippingRuleType" })</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 nopadding" id="setpricing">
+                <h3 class="section-heading margin-top-25">@Admin_Resources.SetPricing</h3>
+                <div class="form-group" id="basecost-content">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.BaseCost, new { @class = "required", @data_test_selector = "lblBaseCost" })
+                        </div>
+                        <div class="pull-left" id="currencyListDropdown">
+                            @Html.DropDownListFor(model => model.CurrencyId, Model.CurrencyList ?? new List<SelectListItem>(), new { @disabled = "disabled" , @data_test_selector = "drpCurrencyId" })
+                        </div>
+                        <div class="control-sm">
+                            <div>
+                                @Html.TextBoxFor(model => model.BaseCost, new { @id = "valBaseCost", required = "required", @validationrule = "RoundOff", @data_test_selector = "txtBaseCost", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidAmountForRoundOff, Admin_Resources.ErrorValidAmount) })
+                            </div>
+                        </div>
+                        <div class="col-sm-9 control-non nopadding">@Html.ValidationMessageFor(model => model.BaseCost,"", new {@data_test_selector = "lblBaseCost" })</div>
+                    </div>
+                </div>
+                <div class="form-group" id="peritemcost-content" style="display:none">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.PerItemCost, new { @class = "required", @data_test_selector = "lblPerItemCost" })
+                        </div>
+                        <div class="pull-left" id="currencyListDropdown">
+                            @Html.DropDownListFor(model => model.CurrencyId, Model.CurrencyList ?? new List<SelectListItem>(), new { @disabled = "disabled", @data_test_selector = "drpPerItemCost" })
+                        </div>
+                        <div class="control-sm">
+                            <div>
+                                @Html.TextBoxFor(model => model.PerItemCost, new { @id = "valPerItemCost", required = "required", @validationrule = "RoundOff", @data_test_selector = "txtPerItemCost", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidAmountForRoundOff, Admin_Resources.ErrorValidAmount) })
+                            </div>
+                        </div>
+                        <div class="col-sm-9 control-non nopadding">@Html.ValidationMessageFor(model => model.PerItemCost,"", new { @data_test_selector = "lblPerItemCost" })</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 nopadding" id="enterlimitsfortieredpricing" style="display:none">
+                <h3 class="section-heading margin-top-25">@Admin_Resources.EnterLimitsForTieredPricing</h3>
+                <div class="form-group" id="lowerlimit-content">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.LowerLimit, new { @class = "required", @data_test_selector = "lblLowerLimit" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.LowerLimit, new { @id = "valLowerLimit", required = "required", @data_test_selector = "txtLowerLimit", @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForInventory(), @Message = HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorValidLowerLimitForRoundOff, Admin_Resources.ErrorValidLowerLimit) })
+                        </div>
+                        <div class="col-sm-9 control-non nopadding">@Html.ValidationMessageFor(model => Model.LowerLimit, "", new { @id = "_validationMessageForLowerLimit", @class = "text-danger", @data_test_selector = "valLowerLimit" })</div>
+                    </div>
+                </div>
+                <div class="form-group" id="upperlimit-content">
+                    <div class="col-sm-12 nopadding ">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.UpperLimit, new { @class = "required", @data_test_selector = "lblUpperLimit" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.UpperLimit, new { @id = "valUpperLimit", required = "required", @validationrule = "RoundOff", @data_test_selector = "txtUpperLimit", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForInventory(), @Message = HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorValidUpperLimitForRoundOff, Admin_Resources.ErrorValidUpperLimit) })
+                        </div>
+                        <div class="col-sm-9 control-non nopadding">@Html.ValidationMessageFor(model => model.UpperLimit, "", new { @id = "_validationMessageForUpperLimit", @class = "text-danger", @data_test_selector = "valUpperLimit" })</div>
+                    </div>
+                </div>
+            </div>
+
+            @Html.HiddenFor(m => m.LowerLimit)
+            @Html.HiddenFor(m => m.UpperLimit)
+            @Html.HiddenFor(m => m.ShippingRuleId)
+            @Html.HiddenFor(m => m.ShippingId)
+            @Html.HiddenFor(m => m.ShippingRuleTypeCode)
+            @Html.HiddenFor(m => m.ShippingTypeId)
+        </div>
+    </section>
+}
+@if (actionName == "EditShippingRule" && Model.ClassName == "ZnodeShippingCustom")
+{
+    <div id="AssociatedSKUList"></div>
+}
+@Scripts.Render("~/bundles/jqueryval")

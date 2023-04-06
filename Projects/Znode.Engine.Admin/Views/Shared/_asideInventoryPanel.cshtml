@@ -1,0 +1,13 @@
+﻿<aside>
+    <button type="button" id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelManageInventory, "EditSKUInventory", "Inventory", new { @inventoryId = Model.InventoryId })</li>
+
+            @if (Model.IsDownloadable)
+            {
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelDownloadableProductKeys, "GetDownloadableProductKeys", "Inventory", new { @productId = Model.PimProductId, @sku = HttpUtility.UrlEncode(Model.SKU), @inventoryId = Model.InventoryId }, new { @data_test_selector = "linkDownlaodableProductKeys" })</li>
+            }
+        </ul>
+    </div>
+</aside>

@@ -1,0 +1,55 @@
+﻿@model Znode.Engine.Admin.Models.GridModel
+@using Znode.Engine.Admin.Helpers
+
+<div class="pull-right">
+    @Html.Partial("~/Views/DynamicGrid/_GridViewType.cshtml")
+</div>
+
+<div id="Dynamic_Grid dirtyignore">
+    @if (Model?.DataTableToList?.Count > 0)
+    {
+        if (!string.IsNullOrEmpty(Model.SubRecordFilterKeyName) && !string.IsNullOrEmpty(Model.DelegateTypeName) && !string.IsNullOrEmpty(Model.DelegateTypeMethodName))
+        {
+            Model.WebGridColumn.Add(new WebGridColumn()
+            {
+                Format = (item) =>
+                {
+                    WebGrid subGrid = new WebGrid(source: FilterHelpers.GetSubRecords(item, Model.SubRecordFilterKeyName, Model.DelegateTypeName, Model.DelegateTypeMethodName), canSort: false);
+                    return subGrid.GetHtml(
+                        htmlAttributes: new { id = "subT", @style = "width:50%;" },
+                        columns: subGrid.Columns(
+                        subGrid.Column("Text", header: "", format: (item1) => new HtmlString(item1.Text))
+                        ));
+                }
+            });
+        }
+
+        WebGrid grid = new WebGrid(rowsPerPage: Model.RowPerPageCount, ajaxUpdateContainerId: "grid-container",
+            ajaxUpdateCallback: "DynamicGrid.SetSortOrder");
+        grid.Bind(source: Model.DataTableToList,
+            rowCount: Model.TotalRecordCount, autoSortAndPage: false);
+        grid.SortDirection = Model.GridSortDirection;
+        grid.SortColumn = Model.GridSortColumn;
+        <div class="col-sm-12 detail-view" style="display:inline-flex;">
+            <div class="table-responsive table-partial col-sm-3 nopadding">
+                @Html.RenderBlock(HttpUtility.HtmlDecode(grid.Table(
+                          htmlAttributes: new { id = "grid", @class = "table" },
+                          headerStyle: "grid-header",
+                          columns: Model.WebGridColumn).ToHtmlString()))
+            </div>
+            <div class="col-sm-9 nopadding result-partial">
+                <div id="Resultpartial"></div>
+            </div>
+        </div>
+        <div class="col-sm-12 nopadding">
+            @grid.CustomPager(Html)
+            @Html.Hidden("dir", grid.SortDirection) @Html.Hidden("col", grid.SortColumn)
+        </div>
+    }
+    else
+    {
+        <div class="col-sm-12 no-record nopadding">
+            <p>@Admin_Resources.NoRecordFoundText</p>
+        </div>
+    }
+</div>

@@ -1,0 +1,46 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PortalCatalogViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+@Html.HiddenFor(model => model.PublishCatalogId)
+@Html.HiddenFor(Model => Model.PortalId)
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelPreview<em class="z-minus"></em><span>@portalName</span></h1>
+    <div class="pull-right">
+        @if (Model?.PortalId <= 0)
+        {
+            @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "CreateStore", "Store", null, new { @class = "btn-text-icon" })
+        }
+        else
+        {
+            @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "EditStore", "Store", new { PortalId = Model.PortalId }, new { @class = "btn-text-icon" })
+        }
+
+    </div>
+</div>
+<div class="main-wrapper">
+    <div id="viewPortalCatalog">
+        <aside>
+            <div class="catalog-tree">
+                <div class="catalog-tree-search">
+                    <div class="right-inner-icon">
+                        <em class="z-search"></em>
+                        @Html.TextBox("TreeSearch")
+                    </div>
+                </div>
+                <div class="col-sm-12 nopadding">
+                    <div id="Catalog_Tree"></div>
+                </div>
+            </div>
+        </aside>
+        <!--Main Container-->
+        <section class="main-container">
+            <div class="col-sm-12 nopadding">
+                <div id="DisplayPublishInfo" class="publish-details"></div>
+            </div>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,153 @@
+﻿.b2b-product-list{padding:0 5px;}
+.b2b-facets-btn{padding:15px 10px 0;}
+.b2b-filters{background-color:$filter-background;margin-left:0;padding:15px;font-size:$base-font-size - 1;margin:0 -5px;
+    > div {flex:1;}
+    .filter-text{margin-right:5px;margin-bottom:0px;}
+    .b2b-sorting{
+        .search-sorting{display:flex;}
+        select{padding:0 25px 0 5px;}
+    }
+    .b2b-view-mode{
+        .productview{color:$base-tertiary-light;padding:0 3px;font-size:$base-font-size;}
+        .grid-view-opt-active,.list-view-opt-active,.text-view-opt-active{color:$black;}
+        .text-view-opt, .text-view-opt-active{padding-left: 9px;}
+    }
+    .b2b-paging{width:100%;margin-bottom:15px;
+        .search-paging{display:flex;justify-content:center;}
+    }
+    .b2b-product-count{padding:0 15px;
+        &.page-top{font-size:$base-font-size + 4;font-family:$base-font-family-bold;width:100%;padding:0 0 10px 0;}
+    }
+    .b2b-pagination{
+        ul{padding:0;list-style:none;display:flex;
+            li{padding:0 15px;
+                a{color:$base-tertiary;
+                    &:hover{color:$base-primary-light;}
+                    &.disabled{color:$base-tertiary-light;pointer-events:none;}
+                }
+            }
+        }
+    }
+}
+
+.product-view {
+    .product-grid-ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        padding: 0;
+
+        .b2b-products {
+            transition-duration: 300ms;
+        }
+
+        .product-details {
+            .product-sku {
+                color: #9E9E9E;
+            }
+
+            .b2b-compare-product, .b2b-wishlist-product {
+                a {
+                    font-size: 12.5px;
+                }
+
+                .label-compare, .label-wishlist {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        &.grid-view {
+            .b2b-products {
+                width: 33.33%;
+                display: flex;
+
+                @media only screen and (max-width: 767px) {
+                    width: 50%;
+                }
+
+                @media only screen and (max-width: 480px) {
+                    width: 100%;
+                }
+
+                .product-img .title, .b2b-view-more-details {
+                    display: none;
+                }
+            }
+        }
+
+
+        &.list-view {
+            .b2b-products {
+                width: 100%;
+
+                .view-item {
+                    display: flex;
+
+                    .product-img {
+                        width: 30%;
+
+                        .image {
+                            margin: 0;
+
+                            img {
+                                max-width: 100%;
+                            }
+                        }
+
+                        .title {
+                            display: none;
+                        }
+                    }
+
+                    .product-details {
+                        width: 70%;
+                        padding: 10px;
+                    }
+
+                    .b2b-view-more-details{
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        &.text-view {
+            .b2b-products {
+                width: 100%;
+
+                .view-item {
+                    .product-img {
+                        .title {
+                            display: none;
+                        }
+
+                        .image {
+                            display: none;
+                        }
+                    }
+
+                    .product_highlight, .price, .product-inventory, .b2b-wishlist-product, .b2b-compare-product {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include screensize(xl-small){
+    .b2b-filters .b2b-paging{width:auto;margin-bottom:0;}
+}
+
+@include screensize(small){
+    .b2b-filters{
+        .b2b-product-count.page-top{width:auto;padding:0;}
+        .b2b-view-mode{padding-left:15px;}
+    }
+}
+
+@include screensize(medium){
+    .b2b-product-list{padding:0 5px 0 10px;}
+    .b2b-filters{margin:0 10px;}
+}

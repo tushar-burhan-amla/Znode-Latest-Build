@@ -1,0 +1,78 @@
+﻿@model Znode.Engine.Admin.ViewModels.ProfileViewModel
+@using Znode.Engine.Admin.ViewModels;
+@{
+    Layout = null;
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateUpdateProfile" };
+}
+<div id="aside-popup-panel">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateEditCustomerAccount" }))
+            {
+        <div class="col-sm-12 title-container">
+            @if (Model.ProfileId == 0)
+            {
+                <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelUserProfile)</h1>
+            }
+            else
+            {
+                <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelUserProfile)<em class="z-minus"></em><span>@Model.ProfileName</span></h1>
+            }
+                <div class="pull-right btn-container">
+                    <button type="button" data-test-selector="linkCancel" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('DivAddProfile')"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                    <div class="pull-right">
+                        <button type="submit" data-test-selector="linkSave" class="btn-text btn-text-secondary">@Admin_Resources.ButtonSave</button>
+                    </div>
+                </div>
+        </div>
+    <!--Main Container-->
+        <section class="col-sm-12 page-container">
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label class="required" data-test-selector="lblProfileName">@Admin_Resources.ZnodeProfileName</label>
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(x => x.ProfileName, new { @data_test_selector = "txtProfileName" })
+                        @Html.ValidationMessageFor(m => m.ProfileName, "", new { @data_test_selector = "valProfileName" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label data-test-selector="lblProfileCode">@Admin_Resources.ZnodeProfileCode</label>
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(x => x.DefaultExternalAccountNo, new { @data_test_selector = "txtProfileCode" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.HelptextProfileExternalId)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label data-test-selector="lblProfileSetting">@Admin_Resources.ZnodeProfileSetting</label>
+                    </div>
+                    <div class="control-md">
+                        <div class="col-sm-12 nopadding">
+                            <label>
+                                <input @(Model.TaxExempt ? "checked='checked'" : "" ) id="TaxExempt" data-test-selector="txtTaxExempt" name="TaxExempt" type="checkbox" value="true">
+                                <span class="lbl padding-8" data-test-selector="infoTaxExempt" for="TaxExempt">@Admin_Resources.TaxExempt</span>
+                                <input name="TaxExempt" type="hidden" value="false">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(x => x.ProfileId)
+
+        </section>
+    }
+</div>
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    CommonHelper.prototype.DisplayTooltip();
+</script>

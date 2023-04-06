@@ -1,0 +1,60 @@
+﻿@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.Helpers;
+@model CreateOrderViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName };
+    string cultureCode = string.IsNullOrEmpty(Model?.CartViewModel?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CartViewModel.CultureCode;
+}
+<div id="UserCart">
+    <div class="col-sm-12 title-container">
+        <h1 data-test-selector="hdgUser">@string.Format(@Admin_Resources.TitleManage, "User")<em class="z-minus"></em><span>@TempData["CustomerDisplayName" + @Model.UserId]</span></h1>
+        <div class="pull-right btn-container">
+            @using (Html.BeginForm("CreateCustomerOrder", "order", FormMethod.Post, new { name = "placeorder", id = "placeorder" }))
+            {
+                @Html.Hidden("UserId", Model.UserId)
+                @Html.Hidden("PortalId", Model.CartViewModel.PortalId)
+                @Html.Hidden("PublishedCatalogId", Model.CartViewModel.PublishedCatalogId)
+                @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "CustomersList", "Customer", null, new { @class = "btn-text-icon", @data_test_selector = "linkBack" })
+                <div class="pull-right padding-left" id="btnUserCart">
+                    @if (Model.IsGuestUser == false)
+                    {
+                        if (Model?.CartViewModel.ShoppingCartItems?.Any() ?? false)
+                        {
+                            <button type="submit" id="createOrder" class="btn-text btn-text-secondary">@Admin_Resources.ProceedToCheckout</button>
+                        }
+                        else
+                        {
+                            <button type="submit" id="createOrder" class="btn-text btn-text-secondary">@Admin_Resources.ButtonCreateOrder</button>
+                        }
+                    }
+                </div>
+            }
+
+        </div>
+    </div>
+    <div class="main-wrapper">
+        @Html.Partial("~/views/User/_asidecustomermanagepanel.cshtml")
+
+        <section class="main-container">
+            <div id="layout-cart">
+                <h3 class="section-heading pull-left">@Admin_Resources.LabelProductsInCart</h3>
+                @if (Model?.CartViewModel.ShoppingCartItems?.Any() ?? false)
+                {
+                    @Html.Partial("_UserCart", Model.CartViewModel)
+                }
+                else
+                {
+                <div class="col-sm-12 nopadding cart-summary">
+                    <p class="text-center margin-top-bottom no-record">@Admin_Resources.TextUserEmptyCart</p>
+                </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>
+

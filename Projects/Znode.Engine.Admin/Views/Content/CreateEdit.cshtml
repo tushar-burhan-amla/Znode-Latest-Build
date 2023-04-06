@@ -1,0 +1,385 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Extensions
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.Models
+@model ContentPageViewModel
+@{
+    Model.TakeFromDraftFirst = true;
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    if(actionName== "GetDefaultCMSSEODetails")
+    {
+        actionName = "editcontentpage";
+    }
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string returnurl = "/Content/ContentPageList";
+
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    string FormId = "frmCreateContentPage";
+    string CancelUrl = "/Content/ContentPageList";
+    string Callback = "Content.prototype.SelectProfile";
+
+    if (Equals(actionName.ToLower(), "editcontentpage"))
+    {
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "btnSaveNClose", ControlId = "btnSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "SaveCancel.prototype.SubmitForm('" + @FormId + "','" + @Callback + "', '" + @CancelUrl + "')" });
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "btnSave", ControlId = "dvSave", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "SaveCancel.prototype.SubmitForm('" + @FormId + "', '" + @Callback + "')" });
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "btnPublish", ControlId = "PublishContentPageLink", LinkType = LinkType.OnClick, LinkDisplayName = @PIM_Resources.ButtonReady, OnClick = "Content.prototype.PublishContentPagePopup()" });
+    }
+    else
+    {
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "btnSaveNClose", ControlId = "btnSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "SaveCancel.prototype.SubmitForm('" + @FormId + "','" + @Callback + "', '" + @CancelUrl + "')" });
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "btnSave", ControlId = "dvSave", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "SaveCancel.prototype.SubmitForm('" + @FormId + "', '" + @Callback + "')" });
+    }
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateContentPage", CancelUrl = "/Content/ContentPageList", Callback = "Content.prototype.SelectProfile", IsSaveCloseEnable = false };
+
+    PopupModel publishPopupModel = new PopupModel()
+    {
+        Title = @Admin_Resources.TitlePublishConfirm,
+        Description = string.Format(@Admin_Resources.PublishConfirmationMessage, "content page"),
+        NoChoiceDescription = string.Format(@Admin_Resources.PublishConfirmationMessageNoChoice, "content page"),
+        ModalPopUpId = "PublishContentPage",
+        ModalSizeClass = "model-smd",
+        AdditionalNote = string.Format(Admin_Resources.PublishAllLocaleDisclaimerMessage, "content page"),
+        InputFields = new List<PopupInputField>
+{
+    new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = HelperMethods.GetAvailablePublishStates(), RequiredNumberOfItemsToDisplay = 2 }
+},
+        Buttons = new List<PopUpButtonModel>()
+{
+    new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Content.prototype.UpdateAndPublishContentPage(this,'"+@actionModel.FormId+"')"}
+}
+    };
+
+    PopupModel savePopupModel = new PopupModel()
+    {
+        Title = @Admin_Resources.TitlePublishConfirm,
+        Description = string.Format(@Admin_Resources.PublishConfirmationMessage, "content page"),
+        NoChoiceDescription = string.Format(@Admin_Resources.PublishConfirmationMessageOnChoice, "content page"),
+        ModalPopUpId = "SaveContentPage",
+        ModalSizeClass = "model-smd",
+        Buttons = new List<PopUpButtonModel>()
+{
+  new PopUpButtonModel { ButtonText = @Admin_Resources.TextYes, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Content.prototype.PublishContentPagePopup()"}
+}
+    };
+}
+<input type="hidden" id="StorePublishStatus" value="@Model.StorePublished" />
+<div class="col-sm-12 title-container">
+    @if (Equals(actionName.ToLower(), "editcontentpage"))
+    {
+        <h1 data-test-selector="hdgEdit@(Admin_Resources.LabelContentPage.Replace(" ", ""))">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelContentPage)<em class="z-minus"></em><span>@Model.PageName</span></h1>
+        <div class="pull-right btn-container">
+            <a id="linkBack" data-test-selector="linkBack" href="@returnurl" class="btn-text-icon"><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+            @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+        </div>
+    }
+    else
+    {
+        <h1 data-test-selector="hdgAdd@(Admin_Resources.LabelContentPage.Replace(" ", ""))">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelContentPage)</h1>
+        <div class="pull-right btn-container ">
+            <a id="linkBack" data-test-selector="linkBack" href="@returnurl" class="btn-text-icon"><ems class="z-back"></ems>@Admin_Resources.ButtonCancel</a>
+            @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+        </div>
+    }
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @if (Equals(actionName.ToLower(), "editcontentpage"))
+    {
+        @Html.Partial("~/Views/Content/_asideContentPagePanel.cshtml", Model)
+    }
+    else
+    {
+        <aside>
+            <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+            <div class="slide-container">
+                @Html.Partial("~/Views/Content/_ContentPageTree.cshtml")
+            </div>
+        </aside>
+    }
+ 
+    <!--Main Container-->
+
+    <section class="main-container">
+        <div id="divMainContainer" style="display:none;">
+            @if (Equals(actionName.ToLower(), "editcontentpage"))
+            {
+                <div class="panel-container">
+                    <div class="pull-right">
+                        <button type="submit" class="btn-text btn-text-tertiary" onclick="Content.prototype.GetCMSDefaultSEODetails()" style="margin-right: 15px;">@Admin_Resources.GetDefaultButton</button>
+                    </div>
+                </div>
+            }
+                @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateContentPage" }))
+                {
+                    string isRedirectStatus = Model.IsRedirect ? "checked='checked'" : string.Empty;
+                    string isActiveStatus = Model.IsActive ? "checked='checked'" : string.Empty;
+                <div id="loginForm">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.PortalId, new { @class = "required", @data_test_selector = "lblStore" })
+                            </div>
+                            @if (Equals(actionName.ToLower(), "editcontentpage"))
+                            {
+                                <div class="control-md">
+                                    <input type="text" data-test-selector="txtPortalName" value="@Model.PortalName" disabled="disabled" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="control-md">
+                                    @Html.FastSelectFor(model => model.StoreName, model => model.PortalId, "GetSuggestions", "Typeahead", "Content.prototype.OnSelectPortalResult", 1, true,
+                                   new
+                                   {
+                                       htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStoreName" },
+                                       parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                                   })
+                                    @CustomHtmlHelper.HiddenField(Convert.ToString(Model.PortalId), "hdnPortalId", "hidden", Convert.ToString(Model.PortalId))
+                                    @Html.ValidationMessageFor(model => model.StoreName, null, new { id = "errorRequiredStore", @data_test_selector = "valErrorRequiredStore" })
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.ProfileIds, new { @class = "required", @data_test_selector = "lblProfile" })
+                            </div>
+                            <div id="profilelist" data-test-selector="divProfileList" class="control-md">
+                                @Html.Partial("~/Views/Content/_ProfileList.cshtml", Model)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.CMSTemplateId, new { @class = "required", @data_test_selector = "lblTemplate" })
+                            </div>
+                            @if (Equals(actionName.ToLower(), "editcontentpage"))
+                            {
+                                <div class="control-md">
+                                    <input type="text" data-test-selector="txtTemplate" value="@Model.PageTemplateName" disabled="disabled" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="control-md">
+                                    <select class="selectpicker" id="ddlCMSTemplate"></select>
+                                    @Html.HiddenFor(model => model.CMSTemplateId)
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.PageName, new { @class = "required", @data_test_selector = "lblPageName" })
+                            </div>
+                            @if (Equals(actionName.ToLower(), "addcontentpage"))
+                            {
+                                <div class="control-md">
+                                    @Html.TextBoxFor(model => model.PageName, new { @data_test_selector = "txtPageName" })
+                                    @Html.ValidationMessageFor(model => model.PageName, "", new { @id = "errorContentPageName", @data_test_selector = "valErrorContentPageName" })
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="control-md">
+                                    <input type="text" data-test-selector="txtPageName" value="@Model.PageName" disabled="disabled" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(@Admin_Resources.LabelIsActive, new { @data_test_selector = "lblIsActive" })
+                            </div>
+                            <div class="control-md">
+                                <label>
+                                    <input @isActiveStatus id="IsActive" data-test-selector="chkIsActive" name="IsActive" type="checkbox" value="true">
+                                    <span class="lbl padding-8"></span>
+                                    <input name="IsActive" type="hidden" value="false">
+                                    @Html.Partial("_HelpText", Admin_Resources.HelpTextForIsActive)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model?.Locale?.Count > 0)
+                    {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(x => x.LocaleId, new { @data_test_selector = "lblLocale" })
+                                </div>
+                                <div class="control-md">
+                                    @if (Model.CMSContentPagesId > 0)
+                                    {
+                                        @Html.DropDownListFor(m => m.LocaleId, Model.Locale, new { @id = "ddl_locale_list_content_pages", @data_test_selector = "drpLocale" })
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(m => m.LocaleId, Model.Locale, new { @id = "ddl_locale_list_content_pages", @data_test_selector = "drpLocale", disabled = "disabled" })
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.PageTitle, new { @class = "required", @data_test_selector = "lblPageTitle" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(m => m.PageTitle, new { @data_test_selector = "txtPageTitle" })
+                                @Html.ValidationMessageFor(m => m.PageTitle, "", new { @data_test_selector = "valPageTitle" })
+                            </div>
+                        </div>
+                    </div>
+                    <div id="div_content_page_for_locale">
+                        @{ Html.RenderPartial("_ContentPageForLocale", Model); }
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.MetaInformation, new { @data_test_selector = "lblMetaInformation" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(m => m.MetaInformation, new { @data_test_selector = "txtMetaInformation" })
+                                @Html.ValidationMessageFor(m => m.MetaInformation, "", new { @data_test_selector = "valMetaInformation" })
+                            </div>
+                            @Html.Partial("_HelpText", Admin_Resources.HelptextMetaInformation)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.SEOUrl, new { @data_test_selector = "lblSEOUrl" })
+                            </div>
+                            <div class="control-md">
+                                @if (string.IsNullOrEmpty(Model.SEOUrl) || Model.LocaleId == (Convert.ToInt32(DefaultSettingHelper.DefaultLocale)) || Model.LocaleId == 0)
+                                {
+                                    @Html.TextBoxFor(model => model.SEOUrl, new { @data_test_selector = "txtSEOUrl" })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(model => model.SEOUrl, new { @readonly = "readonly", disabled = "disabled", @data_test_selector = "txtSEOUrl" })
+                                }
+                                @Html.ValidationMessageFor(model => model.SEOUrl, "", new { id = "errorSpanSEOUrl", @data_test_selector = "valSEOUrl" })
+                            </div>
+                            @Html.Partial("_HelpText", Admin_Resources.HelptextForSEOUrl)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(@Admin_Resources.LabelIsRedirect, new { @data_test_selector = "lblIsRedirect" })
+                            </div>
+                            <div class="control-md">
+                                <label>
+                                    <input @isRedirectStatus id="IsRedirect" data-test-selector="txtIsRedirect" name="IsRedirect" type="checkbox" value="true">
+                                    <span class="lbl padding-8"></span>
+                                    <input name="IsRedirect" type="hidden" value="false">
+                                    @Html.Partial("_HelpText", Admin_Resources.HelpTextForIsRedirect)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.CanonicalURL, new { @data_test_selector = "lblCanonicalURL" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.CanonicalURL, new { @data_test_selector = "txtCanonicalURL" })
+                                @Html.ValidationMessageFor(model => model.CanonicalURL, "", new { @data_test_selector = "valCanonicalURL" })
+                            </div>
+                            @Html.Partial("_HelpText", Admin_Resources.CanonicalURLHelpTextCMS)
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.RobotTag, new { @data_test_selector = "lblRobotTagValue" })
+                            </div>
+                            <div class="control-md">
+                                @Html.EnumDropDownListFor(model => model.RobotTag, new { @data_test_selector = "drpRobotTagValue" })
+                                @Html.ValidationMessageFor(model => model.RobotTag, "", new { @id = "errorRequiredType", @data_test_selector = "valRobotTagValue" })
+                            </div>
+                            @Html.Partial("_HelpText", Admin_Resources.RobotTagHelpTextCMS)
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.ActivationDate, new { @data_test_selector = "lblActivationDate" })
+                            </div>
+                            <div class="control-sm">
+                                <div class="right-inner-icon">
+                                    @Html.TextBox("ActivationDate", Model.ActivationDate != null ? Model.ActivationDate.ToDateTimeFormat() : string.Empty, new { @id = "ActivationDateId", @data_test_selector = "txtActivationDate", @mindate = "", @class = "datepicker", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat() })
+                                    <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                                    <span id="activationdaterrror" class="contenterrormessage error-msg"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.ExpirationDate, new { @data_test_selector = "lblExpirationDate" })
+                            </div>
+                            <div class="control-sm">
+                                <div class="right-inner-icon">
+                                    @Html.TextBox("ExpirationDate", Model.ExpirationDate != null ? Model.ExpirationDate.ToDateTimeFormat() : string.Empty, new { @id = "ExpirationDateId", @data_test_selector = "txtExpirationDate", @class = "datepicker", @maxdate = "", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat() })
+                                    <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                                    <span id="expirationdaterrror" class="error-msg"></span>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.HiddenFor(model => model.PortalId)
+                        @Html.HiddenFor(model => model.PortalName)
+                        @Html.HiddenFor(model => model.PageTemplateName)
+                        @Html.HiddenFor(model => model.PageName)
+                        @Html.HiddenFor(model => model.CMSTemplateId)
+                        @Html.HiddenFor(model => model.CMSContentPagesId, new { @id = "CMSContentPagesId" })
+                        @Html.HiddenFor(model => model.CMSContentPageGroupId, new { @id = "CMSContentPageGroupId" })
+                        @Html.HiddenFor(model => model.OldSEOURL)
+                        @Html.HiddenFor(model => model.IsSelectAllProfile)
+                        @Html.Hidden("hdnactionname", actionName.ToLower())
+                        @Html.HiddenFor(model => model.SEOUrl)
+                        @Html.HiddenFor(m => m.FolderId, new { @id = "hdnContentPageFolderId" })
+                        @Html.HiddenFor(m => m.TargetPublishState)
+                        @Html.HiddenFor(m => m.TakeFromDraftFirst)
+                        @Html.HiddenFor(m => m.FileName, new { @id = "FileName" })
+                    </div>
+                </div>
+                }
+
+            </div>
+        <div id="divContentContainer" style="display:none">
+
+        </div>
+        <div id="divPreviewContainer" style="display:none">
+
+        </div>
+        <div id="content-page-dataid"></div>
+    </section>
+</div>
+@Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml", publishPopupModel)
+@Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml", savePopupModel)
+<div id="divContentStoreList" class="aside-popup-panel modal-dialog modal-xl"></div>
+<script>
+       var templateDataList =@Html.Raw(Json.Encode(Model.TemplateImageList));
+          
+    $("#dvSave,#btnSaveNClose").click(function (e) {
+        if ($("#ProfileId").val() == null || $("#ProfileId").val() == "") {
+            $("#error-profile").html("@Admin_Resources.TextSelectOneProfile");
+        }
+    });
+</script>

@@ -1,0 +1,17 @@
+﻿<aside>
+    <button type="button" id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(@GlobalSetting_Resources.LabelGeneral, "List", "GeneralSetting", null, new { @data_test_selector = "link" + (@GlobalSetting_Resources.LabelGeneral) })</li>
+            <li>@Html.AuthorizedRawActionLink(@GlobalSetting_Resources.LabelLocales, "List", "Locale", null, new { @data_test_selector = "link" + (@GlobalSetting_Resources.LabelLocales) })</li>
+            <li>@Html.AuthorizedRawActionLink(@GlobalSetting_Resources.LabelCurrencies, "List", "Currency", null, new { @data_test_selector = "link" + (@GlobalSetting_Resources.LabelCurrencies) })</li>
+            <li>@Html.AuthorizedRawActionLink(@GlobalSetting_Resources.LabelCountries, "List", "Country", null, new { @data_test_selector = "link" + (@GlobalSetting_Resources.LabelCountries) })</li>
+            <li>@Html.AuthorizedRawActionLink(GlobalSetting_Resources.LabelCacheManagement, "GetCacheManagementData", "GeneralSetting", null, new { @data_test_selector = "link" + (@GlobalSetting_Resources.LabelCacheManagement) })</li>
+            <li>@Html.AuthorizedRawActionLink(GlobalSetting_Resources.UrlManagementConfiguration, "List", "UrlManagement", null, new { @data_test_selector = "link" + (@GlobalSetting_Resources.UrlManagementConfiguration) })</li>
+            <li>@Html.AuthorizedRawActionLink(GlobalSetting_Resources.LabelPublishSettings, "PublishSettings", "GeneralSetting", null, new { @data_test_selector = "link" + (@GlobalSetting_Resources.LabelPublishSettings) })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelInventorySubscriptionNotification, "GetStockNoticeSettings", "GeneralSetting", null, new { @data_test_selector = "link" + (Admin_Resources.LabelInventorySubscriptionNotification) })</li>
+            <li>@Html.AuthorizedRawActionLink(GlobalSetting_Resources.LabelPowerBiSettings, "GetPowerBISettings", "GeneralSetting", null, new { @data_test_selector = "link" + (@GlobalSetting_Resources.LabelPowerBiSettings) })</li>
+            <li>@Html.AuthorizedRawActionLink(GlobalSetting_Resources.LabelPromotionAndCouponSettings, "GetConfigurationSettings", "GeneralSetting", null, new { @data_test_selector = "link" + (@GlobalSetting_Resources.LabelPromotionAndCouponSettings) })</li>
+        </ul>
+    </div>
+</aside>

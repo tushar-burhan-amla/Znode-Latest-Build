@@ -1,0 +1,231 @@
+﻿@using Znode.Engine.Admin.Models;
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+@model InventorySKUViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel
+    {
+        Action = actionName,
+        Controller = controllerName,
+        CancelUrl = "/Inventory/InventorySKUList",
+        FormId = "frmAssociateItemInventory",
+        Callback = "Inventory.prototype.ValidateSKU",
+        IsSaveCloseEnable = true
+    };
+    bool isDownloadable = Model.IsDownloadable;
+}
+
+<div class="col-sm-12 title-container">
+    @if (string.Equals(actionName.ToLower(), "addskuinventory"))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.HeaderInventory)</h1>
+        actionModel.IsSaveCloseEnable = false;
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.HeaderInventory)<em class="z-minus"></em><span>@Html.DisplayFor(model => model.SKU)</span></h1>
+    }
+    <div class="pull-right btn-container">
+        <a href="@actionModel.CancelUrl" class="btn-text-icon"><em class="z-back" data-test-selector="linkCancel"></em>@Admin_Resources.ButtonCancel</a>
+        <div class="pull-right padding-left dirtyignore">
+            @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, actionModel.Action, actionModel.Controller, new { @id = "dvSave", @class = "btn-text btn-text-secondary", @data_test_selector = "linkSave", onclick = "SaveCancel.prototype.SubmitForm('" + @actionModel.FormId + "', '" + @actionModel.Callback + "')" })
+        </div>
+    </div>
+</div>
+<div class="main-wrapper ">
+    <!--Left Panel-->
+    @if (string.Equals(actionName.ToLower(), "editskuinventory"))
+    {
+        @Html.Partial("~/views/Shared/_asideInventoryPanel.cshtml", Model)
+    }
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmAssociateItemInventory" }))
+        {
+        <div id="loginForm">
+            @if (string.Equals(actionName.ToLower(), "addskuinventory"))
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.SKU, new { @class = "required", @data_test_selector = "lblSKU" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.SKU, new { @placeholder = Admin_Resources.TextEnterProductSKU, @id = "txtSKU", @data_test_selector = "txtSKU" })
+                            @Html.ValidationMessageFor(model => model.SKU, "", new { @id = "valSKU", @data_test_selector = "valSKU" })
+                        </div>
+                        <div class="control-sm dirtyignore">
+                            @Html.AuthorizedPrototypeRawActionLink(@Admin_Resources.BrowseButton, "GetProductSKUList", "Inventory", new { @id = "GetProductSKUList", @class = "btn-text btn-text-secondary margin-left-10", @value = "Create XML", onclick = "ZnodeBase.prototype.BrowseAsidePoupPanel('/Inventory/GetProductSKUList','skuList')", @data_test_selector = "btnBrowse" })
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.SKU, new { @data_test_selector = "lblSKU" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.SKU, new { @placeholder = Admin_Resources.TextEnterProductSKU, @id = "txtSKU", @disabled = "disabled", @data_test_selector = "txtSKU" })
+                            @Html.ValidationMessageFor(model => model.SKU, "", new { @id = "valSKU", @data_test_selector = "valSKU" })
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (string.Equals(actionName.ToLower(), "addskuinventory"))
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.HeaderWarehouse, new { @class = isDownloadable ? "" : "required", @data_test_selector = "lblWarehouse" })
+                        </div>
+                        <div class="control-md">
+                            @if (isDownloadable)
+                            {
+                                @Html.DropDownListFor(model => model.WarehouseId, Model.WarehouseNameList, Admin_Resources.LabelSelectWarehouse, new { @disabled = "disabled", @data_test_selector = "drpWarehouse" })
+                                @Html.HiddenFor(model => model.WarehouseId)
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.WarehouseId, Model.WarehouseNameList, Admin_Resources.LabelSelectWarehouse, new { @data_test_selector = "drpWarehouse" })
+                            }
+                            @Html.ValidationMessageFor(model => model.WarehouseId, "", new { @data_test_selector = "valWarehouse" })
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.HeaderWarehouse, new { @class = isDownloadable ? "" : "required", @data_test_selector = "lblWarehouse" })
+                        </div>
+                        <div class="control-md">
+                            @if (isDownloadable)
+                            {
+                                @Html.DropDownListFor(model => model.WarehouseId, Model.WarehouseNameList, Admin_Resources.LabelSelectWarehouse, new { @disabled = "disabled", @Onchange = "Inventory.prototype.GetInventoryBySKU()", @data_test_selector = "drpWarehouse" })
+                                @Html.HiddenFor(model => model.WarehouseId)
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.WarehouseId, Model.WarehouseNameList, Admin_Resources.LabelSelectWarehouse, new { @Onchange = "Inventory.prototype.GetInventoryBySKU()", @data_test_selector = "drpWarehouse" })
+                            }
+                            @Html.ValidationMessageFor(model => model.WarehouseId, "", new { @data_test_selector = "valWarehouse" })
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.Quantity, new { @class = isDownloadable ? "" : "required", @data_test_selector = "lblQuantity" })
+                    </div>
+                    <div class="control-md">
+                        @if (isDownloadable)
+                        {
+                            @Html.TextBoxFor(model => model.Quantity, new { @disabled = "disabled", @data_test_selector = "txtQuantity" })
+                            @Html.ValidationMessageFor(model => model.Quantity, "", new { @data_test_selector = "valQuantity" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.Quantity, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForInventory(), @Message = HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorValidQuantityFromInventoryForRoundOff, Admin_Resources.ErrorValidInventory), @data_test_selector = "txtQuantity" })
+                            @Html.ValidationMessageFor(model => model.Quantity, "", new { @data_test_selector = "valQuantity" })
+                        }
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.HelptextQuantityForDownloadableProduct)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.ReOrderLevel, new { @data_test_selector = "lblReOrderLevel" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ReOrderLevel, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForInventory(), @Message = HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorValidReOrderLevelFromInventoryForRoundOff, Admin_Resources.ErrorValidInventory), @data_test_selector = "txtReOrderLevel" })
+                        @Html.ValidationMessageFor(model => model.ReOrderLevel, "", new { @data_test_selector = "valReOrderLevel" })
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-heading margin-top-25" data-test-selector="hdgBackorderInformation">Backorder Information</h3>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.BackOrderQuantity, new { @data_test_selector = "lblBackOrderQuantity" })
+                    </div>
+                    <div class="control-md">
+                        @if (isDownloadable)
+                        {
+                            @Html.TextBoxFor(model => model.BackOrderQuantity, new { @disabled = "disabled", @data_test_selector = "txtBackOrderQuantity" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.BackOrderQuantity, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForInventory(), @Message = HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorValidQuantityFromInventoryForRoundOff, Admin_Resources.ErrorValidBackOrder), @data_test_selector = "txtBackOrderQuantity" })
+                        }
+                        @Html.ValidationMessageFor(model => model.BackOrderQuantity, "", new { @data_test_selector = "valBackOrderQuantity" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.HelptextBackorderQuantityForDownloadableProduct)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.BackOrderExpectedDate, new { @data_test_selector = "lblBackOrderExpectedDate" })
+                    </div>
+                    <div class="control-md">
+                        <div class="right-inner-icon">
+                            @if (isDownloadable)
+                            {
+                                @Html.TextBox("BackOrderExpectedDate", Model.BackOrderExpectedDate != null ? Model.BackOrderExpectedDate.ToDateTimeFormat() : string.Empty, new { @disabled = "disabled", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtBackOrderExpectedDate" })
+                            }
+                            else
+                            {
+                                @Html.TextBox("BackOrderExpectedDate", Model.BackOrderExpectedDate != null ? Model.BackOrderExpectedDate.ToDateTimeFormat() : string.Empty, new { @class = "datepicker", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtBackOrderExpectedDate" })
+                            }
+                            <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.BackOrderExpectedDate, "", new { @data_test_selector = "valBackOrderExpectedDate" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.HelptextBackorderExpectedDateForDownloadableProduct)
+                </div>
+            </div>
+
+            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                new PopupModel()
+                {
+                    Title = @Admin_Resources.HeaderConfirmDelete,
+                    Description = @Admin_Resources.TextConfirmDelete,
+                    ModalPopUpId = "StoreDeletePopup",
+                    Buttons = new List<PopUpButtonModel>() {
+                        new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "javscript: var inventory = new Inventory(); inventory.DeleteMultipleSKUInventory()"}
+                     }
+                })
+
+        </div>
+            @Html.HiddenFor(m => m.InventoryListId)
+            @Html.HiddenFor(m => m.InventoryId)
+            @Html.HiddenFor(m => m.ListName)
+            @Html.HiddenFor(m => m.SKU)
+            @Html.HiddenFor(m => m.Quantity)
+            @Html.HiddenFor(m => m.ProductId, new { id = "hdnProductId" })
+            @Html.HiddenFor(m => m.IsDownloadable)
+        }
+        <div id="divAsidePanelDownloadableProduct" class="aside-popup-panel modal-dialog modal-xl">
+            @*Partial View*@
+        </div>
+
+    </section>
+</div>
+<div id="skuList" class="aside-popup-panel modal-dialog modal-xl"></div>

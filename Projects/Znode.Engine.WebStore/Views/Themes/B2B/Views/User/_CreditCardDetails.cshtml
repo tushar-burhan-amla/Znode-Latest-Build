@@ -1,0 +1,54 @@
+﻿@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Api.Models
+@{
+    Layout = null;
+}
+@model PaymentMethodCCDetailsListModel
+
+<div class="col-12 order-history credit-card-content p-0">
+    <div class="row no-gutters">
+        <div class="col-12 p-0 mb-4 dashboard-content">
+            <h3 class="b2b-section-header">Showing <span id="cardcount"></span> Credit Cards</h3>
+            <div class="col-12 account-recent-orders">
+                @foreach (var cardDetails in Model.PaymentMethodCCDetails)
+                {
+                    string url = "";
+                    if (cardDetails.CardType == @WebStoreConstants.TitleMastercard)
+                    {
+                        url = "../../Content/images/MASTERCARD.png";
+                    }
+                    else if (cardDetails.CardType == @WebStoreConstants.TitleVisa)
+                    {
+                        url = "../../Content/images/VISA.png";
+                    }
+                    else if (cardDetails.CardType == @WebStoreConstants.TitleAmericanExpress)
+                    {
+                        url = "../../Content/images/AMEX.png";
+                    }
+                    else if (cardDetails.CardType == @WebStoreConstants.TitleDiscover)
+                    {
+                        url = "../../Content/images/DISCOVER.png";
+                    }
+                    <div class="row">
+                        <div class="col-12 p-0 credit-card-block">
+                            <div class="card-type mb-2">
+                                @if(!string.IsNullOrEmpty(url)){
+                                <img src="@url" alt="Credit Card Image" class="img-fluid mr-3" />
+                                }                                
+                                <strong class="mr-3">xxxx-xxxx-xxxx-@cardDetails.CreditCardLastFourDigit</strong>
+                                <a href="@Url.Action("DeleteCardDetails", "user",new { paymentGUID = cardDetails.PaymentGUID})" class="edit-card-details pull-right"><span class="delete-icon" title="Delete Card Details" data-test-selector="spnDeleteCardDetails"></span></a>
+                            </div>
+                            <div class="mb-3">
+                                <div data-test-selector="divName"><strong>Name :</strong> @cardDetails.CardHolderFirstName  @cardDetails.CardHolderLastName</div>
+                                @if (cardDetails.AddressLine1 != null || cardDetails.City != null || cardDetails.State != null || cardDetails.Country != null)
+                                {
+                                <div data-test-selector="divAddress"><strong>Address :</strong> @cardDetails.AddressLine1 @cardDetails.City @cardDetails.State @cardDetails.Country</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

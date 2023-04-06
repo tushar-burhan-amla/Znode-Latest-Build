@@ -1,0 +1,143 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model ThemeViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = "/Theme/List", FormId = "frmTheme", Callback = "Theme.prototype.ValidateZipFileType", IsSaveCloseEnable = true };
+    string mainContainer = !actionName.ToLower().Contains("create") ? "main-container" : "col-sm-12 page-container";
+    string mainWrapperClass = !actionName.ToLower().Contains("create") ? "main-wrapper" : "";
+}
+
+<div id="grid-container">
+    <!--Left Panel-->
+    <div class="col-sm-12 title-container">
+        @if (string.Equals(actionName.ToLower(), "create"))
+        {
+            <h1 data-test-selector="hdgTheme">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleTheme)</h1>
+        }
+        else
+        {
+            <h1 data-test-selector="hdgTheme">@string.Format(@Admin_Resources.TitleManage, Admin_Resources.TitleTheme)<em class="z-minus"></em><span>@Model.Name</span></h1>
+        }
+
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+    <div class=@mainWrapperClass>
+        <!--Left Panel-->
+        @if (string.Equals(actionName.ToLower(), "edittheme"))
+        {
+            @Html.Partial("~/Views/Theme/_asideThemeManagepanel.cshtml", Model)
+        }
+        <!--Main Container-->
+        <section class="@mainContainer">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmTheme", enctype = "multipart/form-data" }))
+            {
+                if (Equals(actionName.ToLower(), "create"))
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.Name, new { @class = "required", @data_test_selector = "lblName" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.Name, new { @data_test_selector = "txtName" })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { id = "errorSpanThemeName", @data_test_selector = "valName" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-md control-non">
+                            <label>
+                                <input @(Model.IsParentTheme ? "checked='checked'" : "") id="IsParentTheme" name="IsParentTheme" type="checkbox" value="true" onchange="Theme.prototype.IsParentThemeToggleCallback(this.checked, $('#parentThemeSelectionSection_Create'));">
+                                <span class="lbl padding-8">@Admin_Resources.LabelIsParentTheme</span>
+                            </label>
+                            @Html.Partial("_HelpText", @Admin_Resources.HelptextIsParentTheme)
+                        </div>
+                    </div>
+                    <div class="form-group" id="parentThemeSelectionSection_Create" style="display:none">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.ParentThemeId, new { @class = "required" })
+                            </div>
+                            <div class="control-md">
+                                @Html.DropDownListFor(model => model.ParentThemeId, Model.ThemeList, Admin_Resources.LabelSelectTheme)
+                                @Html.ValidationMessageFor(model => model.ParentThemeId)
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.Name, new { @class = "required", @data_test_selector = "lblName" })
+                            </div>
+                            <div class="control-md dirtyignore">
+                                @Html.TextBoxFor(model => model.Name, new { @readonly = "readonly", @data_test_selector = "txtName" })
+                                @Html.ValidationMessageFor(model => model.Name,"",new { @data_test_selector = "valName" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-md control-non">
+                            <label>
+                                <input @(Model.IsParentTheme ? "checked='checked'" : "") type="checkbox" value="true" disabled="disabled">
+                                <span class="lbl padding-8">@Admin_Resources.LabelIsParentTheme</span>
+                                <input type="hidden" name="IsParentTheme" value="@Html.RenderBlock(Model.IsParentTheme.ToString())" />
+                            </label>
+                            @Html.Partial("_HelpText", @Admin_Resources.HelptextIsParentTheme)
+                        </div>
+                    </div>
+                    if (!Model.IsParentTheme)
+                    {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.ParentThemeId, new { @class = "required" })
+                                </div>
+                                <div class="control-md">
+                                    @Html.TextBoxFor(model => model.ParentThemeName, new { @readonly = "readonly" })
+                                    <input type="hidden" name="ParentThemeId" value="@Html.RenderBlock(Model.ParentThemeId.ToString())" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.FilePath,new { @data_test_selector = "lblFilePath" })
+                        </div>
+                        <div class="control-md">
+                            @Html.EditorFor(model => model.FilePath,new { @data_test_selector = "txtFilePath" })
+                            <span id="errZipFileType" class="error-msg"></span>
+                        </div>
+                    </div>
+                </div>
+                @Html.HiddenFor(m => m.CMSThemeId)
+                @Html.HiddenFor(m => m.Name)
+                @Html.HiddenFor(m => m.FilePath, new { @id = "hdnFilePath"})
+                @Html.HiddenFor(m => m.IsFilePathExists, new { @id = "isFilePathExists"})
+            }
+        </section>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        if ($("#isFilePathExists").val() == "True")
+            $("#fileName").attr("title", $("#Name").val());
+    });
+    $("#Name").keypress(function (e) {
+        //Prevent the form submission on enter.
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+</script>

@@ -1,0 +1,135 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model TouchPointConfigurationViewModel
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+@using (Ajax.BeginForm(actionName, controllerName, new AjaxOptions() { UpdateTargetId = "divShowLogDetails", InsertionMode = InsertionMode.Replace, }))
+{
+    <div id="aside-popup-panel">
+        <div class="col-sm-12 title-container">
+            <h1>@ERP_Resources.TextSchedulerLogDetails</h1>
+            <div class="pull-right">
+                <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('divShowLogDetails')"><em class="z-cancel"></em>@Admin_Resources.ButtonCancel</button>
+            </div>
+        </div>
+        <div class="col-sm-12 page-container">
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.SchedulerName)
+                    </div>
+                    <div class="control-lg">
+                        <label>@Html.DisplayFor(model => model.SchedulerName)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.LogName)
+                    </div>
+                    <div class="control-lg">
+                        <label>@Html.DisplayFor(model => model.LogName)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.DateTime)
+                    </div>
+                    <div class="control-lg">
+                        <label>@Html.DisplayFor(model => model.DateTime)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.TaskCategory)
+                    </div>
+                    <div class="control-lg">
+                        <label>@Html.DisplayFor(model => model.TaskCategory)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.EventID)
+                    </div>
+                    <div class="control-lg">
+                        <label>@Html.DisplayFor(model => model.EventID)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.Level)
+                    </div>
+                    <div class="control-lg">
+                        <label>@Html.DisplayFor(model => model.Level)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.MachineName)
+                    </div>
+                    <div class="control-lg">
+                        <label>@Html.DisplayFor(model => model.MachineName)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.CorrelationId)
+                    </div>
+                    <div class="control-lg">
+                        <label>@Html.DisplayFor(model => model.CorrelationId)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.OperationalCode)
+                    </div>
+                    <div class="control-lg">
+                        <label>@Html.DisplayFor(model => model.OperationalCode)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label>@ERP_Resources.TextLogDetails</label>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.LogDetails))
+                    {
+                        <div class="control-lg">
+                            @Html.TextAreaFor(model => model.LogDetails, new { @style = "height : 300px; margin-top: 10px;", @Readonly = "true" })
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="control-lg">
+                            <label>Log details not found!</label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@Scripts.Render("~/bundles/jqueryval")
+
+

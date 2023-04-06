@@ -1,0 +1,53 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model AddressListViewModel
+
+<div class="container">
+    <div class="row multiple-checkout">
+        <div class="col-xs-12 nopadding">
+            <h1 class="page-title">ADDRESSES</h1>
+        </div>
+        <div class="col-xs-12 checkout-step nopadding">
+            <h3>Checkout Step 1 of 4</h3>
+        </div>
+        <div class="col-sm-12 box-container">
+
+            <h3 class="section-heading">@WebStore_Resources.TitleShippingAddress</h3>
+
+            @if (Model?.ShippingAddress != null)
+            {
+                <div id="shipping-content">
+                    @{ Html.RenderPartial("_DisplayAddress", Model.ShippingAddress, new ViewDataDictionary { { "addressType", "shipping" } });}
+                </div>
+                        }
+
+
+            <div id="BillingAddressContainer">
+                <h3 class="section-heading">@WebStore_Resources.TitleBillingAddress</h3>
+                @if (Model?.BillingAddress != null)
+                {
+                    <div id="billing-content">
+                        @{ Html.RenderPartial("_DisplayAddress", Model.BillingAddress, new ViewDataDictionary { { "addressType", "billing" } });}
+                    </div>
+                 }
+
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 nopadding">
+        <div class="pull-right">
+            <a href="/Checkout/ShippingOptions" class="btn-text btn-bg-primary">Next Step</a>
+
+            <a href="/cart" class="btn-text btn-bg-secondary">Cancel</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade quick-login-popup" id="quick-login-popup-ipad" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="popup-container modal-dialog">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span id="close-quick-login-popup-ipad" aria-hidden="true"><i class="close-icon"></i></span></button>
+        <div class="" id="quick-login-content">
+
+        </div>
+    </div>
+</div>

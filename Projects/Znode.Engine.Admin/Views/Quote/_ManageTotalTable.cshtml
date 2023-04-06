@@ -1,0 +1,120 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model QuoteCartViewModel
+
+@{
+    Model.CultureCode = string.IsNullOrEmpty(Model.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    string estimateCost = string.Format(Admin_Resources.LabelOriginalShippingCost, HelperMethods.FormatPriceWithCurrency(Model.EstimateShippingCost, Model.CultureCode));
+    bool isTaxSummaryAvailable = Model?.TaxSummaryList?.Count > 0;
+}
+<div class="col-sm-12 cart-summary">
+    <div id="loader-divTotal">@Html.Partial("_Loader")</div>
+    <div class="form-group">
+        <div class="col-sm-6 col-md-8 nopadding padding-rl-5">
+            @Html.LabelFor(model => model.SubTotal, new { @data_test_selector = "lblSubTotal" })
+        </div>
+        <div class="col-sm-6 col-md-4 nopadding text-right">
+            <label data-test-selector="lblSpanSubTotal">@HelperMethods.FormatPriceWithCurrency(Model.SubTotal, Model.CultureCode)</label>
+            @Html.HiddenFor(model => model.ErrorMessage, new { @id = "hdnShippingErrorMessage" })
+            @Html.HiddenFor(model => model.HasError, new { @id = "hdnShippingHasError" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-6 col-md-8 nopadding padding-rl-5">
+            @if (Convert.ToDecimal(Model.EstimateShippingCost) > 0)
+            {
+                <label title="@estimateCost" data-test-selector="lblShippingPlusHandling">@Admin_Resources.LabelCustom</label>
+            }
+
+            <label data-test-selector="lblShippingPlusHandling">@Admin_Resources.LabelShipping</label>
+        </div>
+        <div class="col-sm-6 col-md-4 nopadding text-right">
+            <label id="total-shippingcost" data-test-selector="txtShippingCost"> + @HelperMethods.FormatPriceWithCurrency(Model.ShippingCost, Model.CultureCode)</label>
+        </div>
+    </div>
+    @if (Model.ShippingHandlingCharges > 0)
+    {
+        <div class="form-group">
+            <div class="col-sm-6 col-md-8 nopadding padding-rl-5">
+                @Html.Label(Admin_Resources.ShippingHandlingCharge, new { @data_test_selector = "lblShippingHandlingCharge" })
+            </div>
+            <div class="col-sm-6 col-md-4 nopadding text-right">
+                <label id="dynamic-quote-shippingHandlingCharge" data-test-selector="lblShippingHandlingCharge"> + @HelperMethods.FormatPriceWithCurrency(Model.ShippingHandlingCharges, Model.CultureCode)</label>
+            </div>
+        </div>
+    }
+    @if (Model.ImportDuty > 0)
+    {
+        <div class="form-group">
+            <div class="col-sm-6 col-md-8 nopadding padding-rl-5">
+                <label data-test-selector="lblImportDuty">Import Duty</label>
+            </div>
+            <div id="dynamic-Column-Tax" class="col-sm-6 col-md-4 nopadding text-right">
+                <label data-test-selector="lblImportDutyCurrencyCode"> + @HelperMethods.FormatPriceWithCurrency(Model.ImportDuty, Model.CultureCode)</label>
+            </div>
+        </div>
+    }
+        <div id="taxTotalDiv">
+            <div class="form-group">
+                <div class="col-sm-6 col-md-8 nopadding padding-rl-5">
+                    <label data-test-selector="lblColumnTax">@WebStore_Resources.ColumnTax</label>
+                    @if (isTaxSummaryAvailable == true)
+                    {
+                        <span class="down-arrow padding-left" onclick="Quote.prototype.ShowTaxDetails(this)">&#x25BC;</span>
+                    }
+                </div>
+                <div id="dynamic-Column-Tax" class="col-sm-6 col-md-4 nopadding text-right">
+                    <label data-test-selector="lblCurrencyCode"> + @HelperMethods.FormatPriceWithCurrency(Model.TaxCost, Model.CultureCode)</label>
+                </div>
+            </div>
+            @if (isTaxSummaryAvailable == true)
+            {
+                <div class="col-sm-12 col-md-9 form-group tax-summary margin-bottom nopadding">
+                    <table class="table" id="TaxSummary" style="display:none" aria-describedby="Tax Summary Table">
+                        <thead>
+                            <tr>
+                                <th scope="col" data-test-selector="lblTaxName">@Admin_Resources.ColumnTitleTaxName</th>
+                                <th scope="col" data-test-selector="lblRate">@Admin_Resources.ColumnTitleRate</th>
+                                <th scope="col" class="text-right" data-test-selector="lblTaxes">@Admin_Resources.ColumnTitleTaxesFees</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (TaxSummaryViewModel taxSummary in Model.TaxSummaryList)
+                            {
+                                <tr>
+                                    <td>@taxSummary.TaxName</td>
+                                    <td>@taxSummary.Rate</td>
+                                    <td class="text-right">@taxSummary.Tax</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+        <div id="divTaxExemptContainer" class="col-sm-12 nopadding cart-promocode" style="display:block;">
+            <div class="quote-charges-border-bottom padding-rl-5">
+                <div class="form-group">
+                    <div id="containerTaxExempt" style="">
+                        <label>
+                            <input data-val="true" id="chkTaxExempt" onclick="Quote.prototype.OnTaxExemptChecked();" checked="@Model.IsTaxExempt" value="true" type="checkbox" data-test-selector="chkApplyTaxExempt">
+                            <span id="messageTaxExcempt" class="lbl padding-8" data-test-selector="spnApplyTaxExempt">Make Tax Exempt</span> @*@Admin_Resources.LabelMakeTaxExempt*@
+                            <input name="chkTaxExempt" value="false" type="hidden">
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group total">
+            <div class="col-sm-6 col-md-8 nopadding padding-rl-5">
+                @Html.Label(Admin_Resources.LabelQuoteTotal, new { @data_test_selector = "lblQuoteTotal" })
+            </div>
+            <div class="col-sm-6 col-md-4 nopadding text-right">
+                <label id="dynamic-quote-total" data-test-selector="lblSpanTotal">@HelperMethods.FormatPriceWithCurrency(Model.Total, Model.CultureCode)</label>
+                @Html.Hidden("hdnTotalQuoteAmount", Model.Total)
+            </div>
+        </div>
+    </div>
+
+    @Html.Hidden("RoundOffDigits", DefaultSettingHelper.DefaultPriceRoundOff, new { @id = "hdnRoundOffDigits" })

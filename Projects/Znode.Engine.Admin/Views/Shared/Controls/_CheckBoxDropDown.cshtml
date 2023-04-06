@@ -1,0 +1,86 @@
+﻿@model Znode.Engine.Admin.Models.DropDownOptions
+
+@if (!Model.IsDropDownHidden || Model.DropDownList.Count > 0)
+{
+    string classIcon = string.IsNullOrEmpty(Model.SelectOptionName) ? string.Empty : Model.SelectOptionName.Replace(" ", "").ToLower();
+    <div class="dropdown" data-test-selector="drp@(Model.SelectOptionName.Replace(" ", ""))">
+        <a href="javascript:void(0)" class="btn-dropdown dropdown-toggle" data-test-selector="drpColumns" data-toggle="dropdown">
+            <span data-test-selector="link@(Model.SelectOptionName.Replace(" ", ""))">@Model.SelectOptionName</span><em class="z-down"></em>
+        </a>
+        <div class='dropdown-menu dropdown-list-container'>
+            <div class="dropdown-wrapper">
+                <div class="dropdown-search">
+                    <div class="right-inner-icon ms-search">
+                        <em class="z-search"></em>
+                        <input type="text" name="ManageSearch" data-test-selector="txtSearch" placeholder="Search Option" value="" />
+                    </div>
+                </div>
+
+                @if (Model.DropDownList.Count > 0)
+                {
+                    int _entityId = Model.EntityId > 0 ? Model.EntityId : 0;
+                    <ul id="@Model.DropDownId" data-test-selector="listColumnsContainer" class="dropdown-list-ul dropdown-list-multiselect mutliSelect">
+                        @if (@Model.IsAllowCheckAll)
+                    {
+                            <div>
+                                <label>
+                                    <input type='checkbox' data-test-selector="chkSelectAll" id='selectall' onclick="MultiSelectDDL.prototype.CheckAll(this,'@Model.HiddenItemDataStorage')" text='Select All' />
+                                    <span data-test-selector="lblSelectAll" class="lbl padding-8">Select All</span>
+                                </label>
+                            </div>
+                        }
+                        @foreach (var item in Model.DropDownList)
+                        {
+                            string _checked = item.IsChecked ? "checked='checked'" : string.Empty;
+                            string _isHide = item.IsHide ? "style=display:none" : string.Empty;
+                            string hidecol = item.IsHide ? "hidecolumn" : string.Empty;
+                            string _isDisabled = item.IsDisabled ? "disabled='disabled'" : string.Empty;
+                            <li class="child-options @hidecol" @_isHide>
+                                <label>
+                                    <input data-test-selector="chk@(item.name)" type="checkbox" onclick="MultiSelectDDL.prototype.CheckBoxChecked(this,'@Model.HiddenItemDataStorage')" class="btncheckbox" @_checked data-controller="@Model.Controller" data-action="@Model.Action" data-issubmit="@Model.ShowSubmitButton" data-issuboption="@Model.IsSubOptions" data-sucess="@Model.SuccessCallBack" value="@item.id" id="@item.id" data-value="@item.DataId" data-ismultiple="@Model.IsMultiple" data-entity-id="@_entityId" @_isDisabled />
+                                    <span data-test-selector="lbl@(item.name)" class="lbl padding-8">@item.name</span>
+                                </label>
+                            </li>
+
+
+                            if (Model.IsSubOptions)
+                            {
+                                if (item.Sublist != null)
+                                {
+                                    foreach (var subitem in item.Sublist)
+                                    {
+                                        <ul id="optgroup-@item.id">
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" data-test-selector="chk@(subitem.name)" class="btncheckbox" @_checked value="@subitem.id" id="@subitem.id" data-value="@subitem.DataId" />
+                                                    <span class="lbl padding-8" data-test-selector="lbl@(subitem.name)">@subitem.name</span>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    }
+                                }
+                            }
+
+                        }
+                    </ul>
+                    if (@Model.ShowSubmitButton)
+                    {
+                        <div class="dropdown-submit">
+                            <button type="button" class="btn-text btn-text-secondary pull-right" data-test-selector="btnSubmit" data-ddlId="@Model.DropDownId" data-controller="@Model.Controller" data-action="@Model.Action" onclick="MultiSelectDDL.prototype.SubmitData(this)">@Admin_Resources.ButtonSubmit</button>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-sm-12 no-record nopadding">
+                        <p data-test-selector="infoNoRecordFound">@Admin_Resources.NoRecordFoundText</p>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+}
+<script>
+   $(document).ready(function(){var o=new MultiSelectDDL(window.document),e="@Model.DropDownId",n="@Model.IsDraggable",d="@Model.Controller",l="@Model.SortAction";o.SortColumn(e,n,d,l),o.BindSearch()});
+</script>

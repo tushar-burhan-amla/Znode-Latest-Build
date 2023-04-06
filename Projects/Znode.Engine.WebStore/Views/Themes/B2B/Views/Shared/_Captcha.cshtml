@@ -1,0 +1,9 @@
+﻿@using CaptchaMvc.HtmlHelpers
+
+<div class="col-xs-12 nopadding captcha-panel">
+    @Html.Captcha("Refresh", "Captcha Code", 5, WebStore_Resources.RequiredCaptchaCode, true)
+</div>
+<script>
+    $("#CaptchaDeText").next().next("a").attr("href", "")
+    $("#CaptchaDeText").next().next("a").attr("onclick", "" + $("#CaptchaDeText").next().next("a").attr("onclick") + ";return false;" + "")
+</script>

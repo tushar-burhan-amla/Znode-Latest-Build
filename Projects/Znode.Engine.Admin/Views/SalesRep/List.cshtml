@@ -1,0 +1,97 @@
+﻿@model Znode.Engine.Admin.ViewModels.UsersListViewModel
+@using Znode.Libraries.Resources
+@using Znode.Engine.Admin.Models
+@using Znode.Libraries.ECommerce.Utilities;
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+}
+<div id=@Model.GridModel.FrontObjectName>
+    <div class="col-sm-12 title-container">
+        <h1 data-test-selector="hdgAdminUsers">@Admin_Resources.LabelSalesReps<span class="total-count"><p>@Model.GridModel.TotalRecordCount</p></span></h1>
+        <div class="pull-right padding-left btn-container">
+            @Html.AuthorizedRawActionLink(Admin_Resources.ButtonAdd, "CreateUser", "SalesRep",null, new { @class = "btn-text btn-text-secondary", @data_test_selector = "linkAddNew" })
+        </div>
+    </div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @using (Ajax.BeginForm("List", "SalesRep", new AjaxOptions() { UpdateTargetId = @Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+        {
+            <div id="filterComponent">
+                @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+            </div>
+        }
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+            new PopupModel()
+            {
+                Title = @Admin_Resources.HeaderConfirmDelete,
+                Description = @Admin_Resources.TextAccountConfirmDelete,
+                ModalPopUpId = "AccountDeletePopup",
+                Buttons = new List<PopUpButtonModel>() {
+                new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "User.prototype.DeleteUsers(this)"}
+                }
+            })
+        <div class="col-sm-12 list-container">
+            @{
+                @Html.Hidden("hdnEnableDisableActionURL")
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.ConfirmText,
+
+                        Description = @Admin_Resources.LockMultipleAccountConfirmationMessage,
+                        ModalPopUpId = "PopUpConfirmDisable",
+                        Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes = "data-dismiss=modal", OnClickFunctionName = "DynamicGrid.prototype.RedirectToEnableDisable()" } }
+                    })
+
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                        new PopupModel()
+                        {
+                            Title = @Admin_Resources.ConfirmText,
+                            Description = @Admin_Resources.UnlockMultipleAccountConfirmationMessage,
+                            ModalPopUpId = "PopUpConfirmEnable",
+                            Buttons = new List<PopUpButtonModel>
+                            () { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes = "data-dismiss=modal", OnClickFunctionName = "DynamicGrid.prototype.RedirectToEnableDisable()" } }
+                        })
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                            new PopupModel()
+                            {
+                                Title = @Admin_Resources.ConfirmText,
+                                Description = @Admin_Resources.UnlockMultipleAccountConfirmationMessage,
+                                ModalPopUpId = "accountEnable",
+                                Buttons = new List<PopUpButtonModel>
+                                () {
+                                new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "SalesRep.prototype.EnableUserAccount()"}
+                                }
+                            })
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                new PopupModel()
+                                {
+                                    Title = @Admin_Resources.ConfirmText,
+                                    Description = @Admin_Resources.LockMultipleAccountConfirmationMessage,
+                                    ModalPopUpId = "accountdisable",
+                                    Buttons = new List<PopUpButtonModel>
+                                    () {
+                                    new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "SalesRep.prototype.DisableUserAccount()"}
+                                    }
+                                })
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                new PopupModel()
+                                {
+                                    Title = @Admin_Resources.ResetPasswordButtonText,
+                                    Description = @Admin_Resources.TextConformResetPassword,
+                                    ModalPopUpId = "accountresetpassword",
+                                    Buttons = new List<PopUpButtonModel>() {
+                                    new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "SalesRep.prototype.UserResetPassword()"}
+                                    }
+                                })
+                @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+
+            }
+        </div>
+    </section>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.z-enable').attr('title', 'Unlock');
+    });
+</script>

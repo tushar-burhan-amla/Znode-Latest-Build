@@ -1,0 +1,111 @@
+﻿@model Znode.Engine.Admin.ViewModels.AccountQuoteViewModel
+@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities;
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string cancelUrl = string.Empty;
+    string cultureCode = string.IsNullOrEmpty(Model.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    if (Model.UpdatePageType == AdminConstants.Quotes)
+    {
+        cancelUrl = "/Quote/AccountQuoteList";
+    }
+    else if (Model.UpdatePageType == AdminConstants.AccountQuotes)
+    {
+        cancelUrl = "/Account/AccountQuoteList?accountId=" + Model.AccountId;
+    }
+    else if (Model.UpdatePageType == AdminConstants.QuoteHistory)
+    {
+        cancelUrl = "/Account/AccountQuoteList?UserId=" + Model.UserId + "&AccountId=" + Model.AccountId;
+    }
+    else
+    {
+        cancelUrl = "javascript: history.go(-1)";
+    }
+    string _displayPODocument = !string.IsNullOrEmpty(Model.PODocumentName) ? "display:block" : "display:none";
+    string PODocument = !string.IsNullOrEmpty(Model.PODocumentName) ? HelperUtility.GetFilePath(Model.PODocumentName.Replace("~", string.Empty)) : "#";
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { ControlId = "btnUpdateQuote", DataTestSelector = "linkSave", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "Quote.prototype.SubmitAccountQuote(true)" });
+    primaryPageAction.PageActions.Add(new PageAction { DataTestSelector = "linkPrint", HrefLink = "#", LinkType = LinkType.OnClick, LinkDisplayName = Admin_Resources.ButtonSave, OnClick = "Quote.prototype.SubmitAccountQuote(false);" });
+
+}
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelManage<em class="z-minus"></em><span>@Model.OmsQuoteId</span></h1>
+    <div class="pull-right btn-container">
+        @if (string.Equals(Model.OrderStatus, AdminConstants.Draft, StringComparison.CurrentCultureIgnoreCase) | string.Equals(Model.OrderStatus, AdminConstants.Ordered, StringComparison.CurrentCultureIgnoreCase))
+        {
+            <a href="@cancelUrl" class="btn-text-icon"><em class="z-back"></em>@Admin_Resources.ButtonBack</a>
+        }
+        else
+        {
+            <a href="@cancelUrl" class="btn-text-icon"><em class="z-back"></em>@Admin_Resources.ButtonBack</a>
+            @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+        }
+
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    <div class="col-sm-12 nopadding order-manage-container order-page-details">
+
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "formUpdateQuote" }))
+        {
+            <div class="col-sm-12 nopadding d-flex flex-wrap">
+
+
+                <div class="order-information">
+                    <div id="orderInformation" data-test-selector="divOrderInformation" class="col-sm-12 nopadding d-flex h-100">
+                        @Html.Partial("_ManagePendingOrderInfo", Model)
+                    </div>
+                </div>
+
+                <div class="customer-information">
+                    <div id="customerInformation" data-test-selector="divCustomerInformation" class="d-flex h-100">
+                        @Html.Partial("_ManagePendingOrderCustomerInfo", Model)
+                    </div>
+                </div>
+                <div class="order-notes">
+                    <div class="col-sm-12 nopadding">
+                        
+                        <div id="additionalNotes" class="aside-popup-panel modal-dialog modal-md">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 nopadding panel panel-default productInfoPage">
+                    <div id="orderLineItems" data-test-selector="divOrderLineItems">
+                        @Html.Partial("_PendingOrderLineItemList", Model.ShoppingCart)
+                    </div>
+                </div>
+
+                <div class="col-sm-12 nopadding">
+                        <div class="col-sm-12 nopadding panel panel-default productInfoPage margin-top-20">
+                            <div id="orderHistory" data-test-selector="divOrderHistory">
+                                @Html.Partial("_ManagePendingOrderHistory", Model)
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            @Html.HiddenFor(m => m.AccountId)
+            @Html.HiddenFor(m => m.UserId)
+            @Html.HiddenFor(m => m.PortalId)
+            @Html.HiddenFor(m => m.OmsQuoteId)
+            @Html.HiddenFor(m => m.ShippingId)
+            @Html.HiddenFor(m => m.QuoteOrderTotal)
+            @Html.HiddenFor(m => m.ShippingAddressId)
+            @Html.HiddenFor(m => m.BillingAddressId)
+            @Html.HiddenFor(m => m.ApproverUserId)
+            @Html.HiddenFor(m => m.AdditionalInstruction)
+            @Html.HiddenFor(m => m.CreatedDate)
+            @Html.HiddenFor(m => m.UpdatePageType)
+            @Html.HiddenFor(m => m.OmsOrderStateId, new { @id = "hdnOmsOrderStateId" })
+            @Html.HiddenFor(m => m.OmsQuoteId, new { @id = "hdnManageOmsQuoteId" })
+            @Html.HiddenFor(m => m.AdditionalNotes)
+
+        }
+
+    </div>
+</section>

@@ -1,0 +1,8 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+
+@Html.Partial("_EnableOAB", Model)
+<script>
+    $(document).ready(function () {
+        Payment.prototype.ShowBillingAddressOptional();
+    });
+</script>

@@ -1,0 +1,80 @@
+﻿@model Znode.Engine.WebStore.ViewModels.LoginViewModel
+@{
+    string rememberMeStatus = (!Equals(Model, null) && Model.RememberMe) ? "checked='checked'" : string.Empty;
+    string _isDisplayGuestcheckout = Convert.ToString(Request.QueryString["returnUrl"])?.ToLower() == "~/checkout" ? "checkout-guest" : "checkout-new";
+    string successMessage = Model?.SuccessMessage;
+}
+<div class="col-12 text-right nav-header">
+    <a href="JavaScript:void(0);" class="CloseNav p-0 close-icon" aria-label="Close"></a>
+    <div class="nav-label"><span class="profile-icon"></span><div class="cut-text"> @WebStore_Resources.LabelSignInRegister</div></div>
+</div>
+<div class="col-12 login-container">
+    <div class="form-group">
+        <div class="nav-title">@WebStore_Resources.TitleCustomerLogin</div>
+    </div>
+    <p class="success-msg">@successMessage</p>
+    @using (Ajax.BeginForm("Login", "User", null, new AjaxOptions { OnSuccess = "User.prototype.GetResult", OnBegin = "User.prototype.ShowLoader()", OnFailure = "User.prototype.HideLoader()" }, new { @class = "login-form form", @id = "loginForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label for="login_username" class="visuallyhidden">@WebStore_Resources.LabelUserNameEmail</label>
+            @Html.TextBoxFor(model => model.Username, new { @id = "login_username", @placeholder = "Username/Email" })
+            <p class="error-msg">@Html.ValidationMessageFor(m => m.Username)</p>
+        </div>
+        <div class="form-group">
+            <label for="login_password" class="visuallyhidden">@WebStore_Resources.ColumnPassword</label>
+            @Html.PasswordFor(model => model.Password, new { @id = "login_password", @placeholder = "Password" })
+            <p class="error-msg">@Html.ValidationMessageFor(m => m.Password)</p>
+            <p id="error-content" class="error-msg"></p>
+        </div>
+        <div class="form-group">
+            <div id="div-captcha">
+                @Html.ZnodeCaptcha(WebStoreConstants.CaptchaRequiredForLogin, string.Empty)
+                @if (Model != null)
+                {
+                    <span id="valueCaptchaError" class="field-validation-error">@Model.ErrorMessage</span>
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block" onclick="User.prototype.AppendLoaderOnSubmit()" id="loginButton">@WebStore_Resources.ButtonLogin</button>
+        </div>
+        <div class="styled-input">
+            <input @rememberMeStatus type="checkbox" value="true" name="RememberMe" id="RememberMe" data-val-required="The Remember Me field is required." data-val="true">
+            <label for="RememberMe">@WebStore_Resources.RememberMe</label>
+            <input type="hidden" value="false" name="RememberMe">
+        </div>
+        <div class="form-group">
+            @if (ViewBag.CheckoutLogin != null)
+            {
+                @Html.Hidden("returnUrl", "~/Checkout")
+            }
+            else
+            {
+                @Html.Hidden("returnUrl", !string.IsNullOrEmpty(Request.QueryString["returnUrl"]) ? Request.QueryString["returnUrl"] : "/")
+            }
+            <a href="JavaScript:void(0);" onclick="User.prototype.ForgotPassword()" class="login-form-forgotpassword" title="@WebStore_Resources.LinkTextForgetPassword">@WebStore_Resources.LinkTextForgetPassword</a>
+        </div>
+
+    }
+    <div class="col-12 p-0">
+        @Html.Partial("_ExternalLoginsListPartial")
+    </div>
+    <div class="col-12 p-0 mt-3 account-signup-container @_isDisplayGuestcheckout">
+        <div class="form-group">
+            <div class="nav-title">@WebStore_Resources.TitleNewCustomer</div>
+            <p class="mb-3 b2b-new-customer-text">
+                @WebStore_Resources.TextNewCustomer
+            </p>
+            <a href="/User/Signup/@(!string.IsNullOrEmpty(Request.QueryString["returnUrl"]) ? "?returnUrl=" + Request.QueryString["returnUrl"] : "")" class="btn btn-secondary btn-block account-signup-link">@WebStore_Resources.LinkTextGetAnAccount</a>
+        </div>
+        <div class="form-group mt-4 checkout-guest-container">
+            <div class="nav-title">@WebStore_Resources.LinkTextGuestCheckout</div>
+            <p class="mb-3 key-CheckoutAsAGuestMessage">@Html.RenderMessage(WebStoreConstants.CheckoutAsAGuestMessage)</p>
+            <a href="/Checkout?mode=guest" class="btn btn-secondary btn-block checkout-login-asguest">@WebStore_Resources.LinkTextGuestCheckout</a>
+        </div>
+    </div>
+
+</div>
+<script src="~/Scripts/lib/jquery.validate.unobtrusive.min.js"></script>
+

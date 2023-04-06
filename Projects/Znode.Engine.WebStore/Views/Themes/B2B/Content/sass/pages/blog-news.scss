@@ -1,0 +1,137 @@
+﻿.blog-news {
+    padding: 0;
+    list-style: none;
+
+    li:last-child article {
+        border-bottom: 0 !important;
+    }
+}
+
+.comments-display-section {
+    border-bottom: 1px solid #454545;
+    margin-bottom: 15px;
+
+    .comment-list:last-child {
+        border-bottom: 0 !important;
+    }
+}
+
+.blog-news-date-time {
+    padding: 0;
+    color: $base-primary;
+    font-family: $base-font-family-bold;
+}
+
+.blog-news-image {
+    max-height: 500px;
+}
+
+.blogs-news-list {
+    .blog-news .blog-image .main-blog-image {
+        width: 100%;
+        height: auto;
+    }
+
+    .blog-news-title h6 {
+        font-size: 18px;
+        text-transform: uppercase;
+
+        a {
+            color: #454545;
+        }
+    }
+
+    .blog-news-date-time {
+        color: #808080;
+        font-size: 16px;
+    }
+}
+
+.blog-details {
+    position: relative;
+    overflow-x: hidden;
+    margin-top: 30px;
+
+    .blog-image-bg {
+        position: relative;
+        height: 65vh;
+        width: 95%;
+        margin: 0 auto;
+        vertical-align: top;
+        background-size: cover;
+        background-position: center center;
+        transform-origin: center top;
+
+        img {
+            width: 100%;
+            display: block;
+        }
+    }
+
+    .blog-content-container {
+        min-height: 50%;
+        width: 60%;
+        background: #fff;
+        padding: 1rem 2rem;
+        margin: -30rem auto 15px auto;
+        border-radius: 3px;
+        transform: translateZ(0);
+
+        .blog-news-title {
+            .page-title {
+                padding: 20px 0 0 0;
+                font-size: 28px;
+            }
+        }
+
+        .blog-news-date-time {
+            font-size: 16px;
+        }
+
+        .blog-news-date-time, .blog-news-text {
+            color: #919191;
+
+            .blog-middle-image {
+                width: 100%;
+                height: 100%;
+            }
+
+            img {
+                padding: 15px 0;
+                width: 100%;
+            }
+        }
+
+        .comments-display-section {
+            .comment-heading {
+                font-size: 22px;
+            }
+
+            .comment-list .blog-comment {
+                color: #8a8a8a !important;
+
+                .comment-text {
+                    font-size: 16px;
+                    letter-spacing: 1px;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+
+    .blog-details {
+        .blog-image-bg {
+            position: relative;
+            height: 20vh;
+            width: 100%;
+        }
+
+        .blog-content-container {
+            min-height: 50%;
+            width: 90%;
+            margin: -8rem auto 15px auto;
+        }
+    }
+}

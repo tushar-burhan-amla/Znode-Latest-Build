@@ -1,0 +1,8 @@
+﻿@using Znode.Engine.Admin.Models
+@model List<BaseDropDownList>
+@{
+    DropDownOptions _data = new DropDownOptions() { DropDownId = "DropDownId2", DropDownList = Model, assignable = true, SortAction = "", Action = "AssociateAttributes", Controller = "MediaManager/AttributeGroup", IsAjax = false, SuccessCallBack = "", IsMultiple = true, IsDraggable = true, IsAllowCheckAll = false, SelectOptionName = "Add Attributes", ShowSubmitButton = true };
+}
+<div class="pull-right padding-left action-dropdown ">
+    @Html.Partial("~/Views/Shared/Controls/_CheckBoxDropDown.cshtml", _data)
+</div>

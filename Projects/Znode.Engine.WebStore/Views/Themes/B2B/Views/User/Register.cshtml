@@ -1,0 +1,62 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model RegisterViewModel
+
+@{
+    bool isAjax = Request.IsAjaxRequest();
+}
+<div class="user-register container">
+    <div class="row">
+        <div class="col-12 my-4 b2b-form">
+            <div class="row">
+                <div class="col-12 col-lg-6 mb-4">
+                    <h3 class="page-title">@WebStore_Resources.TitleRegisterAccount</h3>
+                    @if (isAjax)
+                    {
+                        <div id="ajaxRegisterForm">
+                            @using (Ajax.BeginForm("signup", "User", new AjaxOptions() { OnSuccess = "Checkout.prototype.SetUserCreationStatusMessage" }, new { id = "frmRegister" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Partial("_Register", Model)
+                                @Html.Hidden("isSinglePageCheckout", true)
+                                <div class="quotebutton">
+                                    <button type="submit" class="btn btn-primary" id="user-register" data-test-selector="btnSubmitAccount">@WebStore_Resources.ButtonCreateAccount</button>
+                                    <button type="button" class="mt-3 ml-md-3 btn btn-secondary" data-dismiss="modal"  data-test-selector="btnCancelAccount">@Admin_Resources.ButtonCancel</button>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        using (Html.BeginForm("signup", "User", new { returnUrl = TempData["returnUrl"] },FormMethod.Post, new { role = "form", @id = "frmRegister" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Partial("_Register", Model)
+                            <div class="quotebutton">
+                                <button type="submit" class="btn btn-primary" id="user-register" data-test-selector="btnSubmitAccount">@WebStore_Resources.ButtonCreateAccount</button>
+                                <button type="button" class="mt-3 ml-md-3 btn btn-secondary" onclick="javascript: location.href = '/User/Login'" data-test-selector="btnCancelAccount">@WebStore_Resources.ButtonCancel</button>
+                            </div>
+                        }
+                    }
+                </div>
+                @if (!isAjax)
+                {
+                    <div class="col-12 col-lg-6">
+                        <div class="mb-5 text-center">
+                            <div class="form-group">
+                                <h3 class="page-title" data-test-selector="hdgPageTitle">@WebStore_Resources.TextAlreadyHaveAccount</h3>
+                            </div>
+                            <a href="JavaScript:void(0);" data-target="#sign-in-nav" class="d-block d-md-inline-block btn btn-secondary loginNow" data-test-selector="linkLoginNow" onclick="User.prototype.LoginInPopup();">Login Now !</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#frmRegister").submit(function () {
+        if ($('#frmRegister').valid()) {
+            $("#user-register").prop("disabled", true).addClass("disabled");
+        }
+    });
+</script>

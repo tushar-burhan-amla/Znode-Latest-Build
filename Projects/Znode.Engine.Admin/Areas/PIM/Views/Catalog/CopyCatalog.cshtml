@@ -1,0 +1,58 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model CatalogViewModel
+
+@{
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCopyCatalog",CancelUrl= "CatalogList",IsSaveCloseIsShow=false };
+    }
+
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleCopy, Admin_Resources.TitleCatalog)</h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<div class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCopyCatalog" , @onsubmit = "return ZnodeBase.prototype.ValidateCodeField('[name=CatalogCode]','" + Model.CatalogCode + "','/Catalog/IsCatalogCodeExists')" }))
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.CatalogName, new { @class = "required" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.CatalogName, new { maxlength = 255 })
+                    @Html.ValidationMessageFor(model => model.CatalogName)
+                </div>
+            </div>
+
+            <div class="col-sm-12 nopadding padding-top">
+                <div class="control-md control-non">
+                    <label for="CopyAllData">
+                        <input type="checkbox" value="true" name="CopyAllData" id="CopyAllData" data-val="true">
+                        <span class="lbl padding-8">Copy All Data</span>
+                        <input type="hidden" value="false" name="CopyAllData">
+                    </label>
+                    <div class="col-sm-12 nopadding">
+                        <p class="sub">@PIM_Resources.CopyCatalogNote</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.CatalogCode, new { @class = "required", @data_test_selector = "lblCatalogCode" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.CatalogCode, new { @onblur = "ZnodeBase.prototype.ValidateCodeField('[name=CatalogCode]','" + Model.CatalogCode + "','/Catalog/IsCatalogCodeExists')", @data_test_selector = "txtCatalogCode" })
+                    @Html.ValidationMessageFor(model => model.CatalogCode, "", new { @data_test_selector = "valCatalogCode" })
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(model => model.PimCatalogId)
+    }
+</div>

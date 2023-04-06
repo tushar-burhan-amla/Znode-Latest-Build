@@ -1,0 +1,180 @@
+﻿@model Znode.Engine.Admin.ViewModels.DisplaySettingViewModel
+@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateEditDisplaySettings" };
+}
+
+<div class="row">
+    <!--Main Container-->
+    <section class="main-container">
+        <div class="col-sm-12 page-container">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateEditDisplaySettings" }))
+            {
+                <h4>@Admin_Resources.LabelProductGridSettings</h4>
+                <div class="col-sm-12 box-container">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.MaxCatalogDisplayColumns, new { @class = "required" })
+                            </div>                            
+                            <div class="control-md">
+                                @Html.TextBoxFor(m => m.MaxCatalogDisplayColumns)
+                                @Html.ValidationMessageFor(m => m.MaxCatalogDisplayColumns)
+                                <em class="unit-text">pixels</em>
+                            </div>
+                        </div>                        
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.MaxCatalogCategoryDisplayThumbnails, new { @class = "required" })
+                            </div>                            
+                            <div class="control-md">
+                                @Html.TextBoxFor(m => m.MaxCatalogCategoryDisplayThumbnails)
+                                @Html.ValidationMessageFor(m => m.MaxCatalogCategoryDisplayThumbnails)
+                                <em class="unit-text">pixels</em>
+                            </div>
+                        </div>                        
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(@Admin_Resources.LabelProductDisplayOrder)
+                            </div>                            
+                        </div>
+                        @*<div class="col-sm-8 nopadding">
+                            <label>
+                                <input @(Model.UseDynamicDisplayOrder.GetValueOrDefault() ? "checked='checked'" : "") id="UseDynamicDisplayOrder" name="UseDynamicDisplayOrder" type="checkbox" value="true">
+                                <span class="lbl padding-8">@Admin_Resources.LabelPopularProductsOnTop</span>
+                                <input name="UseDynamicDisplayOrder" type="hidden" value="false">
+                            </label>
+                        </div>*@
+                    </div>
+
+                    <h4>@Admin_Resources.LabelAutoImageResizeSettings</h4>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.MaxCatalogItemLargeWidth, new { @class = "required" })
+                            </div>                            
+                            <div class="control-md right-inner-icon">
+                                @Html.TextBoxFor(m => m.MaxCatalogItemLargeWidth)
+                                @Html.ValidationMessageFor(m => m.MaxCatalogItemLargeWidth)
+                                <em class="unit-text">pixels</em>
+                            </div>
+                        </div>                        
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.MaxCatalogItemMediumWidth, new { @class = "required" })
+                            </div>                            
+                            <div class="control-md right-inner-icon">
+                                @Html.TextBoxFor(m => m.MaxCatalogItemMediumWidth)
+                                @Html.ValidationMessageFor(m => m.MaxCatalogItemMediumWidth)
+                                <em class="unit-text">pixels</em>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.MaxCatalogItemSmallWidth, new { @class = "required" })
+                            </div>                            
+                            <div class="control-md right-inner-icon">
+                                @Html.TextBoxFor(m => m.MaxCatalogItemSmallWidth)
+                                @Html.ValidationMessageFor(m => m.MaxCatalogItemSmallWidth)
+                                <em class="unit-text">pixels</em>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.MaxCatalogItemCrossSellWidth, new { @class = "required" })
+                            </div>                            
+                            <div class="control-md right-inner-icon">
+                                @Html.TextBoxFor(m => m.MaxCatalogItemCrossSellWidth)
+                                @Html.ValidationMessageFor(m => m.MaxCatalogItemCrossSellWidth)
+                                <em class="unit-text">pixels</em>
+                            </div>
+                        </div>                        
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.MaxCatalogItemThumbnailWidth)
+                            </div>                            
+                            <div class="control-md right-inner-icon">
+                                @Html.TextBoxFor(m => m.MaxCatalogItemThumbnailWidth)
+                                @Html.ValidationMessageFor(m => m.MaxCatalogItemThumbnailWidth)
+                                <em class="unit-text">pixels</em>
+                            </div>
+                        </div>                        
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.MaxCatalogItemSmallThumbnailWidth, new { @class = "required" })
+                            </div>                            
+                            <div class="control-md right-inner-icon">
+                                @Html.TextBoxFor(m => m.MaxCatalogItemSmallThumbnailWidth)
+                                @Html.ValidationMessageFor(m => m.MaxCatalogItemSmallThumbnailWidth)
+                                <span class="display-unit">@Admin_Resources.LabelPixel</span>
+                            </div>
+                        </div>                        
+                    </div>
+
+                    @*<div class="form-group">
+                        <h4>@Admin_Resources.LabelDefaultProductImage</h4>
+                        <div id="displayDefaultImage">
+                            <span class="sub">@Admin_Resources.LabelDefaultProductImageDescription</span>
+                            <div class="form-group top-shift">
+                                <div id="defaultImage" class="col-sm-4 nopadding">
+                                    <img src="@Model.ImageNotAvailablePathUrl.Trim('~')" alt="Not Available Image" class="img-responsive" />
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="col-lg-12 nopadding">
+                                        <label>
+                                            @Html.RadioButtonFor(model => model.NoImageNewImage, MvcAdminConstants.CurrentImage, new { id = "radCurrentImageDisplay", name = "select-option", onchange = "Portal.HideUploadNewImageDisplay()" })
+                                            <span class="lbl padding-8">@ZnodeResources.TextKeepImage</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-12 nopadding">
+                                        <label>
+                                            @Html.RadioButtonFor(model => model.NoImageNewImage, MvcAdminConstants.NewImage, new { id = "radUploadNewImageDisplay", name = "select-option", onchange = "Portal.UploadNewImageDisplay()" })
+                                            <span class="lbl padding-8"> @ZnodeResources.TextUploadImage</span>
+                                        </label>
+                                    </div>
+                                    <div id="uploadNewImageDisplay">
+                                        <div class="col-sm-12 top-shift nopadding">
+                                            @Html.EditorFor(m => m.ImageNotAvailablePath)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+
+
+                </div>
+                @Html.HiddenFor(m => m.PortalId)
+                @Html.HiddenFor(m => m.PortalDisplaySettingsId)
+                
+            }
+        </div>
+    </section>
+    <div class="col-sm-12 nopadding">
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+</div>

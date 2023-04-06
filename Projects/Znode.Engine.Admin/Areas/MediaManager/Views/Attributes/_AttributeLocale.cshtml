@@ -1,0 +1,22 @@
+﻿@model List<Znode.Engine.Admin.AttributeValidationHelpers.LocaleDataModel>
+@{
+    int attributeId = Convert.ToInt32(Request.QueryString["mediaAttributeId"]);
+}
+
+<div class="col-sm-12 nopadding">
+    @Html.Partial("~/Areas/MediaManager/Views/Attributes/_Locale.cshtml", Model)
+</div>
+
+<div class="col-sm-12 nopadding margin-top-25" id="divDefaultAtrributeValue">
+    <h3 class="section-heading">@Admin_Resources.LabelOptionsDefaultValues</h3>
+    @if (attributeId > 0)
+    {
+        <div class="col-sm-12 nopadding">
+            @{Html.RenderAction("DefaultValues", "Attributes", new { @attributeId = attributeId });}
+        </div>
+    }
+    else
+    {
+        <span class="margin-bottom">@MediaManager_Resources.LabelManageOption</span>
+    }
+</div>

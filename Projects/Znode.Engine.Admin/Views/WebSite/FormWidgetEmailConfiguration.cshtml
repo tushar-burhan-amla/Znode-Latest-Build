@@ -1,0 +1,106 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model FormWidgetEmailConfigurationViewModel
+
+@{  
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    bool isSaveCloseShow = Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString()) ? true : false;
+    string cancelUrl = $"/Content/EditContentPage?cmsContentPagesId={Model.CMSContentPagesId}";
+    ActionModel actionModel = new ActionModel { Action = "FormWidgetEmailConfiguration", Controller = "WebSite", CancelUrl = cancelUrl, FormId = "formWidgetEmailConfiguration", IsSaveCloseEnable = false,IsSaveCloseIsShow= isSaveCloseShow, Callback = "WebSite.prototype.ValidateNotificationEmail" };
+}
+<div id="divFormTemplate">
+    <div class="col-sm-12 title-container">
+        <h1>@Admin_Resources.LabelManage<em class="z-minus"></em><span>@Model.DisplayName</span></h1>
+        @if (Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.ContentPageMapping.ToString()))
+        {
+            <div class="pull-right btn-container">
+                <button type="button" class="btn-text-icon pull-left" data-test-selector="linkBack" onclick="ZnodeBase.prototype.CancelUpload('associatedPanel')"><em class="z-back"></em>@Admin_Resources.ButtonBack</button>
+                <div class="pull-right padding-left">
+                    @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, actionModel.Action, actionModel.Controller, new { @id = "dvSave", @class = "btn-text btn-text-secondary", onclick = "SaveCancel.prototype.SubmitForm('" + @actionModel.FormId + "', '" + @actionModel.Callback + "')" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="pull-right">
+                @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+            </div>
+        }
+    </div>
+    <!--Main Container-->
+    <div id="TextWidgetConfigurationDiv" class="cms-form-widget">
+        @Html.Partial("~/views/WebSite/_ManageFormWidgetPanel.cshtml")
+
+        <section class="main-container">
+            <div class="notification-msg cms-notification">
+                <div id="divFormWidgetError" class="alert-danger" style="display:none;"></div>
+            </div>
+            @using (Ajax.BeginForm("FormWidgetEmailConfiguration", "WebSite", new AjaxOptions() { HttpMethod = "post", OnSuccess = "WebSite.prototype.SaveEmailWidget(data,this)", InsertionMode = InsertionMode.Replace }, new { id = "formWidgetEmailConfiguration" }))
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(x => x.NotificationEmailId)
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(x => x.NotificationEmailId, new { @placeholder = Admin_Resources.NotificationEmail, @id = "txtNotificationEmail" })
+                            @Html.ValidationMessageFor(model => model.NotificationEmailId, "", new { @id = "errorRequiredNotificationEmailId" })
+                        </div>
+                        @Html.Partial("_HelpText", Admin_Resources.HelpTextNotificationEmailId)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(x => x.NotificationEmailTemplateId)
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.NotificationEmailTemplate, new { @placeholder = Admin_Resources.LabelSelectNotificationTemplate, @id = "txtNotificationEmailTemplate", @readonly = "readonly" })
+                            @Html.HiddenFor(model => model.NotificationEmailTemplateId, new { @id = "hdnNotificationEmailTemplateId" })
+                            @Html.ValidationMessageFor(model => model.NotificationEmailTemplate, "", new { @id = "errorRequiredNotificationEmailTemplate" })
+                        </div>
+                        @Html.Partial("_HelpText", Admin_Resources.HelpTextNotificationEmailTemplate)
+                        <div class="pull-left">
+                            <a id="searchEmailTemplate" onclick="WebSite.prototype.GetEmailTemplateList('NotificationEmailTemplate');" class="btn-narrow-icon dirtyignore" data-toggle="tooltip" data-placement="top" data-original-title="@Admin_Resources.SearchExistingTemplate"><em class='z-search'></em></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(x => x.AcknowledgementEmailTemplateId)
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.AcknowledgementEmailTemplate, new { @placeholder = Admin_Resources.LabelSelectAcknowledgementEmailTemplateId, @id = "txtAcknowledgementEmailTemplate", @readonly = "readonly" })
+                            @Html.HiddenFor(model => model.AcknowledgementEmailTemplateId, new { @id = "hdnAcknowledgementEmailTemplateId" })
+                            @Html.ValidationMessageFor(model => model.AcknowledgementEmailTemplate, "", new { @id = "errorRequiredAcknowledgementEmailTemplate" })
+                        </div>
+                        @Html.Partial("_HelpText", Admin_Resources.HelpTextAcknowledgementEmailTemplate)
+                        <div class="pull-left">
+                            <a id="SearchEmailTemplate" onclick="WebSite.prototype.GetEmailTemplateList('AcknowledgementEmailTemplate');" class="btn-narrow-icon dirtyignore" data-toggle="tooltip" data-placement="top" data-original-title="@Admin_Resources.SearchExistingTemplate"><em class='z-search'></em></a>
+                        </div>
+                    </div>
+                </div>
+
+
+                @Html.HiddenFor(model => model.CMSContentPagesId)
+                @Html.HiddenFor(model => model.TypeOFMapping)
+                @Html.HiddenFor(model => model.WidgetsKey)
+                @Html.HiddenFor(model => model.CMSWidgetsId)
+                @Html.HiddenFor(model => model.FormWidgetEmailConfigurationId)
+                @Html.HiddenFor(model => model.DisplayName)
+                @Html.HiddenFor(model => model.FormTitle, new { @id = "hdnFormTitle" })
+            }
+        </section>
+
+    </div>
+    <div id="divEmailTemplatelistPopup" class="aside-popup-panel modal-dialog modal-xl">
+    </div>
+</div>
+<script>
+    $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover', html: true });
+    $("#txtNotificationEmail").focusout(function () {
+        WebSite.prototype.ValidateNotificationEmail();
+    });
+
+</script>

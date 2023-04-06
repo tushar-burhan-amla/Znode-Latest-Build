@@ -1,0 +1,47 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PortalApprovalViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    var guid = "ApproverUserId" + Guid.NewGuid();
+}
+
+@using (Ajax.BeginForm("CreateUpdatePortalApproverUser", "Store", new AjaxOptions()
+{
+    HttpMethod = "post",
+    OnSuccess = "Store.prototype.AreaMapperAddResult(data,this)",
+    InsertionMode = InsertionMode.Replace,
+
+}, new { id = "frmApprovalArea_" + Model?.UserId }))
+{
+    <div class="col-xs-12 padding-top-bottom tr-div approver-rows nopadding dynamic-approvers dynamic-approverUserId" id="PartialPage_@Model.UserApproverId">
+        <div class="col-xs-4">
+            @Html.TextBoxFor(m => Model.ApproverName, new { @placeholder = "Enter Approver User", @id = "approverUser_" + Model.UserApproverId, @class = "txtApproverUser" })
+            @Html.ValidationMessageFor(model => Model.ApproverName)
+            <input class="txtApproverUserId" id="ApproverUserId" data_userId="True" name="ApproverUserId" type="hidden" value="@Model.ApproverUserId" data_userapproverId=@Model.UserApproverId>
+        </div>
+        <div class="col-xs-4"></div>
+        <div class="col-xs-4 text-right">
+            <button type="button" class="CancelAreaMapping_@Model.UserApproverId btn-narrow-icon" title="Cancel" style="display:none !important" onclick="Store.prototype.CancelNewAddAreaMapping('CancelAreaMapping_@Model.UserApproverId',this)"><em class="z-close"></em></button>
+        </div>
+    </div>
+
+    @Html.HiddenFor(x => x.ApproverUser)
+    @Html.HiddenFor(x => x.UserApproverId)
+    @Html.HiddenFor(x => x.UserId, new { id = "userId" })
+    @Html.HiddenFor(x => x.PortalApprovalId)
+    <input id="UserApproverId" name="UserApproverId" type="hidden" value="@Model.UserApproverId">
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    $(document).ready(function () {
+        Store.prototype.GetApproverUsersByPortalId();
+
+        $('.txtApproverUser').keypress(
+            function (event) {
+                if (event.which == '13') {
+                    event.preventDefault();
+                }
+            });
+    });
+</script>

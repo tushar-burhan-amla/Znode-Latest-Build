@@ -1,0 +1,22 @@
+﻿@model Znode.Engine.Admin.ViewModels.PopupViewModel
+
+<form method="post" action="/api/fileupload" enctype="multipart/form-data" novalidate class="box">
+    <div class="box__input drop-area text-center">
+        <div class="col-sm-12 drop-container">
+            <div class="file-upload pull-left nomargin">
+                <span class="btn-text btn-text-secondary" for="file" data-test-selector="spnBrowse">@Admin_Resources.BrowseButton</span>
+                <input type="file" name="files[]" id="file" class="box__file" data-multiple-caption="{count} files selected" multiple />
+            </div>
+            <div class="pull-left">
+                <h3>@*@Admin_Resources.LabelDropFiles*@or drop files anywhere to instantly upload</h3>
+            </div>
+            <div>
+                <em class="z-cloud-upload"></em>
+            </div>
+            @Html.HiddenFor(m => m.FolderId, new { id = "folderId" })
+            @Html.HiddenFor(m => m.IsOverrideFile, new { id = "isOverrideFile" })
+        </div>
+    </div>
+</form>
+
+

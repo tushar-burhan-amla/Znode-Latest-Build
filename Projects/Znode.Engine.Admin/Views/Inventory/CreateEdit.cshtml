@@ -1,0 +1,126 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using System.Configuration
+@model InventoryViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateInventory", CancelUrl = "/Inventory/List", Callback = "FileUpload.OnSubmit" };
+}
+<div class="col-sm-12 title-container">
+    @if (string.Equals(actionName.ToLower(), "create"))
+    {
+        <h1>@Admin_Resources.HeaderInventory<span class="separator"> | </span><span class="title-action">@Admin_Resources.TitleAdd</span></h1>
+    }
+    else
+    {
+        <h1>@Admin_Resources.HeaderInventory<span class="separator"> | </span><span class="title-action">@Admin_Resources.TitleEdit</span><span class="separator"> - </span><span class="title-item">@Html.DisplayFor(model => model.ListName)</span></h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+
+<div class="main-wrapper">
+    <!--Left Panel-->
+    <aside>
+        <button type="button" id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            <ul class="aside-panel">
+                @Html.Partial("~/Views/Shared/_asideInventoryPanel.cshtml", Model)
+            </ul>
+        </div>
+    </aside>
+    <!--Main Container-->
+    <section class="main-container">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateInventory", enctype = "multipart/form-data" }))
+            {
+                <div id="createForm">
+                    @if (string.Equals(actionName.ToLower(), "create"))
+                    {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(m => m.ListCode, new { @class = "required" })
+                                </div>
+                                <div class="control-md">
+                                    @Html.TextBoxFor(model => model.ListCode)
+                                    @Html.ValidationMessageFor(model => model.ListCode)
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.ListCode, new { @class = "required" })
+                                </div>
+                                <div class="control-md">
+                                    <input type="text" value="@Model.ListCode" disabled="disabled" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.ListName, new { @class = "required" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.ListName)
+                                @Html.ValidationMessageFor(model => model.ListName)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Admin_Resources.LabelImportInventoryList)
+                            </div>
+                            <div class="control-md">
+                                <div class="file-upload">
+                                    <span title="Upload" class="btn-text-icon file-upload-btn"><em class="z-upload"></em>@Admin_Resources.BrowseButton</span>
+                                    <input type="file" name="importFile" id="importFile" onchange="FileUpload.ValidFileFormat();">
+                                </div>
+                                <div>
+                                    <button type="button" style="display:none" id="preview" title="@Admin_Resources.LabelPreview" data-placement="top" data-toggle="tooltip" class="file-preview"><em class="z-preview"></em></button>
+                                </div>
+                                <div>
+                                    <span id="error-file-upload" class="error-msg" />
+                                </div>
+                                <span id="file-upload-name" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding dirtyignore">
+                            <div class="control-label">
+                                @Html.Label(Admin_Resources.ButtonDownloadTemplate)
+                            </div>
+                            <div>
+                                @Html.AuthorizedRawActionLink("<em class='z-download'></em>", "DownloadSamples", "Inventory", new { sampleFilePath = ConfigurationManager.AppSettings["InventorySampleFilePath"] }, new { @class = "btn-text file-preview", @title = @Admin_Resources.ButtonDownloadTemplate, @data_placement = "top", @data_toggle = "tooltip" })
+                            </div>
+                        </div>
+                    </div>
+                    @Html.HiddenFor(model => model.InventoryListId)
+                    @Html.HiddenFor(model => model.ListCode)
+                </div>
+          }
+            @if (Model.ImportInventoryList?.Count > 0)
+            {
+                @Html.Partial("~/Views/Price/_ImportPriceErrorList.cshtml", Model.GridModel)
+            }
+            @*Don't delete this div*@
+            <div id="preview-import-price"></div>
+    </section>
+</div>
+<script src="~/Scripts/Core/Znode/FileUpload.js"></script>
+<script>
+    $(".pagination").hide()
+    $(".dropdown").hide();
+    FileUpload.PreviewImport("Inventory");
+</script>

@@ -1,0 +1,28 @@
+﻿@model Znode.Engine.WebStore.ViewModels.WidgetTextViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+                /**/
+
+                var _portal = PortalAgent.CurrentPortal;
+                string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+}
+@if (!Equals(Model, null) && Model.CMSMode)
+{
+    if (Model.IsEmpty)
+    {
+        <img src="@_fileLocation/Images/content-block.png" alt="New Product" class="img-responsive cms-img-icon" />
+    }
+}
+
+@if (!Equals(Model, null))
+{
+    <div id="layout-contentpage">
+        @{
+            <div class="row contain-pages">
+                <div class="col-12">
+                    @Html.RenderBlock(HttpUtility.HtmlDecode(Model.Text))
+                </div>
+            </div>
+        }
+    </div>
+}

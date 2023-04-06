@@ -1,0 +1,42 @@
+﻿@using Znode.Libraries.ECommerce.Utilities;
+
+@{
+    bool hasUserId = Model.GetType().GetProperty("UserId") != null;
+    int user_Id = hasUserId ? Model.UserId : Model.EntityId;
+    bool IsGuestUsers = Convert.ToBoolean(TempData["IsGuestUser" + user_Id]);
+    TempData["IsGuestUser" + user_Id] = IsGuestUsers;
+    string customerDisplayName = Convert.ToString(TempData["CustomerDisplayName" + user_Id]);
+    TempData["CustomerDisplayName" + user_Id] = customerDisplayName;
+}
+}
+<aside>
+    <button id="slide-menu" class="slide-menu-btn" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+
+            @if (IsGuestUsers)
+            {
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.GeneralSettings, "CustomerEdit", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkGeneralSettings" })</li>
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelAddresses, "GetAddressList", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkAddresses" })</li>
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelOrders, "GetOrderList", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkOrder" })</li>
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelProfile, "GetAssociatedProfileList", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkProfiles" })</li>
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelNotes, "CustomerNoteList", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkNotes" })</li>
+            }
+            else
+            {
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.GeneralSettings, "CustomerEdit", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkGeneralSettings" })</li>
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelAddresses, "GetAddressList", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkAddresses" })</li>
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelOrders, "GetOrderList", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkOrder" })</li>
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelProfile, "GetAssociatedProfileList", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkProfiles" })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelAffiliates, "GetAffiliate", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkAffiliates" })</li>
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.TitlePriceManagement, "GetAssociatedPriceListForCustomer", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkPriceManagement" })</li>
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.TitleVouchersList, "GetUserVoucherList", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkVouchers" })</li>
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelNotes, "CustomerNoteList", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkNotes" })</li>
+                <li>@Html.GlobalAttributeActionLink(Admin_Resources.LabelAdditionalAttributes, user_Id, Convert.ToString(EntityTypeEnum.User), new { @data_test_selector = "linkAdditionalAttributes" })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.ApprovalManagement, "GetApproverLevelList", "Account", new { userId = user_Id }, new { @data_test_selector = "linkApprovalManagement" })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelUserCartInfo, "GetUserCartByUserId", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkUserCartInfo" })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelUserImpersonation, "GetImpersonationByUserId", "Customer", new { userId = user_Id }, new { @data_test_selector = "linkUserCartInfo" })</li>
+            }
+        </ul>
+    </div>
+</aside>

@@ -1,0 +1,46 @@
+@using Znode.Engine.WebStore.ViewModels
+@model AddressListViewModel
+<div class="col-12 p-0 recommended-address-popup">
+    <div class="col-12 p-0  nopadding entered-display-address">
+        <h5>@WebStore_Resources.LabelEnteredAddress</h5>
+        <div class="col-12 p-0">
+            <div class="col-12 p-0 address-details" id="user-entered-address"> </div>
+            <div class="pull-left">
+                <button onclick="User.prototype.SaveChanges(event,null);" class="btn-text btn-bg-primary">Continue with this address</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 p-0 recommended-display-addess">
+        <h5>@WebStore_Resources.LabelRecommendedAddress</h5>
+
+        @if (Model?.AddressList?.Any() ?? false)
+            {
+                int id = 1;
+            <div class="col-12 p-0">
+
+                @foreach (AddressViewModel item in Model.AddressList)
+                {
+                    <div class="col-12 address-details">
+                        <div class="address-street">
+                            <div id="recommended-address1-@id">@item.Address1</div>
+                            @if (!string.IsNullOrEmpty(item.Address2))
+                            {
+                                <div id="recommended-address2-@id">@item.Address2</div>
+                            }
+                        </div>
+                        <div class="address-citystate">
+                            <span id="recommended-address-city-@id">@item.CityName, </span>
+                            <sapn id="recommended-address-state-@id">@item.StateName, </sapn>
+                            <span id="recommended-address-postalcode-@id">@item.PostalCode</span>
+                            <div id="recommended-address-country-@id">@item.CountryName</div>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <button onclick="User.prototype.SaveChanges(event,@id);" class="btn-text btn-bg-primary">Update with this address</button>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

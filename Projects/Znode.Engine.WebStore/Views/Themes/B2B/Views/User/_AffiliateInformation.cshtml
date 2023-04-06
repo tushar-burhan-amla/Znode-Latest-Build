@@ -1,0 +1,44 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ReferralCommissionViewModel
+
+@{List<string> urls = Model.Url?.Split(',')?.ToList(); }
+<div class="col-12 pr-0 pl-0 reviews-wishlist-section dashboard-content">
+    <div class="col-12 p-0">
+        <h3 class="b2b-section-header">@WebStore_Resources.LabelAffiliateInformation</h3>
+		@if (!string.IsNullOrEmpty(Model.ReferralCommissionType))
+		{
+			<div class="col-12 dashboard-content p-4">
+				<div class="col-12 p-0">
+					<div class="col-12 p-0">
+						@WebStore_Resources.LabelReferralCommission : @Model.ReferralCommission
+						@if (Model.ReferralCommissionType == "Percentage")
+						{
+							<b>%</b>
+						}
+					</div>
+					<div class="col-12 p-0">
+						@WebStore_Resources.LabelReferralCommissionType : @Model.ReferralCommissionType
+					</div>
+					<div class="col-12 p-0">
+						@WebStore_Resources.LabelTrackingLink :
+						@if (urls?.Count > 0)
+						{
+							foreach (var item in urls)
+							{
+								<div class="col-12 p-0">
+									<a href="//@item?affiliateId=@Model.UserId" target="_blank">@item?affiliateId=@Model.UserId</a>
+								</div>
+							}
+						}
+					</div>
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="col-12 p-4">
+				<p>@WebStore_Resources.MessageNoAffiliateInformation</p>
+			</div>
+		}
+    </div>
+</div>

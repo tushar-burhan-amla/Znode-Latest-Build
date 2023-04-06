@@ -1,0 +1,23 @@
+﻿// Input Field
+input{ 
+  @include input-field;
+  height:38px;
+  font-family:$base-font-family-bold;
+}
+textarea {
+  @include input-field;
+  resize: none;overflow-y: auto;
+}
+html input[disabled], html select[disabled], html textarea[disabled], html input[readonly], html select[readonly], html textarea[readonly]{cursor: not-allowed;background-color:#efefef;}
+button[disabled],a[disabled]{cursor: not-allowed;opacity:0.3;}
+.disable-anchor{color:#ddd;cursor:not-allowed;opacity:0.3;pointer-events:none;}
+.disable-radio{color:#ddd;cursor:not-allowed;pointer-events:none;}
+//  Remove arrow from input field with numbers.
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

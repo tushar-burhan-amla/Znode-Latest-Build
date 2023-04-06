@@ -1,0 +1,24 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model WidgetBrandListViewModel
+
+@if (Model?.Brands?.Count > 0)
+{
+    <h3 class="product-list-title">@Html.RenderMessage(WebStoreConstants.Brands)</h3>
+    <div class="col-xs-12 brand-list-widget nopadding">
+        <ul id="view-option-category">
+            @foreach (var brand in Model.Brands)
+            {
+                if (!Equals(brand.BrandViewModel, null) && brand.BrandViewModel.IsActive)
+                {
+                    <li>
+                        <a href="@Url.GetBrandUrl(brand.BrandViewModel.SEOFriendlyPageName, null, brand.BrandViewModel.BrandId)" data-lightbox="enlarge">
+                            <img src="@brand.BrandViewModel.ImageSmallPath" class="img-fluid" data-src="@brand.BrandViewModel.ImageSmallPath" alt="" />
+                            <label>@brand.BrandViewModel.BrandName</label>
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+}
+

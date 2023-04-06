@@ -1,0 +1,113 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model EmailViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName };
+}
+@using (Ajax.BeginForm(actionName, controllerName,
+                 new AjaxOptions()
+                    {
+                     HttpMethod = "post",
+                    OnSuccess = "Store.prototype.TestEmailResult",
+                    UpdateTargetId = "divTestEmailPopup",
+                    InsertionMode = InsertionMode.Replace,
+                    OnBegin = "",
+                    },
+                    new { @id = "frmTestEmail" }))
+{
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+                <h4 class="modal-title">@Admin_Resources.LabelTestEmail</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12 page-container">
+                    <div class="col-sm-12 nopadding">
+                        <div class="col-sm-12 nopadding">
+                            <div class="col-sm-12 nopadding text-center">
+                                <span id="errorMsg"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.ToEmailAddress, new { @class = "required" })
+                                    </div>
+                                    <div class="control-lg">
+                                        @Html.TextBoxFor(model => model.ToEmailAddress)
+                                        @Html.ValidationMessageFor(model => model.ToEmailAddress)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.CcEmailAddress, new { })
+                                    </div>
+                                    <div class="control-lg">
+                                        @Html.TextBoxFor(model => model.CcEmailAddress)
+                                        @Html.ValidationMessageFor(model => model.CcEmailAddress)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.BccEmailAddress, new { })
+                                    </div>
+                                    <div class="control-lg">
+                                        @Html.TextBoxFor(model => model.BccEmailAddress)
+                                        @Html.ValidationMessageFor(model => model.BccEmailAddress)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.EmailSubject, new { @class = "required" })
+                                    </div>
+                                    <div class="control-lg">
+                                        @Html.TextBoxFor(model => model.EmailSubject)
+                                        @Html.ValidationMessageFor(model => model.EmailSubject)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.EmailMessage, new { @class = "required" })
+                                    </div>
+                                    <div class="control-lg">
+                                        @Html.TextAreaFor(model => model.EmailMessage, new { @rows = "5" })
+                                        @Html.ValidationMessageFor(model => model.EmailMessage)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 nopadding">
+                    <div class="pull-right btn-container">
+                        <button type="button" class="btn-text-icon" data-dismiss="modal"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                        <div class="pull-right">
+                            <button type="submit" class="btn-text btn-text-secondary">@Admin_Resources.ButtonSend</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.PortalId)
+}
+@Scripts.Render("~/bundles/jqueryval")
+
+

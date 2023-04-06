@@ -1,0 +1,39 @@
+﻿// Admin All Print CSS.
+
+@media print{
+body {padding:0;}
+.body-wrapper {margin:0;}
+body.nav-open section.main-container, body .main-container {margin-left:0;}
+
+header {background-color:$base-color-primary !important;height:40px; position:static;}
+header nav, .top-user-details, header .dropdown, .title-container .btn-text-icon, aside, input[type=checkbox], input[type=radio], input[type=checkbox] + .lbl, input[type=radio] + .lbl, footer, button, .btn-text {display:none !important;}
+.page-container {padding:0;}
+
+.title-container {padding:10px 0 8px; border-bottom:1px solid $border-bgcolor-primary; margin-bottom:20px;box-shadow:none;
+    h1{float:none;}
+}
+
+.container {width:100%;}
+.container-fluid {padding:0;}
+a[href]:after {content:none !important;}
+.form-group{margin:0 0 8px;
+    &:after{content:"";display:block;clear:both;}
+    .control-label{float:left;width:170px;}
+    .control-md{float:left;width:35%;}
+}
+.col-sm-12 {float:none!important;}
+.col-sm-3 {float:left;width:25%;}
+.col-sm-9 {float:left;width:75%;}
+.col-sm-5 {float:none; width:100%;}
+
+.table {margin-bottom:15px; width:100%;
+        tr{
+            th{padding:5px 0;text-align:left;font-size:$base-font-size + 1;font-weight:normal;border:0 !important;}
+            td{padding:5px 0;font-size:$base-font-size + 1;border:0 !important;}
+        }   
+    }
+@media (max-width: 991px) {
+  .container,body,html,header {width:100% !important;}
+}
+
+}

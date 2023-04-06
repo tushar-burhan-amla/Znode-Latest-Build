@@ -1,0 +1,25 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model LoginViewModel
+
+@Html.ValidationSummary(true)
+<div class="col-xs-12 nopadding sigle-page-login margin-bottom">
+    <div class="form-group">
+        <div class="col-xs-12 nopadding">
+            <label for="login_username">@Admin_Resources.Username</label>
+        </div>
+        <div class="col-xs-12 nopadding">
+            @Html.TextBoxFor(model => model.Username, new { @id = "login_username", @class = "form-input-long" })
+            <p class="error-msg">@Html.ValidationMessageFor(m => m.Username, null, new { @id = "valUser" })</p> 
+            <div id="ShowDuplicateUserErrorMessage" class="field-validation-error showduplicateusererrormessage"></div>                    
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-12 nopadding">
+            <label for="login_password">@Admin_Resources.Password</label>
+        </div>
+        <div class="col-xs-12 nopadding">
+            @Html.PasswordFor(model => model.Password, new { @id = "login_password", @class = "form-input-long" })
+            <p class="error-msg">@Html.ValidationMessageFor(m => m.Password, null, new { @id = "valPassword" })</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+﻿@model TabViewListModel
+@using Znode.Engine.Admin.Models
+@Scripts.Render("~/Content/bootstrap-3.3.7/js/jquery-ui-custom.js")
+
+@{
+    string DefaultSelect = string.Empty;
+
+    if (!Model.MaintainAllTabData)
+    {
+        <div id="tabs" class="dynamic-tabs">
+            <ul class="nav nav-tabs">
+                @foreach (var tab in Model.Tabs)
+                {
+                    if (tab.IsVisible)
+                    {
+                        <li data-test-selector="link@(tab.Name.Replace(" ", ""))"> <a id="tab-@tab.Id" href="@tab.Url">@tab.Name</a> </li>
+                    }
+                    if (tab.IsSelected)
+                    {
+                        DefaultSelect = "tab-" + @tab.Id;
+                    }
+                }
+            </ul>
+        </div>
+    }
+    else
+    {
+        <div id="tabs" class="dynamic-tabs">
+            <ul class="nav nav-tabs">
+                @foreach (var tab in Model.Tabs)
+                {
+                    if (tab.IsVisible)
+                    {
+                        <li data-test-selector="link@(tab.Name.Replace(" ", ""))"> <a href="#tab-@tab.Id">@tab.Name</a> </li>
+                    }
+                    if (tab.IsSelected)
+                    {
+                        DefaultSelect = "tab-" + @tab.Id;
+                    }
+                }
+            </ul>
+
+            @foreach (var tab in Model.Tabs)
+            {
+                string[] action = tab.Url.Split('/');
+                string[] Controller = { };
+                string[] parameters = { };
+                string actionName = "";
+                string dataparam = "";
+                string dataparamvalue = "";
+                if (action[2].Contains('?'))
+                {
+                    Controller = action[2].Split('?');
+                    actionName = Controller[0];
+                    parameters = Controller[1].Split('=');
+
+                }
+                else
+                {
+                    actionName = action[2];
+                }
+
+                if (parameters.Length > 0)
+                {
+                    dataparam = parameters[0];
+                    dataparamvalue = parameters[1];
+                }
+
+                <input type="hidden" value="0" id="@dataparam" />
+                <div id='tab-@tab.Id' data-controller="@action[1]" data-method="@actionName" data-parameter="@dataparam" data-paramvalue="@dataparamvalue">
+                    @Html.Action(actionName, action[1], new { @id = dataparamvalue })
+
+                </div>
+            }
+        </div>
+    }
+}
+
+
+<script>
+    var maintaindata = '@Model.MaintainAllTabData';
+    $("#tabs").tabs({
+        beforeLoad: function (event, ui) {
+            if (maintaindata === "False")
+                $(".ui-tabs-panel").empty();
+            ui.jqXHR.fail(function () {
+                ui.panel.html(
+                    "Couldn't load this tab. We'll try to fix this as soon as possible. " +
+                    "If this wouldn't be a demo.");
+            });
+        }
+    });
+    var defaultselect = '@DefaultSelect';
+    $('#' + defaultselect ? "DefaultSelect" : defaultselect).trigger('click');
+
+
+
+    $(function () {
+        if (typeof (localStorage['CurrentUrl']) != "undefined") {
+            if ((localStorage['CurrentUrl']).includes("#")) {
+                localStorage['CurrentUrl'] = localStorage['CurrentUrl'].replace("#","");
+            }           
+            if (localStorage['CurrentUrl'].toLowerCase() == window.location.href.toLowerCase()) {
+                $("#tabs").tabs({ active: localStorage['activetab'] });
+            }          
+            else
+                $("#tabs").tabs({ active: 0 });
+        }
+    });
+    $("#tabs").on("tabsactivate", function (event, ui) {
+        localStorage['activetab'] = $('#tabs').tabs('option', 'active');
+        localStorage['CurrentUrl'] = window.location.href;
+
+        // Create the event.
+        var event = document.createEvent('CustomEvent');
+        event.initEvent('onHideControlsLoad', true, true);
+        document.dispatchEvent(event);
+    });
+
+</script>

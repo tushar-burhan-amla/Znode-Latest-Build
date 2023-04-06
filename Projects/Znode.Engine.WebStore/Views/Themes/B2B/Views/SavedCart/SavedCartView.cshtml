@@ -1,0 +1,28 @@
+﻿@using Znode.Engine.WebStore.Models
+@model List<DropdownListModel>
+
+<div id="Savedcart" class="col-12 px-0 pl-2" id="allPaymentOptionsDiv">
+    <p class="title-select-saved-cart pb-2" data-test-selector="paraSelectSavedCart">@WebStore_Resources.SelectSavedCart</p>
+    @Html.ValidationMessage("errorname", null, new { id = "selecterrorname", @data_test_selector = "spnCartNameError", @class = "error-msg" })
+
+    @if (Model?.Count == 0)
+    {
+        <p>@WebStore_Resources.NoItemsInSavedCart</p>
+    }
+    <div class="save-cart-content">
+        <div class="saved-cart-list">
+            @foreach (var option in Model)
+            {
+                <div class="col-12 p-0 styled-input">
+                    <input type="radio" id="@option.Name@option.Id" data-test-selector="@option.Name@option.Id" data-payment-type="@option.Name" data-display-text="@option.Name" name="PaymentOptions" value="@option.Id" />
+                    <label for="@option.Name@option.Id" class="pl-2" data-test-selector="@option.Name@option.Id">@option.Name</label>
+                </div>
+                @Html.Hidden("SavedCartId", @option.Id)
+            }
+        </div>
+        <div class="modal-footer pr-0 pb-2 pt-4" id="SavedCarts">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-test-selector="btnCancel">@WebStore_Resources.ButtonCancel</button>
+            <button type="submit" class="btn btn-primary" data-test-selector="btnSave" id="btnSave" onclick="Checkout.prototype.Saved()">@WebStore_Resources.Save</button>
+        </div>
+    </div>
+</div>

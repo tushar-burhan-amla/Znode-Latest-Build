@@ -1,0 +1,83 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model  ProductPriceViewModel
+@if (Model.PriceView)
+{
+    if (Model.ProductType.ToLower() == "groupedproduct")
+    {
+        if (!Equals(Model.SalesPrice, null))
+        {
+            <span class="dynamic-product-price_@Model.sku pull-right original-price text-right @Model.ObsoleteClass">
+                @Helper.FormatPriceWithCurrency(Model.SalesPrice, Model.CultureCode)
+            </span>
+            if (Model.SalesPrice != Model.RetailPrice)
+            {
+                <span class="cut-price pull-right text-right">
+                    @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode)
+                </span>
+            }
+        }
+        else
+        {
+            <span class="dynamic-product-price_@Model.sku pull-right original-price text-right @Model.ObsoleteClass">
+                @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode)
+            </span>
+        }
+    }
+    else
+    {
+        <div id="product_Detail_Price_Div">
+            <h2>
+                @if (!Equals(Model.SalesPrice, null))
+                {
+                    <span class="@Model.ObsoleteClass">
+                        @if (HelperUtility.IsNotNull(Model.PromotionalPrice) && Model.PromotionalPrice > 0)
+                        {
+                            @Helper.FormatPriceWithCurrency(Model.PromotionalPrice, Model.CultureCode)
+                        }
+                        else
+                        {
+                            @Helper.FormatPriceWithCurrency(Model.SalesPrice, Model.CultureCode)
+                        }
+                    </span>
+                    if (Model.SalesPrice != @Model.RetailPrice)
+                    {
+                        <span class="cut-price">
+                            @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode)
+                        </span>
+                    }
+                }
+                else
+                {
+                    if (HelperUtility.IsNotNull(Model.PromotionalPrice) && Model.PromotionalPrice > 0)
+                    {
+                        <span class="@Model.ObsoleteClass">
+                            @Helper.FormatPriceWithCurrency(Model.PromotionalPrice, Model.CultureCode)
+                        </span>
+                        if (Model.RetailPrice != @Model.RetailPrice)
+                        {
+                            <span class="cut-price">
+                                @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode)
+                            </span>
+                        }
+                    }
+                    else
+                    {
+                        <span class="@Model.ObsoleteClass">
+                            @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode)
+                        </span>
+                    }
+                }
+            </h2>
+        </div>
+    }
+}
+else
+{
+    if (!Equals(Model.Quantity, null) && Model.Quantity > 0)
+    {
+        <span class="product-count ml-2">(@Model.Quantity)</span>
+    }
+}
+
+

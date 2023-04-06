@@ -1,0 +1,40 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model ImportViewModel
+
+{
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" onclick="return Import.prototype.RemoveTargetColumns();" data-test-selector="btnCloseAddTemplatePopup"><em class="z-close-circle"></em></button>
+                    <h4 class="modal-title" data-test-selector="hdgAddTemplateName">@Admin_Resources.LabelAddTemplateName</h4>
+            </div>
+
+            <div class="modal-body">
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                        <label class="required" data-test-selector="lblTemplateName">@Admin_Resources.TextTemplateName</label>
+                                    </div>
+                    <div class="control-md">
+                                        @Html.TextBoxFor(model => model.TemplateName, new { @data_test_selector = "txtTemplateName" })
+                                        @Html.ValidationMessageFor(model => model.TemplateName)
+                        <span class="error-msg" id="error-template-name" data-test-selector="valTemplateName"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 nopadding">
+                    <div class="pull-right">
+                        <button type="button" class="btn-text-icon" id="btnCreateTemplateCancel" data-test-selector="btnCancel" onclick="return Import.prototype.RemoveTargetColumns();" data-dismiss="modal"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                        <div class="pull-right">
+                            <button type="submit" class="btn-text btn-text-secondary" id="btnCreateTemplateName" data-test-selector="btnSave">@Admin_Resources.ButtonSave</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+@Scripts.Render("~/bundles/jqueryval")

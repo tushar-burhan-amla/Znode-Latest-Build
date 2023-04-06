@@ -1,0 +1,12 @@
+﻿<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleTaxRules, "TaxRuleTypeList", "ProviderEngine", null)</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleSupplierTypes, "SupplierTypeList", "ProviderEngine", null)</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleShippingType, "ShippingTypeList", "ProviderEngine", null)</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitlePromotionType, "PromotionTypeList", "ProviderEngine", null)</li>
+            <li>@Html.AuthorizedRawActionLink(ERP_Resources.TitleBusinessSystemConnector, "ERPConfiguratorList", "ProviderEngine", null)</li>
+        </ul>
+    </div>
+</aside>

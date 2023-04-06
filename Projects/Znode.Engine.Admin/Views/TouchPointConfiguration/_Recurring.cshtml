@@ -1,0 +1,55 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+
+@model ERPTaskSchedulerViewModel
+
+@* Helptext for recurring *@
+<div class="col-sm-12 nopadding padding-20 cron-expression-info">
+    @Html.Partial("~/Views/TouchPointConfiguration/_RecurringHelp.cshtml")
+</div>
+
+<div class="col-sm-12 nopadding padding-top-20">
+    <div class="control-label">
+        @Html.Label(ERP_Resources.CronExpression, new { @class = "required", @data_test_selector = "lblCronExpression" })
+    </div>
+    <div class="control-md">
+        @Html.TextBoxFor(model => model.CronExpression, string.Empty, new { @data_test_selector = "txtCronExpression", @id = "txtCronExpression", @autocomplete = "off", @maxlength = 100 })
+        @Html.ValidationMessageFor(model => model.CronExpression, "", new { @data_test_selector = "valCronExpression", @id = "valCronExpression" })
+        <span id="lblCronDescriptionText" class="text-success"></span>
+        <span id="createSchedulerError" class="error-msg display-none"></span>
+    </div>
+    @Html.HiddenFor(x => x.CronExpression, new { @id = "hdnCronExpr" })
+   
+</div>
+
+<script src="~/Scripts/References/later.min.js"></script>
+<script src="~/Scripts/References/prettycron.js"></script>
+<script>
+    $(function () {
+        getCronDescription();
+    });
+
+    $("#txtCronExpression").on("change input", function () {
+        getCronDescription();
+        removeMultipleMessage();
+    });
+
+    $("#drpSchedule").on("change", function () {
+        var cronExpression = $("#drpSchedule").val();
+       
+        $("#lblHelpCronDescription").text(cronExpression != '' ? cronExpression : "");
+    });
+
+    function getCronDescription() {
+        var cronExpression = $("#txtCronExpression").val();
+
+        $("#lblCronDescriptionText").text(cronExpression != '' ? prettyCron.toString(cronExpression) : '');
+    }
+    function removeMultipleMessage()
+    {
+        if ($("#txtCronExpression").val() == '' && $("#createSchedulerError").html() != '') {
+            $("#createSchedulerError").html('');
+        }
+        $("#valCronExpression").html('');
+    }
+</script>

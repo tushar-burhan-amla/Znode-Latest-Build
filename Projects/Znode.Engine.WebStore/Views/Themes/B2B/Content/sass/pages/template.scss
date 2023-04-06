@@ -1,0 +1,238 @@
+﻿.landing-form {
+    h1 {
+        text-align: center;
+        display: block;
+        margin: 0 auto;
+        padding: 20px 0;
+    }
+
+    img {
+        width: 100%;
+    }
+
+    .content-text {
+        background: #f8f8f8;
+    }
+}
+
+.template-search-video .template-title .item video {
+    display: block;
+    margin: 0 auto;
+    width:100%;
+}
+
+.landing-form-template {
+    .Boxed {
+        width: auto !important;
+    }
+}
+
+.landing-promotion-page {
+
+    .section-template {
+        background: #f8f8f8;
+    }
+
+    .image-block-view .item img {
+        width: 100% !important;
+    }
+}
+
+.form-widget-builder {
+    background: $input-background-facet;
+
+    h1 {
+        padding-bottom: 15px;
+        text-transform: uppercase;
+        font-size: 24px;
+        border-bottom: 2px solid $border-light;
+
+        @media screen and (min-width:$base-screen-small) {
+            margin: 0 15px;
+        }
+    }
+
+    .form-builder {
+        padding-top: 15px;
+
+        .form-group:nth-child(1), .form-group:nth-child(2), .form-group:nth-child(4), .form-group:nth-child(5), .form-group:nth-child(6), .form-group:nth-child(7), .form-group:nth-child(8), .form-group:nth-child(9) {
+
+            @media screen and (min-width:$base-screen-small) {
+                flex: 50%
+            }
+        }
+
+        .form-group, .quotebutton {
+            padding: 0;
+
+            @media screen and (min-width:$base-screen-small) {
+                padding: 0 15px;
+            }
+
+            label {
+                font-family: $base-font-family-bold;
+            }
+        }
+    }
+}
+
+.form-template-page {
+    h1.pt-5 {
+        font-size: 28px;
+        margin: auto;
+
+        @media screen and (min-width:$base-screen-small) {
+            width: 80%;
+        }
+    }
+
+    .font-16 {
+        margin: auto;
+
+        @media screen and (min-width:$base-screen-small) {
+            width: 90%;
+        }
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    h6 {
+        font-size: 18px;
+    }
+
+    .form-builder{
+        .row{margin:0;}
+    }
+}
+
+//Content Conatiners
+.content-container {
+
+    .container-bannerwithtext {
+        padding: 2rem 0;
+
+        .container-banner {
+            img {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        .container-content {
+            position: absolute;
+            top: 50%;
+            left: 15%;
+            transform: translate(0, -50%);
+
+            .container-text {
+                font-size: 28px;
+                font-weight: 600;
+                color: $white;
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    .ticker-wrapper {
+        background-color: $ticker-bgcolor;
+        height: 100%;
+        padding: 10px 0;
+        line-height: 20px;
+
+        .ticker {
+            color: $white;
+            text-align: center;
+
+            .ticker-text {
+                font-size: $base-font-size + 2;
+            }
+        }
+    }
+
+    .container-twobannerwithtext {
+        padding: 2rem 0;
+
+        img {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .adtext-wrapper {
+            position: absolute;
+            bottom: 10%;
+            left: 7%;
+            color: $white;
+
+            .adtitle {
+                font-size: $base-font-size + 7;
+
+                span {
+                    margin-left: 5px;
+                    font-size: $base-font-size + 1;
+                }
+            }
+
+            .adtext {
+                font-size: $base-font-size + 1;
+            }
+        }
+    }
+
+    .container-twotextbox {
+        padding: 2rem 0;
+
+        .Adspace-wrapper .Adspace-outer {
+            background: $adspace-bgcolor;
+            flex: 50%;
+            padding: 25px;
+            min-height: 150px;
+            box-shadow: $dividing-shadow;
+            border-radius: 2px;
+
+            .fstadspace {
+                color: $text-default;
+
+                .Adspace-title {
+                    font-size: 20px;
+                    font-family: $base-font-family-bold;
+
+                    span {
+                        margin-left: 5px;
+                        font-size: $base-font-size + 1;
+                    }
+                }
+
+                .Adspace-description {
+                    line-height: 20px;
+                    margin: 10px 0;
+                }
+            }
+        }
+
+        .Adspace-outer:hover {
+            box-shadow: $box-shadow-product;
+        }
+    }
+}
+
+ @media only screen and (max-width: 768px) {
+    .content-container {
+        .container-bannerwithtext {
+            .container-content {
+                position: relative;
+                text-align: center;
+                top: 0;
+                left: 0;
+                transform: translate(0, 0);
+
+                .container-text {
+                    font-size: $base-font-size + 11;
+                    color: $black;
+                }
+            }
+        }
+    }
+}

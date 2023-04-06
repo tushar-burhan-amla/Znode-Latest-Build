@@ -1,0 +1,239 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities;
+@model MediaConfigurationViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleDAM + " | " + Admin_Resources.Multifront;
+    string selectedServer = Model.IsLocalServer ? "0" : Model.IsNetworkDrive ? "2" : "1";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmMediaConfiguration", CancelUrl = "/MediaManager/MediaManager/List", IsSaveCloseEnable = true };
+    string mediapath = string.IsNullOrEmpty(Model?.GlobalMediaDisplaySetting?.MediaPath) ? ZnodeAdminSettings.DefaultImagePath : Model?.GlobalMediaDisplaySetting?.MediaPath;
+    int? mediaId = Model?.GlobalMediaDisplaySetting?.MediaId > 0 ? Model?.GlobalMediaDisplaySetting?.MediaId : 0;
+}
+
+<div id="MediaConfiguration">
+    <div class="col-sm-12 title-container">
+        <h1>@MediaManager_Resources.TitleMediaManager<em class="z-minus"></em><span>@MediaManager_Resources.TitleConfigureMediaSetting</span></h1>
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm("SaveMediaSettings", "MediaConfiguration", FormMethod.Post, new { id = "frmMediaConfiguration", onsubmit = "return MediaConfiguration.prototype.ServerConfigurationValidation();" }))
+        {
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label>@MediaManager_Resources.TitleSelectServer</label>
+                        </div>
+                        <div class="control-md">
+                            <div class="col-sm-4 nopadding">
+                                <label>
+                                    <input name="server" type="radio" value="0" data-server="@AdminConstants.DefaultMediaServerName" onchange="javascript: var serverConfig = new MediaConfiguration(); serverConfig.DivVisiblity($('input[name=server]:checked').val());">
+                                    <span class="lbl padding-8">@MediaManager_Resources.LabelLocalServer</span>
+                                </label>
+                            </div>
+                            <div class="col-sm-4 nopadding">
+                                <label>
+                                    <input name="server" type="radio" value="1" onchange="javascript: var serverConfig = new MediaConfiguration(); serverConfig.DivVisiblity($('input[name=server]:checked').val());">
+                                    <span class="lbl padding-8">@MediaManager_Resources.LabelOtherServer</span>
+                                </label>
+                            </div>
+                            <div class="col-sm-4 nopadding">
+                                <label>
+                                    <input name="server" type="radio" value="2" data-server="@AdminConstants.NetworkDrive" onchange="javascript: var serverConfig = new MediaConfiguration(); serverConfig.DivVisiblity($('input[name=server]:checked').val());">
+                                    <span class="lbl padding-8">Network Drive</span>
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div id="networkserver" style="display:none;">
+                        <div class="col-sm-12 nopadding">
+                            <h3 class="section-heading margin-top-25"></h3>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    <label class="required">@MediaManager_Resources.HostedURL</label>
+                                </div>
+                                <div class="control-md" id="txturl">
+                                    @Html.TextBoxFor(model => model.URL, new { @id = "hostsiteurl" })
+                                    @Html.ValidationMessageFor(model => model.URL, "", new { @id = "errorRequiredURL" })
+                                </div>
+                                <div class="help-text">
+                                    <em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="The site domain hosted on IIS that will be used to fetch and display the images on webstore. example: media.mydomain.com"></em>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    <label class="required">@MediaManager_Resources.NetworkDrivePath</label>
+                                </div>
+                                <div class="control-md" id="txtnetworkUrl">
+                                    @Html.TextBoxFor(model => model.NetworkUrl, new { @id = "networkdrivepath" })
+                                    @Html.ValidationMessageFor(model => model.NetworkUrl, "", new { @id = "errorRequiredNetworkURL" })
+                                </div>
+                                <div class="help-text">
+                                    <em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="This is the actual path of the network drive. example: //<Server Name>/<Folder Path>"></em>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="otherServer" style="display:none;">
+                    <div class="col-sm-12 nopadding">
+                        <h3 class="section-heading margin-top-25">@MediaManager_Resources.LabelSelectStorageServer</h3>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label>@MediaManager_Resources.LabelStorageServer</label>
+                            </div>
+                            <div class="control-md">
+                                <select id="ddlServerName" name="ServerId" onchange="javascript: var serverConfig = new MediaConfiguration(); serverConfig.DropdownChange();">@Html.RenderBlock(Model.OptionsList) </select>
+                                <span id="ddlServerErr" class="field-validation-error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="partialPlaceHolder">
+                    </div>
+                    @Html.HiddenFor(model => model.IsLocalServer, new { id = "hdnIsLocalServer", ng_model = "hdnIsLocalServer" })
+                    @Html.HiddenFor(model => model.IsNetworkDrive, new { id = "hdnIsNetworkDrive", ng_model = "hdnIsNetworkDrive" })
+                    @Html.HiddenFor(model => model.MediaConfigurationId)
+                    @Html.HiddenFor(model => model.Server, new { id = "hdnServerName" })
+                </div>
+
+                <div>
+                    <h3 class="section-heading" data-test-selector="hdgDefaultImage">@Admin_Resources.LabelDefaultImage</h3>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label data-test-selector="lblImage">@Admin_Resources.LabelImage</label>
+                            </div>
+                            <div class="control-md">
+                                <div class="upload-images" id="divMediaId">
+                                    <img id="MediaId" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')" src="@mediapath" alt="Uploaded Image" class="img-responsive" data-test-selector="imgBrowseMedia">
+                                    <span class="change-image" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')">@Admin_Resources.LinkChange</span>
+                                    <input type="hidden" id="MediaId" name="MediaId" value="@mediaId">
+                                    <input type='hidden' value=@AdminConstants.ImageExtensions Id='hdnMediaId' />
+                                    @if (!Equals(mediapath, null) && !Equals(mediapath, ZnodeAdminSettings.DefaultImagePath))
+                                    {
+                                        <a class="upload-images-close" data-toggle="tooltip" data-placement="top" title="Remove" onclick="EditableText.prototype.RemoveImage('MediaId')"><em class="z-close-circle"></em></a>
+                                    }
+                                </div>
+                                @Html.HiddenFor(m => m.GlobalMediaDisplaySetting.MediaId, new { @data_test_selector = "hdnGlobalMediaId", @id= "MediaId" })
+                            </div>
+                            <div id="UploadMediaId" class="appendMediaModel">
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="section-heading margin-top-25" data-test-selector="hdgAutoImageResizeSettings">@Admin_Resources.LabelAutoImageResizeSettings</h3>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.GlobalMediaDisplaySetting.MaxLargeWidth, new { @class = "required", @data_test_selector = "lblMaxLargeWidth" })
+                            </div>
+                            <div class="control-sm">
+                                <div class="right-inner-icon">
+                                    @Html.TextBoxFor(model => model.GlobalMediaDisplaySetting.MaxLargeWidth, new { @data_test_selector = "txtMaxLargeWidth" })
+                                    <em class="unit-text">@Admin_Resources.LabelPixels</em>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.GlobalMediaDisplaySetting.MaxLargeWidth, "", new { @data_test_selector = "valMaxLargeWidth" })
+                            </div>                  
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.GlobalMediaDisplaySetting.MaxMediumWidth, new { @class = "required", @data_test_selector = "lblMaxMediumWidth" })
+                            </div>
+                            <div class="control-sm">
+                                <div class="right-inner-icon">
+                                    @Html.TextBoxFor(model => model.GlobalMediaDisplaySetting.MaxMediumWidth, new { @data_test_selector = "txtMaxMediumWidth" })
+                                    <em class="unit-text">@Admin_Resources.LabelPixels</em>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.GlobalMediaDisplaySetting.MaxMediumWidth, "", new { @data_test_selector = "valMaxMediumWidth" })
+                            </div>
+                          
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.GlobalMediaDisplaySetting.MaxSmallWidth, new { @class = "required", @data_test_selector = "lblMaxSmallWidth" })
+                            </div>
+                            <div class="control-sm">
+                                <div class="right-inner-icon">
+                                    @Html.TextBoxFor(model => model.GlobalMediaDisplaySetting.MaxSmallWidth, new { @data_test_selector = "txtMaxSmallWidth" })
+                                    <em class="unit-text">@Admin_Resources.LabelPixels</em>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.GlobalMediaDisplaySetting.MaxSmallWidth, "", new { @data_test_selector = "valMaxSmallWidth" })
+                            </div>
+      
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.GlobalMediaDisplaySetting.MaxCrossSellWidth, new { @class = "required", @data_test_selector = "lblMaxCrossSellWidth" })
+                            </div>
+                            <div class="control-sm">
+                                <div class="right-inner-icon">
+                                    @Html.TextBoxFor(model => model.GlobalMediaDisplaySetting.MaxCrossSellWidth, new { @data_test_selector = "txtMaxCrossSellWidth" })
+                                    <em class="unit-text">@Admin_Resources.LabelPixels</em>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.GlobalMediaDisplaySetting.MaxCrossSellWidth, "", new { @data_test_selector = "valMaxCrossSellWidth" })
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.GlobalMediaDisplaySetting.MaxThumbnailWidth, new { @class = "required", @data_test_selector = "lblMaxThumbnailWidth" })
+                            </div>
+                            <div class="control-sm">
+                                <div class="right-inner-icon">
+                                    @Html.TextBoxFor(model => model.GlobalMediaDisplaySetting.MaxThumbnailWidth, new { @data_test_selector = "txtMaxThumbnailWidth" })
+                                    <em class="unit-text">@Admin_Resources.LabelPixels</em>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.GlobalMediaDisplaySetting.MaxThumbnailWidth, "", new { @data_test_selector = "valMaxThumbnailWidth" })
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.GlobalMediaDisplaySetting.MaxSmallThumbnailWidth, new { @class = "required", @data_test_selector = "lblMaxSmallThumbnailWidth" })
+                            </div>
+                            <div class="control-sm">
+                                <div class="right-inner-icon">
+                                    @Html.TextBoxFor(model => model.GlobalMediaDisplaySetting.MaxSmallThumbnailWidth, new { @data_test_selector = "txtMaxSmallThumbnailWidth" })
+                                    <em class="unit-text">@Admin_Resources.LabelPixels</em>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.GlobalMediaDisplaySetting.MaxSmallThumbnailWidth, "", new { @data_test_selector = "valMaxSmallThumbnailWidth" })
+                            </div>                           
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-non"><button id="btnGenerateImages" class="btn-text btn-text-secondary btn-margin-left" onclick="return MediaConfiguration.prototype.GenerateImages();" type="button" data-test-selector="btnGenerateImages">@Admin_Resources.LabelGenerateImages</button></div>
+                    </div>
+                    @Html.HiddenFor(x => x.GlobalMediaDisplaySetting.GlobalMediaDisplaySettingsId)
+                </div>
+            </div>
+        }
+    </section>
+</div>
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup"></div>
+@Scripts.Render("~/bundles/jqueryval")
+

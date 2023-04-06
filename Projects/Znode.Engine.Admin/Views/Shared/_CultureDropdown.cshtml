@@ -1,0 +1,18 @@
+﻿@model List<SelectListItem>
+<div class="dropdown dropdown-button">
+    <a id="ddlCulture" href="#" class="btn-dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+        <em class="z-locale"></em><span id="ddlCultureSpan" data-test-selector="linkCulture" data-value="@Model.Where(x => x.Selected == true).Select(x => x.Value).FirstOrDefault()"> @Model.Where(x => x.Selected == true).Select(x => x.Text).FirstOrDefault()</span><em class="z-down"></em>
+    </a>
+
+    @if (Model.Count > 0)
+    {
+        <ul data-test-selector="listCultureContainer" class="dropdown-menu dropdown-menu-right dropdown-list-ul">
+            @foreach (var item in Model)
+            {
+                <li>
+                    <a href="#" data-value="@item.Value" data-test-selector="list@(item.Text)" onclick="ZnodeBase.prototype.ChangeCultureDropdown(this)">@item.Text</a>
+                </li>
+            }
+        </ul>
+    }
+</div>

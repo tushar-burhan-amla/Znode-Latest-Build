@@ -1,0 +1,11 @@
+﻿@model WidgetParameter
+<div id="recommended-view-products" class="recommended-view-items" data-test-selector="divRecommendedProduct">    
+</div>
+<script type="text/javascript">
+    var ProductSku = $("div[id='layout-product']").attr("data-sku");
+    if (!ProductSku) ProductSku = "";    
+    $.ajax({ url: "/Product/GetRecommendedProducts?widgetCode=@Model.WidgetCode&productSku=" + ProductSku, type: "get" }).done(function (t) {
+        $(".recommended-view-items").html(t)
+        ZnodeBase.prototype.onImageError();
+    });
+</script>

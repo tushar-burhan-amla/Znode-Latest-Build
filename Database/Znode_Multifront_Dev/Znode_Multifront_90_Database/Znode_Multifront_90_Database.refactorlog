@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="67251c81-8e62-44e1-ac38-c4f0a9f8eb6f" ChangeDateTime="02/15/2016 09:04:44">
+    <Property Name="ElementName" Value="[dbo].[ZnodeInputValidationRule].[MoidifiedBy]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ZnodeInputValidationRule]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ModifiedBy" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="62c46f6c-e257-4865-b4aa-97c465078e51" ChangeDateTime="02/16/2018 13:42:59">
+    <Property Name="ElementName" Value="[dbo].[ZnodePimCategoryHierarchy].[ParentPimCategoryHierarchyId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ZnodePimCategoryHierarchy]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PimParentCategoryId" />
+  </Operation>
+  
+  <Operation Name="Rename Refactor" Key="d323fdaa-c4eb-4817-a2f4-ee07de5b70f2" ChangeDateTime="05/13/2021 04:57:23">
+    <Property Name="ElementName" Value="[dbo].[ZnodeAccount].[Desription]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ZnodeAccount]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Description" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="558f52ad-1665-4d87-a4d0-d274a61c896c" ChangeDateTime="03/11/2022 13:35:03">
+    <Property Name="ElementName" Value="[dbo].[ZnodeOrderPayment].[PaymentGatewayId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ZnodeOrderPayment]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PaymentSettingId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e8f86a44-487d-4c6e-b73b-bc0b46b15ceb" ChangeDateTime="09/02/2022 09:54:34">
+    <Property Name="ElementName" Value="[dbo].[ZnodePortalCatalog].[Old]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ZnodePortalCatalog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OldPublishCatalogId" />
+  </Operation>
+</Operations>

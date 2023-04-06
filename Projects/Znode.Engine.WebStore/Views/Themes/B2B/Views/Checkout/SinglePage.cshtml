@@ -1,0 +1,349 @@
+﻿@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.WebStore.Agents
+@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Helpers;
+@model Znode.Engine.WebStore.ViewModels.CheckoutViewModel
+
+@{
+    string _display = Convert.ToString(Request.QueryString["mode"]) == "guest" ? Model.UserId < 1 ? "display:block;" : "display:none;" : "display:none;";
+    bool enablePerOrderlimit = Convert.ToBoolean(PortalAgent.CurrentPortal?.GlobalAttributes?.Attributes?.FirstOrDefault(x => x.AttributeCode == WebStoreConstants.EnableUserOrderLimit)?.AttributeValue);
+    bool enableUserOrderAnnualLimit = Convert.ToBoolean(PortalAgent.CurrentPortal?.GlobalAttributes?.Attributes?.FirstOrDefault(x => x.AttributeCode == WebStoreConstants.EnableUserOrderAnnualLimit)?.AttributeValue);
+    UserViewModel userViewModel = SessionHelper.GetDataFromSession<UserViewModel>(WebStoreConstants.UserAccountKey);
+    string cultureCode = PortalAgent.CurrentPortal.CultureCode;
+    string perOrderLimitWithCurrency = HelperMethods.FormatPriceWithCurrency(userViewModel?.PerOrderLimit, cultureCode);
+    string annualOrderLimitWithCurrency = HelperMethods.FormatPriceWithCurrency(userViewModel?.AnnualOrderLimit, cultureCode);
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    bool isRegistered = User.Identity.IsAuthenticated;
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+    Layout = @_fileLocation + "/Views/Shared/_Layout.cshtml";
+    string disablebutton = (Model.IsLevelApprovedOrRejected
+    && !string.Equals(Model.OrderStatus, ZnodeOrderStatusEnum.DRAFT.ToString(), StringComparison.CurrentCultureIgnoreCase)
+    && !string.Equals(Model.OrderStatus, ZnodeOrderStatusEnum.ORDERED.ToString(), StringComparison.CurrentCultureIgnoreCase))
+    ? "disabled='disabled'" : ""; 
+    string paymentApiResponseHeader = ViewBag.PaymentApiResponseHeader;
+}
+
+<div id="divSinglePageCheckout" class="col">
+    @Html.Partial("../_LearnMore", Model)
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                @if (Model.IsQuoteRequest)
+                {
+                    <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a>@WebStore_Resources.TitleQuoteRequest</div>
+                }
+                else
+                {
+                    <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a>@WebStore_Resources.TitleCheckout</div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row b2b-checkout-page">
+        <div class="container">
+            <div class="row single-page-checkout">
+                <div class="col-12">
+                    @if (Model.IsQuoteRequest)
+                    {
+                        <h1 class="page-title">@WebStore_Resources.TitleQuoteRequest</h1>
+                    }
+                    else
+                    {
+                        <h1 class="page-title">@WebStore_Resources.TitleSinglePageCheckoutProcess</h1>
+                    }
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12 col-lg-7 pr-lg-2">
+                            <div class="col-12 shipping-address">
+                                @{ Html.RenderAction("AccountAddress", "Checkout", new { isQuoteRequest = Model.IsQuoteRequest, isAddressFromSession = true });}
+                                <div style="@_display" class="mb-3">
+                                    <a data-target="#sign-in-nav" class="OpenNav" href="#" id="btnSignIn" onclick="User.prototype.LoginInPopup()">Existing Customer Login</a>
+                                </div>
+                                <div style="@_display" class="mb-4">
+                                    @Ajax.ActionLink("Create an account for later use", "Signup", "User", null,
+                                    new AjaxOptions
+                                    {
+                                    UpdateTargetId = "address-popup-content",
+                                    InsertionMode = InsertionMode.Replace,
+                                    HttpMethod = "GET",
+                                    OnBegin = "$('.address-popup').modal('hide');",
+                                    OnSuccess = "$('form').removeData('validator'); $('form').removeData('unobtrusiveValidation'); $.validator.unobtrusive.parse('form');"
+                                    }, new { @data_isquickview = "true", @data_toggle = "modal", @data_target = ".address-popup" })
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12 col-md p-0 mb-4">
+                                        <div class="col-12 p-0 h-100 b2b-block">
+                                            <h3 class="block-title">@WebStore_Resources.SinglePageCheckoutShippingMethod</h3>
+                                            <div class="row">
+                                                <div class="shipping-method col-xl-6">
+                                                    <div id="loaderId"> </div>
+                                                </div>
+                                                <div class="col-xl-6 py-3 ml-4 ml-xl-0">
+                                                    <div id="divInHandDate" class="row align-items-center in-hand-block">
+                                                        <div class="col-md-6">
+                                                            <label class="font-weight-bold pr-2" data_test_selector="lblInHandDate">@WebStore_Resources.LabelInHandDate:</label>
+                                                        </div>
+                                                        <div class="col-md-6 pl-md-0">
+                                                            <div class="mw-350">
+                                                                <div class="hand-date-picker mr-3">
+                                                                    @Html.TextBoxFor(model => model.InHandDate, Model?.InHandDate != null ? Model.InHandDate.ToDateTimeFormat() : string.Empty, new { @mindate = HelperMethods.GetDateTime(), @class = "datepicker", @group = "inhanddate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtInHandDate" })
+                                                                    <span class="icon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></span>
+                                                                </div>
+                                                            </div>
+                                                            <span class="text-danger field-validation-error" id="spamDate"></span>
+                                                            @Html.ValidationMessageFor(model => model.InHandDate, "", new { @data_test_selector = "valInHandDate" })
+                                                        </div>
+                                                    </div>
+
+                                                    @if (Model?.ShippingConstraints?.Count > 0)
+                                                    {
+                                                        var selectedShippingConstraint = Model.ShippingConstraints.FirstOrDefault(w => w.IsSelected == true);
+
+                                                        <div class="shipping-constraints row pt-4 pt-md-3">
+                                                            <div class="col-md-6">
+                                                                <label class="font-weight-bold pr-2" data_test_selector="lblShippingConstraintCode">@WebStore_Resources.LabelShippingConstraintsCode:</label>
+                                                            </div>
+                                                            <div class="col-md-6 ml-3 ml-md-0 pl-md-0 text-break">
+                                                                @for (int i = 0; i < Model.ShippingConstraints.Count; i++)
+                                                                {
+                                                                    <div class="styled-input d-block mb-2" data-test-selector="div_@Model.ShippingConstraints[i].ShippingConstraintCode">
+                                                                        <input type="radio" id="@Model.ShippingConstraints[i].ShippingConstraintCode.Replace(" ", "_")" name="ShippingConstraintCode" value="@Model.ShippingConstraints[i].ShippingConstraintCode" data-shipping-name="@WebUtility.HtmlDecode(Model.ShippingConstraints[i].Description)" data-test-selector="chk@(Model.ShippingConstraints[i].ShippingConstraintCode)" @(((selectedShippingConstraint == null && i == 0) || Model.ShippingConstraints[i].IsSelected) ? "checked=checked" : "") />
+                                                                        <label data-test-selector="lbl@(Model.ShippingConstraints[i].ShippingConstraintCode)" for="@Model.ShippingConstraints[i].ShippingConstraintCode.Replace(" ", " _")">@WebUtility.HtmlDecode(Model.ShippingConstraints[i].Description)</label>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if (Model.IsQuoteRequest == false)
+                                {
+                                    <div class="row">
+                                        <div id="divSinglePagePayment" class="col-12 col-md single-page-payment col-12 p-0 col-md mb-4">
+                                            @{Html.RenderAction("PaymentOptions", "Checkout", new { isQuote = Model.IsQuoteRequest, isPendingOrder = Model.IsPendingOrderRequest });}
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-5 d-flex flex-column">
+                            <div class="p-0 quotebutton hide-in-amazon-checkout text-right order-1 order-lg-0">
+                                @if (Model.IsQuoteRequest)
+                                {
+                                    <button type="submit" onclick="Quote.prototype.SubmitQuote()" id="btnPlaceQuote" name="singleCheckoutSubmitPayment" class="btn-primary btn w-100 btnPlaceQuote mb-3">
+                                        @WebStore_Resources.ButtonSubmitQuote
+                                    </button>
+                                }
+                                else if (Model.ShowPlaceOrderButton && string.Equals(Model.OrderStatus, ZnodeOrderStatusEnum.APPROVED.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                                {
+                                    <button type="submit" @disablebutton onclick="Checkout.prototype.SubmitOrder()" id="btnCompleteCheckout" name="singleCheckoutSubmitPayment" class="btn btn-primary w-100 checkoutButton btnCompleteCheckout mb-3">
+                                        @if (Model.QuoteId > 0)
+                                        {
+                                            if (!Model.IsLastApprover)
+                                            {
+                                                @WebStore_Resources.LabelUpdateAndApproveOrder
+                                            }
+                                            else
+                                            {
+                                                @WebStore_Resources.LabelApproveAndPlaceOrder
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @WebStore_Resources.TextPlaceOrder
+                                        }
+                                    </button>
+                                }
+                                else if ((Model.ShowPlaceOrderButton || (string.Equals(Model.PermissionCode, ZnodePermissionCodeEnum.ARA.ToString(), StringComparison.CurrentCultureIgnoreCase) || string.Equals(Model.PermissionCode, ZnodePermissionCodeEnum.SRA.ToString(), StringComparison.CurrentCultureIgnoreCase))) || (string.Equals(Model.ApprovalType, ZnodePortalApprovalsLevelEnum.Payment.ToString(), StringComparison.CurrentCultureIgnoreCase) && Model.EnableApprovalRouting))
+                                {
+                                    string onclickFunction = (Model.QuoteId > 0) ? "Checkout.prototype.SubmitForApproval()" : "Checkout.prototype.SubmitOrder()";
+                                    <button type="submit" @disablebutton onclick="@onclickFunction" id="btnCompleteCheckout" name="singleCheckoutSubmitQuote" class="btn btn-primary w-100 checkoutButton btnCompleteCheckout mb-3">
+                                        @if (Model.QuoteId > 0)
+                                        {
+                                            if (!Model.IsLastApprover)
+                                            {
+                                                @WebStore_Resources.LabelUpdateAndApproveOrder
+                                            }
+                                            else
+                                            {
+                                                @WebStore_Resources.LabelApproveAndPlaceOrder
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @WebStore_Resources.TextPlaceOrder
+                                        }
+                                    </button>
+                                }
+                                else if ((Model.ShowPlaceOrderButton || (string.Equals(Model.PermissionCode, ZnodePermissionCodeEnum.ARA.ToString(), StringComparison.CurrentCultureIgnoreCase) || string.Equals(Model.PermissionCode, ZnodePermissionCodeEnum.SRA.ToString(), StringComparison.CurrentCultureIgnoreCase))) || (string.Equals(Model.ApprovalType, ZnodePortalApprovalsLevelEnum.Payment.ToString(), StringComparison.CurrentCultureIgnoreCase) && Model.EnableApprovalRouting))
+                                {
+                                    <button type="submit" @disablebutton onclick="Checkout.prototype.SubmitForApproval()" id="singleCheckoutSubmitQuote" name="singleCheckoutSubmitQuote" class="btn btn-primary w-100 singlecheckoutsubmitquote mb-3">
+                                        @if (Model.QuoteId > 0)
+                                        {
+                                            if (!Model.IsLastApprover)
+                                            {
+                                                @WebStore_Resources.LabelUpdateAndApproveOrder
+                                            }
+                                            else
+                                            {
+                                                @WebStore_Resources.LabelApproveAndPlaceOrder
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @WebStore_Resources.ButtonSubmitForApproval
+                                        }
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" @disablebutton onclick="Checkout.prototype.SubmitOrder()" id="btnCompleteCheckout" name="singleCheckoutSubmitPayment" class="btn btn-primary w-100 btn-margin-left btnCompleteCheckout mb-3">
+                                        @if (Model.QuoteId > 0)
+                                        {
+                                            if (!Model.IsLastApprover)
+                                            {
+                                                @WebStore_Resources.LabelUpdateAndApproveOrder
+                                            }
+                                            else
+                                            {
+                                                @WebStore_Resources.LabelApproveAndPlaceOrder
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @WebStore_Resources.TextPlaceOrder
+                                        }
+                                    </button>
+                                }
+                            </div>
+                            <div class="review-order mb-3 order-0 order-lg-1">
+                                <div id="cart-review-content" class="row no-gutters">
+                                    @{
+                                        if (Model.ShippingId > 0)
+                                        {
+                                            Html.RenderAction("CartReview", "Checkout", new { shippingOptionId = Model.ShippingId, isQuoteRequest = Model.IsQuoteRequest });
+                                        }
+                                        else
+                                        {
+                                            Html.RenderAction("CartReview", "Checkout", new { isQuoteRequest = Model.IsQuoteRequest });
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.QuoteId)
+    @Html.HiddenFor(m => m.OrderStatus)
+    @Html.HiddenFor(m => m.PermissionCode)
+    @Html.HiddenFor(m => m.RoleName)
+    @Html.HiddenFor(m => m.ShippingId)
+    @Html.HiddenFor(model => model.CreditCardNumber, new { @id = "hdnCreditCardNumber" })
+    @Html.Hidden("EnablePerOrderlimit", enablePerOrderlimit)
+    @Html.Hidden("EnableUserOrderAnnualLimit", enableUserOrderAnnualLimit)
+    @Html.Hidden("PerOrderLimit", userViewModel?.PerOrderLimit)
+    @Html.Hidden("AnnualOrderLimit", userViewModel?.AnnualOrderLimit)
+    @Html.Hidden("AnnualBalanceOrderAmount", userViewModel?.AnnualBalanceOrderAmount)
+    @Html.Hidden("PerOrderLimitWithCurrency", perOrderLimitWithCurrency)
+    @Html.Hidden("AnnualOrderLimitWithCurrency", annualOrderLimitWithCurrency)
+    @Html.HiddenFor(m => m.IsRequireApprovalRouting)
+    @Html.HiddenFor(m => m.EnableApprovalRouting)
+    @Html.HiddenFor(m => m.ApprovalType)
+    @Html.Hidden("hdnPortalId", portalId)
+    @Html.HiddenFor(m => m.OrderLimit)
+    @Html.HiddenFor(m => m.IsLastApprover, new { @id = "hdnIsLastApprover" })
+    @Html.HiddenFor(m => m.IsLevelApprovedOrRejected, new { @id = "hdnIsLevelApprovedOrRejected" })
+    @Html.HiddenFor(m => m.QuoteId, new { id = "OmsQuoteId" })
+    @Html.HiddenFor(m => m.ApprovalType)
+    @Html.HiddenFor(m => m.IsQuoteRequest)
+    @Html.Hidden("hdnPaymentApiResponseHeader", paymentApiResponseHeader)
+    @Html.HiddenFor(m => m.IsPendingOrderRequest)
+    <!-- Modal -->
+    <div class="modal fade" id="PaymentModal" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog compare-product-popup modal-dialog-centered">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" data-test-selector="lblPaymentApplMsg">@WebStore_Resources.LabelPaymentApplication</h4>
+                </div>
+                <div class="modal-body">
+                    <p data-test-selector="lblPaymentMethodMsg">@WebStore_Resources.TextPaymentMethod</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="PaypalPaymentModal" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog compare-product-popup modal-dialog-centered">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" data-test-selector="lblPaymentApplMsg">@WebStore_Resources.LabelPaymentApplication</h4>
+                </div>
+                <div class="modal-body">
+                    <p data-test-selector="lblPaypalPaymentMethodMsg">@WebStore_Resources.TextPaypalPaymentMethod</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Error Payment Modal-->
+    <div class="modal fade" id="ErrorPaymentModal" role="dialog">
+        <div class="modal-dialog compare-product-popup">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">@WebStore_Resources.LabelPaymentApplication</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i aria-hidden="true" class="close-circle-icon"></i></button>
+                </div>
+                <div class="modal-body">
+                    <p data-test-selector="lblPaymentMethodErrMsg" class="font-16"></p>
+                    <div class="col-12 margin-top-bottom p-0">
+                        <div class="pull-right">
+                            <button data-test-selector="btnPaymentOk" type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Address Popup-->
+<div class="modal fade address-popup" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="" id="address-popup-content">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        Checkout.prototype.ChangeSubmitOrderButtonText();
+        Checkout.prototype.ShippingOptions(false);
+        Checkout.prototype.CalculateShipping("");
+        $(".cart-item-remove").remove();
+    });
+    $(document).off("click", "#address-popup-content .close");
+    $(document).on("click", "#address-popup-content .close", function () {
+        location.reload();
+    });
+</script>
+@if(Helper.IsEnhancedEcommerceTrackingEnabled())
+{
+    <script>
+        $("#btnCompleteCheckout").on("click", function () {
+            GoogleAnalytics.prototype.SendEcommerceCheckoutOptionData(4, "");
+        })
+    </script>
+}

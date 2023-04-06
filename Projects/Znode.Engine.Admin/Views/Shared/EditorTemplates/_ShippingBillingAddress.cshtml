@@ -1,0 +1,106 @@
+﻿@model Znode.Engine.Admin.ViewModels.AddressViewModel
+
+<div class="form-group">
+    <div class="col-sm-4 nopadding">
+        @Html.LabelFor(m => m.Address1, new { @class = "required" })
+    </div>
+    <div class="col-sm-8">
+        @Html.TextBoxFor(m => m.Address1)
+        @Html.ValidationMessageFor(m => m.Address1)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-4 nopadding">
+        @Html.LabelFor(m => m.FirstName, new { @class = "required" })
+    </div>
+    <div class="col-sm-8">
+        @Html.TextBoxFor(m => m.FirstName)
+        @Html.ValidationMessageFor(m => m.FirstName)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-4 nopadding">
+        @Html.LabelFor(m => m.LastName, new { @class = "required" })
+    </div>
+    <div class="col-sm-8">
+        @Html.TextBoxFor(m => m.LastName)
+        @Html.ValidationMessageFor(m => m.LastName)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-4 nopadding">
+        @Html.LabelFor(m => m.CompanyName)
+    </div>
+    <div class="col-sm-8">
+        @Html.TextBoxFor(m => m.CompanyName)
+        @Html.ValidationMessageFor(m => m.CompanyName)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-4 nopadding">
+        @Html.LabelFor(m => m.Address2, new { @class = "required" })
+    </div>
+    <div class="col-sm-8">
+        @Html.TextBoxFor(m => m.Address2)
+        @Html.ValidationMessageFor(m => m.Address2)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-4 nopadding">
+        @Html.LabelFor(m => m.Address3)
+    </div>
+    <div class="col-sm-8">
+        @Html.TextBoxFor(m => m.Address3)
+        @Html.ValidationMessageFor(m => m.Address3)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-4 nopadding">
+        @Html.LabelFor(m => m.CityName, new { @class = "required" })
+    </div>
+    <div class="col-sm-8">
+        @Html.TextBoxFor(m => m.CityName)
+        @Html.ValidationMessageFor(m => m.CityName)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-4 nopadding">
+        @Html.LabelFor(m => m.StateName, new { @class = "required" })
+    </div>
+    <div class="col-sm-8">
+        @Html.TextBoxFor(m => m.StateName, new { maxlength = "2" })
+        @Html.ValidationMessageFor(m => m.StateName)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-4 nopadding">
+        @Html.LabelFor(m => m.PostalCode, new { @class = "required" })
+    </div>
+    <div class="col-sm-8">
+        @Html.TextBoxFor(m => m.PostalCode)
+        @Html.ValidationMessageFor(m => m.PostalCode)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-4 nopadding">
+        @Html.LabelFor(m => m.Countries)
+    </div>
+    <div class="col-sm-8">
+        @Html.DropDownListFor(m => m.CountryName, Model.Countries)
+        @Html.ValidationMessageFor(m => m.Countries)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-4 nopadding">
+        @Html.LabelFor(m => m.PhoneNumber, new { @class = "required" })
+    </div>
+    <div class="col-sm-8">
+        @Html.TextBoxFor(m => m.PhoneNumber)
+        @Html.ValidationMessageFor(m => m.PhoneNumber)
+    </div>
+</div>
+
+
+
+
+

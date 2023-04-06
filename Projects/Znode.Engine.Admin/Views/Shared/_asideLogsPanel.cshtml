@@ -1,0 +1,13 @@
+﻿<aside>
+    <button type="button" id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelLogConfiguration, "ConfigureLogs", "LogMessage", null, new { @data_test_selector = "linkLogConfiguration" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelErrorLogs, "List", "LogMessage", null, new { @data_test_selector = "linkErrorLogs" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelEventLogs, "EventLogList", "LogMessage", null, new { @data_test_selector = "linkEventLogs" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelIntegrationLogs, "IntegrationLogList", "LogMessage", null, new { @data_test_selector = "linkIntegrationLogs" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelDataBaseLogs, "DatabaseLogList", "LogMessage", null, new { @data_test_selector = "linkDataBaseLogs" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelImpersonationLogs, "ImpersonationLogList", "LogMessage", null, new { @data_test_selector = "linkImpersonationLogs" })</li>
+        </ul>
+    </div>
+</aside>

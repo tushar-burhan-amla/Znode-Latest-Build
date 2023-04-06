@@ -1,0 +1,79 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model ImpersonationViewModel
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities;
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront; ;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgUser">@string.Format(@Admin_Resources.TitleManage, "User")<em class="z-minus"></em><span>@TempData["CustomerDisplayName" + @Model.UserId]</span></h1>
+    <div class="pull-right btn-container">
+        @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "CustomersList", "Customer", null, new { @class = "btn-text-icon", @data_test_selector = "linkBack" })
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/views/User/_asidecustomermanagepanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmImpersonateCustomerAccount" }))
+        {
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(@Admin_Resources.LabelStore, new { @class = "required", @data_test_selector = "lblStore" })
+
+                    </div>
+                    <div class="control-md">
+                        @if (Model.IsLock)
+                        {
+                            @Html.DropDownListFor(model => model.PortalId, Model.AvailablePortals, new { @id = "ddl_Impersonate_Portal_list", @disabled = "disabled", @data_test_selector = "drpStoreList" })
+                        }
+                        else if (Model.AvailablePortals.Count > 1)
+                        {
+                            @Html.DropDownListFor(model => model.PortalId, Model.AvailablePortals, new { @id = "ddl_Impersonate_Portal_list", @data_test_selector = "drpStoreList" })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(model => model.PortalId, Model.AvailablePortals, new { @id = "ddl_Impersonate_Portal_list", @disabled = "disabled", @data_test_selector = "drpStoreList" })
+                        }
+
+                        <span class="error-msg" id="errorRequiredddl_portal_list" data-test-selector="valStore"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label data-test-selector="lblCustomerImpersonation">@Admin_Resources.LabelUserImpersonation</label>
+                    </div>
+                    <div class="control-md">
+                        @if (Model.IsLock)
+                        {
+                            <button type = "button" id = "btnCustomerImpersonation" disabled = "disabled" class="btn-text btn-text-secondary btn-margin-left" data-toggle='modal' data-target='#PopUpConfirmImpersonation' data-test-selector="btnImpersonation" onclick="User.prototype.ImpersonateUsers()">@Admin_Resources.LabelUserStartImpersonation</button>
+                        }
+                        else if (Model.AvailablePortals.Count > 1)
+                        {
+                            <button type = "button" id = "btnCustomerImpersonation" disabled = "disabled" class="btn-text btn-text-secondary btn-margin-left" data-toggle='modal' data-target='#PopUpConfirmImpersonation' data-test-selector="btnImpersonation" onclick="User.prototype.ImpersonateUsers()">@Admin_Resources.LabelUserStartImpersonation</button>
+                        }
+                        else
+                        {
+                            <button type="button" id="btnCustomerImpersonation" class="btn-text btn-text-secondary btn-margin-left" data-toggle='modal' data-target='#PopUpConfirmImpersonation' data-test-selector="btnImpersonation" onclick="User.prototype.ImpersonateUsers()">@Admin_Resources.LabelUserStartImpersonation</button>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.UserId)
+            @Html.HiddenFor(model => model.IsLock)
+            @Html.HiddenFor(model => model.PortalId, new { @id = "hdnImpersonatePortalId" })
+            <input type="hidden" id="hdnImpersonateToken" name="more" />
+            <input type="hidden" id="hdnImpersonateInvalidTokenMsg" name="more" value="@Admin_Resources.HttpCode_500_RequestValidationErrorMsg" />
+        }
+    </section>
+</div>

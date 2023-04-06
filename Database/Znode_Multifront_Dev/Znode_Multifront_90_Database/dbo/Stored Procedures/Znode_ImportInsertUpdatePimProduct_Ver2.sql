@@ -1,0 +1,524 @@
+﻿create PROCEDURE [dbo].[Znode_ImportInsertUpdatePimProduct_Ver2]
+(
+    @PimProductDetail  PIMPRODUCTDETAIL READONLY,
+    @UserId            INT       ,
+    @status            BIT    OUT,
+    @IsNotReturnOutput BIT    = 0,
+	@CopyPimProductId  INT	  = 0 )
+AS
+   /*
+     Summary : To Insert / Update single Product with multiple attribute values 
+     Update Logic: 
+*/
+     BEGIN
+         BEGIN TRAN A;
+         BEGIN TRY
+			 DECLARE @PimProductId INT;
+			 DECLARE @TBL_PimProductId TABLE(PimAttributeValueId INT,ZnodePimAttributeValueLocaleId INT );
+			 DECLARE @TBL_CopyPimProductId TABLE(PimAttributeValueId INT,OldPimAttributeValueId INT);
+			 DECLARE @PimDefaultFamily INT= dbo.Fn_GetDefaultPimProductFamilyId()
+			 DECLARE @DefaultLocaleId INT= dbo.Fn_GetDefaultLocaleId();
+			 DECLARE @GetDate DATETIME = dbo.Fn_GetDate();
+			 DECLARE @TBL_DefaultAttributeId TABLE (PimAttributeId INT , AttributeCode VARCHAR(600))
+			 DECLARE @TBL_MediaAttributeId TABLE (PimAttributeId INT , AttributeCode VARCHAR(600))
+			 DECLARE @TBL_TextAreaAttributeId TABLE (PimAttributeId INT , AttributeCode VARCHAR(600))
+			 DECLARE @TBL_MediaAttributeValue TABLE (PimAttributeValueId INT ,LocaleId INT ,AttributeValue VARCHAr(300),MediaId INT)
+			 DECLARE @TBL_DefaultAttributeValue TABLE (PimAttributeValueId INT , LocaleId INT , AttributeValue INT)
+			 DECLARE @ZnodePimAttributeValue TABLE (PimAttributeValueId  INT, PimAttributeFamilyId INT,PimAttributeId INT);
+
+			 DECLARE @AssociatedProduct VARCHAR(4000);
+			 DECLARE @ConfigureAttributeId VARCHAR(4000);
+			 DECLARE @ConfigureFamilyId VARCHAR(4000);
+			 DECLARE @PimAttributeFamilyId INT;
+			 DECLARE @LocaleId INT 
+             
+			 INSERT INTO @TBL_DefaultAttributeId (PimAttributeId,AttributeCode)
+			 SELECT PimAttributeId,AttributeCode FROM  [dbo].[Fn_GetDefaultAttributeId] ()
+			 
+			 INSERT INTO @TBL_MediaAttributeId (PimAttributeId,AttributeCode)
+			 SELECT PimAttributeId,AttributeCode FROM [dbo].[Fn_GetProductMediaAttributeId]()
+
+			 INSERT INTO @TBL_TextAreaAttributeId (PimAttributeId ,AttributeCode)
+			 SELECT PimAttributeId, AttributeCode   FROM [dbo].[Fn_GetTextAreaAttributeId]()
+
+			 
+			 SELECT TOP 1 @PimAttributeFamilyId = PimAttributeFamilyId
+                FROM @PimProductDetail;
+
+			 SELECT TOP 1 @LocaleId = LocaleId
+                FROM @PimProductDetail;
+
+             -- Retrive input productId from @PimProductDetail table ( having multiple attribute values with common productId) 
+
+             SELECT TOP 1 @PimProductId = PimProductId
+             FROM @PimProductDetail;
+			
+             IF ISNULL(@PimProductId, 0) = 0
+                 BEGIN
+                     INSERT INTO ZnodePimProduct
+                     (PimAttributeFamilyId,
+                      CreatedBy,
+                      CreatedDate,
+                      ModifiedBy,
+                      ModifiedDate
+                     )
+                            SELECT @PimAttributeFamilyId,
+                                   @UserId,
+                                   @GetDate,
+                                   @UserId,
+                                   @GetDate;
+                     SET @PimProductId = SCOPE_IDENTITY();
+                 END;
+             ELSE 
+                 BEGIN
+                     UPDATE ZNodePimProduct
+                       SET
+                           PimAttributeFamilyId = @PimAttributeFamilyId,
+                           ModifiedBy = @UserId,
+                           ModifiedDate = @GetDate
+                     WHERE PimProductId = @PimProductId;
+                     
+					 INSERT INTO @TBL_PimProductId(PimAttributeValueId)
+					 SELECT ZPAV.PimAttributeValueId
+                     FROM ZnodePimAttributeValue ZPAV
+					 INNER JOIN ZnodePimAttribute ZPA ON (ZPA.PimAttributeId = ZPAV.PimAttributeId AND ZPA.IsLocalizable = 1)
+					 INNER JOIN ZnodePimFamilyGroupMapper ZPFGMI  ON (ZPFGMI.PimAttributeId = ZPAV.PimAttributeId AND ZPFGMI.PimAttributeFamilyId = @PimAttributeFamilyId)
+					 WHERE ZPAV.PimProductId = @PimProductId
+					 AND NOT EXISTS
+                            (
+                                SELECT TOP 1 1
+                                FROM @PimProductDetail TBPDI
+                                WHERE TBPDI.PimAttributeId = ZPAV.PimAttributeId
+                                      AND TBPDI.PimProductId = ZPAV.PimProductId
+							 )
+                     
+					-- SELECT * FROM @TBL_PimProductId
+
+
+                     DELETE FROM ZnodePimAttributeValueLocale
+                     WHERE EXISTS
+                     (
+                         SELECT TOP 1 1
+                         FROM @TBL_PimProductId TBPD
+                         WHERE TBPD.PimAttributeValueId = ZnodePimAttributeValueLocale.PimAttributeValueId 
+								
+                     ) AND LocaleId = @LocaleId;
+					 DELETE  ZnodePimProductAttributeDefaultValue 
+					  WHERE EXISTS
+                     (
+                         SELECT TOP 1 1
+                         FROM @TBL_PimProductId TBPD
+                         WHERE TBPD.PimAttributeValueId = ZnodePimProductAttributeDefaultValue.PimAttributeValueId 
+								
+                     ) AND LocaleId = @LocaleId;
+					 DELETE FROM ZnodePimProductAttributeMedia 
+					  WHERE EXISTS
+                     (
+                         SELECT TOP 1 1
+                         FROM @TBL_PimProductId TBPD
+                         WHERE TBPD.PimAttributeValueId = ZnodePimProductAttributeMedia.PimAttributeValueId 
+								
+                     ) AND LocaleId = @LocaleId;
+					 DELETE FROM ZnodePimProductAttributeTextAreaValue
+					   WHERE EXISTS
+                     (
+                         SELECT TOP 1 1
+                         FROM @TBL_PimProductId TBPD
+                         WHERE TBPD.PimAttributeValueId = ZnodePimProductAttributeTextAreaValue.PimAttributeValueId 
+								
+                     ) AND LocaleId = @LocaleId;
+                     DELETE FROM ZnodePimAttributeValue
+                     WHERE EXISTS
+                     (
+                         SELECT TOP 1 1
+                         FROM @TBL_PimProductId TBPD
+                         WHERE TBPD.PimAttributeValueId = ZnodePimAttributeValue.PimAttributeValueId
+                     )
+					 AND NOT EXISTS (SELECT TOP 1 1 FROM ZnodePimAttributeValueLocale ZPVD WHERE ZPVD.PimAttributeValueId = ZnodePimAttributeValue.PimAttributeValueId )
+					 
+					 ;
+                 END;
+		
+			 Insert into ZnodePimAttributeValue (PimAttributeFamilyId,PimProductId,PimAttributeId,PimAttributeDefaultValueId,--,AttributeValue
+			 CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+			 OUTPUT INSERTED.PimAttributeValueId,
+			 INSERTED.PimAttributeFamilyId,
+			 INSERTED.PimAttributeId
+			 INTO @ZnodePimAttributeValue
+			 Select  CASE WHEN PPD.PimAttributeFamilyId = 0 THEN @PimDefaultFamily ELSE PPD.PimAttributeFamilyId END,
+			 @PimProductId, PPD.PimAttributeId, CASE WHEN PPD.ProductAttributeDefaultValueId = 0 THEN NULL ELSE PPD.ProductAttributeDefaultValueId END, 
+			 @UserId,@GetDate,@UserId,@GetDate  from @pimProductDetail PPD
+				
+        		 
+
+
+		  --------  MERGE INTO ZnodePimAttributeValue TARGET
+    --------          USING @pimProductDetail SOURCE
+    --------          ON(
+				--------TARGET.PimProductId = @PimProductId
+    --------                AND TARGET.PimAttributeId = SOURCE.PimAttributeId)
+    --------                --AND ISNULL(TARGET.PimAttributeFamilyId, 0) = ISNULL(SOURCE.PimAttributeFamilyId, 0))
+    --------                WHEN MATCHED
+    --------                THEN UPDATE SET
+    --------                             TARGET.PimAttributeFamilyId = CASE
+    --------                                                               WHEN Source.PimAttributeFamilyId = 0
+    --------                                                               THEN NULL
+    --------                                                               ELSE Source.PimAttributeFamilyId
+    --------                                                           END,
+    --------                             TARGET.PimAttributeDefaultValueId = CASE
+    --------                                                                     WHEN SOURCE.ProductAttributeDefaultValueId = 0
+    --------                                                                     THEN NULL
+    --------                                                                     ELSE SOURCE.ProductAttributeDefaultValueId
+    --------                                                                 END, 
+    --------                             -- ,TARGET.AttributeValue					= SOURCE.AttributeValue
+    --------                             TARGET.CreatedBy = @UserId,
+    --------                             TARGET.CreatedDate = @GetDate,
+    --------                             TARGET.ModifiedBy = @UserId,
+    --------                             TARGET.ModifiedDate = @GetDate
+    --------             WHEN NOT MATCHED
+    --------             THEN INSERT(PimAttributeFamilyId,
+    --------                         PimProductId,
+    --------                         PimAttributeId,
+    --------                         PimAttributeDefaultValueId,
+    --------                         --,AttributeValue
+    --------                         CreatedBy,
+    --------                         CreatedDate,
+    --------                         ModifiedBy,
+    --------                         ModifiedDate) VALUES
+    --------         (CASE
+    --------              WHEN Source.PimAttributeFamilyId = 0
+    --------              THEN @PimDefaultFamily
+    --------              ELSE Source.PimAttributeFamilyId
+    --------          END,
+    --------          @PimProductId,
+    --------          SOURCE.PimAttributeId,
+    --------          CASE
+    --------              WHEN SOURCE.ProductAttributeDefaultValueId = 0
+    --------              THEN NULL
+    --------              ELSE SOURCE.ProductAttributeDefaultValueId
+    --------          END, 
+    --------          --,SOURCE.AttributeValue
+    --------          @UserId,
+    --------          @GetDate,
+    --------          @UserId,
+    --------          @GetDate
+    --------         )
+    --------         --WHEN NOT MATCHED BY SOURCE AND TARGET.PimProductId = @PimProductId
+    --------         --                               AND Target.PimAttributeFamilyId IS NOT NULL
+    --------         --THEN DELETE
+    --------         OUTPUT INSERTED.PimAttributeValueId,
+    --------                INSERTED.PimAttributeFamilyId,
+    --------                INSERTED.PimAttributeId
+    --------                INTO @ZnodePimAttributeValue;
+        		 
+		INSERT INTO @TBL_MediaAttributeValue (PimAttributeValueId,LocaleId , AttributeValue,MediaId)
+		SELECT a.PimAttributeValueId,b.LocaleId,zm.Path AttributeValue ,ZM.MediaId FROM @ZnodePimAttributeValue AS a
+		INNER JOIN @PimProductDetail AS b ON(a.PimAttributeId = b.PimAttributeId
+		AND ISNULL(a.PimAttributeFamilyId, 0) = ISNULL(b.PimAttributeFamilyId, 0))
+		INNER JOIN @TBL_MediaAttributeId c ON ( c.PimAttributeId  = b.PimAttributeId )
+		INNER JOIN ZnodeMedia ZM ON (EXISTS (SELECT TOP 1 1 FROM dbo.split(b.AttributeValue ,',') SP WHERE sp.Item = ZM.MediaId ))
+		
+		Insert into ZnodePimProductAttributeMedia (PimAttributeValueId,LocaleId,MediaPath,MediaId ,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+		Select  MAV.PimAttributeValueId,MAV.LocaleId,MAV.AttributeValue,MAV.MediaId, @UserId, @GetDate,@UserId, @GetDate  from @TBL_MediaAttributeValue MAV
+
+
+		--MERGE INTO ZnodePimProductAttributeMedia TARGET 
+		--USING @TBL_MediaAttributeValue SOURCE 
+		--ON (        TARGET.PimAttributeValueId = SOURCE.PimAttributeValueId
+		--        AND TARGET.MediaPAth = SOURCE.AttributeValue
+  --                AND TARGET.LocaleId = SOURCE.LocaleId)
+		--WHEN MATCHED THEN 
+		--UPDATE SET
+  --                               TARGET.MediaPath = SOURCE.AttributeValue,
+		--				   TARGET.MediaId   = SOURCE.MediaId,
+  --                               TARGET.CreatedBy = @UserId,
+  --                               TARGET.CreatedDate = @GetDate,
+  --                               TARGET.ModifiedBy = @UserId,
+  --                               TARGET.ModifiedDate = @GetDate
+  --               WHEN NOT MATCHED
+  --               THEN 
+		--    INSERT(PimAttributeValueId,
+  --                           LocaleId,
+  --                           MediaPath,
+		--					 MediaId ,
+  --                           CreatedBy,
+  --                           CreatedDate,
+  --                           ModifiedBy,
+  --                           ModifiedDate) 
+		--	VALUES
+  --           (SOURCE.PimAttributeValueId,
+  --            SOURCE.LocaleId,
+  --            SOURCE.AttributeValue,
+		--	  SOURCE.MediaId,
+  --            @UserId,
+  --            @GetDate,
+  --            @UserId,
+  --            @GetDate
+  --           )
+		-- WHEN NOT MATCHED BY SOURCE AND EXISTS 
+		-- (SELECT TOP 1 1 FROM @TBL_MediaAttributeValue TBLM WHERE TARGET.PimAttributeValueId = TBLM.PimAttributeValueId AND TARGET.Localeid = @LocaleId)
+		--   THEN 
+		-- DELETE  ;
+
+	   ;With Cte_TextAreaAttributeValue AS 
+		 (
+		SELECT a.PimAttributeValueId,
+                        b.LocaleId,
+                        AttributeValue
+        FROM @ZnodePimAttributeValue AS a
+        INNER JOIN @PimProductDetail AS b ON(a.PimAttributeId = b.PimAttributeId
+                                                AND ISNULL(a.PimAttributeFamilyId, 0) = ISNULL(b.PimAttributeFamilyId, 0))
+		INNER JOIN @TBL_TextAreaAttributeId c ON ( c.PimAttributeId  = b.PimAttributeId )
+		
+		)
+		insert into ZnodePimProductAttributeTextAreaValue (PimAttributeValueId,LocaleId,AttributeValue,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+		Select CTAA.PimAttributeValueId,
+              CTAA.LocaleId,
+              CTAA.AttributeValue,
+              @UserId,
+              @GetDate,
+              @UserId,
+              @GetDate from Cte_TextAreaAttributeValue CTAA
+
+		--MERGE INTO ZnodePimProductAttributeTextAreaValue TARGET 
+		--USING Cte_TextAreaAttributeValue SOURCE 
+		--ON (TARGET.PimAttributeValueId = SOURCE.PimAttributeValueId
+  --              AND TARGET.LocaleId = SOURCE.LocaleId)
+		--WHEN MATCHED THEN 
+		--UPDATE SET
+  --                               TARGET.AttributeValue = SOURCE.AttributeValue,
+  --                               TARGET.CreatedBy = @UserId,
+  --                               TARGET.CreatedDate = @GetDate,
+  --                               TARGET.ModifiedBy = @UserId,
+  --                               TARGET.ModifiedDate = @GetDate
+  --               WHEN NOT MATCHED
+  --               THEN 
+		--    INSERT(PimAttributeValueId,
+  --                           LocaleId,
+  --                           AttributeValue,
+  --                           CreatedBy,
+  --                           CreatedDate,
+  --                           ModifiedBy,
+  --                           ModifiedDate) 
+		--	VALUES
+  --           (SOURCE.PimAttributeValueId,
+  --            SOURCE.LocaleId,
+  --            SOURCE.AttributeValue,
+  --            @UserId,
+  --            @GetDate,
+  --            @UserId,
+  --            @GetDate
+  --           );
+		 
+        INSERT INTO @TBL_DefaultAttributeValue (PimAttributeValueId,LocaleId,AttributeValue)  
+		SELECT a.PimAttributeValueId,
+                        b.LocaleId,
+                        d.PimAttributeDefaultValueId  AttributeValue
+        FROM @ZnodePimAttributeValue AS a
+          INNER JOIN @PimProductDetail AS b ON(a.PimAttributeId = b.PimAttributeId
+                                                AND ISNULL(a.PimAttributeFamilyId, 0) = ISNULL(b.PimAttributeFamilyId, 0))
+		INNER JOIN @TBL_DefaultAttributeId c ON ( c.PimAttributeId  = b.PimAttributeId )
+		INNER JOIN ZnodePimAttributeDefaultValue d ON (EXISTS (SELECT TOP 1 1 FROM dbo.split(b.AttributeValue,',') SP WHERE d.PimAttributeId = b.PimAttributeId AND SP.Item = d.AttributeDefaultValueCode))
+	
+
+	    insert into ZnodePimProductAttributeDefaultValue (PimAttributeValueId,LocaleId,PimAttributeDefaultValueId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+	    Select TDAV.PimAttributeValueId,TDAV.LocaleId,TDAV.AttributeValue,@UserId, @GetDate, @UserId, @GetDate  from @TBL_DefaultAttributeValue  TDAV
+		
+		---- SELECT * FROM Cte_DefaultAttributeValue
+		--MERGE INTO ZnodePimProductAttributeDefaultValue TARGET 
+		--USING @TBL_DefaultAttributeValue SOURCE 
+		--ON (TARGET.PimAttributeValueId = SOURCE.PimAttributeValueId
+  --            AND TARGET.PimAttributeDefaultValueId =  SOURCE.AttributeValue
+		--	    AND TARGET.LocaleId = SOURCE.LocaleId)
+		--WHEN MATCHED THEN 
+		--UPDATE SET
+  --                               TARGET.PimAttributeDefaultValueId = SOURCE.AttributeValue,
+  --                               TARGET.CreatedBy = @UserId,
+  --                               TARGET.CreatedDate = @GetDate,
+  --                               TARGET.ModifiedBy = @UserId,
+  --                               TARGET.ModifiedDate = @GetDate
+  --               WHEN NOT MATCHED
+  --               THEN 
+		--    INSERT(PimAttributeValueId,
+  --                           LocaleId,
+  --                           PimAttributeDefaultValueId,
+  --                           CreatedBy,
+  --                           CreatedDate,
+  --                           ModifiedBy,
+  --                           ModifiedDate) 
+		--	VALUES
+  --           (SOURCE.PimAttributeValueId,
+  --            SOURCE.LocaleId,
+  --            SOURCE.AttributeValue,
+  --            @UserId,
+  --            @GetDate,
+  --            @UserId,
+  --            @GetDate
+  --           )
+		--	 WHEN NOT MATCHED BY SOURCE  AND EXISTS (SELECT TOP 1 1 FROM @TBL_DefaultAttributeValue TBLAV WHERE TBLAV.PimAttributeValueId = TARGET.PimAttributeValueId AND TARGET.LocaleId = @LocaleId )
+		--	 THEN 
+		--	 DELETE 
+		--	 ;
+		
+		Insert into ZnodePimAttributeValueLocale (PimAttributeValueId,LocaleId,AttributeValue,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+			 SELECT a.PimAttributeValueId,b.LocaleId,AttributeValue,@UserId,@GetDate,@UserId,@GetDate FROM @ZnodePimAttributeValue AS a
+			 INNER JOIN @PimProductDetail AS b ON(a.PimAttributeId = b.PimAttributeId
+							 AND ISNULL(a.PimAttributeFamilyId, 0) = ISNULL(b.PimAttributeFamilyId, 0))
+			 WHERE NOT EXISTS (SELECT TOP 1 1 FROM @TBL_DefaultAttributeId TBLDA WHERE TBLDA.PimAttributeId = b.PimAttributeId  )
+			 AND NOT EXISTS (SELECT TOP 1 1 FROM @TBL_MediaAttributeId TBLMA WHERE TBLMA.PimAttributeId = b.PimAttributeId  )
+			 AND NOT EXISTS (SELECT TOP 1 1 FROM @TBL_TextAreaAttributeId TBLTA WHERE TBLTA.PimAttributeId = b.PimAttributeId  )
+
+			  
+			 
+		  -- MERGE INTO ZnodePimAttributeValueLocale TARGET
+    --         USING
+    --         (
+    --             SELECT a.PimAttributeValueId,
+    --                    b.LocaleId,
+    --                    AttributeValue
+    --             FROM @ZnodePimAttributeValue AS a
+    --                  INNER JOIN @PimProductDetail AS b ON(a.PimAttributeId = b.PimAttributeId
+    --                                                         AND ISNULL(a.PimAttributeFamilyId, 0) = ISNULL(b.PimAttributeFamilyId, 0))
+    --             WHERE NOT EXISTS (SELECT TOP 1 1 FROM @TBL_DefaultAttributeId TBLDA WHERE TBLDA.PimAttributeId = b.PimAttributeId  )
+			 --    AND NOT EXISTS (SELECT TOP 1 1 FROM @TBL_MediaAttributeId TBLMA WHERE TBLMA.PimAttributeId = b.PimAttributeId  )
+				-- AND NOT EXISTS (SELECT TOP 1 1 FROM @TBL_TextAreaAttributeId TBLTA WHERE TBLTA.PimAttributeId = b.PimAttributeId  )
+			 --) SOURCE
+    --         ON(TARGET.PimAttributeValueId = SOURCE.PimAttributeValueId
+    --            AND TARGET.LocaleId = SOURCE.LocaleId)
+    --             WHEN MATCHED
+    --             THEN UPDATE SET
+    --                             TARGET.AttributeValue = SOURCE.AttributeValue,
+    --                             TARGET.CreatedBy = @UserId,
+    --                             TARGET.CreatedDate = @GetDate,
+    --                             TARGET.ModifiedBy = @UserId,
+    --                             TARGET.ModifiedDate = @GetDate
+    --             WHEN NOT MATCHED
+    --             THEN INSERT(PimAttributeValueId,
+    --                         LocaleId,
+    --                         AttributeValue,
+    --                         CreatedBy,
+    --                         CreatedDate,
+    --                         ModifiedBy,
+    --                         ModifiedDate) VALUES
+    --         (SOURCE.PimAttributeValueId,
+    --          SOURCE.LocaleId,
+    --          SOURCE.AttributeValue,
+    --          @UserId,
+    --          @GetDate,
+    --          @UserId,
+    --          @GetDate
+    --         );
+             SET @AssociatedProduct =
+             (
+                 SELECT MAX(AssociatedProducts)
+                 FROM @PimProductDetail AS a
+             );
+             INSERT INTO ZnodePimProductTypeAssociation
+             (PimParentProductId,
+              PimProductId,
+              DisplayOrder,
+              CreatedBy,
+              CreatedDate,
+              ModifiedBy,
+              ModifiedDate
+             )
+                    SELECT @PimProductId,
+                           Item,
+                           ID AS RowId,
+                           @UserId,
+                           @GetDate,
+                           @UserId,
+                           @GetDate
+                    FROM dbo.Split(@AssociatedProduct, ',') AS b
+                         INNER JOIN ZNodePimProduct AS q ON(q.PimProductId = b.Item);
+             SET @ConfigureAttributeId =
+             (
+                 SELECT MAX(ConfigureAttributeIds)
+                 FROM @PimProductDetail AS a
+             );
+             SET @ConfigureFamilyId =
+             (
+                 SELECT MAX(ConfigureFamilyIds)
+                 FROM @PimProductDetail AS a
+             );
+             INSERT INTO [ZnodePimConfigureProductAttribute]
+             (PimProductId,
+              PimFamilyId,
+              PimAttributeId,
+              CreatedBy,
+              CreatedDate,
+              ModifiedBy,
+              ModifiedDate
+             )
+                    SELECT @PimProductId,
+                           @ConfigureFamilyId,
+                           q.PimAttributeId,
+                           @UserId,
+                           @GetDate,
+                           @UserId,
+                           @GetDate
+                    FROM dbo.Split(@ConfigureAttributeId, ',') AS b
+                         INNER JOIN ZnodePimAttribute AS q ON(q.PimAttributeId = b.Item);
+
+
+
+             IF @IsNotReturnOutput = 0
+                 SELECT @PimProductId AS Id,
+                        CAST(1 AS BIT) AS Status;
+             SET @status = 1;
+
+			 IF @CopyPimProductId > 0 
+			 BEGIN 
+			   INSERT INTO ZnodePimAttributeValueLocale  (PimAttributeValueId,LocaleId,AttributeValue,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+			   SELECT ZPAVI.PimAttributeValueId,ZPAVL.LocaleId,ZPAVL.AttributeValue,@UserId,@GetDate,@UserId,@GetDate
+			   FROM ZnodePimAttributeValueLocale ZPAVL 
+			   INNER JOIN ZnodePimAttributeValue ZPAV ON (ZPAV.PimAttributeValueId = ZPAVL.PimAttributeValueId )
+			   INNER JOIN ZnodePimAttributeValue ZPAVI ON (ZPAVI.PimAttributeId = ZPAV.PimAttributeId AND ZPAVI.PimProductId = @PimProductId )
+			   WHERE ZPAVL.LocaleId <> dbo.Fn_GetDefaultLocaleId()
+			   AND ZPAV.PimProductId = @CopyPimProductId
+
+			    INSERT INTO ZnodePimProductAttributeDefaultValue  (PimAttributeValueId,LocaleId,PimAttributeDefaultValueId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+			   SELECT ZPAVI.PimAttributeValueId,ZPAVL.LocaleId,ZPAVL.PimAttributeDefaultValueId,@UserId,@GetDate,@UserId,@GetDate
+			   FROM ZnodePimProductAttributeDefaultValue ZPAVL 
+			   INNER JOIN ZnodePimAttributeValue ZPAV ON (ZPAV.PimAttributeValueId = ZPAVL.PimAttributeValueId )
+			   INNER JOIN ZnodePimAttributeValue ZPAVI ON (ZPAVI.PimAttributeId = ZPAV.PimAttributeId AND ZPAVI.PimProductId = @PimProductId )
+			   WHERE ZPAVL.LocaleId <> dbo.Fn_GetDefaultLocaleId()
+			   AND ZPAV.PimProductId = @CopyPimProductId
+
+
+			   INSERT INTO ZnodePimProductAttributeTextAreaValue  (PimAttributeValueId,LocaleId,AttributeValue,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+			   SELECT ZPAVI.PimAttributeValueId,ZPAVL.LocaleId,ZPAVL.AttributeValue,@UserId,@GetDate,@UserId,@GetDate
+			   FROM ZnodePimProductAttributeTextAreaValue ZPAVL 
+			   INNER JOIN ZnodePimAttributeValue ZPAV ON (ZPAV.PimAttributeValueId = ZPAVL.PimAttributeValueId )
+			   INNER JOIN ZnodePimAttributeValue ZPAVI ON (ZPAVI.PimAttributeId = ZPAV.PimAttributeId AND ZPAVI.PimProductId = @PimProductId )
+			   WHERE ZPAVL.LocaleId <> dbo.Fn_GetDefaultLocaleId()
+			   AND ZPAV.PimProductId = @CopyPimProductId
+			   			   
+			   INSERT INTO ZnodePimProductAttributeMedia  (PimAttributeValueId,LocaleId,MediaPath,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+			   SELECT ZPAVI.PimAttributeValueId,ZPAVL.LocaleId,ZPAVL.MediaPath,@UserId,@GetDate,@UserId,@GetDate
+			   FROM ZnodePimProductAttributeMedia ZPAVL 
+			   INNER JOIN ZnodePimAttributeValue ZPAV ON (ZPAV.PimAttributeValueId = ZPAVL.PimAttributeValueId )
+			   INNER JOIN ZnodePimAttributeValue ZPAVI ON (ZPAVI.PimAttributeId = ZPAV.PimAttributeId AND ZPAVI.PimProductId = @PimProductId )
+			   WHERE ZPAVL.LocaleId <> dbo.Fn_GetDefaultLocaleId()
+			   AND ZPAV.PimProductId = @CopyPimProductId
+			   
+			 END 
+
+             COMMIT TRAN A;
+         END TRY
+         BEGIN CATCH
+             SELECT ERROR_MESSAGE()
+		     SET @Status = 0;
+		     DECLARE @Error_procedure VARCHAR(1000)= ERROR_PROCEDURE(), @ErrorMessage NVARCHAR(MAX)= ERROR_MESSAGE(), @ErrorLine VARCHAR(100)= ERROR_LINE(), 
+			 @ErrorCall NVARCHAR(MAX)= 'EXEC Znode_ImportInsertUpdatePimProduct @UserId = '+CAST(@UserId AS VARCHAR(50))+',@IsNotReturnOutput='+CAST(@IsNotReturnOutput AS VARCHAR(50))+',@CopyPimProductId='+CAST(@CopyPimProductId AS VARCHAR(50))+',@Status='+CAST(@Status AS VARCHAR(10));
+              			 
+             SELECT 0 AS ID,CAST(0 AS BIT) AS Status;                    
+			ROLLBACK TRAN A;
+             EXEC Znode_InsertProcedureErrorLog
+				@ProcedureName = 'Znode_ImportInsertUpdatePimProduct',
+				@ErrorInProcedure = @Error_procedure,
+				@ErrorMessage = @ErrorMessage,
+				@ErrorLine = @ErrorLine,
+				@ErrorCall = @ErrorCall;
+         END CATCH;
+     END;

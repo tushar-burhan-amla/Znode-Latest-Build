@@ -1,0 +1,117 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model OrderViewModel
+@{
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+}
+<div class="col-sm-12 page-container">
+    <div class="col-sm-12 nopadding">
+        <div style="font-family: Arial, Helvetica; font-size: 10px; text-align: left; color: #292a2a; ">
+            <div style="background-color: #eff3fb; color: #292a2a; font-size: 1.5em; font-weight: bold; padding-bottom:10px;">@Model.StoreName&nbsp;Packaging Slip@*@Admin_Resources.TitleOrderReceipt*@</div>
+            <div class="col-xs-12 nopadding padding-left order" style="font-family: Verdana;font-size: 11px;border:1px solid black;padding-top:10px;background-color:#85756c;color:#ffffff;display:block;">
+                <p nowrap="nowrap" style="color: #292a2a !important; text-align: left;"><strong style="color: #292a2a !important;">ORDER:</strong> @Model.OrderNumber</p>
+                <p nowrap="nowrap" style="color: #292a2a !important; text-align: left;"><strong style="color: #292a2a !important;">ORDER DATE:</strong> @Model.OrderDate</p>
+            </div>
+            <div class="col-xs-12 nopadding" style="border:1px solid black;border-top:0;margin-bottom:10px;">
+                <div class="col-xs-12 nopadding">
+                    <div class="col-xs-6 nopadding shipping" style="color: #292a2a; font-weight: bold; font-size: 11px; background-color:#ffeeea;padding:10px;">SOLD TO:</div>
+                    <div class="col-xs-6 nopadding shipping" style="color: #292a2a; font-weight: bold; font-size: 11px;padding:10px; background-color:#ffeeea;">SHIP TO:</div>
+                </div>
+                <div class="col-xs-6 nopadding">
+                    <div style="padding:10px;">
+                        @Model.BillingAddress.FirstName @Model.BillingAddress.LastName @if (!Equals(Model.BillingAddress.CompanyName, null))
+                        {<br>@Model.BillingAddress.CompanyName}<br>@Model.BillingAddress.Address1 @if (!Equals(Model.BillingAddress.Address2, null))
+                        {<br>@Model.BillingAddress.Address2}<br>@Model.BillingAddress.CityName<br>@Model.BillingAddress.StateName<br>@Model.BillingAddress.PostalCode<br>@Model.BillingAddress.CountryName<br>Phone Number : @Model.BillingAddress.PhoneNumber
+                    </div>
+                </div>
+                <div class="col-xs-6 nopadding">
+                    <div style="padding:10px;">
+                        @Model.ShippingAddress.FirstName @Model.ShippingAddress.LastName @if (!Equals(Model.BillingAddress.CompanyName, null))
+                        {<br>@Model.ShippingAddress.CompanyName}<br>@Model.ShippingAddress.Address1 @if (!Equals(Model.BillingAddress.Address2, null))
+                        {<br>@Model.BillingAddress.Address2}<br>@Model.ShippingAddress.CityName<br>@Model.ShippingAddress.StateName<br>@Model.ShippingAddress.PostalCode<br>@Model.ShippingAddress.CountryName<br>Phone Number : @Model.ShippingAddress.PhoneNumber<br>Email : @Model.Email
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 nopadding">
+                <div class="col-xs-12 nopadding" style="border: 1px solid black;">
+                    <div class="col-xs-6 nopadding shipping" style="color: #292a2a; font-weight: bold; font-size: 11px; padding: 10px;background-color:#ffeeea;">Payment Method:</div>
+                    <div class="col-xs-6 nopadding shipping" style="color: #292a2a;font-weight: bold; font-size: 11px; padding: 10px;background-color:#ffeeea;">Shipping Method:</div>
+                </div>
+                <div class="col-xs-12 nopadding" style="border-right: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black;">
+                    <div class="col-xs-6 nopadding">
+                        <div style="padding:10px;display:block;">
+                            @{
+                                if (!string.IsNullOrEmpty(Model.PurchaseOrderNumber))
+                                {
+                                    <p style="text-align: left;" nowrap="nowrap" width="10%"><strong>PURCHASE ORDER</strong></p>
+                                    <p style="text-align: left;" nowrap="nowrap" width="10%"><strong>PURCHASE ORDER NUMBER:</strong>@Model.PurchaseOrderNumber</p>
+                                }
+                                else if (!string.IsNullOrEmpty(Model.PaymentTransactionToken))
+                                {
+                                    <p style="text-align: left;" nowrap="nowrap" width="10%"><strong>@Model.PaymentDisplayName</strong></p>
+                                    <p style="text-align: left;" nowrap="nowrap" width="10%"><strong>Transaction ID:</strong></p>
+                                    <p style="text-align: left;" nowrap="nowrap" width="30%">@Model.PaymentTransactionToken</p>
+                                }
+                                else if (Model.GiftCardAmount > 0)
+                                {
+                                    <p style="text-align: left;" nowrap="nowrap" width="10%"><strong>Gift Card</strong></p>
+                                }
+                                else
+                                {
+                                    <p style="text-align: left;" nowrap="nowrap" width="10%"><strong>@Model.PaymentDisplayName</strong></p>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="col-xs-6 nopadding">
+
+                        <div style="padding:10px;display:block;">
+                            <p nowrap="nowrap" width="10%" style="text-align: left;"><strong>@Html.RenderBlock(Model.ShippingTypeName)</strong></p>
+                            @if (Model.ShippingCost > 0)
+                            {
+                                <p nowrap="nowrap" width="10%" style="text-align: left;"><strong>(TOTAL SHIPPING CHARGES:</strong> @HelperMethods.FormatPriceWithCurrency(Model.ShippingCost, cultureCode))</p>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.TrackingNumber))
+                            {
+                                <p nowrap="nowrap" width="10%" style="text-align: left;"><strong>TRACKING NUMBER:</strong>@Model.TrackingNumber</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 nopadding padding-top">
+                <div>
+                    <div class="col-xs-12 nopadding order-quantity" style="border: 1px solid black; background-color: #292a2a; ">
+                        <div class="col-xs-2 nopadding" style="font-family: Verdana, Helvetica, sans-serif; color: #292a2a; font-size: 10px; padding: 10px; display: inline-block;"><strong>QTY</strong></div>
+                        <div class="col-xs-3 nopadding" style="font-family: Verdana, Helvetica, sans-serif; color: #292a2a; font-size: 10px; padding: 10px; display: inline-block; "><strong>PRODUCTS</strong></div>
+                        <div class="col-xs-3 nopadding" style="font-family: Verdana, Helvetica, sans-serif; color: #292a2a; font-size: 10px; padding: 10px; display: inline-block;"><strong>DESCRIPTION</strong></div>
+                        <div class="col-xs-2 nopadding" style="font-family: Verdana, Helvetica, sans-serif; color: #292a2a; font-size: 10px; padding: 10px; display: inline-block; "><strong>SKU</strong></div>
+                        <div class="col-xs-2 nopadding" style="font-family: Verdana, Helvetica, sans-serif; color: #292a2a; font-size: 10px; padding: 10px; display: inline-block;"><strong>STATUS</strong></div>
+                    </div>
+                    @foreach (var cartItem in Model.OrderLineItems)
+                    {
+                <div class="col-xs-12 nopadding" style="border: 1px solid black;  border-top:0px;">
+                    <div class="col-xs-2 nopadding" style="font-family: Verdana, Helvetica, sans-serif;color: #292a2a; font-size: 10px;padding:10px;display:inline-block;">@cartItem.Quantity</div>
+                    <div class="col-xs-3 nopadding" style="font-family: Verdana, Helvetica, sans-serif;color: #292a2a; font-size: 10px;padding: 10px;display:inline-block;">@Html.RenderBlock(cartItem.ProductName)</div>
+                    <div class="col-xs-3 nopadding" style="font-family: Verdana, Helvetica, sans-serif;color: #292a2a; font-size: 10px;padding:10px;display:inline-block;">@Html.RenderBlock(cartItem.Description)</div>
+                    <div class="col-xs-2 nopadding" style="font-family: Verdana, Helvetica, sans-serif;color: #292a2a; font-size: 10px;padding:10px;display:inline-block;">
+                        @cartItem.Sku
+                    @if (!string.IsNullOrEmpty(cartItem.DownloadableProductKey))
+                    {
+                        <br />
+                        List<string> keys = cartItem?.DownloadableProductKey.Split(',').ToList();
+                        <h10>Product Keys</h10>
+                        foreach (string item in keys)
+                        { <div>@Html.RenderBlock(item)</div> }
+                }
+
+                </div>
+                <div class="col-xs-2 nopadding" style="font-family: Verdana, Helvetica, sans-serif;color: #292a2a; font-size: 10px;padding: 10px;display:inline-block;">@cartItem.OrderLineItemState</div>
+                </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

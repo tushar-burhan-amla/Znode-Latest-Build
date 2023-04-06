@@ -1,0 +1,39 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model SearchProfileViewModel
+@if (Model.IsIndexExist)
+{<div id="fieldValueList">
+        <div class="col-xs-12 nopadding rank-section" id="fieldValueListDiv_0">
+            <div class="left-section">
+                <select id="fieldList" name="fieldNames">
+                    <option value="">Select</option>
+                    @foreach (var item in Model.FieldValueList)
+                    {
+                        if (item.AttributeName != null)
+                        {
+                            <option value="@item.AttributeCode">@item.AttributeName</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="switch-field padding-top pull-right">
+                <div class="control-yes-no pull-right">
+                    <input checked='checked' id="fieldValue_left_0" name="fieldValues" value="1" type="radio"> <label for="fieldValue_left_0">ASC</label>
+                    <input id="fieldValue_right_0" name="fieldValues" value="0" type="radio"> <label for="fieldValue_right_0">DESC</label>
+                </div>
+                @*<em onclick="Search.prototype.RemoveRow('fieldValueListDiv_0')" class="z-close-circle" title="Delete"></em>*@
+            </div>
+        </div>
+    </div>
+}
+else if (Model.PublishCatalogId > 0)
+{
+    <span class="error-msg">
+        @Html.RenderBlock(Admin_Resources.ErrorSearchIndexNotExistForRelevance)
+    </span>
+}
+else
+{
+    <span style="color:blue">
+        @Admin_Resources.ErrorPleaseSelectCatalog
+    </span>
+}

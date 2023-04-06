@@ -1,0 +1,87 @@
+@model string
+
+<div id="data-capture-content" data-bind="if: show()">
+  <div class="form-group" data-bind="foreach: dataCaptureFields">
+    <div>
+      <label class="control-label"
+             data-bind="text: Label, 
+                        css: { required: IsRequired },
+                        attr: { 'cat-field-id': CATFieldId }"></label>
+    </div>
+    <div class="left-inner-icon">
+      <div data-bind="ifnot: showOptions($data)">
+        <input type="text"
+               data-bind="value: Value,
+                          attr: { 'cat-field-id': CATFieldId,
+                                  'display-order': DisplayOrder,
+                                  'maxlength': MaxLength,
+                                  required: IsRequired,
+                                  'required-msg': RequiredErrorMessage,
+                                  'regex-pattern': RegEx,
+                                  'regex-msg': RegExErrorMessage,
+                                  'is-validated': IsValidated,
+                                  'val-msg': ValidationErrorMessage,
+                                   onblur: 'DataCapture.prototype.validateDataCapture(&quot;' + CATFieldId + '&quot;)' }"/>
+      </div>
+      <div data-bind="if: showOptions($data)">
+        <div class="select-container">
+          <select class="input-select"
+                  data-bind="options: Options,
+                              optionsText: 'Text',
+                              optionsValue: 'Value',
+                              optionsCaption: '',
+                              value: Value,
+                              attr: { 'cat-field-id': CATFieldId,
+                                      'display-order': DisplayOrder,
+                                      required: IsRequired,
+                                      'required-msg': RequiredErrorMessage,
+                                      onblur: 'DataCapture.prototype.validateDataCapture(&quot;' + CATFieldId + '&quot;)' }">
+          </select>
+        </div>
+      </div>
+      <span data-bind="attr: { 'cat-field-id': CATFieldId }"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+
+    var ViewModel = function() {
+
+      self.paymentSettingId = ko.observable();
+      self.dataCaptureFields = ko.observableArray();
+
+      self.paymentSettingId.subscribe(function() {
+        self.update();
+      });
+
+      self.show = function() {
+        return self.dataCaptureFields() && self.dataCaptureFields().length > 0;
+      };
+
+      self.showOptions = function(field) {
+        return field.Options.length > 0;
+      }
+
+      self.update = function () {
+        if (('@Model' === 'checkout' && self.paymentSettingId() > 0) || '@Model' === 'registration') {
+          CustomEndpoint.prototype.GetDataCaptureFields("@Model",
+            self.paymentSettingId(),
+          function(data) {
+            self.dataCaptureFields.removeAll();
+            data.forEach(function(x) {
+              self.dataCaptureFields.push(x);
+            });
+          });
+        }
+      }
+
+      self.update();
+    };
+
+    ko.applyBindings(new ViewModel());
+
+  });
+</script>
+

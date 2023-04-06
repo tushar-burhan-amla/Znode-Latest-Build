@@ -1,0 +1,52 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model ReportCategoryListViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleReport + " | " + Admin_Resources.TitleAdvanced;  
+bool isCategoryExist = (Request.QueryString["reportCategoryId"] == null) ? false : true;
+}
+
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelReports</h1>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    <aside>
+        <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            @if (Model.ReportCategoryList.Count > 0)
+            {
+            <ul class="aside-panel">
+                @foreach (var ReportCategory in Model.ReportCategoryList)
+                {
+                    if (ReportCategory.ReportCategoryId == 1 && !isCategoryExist)
+                    {
+                        <li>@Html.AuthorizedRawActionLink(ReportCategory.CategoryName, "Index", "DevExpressReport",null)</li>
+                    }
+                    else
+                    {
+                        <li>@Html.AuthorizedRawActionLink(ReportCategory.CategoryName, "Index", "DevExpressReport", new { @reportCategoryId = ReportCategory.ReportCategoryId })</li>
+                    }
+                }
+            </ul>
+            }
+        </div>
+    </aside>
+    <!--Main Container-->
+    <section class="main-container">
+        <div class="row">
+            <ul class="report-blocks clearfix">
+                @if (Model.ReportDetailList.Count > 0)
+                {
+                    foreach (var ReportDetail in Model.ReportDetailList)
+                    {
+                        <li class="col-md-4">
+                            <h3 class="section-heading">@ReportDetail.ReportName</h3>
+                            <p>@ReportDetail.Description</p>
+                            @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "DevExpressReport", new { @reportCode = ReportDetail.ReportCode }, new { target = "_blank" })
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,65 @@
+﻿@using Znode.Libraries.Resources
+@using Znode.Engine.Admin.Models
+@model PopupModel
+
+@if (!Equals(Model, null))
+{
+    <div class="modal fade" id="@Model.ModalPopUpId" role="dialog">
+        <div class="modal-dialog @(string.IsNullOrEmpty(Model.ModalSizeClass) ? "modal-sm" : Model.ModalSizeClass)">
+            <div class="modal-content" data-test-selector="popDiv">
+                <div class="modal-header">
+                    <h4 class="modal-title" data-test-selector="popHdg">@Model.Title</h4>
+                </div>
+                <div class="modal-body">
+                    @if (!Equals(Model.InputFields, null) && Model.InputFields.Count > 0 && Model.InputFields.Count(x => x.InputFieldData != null && x.InputFieldData.Count > 0) > 0)
+                    {
+                        <p data-test-selector="popDescription">@Model.Description</p>
+                        @Html.Partial("~/Views/Shared/Controls/_PopUpChoiceFields.cshtml", Model.InputFields)
+                    }
+                    else
+                    {
+                        if (string.IsNullOrEmpty(Model.NoChoiceDescription))
+                        {
+                            <p data-test-selector="popDescription">@Model.Description</p>
+                        }
+                        else
+                        {
+                            <p data-test-selector="paraDesc">@Model.NoChoiceDescription</p>
+                        }
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.AdditionalNote))
+                    {
+                        <p data-test-selector="paraNote"><strong>Note: </strong>@Model.AdditionalNote</p>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-right">
+                        @if (Model.Buttons?.Count > 0)
+                        {
+                            foreach (PopUpButtonModel button in Model.Buttons)
+                            {
+                                string className = "btn-text-icon";
+                                if (!string.IsNullOrEmpty(button.CSSClassName))
+                                {
+                                    className = button.CSSClassName;
+                                }
+                                <div class="pull-right">
+                                    <button type='button' @button.ButtonAttributes class='btn-text btn-text-secondary' style="margin-left:9px;" data-dismiss="modal" onclick="javascript:$('body').removeClass('modal-open');$('body').removeAttr('style'); @button.OnClickFunctionName" data-test-selector="popBtnOk">@button.ButtonText</button>
+                                </div>
+                            }
+                        }
+                        @if (Model.IsErrorPopUp == false)
+                        {
+                            <button type="button" id="btn-cancel-popup" class="btn-text-icon" data-dismiss="modal" data-test-selector="popBtnCancel"><em class='z-back'></em>@Admin_Resources.ButtonCancel</button>
+                        }
+                        else
+                        {
+                            <button type="button" id="btn-cancel-popup" class="btn-text btn-text-secondary" data-dismiss="modal" data-test-selector="popBtnOk">@Admin_Resources.TextOk <em class='z-ok'></em></button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

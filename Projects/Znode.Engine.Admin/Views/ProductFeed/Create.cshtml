@@ -1,0 +1,186 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+@model ProductFeedViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+
+@{
+    var isFirstDateChecked = true;
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront; ;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string FormId = "frmProductFeed";
+    string CancelUrl = "/ProductFeed/List";
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmProductFeed", CancelUrl = "/ProductFeed/List" };
+    Model.ProductFeedSiteMapTypeCode = string.Equals(actionName.ToLower(), "createproductfeed") ? Model.XMLSiteMapTypeList?[0].Value : Model.ProductFeedSiteMapTypeCode;
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "dvSave", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSave, DataTestSelector = "linkSave", OnClick = "ProductFeed.prototype.SetSubmitOnSave()" });
+}
+<div class="col-sm-12 title-container">
+    @if (string.Equals(actionName.ToLower(), "createproductfeed"))
+    {
+        <h1 data-test-selector="hdgProductFeed">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelProductFeed)</h1>
+    }
+    else
+    {
+        <h1 data-test-selector="hdgProductFeed">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelProductFeed)<em class="z-minus"></em><span>@Model.FileName</span></h1>
+    }
+    <div class="pull-right btn-container">
+        <a id="btnCancelForProduct" href=@CancelUrl class="btn-text-icon" data-test-selector="linkCancel"><em class='z-back'></em>@Admin_Resources.ButtonCancel</a>
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmProductFeed" }))
+{
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        <h3 class="section-heading" data-test-selector="hdgGeneralInformation">@Admin_Resources.HeaderGeneralInformation</h3>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.LabelStores, new { @class = "required", @data_test_selector = "lblStores" })
+                </div>
+                @if (Equals(actionName.ToLower(), "edit"))
+                {
+                    <div class="control-md" data-test-selector="divStores">
+                        <input type="text" data-test-selector="txtPortalName" id="txtPortalName" value="@Model.StoreName" disabled="disabled" />
+
+                    </div>
+                }
+                else
+                {
+                    <div class="control-md" data-test-selector="divStores">
+                        <div class="chkStoresList">
+
+                            @Html.FastSelectFor(model => model.PortalIds, model => model.PortalId, "GetSuggestions", "Typeahead", "ProductFeed.prototype.OnSelectPortalResult", 1, true,
+                             new
+                             {
+                                htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStoreName" },
+                                parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                             })
+                        </div>
+                        <span id="StoreName-error" data-test-selector="valStoreName"></span>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblTypeXMLSiteMap">@Admin_Resources.LabelTypeXMLSiteMap</label>
+                </div>
+                @if (Equals(actionName.ToLower(), "edit"))
+                {
+                    <div class="control-md">
+                        <input type="text" id="txtSitemapType" data-test-selector="txtTypeXMLSiteMap" data-typecode="@Model.ProductFeedTypeCode" value="@Model.ProductFeedTypeName" disabled="disabled" />
+                    </div>
+                }
+                else
+                {
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.ProductFeedTypeCode, new SelectList(Model.XMLSiteMapList, "Value", "Text"), new { @id = "ddlXMLSiteMap", @data_test_selector = "drpTypeXMLSiteMap", @onchange = "ProductFeed.prototype.DisplayXMLSiteMapType(); return false;" })
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="form-group defaultLocalId">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblLocaleId">@Admin_Resources.LabelLocaleId</label>
+                </div>
+                @if (Equals(actionName.ToLower(), "edit"))
+                {
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.LocaleId, new SelectList(Model.Locale, "Value", "Text"), new { htmlAttributes = new { @class = "form-control" }, @data_test_selector = "drpLocaleId", @disabled = "disabled" })
+                        @Html.HiddenFor(model => model.LocaleId)
+                    </div>
+                }
+                else
+                {
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.LocaleId, new SelectList(Model.Locale, "Value", "Text"), new { htmlAttributes = new { @class = "form-control" }, @data_test_selector = "drpLocaleId" })
+                        @Html.ValidationMessageFor(model => model.LocaleId, "", new { @data_test_selector = "valLocaleId" })
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="form-group" id="rdbXMLSiteMapType">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.XMLSiteMapType, new { @data_test_selector = "lblXMLSiteMapType" })
+                </div>
+                <div class="control-md" id="XMLTypeInputs">
+                    @foreach (var item in Model.XMLSiteMapTypeList)
+                    {
+                        <div class="col-sm-3 nopadding">
+                            <label>
+                                <input type="radio" name="ProductFeedSiteMapTypeCode" data-test-selector="chk@(item.Value.Replace(" ", ""))" onclick="ProductFeed.prototype.AddFileName();" value="@item.Value" @(Model.ProductFeedSiteMapTypeCode == item.Value ? "checked=checked" : "") />
+                                <span class="lbl padding-8" data-test-selector="lbl@(item.Value.Replace(" ", ""))">@item.Text</span>
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div id="GoogleFeedFields" style="display:none">
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Title, new { @data_test_selector = "lblTitle" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.Title, new { @data_test_selector = "txtTitle" })
+                        @Html.ValidationMessageFor(model => model.Title, "", new { @data_test_selector = "valTitle" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Link, new { @data_test_selector = "lblLink" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.Link, new { @data_test_selector = "txtLink" })
+                        @Html.ValidationMessageFor(model => model.Link, "", new { @data_test_selector = "valLink" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Description, new { @data_test_selector = "lblDescription" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.Description, new { @data_test_selector = "txtDescription" })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @data_test_selector = "valDescription" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.FileName, new { @class = "required", @data_test_selector = "lblFileName" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.FileName, new { @data_test_selector = "txtFileName", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.FileName, "", new { @id = "errorFileName", @data_test_selector = "valErrorFileName" })
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(model => model.ProductFeedId)
+        @Html.HiddenFor(model => model.PortalId)
+        @Html.HiddenFor(model => model.ProductFeedTypeCode)
+        @Html.HiddenFor(model => model.ProductFeedSiteMapTypeCode)
+        @Html.Hidden("hdnnactionname", actionName.ToLower())
+    </section>
+}
+<script src="~/Content/bootstrap-3.3.7/js/moment-with-locales.js"></script>
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        ProductFeed.prototype.DisableXMLSiteMapType();
+    });
+</script>

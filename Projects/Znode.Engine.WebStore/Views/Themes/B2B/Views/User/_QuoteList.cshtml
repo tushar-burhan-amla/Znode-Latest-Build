@@ -1,0 +1,53 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model IEnumerable<QuoteViewModel>
+@if (Model != null && Model.Any())
+{
+
+    <div class="table-responsive">
+        <table class="table" aria-describedby="Quote List Information">
+            <thead>
+                <tr>
+                    <th scope="col" data-test-selector="colQuoteNumber">@WebStore_Resources.TitleQuoteNumber</th>
+                    <th scope="col" data-test-selector="colQuoteStatus">@WebStore_Resources.TitleQuoteStatus</th>
+                    <th scope="col" data-test-selector="colQuoteDate">@WebStore_Resources.TitleQuoteDate</th>
+                    <th scope="col" data-test-selector="colExpiredDate">@WebStore_Resources.TitleExpiredDate</th>
+                    <th scope="col" data-test-selector="colQuoteAmount">@WebStore_Resources.TitleQuoteAmount</th>
+                    <th scope="col" data-test-selector="colAction">@WebStore_Resources.TitleAction</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (QuoteViewModel quote in Model)
+                {
+                    <tr>
+                        <td data-test-selector="colQuoteNumber">
+                            <a href="/Quote/GetQuote?omsQuoteId=@quote.OmsQuoteId">
+                                @quote.QuoteNumber
+                            </a>
+                        </td>
+                        <td data-test-selector="colQuoteStatus">@quote.QuoteStatus</td>
+                        <td data-test-selector="colQuoteDate">
+                            @quote.QuoteDate.ToDateTimeFormat() 
+                        </td>
+                        <td data-test-selector="colExpiredDate">@quote.QuoteExpirationDate.ToDateTimeFormat()</td>
+                        <td  data-test-selector="colQuoteAmount">@quote.TotalAmount</td>
+                        <td data-test-selector="colAction">
+                            <a href="/Quote/GetQuote?omsQuoteId=@quote.OmsQuoteId" class="remove-compare" onclick="" data-toggle="tooltip" data-placement="top" title="View Quote">
+                                <span class="zf-view"></span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="col-12 account-recent-orders">
+        <div class="row">
+            <div class="col-12 pl-2 py-4">
+                <div class="b2b-recent-order-detail">@WebStore_Resources.NoQuoteMessage</div>
+            </div>
+        </div>
+    </div>
+}

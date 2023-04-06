@@ -1,0 +1,60 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model PIMAttributeGroupViewModel
+
+@{
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateEditAttributeGroup", CancelUrl = controllerName == "ProductAttributeGroup" ? "/PIM/ProductAttributeGroup/List" : "/PIM/CategoryAttributeGroup/List", Callback = "PIMAttributeGroup.prototype.ValidateAttributeGroupCode", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    @if (Model.PimAttributeGroupId > 0)
+            {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelAttributeGroup)<em class="z-minus"></em><span id="GroupCodeLable">@Model.GroupCode</span></h1>
+        @Html.HiddenFor(m => m.GroupCode)
+    }
+    else
+    {
+        <h1 data-test-selector="hdgAddAttributeGroup">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelAttributeGroup)</h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateEditAttributeGroup" }))
+    {
+        <div class="box-container margin-bottom">
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.GroupCode, new { @class = "required", @data_test_selector ="lblGroupCode" })
+                    </div>
+                    <div class="control-md">
+                        @if (Model.PimAttributeGroupId > 0)
+                        {  @Html.TextBoxFor(m => m.GroupCode, new { @readonly = "readonly" }) }
+                        else
+                        { @Html.TextBoxFor(m => m.GroupCode , new { @data_test_selector = "txtGroupCode" }) }
+
+                        @Html.ValidationMessageFor(model => model.GroupCode, "", new { id = "errorSpanGroupCode" , data_test_selector= "valGroupCode" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 nopadding">
+            @Html.HiddenFor(m => m.IsNonEditable)
+            @Html.HiddenFor(m => m.PimAttributeGroupId)
+            @Html.HiddenFor(x => x.IsCategory)
+            @Html.HiddenFor(m => m.IsSystemDefined)
+            @{Html.RenderAction("GetTabStructure", controllerName, new { @pimAttributeGroupId = @Model.PimAttributeGroupId });}
+        </div>
+                }
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+        PIMAttributeGroup.prototype.ValidateGroupCode()
+    });
+</script>

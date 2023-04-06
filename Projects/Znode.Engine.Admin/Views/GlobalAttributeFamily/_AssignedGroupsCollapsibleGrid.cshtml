@@ -1,0 +1,49 @@
+﻿@model GlobalAttributeGroupListViewModel
+@using Znode.Engine.Admin.ViewModels;
+
+@{
+    string controller = ViewContext.RouteData.Values["controller"].ToString();
+    string action = "AssignedGlobalAttributes";
+ 
+}
+
+<div class="collapsible-grid dirtyignore">
+    <table class="table" data-test-selector="tblAssignedEntityGroup" aria-describedby="Global Attribute Family Table">
+        <thead>
+            <tr>
+                <th scope="col" data-test-selector="tblHd@(Admin_Resources.LabelAttributeCode)">@Admin_Resources.LabelAttributeCode</th>
+                <th scope="col" data-test-selector="tblHd@(Admin_Resources.LabelType)">@Admin_Resources.LabelType</th>
+                <th scope="col" data-test-selector="tblHd@(Admin_Resources.LabelRequired)">@Admin_Resources.LabelRequired</th>
+                <th scope="col" data-test-selector="tblHd@(Admin_Resources.LabelAttributeLocalizable)">@Attributes_Resources.LabelAttributeLocalizable</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{foreach (GlobalAttributeGroupViewModel item in Model.AttributeGroupList)
+                {
+                    <tr>
+                        <td colspan="5">
+                            <table class="table child-table" aria-describedby="Global Attribute Family Child Table">
+                                <thead>
+                                    <tr class="header">
+                                        <th scope="col" class="th-header" colspan="7">
+                                            <button type="button" class="btn-dropdown" onclick="GlobalAttributeFamily.prototype.HideShowExpandOption(this,'@controller','@action');" data-attributegroupid="@item.GlobalAttributeGroupId"><i class="z-add"></i></button>
+                                            <span data-test-selector="lbl@(item.GroupCode)">@item.GroupCode</span>
+                                            <a class="pull-right padding-right" title="Delete" onclick="GlobalAttributeFamily.prototype.UnAssignAttributeGroup('@item.GroupCode')"><i class="z-delete"></i></a>
+                                            <a class="pull-right padding-right" title="Edit" onclick="GlobalAttributeFamily.prototype.EditDisplayOrder('@item.GlobalAttributeGroupId', '@item.GroupCode', '@item.DisplayOrder')"><i class="z-edit"></i></a>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="attributeData" data-test-selector="tblBdAttributeData">
+
+                                    @*Attribute Data will be rendered here*@
+
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

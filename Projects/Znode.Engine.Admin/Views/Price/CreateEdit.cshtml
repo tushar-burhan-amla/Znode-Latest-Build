@@ -1,0 +1,201 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+@using System.Configuration;
+
+@model PriceViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreatePricing", CancelUrl = "/Price/List", Callback = "Price.prototype.CheckFileValidataion", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    @if (string.Equals(actionName.ToLower(), "create"))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.HeaderPricing)</h1>
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.HeaderPricing)<em class="z-minus"></em><span>@Model.ListName</span></h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @if (string.Equals(actionName.ToLower(), "edit"))
+    {
+        @Html.Partial("~/Views/Shared/_asidePricePanel.cshtml", Model)
+    }
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreatePricing", enctype = "multipart/form-data" }))
+            {
+        <div id="loginForm">
+            @if (string.Equals(actionName.ToLower(), "create"))
+            {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.ListCode, new { @class = "required" , @data_test_selector = "lblCode" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ListCode,new { @data_test_selector = "txtCode" })
+                        @Html.ValidationMessageFor(model => model.ListCode,"", new { @data_test_selector = "valCode" })
+                    </div>
+                </div>
+            </div>
+            }
+            else
+            {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ListCode, new { @class = "required", @data_test_selector = "lblCode" })
+                    </div>
+                    <div class="control-md">
+                        <input type="text" value="@Model.ListCode" data-test-selector="txtCode" disabled="disabled" />
+                    </div>
+                </div>
+            </div>
+            }
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.ListName, new { @class = "required", @data_test_selector = "lblName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ListName,new { @data_test_selector = "txtName" })
+                        @Html.ValidationMessageFor(model => model.ListName,"", new { @data_test_selector = "valName" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.CurrencyId,new { @data_test_selector = "lblCurrency" })
+                    </div>
+                    <div class="control-md">
+                        @{ Html.RenderAction("GetCurrency", controllerName, new { @currencyId = @Model.CurrencyId });}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.CultureId, new { @data_test_selector = "lblCurrencyCulture" })
+                    </div>
+                    <div class="control-md">
+                        @{ Html.RenderAction("GetCulture", controllerName, new { @cultureId = @Model.CultureId, @currencyId = @Model.CurrencyId });}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(Admin_Resources.LabelActivationDate, new { @data_test_selector = "lblActivationDate" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.TimeZoneHelpText)
+                    <div class="control-sm">
+                        <div class="right-inner-icon">
+                            @Html.TextBox("ActivationDate", Model.ActivationDate != null ? Model.ActivationDate.ToDateTimeFormat() : string.Empty, new { @id = "ActivationDate", @mindate = "", @class = "datepicker", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtActivationDate" })
+                            <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                        </div>
+               <span class="text-danger field-validation-error" id="spamDate"></span>
+                    </div>
+                </div>
+            </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelExpirationDate, new { @data_test_selector = "lblExpirationDate" })
+                        </div>
+                        @Html.Partial("_HelpText", @Admin_Resources.TimeZoneHelpText)
+                        <div class="control-sm">
+                            <div class="right-inner-icon">
+                                @Html.TextBox("ExpirationDate", Model.ExpirationDate != null ? Model.ExpirationDate.ToDateTimeFormat() : string.Empty, new { @id = "ExpirationDate", @class = "datepicker", @maxdate = "", @mindate = HelperMethods.GetDateTime().Date, @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtExpirationDate" })
+                                <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="display:none">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelImportPriceList)
+                        </div>
+                        <div class="control-md">
+                            <div class="file-upload">
+                                <span title="Upload" class="btn-text btn-margin-left btn-text-secondary">@Admin_Resources.BrowseButton</span>
+                                <input type="file" name="importFile" id="importFile" onchange="FileUpload.ValidFileFormat();">
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" title="@Admin_Resources.ButtonUpload" data-placement="top" data-toggle="tooltip" class="file-preview"><em class="z-upload"></em></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="section-heading margin-top-25">Import</h3>
+                <div class="form-group" id="divSelectTemplate">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.TemplateId,new { @data_test_selector = "lblTemplate" })
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.TemplateId, new SelectList(Model.TemplateTypeList, "Value", "Text"), new { id = "templateList", @data_test_selector = "drpTemplate" })
+
+                            <span class="field-validation-error" id="error-templatename"></span>
+                            @Html.Hidden("ChangedFileName")
+                            @Html.Hidden("ImportHeadId")
+                            @Html.Hidden("ImportType")
+                        </div>
+                        <div class="pull-left dirtyignore" style="margin-left:2px">
+                          <a>@Html.AuthorizedRawActionLink("<em class='z-download'></em>", "DownloadTemplate", "Price", new { downloadImportHeadId = 2, downloadImportName = "Pricing", downloadImportFamilyId = 0 }, new { @class = "btn-text file-preview", @title = @Admin_Resources.ButtonDownloadTemplate, @data_placement = "top", @data_toggle = "tooltip", @id = "priceSample", @data_test_selector = "btnDownload" })</a> 
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.FilePath)
+                            <span class="sub">@Admin_Resources.SelectCSVFileInstructionText</span>
+                        </div>
+                        <div class="control-md">
+                            @Html.EditorFor(model => model.FilePath, new { htmlAttributes = new { @onchange = "GetFileHeaders()", @class="btn-text btn-text-secondary" } })
+                            <span class="field-validation-error" id="error-file-upload"></span>
+                        </div>
+                    </div>
+                </div>
+                @if (string.Equals(actionName.ToLower(), "edit"))
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-md control-non">
+                                <button type="button" id="btnImportInventory" class="btn-text btn-margin-left btn-text-secondary" onclick="Price.prototype.ImportPricing();">@Admin_Resources.ButtonImport</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @Html.HiddenFor(model => model.PriceListId)
+                @Html.HiddenFor(model => model.ListCode)
+                @Html.HiddenFor(model => model.OldCurrencyId)
+            </div>
+                                }
+
+        @if (Model.ImportPriceList?.Count > 0)
+            {
+            @Html.Partial("~/Views/Price/_ImportPriceErrorList.cshtml", Model.GridModel)
+        }
+
+        @*Don't delete this div*@
+        <div id="preview-import-price"></div>
+
+    </section>
+</div>
+<script src="~/Scripts/Core/Znode/FileUpload.js"></script>
+

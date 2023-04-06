@@ -1,0 +1,21 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model OrderInfoViewModel
+@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("UpdateShippingMethod", "order"
+                                                                            , new AjaxOptions
+                                                                            {
+                                                                                UpdateTargetId = "labelShippingMethod",
+                                                                                HttpMethod = "GET",
+                                                                                OnBegin = "Order.prototype.ValidateShippingMethod",
+                                                                                OnSuccess = "Order.prototype.ChangeShippingMethodSuccessCallback"
+                                                                            }, new { @class = "dirtylisten dirty", @id = "ShippingMethod" }))
+{
+    <div class="col-sm-12 nopadding">
+        @Html.TextBoxFor(model => model.ShippingMethod, new { @maxlength = "100", @Onchange = "Order.prototype.SaveFields(this)", @id = "txtShippingMethod", @data_test_selector = "txtShippingMethod" })
+        <span style="display:none" id="spnShippingMethod" class="field-validation-error" data-valmsg-replace="true">Shipping Method is required.</span>
+        @Html.HiddenFor(model => model.OmsOrderId, new { @id = "hdnShippingMethodOrderId" })
+    </div>
+
+}

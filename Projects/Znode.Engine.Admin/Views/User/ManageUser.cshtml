@@ -1,0 +1,24 @@
+﻿@model Znode.Engine.Admin.ViewModels.UsersViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+}
+
+<div class="row">
+    <!--Left Panel-->
+   @Html.Partial("~/views/User/_asideUserManagePanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        <div class="col-sm-12 page-container">
+            <div class="col-sm-12 title-container">                
+                <h1>@Admin_Resources.LabelUserManagement<span class="separator"> | </span><span class="title-action">@Admin_Resources.LabelManage</span><span class="separator"> - </span><span class="title-item">@($"{Model.UserName}")</span></h1>                                
+                <div class="pull-right">
+                    @Html.AuthorizedRawActionLink(Admin_Resources.ButtonEdit, "Edituser", "User", new { @userId = Model.UserId }, new { @class = "btn-text", title = Admin_Resources.ButtonEdit })
+                    @Html.AuthorizedRawActionLink(Admin_Resources.ButtonCancel, "UsersList", "User", null, new { @class = "btn-text" })
+                </div>
+            </div>
+            <div id="UserData">
+                @Html.Partial("_ManageUser", Model)
+            </div>
+        </div>
+    </section>
+</div>

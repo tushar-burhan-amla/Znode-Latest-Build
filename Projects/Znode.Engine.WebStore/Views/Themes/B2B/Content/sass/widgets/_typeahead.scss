@@ -1,0 +1,87 @@
+﻿// Search Text Box Widget.
+.tt-dropdown-menu {
+    width: 100%;
+    background-color: $white;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid $border-default;
+}
+
+.tt-dataset-autos, .tt-suggestions {
+    float: left;
+    width: 100%;
+}
+
+.tt-suggestion {
+    float: left;
+    width: 100%;
+    border-bottom: 1px solid $border-default;
+    color: $text-default;
+    text-align: left;
+
+    .auto-list {
+        float: left;
+        width: 70%;
+        padding: 5px;
+
+        h4 {
+            font-size: 14px;
+            font-family: $base-font-family-bold;
+            color: $base-primary;
+        }
+
+        p {
+            font-size: 12px;
+            padding: 0;
+            margin: 0;
+            line-height: 22px;
+        }
+
+        b {
+            color: $base-primary;
+        }
+    }
+
+    .auto-img {
+        float: left;
+        text-align: center;
+        margin: 15px 0 0;
+
+        img {
+            width: 40px;
+            height: 40px;
+        }
+    }
+}
+
+.tt-suggestion.tt-cursor {
+    background-color: #c0e2f2;
+    cursor: pointer;
+}
+
+.site-search .tt-suggestion {
+    .search-img {
+        margin-right: 20px;
+        height: 60px;
+        width: 60px;
+
+        img {
+            height: 60px;
+            object-fit: cover;
+        }
+    }
+
+    .auto-list {
+        float: none;
+
+        p {
+            font-size: $base-font-size;
+        }
+
+        .search-category {
+            text-decoration: underline;
+            color: $base-tertiary;
+        }
+    }
+}

@@ -1,0 +1,49 @@
+﻿@model Znode.Engine.Admin.ViewModels.PIMAttributeViewModel
+@using Znode.Engine.Admin.ViewModels;
+
+@{
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateAttribute", CancelUrl = controllerName == "ProductAttribute" ? "/PIM/ProductAttribute/List" : "/PIM/CategoryAttribute/List", Callback = controllerName == "ProductAttribute" ? "ProductAttribute.prototype.IsProductAttributeCodeExist" : "ProductAttribute.prototype.IsCategoryAttributeCodeExist", IsSaveCloseEnable = true };
+}
+
+<div class="col-sm-12 title-container">
+    @if (actionName.ToLower().Contains("create"))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelAttribute)</h1>
+    }
+    else
+    {
+        <h1>
+            @string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelAttribute)<em class="z-minus"></em>
+            @if (!Model.IsCategory)
+            {
+                <span class="total-count padding-left"><p>@string.Format(@Admin_Resources.AttributeUsedInProductCount, Model.UsedInProductsCount)</p></span>
+            }
+            <span>@Model.AttributeCode</span>
+        </h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateAttribute" }))
+    {
+        @*Div for creating tabs*@
+        <div class="col-sm-12 nopadding">
+            @Html.Partial("~/Views/Shared/Controls/_TabStructure.cshtml", Model.Tabs)
+        </div>
+    }
+</section>
+<div id="divMediaUploaderPopup"></div>
+
+<script type="text/javascript">
+    document.addEventListener('onHideControlsLoad', function () {
+        ProductAttribute.prototype.BindDefaultValueSaveClick();
+        ProductAttribute.prototype.BindDefaultValueDeleteClick();
+    }, false);
+</script>

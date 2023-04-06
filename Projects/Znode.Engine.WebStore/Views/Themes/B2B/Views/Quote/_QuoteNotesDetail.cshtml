@@ -1,0 +1,46 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Helpers;
+@model QuoteResponseViewModel
+
+<div id=quoteNoteList>
+    <div class="col-12 p-0">
+      <h4 class="pb-3">@WebStore_Resources.LabelNotes</h4>   
+    </div>
+    <div class="dashboard-content notes-main-table mb-4">
+        <div class="table-responsive  notes-list-table" id="listcontainerId">
+            @{
+                if (Model.QuoteNoteList.Count > 0)
+                {
+                    <table id="manageQuoteGrid" data-test-selector="tblManageQuoteGrid" class="table table-tr" data-swhgajax="true" data-swhgcontainer="ZnodeOmsQuoteHistory" data-swhgcallback="" aria-describedby="Label Notes">
+                        <tbody data-test-selector="tblBdManageOrderGrid">
+                            <tr class="table-heading" style="border-bottom:1px solid #c3c3c3;">
+                                <th scope="col" data-test-selector="tblHdDate" class="table-td receipt-column-item py-4 pl-4">
+                                    @WebStore_Resources.TitleDate
+                                </th>
+                                <th scope="col" data-test-selector="tblHTime" class="table-td receipt-column-item py-4">
+                                    @WebStore_Resources.LabelTime
+                                </th>
+                                <th scope="col" data-test-selector="tblHdUpdatedBy" class="table-td receipt-column-item py-4">
+                                    @WebStore_Resources.LabelUpdatedBy
+                                </th>
+                                <th scope="col" data-test-selector="tblHdNotes" class="table-td receipt-column-item py-4">
+                                    @WebStore_Resources.LabelNotes
+                                </th>
+                            </tr>
+                            @foreach (var item in Model.QuoteNoteList)
+                            {
+                                <tr class="receipt-item table-tr">
+                                    <td class="table-td receipt-column-item py-4 pl-4">@Convert.ToDateTime(item.CreatedDate).ToString(HelperMethods.GetStringDateTimeFormat())</td>
+                                    <td class="table-td receipt-column-item py-4">@Convert.ToDateTime(item.CreatedDate).ToString("hh:mm tt")</td>
+                                    <td class="table-td receipt-column-item py-4">@item.UpdatedBy</td>
+                                    <td class="table-td receipt-column-item td-break-word py-4">@Html.RenderBlock(item.Notes)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+    </div>
+
+</div>

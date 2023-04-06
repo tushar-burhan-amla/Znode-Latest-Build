@@ -1,0 +1,73 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model CMSPageListViewModel
+
+@{
+    int currentPageSize = Model.PageSize != 0 ? Model.PageSize : WebStoreConstants.CMSDefaultPageSize;
+    int currentPageNumber = Model.PageNumber;
+    int pageIndex = currentPageNumber;
+
+    pageIndex = pageIndex == 0 ? pageIndex : (pageIndex - 1);
+    int countFrom = pageIndex > 0 ? (currentPageSize * pageIndex) + 1 : 1;
+    int countTo = pageIndex > 0 ? (countFrom - 1) + currentPageSize : currentPageSize;
+    countTo = (Model.TotalPages - 1) == pageIndex ? Convert.ToInt32(Model.TotalCMSPageCount) : countTo;
+
+}
+<div id="layout-cms-paging" class="b2b-paging">
+    <div class="search-paging">
+        <span class="filter-text">@WebStore_Resources.LabelPageResultsPerPage</span>
+        <form name="ContentSearchPaging">
+            @Html.AntiForgeryToken()
+            @Html.DropDownList("contentpagesize", new[] {
+                              new SelectListItem() {Text = WebStore_Resources.Show8, Value = "8", Selected =  @currentPageSize == 8 },
+                              new SelectListItem() {Text = WebStore_Resources.Show12, Value = "12", Selected =  @currentPageSize == 12 },
+                              new SelectListItem() {Text = WebStore_Resources.Show16, Value = "16", Selected =  @currentPageSize == 16 },
+                              new SelectListItem() {Text = WebStore_Resources.Show32, Value = "32",  Selected = @currentPageSize == 32},
+                              new SelectListItem() {Text = WebStore_Resources.Show64, Value = "64",  Selected = @currentPageSize == 64 },
+           })
+        </form>
+    </div>
+</div>
+
+<div class="b2b-product-count">
+        @if (!Equals(Model.SearchResultCountText, null))
+        {
+            <p class="search-result" data-test-selector="paraSearchResult">@countFrom - @countTo of @Model.TotalCMSPageCount</p>
+        }
+</div>
+
+<div class="search-pagination b2b-pagination">
+    <ul>
+        <li class="search-more-nav arrow-left"><a data-test-selector="linkCMSArrowLeftBottom" onclick="Search.prototype.PreviousPageClick(this)" class="prev-content-page-search button" href="javascript: void(0)" data-pageno="@currentPageNumber" title="Previous" ><span class='left-icon'></span></a></li>
+        <li class="search-more-nav arrow-right"><a data-test-selector="linkCMSArrowRight" onclick="Search.prototype.NextPageClick(this)" class="next-content-page-search button" href="javascript: void(0)" data-pageno="@currentPageNumber" title="Next" ><span class='right-icon'></span></a></li>
+    </ul>
+    @Html.HiddenFor(model => model.TotalPages, new { id = "hdnContentPageTotalPages" })
+    <input type="hidden" id="currentContentPageNumber" name="currentContentPageNumber" value="@currentPageNumber">
+</div>
+
+<script>
+    $(document).ready(function () {
+        var totalPages = parseInt($("#hdnContentPageTotalPages").val(), 10);
+        var currentPageNumber = $("#currentContentPageNumber").val();
+
+        if (totalPages == 1) {
+            $('.prev-content-page-search').addClass('disabled');
+            $('.next-content-page-search').addClass('disabled');
+            return false;
+        }
+        if (parseInt(currentPageNumber) == 1 || currentPageNumber == "") {
+            $('.prev-content-page-search').addClass('disabled');
+            return false;
+        }
+        if (parseInt(currentPageNumber) == (totalPages)) {
+            $('.next-content-page-search').addClass('disabled');
+            return false;
+        }
+    });
+
+    $("#contentpagesize").change(function () {
+        $("#currentContentPageNumber").val("1");
+        $('html, body').animate({scrollTop: 0}, 'slow');
+        $("#formcmspagesearch").click();
+    });
+</script>

@@ -1,0 +1,95 @@
+﻿@using Znode.Engine.WebStore.ViewModels;
+@using Znode.Engine.WebStore.Agents
+@using Znode.Libraries.ECommerce.Utilities;
+@model  CategoryViewModel
+@{
+    var _rq = Request.QueryString;
+    string pageSize = !string.IsNullOrEmpty(Convert.ToString(Request.QueryString[WebStoreConstants.PageSize])) ? Request.QueryString[WebStoreConstants.PageSize] : !string.IsNullOrEmpty(Convert.ToString(SessionHelper.GetDataFromSession<int?>(WebStoreConstants.PageSizeValue))) ? Convert.ToString(SessionHelper.GetDataFromSession<int?>(WebStoreConstants.PageSizeValue)) : null;
+
+    Dictionary<string, object> searchProperties = new Dictionary<string, object>();
+
+    searchProperties.Add(WebStoreConstants.PageSize, pageSize);
+    searchProperties.Add(WebStoreConstants.PageNumber, Request.QueryString[WebStoreConstants.PageNumber]);
+    searchProperties.Add(WebStoreConstants.Sort, Request.QueryString[WebStoreConstants.Sort]);
+    var domainurl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+}
+<div id="layout-category" data-category="@Model.CategoryName" data-categoryId="@Model.CategoryId" class="col">
+    @Html.Partial("../_LearnMore", Model)
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                <div id="breadCrumb" class="col breadcrumb-container">@Html.RenderBlock(Model.BreadCrumbHtml)</div>
+            </div>
+        </div>
+    </div>
+        <div class="row b2b-category-list">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="page-title" data-text-selector="hdnCategoryTitle">@Html.RenderBlock(Attributes.Value(Model.Attributes, "CategoryTitle"))</h1>
+                        <p>@Html.RenderBlock(Attributes.Value(Model.Attributes, "LongDescription"))</p>
+                    </div>
+                    <div class="col-12 category-landing-container p-0">
+                        <z-widget>@Html.WidgetPartialAuto("CategoryGrid", "CategoryList", "123", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), Model.CategoryId)</z-widget>
+                    </div>
+                    @if (Convert.ToInt32(searchProperties[WebStoreConstants.PageSize]) != -1 && (Convert.ToInt32(TempData[WebStoreConstants.ProductCount]) > 0))
+                    {
+                        if (!Helper.InfinityLoading)
+                        {
+                            <div class="col-12">
+                                <div class="category-more text-center mt-4">
+
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+            <div class="row b2b-products-list">
+                <div class="container">
+                    <div class="row mb-5">
+                        <div id="facets" class="col-12 col-lg-3 p-0 mt-5 side-nav nav-right b2b-side-bar">
+                            <div class="d-lg-none">
+                                <div class="col-12 text-right nav-header">
+                                    <a href="JavaScript:void(0);" class="CloseNav p-0 close-icon"></a>
+                                    <div class="nav-label"><div class="cut-text"> Sort & Filter</div></div>
+                                </div>
+                            </div>
+                            @{Html.RenderPartial("_FacetList", Model.ProductListViewModel.SearchResultViewModel);}
+                            <div class="col-12 p-0 b2b-compare-product-list">
+                                <div id="compareProductList">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-9 mt-5 b2b-product-list">
+                            @{Html.RenderPartial("_ProductGrid", Model.ProductListViewModel);}
+                            @if (Convert.ToInt32(searchProperties[WebStoreConstants.PageSize]) != -1 && (Convert.ToInt32(TempData[WebStoreConstants.ProductCount]) > 0))
+                            {
+                                if (!Helper.InfinityLoading && (Convert.ToInt32(TempData[WebStoreConstants.TotalProductCount]) > Convert.ToInt32(searchProperties[WebStoreConstants.PageSize])))
+                                {
+                                    <div class="col-12">
+                                        <div class="category-more text-center mt-4">
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <div class="col offer-banner mt-4 mt-md-0">
+                        <!--Advertisement Banner Widget-->
+                        <z-widget>@Html.WidgetPartial("OfferBanner", "AdvertisementBanner", "110", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId)</z-widget>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" value="@Model.CategoryId" id="categoryId" />
+    <input type="hidden" value="0" id="parentCategoryId" />
+    </div>

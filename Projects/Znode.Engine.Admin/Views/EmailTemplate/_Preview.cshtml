@@ -1,0 +1,29 @@
+﻿
+@using Znode.Engine.Admin.ViewModels;
+@model EmailTemplateViewModel
+
+<div id="aside-popup-panel">
+    <div class="col-sm-12 title-container">
+        <h1>@Admin_Resources.TitlePreviewTemplate<em class="z-minus"></em><span>@Admin_Resources.LabelPreview</span></h1>
+        <div class="pull-right">
+            <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('divEmailTemplatePreview')"><em class='z-back'></em>@Admin_Resources.ButtonBack</button>
+        </div>
+    </div>
+    <div class="col-sm-12 page-container">
+        <h2>@Admin_Resources.LabelEmailContent</h2>
+        @Html.RenderBlock(Model.Html)
+    </div>
+
+    <br />
+    <div class="sms-content-preview">
+        <div class="col-sm-12 page-container">
+            <h2>@Admin_Resources.LabelSMSContent</h2>
+            <div class="sms-content-wrapper">
+                <div class="sms-content-subject">@Model.Subject</div>
+                <div class="sms-content">@Model.SmsContent</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

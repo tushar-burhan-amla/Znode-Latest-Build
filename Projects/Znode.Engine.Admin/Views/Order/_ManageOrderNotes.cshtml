@@ -1,0 +1,38 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model OrderViewModel
+@{
+    Layout = null;
+}
+<div class="col-sm-2 nopadding">
+    <h3 class="section-heading margin-top-25">@Admin_Resources.LabelOrderNotes</h3>
+    @using (Ajax.BeginForm("AddOrderNotes", "Order", new AjaxOptions() { UpdateTargetId = "orderNotesDiv", OnBegin = "return Order.prototype.AddNotesValidation()", OnSuccess = "Order.prototype.AddNotesSuccessCallBack()" }))
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding margin-bottom">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.LabelAdditionalNotes)
+                </div>
+                <div class="control-md">
+                    <div id="areaList">
+                        @Html.TextAreaFor(m => m.AdditionalNotes,new { maxlength = 500 })
+                        @Html.ValidationMessageFor(model => model.AdditionalNotes)
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 nopadding margin-bottom dirtyignore">
+                <div class="control-non">
+                    <button type="submit" class="btn-text btn-margin-left">@Admin_Resources.ButtonSubmit</button>
+                </div>
+            </div>
+        </div>
+            @Html.Hidden("OmsOrderId")
+            @Html.HiddenFor(model => model.PortalId)
+            @Html.HiddenFor(model => model.UserId, new { @id = "hdnUserId" })
+            @Html.Hidden("OmsOrderDetailsId")
+            @Html.Hidden("AdditionalNotes")
+    }
+    <div id="orderNotesDiv">
+        @Html.Partial("_OrderNotes", Model.OrderNotes)
+    </div>
+</div>
+

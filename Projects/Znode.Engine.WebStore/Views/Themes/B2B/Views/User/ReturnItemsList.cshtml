@@ -1,0 +1,110 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Helpers;
+@model RMAReturnOrderDetailViewModel
+
+@{
+    var consolidatedCartItems = Model?.ReturnCartViewModel?.ShoppingCartItems?.ToList()?.AsEnumerable()?.GroupBy(x => new { x.SKU, x.GroupId })?.Select(c => new ReturnItemGroupListViewModel
+    {
+        SKU = c.Key.SKU,
+        GroupId = c.Key.GroupId,
+        Children = c.ToList(),
+        Sequence = c.FirstOrDefault().GroupSequence,
+    }).ToList();
+}
+<div>
+    @if (Model?.ReturnCartViewModel?.ShoppingCartItems?.Any() ?? false)
+    {
+        <div class="col-12 filter-component border-bottom d-flex justify-content-between align-items-center" style="background-color: #FFF;">
+            <div class="col-12 header">
+                <div class="row">
+                    <div class="mr-5">
+                        <label class="lbl-order-detail text-uppercase mb-0">@WebStore_Resources.LabelOrderDetails :</label>
+                    </div>
+                    <div class="col-12 col-xl-9 p-0 d-flex flex-column d-lg-block">
+                        <span class="mr-5">@WebStore_Resources.TitleOrderNumber <span class="ml-3">@Model.OrderNumber</span></span>
+                        <span class="mr-5">@WebStore_Resources.LabelOrderDate <span class="ml-3">@Model.OrderDate</span></span>
+                        <span>@WebStore_Resources.LabelOrderTotal<span class="ml-3">@HelperMethods.FormatPriceWithCurrency(@Model.Total, @Model.CultureCode)</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 list-container p-0">
+            <div class="col-12 p-0">
+                <div class="table-responsive return-order-table">
+                    <table class="table" id="returnOrderTable" aria-describedby="Return Items">
+                        <thead>
+                            <tr class="col-xs-12 nopadding" style="background-color: #FAFAFA;">
+                                <th scope="col" data-test-selector="tblHdImage" class="mw-100">
+                                    <span data-test-selector="spnImage">@WebStore_Resources.LabelImage</span>
+                                </th>
+                                <th scope="col" data-test-selector="tblHdSKU" class="mw-100">
+                                    <span data-test-selector="spnSKU">@WebStore_Resources.TitleSKU</span>
+                                </th>
+                                <th scope="col" data-test-selector="tblHdProduct" class="mw-200">
+                                    <span data-test-selector="spnProduct">@WebStore_Resources.LabelProductName</span>
+                                </th>
+                                <th scope="col" data-test-selector="tblHdReturnReason" class="sp-returned-reason mw-100">
+                                    <span data-test-selector="spnReason">@WebStore_Resources.LabelReason</span>
+                                </th>
+                                <th scope="col" data-test-selector="tblHdUnitPrice" class="sp-returned-reason mw-100">
+                                    <span data-test-selector="spnUnitPrice">@WebStore_Resources.LabelUnitPrice</span>
+                                </th>
+                                <th scope="col" data-test-selector="tblHdQuantity" class="mw-100">
+                                    <span data-test-selector="spnQuantity">@WebStore_Resources.LabelShippedQty</span>
+                                </th>
+
+                                <th scope="col" data-test-selector="tblHdReturnQuantity" class="mw-100">
+                                    <span data-test-selector="spnReturnQuantity">@WebStore_Resources.LabelReturnQty</span>
+                                </th>
+                                <th scope="col" data-test-selector="tblHdTotal" class="mw-100">
+                                    <span data-test-selector="spnTotal">@WebStore_Resources.LabelTotalPrice</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model?.ReturnCartViewModel?.ShoppingCartItems != null && Model?.ReturnCartViewModel?.ShoppingCartItems?.Count > 0)
+                            {
+                                foreach (ReturnItemGroupListViewModel returnItemGroup in consolidatedCartItems.OrderBy(x => x.Sequence))
+                                {
+                                    if (returnItemGroup?.Children != null)
+                                    {
+                                        if (returnItemGroup?.Children.Count == 1 && returnItemGroup.Children.FirstOrDefault()?.Quantity > 0)
+                                        {
+
+                                            string guid = returnItemGroup?.Children.FirstOrDefault()?.ExternalId;
+                                            <tr class="returnItem" data-return-lineitem="@guid">
+                                                @Html.Partial("_ReturnItemsList", returnItemGroup.Children.FirstOrDefault())
+                                            </tr>
+                                        }
+                                        else if (returnItemGroup?.Children.Count > 1)
+                                        {
+                                            foreach (RMAReturnCartItemViewModel variation in returnItemGroup.Children.OrderBy(x => x.Sequence))
+                                            {
+                                                if (variation?.Quantity > 0)
+                                                {
+                                                <tr class="returnItem" data-return-lineitem="@variation.ExternalId">
+                                                    @Html.Partial("_ReturnItemsList", variation)
+                                                </tr>
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="divReturnCalculation" class="border-bottom">
+            <div class="col-12 list-container p-0">
+                @Html.Partial("_ReturnCalculation", Model?.ReturnCalculateViewModel)
+            </div>
+        </div>
+    }
+</div>
+
+@Html.HiddenFor(m => m.OrderNumber, new { @id = "hdnOrderNumber" })
+@Html.HiddenFor(m => m.OmsOrderId, new { @id = "hdnOmsOrderId" })
+@Html.HiddenFor(m => m.CultureCode, new { @id = "hdnCultureCode" })
+@Html.HiddenFor(m => m.ReturnNumber, new { @id = "hdnReturnNumber" })

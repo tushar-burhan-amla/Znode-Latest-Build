@@ -1,0 +1,78 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers
+@{
+    SessionProxyHelper objHelper = new SessionProxyHelper();
+    MenuListViewModel menuList = objHelper.GetMenuListByUserName();
+    bool expandMenuStatus = objHelper.GetCollapseMenuStatus();
+    string collapseMenuStatusCss = expandMenuStatus ? "style=display:none;" : "style=display:block;";
+    string expandMenuStatusCss = expandMenuStatus ? "style=display:block;" : "style=display:none;";
+}
+
+@if (menuList?.Menus?.Count > 0)
+{
+    <div id="Menu_Collapse" class="nav-collapse" @collapseMenuStatusCss>
+        <ul id="nav-menu" class="clearfix">
+            @try
+            {
+                List<MenuViewModel> ParentMenus = menuList.Menus.FindAll(x => Equals(x.ParentMenuId, null) && Equals(x.IsActive, true)).OrderBy(x => x.MenuSequence).ThenBy(x => x.MenuId).ToList();
+                foreach (MenuViewModel item in ParentMenus)
+                {
+                    if (!Equals(item.ActionName.ToLower(), "dashboard"))
+                    {
+                        string url = string.IsNullOrEmpty(item.AreaName) ? $"/{item.ControllerName}/{item.ActionName}" : $"/{item.AreaName}/{item.ControllerName}/{item.ActionName}";
+                        string menuName = item.MenuName;
+                        string className = string.IsNullOrEmpty(item.CSSClassName) ? "z-info" : item.CSSClassName;
+                        string menuId = item.MenuId.ToString();
+                        List<MenuViewModel> ChildMenus = menuList.Menus.FindAll(y => Equals(y.ParentMenuId, item.MenuId) && Equals(y.IsActive, true)).ToList();
+                        <li><a href="@url" class="main-menu menu-link" id="@menuId"><em class="@className menu-link"></em><span class="menu-link">@menuName</span></a></li>
+                    }
+                }
+            }
+            catch (Exception) { }
+        </ul>
+        <a onclick="ZnodeBase.prototype.ExpandMenu(true)" class="show-less-more">Show More <em class="z-right-all"></em></a>
+    </div>
+    <div id="Menu_Expand" class="nav-expand" @expandMenuStatusCss>
+        <ul id="nav-menu" class="clearfix">
+            @try
+            {
+
+                List<MenuViewModel> ParentMenus = menuList.Menus.FindAll(x => Equals(x.ParentMenuId, null) && Equals(x.IsActive, true)).OrderBy(x => x.MenuSequence).ThenBy(x => x.MenuId).ToList();
+                foreach (MenuViewModel item in ParentMenus)
+                {
+                    if (!Equals(item.ActionName.ToLower(), "dashboard"))
+                    {
+                        string url = string.IsNullOrEmpty(item.AreaName) ? $"/{item.ControllerName}/{item.ActionName}" : $"/{item.AreaName}/{item.ControllerName}/{item.ActionName}";
+                        string menuName = item.MenuName;
+                        string className = string.IsNullOrEmpty(item.CSSClassName) ? "z-info" : item.CSSClassName;
+                        string menuId = item.MenuId.ToString();
+                        List<MenuViewModel> ChildMenus = menuList.Menus.FindAll(y => Equals(y.ParentMenuId, item.MenuId) && Equals(y.IsActive, true)).OrderBy(x => x.MenuSequence).ThenBy(x => x.MenuId).ToList();
+
+                        if (ChildMenus?.Count > 0)
+                        {
+                            <li>
+                                <a href="@url" class="main" id="@menuId"><span class="menu-link">@menuName</span></a>
+                                <ul class="sub-menu">
+                                    @foreach (MenuViewModel childItem in ChildMenus)
+                                    {
+                                        className = string.IsNullOrEmpty(childItem.CSSClassName) ? "z-info" : childItem.CSSClassName;
+                                        url = string.IsNullOrEmpty(childItem.AreaName) ? $"/{childItem.ControllerName}/{childItem.ActionName}" : $"/{childItem.AreaName}/{childItem.ControllerName}/{childItem.ActionName}";
+                                        <li>
+                                            <a href="@url" class="menu-link" id="@childItem.MenuId" data-test-selector="link@(childItem.MenuName.Replace(" ",""))">@childItem.MenuName</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li><a href="@url" class="menu-link" id="@menuId"><span>@menuName</span></a></li>
+                        }
+                    }
+                }
+            }
+            catch (Exception) { }
+        </ul>
+        <a onclick="ZnodeBase.prototype.ExpandMenu(false)" class="show-less-more">Show Less <em class="z-right-all"></em></a>
+    </div>
+}

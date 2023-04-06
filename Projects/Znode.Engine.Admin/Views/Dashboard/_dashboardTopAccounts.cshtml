@@ -1,0 +1,56 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@model DashboardItemsListViewModel
+<div class="col-sm-12 nopadding dashboard-search" id="TopProducts">
+
+    <div class="d-flex flex-wrap justify-content-between padding-top padding-bottom table-heading-section">
+        <h2 class="margin-left-15">@Admin_Resources.LabelTopAccounts</h2>
+        <div class="row nopadding">
+            <div class="col-sm-5 margin-top-8">
+                @Html.AuthorizedRawActionLink(Admin_Resources.LabelViewAllAccounts, "List", "Account", null, new { @data_test_selector = "linkCreateQuote", @class = "viewalldata" })
+            </div>
+            <div class="col-sm-6 margin-right-9">
+                @Html.AuthorizedRawActionLink(Admin_Resources.LabelCreateAccount, "Create", "Account", null, new { @class = "btn-text btn-text-secondary", @data_test_selector = "linkCreateQuote", @target = "_blank" })
+            </div>
+
+        </div>
+    </div>
+    @if (Html.IsAuthorized("List", "Account"))
+    {
+        if (Model.DashboardViewModelList.Count > 0 && Model.DashboardViewModelList.Any(x => string.Equals(x.Type, ZnodeConstant.TopAccount, StringComparison.InvariantCultureIgnoreCase)))
+        {
+            <table class="table top-account-table" aria-describedby="Top Accounts List Table">
+                <thead class="thead-default">
+                    <tr>
+                        <th scope="col">@Admin_Resources.LabelAccountName</th>
+                        <th scope="col">@Admin_Resources.LabelAccountCode</th>
+                        <th scope="col">@Admin_Resources.LabelCustomerName</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DashboardItemsViewModel item in Model.DashboardViewModelList)
+                    {
+                        if (string.Equals(item.Type, ZnodeConstant.TopAccount, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                                    <tr>
+                                        <td>
+                                            @Html.AuthorizedRawActionLink(item.ItemName, "EditAccount", "Account", new { accountId = item.ItemId }, new { @data_test_selector = "linkGeneralSetting", @class = "viewalldata", @target = "_blank" })
+                                        </td>
+                                        <td>@Html.RenderBlock(@item.ItemCode)</td>
+                                        <td>@Html.RenderBlock(item.CustomerName)</td>
+                                    </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="no-record-found"><p>@Admin_Resources.NoRecordFoundText</p></div>
+        }
+    }
+    else
+    {
+        <div class="no-record-found"><p>@Admin_Resources.ErrorAccessOfView</p></div>
+    }
+</div>

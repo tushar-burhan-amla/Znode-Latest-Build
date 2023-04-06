@@ -1,0 +1,24 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductViewModel
+@{
+    int productId = Model.ConfigurableProductId > 0 ? Model.ConfigurableProductId : Model.PublishProductId;
+}
+<div id="layout-product" class="col" data-id="@productId">
+    <div class="row product-view-details">
+        <!--Get Product Images-->
+        <div class="col-12 col-lg-5 product-images" id="ProductImage">
+            @Html.Partial("_ProductImage", Model)
+        </div>
+        <!--Get Product details like short decription and higlights-->
+        <div class="col-12 col-lg-7 product-overview">
+            @Html.Partial("_ProductOverview", Model)
+
+            @Html.Partial("_ProductInfo", Model)
+        </div>
+            @Html.HiddenFor(m => m.IsQuickView, new { @id = "isQuickView" })
+</div>
+</div>
+<script>
+jQuery('img').on('error', function (e) {
+                this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+            });
+</script>

@@ -1,0 +1,39 @@
+﻿
+@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.Username, new { @class = "required", @data_test_selector = "lblMerchantLogin" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => Model.GatewayUsername, new { required = "required", @data_test_selector = "txtMerchantLogin" })
+            @Html.ValidationMessageFor(m => Model.GatewayUsername, @Admin_Resources.RequiredUserName, new { @data_test_selector = "valMerchantLogin" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.Password, new { @class = "required", @data_test_selector = "lblMerchantAccountPassword" })
+        </div>
+        <div class="control-md">
+            @Html.PasswordFor(m => Model.GatewayPassword, new { required = "required", @data_test_selector = "txtMerchantAccountPassword" })
+            @Html.ValidationMessageFor(m => Model.GatewayPassword, @Admin_Resources.RequiredPassword, new { @data_test_selector = "valMerchantAccountPassword" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelMerchantIds, new { @class = "required", @data_test_selector = "lblMerchantId" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => Model.TransactionKey, new { required = "required", @data_test_selector = "txtMerchantId" })
+            @Html.ValidationMessageFor(m => Model.TransactionKey, @Admin_Resources.ErrorMerchantIdRequired, new { @data_test_selector = "valMerchantId" })
+        </div>
+    </div>
+</div>
+
+

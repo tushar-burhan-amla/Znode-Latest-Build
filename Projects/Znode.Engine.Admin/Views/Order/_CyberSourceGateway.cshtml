@@ -1,0 +1,186 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PaymentTokenViewModel
+@{
+    var jss = new System.Web.Script.Serialization.JavaScriptSerializer();
+    var jwkJson = jss.Serialize(Model.PaymentGatewayToken);
+}
+<!DOCTYPE html>
+<html lang="en">
+<body>
+</body>
+<head>
+    <title>Sample Checkout</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <style>
+        #number-container, #securityCode-container, #cardholderName, #expMonth, #expYear {
+            height: 38px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: none;
+            padding: 6px 12px;
+        }
+
+        .flex-microform-focused {
+            background-color: #fff;
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+    </style>
+</head>
+</html>
+
+<div class="card">
+    <div class="card-body">
+        <div id="errors-output" role="alert"></div>
+        <form id="my-sample-form" method="post">
+            <div class="form-group">
+                <div class="control-label">
+                    <label class="required" id="cardNumber-label" data-test-selector="lblCardNumber">@Admin_Resources.LabelCreditCardNumber</label>
+                </div>
+                <div class="control-md">
+                    <div id="number-container" data-test-selector="divInputCardNumber"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control-label">
+                    <label class="required" data-test-selector="lblCardCreditExpirationDate">@Admin_Resources.CardCreditExpirationDate</label>
+                </div>
+             <div class="control-md">
+                    <div class="row nopadding">
+                        <div class="col-sm-2 nopadding">
+                            <input type="text" id="expMonth" maxlength="2" data-payment="exp-month" class="creditCardPayment" data-test-selector="txtExpirationMonth">
+                            <span class="sub" data-test-selector="spnMonth">(MM)</span>
+                        </div>
+                        <div class="col-sm-3 col-md-4">
+                            <input type="text" id="expYear" maxlength="4" data-payment="exp-year" class="creditCardPayment" data-test-selector="txtExpirationYear">
+                            <span class="sub" data-test-selector="spnYear">(YYYY)</span>
+                        </div>
+                        <div class="col-sm-12 nopadding">
+                            <div id="errormonth" class="field-validation-error" style="display: none" data-test-selector="divExpirationMonth">Enter valid Month/Year.</div>
+                            <div id="erroryear" class="field-validation-error" style="display: none" data-test-selector="divExpirationYear">Enter a valid Year.</div>
+                        </div>
+                    </div>
+             </div>
+            </div>
+
+            <div class="form-group">
+
+              <div class="control-label">
+                    <label class="required" data-test-selector="lblCardSecurityNumber" for="securityCode-container">@Admin_Resources.CardSecurityNumber</label>
+                </div>
+                <div class="control-md">
+
+                    <div id="securityCode-container" class="form-control" data-test-selector="divInputCardSecurityNumber"></div>
+                    <span class="sub" data-test-selector="spnCardPaymentNote">A 3 digit number usually found on the back of your card</span>
+                    <div id="errorcvc" class="field-validation-error" style="display:none;" data-test-selector="divCardSecurityNumber">Enter a valid Card Security Number.</div>
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-12 margin-top nopadding">
+                    <div class="control-label">
+                        <label class="required" data-test-selector="lblCardHolderName" for="cardholderName">@Admin_Resources.CardHolderName</label>
+                    </div>
+                    <div class="control-md">
+                        <input id="cardholderName" class="form-control" name="cardholderName" data-test-selector="txtcardholderName">
+                        <div id="errorcardholderName" class="field-validation-error" style="display:none;" data-test-selector="divInputHolderName">Enter a valid credit card Holder Name</div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="pay-button" class="btn btn-primary" style="display:none">Pay</button>
+            <input type="hidden" id="flexresponse" name="flexresponse">
+            <input type="hidden" id="hiddenflexresponse" name="flexresponse">
+
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+     // JWK is set up on the server side route for /
+
+    var form = document.querySelector('#my-sample-form');
+    var payButton = document.querySelector('#pay-button');
+    var flexResponse = document.querySelector('#flexresponse');
+    var expMonth = document.querySelector('#expMonth');
+    var expYear = document.querySelector('#expYear');
+    var errorsOutput = document.querySelector('#errors-output');
+
+
+    // the capture context that was requested server-side for this transaction
+        /*alert(captureContext);*/
+
+    var captureContext = @Html.Raw(jwkJson);
+
+    // custom styles that will be applied to each field we create using Microform
+    var myStyles = {
+        'input': {
+            'font-size': '14px',
+            'font-family': 'helvetica, tahoma, calibri, sans-serif',
+            'color': '#555'
+        },
+        /*':focus': { 'color': 'blue' },*/
+        ':disabled': { 'cursor': 'not-allowed' },
+        'valid': { 'color': '#3c763d' },
+        'invalid': { 'color': '#a94442' }
+        };
+
+    // setup
+    var flex = new Flex(captureContext);
+    var microform = flex.microform({ styles: myStyles });
+        var number = microform.createField('number', { placeholder: 'Enter card number' });
+    var securityCode = microform.createField('securityCode', { placeholder: '•••' });
+
+    number.load('#number-container');
+    securityCode.load('#securityCode-container');
+
+        /*expYear.addEventListener('onfocusout', function () {*/
+    payButton.addEventListener('click', function () {
+        var options = {
+            expirationMonth: expMonth.value,
+            expirationYear: expYear.value
+        };
+
+        microform.createToken(options, function (err, token) {
+            debugger
+            if (err) {
+                // handle error
+                console.error(err);
+                errorsOutput.textContent = err.message;
+                Order.prototype.ErrorDisplayCyberSourcePayment();
+                } else {
+                 // At this point you may pass the token back to your server as you wish.
+                // In this example we append a hidden input to the form and submit it.
+                console.log(JSON.stringify(token));
+                flexResponse.value = JSON.stringify(token);
+                $("#CardDataToken").val(flexResponse.value);
+                if ($("#OmsQuoteId").val() > 0) {
+                    Quote.prototype.ConvertQuoteToOrderQuotes();
+                }
+                else if (Order.prototype.GetOrderId() > 0) {
+                    Order.prototype.SubmitManageOrderPayment(flexResponse.value);
+                }
+                else {
+                    Order.prototype.SubmitCyberSourcePayment(flexResponse.value);
+
+                }
+
+
+            }
+        });
+
+    });
+    });
+</script>

@@ -1,0 +1,64 @@
+﻿@model Znode.Engine.WebStore.ViewModels.WidgetTitleListViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+    string imagePath = PortalAgent.CurrentPortal.MediaServerThumbnailUrl;
+}
+<ul class="link-panel-widget">
+    @foreach (var link in Model?.TitleList)
+    {
+        if (string.IsNullOrEmpty(link.MediaPath) && link.IsActive)
+        {
+            if (link.IsNewTab)
+            {
+                <li>
+                    <a href="@link.Url" target="_blank" data-test-selector="linkInfoList">@Html.RenderBlock(link.Title)</a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a href="@link.Url" target="_self" data-test-selector="linkInfoList">@Html.RenderBlock(link.Title)</a>
+                </li>
+            }
+        }
+        else if (link.IsActive)
+        {
+            if (link.IsNewTab)
+            {
+                <li>
+                    <a href="@link.Url" target="_blank">
+                        <img class="img-fluid b-lazy" data-src="@imagePath/@link.MediaPath" alt="Image" title="@link.Title" data-test-selector="@link.Title" />
+
+                        @if (Model.IsImageRequired)
+                        {
+                            <span>@Html.RenderBlock(link.Title)</span>
+                        }
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a href="@link.Url" target="_self">
+                        <img class="img-fluid b-lazy" data-src="@imagePath/@link.MediaPath" alt="Image" title="@link.Title" data-test-selector="@link.Title" />
+
+                        @if (Model.IsImageRequired)
+                        {
+                            <span>@Html.RenderBlock(link.Title)</span>
+                        }
+                    </a>
+                </li>
+            }
+
+        }
+    }
+</ul>
+@if (!Equals(Model, null) && Model.CMSMode)
+{
+    if (Model.IsEmpty)
+    {
+        <img src="@_fileLocation/Images/links.png" alt="New Product" class="img-responsive cms-img-icon" />
+    }
+}

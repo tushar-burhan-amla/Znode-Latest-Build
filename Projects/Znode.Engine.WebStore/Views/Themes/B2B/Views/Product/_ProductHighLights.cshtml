@@ -1,0 +1,40 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model List<HighlightsViewModel>
+@{
+    Layout = null;
+}
+<div id="product-highlights" class="col-12 p-0 b2b-product-highlight mb-2">
+    <ul class="p-0 list-unstyled d-flex flex-wrap">
+        @if (!Equals(Model, null))
+            {
+                foreach (HighlightsViewModel highlight in Model)
+                {
+                <li class="d-flex align-items-center justify-content-center">
+                    @if (!highlight.DisplayPopup)
+                    {
+                        <a href="../Product/GetHighlightInfo?highLightId=@highlight.HighlightId&productId=@highlight.PublishProductId&sku=@highlight.SKU" id="highlightInfo">
+                            <img title="@highlight.HighlightName" src="@highlight.MediaPath" alt="Upload Product Hightlight Image" onclick="javascript:void(0)" class="img-fluid" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@highlight.Hyperlink" target="_blank">
+                            <img title="@highlight.HighlightName" src="@highlight.MediaPath" alt="Upload Product Hightlight Image" class="img-fluid" />
+                        </a>
+                    }
+                </li>
+            }
+        }
+    </ul>
+</div>
+<script>
+   jQuery('img').on('error', function (e) {
+       this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+   });
+</script>
+
+
+
+
+
+

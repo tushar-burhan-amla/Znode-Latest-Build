@@ -1,0 +1,17 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ProductListViewModel
+
+<div id="layout-paging">
+    <div class="search-paging col-xs-12 col-sm-8 margin-top nopadding">
+        <div class="col-xs-8 nopadding search-pagination">
+            <ul>
+                <li class="search-more-nav arrow-left"><a data-test-selector="linkArrowLeftBottom" class="prev-page-search" href="javascript: void(0)" data-pageno="@Request.QueryString["pagenumber"]" class="button" title="Previous"><i class='zf-arrow-left-big'></i></a></li>
+                <li class="search-more-nav arrow-right"><a data-test-selector="linkArrowRightBottom" class="next-page-search" href="javascript: void(0)" data-pageno="@Request.QueryString["pagenumber"]" class="button" title="Next"><i class='zf-arrow-right-big'></i></a></li>
+            </ul>
+            @Html.HiddenFor(model => model.TotalPages, new { id = "hdnTotalPages" })
+        </div>
+        <div class="col-xs-4 nopadding">
+            @Html.Partial("../Search/_FooterPaging", new ViewDataDictionary(new { Id = "Page", @class = "pull-right" }))
+        </div>
+    </div>
+</div>

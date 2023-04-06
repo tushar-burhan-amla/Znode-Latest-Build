@@ -1,0 +1,73 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model BlogNewsViewModel
+
+@{
+    int? cmsContentPagesId = Model?.CMSContentPagesId > 0 ? Model?.CMSContentPagesId : null;
+    int? blogNewsContentId = Model?.BlogNewsContentId > 0 ? Model?.BlogNewsContentId : null;
+    string blogNewsContent = Model?.BlogNewsContent;
+}
+<div class="col-sm-12 nopadding margin-top-bottom">
+    @if (HelperUtility.IsNull(cmsContentPagesId) && HelperUtility.IsNotNull(blogNewsContent))
+    {
+        <label class="padding-right">@Html.RadioButtonFor(model => model.UseExistingContent, "SelectExisting", new { @id = "SelectExisting", @data_test_selector = "chkSelectExisting" }) <span class="lbl padding-8" data-test-selector="lblSelectExisitingPage">@Admin_Resources.LabelSelectExistingPage</span></label>
+        <label class="padding-right">@Html.RadioButtonFor(model => model.UseExistingContent, "AddNew", new { @checked = true, @id = "AddNew", @data_test_selector = "chkAddNew" })<span class="lbl padding-8" data-test-selector="lblAddNewPage">@Admin_Resources.LabelAddNewPage</span></label>
+    }
+    else
+    {
+        <label class="padding-right">@Html.RadioButtonFor(model => model.UseExistingContent, "SelectExisting", new { @checked = true, @id = "SelectExisting", @data_test_selector = "chkSelectExisting" }) <span class="lbl padding-8" data-test-selector="lblSelectExisitingPage">@Admin_Resources.LabelSelectExistingPage</span></label>
+        <label class="padding-right">@Html.RadioButtonFor(model => model.UseExistingContent, "AddNew", new { @id = "AddNew", @data_test_selector = "chkAddNew" })<span class="lbl padding-8" data-test-selector="lblAddNewPage">@Admin_Resources.LabelAddNewPage</span></label>
+    }
+
+    @Html.Partial("_HelpText", Admin_Resources.HelptextBlogNewsContent)
+
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding" id="Existing">
+        <div class="control-label">
+            @Html.LabelFor(model => model.CMSContentPagesId, new { @data_test_selector = "lblContentPage" })
+        </div>
+        <div class="control-md">
+            @CustomHtmlHelper.SearchTextBox(Model.PageName, Admin_Resources.LabelSelectContentPage, "txtPageName", true, Model.PageName, "text", "txtPageName")
+            @CustomHtmlHelper.HiddenField(Convert.ToString(Model.CMSContentPagesId), "hdnCMSContentPagesId", "hidden", Convert.ToString(Model.CMSContentPagesId))
+        </div>
+        <div class="pull-left dirtyignore">
+            @CustomHtmlHelper.SearchButton("serachCustomer", "BlogNews.prototype.GetContentPageList(" + Model.PortalId + "," + Model.LocaleId + ");", @Admin_Resources.SearchExistingContentPageButton, "linkSearchPages")
+        </div>
+        <a class="btn-narrow-icon" data-test-selector="linkClearContentPageName" onclick="BlogNews.prototype.ClearContentPageName()" data-toggle="tooltip" data-placement="top" data-original-title="@Admin_Resources.ClearContentPageName"><em class="z-clear-cache"></em></a>
+    </div>
+
+    <div class="col-sm-12 nopadding" id="New">
+        <div class="control-label">
+            @Html.LabelFor(m => m.BlogNewsContent, new { @data_test_selector = "lblBlogNewsContent" })
+        </div>
+        <div class="control-xxl">
+            @Html.TextAreaFor(x => x.BlogNewsContent, new { @class = "mceEditor rich-text-box", @rows = "5", @data_test_selector = "txtBlogNewsContent" })
+            @Html.ValidationMessageFor(m => m.BlogNewsContent, "", new { @data_test_selector = "valBlogNewsContent" })
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.CMSContentPagesId)
+    @Html.HiddenFor(model => model.BlogNewsContentId)
+</div>
+
+<script>
+    $(document).ready(function () {
+        if ($("#SelectExisting").is(":checked")) {
+            $("#New").hide();
+            $("#Existing").show();
+        } else {
+            $("#Existing").hide();
+            $("#New").show();
+        }
+        $("input[name='UseExistingContent']").click(function () {
+            if ($("#SelectExisting").is(":checked")) {
+                $("#New").hide();
+                $("#Existing").show();
+            } else {
+                $("#Existing").hide();
+                $("#New").show();
+            }
+        });
+    });
+</script>

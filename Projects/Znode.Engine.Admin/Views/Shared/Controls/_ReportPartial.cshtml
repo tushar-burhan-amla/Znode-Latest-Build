@@ -1,0 +1,7 @@
+﻿@model Znode.Engine.Admin.ViewModels.ReportViewModel
+@using MvcReportViewer;
+
+<div class="col-sm-12 nopadding report-container">
+    @Html.MvcReportViewer(Model.Path, Model.ParameterList, new { id = "reportIframe", allowfullscreen = true, scrolling = "yes", style = "border: 0;width:100% !important;height:100% !important;" }).ControlSettings(Model.ControlSetting)
+</div>
+

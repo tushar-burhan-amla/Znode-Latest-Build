@@ -1,0 +1,29 @@
+﻿@model Znode.Engine.Admin.Models.BindDataModel
+
+@foreach (var item in Model.ControlsData)
+{
+    <img class="media" alt="upload image" src="@item.Value" data-mediaId="@item.Key" /><br /><br />
+}
+
+<script>
+    $(".media").on("click", function () {
+        var mediaId = $(this).attr("data-mediaId");
+        $.ajax({
+            url: "/Home/GetImage", data: { "mediaId": mediaId }, success: function (response) {
+                var extension = response.DefaultValue.substr((response.DefaultValue.lastIndexOf('.') + 1));
+                var array = ["jpg", "jpeg", "bmp", "gif", "png"];
+                if (array.indexOf(extension) < 0 || response.FileSize > "52428800") {
+                    $("#txtImage").addClass("field-validation-error");
+                    $("#error-message").html("Please select image of .jpg, .jpeg, .bmp, .gif, .png and should be less than 50 MB.");
+                }
+                else {
+                    $("#txtImage").attr("value", response.DefaultValue);
+                    $("#imageId").attr("src", response.DefaultValue);
+                    $("#media-container").html("");
+                    $("#error-message").html("");
+                }
+            }
+        });
+        return false;
+    });
+</script>

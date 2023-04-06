@@ -1,0 +1,91 @@
+﻿@model Znode.Engine.Admin.ViewModels.CategoryListViewModel
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities;
+@{
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+
+    PopupModel publishPopupModel = new PopupModel()
+    {
+        Title = @Admin_Resources.TitlePublishConfirm,
+        Description = string.Format(Admin_Resources.PublishConfirmationMessage, "category"),
+        NoChoiceDescription = string.Format(Admin_Resources.PublishConfirmationMessageNoChoice, "category"),
+        ModalPopUpId = "PublishCategory",
+        ModalSizeClass = "modal-smd",
+        AdditionalNote = string.Format(Admin_Resources.PublishAllStoreLocaleDisclaimerMessage, "category"),
+        InputFields = new List<PopupInputField>(){
+new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = HelperMethods.GetAvailablePublishStates(), RequiredNumberOfItemsToDisplay = 2 },
+},
+        Buttons = new List<PopUpButtonModel>() {
+new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Category.prototype.PublishCategory()"}
+}
+    };
+}
+<div id="categoryList">
+    <div id="@Model.GridModel.FrontObjectName">
+        <div class="col-sm-12 title-container">
+            <h1 data-test-selector="hdgCategory">@Admin_Resources.TitleCategoriesList<span class="total-count"><p>@Model.GridModel.TotalRecordCount</p></span></h1>
+            <div class="pull-right btn-container">
+                @Html.Partial("~/Views/Shared/_CultureDropdown.cshtml", Model.Locale)
+                <div class="pull-right">
+                    @Html.AuthorizedRawActionLink( Admin_Resources.ButtonAdd, "Create", "Category", null, new { @class = "btn-text btn-text-secondary", @data_test_selector = "btnAddNew" })
+                </div>
+            </div>
+        </div>
+        <!--Main Container-->
+        <section class="col-sm-12 page-container">
+            <div>
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                        new PopupModel()
+                        {
+                            Title = @Admin_Resources.HeaderConfirmDelete,
+                            Description = Admin_Resources.TextConfirmDelete,
+                            ModalPopUpId = "DeletePopup",
+                            Buttons = new List<PopUpButtonModel>() {
+                                new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk,ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Category.prototype.DeleteMultipleCategory(this)" },
+                               }
+                        })
+
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml", publishPopupModel)
+
+            </div>
+            <div class="col-xs-12 nopadding category-filters-container">
+                <div class="col-md-2 category-filter">
+                    @{ List<string> additionalOptionList = new List<string>();
+                        additionalOptionList.Add(ZnodeTypeAheadListGenericOptions.All.ToString());
+                        additionalOptionList.Add(ZnodeTypeAheadListGenericOptions.No.ToString());}
+                    @Html.FastSelectFor(model => model.PimCatalogName, model => model.PimCatalogId, "GetSuggestions", "Typeahead", "Category.prototype.OnSelectCatalogAutocompleteDataBind", 1, true,
+                    new
+                    {
+                        htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectCatalog, @class = "", @Name = "SearchTerm", @id = "txtFilterCatalogName", @data_test_selector = "txtFilterCatalog_Name" },
+                        parameters = new { @type = ZnodeTypeAheadEnum.PIMCategoryList.ToString(), additionalOptions = String.Join(",", additionalOptionList) }
+                    })
+                </div>
+                @using (Ajax.BeginForm("List", "Category", new { pimCatalogId = Model.PimCatalogId, catalogName = Model.PimCatalogName }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+                {
+                    <div id="filterComponent">
+                        @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                    </div>
+                }
+            </div>
+                
+                <div class="col-sm-12 list-container">
+                    @{
+                        @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                    }
+                </div>
+        </section>
+        @Html.Hidden("HdnCategoryId")
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            ZnodeBase.prototype.SetNoImageForList();
+            $(".z-publish").off("click").on("click", function () { Category.prototype.PublishCategoryPopup($(this)); });
+            $('*[data-url]').each(function () { fastselectwrapper($(this), $(this).data("onselect-function")); });
+            // filter border
+            if ($("#filter-content-main li").length > 0) {
+                $("#filter-content-main").css("border-bottom", "1px solid #DBDDDD");
+            }
+        });
+    </script>
+</div>

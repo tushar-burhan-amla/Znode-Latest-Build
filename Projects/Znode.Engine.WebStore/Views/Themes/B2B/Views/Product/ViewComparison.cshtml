@@ -1,0 +1,43 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductCompareViewModel
+@{
+    //string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    bool? mailSend = ViewBag.sendMail;
+}
+<div class="col">
+    <div class="row">
+            <div class="container compare-all-print">
+                <div class="row compare-all">
+                    <div class="col-12">
+                        <h1 class="page-title" data-test-selector="hdgCompareHeading">@WebStore_Resources.HeaderProductCompare</h1>
+                    </div>
+                    @if (Model.ProductList.Count > 1)
+                    {
+                        <div class="col-12 compare-print">
+                            <div class="text-right">
+                                <a data-test-selector="linkButtonBack" href="javaScript:void(0)" onclick="javascript: window.history.go(-1); return false;">@WebStore_Resources.ButtonBack</a>
+                                <a data-test-selector="linkPrint" href="javaScript:void(0)" onclick="javascript:window.print();">@WebStore_Resources.TextPrint</a>
+                                @Html.ActionLink(WebStore_Resources.LabelRemoveAllLink, "DeleteComparableProducts", "Product" , new { @data_test_selector = "linkRemoveAll" })
+                                <a data-test-selector="linkSendMail" href="javaScript:void(0)" id="lnkSendMail" onclick="Product.prototype.SendMailPopUp()">@WebStore_Resources.LabelSendMail</a>
+                            </div>
+                        </div>
+                    }
+                    <div class="col-12 p-0">
+                        @Html.Partial("../Product/_ProductComparisonList", Model.ProductList)
+                    </div>
+                </div>
+            </div>
+        @* Don't delete this div *@
+        <input type="hidden" id="dynamic-mailStatus" name="MailStatus" value="@mailSend" />
+
+    <div data-test-selector="divSuccessMsg" id="successMessageDiv" style="display:none">
+    </div>
+
+        <div id="divSendMail" class="modal fade send-Mail-popup sendMailPopup" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="compare-product-popup modal-dialog modal-md modal-dialog-centered" id="popUp_sendMail">
+            </div>
+        </div>
+        <button data-test-selector="btnSendMail" id="btnSendMailPopup" style="display:none" data-toggle="modal" data-target=".sendMailPopup"></button>
+    </div>
+</div>
+
+

@@ -1,0 +1,94 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@model CatalogAssociationViewModel
+@{
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+    PopupModel publishPopupModel = new PopupModel()
+    {
+        Title = @Admin_Resources.TitlePublishConfirm,
+        Description = string.Format(Admin_Resources.PublishConfirmationMessage, "category"),
+        NoChoiceDescription = string.Format(Admin_Resources.PublishConfirmationMessageNoChoice, "category"),
+        ModalPopUpId = "PublishCatalogCategoryProducts",
+        ModalSizeClass = "modal-smd",
+        AdditionalNote = string.Format(Admin_Resources.PublishAllStoreLocaleDisclaimerMessage, "category"),
+        InputFields = new List<PopupInputField>
+            (){
+            new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = HelperMethods.GetAvailablePublishStates(), RequiredNumberOfItemsToDisplay = 2 },
+            },
+            Buttons = new List<PopUpButtonModel>
+                () {
+                new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Catalog.prototype.PublishCatalogCategoryProducts()"}
+                }
+                };
+                }
+                <div class="col-sm-12 title-container catalog-main-container">
+                    <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.TitleCatalog)<em class="z-minus"></em><span>@Html.RenderBlock(Model.CatalogName)</span></h1>
+    
+                    <div class="pull-right">
+                        <div class="pull-right btn-container">
+                            <a href="/PIM/Catalog/CatalogList" class="btn-text-icon"><em class='z-back' data-test-selector="linkCancel"></em>@Admin_Resources.ButtonBack</a>
+                            <div class="btn-text-group padding-left">
+                                <a class="btn-text btn-text-secondary" onclick="Catalog.prototype.BrowseCategories(@Model.CatalogId)" data-test-selector="btnAssociateCategories">@PIM_Resources.LabelAssociateCategories</a>
+                                <button type="button" class="btn-text-dropdown" id="hideShowCatalogbtn" data-toggle="dropdown" data-attr="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret caret-color"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>@Html.AuthorizedPrototypeRawActionLink(PIM_Resources.ButtonReady, "PublishCatalogCategoryProducts", "Catalog", new { @class = "btn-dropdwn-lst", @style = "display: none;", @id = "PublishCatalogCategoryLink", @onclick = "Catalog.prototype.PublishCatalogCategoryProductsPopup()" }) </li>
+                                    <li><a class="btn-text-icon dirtyignore" id="btn-save-displayorder" style="display:none" onclick="Catalog.prototype.SaveDisplayOrder();"><em class='z-save'></em>@Admin_Resources.ButtonSave</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-wrapper">
+                    <!--Left Panel-->
+                    <aside>
+                        <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+                        <div class="slide-container">
+                            @Html.Partial("~/Areas/PIM/Views/Catalog/_CategoryTree.cshtml")
+                        </div>
+                    </aside>
+
+            <section class="main-container">
+                <div class="col-sm-12 nopadding">
+                    <div id="@Model.GridModel.FrontObjectName" data-id="@Model.GridModel.FrontObjectName">
+                        @Html.Partial("AssociatedCategoriesList", Model)
+                    </div>
+                </div>
+                @Html.HiddenFor(m => m.CatalogId, new { @id = "hdnPimCatalogId" })
+                @Html.HiddenFor(m => m.CategoryId, new { @id = "hdnPimCategoryId" })
+                @Html.HiddenFor(x => x.GridModel.FrontObjectName, new { id = "container_to_update" })
+                @Html.Hidden("IsRootFolder")
+                <div id="temp_data_to_insert" style="display:none"></div>
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                new PopupModel()
+                {
+                Title = @Admin_Resources.HeaderConfirmDelete,
+                Description = @Admin_Resources.TextConfirmDelete,
+                ModalPopUpId = "CatalogAssociatedCategoryDeletePopup",
+                Buttons = new List<PopUpButtonModel>
+                    () {
+                    new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Catalog.prototype.DeleteMultipleCatalogAssociatedCategories(this);"}
+                    }
+                    })
+                    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                    Title = @Admin_Resources.HeaderConfirmDelete,
+                    Description = @Admin_Resources.TextConfirmDelete,
+                    ModalPopUpId = "ConfirmRemoveAssociatedProducts",
+                    Buttons = new List<PopUpButtonModel>
+                        () {
+                        new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Catalog.prototype.RemoveAssociatedProducts(this);"}
+                        }
+                        })
+
+                        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml", publishPopupModel)
+            </section>
+        </div>
+
+        <div id="target-categories-to-display" class="aside-popup-panel modal-dialog modal-lg"></div>
+        <div id="target-products-to-display" class="aside-popup-panel modal-dialog modal-xl"></div>
+        <div id="target-category-edit-to-display" class="aside-popup-panel modal-dialog modal-lg"></div>
+

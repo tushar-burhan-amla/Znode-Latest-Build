@@ -1,0 +1,96 @@
+﻿@using Znode.Engine.WebStore.Agents
+@model Znode.Engine.WebStore.ViewModels.ProductViewModel
+@{
+    var setting = PortalAgent.CurrentPortal?.GlobalAttributes?.Attributes?.FirstOrDefault(x => x.AttributeCode == "EnableEstimatedDeliveryDate")?.AttributeValue;
+    var showLeadTime = setting != null && setting != "false";
+    string dateFormat= Convert.ToString(DefaultSettingHelper.DefaultDateFormat);
+}
+@if (showLeadTime)
+{
+    <div delivery-date-container>
+        <div class="deliveryDate">
+            <div><b>@WebStore_Resources.LabelEstimatedDeliveryDate:</b> <span id="delivery-date"></span></div>
+            <a href="javascript:void(0);" id="calendar-button"><span class="icon-calendar"></span> Details</a>
+        </div>
+        <div class="deliverySlideIn">
+            <div id="calendar-popup">
+                @*Calendar populated here*@
+            </div>
+            <ul id="delivery-legend">
+                @*legend items populated here*@
+            </ul>
+        </div>
+        <p id="delivery-date-label">@WebStore_Resources.LabelDeliveryMessage</p>
+    </div>
+    <script>
+        $(document).ready(function() {
+            var productId = @Model.ParentProductId;
+            CustomEndpoint.prototype.GetProductLeadTime(productId,
+             function (eventDates) {
+                 estimatedDelivery = $.grep(eventDates, function (obj) { return obj.CssClass === "date-delivery"; })[0];
+                 if (estimatedDelivery) {
+
+                     $("#delivery-date").text(new Date(estimatedDelivery.Date).format('@dateFormat.ToLower()'));
+                     var today = $.grep(eventDates, function (obj) { return obj.CssClass === "date-today"; })[0];
+                     if (!today) {
+                         today = { Date: new Date(), Label: "Today", CssClass: "date-today" }
+                     }
+                     var numberOfMonths = new Date(estimatedDelivery.Date).getMonth() -
+                         new Date(today.Date).getMonth() +
+                         1;
+                     $('#calendar-popup').datepicker({
+                         numberOfMonths: numberOfMonths,
+                         hideIfNoPrevNext: true,
+                         minDate: today.Date,
+                         maxDate: estimatedDelivery.Date,
+                         beforeShowDay: function(date) {
+                             var highlight = $.grep(eventDates, function(obj) {
+                                 var d = new Date(obj.Date);
+                                 return d.getFullYear() === date.getFullYear() &&
+                                     d.getDate() === date.getDate() &&
+                                     d.getMonth() === date.getMonth();
+                             })[0];
+                             if (highlight) {
+                                 return [true, highlight.CssClass, highlight.Label];
+                             } else {
+                                 return [$.datepicker.noWeekends(date), "", ""];
+                             }
+                         }
+                     });
+
+                     var unique = {},
+                         newArr = [],
+                         elem = document.getElementById("delivery-legend");
+
+                     eventDates.forEach(function (item) {
+                         var b = unique[item.CssClass] = unique[item.CssClass] || {};
+                         b[item.Label] = true;
+                     });
+
+                     for (var clas in unique) {
+                         for (var label in unique[clas]) {
+                             newArr.push({
+                                 CssClass: clas,
+                                 Label: label
+                             });
+                         }
+                     }
+
+                     $(jQuery.parseJSON(JSON.stringify(newArr))).each(function () {
+                         var clas = this.CssClass;
+                         var label = this.Label;
+                         if (clas !== "date-weekend") { // don't populate for weekends
+                             elem.insertAdjacentHTML('beforeend', "<li><span class=\"" + clas + "\"><a> </a> </span> " + label + "</li>");
+                         }
+                     });
+
+                     // Toggles calendar display (uses CSS on .active)
+                     $('#calendar-button').click(function () {
+                         $('.deliverySlideIn, #calendar-button').toggleClass("active");
+                     });
+                     $('.ui-datepicker-group').parent("div").addClass("calendarContainer");
+                 }
+             });
+     })
+    </script>
+}

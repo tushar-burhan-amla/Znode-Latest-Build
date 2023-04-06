@@ -1,0 +1,87 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities;
+@model UrlRedirectViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = (ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString() == AdminConstants.CreateUrlRedirect) ? ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString() : AdminConstants.EditUrlRedirect;
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateEditUrlRedirect", CancelUrl = "/SEO/UrlRedirectList?PortalId=" + Model?.PortalId, IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    @if (string.Equals(actionName.ToLower(), "createurlredirect"))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelURLRedirect)</h1>
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelURLRedirect)<em class="z-minus"></em><span>@Model.RedirectFrom</span></h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateEditUrlRedirect" }))
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.PortalId, new { @class = "required",@data_test_selector= "lblStoreName" })
+                </div>
+                <div class="control-md">
+                    @Html.FastSelectFor(model => model.StoreName, model => model.PortalId, "GetSuggestions", "Typeahead", "SEO.prototype.OnSelectPortalResult", 1, true, new { htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStoreName" }, parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() } })                 
+                    @CustomHtmlHelper.HiddenField(Convert.ToString(Model.PortalId), "hdnPortalId", "hidden", Convert.ToString(Model.PortalId))
+                    @Html.ValidationMessageFor(model => model.StoreName, null, new { id = "errorRequiredStore", @data_test_selector = "valStoreName" })
+                </div>  
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.RedirectFrom, new { @class = "required",@data_test_selector= "lblRedirectFrom" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.RedirectFrom, new {@data_test_selector = "txtRedirectFrom" })
+                    @Html.ValidationMessageFor(model => model.RedirectFrom,null, new { @data_test_selector = "valRedirectFrom" })
+                </div>
+                @Html.Partial("_HelpText", @Admin_Resources.HelptextRedirectFrom)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.RedirectTo, new { @class = "required", @data_test_selector = "lblRedirectTo" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.RedirectTo, new { @data_test_selector = "txtRedirectTo" })
+                    @Html.ValidationMessageFor(model => model.RedirectTo,null, new { @data_test_selector = "valRedirectTo" })
+                </div>
+                @Html.Partial("_HelpText", @Admin_Resources.HelptextRedirectTo)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="control-md control-non">
+                <label>
+                    <input type="checkbox" name="IsActive" value="true" checked="@Model.IsActive" data-test-selector="chkEnableRedirection"/>
+                    <span class="lbl padding-8" data-test-selector="spnEnableRedirection">@Admin_Resources.LabelEnableRedirection</span>
+                    <input name="IsActive" type="hidden" value="false">
+                </label>
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.CMSUrlRedirectId)
+        @Html.HiddenFor(model => model.PortalId)
+        @Html.HiddenFor(model => model.StoreName)
+    }
+</section>
+<script>
+    $(document).ready(function () {
+        $('form').removeData('validator');
+        $('form').removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse('form');
+    });
+    //Bootstrap ToolTip Call
+    $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover', html: true });
+</script>
+<div id="divStoreListAsidePanel" class="aside-popup-panel modal-dialog modal-lg"></div>

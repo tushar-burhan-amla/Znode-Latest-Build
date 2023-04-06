@@ -1,0 +1,44 @@
+﻿@model Znode.Engine.Admin.ViewModels.ProductDetailsListViewModel
+@using Znode.Engine.Admin.Models
+@using Znode.Libraries.ECommerce.Utilities;
+
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+}
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.TitleProductsList</h1>
+    <div  class="pull-right btn-container">
+        @Html.Partial("~/Views/Shared/_CultureDropdown.cshtml", Model?.Locales)
+    </div> 
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.PortalId)
+            </div>
+            <div class="control-md">
+                @Html.FastSelectFor(model => model.StoreName, model => model.PortalId, "GetSuggestions", "Typeahead", "SEO.prototype.OnSelectPortalResult", 1, true,
+                   new
+                   {
+                       htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStoreName" },
+                       parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                   })
+                @Html.HiddenFor(model => model.PortalId, new { @id = "hdnPortalId" })
+                @Html.ValidationMessageFor(model => model.PortalId)
+            </div>          
+        </div>
+    </div>
+    <div id="productList" class="margin-top">
+        @Html.Partial("_productList", Model)
+    </div>
+</section>
+<div id="divStoreListAsidePanel" class="aside-popup-panel modal-dialog modal-lg"></div>
+@Html.Hidden("HdnseoId")
+@Html.HiddenFor(model => model.SEOTypeId, new { @id = "hdnSEOTypeId" })
+<script>
+    $(document).ready(function () {
+        $(".z-publish").off("click").on("click", function () { SEO.prototype.PublishSeoPopup($(this)); });
+    });
+</script>

@@ -1,0 +1,181 @@
+﻿@model AutoComplete
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    bool isTemplate = string.Equals(controllerName, "User", StringComparison.InvariantCultureIgnoreCase) && (string.Equals(actionName, "CreateTemplate", StringComparison.InvariantCultureIgnoreCase) || string.Equals(actionName, "EditTemplate", StringComparison.InvariantCultureIgnoreCase));
+    string className = isTemplate ? string.Empty : "col-lg-6";
+    int productId = 0;
+    Int32.TryParse(Request.QueryString["ProductId"], out productId);
+}
+<div id="layout-account-editprofile" class="main-wrapper col">
+    <div class="row b2b-quick-order-page">
+        <div class="container">
+            <div class="row quick-order-pad">
+                <div class="col-12 quick-order-page mt-4 mb-3">
+                    <input type="hidden" id="hdnQuickOrderPadProductId" name="ProductId" />
+                    <input type="hidden" id="hdnQuickOrderPadProductName" name="ProductName" />
+                    <input type="hidden" id="isEnhancedEcommerceEnabled" value=@Helper.IsEnhancedEcommerceTrackingEnabled().ToString() />
+                    <div class="row mb-5">
+                        @if (!isTemplate)
+                        {
+                        <div class="col-12 col-lg-6 b2b-form mb-lg-4">
+                            @*<h1 class="page-title">&nbsp;</h1>*@
+                            @if (isTemplate)
+                            {
+                                <h1 class="page-title pb-0 border-bottom">@WebStore_Resources.LabelAddProducts</h1>
+                            }
+                            else
+                            {
+                                <h1 class="page-title">@WebStore_Resources.HeaderQuickOrder</h1>
+                                <div class="mb-3">@Html.RenderBlock(WebStore_Resources.NoteQuickOrderLimit)</div>
+                            }
+                            <nav class="quick-order-tab">
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">@WebStore_Resources.QuickSearchLabel</a>
+                                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">@WebStore_Resources.QuickPasteMultiple</a>
+                                </div>
+                            </nav>
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active pt-4 pb-lg-4" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="mb-3">@WebStore_Resources.QuickOrderDescription</div>
+                                    <div class="mb-3">@Html.RenderBlock(WebStore_Resources.QuickOrderStepOne)</div>
+                                    <div class="mb-3">@Html.RenderBlock(WebStore_Resources.QuickOrderStepTwo)</div>
+                                </div>
+                                <div class="tab-pane fade pt-3 pb-lg-4" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+                                    <div class="col-12 p-0">
+                                        <div class="col-12 px-0 py-3 font-weight-bold text-capitalize" data-test-selector="divUploadSpreadsheetLabel">@WebStore_Resources.LabelUploadSpreadsheet</div>
+                                        <div class="d-flex justify-content-between align-items-center pb-3">
+                                            <input type="text" name="select" id="selectfile" placeholder="@WebStore_Resources.TextSelectUploadFile" class="form-control mr-3" data-test-selector="txtSelectFile" />
+                                            <button id="filebrowse" onclick="document.getElementById('file-input').click();" class="btn btn-primary" data-test-selector="btnFileBrowse">@WebStore_Resources.BrowseButton</button>
+                                            <input id="file-input" type="file" name="name" style="display:none;" />
+
+                                            </div>
+                                            <p class="font-weight-bold text-capitalize pt-3">@WebStore_Resources.LabelGuideSpreadsheets</p>
+                                            <div class="d-flex justify-content-between align-items-center py-3">
+                                                <div class="d-flex justify-content-between align-items-center sub-heading-template p-2 font-weight-bold">
+                                                    <span class="icon-file-upload"></span>
+                                                    <span class="file-text pl-2">
+                                                        @WebStore_Resources.LabelDownloadSpreadsheetTemplate <br />
+                                                        <a href="javascript:void(0)" class="xlsx-link pr-1" id="xlsx-link" data-toggle="" onclick="QuickOrderPad.prototype.DownloadQuickOrderTemplate('.csv');" data-test-selector="linkCSVFile">@WebStore_Resources.TitleCSVLink</a>
+                                                        <a href="javascript:void(0)" class="csv-link pl-1" id="csv-link" data-toggle="" onclick="QuickOrderPad.prototype.DownloadQuickOrderTemplate('.xlsx');" data-test-selector="linkXLSXFile">@WebStore_Resources.TItleXLSXLink</a>
+                                                    </span>
+                                                </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="col-12 p-0 py-3">@WebStore_Resources.QuickOrderMultiplePasteDesc </div>
+                                    <div class="form-group">
+                                        <div class="col-12 p-0">
+                                            <label class="font-weight-bold">@WebStore_Resources.LabelSKULists:</label>
+                                        </div>
+                                        <div class="col-12 p-0">
+                                            @Html.TextArea("txtAddMultipleItems", new { @rows = "5", @data_test_selector = "txtAddMultipleItems" })
+                                        </div>
+
+                                    </div>
+                                    <div class="d-md-flex justify-content-between">
+                                        <div class="order-md-2 mb-3">
+                                            <button type="submit" class="btn btn-primary add-to-quick-list" onclick="QuickOrderPad.prototype.AddProductsToQuickOrder();" id="btnAddMultipleItems">@WebStore_Resources.ButtonAddAllToQuick</button>
+                                        </div>
+                                        <div class="order-md-1">
+                                            <p class="font-weight-bold">@WebStore_Resources.LabelFormattedExample</p>
+                                            <ul class="p-0 pl-3">
+                                                <li>@WebStore_Resources.QuickTableSKUOnly</li>
+                                                <li>@WebStore_Resources.QuickTableSKUOnlyComma</li>
+                                                <li>@WebStore_Resources.QuickTableSKUOnlyTab</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                        <div class="col-12 @className ml-auto">
+                            <div id="quick-order-pad-content" class="col-12 quick-order-pad-content px-0">
+                                <div class="row btn-container less-padding">
+                                    <div class="col-11 text-right">
+                                        @if (isTemplate)
+                                        {
+                                            <button type="button" class="btn btn-primary quickOrderPadAddToCart mr-2 mr-md-3 mt-2 mt-md-1" id="btnQuickOrderPad">@WebStore_Resources.ButtonAddToTemplate</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-add-cart btn-primary quickOrderPadAddToCart mr-2 mr-md-3 mt-2 mt-md-1" id="btnQuickOrderPad"><i class="zf-cart"></i>@WebStore_Resources.ButtonAddToCart</button>
+                                        }
+                                        <button type="button" class="cart-item-remove clear-all-orders mt-2 ml-auto mr-2 mr-md-3" id="btnQuickOrderClearAll" data-test-selector="btnQuickOrderClearAll"><span class="close-circle-icon"></span> @WebStore_Resources.TextClearAllItems</button>
+
+                                    </div>
+                                </div>
+                                <div class="quick-rows">
+                                    <div id="quickorderdiv">
+                                        @for (int index = 1; index <= Convert.ToInt32(WebStoreConstants.DefaultQuickOrderPadRows); index++)
+                                        {
+                                            <div class="form-group" id="form-group-@index">
+                                                <div class="row no-gutters align-items-start">
+                                                    <div class="col-8">
+                                                        @Html.AutocompleteFor(model => model.Name, model => model.Id, "GetProductListBySKU", "Product", "QuickOrderPad.prototype.OnItemSelect", false, new { htmlAttributes = new { @placeholder = WebStore_Resources.TextEnterSku, @id = "txtQuickOrderPadSku_" + index, @class = "quick-order-pad-autocomplete", @data_qo_sku = "", @data_qo_product_id = "", data_qo_product_name = "", data_qo_cart_quantity = "", data_qo_quantity_on_hand = "", data_qo_in_stock_message = "", data_qo_out_stock_message = "", data_qo_min_quantity = "", data_qo_max_quantity = "", data_qo_call_for_pricing = "", data_is_first = "true", data_qo_track_inventory = "", data_qo_product_type = "", data_qo_retail_price = "", data_qo_autoAddOnSKUs = "", data_qo_isobsolete = "", data_qo_isactive = "", data_qo_child_track_inventory = "", onchange = "QuickOrderPad.prototype.IsValidProductSKU(this)", onKeyPress = "QuickOrderPad.prototype.CheckUpdateSKU(this,event)", onblur= "QuickOrderPad.prototype.CheckUpdateSKU(this,event)" } })
+                                                    </div>
+                                                    <div class="col-3 px-2 px-md-3">
+                                                        @Html.TextBox("txtQuickOrderPadQuantity_" + index, 0, null, new { @placeholder = WebStore_Resources.ColumnTitleQty, @class = "quantity quick-order-pad-quantity text-right", @parentcontrol = "txtQuickOrderPadSku_" + index, @type = "number" , @id = "txtQuickOrderPadQuantity_" + index, onchange = "QuickOrderPad.prototype.OnQuantityChange(this)" })
+                                                        <p id="inventoryquickorderMessage_@index" for="txtQuickOrderPadQuantity_@index" class="col-12 p-0 error-msg"></p>
+                                                    </div>
+                                                    <div class="col-1">
+                                                        @* Do not show the remove row button for the first row *@
+                                                        @if (index != 1)
+                                                        {
+                                                            <div id="removeRow_@index" class="remove_row remove-item" title="@WebStore_Resources.ButtonClear"><span class="close-circle-icon"></span></div>
+                                                        }
+                                                    </div>
+                                                    <p id="inventoryMessage_@index" for="txtQuickOrderPadSku_@index" class="col-12 p-0 error-msg"></p>
+                                                </div>
+                                            </div>                                            
+                                        }
+                                    </div>
+                                    <div id="quickOrderPad" class="">
+                                    </div>
+                                </div>
+
+                                <div class="row less-padding pt-3">
+                                    <div class="col-11 text-right">
+                                        @Ajax.ActionLink("Add Row", "QuickOrder", "Product",
+                                        new AjaxOptions
+                                        {               
+                                            UpdateTargetId = "quickOrderPad",
+                                            InsertionMode = InsertionMode.InsertAfter,
+                                            HttpMethod = "GET",
+                                            OnSuccess = "var lgn = $('[data-autocomplete-url]').length - 1;$('[data-autocomplete-url]:eq(' + lgn + ')').each(function () { autocompletewrapper($(this), $(this).data('onselect-function')); });"
+                                        }, new { @class = "btn btn-secondary d-md-inline-block mr-1 mr-md-3", @id = "btnAddNewSKU", @data_test_selector = "btnAddNewSKU" })
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Hidden("hdDefaultQuickOrderPadRows", WebStoreConstants.DefaultQuickOrderPadRows)
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (@productId > 0) {
+            QuickOrderPad.prototype.SetAutoCompleteItemProperties($("#txtQuickOrderPadSku_1"), @productId);
+        }
+        $('#btnQuickOrderPad').attr('disabled', 'disabled');
+        $('#btnQuickOrderClearAll').prop('disabled', 'disabled');
+
+    });
+    $("#file-input").change(function () {
+        var fileUpload = $("#file-input").get(0);
+        var files = fileUpload.files;
+        $('#selectfile').val(files[0].name);
+        QuickOrderPad.prototype.UploadQuickOrderFile(files);
+    });
+</script>
+

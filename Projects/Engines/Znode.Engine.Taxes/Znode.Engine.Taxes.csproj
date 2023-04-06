@@ -1,0 +1,284 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{90A36C0E-C961-4F6B-BB22-D6D11332C9F1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Znode.Engine.Taxes</RootNamespace>
+    <AssemblyName>Znode.Engine.Taxes</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Int|AnyCPU'">
+    <OutputPath>bin\Int\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'loadtest|AnyCPU'">
+    <OutputPath>bin\loadtest\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'automation|AnyCPU'">
+    <OutputPath>bin\automation\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'B2B|AnyCPU'">
+    <OutputPath>bin\B2B\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LB|AnyCPU'">
+    <OutputPath>bin\LB\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Avalara.AvaTax.Adapter, Version=5.4.0.236, Culture=neutral, PublicKeyToken=34e4ef76d6267205">
+      <HintPath>..\..\packages\Avalara.AvaTax.Adapter.5.4.0\lib\Avalara.AvaTax.Adapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalara.AvaTax.RestClient.net461, Version=21.6.0.0, Culture=neutral, PublicKeyToken=640b26ba35192d1b, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Avalara.AvaTax.21.6.0\lib\net461\Avalara.AvaTax.RestClient.net461.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.4.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Znode.Libraries.Framework.Business.9.7.5\lib\net48\Znode.Libraries.Framework.Business.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AvataxTaxManager.cs" />
+    <Compile Include="AvataxTaxSales.cs" />
+    <Compile Include="Avatax\Client\AvataxClient.cs" />
+    <Compile Include="Avatax\Client\IAvataxClient.cs" />
+    <Compile Include="Avatax\Helper\AvataxHelper.cs" />
+    <Compile Include="Avatax\Helper\IAvataxHelper.cs" />
+    <Compile Include="Avatax\Mapper\AvataxMapper.cs" />
+    <Compile Include="Avatax\Mapper\IAvataxMapper.cs" />
+    <Compile Include="Helper\ZnodeTaxHelper.cs" />
+    <Compile Include="Interfaces\IZnodeTaxesType.cs" />
+    <Compile Include="Interfaces\IZnodeTaxHelper.cs" />
+    <Compile Include="Interfaces\IZnodeTaxManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\CalculateTax70\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="VertexTax.cs" />
+    <Compile Include="ZnodeInclusiveTax.cs" />
+    <Compile Include="ZnodeTaxBag.cs" />
+    <Compile Include="ZnodeTaxManager.cs" />
+    <Compile Include="ZnodeTaxRuleControl.cs" />
+    <Compile Include="ZnodeTaxSalesTax.cs" />
+    <Compile Include="ZnodeTaxesType.cs" />
+    <Compile Include="ZnodeTaxTypeExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.Data\Znode.Libraries.Data.csproj">
+      <Project>{786f7274-2f78-4282-b91c-978cb79fb2f3}</Project>
+      <Name>Znode.Libraries.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.ECommerce.Entities\Znode.Libraries.ECommerce.Entities.csproj">
+      <Project>{c0e80bd4-5d88-4b0b-9f2f-23d51c2f973a}</Project>
+      <Name>Znode.Libraries.ECommerce.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.ECommerce.Utilities\Znode.Libraries.ECommerce.Utilities.csproj">
+      <Project>{f3703cce-eec4-46b0-a54f-83857d4014df}</Project>
+      <Name>Znode.Libraries.ECommerce.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Znode.Libraries.MongoDB.Data\Znode.Libraries.MongoDB.Data.csproj">
+      <Project>{5b6482f4-7b81-4d7c-a099-78237c8a55b3}</Project>
+      <Name>Znode.Libraries.MongoDB.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.Resources\Znode.Libraries.Resources.csproj">
+      <Project>{0461ba0d-6141-47d7-a78e-c166ff5a75f0}</Project>
+      <Name>Znode.Libraries.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Engine.Api.Models\Znode.Engine.Api.Models.csproj">
+      <Project>{05A4B1D5-82D1-4E47-AFD9-4B01AC5917BD}</Project>
+      <Name>Znode.Engine.Api.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Engine.Promotions\Znode.Engine.Promotions.csproj">
+      <Project>{0b46a894-d427-4372-a4c3-c47cc2c7e036}</Project>
+      <Name>Znode.Engine.Promotions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\CalculateTax70.wsdl" />
+    <None Include="Service References\CalculateTax70\VertexInc-Accrual.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-AccrualSync.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-APInvoiceSync.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-ARBillingSync.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-AssetMovement.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-BuyerInputTax.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-ChangedTaxAreaRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-ChangedTaxAreaResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-CodeList-DeliveryTerm.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-CodeList-JurisdictionLevel.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-CodeList-TaxingLocation.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-CodeList-TaxingType.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-Common.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-Core.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-Delete.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-DistributeTax.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-DistributeTaxProcurement.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-ERS.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-Exists.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-FindChangedTaxAreaRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-FindChangedTaxAreaResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-FindTaxAreasRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-FindTaxAreasResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-InventoryRemoval.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-Invoice.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-InvoiceVerification.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-PurchaseOrder.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-Quotation.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-Reversal.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-Rollback.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-TaxAreaRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-TaxAreaResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc-Version.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\VertexInc_Envelope.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CalculateTax70\Znode.Engine.Taxes.CalculateTax70.calculateTaxResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\CalculateTax70\Znode.Engine.Taxes.CalculateTax70.VertexEnvelope.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\CalculateTax70\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CalculateTax70\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CalculateTax70\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CalculateTax70\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

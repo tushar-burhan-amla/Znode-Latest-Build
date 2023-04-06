@@ -1,0 +1,224 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model LogConfigurationViewModel
+@using Znode.Engine.Admin.Models
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmConfigureLogs", IsSaveCloseEnable = false };
+}
+<div>
+    <div class="col-sm-12 title-container">
+        <h1 data-test-selector="hdgApplicationLogs">@Admin_Resources.LabelLogMessage</h1>
+        <div class="pull-right dirtyignore btn-container">
+            @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, "ConfigureLogs", "LogMessage", new { @id = "dvSave", @data_test_selector = "linkSave", @class = "btn-text btn-text-secondary", onclick = "LogMessage.prototype.ConfigureLogs($(this))" })
+        </div>
+    </div>
+    <div class="main-wrapper">
+        @Html.Partial("~/Views/Shared/_asideLogsPanel.cshtml")
+        <section class="main-container">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmConfigureLogs" }))
+            {
+                <div class="form-group" id="divIsErrorLoggingEnabled">
+                    <div class="col-sm-12 nopadding log-switch">
+                        <div class="control-label">
+                            <label data-test-selector="lblErrorLogs">@Admin_Resources.LabelErrorLogs</label>
+                        </div>
+                        <div class="control-sm">
+                            <div class="switch-field">
+                                @if (Model.IsErrorLoggingEnabled.GetValueOrDefault())
+                                {
+                                    @Html.RadioButtonFor(x => x.IsErrorLoggingEnabled, "true", new { @checked = true, @id = "IsErrorLoggingEnabled_left", @data_test_selector = "chkErrorLoggingEnabledLeft" }) <label data-test-selector="lblErrorLoggingEnabledLeft" for="IsErrorLoggingEnabled_left">Yes</label>
+                                    @Html.RadioButtonFor(x => x.IsErrorLoggingEnabled, "false", new { @id = "IsErrorLoggingEnabled_right", @data_test_selector = "chkErrorLoggingEnabledRight" }) <label data-test-selector="lblErrorLoggingEnabledRight" for="IsErrorLoggingEnabled_right">No</label>
+                                }
+                                else
+                                {
+                                    @Html.RadioButtonFor(x => x.IsErrorLoggingEnabled, "true", new { @id = "IsErrorLoggingEnabled_left", @data_test_selector = "chkErrorLoggingEnabledLeft" }) <label data-test-selector="lblErrorLoggingEnabledLeft" for="IsErrorLoggingEnabled_left">Yes</label>
+                                    @Html.RadioButtonFor(x => x.IsErrorLoggingEnabled, "false", new { @checked = true, @id = "IsErrorLoggingEnabled_right", @data_test_selector = "chkErrorLoggingEnabledRight" }) <label data-test-selector="lblErrorLoggingEnabledRight" for="IsErrorLoggingEnabled_right">No</label>}
+                            </div>
+
+                        </div>
+                        <div>
+                            <input type="button" date-test-selector="btnPurgeErrorLogs" id="0" name="purgeErrorLogs" class="btn-text btn-text-secondary purge" value="Purge" onclick="LogMessage.prototype.DeleteLogsPopup($(this))" />
+                        </div>
+                        <div class="help-text">
+                            <em class="z-help-circle" data-test-selector="linkErrorLogsTooltip" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpAllLogs"></em>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="divIsEventLoggingEnabled">
+                    <div class="col-sm-12 nopadding log-switch">
+                        <div class="control-label">
+                            <label date-test-selector="lblEventLogs">@Admin_Resources.LabelEventLogs</label>
+                        </div>
+                        <div class="control-sm">
+                            <div class="switch-field">
+                                @if (Model.IsEventLoggingEnabled.GetValueOrDefault())
+                                {
+                                    @Html.RadioButtonFor(x => x.IsEventLoggingEnabled, "true", new { @checked = true, @id = "IsEventLoggingEnabled_left", @data_test_selector = "chkEventLoggingEnabledLeft" }) <label data-test-selector="lblEventLoggingEnabledLeft" for="IsEventLoggingEnabled_left">Yes</label>
+                                    @Html.RadioButtonFor(x => x.IsEventLoggingEnabled, "false", new { @id = "IsEventLoggingEnabled_right", @data_test_selector = "chkEventLoggingEnabledRight" }) <label data-test-selector="lblEventLoggingEnabledRight" for="IsEventLoggingEnabled_right">No</label>
+                                }
+                                else
+                                {
+                                    @Html.RadioButtonFor(x => x.IsEventLoggingEnabled, "true", new { @id = "IsEventLoggingEnabled_left", @data_test_selector = "chkEventLoggingEnabledLeft" }) <label data-test-selector="lblEventLoggingEnabledLeft" for="IsEventLoggingEnabled_left">Yes</label>
+                                    @Html.RadioButtonFor(x => x.IsEventLoggingEnabled, "false", new { @checked = true, @id = "IsEventLoggingEnabled_right", @data_test_selector = "chkEventLoggingEnabledRight" }) <label data-test-selector="lblEventLoggingEnabledRight" for="IsEventLoggingEnabled_right">No</label>
+                                }
+                            </div>
+
+                        </div>
+                        <div>
+                            <input type="button" id="1" date-test-selector="btnPurgeEventLogs" name="purgeEventLogs" class="btn-text btn-text-secondary purge" value="Purge" onclick="LogMessage.prototype.DeleteLogsPopup($(this))" />
+                        </div>
+                        <div class="help-text">
+                            <em class="z-help-circle" data-test-selector="linkEventLogsTooltip" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpEventLogs"></em>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="divIsIntegrationLoggingEnabled">
+                    <div class="col-sm-12 nopadding log-switch">
+                        <div class="control-label">
+                            <label data-test-selector="lblIntegrationLogs">@Admin_Resources.LabelIntegrationLogs</label>
+                        </div>
+                        <div class="control-sm">
+                            <div class="switch-field">
+                                @if (Model.IsIntegrationLoggingEnabled.GetValueOrDefault())
+                                {
+                                    @Html.RadioButtonFor(x => x.IsIntegrationLoggingEnabled, "true", new { @checked = true, @id = "IsIntegrationLoggingEnabled_left", @data_test_selector = "chkIntegrationLoggingEnabledLeft" }) <label data-test-selector="lblIntegrationLoggingEnabledLeft" for="IsIntegrationLoggingEnabled_left">Yes</label>
+                                    @Html.RadioButtonFor(x => x.IsIntegrationLoggingEnabled, "false", new { @id = "IsIntegrationLoggingEnabled_right", @data_test_selector = "chkIntegrationLoggingEnabledRight" }) <label data-test-selector="lblIntegrationLoggingEnabledRight" for="IsIntegrationLoggingEnabled_right">No</label>
+                                }
+                                else
+                                {
+                                    @Html.RadioButtonFor(x => x.IsIntegrationLoggingEnabled, "true", new { @id = "IsIntegrationLoggingEnabled_left", @data_test_selector = "chkIntegrationLoggingEnabledLeft" }) <label data-test-selector="lblIntegrationLoggingEnabledLeft" for="IsIntegrationLoggingEnabled_left">Yes</label>
+                                    @Html.RadioButtonFor(x => x.IsIntegrationLoggingEnabled, "false", new { @checked = true, @id = "IsIntegrationLoggingEnabled_right", @data_test_selector = "chkIntegrationLoggingEnabledRight" }) <label data-test-selector="lblIntegrationLoggingEnabledRight" for="IsIntegrationLoggingEnabled_right">No</label>}
+                            </div>
+
+                        </div>
+                        <div>
+                            <input type="button" id="2" date-test-selector="btnPurgeIntegrationLogs" name="purgeIntegrationLogs" class="btn-text btn-text-secondary purge" value="Purge" onclick="LogMessage.prototype.DeleteLogsPopup($(this))" />
+                        </div>
+                        <div class="help-text">
+                            <em class="z-help-circle" data-test-selector="linkIntegrationLogsTooltip" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpIntegrationLogs"></em>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="divIsDataBaseLoggingEnabled">
+                    <div class="col-sm-12 nopadding log-switch">
+                        <div class="control-label">
+                            <label data-test-selector="lblDataBaseLogs">@Admin_Resources.LabelDataBaseLogs</label>
+                        </div>
+                        <div class="control-sm">
+                            <div class="switch-field">
+                                @if (Model.IsDataBaseLoggingEnabled.GetValueOrDefault())
+                                {
+                                    @Html.RadioButtonFor(x => x.IsDataBaseLoggingEnabled, "true", new { @checked = true, @id = "IsDataBaseLoggingEnabled_left", @data_test_selector = "chkDataBaseLoggingEnabledLeft" }) <label data-test-selector="lblDataBaseLoggingEnabledLeft" for="IsDataBaseLoggingEnabled_left">Yes</label>
+                                    @Html.RadioButtonFor(x => x.IsDataBaseLoggingEnabled, "false", new { @id = "IsDataBaseLoggingEnabled_right", @data_test_selector = "chkDataBaseLoggingEnabledRight" }) <label data-test-selector="lblDataBaseLoggingEnabledRight" for="IsDataBaseLoggingEnabled_right">No</label>
+                                }
+                                else
+                                {
+                                    @Html.RadioButtonFor(x => x.IsDataBaseLoggingEnabled, "true", new { @id = "IsDataBaseLoggingEnabled_left", @data_test_selector = "chkDataBaseLoggingEnabledLeft" }) <label data-test-selector="lblDataBaseLoggingEnabledLeft" for="IsDataBaseLoggingEnabled_left">Yes</label>
+                                    @Html.RadioButtonFor(x => x.IsDataBaseLoggingEnabled, "false", new { @checked = true, @id = "IsDataBaseLoggingEnabled_right", @data_test_selector = "chkDataBaseLoggingEnabledRight" }) <label data-test-selector="lblDataBaseLoggingEnabledRight" for="IsDataBaseLoggingEnabled_right">No</label>
+                                }
+                            </div>
+
+                        </div>
+                        <div>
+                            <input type="button" id="3" date-test-selector="btnPurgeDatabaseLogs" name="purgeDatabaseLogs" class="btn-text btn-text-secondary purge" value="Purge" onclick="LogMessage.prototype.DeleteLogsPopup($(this))" />
+                        </div>
+                        <div class="help-text">
+                            <em class="z-help-circle" data-test-selector="linkDatabaseLogsTooltip" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpDatabaseLogs"></em>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-12 col-md-8 nopadding log-switch">
+                    <div class="control-label padding-bottom">
+                        <label data-test-selector="lblErrorLogs">@Admin_Resources.LabelLoggingLevels</label>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 padding-bottom">
+                        <label>
+                            <input id="IsLoggingLevelsEnabledAll" name="IsLoggingLevelsEnabledAll" checked="@Model.IsLoggingLevelsEnabledAll" enabled="enable" type="checkbox" value="@Server.UrlEncode(Model.IsLoggingLevelsEnabledAll.ToString().ToLower())" onchange="LogMessage.prototype.SelectAllLog()" data-test-selector="chkLoggingLevelsEnabledAll">
+                            <span class="lbl padding-8" for="IsLoggingLevelsEnabledAll" data-test-selector="spnLoggingLevelsEnabledAll">@Admin_Resources.ZLoggingLevelsEnabledAll</span>
+                            <input name="IsLoggingLevelsEnabledAll" type="hidden" value="false">
+                        </label>
+                        <div class="help-text">
+                            <em class="z-help-circle" data-test-selector="linkIsLoggingLevelsEnabledAll" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpLoggingLevelsEnabledAll"></em>
+                        </div>
+
+                    </div>
+                    <div id="loggingLevelDiv">
+                        <div class="col-xs-12 col-sm-4 padding-bottom">
+                            <label>
+                                <input id="IsLoggingLevelsEnabledInfo" name="IsLoggingLevelsEnabledInfo" checked="@Model.IsLoggingLevelsEnabledInfo" enabled="enable" type="checkbox" value="@Server.UrlEncode(Model.IsLoggingLevelsEnabledInfo.ToString().ToLower())" onchange="LogMessage.prototype.CheckUncheck(this)" data-test-selector="chkLoggingLevelsEnabledInfo">
+                                <span class="lbl padding-8" for="IsLoggingLevelsEnabledInfo" data-test-selector="spnLoggingLevelsEnabledInfo">@Admin_Resources.ZLoggingLevelsEnabledInfo</span>
+                                <input name="IsLoggingLevelsEnabledInfo" type="hidden" value="false">
+                            </label>
+                            <div class="help-text">
+                                <em class="z-help-circle" data-test-selector="linkIsLoggingLevelsEnabledInfo" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpIsLoggingLevelsEnabledInfo"></em>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 padding-bottom">
+                            <label>
+                                <input id="IsLoggingLevelsEnabledWarning" name="IsLoggingLevelsEnabledWarning" checked="@Model.IsLoggingLevelsEnabledWarning" enabled="enable" type="checkbox" value="@Server.UrlEncode(Model.IsLoggingLevelsEnabledWarning.ToString().ToLower())" onchange="LogMessage.prototype.CheckUncheck(this)" data-test-selector="chkLoggingLevelsEnabledWarning">
+                                <span class="lbl padding-8" for="IsLoggingLevelsEnabledWarning" data-test-selector="spnLoggingLevelsEnabledWarning">@Admin_Resources.ZLoggingLevelsEnabledWarning</span>
+                                <input name="IsLoggingLevelsEnabledWarning" type="hidden" value="false">
+                            </label>
+                            <div class="help-text">
+                                <em class="z-help-circle" data-test-selector="linkIsLoggingLevelsEnabledWarning" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpIsLoggingLevelsEnabledWarning"></em>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 padding-bottom">
+                            <label>
+                                <input id="IsLoggingLevelsEnabledDebug" name="IsLoggingLevelsEnabledDebug" checked="@Model.IsLoggingLevelsEnabledDebug" enabled="enable" type="checkbox" value="@Server.UrlEncode(Model.IsLoggingLevelsEnabledDebug.ToString().ToLower())" onchange="LogMessage.prototype.CheckUncheck(this)" data-test-selector="chkLoggingLevelsEnabledDebug">
+                                <span class="lbl padding-8" for="IsLoggingLevelsEnabledDebug" data-test-selector="spnLoggingLevelsEnabledDebug">@Admin_Resources.ZLoggingLevelsEnabledDebug</span>
+                                <input name="IsLoggingLevelsEnabledDebug" type="hidden" value="false">
+                            </label>
+                            <div class="help-text">
+                                <em class="z-help-circle" data-test-selector="linkIsLoggingLevelsEnabledDebug" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpIsLoggingLevelsEnabledDebug"></em>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 padding-bottom">
+                            <label>
+                                <input id="IsLoggingLevelsEnabledError" name="IsLoggingLevelsEnabledError" checked="@Model.IsLoggingLevelsEnabledError" type="checkbox" value="@Server.UrlEncode(Model.IsLoggingLevelsEnabledError.ToString().ToLower())" onchange="LogMessage.prototype.CheckUncheck(this)" data-test-selector="chkLoggingLevelsEnabledError">
+                                <span class="lbl padding-8" for="IsLoggingLevelsEnabledError" data-test-selector="spnLoggingLevelsEnabledError">@Admin_Resources.ZLoggingLevelsEnabledError</span>
+                                <input name="IsLoggingLevelsEnabledError" type="hidden" value="false">
+                            </label>
+                            <div class="help-text">
+                                <em class="z-help-circle" data-test-selector="linkIsLoggingLevelsEnabledError" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpsIsLoggingLevelsEnabledError"></em>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderConfirmDelete,
+                        Description = @Admin_Resources.TextConfirmDeleteLogs,
+                        ModalPopUpId = "LogsDeletePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "LogMessage.prototype.PurgeLogs()"}
+                         }
+                    })
+            @Html.HiddenFor(model => model.LogCategoryIdToBeDeleted)
+        </section>
+    </div>
+</div>
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    $(document).ready(function () {
+        $(".purge").off("click").on("click", function () { LogMessage.prototype.PurgeLogsPopup($(this)); });
+        $('#IsErrorLoggingEnabled_right').change(function () {
+            if ($('#IsErrorLoggingEnabled_right').is(':checked')) {
+                $('#IsEventLoggingEnabled_right').prop("checked", true);
+                $('#IsIntegrationLoggingEnabled_right').prop("checked", true)
+            }
+        })
+    });
+</script>

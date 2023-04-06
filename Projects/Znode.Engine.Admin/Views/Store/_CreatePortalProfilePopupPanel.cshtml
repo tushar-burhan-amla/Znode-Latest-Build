@@ -1,0 +1,85 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalProfileViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.Resources;
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formCreateEditPortalProfile", SaveHeader = Admin_Resources.ButtonAdd, CancelHeader = Admin_Resources.ButtonCancel };
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+
+@using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "formCreateEditPortalProfile" }))
+{
+    <div id="aside-popup-panel">
+        <div class="col-sm-12 title-container">
+            <h1 data-test-selector="hdgAssociateProfile">@Admin_Resources.LabelAssociateProfile</h1>
+            <div class="pull-right">
+                <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('divPortalProfilePopup')" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                <div class="pull-right">
+                    @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, actionModel.Action, actionModel.Controller, new { @class = "btn-text btn-text-secondary", @id = "dvSave", @onclick = "SaveCancel.prototype.SubmitForm('" + actionModel.FormId + "')", @data_test_selector = "linkSave" })
+                </div>
+            </div>
+        </div>
+
+        <!--Main Container-->
+        <section class="col-sm-12 page-container">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "formCreateEditPortalProfile" }))
+            {
+                <h3 class="section-heading" data-test-selector="hgdProfileDetails">@Admin_Resources.HeaderProfileDetails</h3>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.ProfileId, new { @class = "required", @data_test_selector = "lblProfile" })
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.ProfileId, Model.Profiles, new { @data_test_selector = "drpProfileList" })
+                        </div>
+                    </div>
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-lg padding-top control-non">
+                            @if (Model.IsDefaultAnonymousProfileEnable == false)
+                            {
+                                <label>
+                                    <input @(Model.IsDefaultAnonymousProfile ? "checked='checked'" : "") id="IsDefaultAnonymousProfile" name="IsDefaultAnonymousProfile" type="checkbox" value="true" data-test-selector="chkIsDefaultAnonymousProfile" disabled="disabled">
+                                    <span class="lbl padding-8" data-test-selector="spnIsDefaultAnonymousProfile">Is Default Anonymous Profile</span>
+                                    <input name="IsDefaultAnonymousProfile" type="hidden" value="true">
+                                </label>
+                            }
+                            else
+                            {
+                                <label>
+                                    <input @(Model.IsDefaultAnonymousProfile ? "checked='checked'" : "") id="IsDefaultAnonymousProfile" name="IsDefaultAnonymousProfile" type="checkbox" value="true" data-test-selector="chkIsDefaultAnonymousProfile">
+                                    <span class="lbl padding-8" data-test-selector="spnIsDefaultAnonymousProfile">Is Default Anonymous Profile</span>
+                                    <input name="IsDefaultAnonymousProfile" type="hidden" value="false">
+                                </label>
+                            }
+                        </div>
+                        <div class="control-lg control-non">
+                            @if (Model.IsDefaultRegistedProfileEnable == false)
+                            {
+                                <label>
+                                    <input @(Model.IsDefaultRegistedProfile ? "checked='checked'" : "") id="IsDefaultRegistedProfile" name="IsDefaultRegistedProfile" type="checkbox" value="true" data-test-selector="chkIsDefaultRegistedProfile" disabled="disabled">
+                                    <span class="lbl padding-8" data-test-selector="spnIsDefaultRegistedProfile">Is Default Registered Profile</span>
+                                    <input name="IsDefaultRegistedProfile" type="hidden" value="true">
+                                </label>
+                            }
+                            else
+                            {
+                                <label>
+                                    <input @(Model.IsDefaultRegistedProfile ? "checked='checked'" : "") id="IsDefaultRegistedProfile" name="IsDefaultRegistedProfile" type="checkbox" value="true" data-test-selector="chkIsDefaultRegistedProfile">
+                                    <span class="lbl padding-8" data-test-selector="spnIsDefaultRegistedProfile">Is Default Registered Profile</span>
+                                    <input name="IsDefaultRegistedProfile" type="hidden" value="false">
+                                </label>
+                            }
+                        </div>
+                    </div>
+                </div>
+                @Html.HiddenFor(model => model.PortalId)
+                @Html.HiddenFor(model => model.PortalProfileID)
+                @Html.HiddenFor(model => model.PortalName)
+            }
+        </section>
+
+    </div>
+}

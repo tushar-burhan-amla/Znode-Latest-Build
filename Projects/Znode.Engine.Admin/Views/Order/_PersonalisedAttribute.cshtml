@@ -1,0 +1,20 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model List<PIMProductAttributeValuesViewModel>
+@{
+    Layout = null;
+}
+<form id="frmPersonalised" class="noSubmitOnEnterKeyPress" method="post" novalidate="novalidate">
+    @foreach (var Attribute in Model)
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label for="@Attribute.ControlProperty.Name">@Attribute.AttributeName</label>
+                </div>
+                @Html.CreateControl(Attribute.ControlProperty)
+            </div>
+        </div>
+    }
+    <script src="~/Scripts/References/DynamicValidation.js"></script>
+    <script src="~/Scripts/Core/Common/ZnodeHelper.js"></script>
+</form>

@@ -1,0 +1,14 @@
+﻿@model Znode.Engine.Admin.Models.TreebuttonViewModel
+<div class="TreeClass tree-container">
+    <div class="tree-search">
+        <div class="right-inner-icon">
+            <em class="z-search" data-test-selector="txtHelpAttributeCode" data-toggle="tooltip" data-placement="right" title="" data-original-title="Type search text here and hit ENTER for results."></em>
+            <input type="text" class="treesearch" placeholder="Search" />
+        </div>
+        <span id="searchresult" class="error-msg" ></span>
+    </div>
+  
+    <div id="Main_Tree" data-tree="@Model.Tree">
+    </div>
+</div>
+<script>$('[data-toggle="tooltip"]').tooltip(); </script>

@@ -1,0 +1,275 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Libraries.ECommerce.Utilities;
+@model RMAReturnViewModel
+@{
+    string isShowBorderLineAfterSubTotal = (Model.ReturnShippingCost > 0 || Model.ReturnTaxCost > 0) ? "": "border-line";
+    string isShowBorderLineAfterTaxCost = (Model.ReturnTaxCost > 0) ? "" : "border-line";
+}
+@if (!Equals(Model, null))
+{
+    <div class="main-wrapper col">
+        <div class="b2b-thanks-page">
+            <div class="container">
+                <div class="col-12 checkout-reciept">
+                    <div class="col-12 mb-5">
+                        <div id="layout-account-receipt" class="col-12">
+                            <div class="col-12">
+                                <br>
+                                <h3 class="page-title py-4" style="font-size: 23px; padding: 0px; padding-top: 1.5rem; padding-bottom: 1.5rem; color: #454545;
+                                font-family: Roboto-Medium, Arial, sans-serif;">
+                                    @Model.StoreName @Admin_Resources.TitleReturnOrder
+                                </h3>
+                            </div>
+                            <div class="col-12 account-dashboard">
+                                <div class="col-12 order-receipt right-container">
+                                    <div class="row" style="display: flex; flex-wrap: wrap">
+                                        <div class="col-6 account-profile-section mb-4 mb-lg-0" style="width: 50%; padding: 0 15px; margin-bottom: 30px;">
+                                            <div class="col-12 p-0 h-100 dashboard-content" style="border: 1px solid #c5b7b7; border-radius: 2px;">
+                                                <h3 class="b2b-section-header" style="padding: 10px; border-bottom: 1px solid #ccc;">@Admin_Resources.LabelReturnInformation</h3>
+                                                <div class="col-12 dashboard-addresses" style="padding: 10px; height: 170px; display: flex; flex-direction: column; justify-content: space-between">
+                                                    <div class="p-0 py-3">
+                                                        <strong>@Admin_Resources.LabelReturnNumber:</strong> @Model.ReturnNumber
+                                                    </div>
+                                                    <div class="p-0 py-3">
+                                                        <strong>@Admin_Resources.LabelReturnDate:</strong> @Model.ReturnDate.ToDateTimeFormat()
+                                                    </div>
+                                                    <div class="p-0 py-3">
+                                                        <strong>@Admin_Resources.LabelReturnStatus:</strong> @Model.ReturnStatus
+                                                    </div>
+                                                    <div class="p-0 py-3">
+                                                        <strong>@Admin_Resources.LabelTotalExpectedQty:</strong> @Model.TotalExpectedReturnQuantity
+                                                    </div>
+                                                    <div class="p-0 py-3">
+                                                        <strong>@Admin_Resources.LabelOrderNumber:</strong> @Model.OrderNumber
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 pl-lg-2 account-profile-section" style="width: 50%; padding: 0 15px; margin-bottom: 30px;">
+                                            <div class="col-12 p-0 h-100 dashboard-content" style="border: 1px solid #c5b7b7; border-radius: 2px;">
+                                                <h3 class="b2b-section-header" style="padding: 10px; border-bottom: 1px solid #ccc;">@Admin_Resources.LabelReturnCode</h3>
+                                                <div class="col-12 dashboard-addresses" style="padding: 10px; height: 170px; display: flex; flex-direction: column; justify-content: space-between">
+                                                    <div class="py-3" style="text-align:center; margin-top: 30px;">
+                                                        @if (!string.IsNullOrEmpty(Model.BarcodeImage))
+                                                        {
+                                                            <img src="@Model.BarcodeImage" alt="" style="max-width: 100%;" />
+                                                            <br />
+                                                            <span>@Model.ReturnNumber</span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 pl-lg-2 account-profile-section" style="width: 50%; padding: 0 15px;  margin-bottom: 30px;">
+                                            <div class="col-12 p-0 h-100 dashboard-content" style="border: 1px solid #c5b7b7; border-radius: 2px;">
+                                                <h3 class="b2b-section-header" style="padding: 10px; border-bottom: 1px solid #ccc;">@Admin_Resources.LabelShippingTo</h3>
+                                                <div class="col-12 dashboard-addresses" style="padding: 10px; height: 170px; display: flex; flex-direction: column; justify-content: space-between">
+                                                    <div class="py-3">
+                                                        @Html.RenderBlock(Model.ShippingToAddressHtml)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 pl-lg-2 account-profile-section" style="width: 50%; padding: 0 15px;  margin-bottom: 30px;">
+                                            <div class="col-12 p-0 h-100 dashboard-content" style="border: 1px solid #c5b7b7; border-radius: 2px;">
+                                                <h3 class="b2b-section-header" style="padding: 10px; border-bottom: 1px solid #ccc;">@Admin_Resources.LabelShippingFrom</h3>
+                                                <div class="col-12 dashboard-addresses" style="padding: 10px; height: 170px; display: flex; flex-direction: column; justify-content: space-between">
+                                                    <div class="py-3">
+                                                        @Html.RenderBlock(Model.ShippingFromAddressHtml)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 pl-lg-2 account-profile-section" style="width: 50%; padding: 0 15px; margin-bottom: 30px;">
+                                            <div class="col-12 p-0 h-100 dashboard-content" style="border: 1px solid #c5b7b7; border-radius: 2px;">
+                                                <h3 class="b2b-section-header" style="padding: 10px; border-bottom: 1px solid #ccc;">@Admin_Resources.LabelCustomerService</h3>
+                                                <div class="col-12 dashboard-addresses" style="padding: 10px; height: 170px; display: flex; flex-direction: column; justify-content: space-between">
+                                                    <div class="col-12 dashboard-addresses" style="height: 170px; display: flex; flex-direction: column;">
+                                                        <div class="p-0 py-3" style="margin-bottom: 16px;">
+                                                            <strong>@Admin_Resources.LabelEmailID:</strong> @Model.CustomerServiceEmail
+                                                        </div>
+                                                        <div class="p-0 py-3">
+                                                            <strong>@Admin_Resources.LabelPhoneNumber:</strong> @Model.CustomerServicePhoneNumber
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="col-12 mb-4 dashboard-content" style="border: 1px solid #c5b7b7; border-radius: 2px;display: flex; flex-direction: column">
+                                            <div class="col-12 mb-3 p-0 return-item-list shopping-cart" style="border: none">
+                                                @if (Model?.ReturnLineItems?.Count > 0)
+                                                {
+                                                    <h3 class="b2b-section-header" style="padding: 10px; border-bottom: 1px solid #ccc;">@Admin_Resources.LabelProductsReturned</h3>
+                                                    <div class="table-responsive" style="max-width: 99.5%; margin: 0 auto; ">
+                                                        <table class="table table-tr" aria-describedby="Return Order Items Table">
+                                                            <tr class="table-heading" style="border-bottom:1px solid #c3c3c3;">
+                                                                <th scope="col" class="table-td receipt-column-item">@Admin_Resources.LabelProduct </th>
+                                                                <th scope="col" class="table-td receipt-column-item">@Admin_Resources.LabelReason</th>
+                                                                <th scope="col" class="table-td receipt-column-quantity">@Admin_Resources.LabelExpectedQty</th>
+                                                                <th scope="col" class="table-td receipt-column-price">@Admin_Resources.LabelConfirmedQty</th>
+                                                                <th scope="col" class="table-td receipt-column-price">@Admin_Resources.LabelUnitPrice</th>
+                                                                <th scope="col" class="table-td receipt-column-price">@Admin_Resources.TitleShipping</th>
+                                                                <th scope="col" class="table-td receipt-column-price">@Admin_Resources.LabelTotal</th>
+                                                            </tr>
+                                                            @foreach (var items in Model?.ReturnLineItems)
+                                                            {
+                                                            <tr>
+                                                                <td>
+                                                                    <span>@items.ProductName</span><br />
+                                                                    <span>@Admin_Resources.LabelSKU:  @items.Sku</span>
+                                                                    @Html.RenderBlock(@items.Description)
+                                                                </td>
+                                                                <td>
+                                                                    <span>@items.RmaReasonForReturn</span>
+                                                                </td>
+                                                                <td class="table-td receipt-column-quantity">
+                                                                    @if ((items.ExpectedReturnQuantity) % 1 == 0)
+                                                                    {
+                                                                        @($"{items.ExpectedReturnQuantity.ToInventoryRoundOff():n0}")
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        var returnedQuantity = double.Parse(Convert.ToString(items.ExpectedReturnQuantity.ToInventoryRoundOff()));
+                                                                        @returnedQuantity
+                                                                    }
+                                                                </td>
+                                                                <td class="table-td receipt-column-quantity">
+                                                                    @if (items.RmaReturnStateId == (int)ZnodeReturnStateEnum.REJECTED || items.ReturnedQuantity == null)
+                                                                    {
+                                                                        if ((items.ExpectedReturnQuantity) % 1 == 0)
+                                                                        {
+                                                                            @($"{items.ExpectedReturnQuantity.ToInventoryRoundOff():n0}")
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            var expectedReturnQuantity = double.Parse(Convert.ToString(items.ExpectedReturnQuantity.ToInventoryRoundOff()));
+                                                                            @expectedReturnQuantity
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if ((items.ReturnedQuantity) % 1 == 0)
+                                                                        {
+                                                                            @($"{items.ReturnedQuantity.ToInventoryRoundOff():n0}")
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            var confirmedQuantity = double.Parse(Convert.ToString(items.ReturnedQuantity.ToInventoryRoundOff()));
+                                                                            @confirmedQuantity
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @HelperMethods.FormatPriceWithCurrency(items.Price, Model.CultureCode)
+                                                                </td>
+                                                                <td>
+                                                                    @HelperMethods.FormatPriceWithCurrency(items.ShippingCost, Model.CultureCode)
+                                                                </td>
+                                                                <td class="table-td receipt-column-total">
+                                                                    @if (string.IsNullOrEmpty(items.ReturnedQuantity.ToString()))
+                                                                    {
+                                                                        @HelperMethods.FormatPriceWithCurrency(items.ExpectedReturnQuantity * items.Price, Model.CultureCode)
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @HelperMethods.FormatPriceWithCurrency(items.ReturnedQuantity * items.Price, Model.CultureCode)
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                            }
+                                                        </table>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div class="col-12 col-lg-8 p-0 ml-auto receipt-item-list shopping-cart">
+                                                <div class="col-12 cart-total mt-4 cart-summary receipt-totals" style="padding: 0; max-width: 40%; float: right;">
+                                                    <div class="form-group @isShowBorderLineAfterSubTotal">
+                                                        <div class="" style="display: flex; align-items:center;">
+                                                            <div class="col-7" style="width: 150px;">@Admin_Resources.LabelSubTotal</div>
+                                                            <div class="col-5 pr-4 text-right" data-test-selector="divSubtotal">@HelperMethods.FormatPriceWithCurrency(Model.SubTotal, Model.CultureCode)</div>
+                                                        </div>
+                                                    </div>
+                                                    @if (Model.ReturnShippingCost > 0)
+                                                    {
+                                                        <div class="form-group @isShowBorderLineAfterTaxCost">
+                                                            <div class="" style="display: flex; align-items:center;border-bottom:5px;">
+                                                                <div class="col-7" style="width: 150px;">@Admin_Resources.LabelShipping</div>
+                                                                <div class="col-5 pr-4 text-right" data-test-selector="divShippingCost"> + @HelperMethods.FormatPriceWithCurrency(Model.ReturnShippingCost, Model.CultureCode)</div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    @if (Model.ReturnTaxCost > 0)
+                                                    {
+                                                        <div class="form-group border-line">
+                                                            <div class="" style="display: flex; align-items:center;">
+                                                                <div class="col-7" style="width: 150px;">@Admin_Resources.LabelTax</div>
+                                                                <div class="col-5 pr-4 text-right" data-test-selector="divTaxCost"> + @HelperMethods.FormatPriceWithCurrency(Model.ReturnTaxCost, Model.CultureCode)</div>
+                                                            </div>
+                                                        </div>
+                                                    }
+
+                                                    @if (Model.DiscountAmount > 0)
+                                                    {
+                                                        <div class="form-group">
+                                                            <div class="" style="display: flex; align-items:center;">
+                                                                <div class="col-7" style="width: 150px;">@WebStore_Resources.ColumnDiscounts</div>
+                                                                <div class="col-5 pr-4 text-right" data-test-selector="divTaxCost"> - @HelperMethods.FormatPriceWithCurrency(Model.DiscountAmount, Model.CultureCode)</div>
+                                                            </div>
+                                                        </div>
+                                                    }
+
+                                                    @if (Model.CSRDiscount > 0)
+                                                    {
+                                                        <div class="form-group">
+                                                            <div class="" style="display: flex; align-items:center;">
+                                                                <div class="col-7" style="width: 150px;">@WebStore_Resources.LabelCSRDiscountAmount</div>
+                                                                <div class="col-5 pr-4 text-right" data-test-selector="divTaxCost"> - @HelperMethods.FormatPriceWithCurrency(Model.CSRDiscount, Model.CultureCode)</div>
+                                                            </div>
+                                                        </div>
+                                                    }
+
+                                                    @if (Model.ReturnShippingDiscount > 0)
+                                                    {
+                                                        <div class="form-group border-line">
+                                                            <div class="" style="display: flex; align-items:center;padding-bottom:5px;">
+                                                                <div class="col-7" style="width: 150px;">@WebStore_Resources.LabelShippingDiscount</div>
+                                                                <div class="col-5 pr-4 text-right" data-test-selector="divTaxCost"> - @HelperMethods.FormatPriceWithCurrency(Model.ReturnShippingDiscount, Model.CultureCode)</div>
+                                                            </div>
+                                                        </div>
+                                                    }
+
+                                                    @if (Model.ReturnCharges > 0)
+                                                    {
+                                                        <div class="form-group">
+                                                            <div class="" style="display: flex; align-items:center;">
+                                                                <div class="col-7" style="width: 150px;">@WebStore_Resources.LabelReturnCharges</div>
+                                                                <div class="col-5 pr-4 text-right" data-test-selector="divTaxCost"> - @HelperMethods.FormatPriceWithCurrency(Model.ReturnCharges, Model.CultureCode)</div>
+                                                            </div>
+                                                        </div>
+                                                    }
+
+
+                                                    <div class="form-group total receipt-total" style="border-top: 1px solid #ccc; padding-top: 10px;">
+                                                        <div class="" style="display: flex; align-items:center;">
+                                                            <div class="col-7" style="width: 150px;"><h2>@Admin_Resources.LabelReturnTotal</h2></div>
+                                                            <div class="col-5 pr-4 text-right" data-test-selector="divOrderTotal"><h2>@HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.TotalReturnAmount), Model.CultureCode)</h2></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

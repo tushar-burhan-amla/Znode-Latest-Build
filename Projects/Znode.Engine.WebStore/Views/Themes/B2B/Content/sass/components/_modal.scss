@@ -1,0 +1,24 @@
+// Modal PopUp
+.modal{padding:0 !important;}
+.modal-backdrop{z-index:1042;}
+.modal-header{background-color:$base-primary-light;display:flex;align-items:center;
+    h4{color:$white;font-size:22px;}
+    .close{color:$white;background-color:transparent;border:none;font-size:$base-font-size + 4;padding:0;margin:0;cursor:pointer;}
+}
+.modal-body{width:100%;}
+.modal-footer{width:100%;background-color:$white;}
+.recommended-address-popup{
+    h5{font-size:$base-font-size + 1;color:$base-secondary;padding:5px 0;margin:0;font-weight:bold;}
+   .address-details{padding:5px 0;}
+}
+
+.address-popup{
+    select{width:100%;}
+}
+
+@include screensize(small) {
+    .modal-dialog .modal-body{max-height:600px;overflow:auto;}
+}
+@include screensize(medium) {
+    .modal-dialog .modal-body{max-height:none;}
+}

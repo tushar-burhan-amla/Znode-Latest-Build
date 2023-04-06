@@ -1,0 +1,77 @@
+﻿@using Znode.Engine.WebStore.Models
+@using Znode.Engine.WebStore.Helpers
+@using Znode.Engine.WebStore.Extensions
+@using System.Globalization;
+@model FilterColumnListModel
+
+@{
+    var list = new List<BaseDropDownList>();
+
+    foreach (var item in Model.FilterColumnList)
+    {
+        list.Add(new BaseDropDownList() { id = item.Id.ToString(), name = item.HeaderText, IsChecked = item.IsSearchable });
+    }
+    string dateFormat = HelperMethods.GetDateFormat();
+    DropDownOptions _data = new DropDownOptions() { DropDownId = "DropDownId", DropDownList = list, assignable = true, Action = "CreateFilter", Controller = "XMLGenerator", IsAjax = true, SuccessCallBack = "DynamicGrid.prototype.GenerateFilter", IsMultiple = false, IsDraggable = false, IsAllowCheckAll = false, SelectOptionName = "Manage Filters", IsDropDownHidden = true };
+}
+
+<div id="filter-content-main" class="d-flex flex-wrap">
+    @foreach (FilterColumnModel column in Model.FilterColumnList.FindAll(x => x.IsSearchable == true))
+    {
+        <div class="filter-option filter-csv-text" id="filter-control-@column.Id">
+            @{
+                string textValue = (column.Value.IndexOf("''") >= 0) ? column.Value.Replace("''", "'") : column.Value;
+                if ((Equals(column.DataType.ToLower(), "date") || Equals(column.DataType.ToLower(), "datetime")) && !string.IsNullOrEmpty(column.Value))
+                {
+                    textValue = (column.Value.IndexOf("'") >= 0) ? column.Value.Replace("'", "") : column.Value;
+                    if (textValue.Contains("AND"))
+                    {
+                        textValue = textValue.Split(new string[] { "AND" }, StringSplitOptions.None)[0];
+                    }
+                    textValue = Convert.ToDateTime(textValue).ToDateTimeFormat();
+                }
+
+                textValue = textValue.Contains("\"") ? textValue.Replace("\"", "&#34;") : textValue.Contains("'") ? textValue.Replace("'", "&#39;") : textValue;
+                textValue = textValue.Contains("script") ? textValue.Replace("script", "") : textValue;
+                if (textValue == "true" || textValue == "false")
+                {
+                    textValue = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(textValue);
+                }
+                string mxlen = Equals(column.DataType, "Int32") ? "maxlength=20" : string.Empty;
+            <label class="popovercontent btn-dropdown" data-text-value="@textValue" data-datype="@column.DataType" data-max-length="@mxlen" data-columnname="@column.ColumnName" data-options-list="@column.SelectListOfDatatype" data-column-datatype="@column.DataType" data-column-dateformat="@dateFormat" data-toggle="popover">
+               @column.HeaderText &nbsp;<span class="data-val-label"></span><strong style="text-transform:none !important;"> @Html.RenderBlock(textValue)</strong><span class="zf-down"></span>
+            </label>
+                if (!string.IsNullOrEmpty(textValue))
+                {
+                    <a onclick="DynamicGrid.prototype.ClearFilter(this,@column.Id, '@column.ColumnName')" class="option-close"><i class="zf-close-circle close-icon" data-placement="top" data-toggle="tooltip" title="Close Filter"></i></a>
+                }
+            }
+        </div>
+        }
+
+
+    @if (!Equals(Model, null) && !Equals(Model.DropdownList, null) && Model.DropdownList.Count > 0)
+    {
+        foreach (var dropdown in Model.DropdownList)
+        {
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <div class="col-xs-12 col-md-10 nopadding">
+                        <label>@dropdown.Label</label>
+                    </div>
+                    <div class="col-xs-12 col-md-10 nopadding">
+                        <select name="@dropdown.Name" id="@dropdown.Name">
+                            @foreach (var option in dropdown.Dropdown)
+                            {
+                                <option @(option.Selected ? "selected" : "") value="@option.Value">@option.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    <button style="display:none;" type="submit" name="SearchButton" title="Search" id="btnsearch" class="btn-text btn-bg-primary">@Admin_Resources.TitleSearch</button>
+</div>
+<div id="search-validation-summary" class="col-xs-12 nopadding field-validation-error" style="display:block;"></div>

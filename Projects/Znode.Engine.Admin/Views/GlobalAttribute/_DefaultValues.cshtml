@@ -1,0 +1,193 @@
+﻿@model List<Znode.Engine.Admin.AttributeValidationHelpers.DefaultValueListModel>
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string _defaultValues = string.Empty;
+    string _defaultValuesCode = string.Empty;
+    string _displayOrder = string.Empty;
+    string _ActionLink = string.Empty;
+    string _IsDefault = string.Empty;
+    string _Swatch = string.Empty;
+    int count = 0;
+    List<int> list = new List<int>();
+    var localeArray = "";
+}
+
+@foreach (var _item in Model)
+{
+    list.Add(_item.LocaleId);
+}
+
+@{
+    localeArray = Newtonsoft.Json.JsonConvert.SerializeObject(list);
+}
+<button type="button" id="defaultValue-add-new-row" class="btn-text-icon btn-text-color-icon pull-right" onclick="GlobalAttribute.prototype.AddNewRow(@localeArray);" data-test-selector="btnAddNew"><em class="z-add-circle"></em>@Admin_Resources.ButtonAdd</button>
+<div class="col-sm-12 nopadding">
+    <div class="col-sm-12 nopadding attribut-table-container">
+        <table class="table attribut-table" id="table-default-Values" data-test-selector="tblDefaultValues" aria-describedby="Global Locale Values">
+            <thead>
+                <tr>
+                    <th scope="col">@Admin_Resources.LabelAttributeCode</th>
+                    <th scope="col">@Admin_Resources.LabelDisplayOrder</th>
+                    <th id="lblIsDefault">@Admin_Resources.LabelIsDefault</th>
+                    <th id="headerSwatch" class="imageicon" style="display:none">Swatch</th>
+                    @foreach (var _item in Model)
+                    {
+                        <th scope="col">
+                            @_item.LocaleName
+                        </th>
+                        _defaultValues += Convert.ToString(Html.Partial("~/Views/GlobalAttribute/_DefaultValueRow.cshtml", _item.DefaultValues, new ViewDataDictionary { { "LocaleId", _item.LocaleId } }));
+                        _ActionLink += count == 0 ? Convert.ToString(Html.Partial("~/Views/GlobalAttribute/_ActionRow.cshtml", _item.DefaultValues)) : string.Empty;
+                        count++;
+                    }
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tr>
+                @{ _defaultValuesCode = "<td>";
+                    int _rowIndex = 0;
+                    if (Model?.FirstOrDefault()?.GlobalAttributeDefaultValueCodeList?.Count > 0)
+                    {
+                        foreach (var item in Model.FirstOrDefault().GlobalAttributeDefaultValueCodeList)
+                        {
+                            _defaultValuesCode += "<div id=code_" + _rowIndex + ">";
+                            _defaultValuesCode += Convert.ToString(Html.TextBox("DefaultValueCode-" + _rowIndex, item.AttributeDefaultValueCode, new { @style = "display:none;", @Localeid = item.AttributeDefaultValueCode }));
+                            _defaultValuesCode += Convert.ToString(" <label>" + item.AttributeDefaultValueCode + "</label>");
+                            _defaultValuesCode += Convert.ToString("<input type='hidden' id='hdnDefaultvalue_" + _rowIndex + "' value='" + item.GlobalAttributeDefaultValueId + "' />");
+                            _defaultValuesCode += "</div>";
+                            _rowIndex++;
+                        }
+                    }
+                    else
+                    {
+                        _defaultValuesCode += "<div id=code_" + _rowIndex + ">";
+                        _defaultValuesCode += Convert.ToString(Html.TextBox("DefaultValueCode-" + _rowIndex, null, new { @autocomplete = "off" }));
+                        _defaultValuesCode += Convert.ToString(" <label style='display: none;'></label>");
+                        _defaultValuesCode += Convert.ToString("<input type='hidden' id='hdnDefaultvalue_" + _rowIndex + "' value='" + _rowIndex + "' />");
+                        _defaultValuesCode += "</div>";
+                        _rowIndex++;
+                    }
+                    _defaultValuesCode += "</td>";
+
+                }
+                @{ _displayOrder = "<td>";
+                    int _rowDisplayOrderIndex = 0;
+                    if (Model?.FirstOrDefault()?.GlobalAttributeDefaultValueCodeList?.Count > 0)
+                    {
+                        foreach (var item in Model.FirstOrDefault().GlobalAttributeDefaultValueCodeList)
+                        {
+                            _displayOrder += "<div id=displayOrder_" + _rowDisplayOrderIndex + ">";
+                            _displayOrder += Convert.ToString(Html.TextBox("DefaultValueDisplayOrder-" + _rowDisplayOrderIndex, item.DisplayOrder, new { @style = "display:none;", @Localeid = item.DisplayOrder, @maxlength = "3" }));
+                            _displayOrder += Convert.ToString(" <label>" + item.DisplayOrder + "</label>");
+                            _displayOrder += "</div>";
+                            _rowDisplayOrderIndex++;
+                        }
+                    }
+                    else
+                    {
+                        _displayOrder += "<div id=displayOrder_" + _rowDisplayOrderIndex + ">";
+                        _displayOrder += Convert.ToString(Html.TextBox("DefaultValueDisplayOrder-" + _rowDisplayOrderIndex, null, new { @maxlength = "3", @autocomplete = "off" }));
+                        _displayOrder += Convert.ToString(" <label style='display: none;'></label>");
+                        _displayOrder += "</div>";
+                        _rowDisplayOrderIndex++;
+                    }
+                    _displayOrder += "</td>";
+
+                }
+                @{ _IsDefault = "<td class='is-default'>";
+                    int _rowIsDefaultIndex = 0;
+                    if (Model?.FirstOrDefault()?.GlobalAttributeDefaultValueCodeList?.Count > 0)
+                    {
+                        foreach (var item in Model.FirstOrDefault().GlobalAttributeDefaultValueCodeList)
+                        {
+                            _IsDefault += "<div id=isdefault" + _rowIsDefaultIndex + ">";
+                            var IsChecked = item.IsDefault == true ? "checked='checked'" : string.Empty;
+                            _IsDefault += Convert.ToString("<input " + IsChecked + " id='IsDefault_" + _rowIsDefaultIndex + "' name='IsDefault' disabled type='radio' value='" + item.IsDefault + "' class='dirty'><span class='lbl padding-8'></span>");
+
+                            _IsDefault += "</div>";
+                            _rowIsDefaultIndex++;
+                        }
+                    }
+                    else
+                    {
+                        _IsDefault += "<div id=isdefault" + _rowIsDefaultIndex + ">";
+                        _IsDefault += Convert.ToString("<input checked='checked' id='IsDefault_" + _rowIsDefaultIndex + "' name='IsDefault' type='radio' value='false' class='dirty'><span class='lbl padding-8'></span>");
+                        _IsDefault += "</div>";
+                        _rowIsDefaultIndex++;
+                    }
+                    _IsDefault += "</td>";
+                }
+                @{ _Swatch = "<td id='divswatch' style='display:none;' class='imageicon displayswatch'>";
+                    int _rowSwatchIndex = 0;
+                    var mediaPath = ZnodeAdminSettings.DefaultImagePath;
+                    if (Model?.FirstOrDefault()?.GlobalAttributeDefaultValueCodeList?.Count > 0)
+                    {
+                        foreach (var item in Model.FirstOrDefault().GlobalAttributeDefaultValueCodeList)
+                        {
+                            mediaPath = (item.MediaId <= 0) ? mediaPath : item.MediaId.ToString();
+                            _Swatch += "<div class='divSwatchImage swatch-image'>";
+                            _Swatch += "<div class='control-md' id=swatch-" + _rowSwatchIndex + ">";
+                            _Swatch += "<div class='upload-images' id='divMediaId" + _rowSwatchIndex + "'>";
+
+                            string _imagePath = string.IsNullOrEmpty(item.MediaPath) ? "/MediaFolder/no-image.png" : item.MediaPath;
+                            _Swatch += Convert.ToString("<img id='SwatchImage_" + _rowSwatchIndex + "' onclick='GlobalAttribute.prototype.CheckMediaBrowse(" + _rowSwatchIndex + ");' src='" + _imagePath + "' alt='Swatch Image " + _rowSwatchIndex + "' class='grid-img'>");
+
+                            _Swatch += "<span id='span_" + _rowSwatchIndex + "' onclick='EditableText.prototype.BrowseMedia(&quot;SwatchImage_" + _rowSwatchIndex + "&quot;, &quot;False&quot;, &quot;True&quot;, &quot;True&quot;)' class='change-image' style='pointer-events: All;display:none'>" + Admin_Resources.LinkChange + "</span>";
+                            _Swatch += "<input type='hidden' class='abc" + _rowSwatchIndex + "' id='SwatchImage_" + _rowSwatchIndex + "' name='SwatchImage_" + _rowSwatchIndex + "' value='" + item.MediaId + "'><input type='hidden' value='" + AdminConstants.ImageExtensions + "' Id='hdnSwatchImage_" + _rowSwatchIndex + "' /><input type='hidden' value='1000' id='hdnMediaSizeSwatchImage_" + _rowSwatchIndex + "'>";
+                            _Swatch += "</div></div></div>";
+                            _Swatch += "<div class='divSwatchText swatch-text swatchTxt_" + _rowSwatchIndex + "' style='display:none;'>";
+                            _Swatch += "<div class='control-md' id=swatchText_" + _rowSwatchIndex + ">";
+                            _Swatch += Convert.ToString(Html.TextBox("DefaultValueSwatchText-" + _rowSwatchIndex, item.SwatchText, new { @class = "txtSwatch jscolor", @style = "display:none;", @Localeid = item.SwatchText }));
+                            _Swatch += Convert.ToString(" <label>" + item.SwatchText + "</label>");
+                            _Swatch += "</div></div>";
+                            _Swatch += "<div id='UploadMediaId_" + item.MediaId + "' class='appendMediaModel uploadMedia_" + _rowSwatchIndex + "'></div>";
+                            _rowSwatchIndex++;
+                        }
+                    }
+                    else
+                    {
+                        _Swatch += "<div class='divSwatchImage swatch-image' style='display:none;'>";
+                        _Swatch += "<div class='control-md' id=swatch-" + _rowSwatchIndex + ">";
+                        _Swatch += "<div class='upload-images' id='divMediaId" + _rowSwatchIndex + "'>";
+                        _Swatch += Convert.ToString("<img id='SwatchImage_" + _rowSwatchIndex + "' onclick='GlobalAttribute.prototype.CheckMediaBrowse(" + _rowSwatchIndex + ");' src='" + mediaPath + "'alt='Swatch Image " + _rowSwatchIndex + "' class='grid-img' style='pointer-events: All'>");
+                        _Swatch += "<span onclick='EditableText.prototype.BrowseMedia(&quot;SwatchImage_" + _rowSwatchIndex + "&quot;, &quot;False&quot;, &quot;True&quot;, &quot;True&quot;)' class='change-image' style='pointer-events: All'>" + Admin_Resources.LinkChange + "</span>";
+                        _Swatch += "<input type='hidden' class='abc" + _rowSwatchIndex + "' id='SwatchImage_" + _rowSwatchIndex + "' name='SwatchImage_" + _rowSwatchIndex + "' value=''><input type='hidden' value='" + AdminConstants.ImageExtensions + "' id='hdnSwatchImage_" + _rowSwatchIndex + "' /><input type='hidden' value='1000' id='hdnMediaSizeSwatchImage_" + _rowSwatchIndex + "'>";
+                        _Swatch += "</div></div></div>";
+                        _Swatch += "<div class='divSwatchText swatch-text swatchTxt_" + _rowSwatchIndex + "' style='display:none;'>";
+                        _Swatch += "<div class='control-md' id=swatchText_" + _rowSwatchIndex + ">";
+                        _Swatch += Convert.ToString(Html.TextBox("DefaultValueSwatchText-" + _rowSwatchIndex, null, new { @class = "txtSwatch jscolor" , @autocomplete = "off" }));
+                        _Swatch += Convert.ToString(" <label style='display: none;'></label>");
+                        _Swatch += "</div></div>";
+                        _Swatch += "<div id='UploadMediaId_" + _rowSwatchIndex + "' class='appendMediaModel uploadMedia_" + _rowSwatchIndex + "'></div>";
+                        _rowSwatchIndex++;
+                    }
+
+                    _Swatch += "</td>";
+                }
+                @Html.Hidden("LocaleCount", Model.Count)
+                @Html.Hidden("DefaultValueCount", Model.FirstOrDefault().DefaultValues.Count)
+            </tr>
+            <tr>
+                @Html.RenderBlock(_defaultValuesCode + _displayOrder + _IsDefault + _Swatch + _defaultValues)
+                @Html.RenderBlock(_ActionLink)
+            </tr>
+        </table>
+        <div>
+            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderConfirmDelete,
+                        Description = @Admin_Resources.TextConfirmDeleteforProductDefaultValue,
+                        ModalPopUpId = "GlobalAttributeDeleteDefaultValuePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "GlobalAttribute.prototype.DeleteDefaultAttributeValue($('#hdnDeleteDiv').val())" }
+                         }
+                    })
+        </div>
+        <input type="hidden" id="hdnDeleteDiv" />
+
+    </div>
+</div>
+<script src="~/Scripts/References/jscolor.js"></script>

@@ -1,0 +1,95 @@
+﻿.rmareturn-managereturn {
+
+    .return-tbl {
+        .table-head, .table-body {
+            ul li {
+                flex: 9% 0 0;
+            }
+
+            .sp-product-name {
+                flex: 1 0 0;
+            }
+
+            .sp-status {
+                flex: 10% 0 0;
+            }
+
+            .exp-quantity {
+                flex: 8% 0 0;
+            }
+
+            .sp-quantity {
+                flex: 8% 0 0;
+            }
+
+            .sp-shipping {
+                flex: 8% 0 0;
+            }
+        }
+    }
+
+    .order-page-details {
+        .cart-total {
+            .form-group {
+                padding: 0 50px;
+
+                .return-value {
+                    text-align: right;
+                }
+            }
+
+            .return-details {
+                border-bottom: 1px solid #dddddd;
+
+                .return-value {
+                    position: relative;
+
+                    .help-text {
+                        position: absolute;
+                    }
+                }
+            }
+
+            .shipping-details, .tax-details {
+                border-bottom: 1px solid #dddddd;
+            }
+        }
+    }
+
+    .order-receipt {
+        .receipt-item-list .receipt-totals{
+            .border-line{
+                border-bottom:1px solid #dddddd;
+            }
+        }
+    }
+}
+
+.order-manage {
+    .returnTablePage {
+        .cart-products {
+            .table-head, .table-body {
+                .line-items li:first-child {
+                    width: initial;
+                }
+
+                .sp-return-number {
+                    flex: 1;
+                    padding-left: 20px !important;
+                    width: 100px;
+                    max-width: 250px;
+                }
+
+                .sp-product-name {
+                    padding-right: 7px;
+                    width: 150px;
+                }
+
+                .sp-status {
+                    min-width: 120px;
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+}

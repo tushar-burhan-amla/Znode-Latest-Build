@@ -1,0 +1,23 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model CartViewModel
+
+<div class="container">
+    <div class="row multiple-checkout">
+        <div class="col-12 p-0">
+            <h1 class="page-title">REVIEW ORDER</h1>
+        </div>
+        <div class="col-12 checkout-step nopadding">
+            <h3>Checkout Step 3 of 4</h3>
+        </div>
+       @Html.Partial("_CartReview", Model)
+    </div>
+    <div class="col-12 nopadding">
+        <div class="pull-right">
+            <a href="/cart" class="btn btn-secondary">@WebStore_Resources.LinkTextEditCart</a>
+            <a href="/Checkout/PaymentOptions" class="btn btn-primary ">@WebStore_Resources.ButtonContinue</a>
+        </div>
+    </div>
+</div>
+
+
+

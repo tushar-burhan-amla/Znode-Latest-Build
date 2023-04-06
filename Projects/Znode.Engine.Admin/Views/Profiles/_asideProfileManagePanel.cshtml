@@ -1,0 +1,11 @@
+﻿<aside>
+    <button id="slide-menu" class="slide-menu-btn" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink("Profile Catalog", "GetProfileCatalogList", "Profiles", new { profileId = Model.ProfileId, portalId = Model.PortalId }, new { @data_test_selector = "linkProfileCatalog" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelShippingMethods, "GetAssociatedShippingList", "Profiles", new { profileId = Model.ProfileId, portalId = Model.PortalId }, new { @data_test_selector = "linkShippingMethods" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitlePaymentMethods, "GetAssociatedPaymentList", "Profiles", new { profileId = Model.ProfileId, portalId = Model.PortalId }, new { @data_test_selector = "linkPaymentMethods" })</li>
+        </ul>
+    </div>
+</aside>
+

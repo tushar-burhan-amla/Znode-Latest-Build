@@ -1,0 +1,313 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+@model OrderInfoViewModel
+@{
+    string _displayPODocument = !string.IsNullOrEmpty(Model.PODocumentName) ? "display:block" : "display:none";
+    string PODocument = !string.IsNullOrEmpty(Model.PODocumentName) ? HelperUtility.GetFilePath(Model.PODocumentName.Replace("~", string.Empty)) : "#";
+    Layout = null;
+    string shippingTypeClass = Model.ShippingTypeClassName == "ZnodeCustomerShipping" ? "display:block" : "display:none";
+}
+<div class="col-sm-12 nopadding dashboard-panel ">
+    <div class=" dashboard-panel-heading">
+        <h4 class="dashboard-panel-title" data-test-selector="hdgOrderInformation">@Model.StoreName @Admin_Resources.HeaderOrderInformation</h4>
+    </div>
+    <div class="col-sm-12 nopadding margin-bottom-15">
+        <div class="order-subtitle">
+            <h4>Order Summary</h4>
+        </div>
+        <div class="col-xs-12">
+            <div class="col-xs-6 padding-none">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding ">
+                        <div class="control-label order-label">
+                            @Html.Label(Admin_Resources.LabelOrderDate, new { @data_test_selector = "lblOrderDate" })
+                        </div>
+                        <div class="control-lg update-order-status dirtyignore order-controLg-width" data-test-selector="divOrderDate">
+                            @Html.RenderBlock(Model.OrderDateWithTime)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label order-label">                           
+                            @Html.LabelFor(model => Model.OrderNumber, new { @data_test_selector = "lblOrderNumber" })
+                        </div>
+                        <div class="control-lg update-order-status dirtyignore order-controLg-width" data-test-selector="divOrderNumber">
+                            @Html.RenderBlock(Model.OrderNumber)
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label order-label" data-test-selector="divJobName">
+                            @Html.LabelFor(model => model.JobName, new { @data_test_selector = "lblJobName" })
+                        </div>
+                        <div class="control-lg orderInfo-control-lg" data-test-selector="divManageJobName">
+                            @Html.Partial("_ManageJobName", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 padding-none">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label order-label">
+                                @Html.Label(Admin_Resources.LabelOrderStatus, new { @data_test_selector = "lblOrderStatus" })
+                            </div>
+                            <div class="control-lg update-order-status dirtyignore orderInfo-control-lg order-controLg-width">
+                                @{Html.RenderAction("ManageOrderStatus", "Order", new { omsOrderId = Model.OmsOrderId, orderStatus = Model.OrderStatus });}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="order-created-by">
+                            <div class="control-label order-label">
+                                @Html.Label(Admin_Resources.LabelOrderCreatedBy, new { @data_test_selector = "lblOrderCreatedBy" })
+                            </div>
+                            <div class="control-lg update-order-status dirtyignore" data-test-selector="divOrderCreatedBy">
+                                @Html.RenderBlock(Model.CreatedByName)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 padding-none margin-top billing-info">
+            <div class="order-subtitle">
+                <h4>Billing</h4>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        @Html.Label(Admin_Resources.LabelPaymentMethod, new { @data_test_selector = "lblPaymentMethod" })
+                    </div>
+                    <div class="control-lg update-order-status dirtyignore">
+                        <span id="spanPaymentType" data-test-selector="spnPaymentMethod">
+                            @Html.RenderBlock(HelperUtility.IsNull(Model.PaymentDisplayName) ? string.Empty : Model.PaymentDisplayName)
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.PaymentType == ZnodeConstant.COD || Model.PaymentType == ZnodeConstant.PurchaseOrder || Model.PaymentType == ZnodeConstant.ACH)
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div id="Payment-Status" class="control-label padding-left">
+                            @Html.Label(Admin_Resources.LabelPaymentStatus, new { @data_test_selector = "lblPaymentStatus" })
+                        </div>
+                        <div class="control-lg dirtyignore orderInfo-control-lg">
+                            @{Html.RenderAction("ManagePaymentStatus", "Order", new { omsOrderId = Model.OmsOrderId, orderStatus = Model.PaymentStatus });}
+
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label padding-left">
+                            @Html.Label(Admin_Resources.LabelPaymentStatus, new { @data_test_selector = "lblPaymentStatus" })
+                        </div>
+                        <div class="control-lg">
+                            <span id="labelPaymentStatus" data-test-selector="spnPaymentStatus"> @Html.RenderBlock(HelperUtility.IsNull(Model.PaymentStatus) ? string.Empty : Model.PaymentStatus)</span>
+                        </div>
+                    </div>
+                </div>
+                if (Model.PaymentType == ZnodeConstant.CreditCard)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label padding-left">
+                                @Html.Label(Admin_Resources.LabelCreditCardNumber, new { @data_test_selector = "lblCreditCardNumber" })
+                            </div>
+                            <div class="control-lg text-break">
+                                xxx-xxx-xxx-@Html.RenderBlock(Model.CreditCardNumber)
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            @if (Model.PaymentType == ZnodeConstant.ACH)
+            {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        @Html.Label(Admin_Resources.LabelAccountNumber, new { @data_test_selector = "lblRoutingNumberAccountNumber" })
+                    </div>
+                    <div class="control-lg text-break">
+                        xxx-xxx-xxx-@Html.RenderBlock(Model.CreditCardNumber)
+                    </div>
+                </div>
+            </div>
+            }
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        @Html.Label(Admin_Resources.LabelTransactionId, new { @data_test_selector = "lblTransactionId" })
+                    </div>
+                    <div class="control-lg div-transaction text-break" data-test-selector="divTransactionId" style="width:46% !important">
+                        @Html.RenderBlock(HelperUtility.IsNull(Model.TransactionId) ? string.Empty : Model.TransactionId)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        @Html.Label(Admin_Resources.LabelTaxTransactionNumber, new { @data_test_selector = "lblTaxTransactionNumber" })
+                    </div>
+                    <div class="control-lg text-break" data-test-selector="divTransactionNumber">
+                        @Html.RenderBlock(HelperUtility.IsNull(Model.TaxTransactionNumber) ? string.Empty : Model.TaxTransactionNumber)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        @Html.Label(Admin_Resources.LabelPurchaseOrderNumber, new { @data_test_selector = "lblPurchaseOrderNumber" })
+                    </div>
+                    <div class="control-lg text-break" data-test-selector="divPurchaseOrderNumber">
+                        @Html.RenderBlock(HelperUtility.IsNull(Model.PurchaseOrderNumber) ? string.Empty : Model.PurchaseOrderNumber)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 padding-none pull-right margin-top shipping-info">
+            <div class="order-subtitle">
+                <h4>Shipping</h4>
+            </div>
+            <div style="@_displayPODocument">
+                <div class="form-group dirtyignore">
+                    <div class="control-label padding-left">
+                        @Html.Label(Admin_Resources.LabelPODocument, new { @data_test_selector = "lblPODocument" })
+                    </div>
+                    <div class="document-files control-lg">
+                        <a href="#" id="jumpto-readDocument" class="btn-text btn-margin-left" onclick="Order.prototype.DownloadPODocument();" download>@Admin_Resources.ButtonDownload</a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group date padding-left manage-inhand-date">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.InHandDate, new { @data_test_selector = "lblInHandDate" })
+                </div>
+                @using (Ajax.BeginForm("UpdateInHandDate", "order"
+                                               , new AjaxOptions
+                                               {
+                                                   UpdateTargetId = "labelInHandsDate",
+                                                   HttpMethod = "POST",
+                                                   OnSuccess = "Order.prototype.ChangeInHandDateSuccessCallback"
+                                               }, new { @class = "dirtylisten dirty", @id = "InHandDateView" }))
+                {
+
+                    <div class="control-lg">
+                        <div class="right-inner-icon date-time">
+                            @Html.TextBox("InHandDate", Model.InHandDate != null ? Model.InHandDate.ToDateTimeFormat() : string.Empty, new { @id = "InHandDate", @mindate = HelperMethods.GetDateTime().Date, @class = "datepicker", @Onchange = "Order.prototype.SaveInHandDate(this)", @group = "inhanddate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtInHandDate" })
+                            <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                        </div>
+                        @Html.HiddenFor(model => Model.OmsOrderId, new { @id = "hdnInHandDateOrderId" })
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left" data-test-selector="divShippingConstraintCode">
+                        @Html.LabelFor(model => model.ShippingConstraintCode, new { @data_test_selector = "lblShippingConstraintCode" })
+                    </div>
+                    <div class="control-lg orderInfo-control-lg" data-test-selector="divManageShippingConstraintCode">
+                        @Html.Partial("_ManageShippingConstraintCode", Model)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        @Html.Label(Admin_Resources.ShippingType, new { @data_test_selector = "lblShippingType" })
+                    </div>
+                    <div class="control-lg">
+                        <span id="lblShippingType" data-test-selector="divShippingType">
+                            <select id="shippingTypes" data-test-selector="drpShippingTypes" value="@Model.ShippingTypeDescription" onchange="Order.prototype.GetSelectedShipping(this)">
+                                <option value="@Model.ShippingId" selected>@Model.ShippingTypeDescription</option>
+                            </select>
+
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-12 nopadding" id="customerShippingDiv" style="@shippingTypeClass">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label padding-left">
+                            @Html.LabelFor(model => model.AccountNumber, new { @class = "required", @data_test_selector = "lblAccountNumber" })
+                        </div>
+                        <div class="control-lg">
+                            @Html.Partial("_ManageShippingAccountNumber", Model)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label padding-left">
+                            @Html.LabelFor(model => model.ShippingMethod, new { @class = "required", @data_test_selector = "lblShippingMethod" })
+                        </div>
+                        <div class="control-lg">
+                            @Html.Partial("_ManageShippingMethod", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        <label data-test-selector="lblTrackingNumber">@Admin_Resources.LabelTrackingNumber</label>
+                    </div>
+                    <div class="control-lg orderInfo-control-lg">
+                        @Html.Partial("_ManageTrackingNumber", Model)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        <label data-test-selector="lblExternalId">@Admin_Resources.LabelExternalId</label>
+                    </div>
+                    <div class="control-lg">
+                        <span id="labelExternalId" data-test-selector="spnExternalId">
+                            @Model.ExternalId
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            @Html.HiddenFor(model => model.PortalId)
+            @Html.HiddenFor(model => model.userId, new { @id = "hdnUserId" })
+            @Html.HiddenFor(model => model.OmsOrderId)
+            @Html.HiddenFor(model => model.ShippingTypeId)
+            @Html.HiddenFor(model => model.CreditCardNumber, new { @id = "hdnCreditCardNumber" })
+            @Html.HiddenFor(model => model.PaymentType)
+            @Html.HiddenFor(model => model.OrderStatus, new { @id = "hdnOrderStatus" })
+            @Html.HiddenFor(model => model.PaymentStatus, new { @id = "hdnPaymentStatus" })
+            @Html.HiddenFor(model => model.ShippingTrackingUrl, new { @id = "hdnShippingTrackingUrl" })
+            @Html.HiddenFor(model => model.ShippingTypeClassName, new { @id = "hndShippingclassName" })
+            @Html.HiddenFor(model => model.AccountNumber, new { @id = "hdnShippingAccountNumber" })
+            @Html.HiddenFor(model => model.ShippingMethod, new { @id = "hdnShippingMethod" })
+            @Html.HiddenFor(model => PODocument, new { @id = "hdnPODocumentPath" })
+            @Html.Hidden("OrderNumber", Model.OrderNumber)
+        </div>
+
+
+
+    </div>
+</div>

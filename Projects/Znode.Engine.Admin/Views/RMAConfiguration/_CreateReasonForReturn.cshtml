@@ -1,0 +1,82 @@
+﻿@model Znode.Engine.Admin.ViewModels.RequestStatusViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName };
+    Layout = null;
+}
+@using (Ajax.BeginForm(actionName, controllerName,
+                new AjaxOptions()
+                {
+                    HttpMethod = "post",
+                    OnSuccess = "RMAConfiguration.prototype.AddReasonForReturnResult",
+                    InsertionMode = InsertionMode.Replace,
+                },
+                new { @id = "createReasonForReturn" }))
+{
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-test-selector="btnClose" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+                @if (string.Equals(actionName, "CreateReasonForReturn"))
+                {
+                    <h4 class="modal-title" data-test-selector="hdgAddReasonReturn">@Admin_Resources.LabelAddReasonReturn</h4>
+                }
+                else
+                {
+                    <h4 class="modal-title" data-test-selector="hdgAddReasonReturn">@Admin_Resources.LabelEditReasonReturn</h4>
+                }
+            </div>
+            <div class="modal-body">
+                <div id="customFieldModel" class="col-sm-12 nopadding">
+                    <div class="col-sm-12 nopadding">
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(m => m.Reason, new { @class = "required", @data_test_selector = "lblReason" })
+                                </div>
+                                <div class="control-md">
+                                    @Html.TextBoxFor(model => model.Reason, new { @data_test_selector = "txtReason" })
+                                    @Html.ValidationMessageFor(model => model.Reason, "", new { @data_test_selector = "valReason" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(m => m.IsActive, new { @data_test_selector = "lblIsActive" })
+                                </div>
+                                <div class="control-md">
+                                    @Html.DropDownListFor(model => model.IsActive, new List<SelectListItem>
+                                            {
+                                                new SelectListItem{Text = Admin_Resources.TextYes,Value = AdminConstants.True},
+                                                new SelectListItem{Text = Admin_Resources.TextNo,Value = AdminConstants.False}
+                                            }, new { @data_test_selector = "drpIsActive" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 nopadding">
+                    <div class="pull-right">
+                        <button data-test-selector="linkCancel" id="AddCustomfieldCancel" type="button" class="btn-text-icon" data-dismiss="modal"><em class="z-back"></em> @Admin_Resources.ButtonCancel</button>
+                        <div class="pull-right">
+                            <button data-test-selector="linkSave" id="AddCustomfieldSave" type="submit" class="btn-text btn-text-secondary">@Admin_Resources.ButtonSave</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+        @Html.HiddenFor(model => model.RmaReasonForReturnId)
+}
+@Scripts.Render("~/bundles/jqueryval")
+
+
+
+

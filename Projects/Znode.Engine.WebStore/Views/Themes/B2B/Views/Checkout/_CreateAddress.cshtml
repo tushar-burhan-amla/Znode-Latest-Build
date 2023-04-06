@@ -1,0 +1,30 @@
+﻿@model Znode.Engine.WebStore.ViewModels.AddressViewModel
+
+@{
+    string addressType = Model.AddressType;
+    string _addressType = ViewBag.AddressType;
+    Model.AddressType = _addressType;
+}
+
+    @if (!Equals(Model, null) && !Model.HasError)
+    {
+        using (Ajax.BeginForm("UpdateAddress", "Checkout", new AjaxOptions() { OnBegin = "ZnodeBase.prototype.ShowLoader();", OnSuccess = "Checkout.prototype.SetAddressErrorNotificationMessage", OnFailure = "ZnodeBase.prototype.HideLoader();" }, new { @id = "frmEditAddress_" + _addressType }))
+        {
+            @Html.AntiForgeryToken();
+            @Html.ValidationSummary(true)
+            <div id="Edit-Address-content_@_addressType">
+                @{Html.RenderPartial("_EditAddress", Model);}
+            </div>
+            @Html.Hidden("formChange", false, new { @id = "formChange" })
+        }
+    }
+    else
+    {
+        <span>@WebStore_Resources.HttpCode_401_AccessDeniedMsg</span>
+    }
+<script>
+    $("#frmEditAddress_@_addressType :input").change(function () {
+        $("#formChange").val(true);
+    });
+</script>
+

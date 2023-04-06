@@ -1,0 +1,67 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model AccountPermissionViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formAccountPermissionCreateEdit", CancelUrl = "/Account/PermissionList?accountId=" + @Model.AccountId, Callback = "Account.prototype.ValidateExistAccountPermissionName" };
+}
+<div class="col-sm-12 title-container">
+    @if (string.Equals(actionName.ToLower(), "createaccountpermission"))
+    {
+        <h1 data-test-selector="hdg@(Model.AccountPermissionName)">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelPermission)</h1>
+    }
+    else
+    {
+        <h1 data-test-selector="hdg@(Model.AccountPermissionName)">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelPermission)<em class="z-minus"></em><span>@Model.AccountPermissionName</span></h1>
+    }
+
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "formAccountPermissionCreateEdit" }))
+            {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.LabelPermissionName, new { @class = "required", @data_test_selectossr = "lblPermissionName" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.AccountPermissionName, Model.AccountPermissionName, new { @data_test_selectossr = "txtPermissionName" })
+                    @Html.ValidationMessageFor(model => model.AccountPermissionName, "", new { id = "errorSpanAccountPermissionName", @data_test_selectossr = "valPermissionName"  })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.LabelPermissionAccess, new { @data_test_selectossr = "lblPermissionAccess" })
+                </div>
+                <div class="control-md">
+                    @if (Model?.AccessPermissions?.Count > 0)
+                    {
+                        foreach (SelectListItem access in Model.AccessPermissions)
+                        {
+                            string isChecked = access.Value == Model.AccessPermissionId.ToString() ? "checked onclick =\"return false;\" onkeydown=\"return false;\"" : string.Equals(actionName.ToLower(), "createaccountpermission") ? "checked" : "disabled";
+                            <div class="col-sm-12 nopadding">
+                                <label>
+                                    <input type="radio" name="AccessPermissionId" value="@access.Value" @isChecked data-test-selector="lbl@(access.Text)"> <span class="lbl padding-8">@access.Text</span><br>
+                                </label>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+            @Html.HiddenFor(model => model.AccountId)
+            @Html.HiddenFor(model => model.AccountPermissionId)
+    }
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Account.prototype.ValidateAccountPermissionName();
+    });
+</script>

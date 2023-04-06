@@ -1,0 +1,159 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Libraries.ECommerce.Utilities;
+@model WebSiteLogoViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? string.Empty : Model?.PortalName;
+    string logoUrl = string.IsNullOrEmpty(Model?.LogoUrl) ? ZnodeAdminSettings.DefaultImagePath : Model?.LogoUrl;
+    string FavIconUrl = string.IsNullOrEmpty(Model?.FaviconUrl) ? ZnodeAdminSettings.DefaultImagePath : Model?.FaviconUrl;
+    int? mediaId = Model?.MediaId > 0 ? Model?.MediaId : 0;
+    int? faviconId = Model?.FaviconId > 0 ? Model?.FaviconId : 0;
+    ActionModel actionModel = new ActionModel { Action = "SaveWebSiteLogo", Controller = controllerName, FormId = "formWebSiteLogoCreate", IsSaveCloseEnable = true };
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "linkSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose , OnClick = "SaveCancel.prototype.SubmitForm('formWebSiteLogoCreate', '', '/StoreExperience/List')" });
+    primaryPageAction.PageActions.Add(new PageAction { DataTestSelector = "linkSave", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "SaveCancel.prototype.SubmitForm('formWebSiteLogoCreate', '', '/StoreExperience/StoreSetting?PortalId="+ Model.PortalId +"')" });
+
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelExperience)<em class="z-minus"></em><span>@portalName</span></h1>
+    <div class="pull-right btn-container ">
+        <a href="/StoreExperience/List" class="btn-text-icon" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+        @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+    </div>
+</div>
+
+<div class="col-sm-12 manage-website-container nopadding">
+    @using (Ajax.BeginForm("SaveWebSiteLogo", controllerName, new AjaxOptions { InsertionMode = InsertionMode.Replace, OnSuccess = "WebSite.prototype.SaveWebSiteLogo" }, new { @id = "formWebSiteLogoCreate" }))
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.LabelWebSiteTitle, new { @class = "required", @data_test_selector = "lblWebSiteTitle" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.WebSiteTitle, new { @data_test_selector = "txtWebSiteTitle" })
+                    @Html.ValidationMessageFor(model => model.WebSiteTitle, "", new { @data_test_selector = "valWebSiteTitle" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.LabelWebSiteDescription, new { @data_test_selector = "lblWebSiteDescription" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.WebsiteDescription, new { @data_test_selector = "WebSiteDescription" })
+                    @Html.ValidationMessageFor(model => model.WebsiteDescription, "", new { @data_test_selector = "valWebSiteDescription" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.LabelWebsiteLogo, new { @class = "required", @data_test_selector = "lblWebsiteLogo" })
+                </div>
+                <div class="control-md">
+                    <div class="upload-images" id="divMediaId">
+                        <img id="MediaId" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')" src="@logoUrl" alt="Upload Website Logo Image" class="img-responsive dev-upload-single" data-test-selector="imgBrowseMediaWebsiteLogo">
+                        <span class="change-image" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')">@Admin_Resources.LinkChange</span>
+                        @Html.HiddenFor(model => model.MediaId)
+                        <input type='hidden' value=@AdminConstants.ImageExtensionForWebsiteLogo Id='hdnMediaId' />
+                        @if (!Equals(logoUrl, null) && !Equals(logoUrl, ZnodeAdminSettings.DefaultImagePath))
+                        {
+                            <a class="upload-images-close" data-toggle="tooltip" data-placement="top" title="Remove" onclick="EditableText.prototype.RemoveImage('MediaId')"><em class="z-close-circle"></em></a>
+                        }
+                    </div>
+                    @Html.ValidationMessageFor(model => model.MediaId, "", new { @data_test_selector = "valWebsiteLogo" })
+                </div>
+                <div id="UploadMediaId" class="appendMediaModel">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.LabelFavicon, new { @data_test_selector = "lblFavicon" })
+                </div>
+                <div class="control-sm">
+                    <div class="upload-images" id="divFaviconId">
+                        <img id="FaviconId" onclick="EditableText.prototype.BrowseMedia('FaviconId', 'False', 'True', 'True')" src="@FavIconUrl" class="img-responsive" alt="Upload Favicon Logo Image" data-test-selector="imgBrowseMediaFavicon">
+                        <span class="change-image" onclick="EditableText.prototype.BrowseMedia('FaviconId', 'False', 'True', 'True')">@Admin_Resources.LinkChange</span>
+                        @Html.HiddenFor(model => model.FaviconId, faviconId)
+                        <input type='hidden' value=@AdminConstants.FaviconExtension Id='hdnFaviconId' />
+                        <input type="hidden" value="1000" id='hdnMediaSizeFaviconId' />
+                        @if (!Equals(FavIconUrl, null) && !Equals(FavIconUrl, ZnodeAdminSettings.DefaultImagePath))
+                        {
+                            <a class="upload-images-close" data-toggle="tooltip" data-placement="top" title="Remove" onclick="EditableText.prototype.RemoveImage('FaviconId')"><em class="z-close-circle"></em></a>
+                        }
+                    </div>
+                    @Html.ValidationMessageFor(model => model.FaviconId, "", new { @data_test_selector = "valFavicon" })
+                </div>
+                <div id="UploadMediaId" class="appendMediaModel">
+                </div>
+                @Html.Partial("_HelpText", @Admin_Resources.HelptextFavicon)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.Theme, new { @class = "required", @data_test_selector = "lblTheme" })
+                </div>
+                <div class="control-md">
+                    @Html.DropDownListFor(model => model.CMSThemeId, Model.ThemeList, Admin_Resources.LabelSelectTheme, new { @id = "ddlTheme", @OnChange = "Store.prototype.BindCSSBasedOnThemeId();", @data_test_selector = "drpThemeList" })
+                    @Html.ValidationMessageFor(model => model.CMSThemeId, "", new { @data_test_selector = "valTheme" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.CSS, new { @class = "required", @data_test_selector = "lblCSS" })
+                </div>
+                <div class="control-md">
+                    @Html.DropDownListFor(model => model.CMSThemeCSSId, Model.CSSList, Admin_Resources.LabelSelectCss, new { @id = "ddlCSS", @OnClick = "Store.prototype.ValidateCSS();", @data_test_selector = "drpCSSList" })
+                    @Html.ValidationMessageFor(model => model.CMSThemeCSSId, "", new { @data_test_selector = "valCSS" })
+                </div>
+            </div>
+        </div>
+        <h3 class="section-heading margin-top-25" data-test-selector="hdgStoreContactInformation">Additional Site Styles</h3>
+        <div class="col-xs-6 nopadding">
+            <div class="Tab-container dynamic-tabs margin-top">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#DynamicStyle">Dynamic Styles</a></li>
+                    <li><a data-toggle="tab" href="#WysiwygEditor">Wysiwyg Editor Styles</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="DynamicStyle" class="tab-pane fade in active">
+                        @Html.Raw(@Admin_Resources.DynamicStyleNote)
+                        @Html.TextAreaFor(model => model.DynamicContent.DynamicCssStyle, 15, 7, new { @data_test_selector = "txtDynamicStyles" })
+                    </div>
+                    <div id="WysiwygEditor" class="tab-pane fade">
+                        @Html.Raw(@Admin_Resources.WYSIWYGEditorNote)
+                        @Html.TextAreaFor(model => model.DynamicContent.WYSIWYGFormatStyle, 15, 7, new { @data_test_selector = "txtWYSIWYGFormatStyle" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.CMSPortalThemeId)
+        @Html.HiddenFor(model => model.CMSThemeCSSId)
+        @Html.HiddenFor(model => model.CMSThemeId)
+        @Html.HiddenFor(model => model.PortalId)
+        if (Model.DynamicContent?.PortalCustomCssId > 0)
+        {
+            @Html.HiddenFor(model => model.DynamicContent.PortalCustomCssId);
+        }
+    }
+</div>
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    $(document).ready(function () {
+        var form = $('#formWebSiteLogoCreate')
+            .removeData("validator") /* added by the raw jquery.validate plugin */
+            .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
+        $.validator.unobtrusive.parse(form);
+    });
+</script>

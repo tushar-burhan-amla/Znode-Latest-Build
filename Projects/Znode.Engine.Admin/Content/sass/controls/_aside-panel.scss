@@ -1,0 +1,31 @@
+﻿body.nav-open section.main-container {margin-left: 255px;}
+body .main-container {margin-left:0;}
+
+aside {position:fixed;height:100%;width:0;color:$base-color-white;left:0;top:113px;background:$aside-panel-bgcolor;z-index:100;overflow-y:auto;-moz-transition: left 0.5s ease, width 0.6s cubic-bezier(0.525, -0.35, 0.115, 1.335); -o-transition: left 0.5s ease, width 0.6s cubic-bezier(0.525, -0.35, 0.115, 1.335); -webkit-transition: left 0.5s ease, width 0.6s cubic-bezier(0.525, -0.35, 0.115, 1.335); transition: left 0.5s ease, width 0.6s cubic-bezier(0.525, -0.35, 0.115, 1.335);padding-top:15px;box-shadow:inset -10px 0px 8px -8px $box-border-shadow;
+    .slide-menu-btn {position:fixed;left:0;top:50%;padding:0;border:none;height:45px;width:14px;font-size:11px;margin-right:5px;vertical-align: top;line-height:32px;background-color:$base-color-primary;cursor:pointer;outline:none;border-top-right-radius:4px;border-bottom-right-radius:4px;-moz-transition: left 0.5s ease;-o-transition: left 0.5s ease;-webkit-transition: left 0.5s ease;transition: left 0.5s ease;}
+    .slide-container{
+        .aside-panel{margin:0;padding:0;padding-bottom:135px;display:inline-block;width:100%;
+            li{margin-bottom: 0px;display:block;width:100%;list-style:none;
+                a{padding:10px 10px 10px 15px;color:$aside-tab-text-fg;display:block;width:100%;float:left;text-transform:uppercase;font-size:14px;font-family:$base-font-family-condensed;margin-left:12px;                 
+                    &:hover,&:focus,&:active{background-color:$aside-tab-selected-bg;color:$base-color-primary;-moz-transition: all 0.2s linear 0s;-webkit-transition: all 0.2s linear 0s;transition: all 0.2s linear 0s;box-shadow: 0 4px 8px -2px $box-border-shadow;}
+                 }
+                .active,.tab-selected {color:$base-color-primary;background-color:$aside-tab-selected-bg;-moz-transition: all 0.2s linear 0s;-webkit-transition: all 0.2s linear 0s;transition: all 0.2s linear 0s;box-shadow: 0 4px 8px -2px $box-border-shadow;}                
+                          
+
+                }
+                .active a,.active-tab a,.tab-selected a{background-color:$base-color-white;color:$text-fgcolor-default;box-shadow: 0 4px 8px -2px $box-border-shadow;}
+                .active-tab-validation a {background-color: #ab261d;color:$base-color-white;}
+                }
+     }
+}
+
+body.nav-open aside{left:0;width:246px;
+    .slide-menu-btn {left:246px !important;}        
+}
+// Media Query.
+@include screensize(desktop) {
+body.nav-open aside{width:246px;
+    .slide-menu-btn {left:246px;}  
+}
+body.nav-open section.main-container{margin-left:255px;}
+}

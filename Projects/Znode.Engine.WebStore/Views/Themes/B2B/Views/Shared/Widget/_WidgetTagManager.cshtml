@@ -1,0 +1,14 @@
+﻿@model WidgetParameter
+
+<div id="tagmanager">
+    <script>
+        var dataLayer = [];
+     </script>
+    @Html.TagManager("_TagManager", Model)
+</div>
+<div id="scripts">
+    <script>
+       $('head').append($("#tagmanager").html());
+       $("#tagmanager").closest('z-widget').remove();
+    </script>
+</div>

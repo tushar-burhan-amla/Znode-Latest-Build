@@ -1,0 +1,6 @@
+﻿@{ 
+    int contentPageId = Convert.ToInt32(ViewBag.contentPageId);
+    Layout = null;
+}
+
+<z-widget>@Html.WidgetPartial("TextEditor", "ContentPage", "7771123", "ContentPageMapping", contentPageId)</z-widget>

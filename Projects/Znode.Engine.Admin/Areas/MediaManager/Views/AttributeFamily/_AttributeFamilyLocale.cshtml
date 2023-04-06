@@ -1,0 +1,66 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model EditFamilyLocaleViewModel
+
+<div class="col-sm-12 page-container">
+    <div class="col-sm-12 nopadding" id="loginForm">
+        @{
+            <h1>Locale Values</h1>
+            for (int i = 0; i < Model.Locales.Locales.Count(); i++)
+            {
+                int familyLocaleIndex = Model.FamilyLocaleDetails.IndexOf(Model.FamilyLocaleDetails.FirstOrDefault(x => x.LocaleId == Model.Locales.Locales[i].LocaleId));
+                if (familyLocaleIndex >= 0)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Model.Locales.Locales[i].Name):
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(m => m.FamilyLocaleDetails[familyLocaleIndex].AttributeFamilyName, new { @class = "AttributeFamilyNames" })
+                                @Html.ValidationMessageFor(m => m.FamilyLocaleDetails[familyLocaleIndex].AttributeFamilyName)
+                            </div>
+                        </div>
+                    </div>
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[familyLocaleIndex].AttributeFamilyId)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[familyLocaleIndex].CreatedBy)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[familyLocaleIndex].CreatedDate)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[familyLocaleIndex].Description)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[familyLocaleIndex].FamilyLocaleId)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[familyLocaleIndex].Label)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[familyLocaleIndex].ModifiedBy)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[familyLocaleIndex].ModifiedDate)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[familyLocaleIndex].LocaleId)
+                }
+                else
+                {
+                    Model.FamilyLocaleDetails.Add(new FamilyLocaleDetails());
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Model.Locales.Locales[i].Name)
+                                @{Model.FamilyLocaleDetails[i].LocaleId = Model.Locales.Locales[i].LocaleId;}
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(m => m.FamilyLocaleDetails[i].AttributeFamilyName, new { @class = "AttributeFamilyNames" })
+                                @Html.ValidationMessageFor(m => m.FamilyLocaleDetails[i].AttributeFamilyName)
+                            </div>
+                        </div>
+                    </div>
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[i].AttributeFamilyId)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[i].CreatedBy)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[i].CreatedDate)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[i].Description)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[i].FamilyLocaleId)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[i].Label)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[i].ModifiedBy)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[i].ModifiedDate)
+                    @Html.HiddenFor(m => m.FamilyLocaleDetails[i].LocaleId)
+                    }
+                    @Html.HiddenFor(m => m.AttributeFamilyId)
+                    }
+        }
+
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")

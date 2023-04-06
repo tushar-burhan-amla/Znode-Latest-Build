@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" data-bind="css: typography">
+<head>
+    <title>Preview</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="Content/DevExtreme/css/dx.common.css" rel="stylesheet" />
+    <link href="Content/DevExtreme/css/dx.spa.css" rel="stylesheet" />
+    <link href="Content/CSS/preview-styles.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" type="text/css" href="Content/DevExtreme/layouts/Empty/EmptyLayout.css" />
+    <link rel="stylesheet" type="text/css" href="Content/DevExtreme/layouts/Simple/SimpleLayout.css" />
+    <link rel="stylesheet" type="text/css" href="Content/DevExtreme/layouts/Desktop/DesktopLayout.css" />
+    <link rel="stylesheet" type="text/css" href="Content/DevExtreme/layouts/Split/SplitLayout.css" />
+</head>
+<body data-bind="css: bodyClass">
+    <!-- ko if: false -->
+    <div class="loader"></div>
+    <!-- /ko -->
+    <script type="text/html" id="items">
+        <div data-bind="preview: { data: $data }" class="preview-container"></div>
+    </script>
+
+    <fieldset class="preview" data-bind="css: { 'is-mobile': isMobileTheme(), 'with-padding': !isApplication() }">
+        <legend data-bind="text: groupTitle"></legend>
+        <div data-bind="template: { name: 'items', foreach: widgets }"></div>
+    </fieldset>
+
+    <!-- ko if: !isApplication() && baseWidgets().length -->
+    <fieldset class="preview base-preview with-padding" data-bind="css: { 'is-mobile': isMobileTheme() }">
+        <legend data-bind="text: baseGroupTitle"></legend>
+        <div data-bind="template: { name: 'items', foreach: baseWidgets }"></div>
+    </fieldset>
+    <!-- /ko -->
+
+    <script src="Content/DevExtreme/js/jquery-3.1.0.min.js"></script>
+    <script src="Content/DevExtreme/js/knockout-3.4.0.js"></script>
+    <script src="Content/DevExtreme/js/cldr.min.js"></script>
+    <script src="Content/DevExtreme/js/cldr/event.min.js"></script>
+    <script src="Content/DevExtreme/js/cldr/supplemental.min.js"></script>
+    <script src="Content/DevExtreme/js/globalize.min.js"></script>
+    <script src="Content/DevExtreme/js/globalize/message.min.js"></script>
+    <script src="Content/DevExtreme/js/globalize/number.min.js"></script>
+    <script src="Content/DevExtreme/js/globalize/currency.min.js"></script>
+    <script src="Content/DevExtreme/js/globalize/date.min.js"></script>
+    <script src="Content/DevExtreme/js/dx.all.js"></script>
+
+    <!-- Layouts -->
+    <script type="text/javascript" src="Content/DevExtreme/layouts/Empty/EmptyLayout.js"></script>
+    <script type="text/javascript" src="Content/DevExtreme/layouts/Simple/SimpleLayout.js"></script>
+    <script type="text/javascript" src="Content/DevExtreme/layouts/Desktop/DesktopLayout.js"></script>
+    <script type="text/javascript" src="Content/DevExtreme/layouts/Split/SplitLayout.js"></script>
+
+    <!-- View -->
+    <script type="text/html" id="about-view">
+        <div data-options="dxView: { name: 'about', title: 'About' }">
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <p>To learn more about DevExtreme, visit <a href="http://help.devexpress.com/DevExtreme" target="_blank">http://help.devexpress.com/DevExtreme</a>. It is an interactive learning environment where you can find documentation, feature demonstrations, and various tutorials.</p>
+                <p>If you have any questions about DevExtreme, do not hesitate to contact our support team via <a href="http://support.devexpress.com" target="_blank">http://support.devexpress.com</a>.</p>
+                <p>Note: To disable the simulator debugging environment, set the project's 'Run in Simulator' property to false.</p>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/html" id="details-view">
+        <div data-options="dxView: { name: 'details', title: 'Details' }">
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <div class="dx-fieldset">
+                    <div class="dx-field">
+                        <div class="dx-field-label">Name: </div>
+                        <div class="dx-field-value" data-bind="text: name"></div>
+                    </div>
+                    <div class="dx-field">
+                        <div class="dx-field-label">Area: </div>
+                        <div class="dx-field-value" data-bind="html: area"></div>
+                    </div>
+                    <div class="dx-field">
+                        <div class="dx-field-label">Capital: </div>
+                        <div class="dx-field-value" data-bind="text: capital"></div>
+                    </div>
+                    <div class="dx-field">
+                        <div class="dx-field-label">Formed at: </div>
+                        <div class="dx-field-value" data-bind="text: formedAt"></div>
+                    </div>
+                    <div class="dx-field">
+                        <div class="dx-field-label">Currency: </div>
+                        <div class="dx-field-value" data-bind="text: currency"></div>
+                    </div>
+                    <div class="dx-field">
+                        <div class="dx-field-label">Population: </div>
+                        <div class="dx-field-value" data-bind="text: population"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/html" id="list-view">
+        <div data-options="dxView: { name: 'list', pane: 'master', title: 'Items' }">
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <div data-bind="dxList: { dataSource: dataSource, grouped: true }">
+                    <div data-options="dxTemplate: { name: 'item'}"
+                         data-bind="dxAction: function() { $root.navigateToDetails($data.id); }, css: { 'list-item-selected': id === $root.selectedId() }">
+                        <div data-bind="text: name"></div>
+                    </div>
+                    <div data-options="dxTemplate: { name: 'group'}">
+                        <div data-bind="text: key"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </script>
+
+
+    <script>
+        window.ThemeBuilder = {};
+        less = {
+            async: true
+        };
+    </script>
+    <script src="Content/Scripts/less.min.js"></script>
+    <script src="Content/Scripts/utils.js"></script>
+    <script src="Content/Scripts/groupsAliasesRepository.js"></script>
+    <script src="Content/Scripts/layoutsLoader.js"></script>
+    <script src="Content/Scripts/ko.preview.js"></script>
+    <script src="Content/Data/JS/dx-theme-builder-preview-metadata.js"></script>
+    <script src="Content/Scripts/previewDataLoader.js"></script>
+    <script src="Content/Scripts/previewRepository.js"></script>
+    <script src="Content/Scripts/parentIframeNotifier.js"></script>
+    <script src="Content/Scripts/previewViewModel.js"></script>
+    <script src="Content/Scripts/lessTemplateLoader.js"></script>
+    <script>
+        $(function() {
+            function listener(event) {
+                if(ThemeBuilder.actionData)
+                    ThemeBuilder.actionData = null;
+
+                ThemeBuilder = $.extend(true, window.ThemeBuilder, JSON.parse(event.data));
+
+                switch(ThemeBuilder.action) {
+                    case "load":
+                        metadata = ThemeBuilder.actionData.metadata;
+                        previewViewModel.theme(ThemeBuilder.actionData.currentTheme);
+                        previewViewModel.colorScheme(ThemeBuilder.actionData.currentColorScheme);
+
+                        previewRepository.init(ThemeBuilder.actionData.metadataRepositoryData).done(function() {
+                            previewViewModel.init(metadata, ThemeBuilder.actionData.group);
+                        });
+                        break;
+
+                    case "update":
+                        previewViewModel.theme(ThemeBuilder.actionData.currentTheme);
+                        previewViewModel.colorScheme(ThemeBuilder.actionData.currentColorScheme);
+                        previewViewModel.init(
+                            ThemeBuilder.actionData.metadata,
+                            ThemeBuilder.actionData.group
+                        ).done(function() {
+                            $(document.body).show();
+                            DevExpress.utils.triggerShownEvent($(".preview-container"));
+                        });
+                        break;
+
+                    case "analyze":
+                        previewViewModel.theme(ThemeBuilder.actionData.currentTheme);
+                        previewViewModel.colorScheme(ThemeBuilder.actionData.currentColorScheme);
+                        previewViewModel.analyzeBootstrapTheme(
+                            ThemeBuilder.actionData.metadata,
+                            ThemeBuilder.actionData.bootstrapMetadata,
+                            ThemeBuilder.actionData.customLessContent
+                        ).done(function() {
+                            $(document.body).show();
+                            DevExpress.utils.triggerShownEvent($(".preview-container"));
+                        });
+                        break;
+                    case "getCSS":
+                        return previewViewModel.getCSS.call(previewViewModel, ThemeBuilder.actionData);
+                        break;
+
+                    case "saveCSS":
+                        return previewViewModel.saveCSS.call(previewViewModel, ThemeBuilder.actionData);
+                        break;
+
+                    case "hideBody":
+                        $("body").hide().scrollTop(0);
+                        break;
+                }
+            }
+
+            if(window.addEventListener) {
+                window.addEventListener("message", listener, false);
+            } else {
+                window.attachEvent("onmessage", listener);
+            }
+
+            ThemeBuilder.groupsAliasesRepository = new ThemeBuilder.GroupsAliasesRepository();
+            var previewRepository = new ThemeBuilder.PreviewRepository(new ThemeBuilder.PreviewDataLoader()),
+                parentIframeNotifier = new ThemeBuilder.ParentIframeNotifier(),
+                previewViewModel = new ThemeBuilder.PreviewViewModel(new ThemeBuilder.LessTemplateLoader(), previewRepository, parentIframeNotifier);
+
+            ko.applyBindings(previewViewModel, $("html").get(0));
+
+            window.parent.jQuery(window.parent.document).trigger("iframeready");
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+﻿@model Znode.Engine.WebStore.ViewModels.WidgetSliderBannerViewModel
+@using Znode.Engine.WebStore.Agents
+
+<div id="top-slider" data-navigation="@Model.Navigation" class="owl-carousel slider Top-Slider @Model.Type">
+        @{
+            int counter = 0;
+            string mediaUri = PortalAgent.CurrentPortal.MediaServerUrl;
+            if (!Equals(Model.SliderBanners, null))
+            {
+                foreach (var item in Model.SliderBanners)
+                {
+                    string mediaPath = $"{mediaUri}{item.MediaPath}";
+                    string _active = counter == 0 ? "item active" : "item";
+                    <div class="@_active">
+                        <a href="@item.ButtonLink">
+                            <img src="@mediaPath" alt="@item.ImageAlternateText" data-test-selector="imgMediaPath"/>
+                            <div class="carousel-caption @item.TextAlignment">
+                                @Html.RenderBlock(item.Description)
+                            </div>
+                        </a>
+                    </div>
+                    counter++;
+                }
+            }
+        }
+    </div>
+<script>
+
+    $(function () {        
+        if(@Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(Convert.ToString(Model.AutoPlay).ToLower())) == "true"){
+            $(".Top-Slider").owlCarousel({
+                navigation: true,
+                singleItem: true,
+                autoPlay:@Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(Model.AutoplayTimeOut)),
+                stopOnHover: @Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(Convert.ToString(Model.AutoplayHoverPause).ToLower()))== "true" ? true : false,
+                transitionStyle: @Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TransactionStyle)),
+                navigationText: [
+                    "<span class='left-icon'></span>",
+                    "<span class='right-icon'></span>"
+                ],
+            });
+        }else{            
+            $(".Top-Slider").owlCarousel({
+                navigation: true,
+                singleItem: true,
+                autoPlay: false,
+                stopOnHover: @Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(Convert.ToString(Model.AutoplayHoverPause).ToLower()))== "true" ? true : false,
+                transitionStyle: @Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TransactionStyle)),
+                //transitionStyle: "fade",
+                navigationText: [
+                    "<span class='left-icon'></span>",
+                    "<span class='right-icon'></span>"
+                ],
+            });
+        }
+
+        // For Navigation.
+        var navigation = $(".Top-Slider").data("navigation");
+        if(navigation === "Dots"){
+            $(".Top-Slider .owl-pagination").css("display","block");
+            $(".Top-Slider .owl-buttons").css("display","none");
+        }else{
+            $(".Top-Slider .owl-buttons").css("display","block");
+            $(".Top-Slider .owl-pagination").css("display","none");
+        }
+    });   
+</script>

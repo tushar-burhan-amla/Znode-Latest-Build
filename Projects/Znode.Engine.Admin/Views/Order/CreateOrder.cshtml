@@ -1,0 +1,483 @@
+﻿<script src="~/Scripts/References/PaypalObject/checkout.js"></script>
+@using Znode.Engine.Admin.ViewModels
+@model CreateOrderViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Agents
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    Model.IsQuote = false;
+    if (HelperUtility.IsNotNull(Model.ShippingListViewModel))
+    {
+        Model.ShippingListViewModel.IsQuote = false;
+    }
+    Model.UserAddressDataViewModel.IsOrderQuote = false;
+    string showContainer = Model.IsFromUserCart ? "style=display:none" : string.Empty;
+    string paymentApiRequestHeader = ViewBag.PaymentApiRequestHeader;
+
+    int userId = HelperUtility.IsNotNull(Model.CartViewModel) ? Model.CartViewModel.UserId : 0;
+    var ActionName = TempData["ActionName"];
+    var AccountId = TempData["AccountId"];
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.Equals("createorder", StringComparison.InvariantCultureIgnoreCase)
+        || actionName.Equals("converttoorder", StringComparison.InvariantCultureIgnoreCase)
+        || actionName.Equals("createcustomerorder", StringComparison.InvariantCultureIgnoreCase)
+        || actionName.Equals(ZnodeConstant.ReorderCompleteOrderAction, StringComparison.InvariantCultureIgnoreCase))
+    {
+        <h1 data-test-selector="hdgOrder">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.OrderHeader)</h1>
+    }
+    else if (string.Equals(actionName.ToLower(), "reorder"))
+    {
+        <h1 data-test-selector="hdgOrder">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.OrderHeader)</h1>
+    }
+    else
+    {
+        <h1 data-test-selector="hdgOrder">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.OrderHeader)<em class="z-minus"></em><span>@Model.OrderNumber</span></h1>
+    }
+
+    <div class="pull-right btn-container dirtyignore">
+        @if (actionName.ToLower() == "editorder")
+        {
+            <div class="pull-right">
+                <a id="btnCreateOrder" onclick="Order.prototype.SubmitOrder();" style="display:none" class="btn-text btn-text-secondary" data-test-selector="linkSubmitOrder">@Admin_Resources.LabelUpdateYourOrder</a>
+            </div>
+        }
+        else
+        {
+            <div class="pull-right">
+                <a id="btnCreateOrder" onclick="Order.prototype.SubmitOrder();" style="display:none;" class="btn-text btn-text-secondary" data-test-selector="linkSubmitOrder">@Admin_Resources.LabelPlaceYourOrder</a>
+            </div>
+        }
+        @if (string.Equals(actionName.ToLower(), "converttoorder"))
+        {
+            <a href="javascript:void(0)" class="btn-text-icon" id="btnCancelQuoteOrderId" onclick="OrderSidePanel.prototype.ConfirmCancelQuoteOrderPopUp(PopUpConfirmCancelQuoteOrder);" data-test-selector="linkCancel"><em class='z-back'></em>@Admin_Resources.ButtonCancel</a>
+            @*<div class="pull-right padding-left">
+                    <a href="javascript:void(0)" class="btn-text btn-text-secondary" id="btnContinue" onclick="OrderSidePanel.prototype.ContinueOrder();" data-test-selector="linkContinue">@Admin_Resources.ButtonContinue</a>
+                </div>*@
+        }
+        else
+        {
+            if (Model.UpdatePageType == "OrderHistory")
+            {
+                @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "AccountUserOrderList", "Account", new { userId = Model.SendUserId, accountId = Model.AccountId }, new { @class = "btn-text-icon", @data_test_selector = "linkBack" })
+            }
+            else
+            {
+                if (Model.IsFromUserCart == true)
+                {
+                    @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "GetUserCartByUserId", "Customer", new { userId = Model.UserId }, new { @class = "btn-text-icon", @data_test_selector = "linkBack" })
+                }
+                else
+                {
+                    <a href="javascript:void(0)" class="btn-text-icon" id="btnCancelOrderId" onclick="OrderSidePanel.prototype.ConfirmCancelOrderPopUp(PopUpConfirmCancelOrder);" data-test-selector="linkCancel"><em class='z-back'></em>BACK</a>
+                }
+            }
+            @*<div class="pull-right padding-left">
+                    <a href="javascript:void(0)" class="btn-text btn-text-secondary" id="btnContinue" onclick="OrderSidePanel.prototype.ContinueOrder();" data-test-selector="linkContinue">@Admin_Resources.ButtonContinue</a>
+                </div>*@
+        }
+    </div>
+</div>
+<div class="oms-container dirtyignore">
+    <!--Main Container-->
+    <section class="page-container" @showContainer>
+        <!--Disable AutoFill/AutoComplete of chrome for id txtCustomerName, So chrome will fill user name in userNameDummy instead of txtCustomerName-->
+        <div>
+            <input style="opacity: 0; position: absolute; z-index: -1;" id="userNameDummy" />
+        </div>
+
+        <!--Tab Panel-->
+        @Html.Partial("~/views/Order/_asideOrderManagePanel.cshtml")
+        <br />
+
+
+        <div class="tab-content">
+
+            <!-- Customer Tab Starts -->
+            <div id="customer-tab" class="tab-pane fade in active">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <!-- Select Customer Starts -->
+                        <div id="CustomerDiv" class="panel panel-default productInfoPage">
+
+                            <div class="panel-heading order-panel">
+                                <h4 class="panel-title panel-title-edit" style="display: inline-block;">Select Customer</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            @Html.LabelFor(model => model.PortalId, new { @class = "required", @data_test_selector = "lblStore" })
+                                        </div>
+                                        @if (actionName.Equals("createorder", StringComparison.InvariantCultureIgnoreCase) || actionName.Equals(ZnodeConstant.ReorderCompleteOrderAction, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <div class="col-md-9">
+                                                @Html.FastSelectFor(model => model.StoreName, model => model.PortalId, "GetSuggestions", "Typeahead", "Order.prototype.OnSelectPortalResult", 1, true,
+                                                new
+                                                {
+                                                htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStore" },
+                                                parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                                                })
+                                                @Html.ValidationMessageFor(model => model.StoreName, null, new { id = "errorRequiredStore", @data_test_selector = "valStore" })
+                                            </div>
+                                        }
+                                        else if (actionName.ToLower() == "reorder")
+                                        {
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(model => model.StoreName, new { @data_test_selector = "txtStore" })
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(model => model.StoreName, new { @data_test_selector = "txtStore", @readOnly = "readOnly" })
+                                            </div>
+                                            @Html.HiddenFor(model => model.OrderId)
+                                        }
+                                    </div>
+                                    @Html.HiddenFor(model => model.StoreName, new { id = "txtPortalName" })
+                                    @Html.HiddenFor(model => model.PortalId, new { @id = "selectedPortalId", @name = "hdnSelectedPortal" })
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            @Html.LabelFor(m => m.CustomerName, new { @class = "required", @data_test_selector = "lblCustomerName" })
+                                        </div>
+                                        <div class="col-md-9">
+                                            @Html.HiddenFor(model => model.UserId, new { @id = "hdnUserId" })
+                                            @Html.HiddenFor(model => model.AccountId, new { @id = "hdnAccountId" })
+                                            @Html.TextBoxFor(model => model.CustomerName, new { @placeholder = Admin_Resources.TextSearchByNameOrPhone, @id = "txtCustomerName", @data_test_selector = "txtCustomerName", @disabled = "disabled", onblur = "Order.prototype.ValidateUsername()" })
+                                            @Html.HiddenFor(model => model.UserAddressDataViewModel.FullName)
+                                            @Html.ValidationMessageFor(model => model.CustomerName, "", new { @id = "CustomerNameError", @data_test_selector = "valCustomerName" })
+                                            @Html.Hidden("ActionName", ActionName)
+                                            @Html.Hidden("ReorderAccountId", AccountId)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">&nbsp;</div>
+                                        <div class="col-md-9">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                @if (actionName.Equals("createorder", StringComparison.InvariantCultureIgnoreCase) || actionName.Equals(ZnodeConstant.ReorderCompleteOrderAction, StringComparison.InvariantCultureIgnoreCase))
+                                                {
+                                                    <div class="btn-advanced-search">
+                                                        <a id="serachCustomer" onclick="Order.prototype.GetCustomerList();" class="btn-text btn-default" data-test-selector="btnSearchCustomer"><em class='z-search'></em> ADVANCED SEARCH</a>
+                                                    </div>
+
+                                                    if (SessionProxyHelper.IsSalesRepUser() == false)
+                                                    {
+                                                        <span class="or-text"> OR </span>
+
+                                                        <div class="btn-add-customer">
+                                                            <a class="btn-text btn-text-secondary" onclick="Order.prototype.AddNewUser()" data-test-selector="btnAddNewCustomer"> ADD NEW CUSTOMER </a>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Select CUustomer Ends -->
+                    </div>
+                    <div class="col-lg-6">
+                        <!-- Customer Information Starts -->
+                        <div id="AddressDiv" class="panel panel-default customer-info-section">
+                            <div class="panel-heading">
+                                <h4 class="panel-title panel-title-edit ">@Admin_Resources.LabelCustomerInformation</h4>
+                            </div>
+
+                            <div class="panel-body">
+                                @Html.Partial("UserShippingBillingAddress", Model.UserAddressDataViewModel)
+                            </div>
+                        </div>
+                        <!-- Customer Information Ends -->
+                    </div>
+                </div>
+            </div>
+            <!-- Customer Tab Ends -->
+            <!-- Cart & Shipping Tab Starts -->
+            <div id="shipping-cart-tab" class="tab-pane fade">
+
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <!-- Select Products Starts -->
+                        <div class="panel panel-default select-product-section">
+                            <div class="panel-heading">
+                                <h4 class="panel-title panel-title-edit ">@Admin_Resources.LabelSelectProduct</h4>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="panel-body" id="productListDiv"></div>
+                                <div id="loader-productlist">@Html.Partial("_Loader")</div>
+                            </div>
+
+                        </div>
+                        <!-- Select Products Ends -->
+                        <!-- Order Notes Starts -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title panel-title-edit ">@Admin_Resources.LabelOrderNotes</h4>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-3 margin-bottom-15">
+                                        <label data-test-selector="lblJobName">@Admin_Resources.LabelJobName</label>
+                                    </div>
+                                    <div class="col-md-9 margin-bottom-15">
+                                        @Html.TextBoxFor(model => model.JobName, new { maxlength = 100, @data_test_selector = "txtJobName" })
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3 margin-bottom-15">
+                                        <label>@Admin_Resources.LabelAdditionalNotes</label>
+                                    </div>
+                                    <div class="col-md-9 margin-bottom-15">
+                                        @Html.TextArea("additionalInstructions", new { maxlength = 500, rows = 5, @data_test_selector = "txtAdditionalNotes" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Order Notes Ends -->
+                    </div>
+                    <div class="col-lg-6">
+                        <!-- Cart Starts -->
+                        <div class="panel panel-default cart-section" id="divShoppingCart">
+
+                        </div>
+                        <!-- Cart Ends -->
+
+                        <div id="shippingMethodDiv">
+                            @{Html.RenderPartial("ShippingOptions", Model.ShippingListViewModel, new ViewDataDictionary { TemplateInfo = new System.Web.Mvc.TemplateInfo { HtmlFieldPrefix = "ShippingListViewModel" } });}
+                        </div>
+
+                        <!-- Discount & Taxes Starts -->
+                        <div class="panel panel-default discount-taxes-container">
+                            <div class="panel-heading">
+                                <h4 class="panel-title panel-title-edit ">@Admin_Resources.TextDiscount &amp; @Admin_Resources.LabelTax</h4>
+                            </div>
+
+                            <div class="panel-body">
+                                @{Html.RenderPartial("_DiscountsTax", Model.CartViewModel, new ViewDataDictionary { TemplateInfo = new System.Web.Mvc.TemplateInfo { HtmlFieldPrefix = "Discounts" } });}
+                            </div>
+                        </div>
+                        <!-- Discount & Taxes Ends -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">@Admin_Resources.CartSummary</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="cart-total">
+                                    <div class="row" id="divTotal"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+                <hr />
+                <div class="d-flex justify-content-end">
+                    <button class="btn-text btn-text-secondary float-none" id="btnBottomNextTab" onclick="OrderTabs.prototype.ContinueOrder();">@Admin_Resources.LableNextReview</button>
+                </div>
+
+            </div>
+            <!-- Cart & Shipping Tab Ends -->
+            <!-- Payment Tab Starts -->
+            <div id="payment-tab" class="tab-pane fade">
+                <div class="row">
+                    <div class="col-lg-8" id="paymentMethodsDiv">
+                        @if (HelperUtility.IsNotNull(Model.PaymentSettingViewModel))
+                        {
+                            @Html.Partial("PaymentOptionList", Model.PaymentSettingViewModel)
+
+                        }
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="panel panel-default payment-cart-item-container">
+                            <div class="panel-heading">
+                                <h4 class="panel-title panel-title-edit" id="cart-count">@Admin_Resources.LabelCart</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="payment-tab-calculation row" id="OrderDetails"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (actionName.ToLower() == "editorder")
+            {
+                <div class="col-sm-12 nopadding">
+                    @if (Model.OrderNotes?.Count > 0)
+                    {
+                        <h3 class="section-heading margin-top">@Admin_Resources.LabelOrderNotes</h3>
+                        <div id="orderNotesDiv">
+                            @Html.Partial("_OrderNotes", Model.OrderNotes)
+                        </div>
+                    }
+                </div>
+                @Html.HiddenFor(model => model.PurchaseOrderNumber, new { id = "PONumber" })
+            }
+            <!-- Payment Tab Ends -->
+            <!-- Reveiw & Place Order Tab Starts -->
+            <div id="review-placeorder-tab" class="tab-pane fade review-order-container">
+                <div id="ReviewDiv"></div>
+            </div>
+            <!-- Reveiw & Place Order Tab Ends -->
+            @Html.HiddenFor(model => model.UserAddressDataViewModel.UserId, new { id = "UserAddressDataViewModel.UserId" })
+            @Html.HiddenFor(model => model.UserAddressDataViewModel.IsMultipleCouponCodeAllowed, new { id = "UserAddressDataViewModel.IsMultipleCouponCodeAllowed" })
+            <div id="OrderQuoteData">
+                @Html.HiddenFor(model => model.UserAddressDataViewModel.BudgetAmount, new { id = "UserAddressDataViewModel_BudgetAmount" })
+                @Html.HiddenFor(model => model.UserAddressDataViewModel.PermissionCode, new { id = "UserAddressDataViewModel_PermissionCode" })
+                @Html.HiddenFor(model => model.UserAddressDataViewModel.AccountId, new { id = "UserAddressDataViewModel_AccountId" })
+                @Html.HiddenFor(model => model.UserAddressDataViewModel.IsOrderQuote, new { id = "UserAddressDataViewModel_IsOrderQuote" })
+            </div>
+            @Html.HiddenFor(model => model.CreditCardNumber, new { @id = "hdnCreditCardNumber" })
+        </div>
+
+
+        <div>
+            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                         new PopupModel()
+                         {
+                             Title = @Admin_Resources.ConfirmText,
+                             Description = @Admin_Resources.TextConfirmCancelOrder,
+                             ModalPopUpId = "PopUpConfirmCancelOrder",
+                             Buttons = new List<PopUpButtonModel>
+                             () {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "OrderTabs.prototype.ConfirmCancelOrder()" },
+                                }
+                         })
+        </div>
+
+        <div>
+            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                         new PopupModel()
+                         {
+                             Title = @Admin_Resources.ConfirmText,
+                             Description = @Admin_Resources.TextConfirmCancelOrder,
+                             ModalPopUpId = "PopUpConfirmCancelQuoteOrder",
+                             Buttons = new List<PopUpButtonModel>
+                             () {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "OrderSidePanel.prototype.ConfirmCancelQuoteOrder()" },
+                                }
+                         })
+        </div>
+
+        @*PayPal Express*@
+        <div data-test-selector="divPaypalButton" id="paypal-button" class="col-xs-12 nopadding" style="display:none"></div>
+
+    </section>
+
+    @* Here Store List will display *@
+    <div id="divStoreListAsidePanel" class="aside-popup-panel modal-dialog modal-lg"></div>
+    @* Here Customer Details will display *@
+    <div id="customerDetails" class="aside-popup-panel modal-dialog modal-xl new-customer-popup"></div>
+    @* Here Customer address Details will display *@
+    <div id="addressDetails" class="aside-popup-panel modal-dialog modal-md"></div>
+    <div id="getProductsList" class="aside-popup-panel modal-dialog modal-xl"></div>
+    <div id="productDetailsPanel" class="aside-popup-panel modal-dialog modal-md"></div>
+    <div id="getProductDetail" class="aside-popup-panel modal-dialog modal-md"></div>
+    <div id="skuproductlist"></div>
+
+    <!--Error Payment Modal-->
+    <div class="modal fade" id="ErrorPaymentModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+                    <h4 class="modal-title">@Admin_Resources.LabelPaymentApplication</h4>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-right">
+                        <button type="button" class="btn-text-icon" data-dismiss="modal"><em class="z-ok"></em>Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="PaymentModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">@Admin_Resources.LabelPaymentApplication</h4>
+                </div>
+                <div class="modal-body">
+                    <p>@Admin_Resources.TextPaymentMethod</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.HiddenFor(model => Model.PortalId, new { id = "hdnPortalId" })
+@Html.HiddenFor(m => m.IsQuote)
+@Html.Hidden("hdnActionName", actionName.ToLower())
+
+@Html.Hidden("hdnAccountId", Model.AccountId)
+@Html.Hidden("hdnQuoteShipppingId", Model.CartViewModel?.ShippingId)
+@Html.Hidden("hdnAddressId", Model.UserAddressDataViewModel.ShippingAddress.AddressId)
+@Html.Hidden("IsFromUserCart", Model.IsFromUserCart)
+@Html.Hidden("selectedUserId")
+@Html.Hidden("selectedUserName")
+@Html.Hidden("selectedShippingId")
+@Html.Hidden("enableAddressValidation", Model.UserAddressDataViewModel.EnableAddressValidation)
+@Html.Hidden("hdnPaymentApiRequestHeader", paymentApiRequestHeader)
+@Html.Hidden("ActionName", ActionName)
+
+<script>
+    $(document).ready(function () {
+        Order.prototype.SetCustomerDetailsOnReorder(@userId);
+        OrderTabs.prototype.ContinueToCartTab();
+        Order.prototype.AutoCompleteApprovalUsers();
+        Order.prototype.SetAttributeForPortalId();
+        if ($("#IsFromUserCart").val() == 'True') {
+            $(".page-container").show();
+            OrderTabs.prototype.ContinueOrder(true);
+            //below method is called to bind user cart details.
+            Order.prototype.SetShoppingCartDetails();
+        }
+        if ($("#hdnPortalId").val() != 0) {
+            $("#txtCustomerName").prop("disabled", false);
+        }
+
+
+        // https://mrrsoft.atlassian.net/browse/ZPD-8836
+        /* While opening confirmation pop-up body was moving inside
+           due to padding - right of scrollbar in bootstrap js*/
+        $('#PopUpConfirmCancelOrder').on('shown.bs.modal', function () {
+            $("body.modal-open").css({ 'padding-right': 0, 'overflow': 'auto' });
+        });
+    })
+
+    paypal.Button.render({
+        env: 'sandbox', // Or 'production'
+        commit: true, // Show a 'Pay Now' button
+        payment: function () {
+            Order.prototype.GetPaymentDetails($("#ddlPaymentTypes").val());
+            var paypalResponse = Order.prototype.PaypalExpressCheckout();
+            return paypalResponse[1];
+        },
+        onAuthorize: function (data, actions) {
+            window.location.href = data.returnUrl;
+        }
+    }, '#paypal-button');
+</script>

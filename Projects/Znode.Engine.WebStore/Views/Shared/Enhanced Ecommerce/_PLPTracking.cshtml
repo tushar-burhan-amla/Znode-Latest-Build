@@ -1,0 +1,18 @@
+﻿@model List<Znode.Engine.WebStore.ViewModels.ProductImpressionsViewModel>
+@if (Helper.IsEnhancedEcommerceTrackingEnabled() &&  Model.Count > 0)
+{
+    <script>
+        var data = @Html.RenderBlock(Json.Encode(Model));
+        $(document).ready(function () {
+            GoogleAnalytics.prototype.SendProductListDataImpressions(data ,'@Helper.GetPortalCurrency()');
+        })
+        function SendEcommerceData(control, sku) {
+            var productUrl = $(control).attr('href');
+            $.each(data, function (index, product) {
+                if (sku == product.SKU) {
+                    GoogleAnalytics.prototype.SendProductClicks(product, '@Helper.GetPortalCurrency()', productUrl);
+                }
+            });
+        }
+    </script>
+}

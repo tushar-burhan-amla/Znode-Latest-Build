@@ -1,0 +1,166 @@
+﻿@using Znode.Engine.WebStore.Helpers
+@using Znode.Engine.WebStore.ViewModels
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string _shippingTypeName = Model.ShippingTypeName;
+}
+@{
+    string cssClass = string.Empty;
+}
+<div class="col-12 cart-total mt-4 cart-summary receipt-totals">
+    @{
+    cssClass = (Model.ShippingHandlingCharges > 0 || Model.TaxCost > 0 || Model.ShippingCost > 0) ? "form-group" : "form-group border-line";
+    }
+
+    <div class="@cssClass">
+        <div class="row no-gutters form-group px-3 px-md-4">
+            <div class="col-8">@WebStore_Resources.ColumnSubTotal</div>
+            <div class="col-4 text-right" data-test-selector="divSubtotal">@Helper.FormatPriceWithCurrency(Model.SubTotal, Model.CultureCode)</div>
+        </div>
+
+
+        @{
+        cssClass = (HelperMethods.GetFormattedRoundOffPrice(Model.TaxCost) > 0 || HelperMethods.GetFormattedRoundOffPrice(Model.ShippingHandlingCharges) > 0) ? "form-group" : "form-group border-line";
+        }
+
+        <div class="@cssClass">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8">@WebStore_Resources.LabelShippingCost (@Html.RenderBlock(_shippingTypeName)) </div>
+                <div class="col-4 text-right" data-test-selector="divShippingCost"> + @Helper.FormatPriceWithCurrency(Model.ShippingCost, Model.CultureCode)</div>
+            </div>
+        </div>
+
+        @{
+        cssClass = "form-group";
+        }
+        @if (HelperMethods.GetFormattedRoundOffPrice(Model.ShippingHandlingCharges) > 0)
+        {
+
+        <div class="@cssClass">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8">@WebStore_Resources.LabelShippingHandlingCharge </div>
+                <div class="col-4 text-right" data-test-selector="divShippingHandlingCharges"> + @Helper.FormatPriceWithCurrency(Model.ShippingHandlingCharges, Model.CultureCode)</div>
+            </div>
+        </div>
+
+
+        }
+
+        @if (Model.ImportDuty > 0)
+        {
+            <div class="form-group">
+                <div class="row no-gutters px-3 px-md-4">
+                    <div class="col-8">@WebStore_Resources.ImportDuty</div>
+                    <div class="col-4 text-right" data-test-selector="divImportDuty"> + @Helper.FormatPriceWithCurrency(Model.ImportDuty, Model.CultureCode)</div>
+                </div>
+            </div>
+        }
+        <div class="form-group">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8">@WebStore_Resources.ColumnTax</div>
+                <div class="col-4 text-right" data-test-selector="divTaxCost"> + @Helper.FormatPriceWithCurrency(Model.TaxCost, Model.CultureCode)</div>
+            </div>
+        </div>
+
+        @if (Model?.TaxSummaryList?.Count > 0)
+        {
+            <div class="col-xs-12 form-group tax-summary">
+                <table class="table" id="TaxSummary" aria-describedby="Tax Details">
+                    <thead>
+                        <tr>
+                            <th scope="col" data-test-selector="lblTaxName" class="pl-3 pl-md-4">@WebStore_Resources.ColumnTitleTaxName</th>
+                            <th scope="col" data-test-selector="lblRate">@WebStore_Resources.ColumnTitleRate</th>
+                            <th scope="col" class="text-right pr-3 pr-md-4" data-test-selector="lblTaxes">@WebStore_Resources.ColumnTitleTaxesFees</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (TaxSummaryViewModel taxSummary in Model.TaxSummaryList)
+                        {
+                            <tr>
+                                <td class="pl-3 pl-md-4">@taxSummary.TaxName</td>
+                                <td>@taxSummary.Rate</td>
+                                <td class="text-right pr-3 pr-md-4">@taxSummary.Tax</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        @{
+        cssClass = (HelperMethods.GetFormattedRoundOffPrice(Model.CSRDiscountAmount) > 0 || HelperMethods.GetFormattedRoundOffPrice(Model.ShippingDiscount) > 0) ? "form-group" : "form-group";
+        }
+        @if (HelperMethods.GetFormattedRoundOffPrice(Model?.DiscountAmount) > 0)
+        {
+
+        <div class="@cssClass">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8">@WebStore_Resources.ColumnDiscounts</div>
+                <div class="col-4 text-right" data-test-selector="divDiscountAmount"> - @Helper.FormatPriceWithCurrency(Model.DiscountAmount, Model.CultureCode)</div>
+            </div>
+        </div>
+
+        }
+
+        @{
+        cssClass = "form-group";
+        }
+        @if (HelperMethods.GetFormattedRoundOffPrice(Model.CSRDiscountAmount) > 0)
+        {
+
+        <div class="@cssClass">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8">@WebStore_Resources.LabelCSRDiscountAmount</div>
+                <div class="col-4 text-right" data-test-selector="divCSRDiscountAmount"> - @Helper.FormatPriceWithCurrency(Convert.ToDecimal(Model.CSRDiscountAmount), Model.CultureCode)</div>
+            </div>
+        </div>
+
+        }
+
+
+        @if (HelperMethods.GetFormattedRoundOffPrice(Model.ShippingDiscount) > 0)
+        {
+        <div class="form-group">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8">@WebStore_Resources.LabelShippingDiscount</div>
+                <div class="col-4 text-right" data-test-selector="divShippingDiscount"> - @Helper.FormatPriceWithCurrency(Model.ShippingDiscount, Model.CultureCode)</div>
+            </div>
+        </div>
+        }
+
+        @if (HelperMethods.GetFormattedRoundOffPrice(Model.ReturnCharges) > 0)
+        {
+        <div class="form-group">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8">@WebStore_Resources.LabelReturnCharges</div>
+                <div class="col-4 text-right" data-test-selector="divReturnCharges">
+                    + @Helper.FormatPriceWithCurrency(Model.ReturnCharges, Model.CultureCode)
+                    <i class="icon-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@WebStore_Resources.TitleReturnChargesTooltip"></i>
+                </div>
+            </div>
+        </div>
+        }
+        <div class="form-group total receipt-total border-top">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8"><h2>@WebStore_Resources.ColumnOrderTotal</h2></div>
+                <div class="col-4 text-right" data-test-selector="divOrderTotal"><h2>@Helper.FormatPriceWithCurrency(Convert.ToDecimal(Model.OrderTotalWithoutVoucher), Model.CultureCode)</h2></div>
+            </div>
+        </div>
+        @if (HelperMethods.GetFormattedRoundOffPrice(Model.GiftCardAmount) > 0)
+        {
+        <div class="form-group">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8">@WebStore_Resources.LabelVoucherAmount</div>
+                <div class="col-4 text-right" data-test-selector="divGiftCardAmount">@Helper.FormatPriceWithCurrency(Model.GiftCardAmount, Model.CultureCode)</div>
+            </div>
+        </div>
+
+        <div class="form-group" >
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8">(@WebStore_Resources.LabelAmountPaid</div>
+                <div class="col-4 text-right" data-test-selector="divAmountPaid">@Helper.FormatPriceWithCurrency(Convert.ToDecimal(Model.Total), Model.CultureCode))</div>
+            </div>
+        </div>
+        }
+    </div>
+</div>

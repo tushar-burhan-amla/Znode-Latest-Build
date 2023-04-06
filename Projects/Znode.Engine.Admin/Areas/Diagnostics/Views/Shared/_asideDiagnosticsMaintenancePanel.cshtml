@@ -1,0 +1,10 @@
+﻿<aside>
+    <button type="button" id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><i class="z-left-collaps-arrow"></i></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelDiagnostics, "Index", "Diagnostics", null, new { @area = "Diagnostics", @data_test_selector = "link" + @Admin_Resources.LabelDiagnostics })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelMaintenance, "Index", "Maintenance", null, new { @area = "Diagnostics", @id = "maintenancetab", @data_test_selector = "link" + @Admin_Resources.LabelMaintenance })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelHangfireDashboard, "Dashboard", "Hangfire", null, new { @data_test_selector = "linkHangfireDashboard" })</li>
+        </ul>
+    </div>
+</aside>

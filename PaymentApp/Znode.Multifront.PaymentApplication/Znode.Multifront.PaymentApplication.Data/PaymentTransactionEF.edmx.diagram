@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c50c362cf60c4b119d62ec4a32962d2a" Name="Diagram1">
+        <EntityTypeShape EntityType="Znode.Multifront.PaymentApplication.Data.ZNodeActivityLog" Width="1.5" PointX="0.75" PointY="1.25" />
+        <EntityTypeShape EntityType="Znode.Multifront.PaymentApplication.Data.ZNodeDomain" Width="1.5" PointX="2.75" PointY="1.25" />
+        <EntityTypeShape EntityType="Znode.Multifront.PaymentApplication.Data.ZnodePaymentAddress" Width="1.5" PointX="6" PointY="10.625" />
+        <EntityTypeShape EntityType="Znode.Multifront.PaymentApplication.Data.ZnodePaymentCustomer" Width="1.5" PointX="6" PointY="0.75" />
+        <EntityTypeShape EntityType="Znode.Multifront.PaymentApplication.Data.ZNodePaymentSettingCredential" Width="1.5" PointX="5.25" PointY="15.125" />
+        <EntityTypeShape EntityType="Znode.Multifront.PaymentApplication.Data.ZNodePaymentType" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="Znode.Multifront.PaymentApplication.Data.ZnodeTransaction" Width="1.5" PointX="5.25" PointY="4.5" />
+        <EntityTypeShape EntityType="Znode.Multifront.PaymentApplication.Data.ZNodePaymentGateway" Width="1.5" PointX="0.75" PointY="8.125" />
+        <EntityTypeShape EntityType="Znode.Multifront.PaymentApplication.Data.ZNodePaymentSetting" Width="1.5" PointX="3" PointY="8.625" />
+        <AssociationConnector Association="Znode.Multifront.PaymentApplication.Data.FK_SC_PaymentSetting_SC_Gateway" />
+        <AssociationConnector Association="Znode.Multifront.PaymentApplication.Data.FK_Znode_Transactions_ZNodePaymentSetting" />
+        <AssociationConnector Association="Znode.Multifront.PaymentApplication.Data.FK_ZNodePaymentSetting_ZNodePaymentType" />
+        <AssociationConnector Association="Znode.Multifront.PaymentApplication.Data.FK_ZNodePaymentSettingCredential_ZNodePaymentSetting" />
+        <EntityTypeShape EntityType="Znode.Multifront.PaymentApplication.Data.ZnodeAuthToken" Width="1.5" PointX="8.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Znode.Multifront.PaymentApplication.Data.ZnodePaymentMethod" Width="1.5" PointX="8.25" PointY="5.25" />
+        <AssociationConnector Association="Znode.Multifront.PaymentApplication.Data.FK_ZnodePaymentMethods_CreditCardAddressId" />
+        <AssociationConnector Association="Znode.Multifront.PaymentApplication.Data.FK_ZnodePaymentMethods_CustomersGUID" />
+        <AssociationConnector Association="Znode.Multifront.PaymentApplication.Data.FK_ZnodePaymentMethods_PaymentSettingID" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

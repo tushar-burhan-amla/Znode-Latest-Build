@@ -1,0 +1,15 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model ManageMessageViewModel
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.Message, new { @data_test_selector = "lblMessage" })
+        </div>
+        <div class="control-md">
+            @Html.EditorFor(m => m.Message, new { @data_test_selector = "txtMessage" })
+            @Html.ValidationMessageFor(m => m.Message, "", new { @data_test_selector = "valMessage" })
+            <span id="error_Manage_Message" class='error-msg'></span>
+        </div>
+        @Html.HiddenFor(m => m.CMSMessageId)
+    </div>
+</div>

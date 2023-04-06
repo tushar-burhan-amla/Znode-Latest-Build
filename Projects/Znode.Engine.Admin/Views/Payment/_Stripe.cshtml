@@ -1,0 +1,13 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelMerchantLogin, new { @class = "required", @data_test_selector = "lblMerchantLogin" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => Model.GatewayUsername, new { required = "required", @data_test_selector = "txtMerchantLogin" })
+            @Html.ValidationMessageFor(m => Model.GatewayUsername, @Admin_Resources.MerchantLoginName, new { @data_test_selector = "valMerchantLogin" })
+        </div>
+    </div>    
+</div>

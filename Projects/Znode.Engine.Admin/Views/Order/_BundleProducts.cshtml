@@ -1,0 +1,40 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model  List<BundleProductViewModel>
+@{
+    Layout = null;
+}
+
+@if (Model?.Count > 0)
+{
+    <div class="col-xs-12 nopadding product-bundles margin-top-bottom">
+
+        <div>
+            <table class="table" aria-describedby="Bundle Products Table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="included-product-title" colspan="2">@Admin_Resources.IncludedProducts</th>
+                        <th scope="col" class="text-center">@Admin_Resources.QuantityInBundle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var product in Model)
+                        {
+                            <tr>
+                                <td class="bundle-products">
+                                    <div class="bundle-item-image margin-top-bottom align-items-center">
+                                        <img src="@product.ImageThumbNailPath" alt="@product.Name Image" class="bundle-prod-img padding-left bundle" data-bundlesku="@product.SKU" data-test-selector="imgProductImage" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="bundle-item-title margin-left-20" data-test-selector="hdgProductName">@product.Name</div>
+                                </td>
+                                <td><div class="bundle-item-quantity text-center" data-test-selector="hdgProductName">@product.AssociatedProductBundleQuantity</div></td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

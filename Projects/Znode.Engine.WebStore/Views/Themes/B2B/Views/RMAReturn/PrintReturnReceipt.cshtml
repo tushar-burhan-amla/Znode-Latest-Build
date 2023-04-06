@@ -1,0 +1,323 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model RMAReturnViewModel
+@{
+    bool isReturnsDetailsReceipt = Model?.IsReturnDetailsReceipt ?? true;
+}
+@{
+    string cssClass = string.Empty;
+}
+@if (!Equals(Model, null))
+{
+    <div class="main-wrapper col">
+        <div class="row b2b-thanks-page">
+            <div class="container">
+                <div class="row checkout-reciept">
+                    <div class="col-12 mb-5">
+                        <div id="layout-account-receipt" class="col-12 p-0">
+                            <div class="col-12 p-0">
+                                <br>
+                                <h3 class="page-title py-4" style="font-size: 23px; padding: 0px; padding-top: 1.5rem; padding-bottom: 1.5rem; color: #454545;
+                                font-family: Roboto-Medium, Arial, sans-serif;">
+                                    @Model.StoreName @WebStore_Resources.TitleReturnOrder @Model.ReturnNumber
+                                </h3>
+                            </div>
+                            <div class="col-12 account-dashboard p-0">
+                                <div class="col-12 p-0 order-receipt right-container">
+                                    <div class="row ">
+                                        <div class="col-12 col-lg-6 account-profile-section mb-4 mb-lg-0" style="max-width: 50%; padding: 0 15px; margin-bottom: 30px;">
+                                            <div class="col-12 p-0 h-100 dashboard-content" style="border: 1px solid #c5b7b7; border-radius: 2px;">
+                                                <h3 class="b2b-section-header">@WebStore_Resources.TitleReturnDetails</h3>
+                                                <div class="col-12 dashboard-addresses">
+                                                    <div class="p-0 py-3">
+                                                        <strong>@WebStore_Resources.LabelOrdersNumber:</strong> @Model.OrderNumber
+                                                    </div>
+                                                    <div class="p-0 py-3">
+                                                        <strong>@WebStore_Resources.LabelReturnsNumber:</strong> @Model.ReturnNumber
+                                                    </div>
+                                                    <div class="p-0 py-3">
+                                                        <strong>@WebStore_Resources.LabelReturnsStatus:</strong> @Model.ReturnStatus
+                                                    </div>
+                                                    <div class="p-0 py-3">
+                                                        <strong>@WebStore_Resources.LabelReturnsDate:</strong> @(HelperUtility.IsNotNull(Model.ReturnDate) ? Model.ReturnDate.ToDateTimeFormat() : string.Empty)
+                                                    </div>
+                                                    <div class="p-0 py-3">
+                                                        <strong>@WebStore_Resources.LabelExpectedReturnsQuantity:</strong> @Model.TotalExpectedReturnQuantity
+                                                    </div>
+                                                    <div class="p-0 py-3">
+                                                        <strong>@WebStore_Resources.LabelReturnTotal:</strong> @Helper.FormatPriceWithCurrency(Model.TotalReturnAmount, Model.CultureCode)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-6 pl-lg-2 account-profile-section" style="max-width: 50%; padding: 0 15px; margin-bottom: 30px;">
+                                            <div class="col-12 p-0 h-100 dashboard-content" style="border: 1px solid #c5b7b7; border-radius: 2px;">
+                                                <h3 class="b2b-section-header">@WebStore_Resources.TitleReturnCode</h3>
+                                                <div class="col-12 dashboard-addresses">
+                                                    <div class="py-3" style="text-align:center; margin-top: 60px;">
+                                                        @if (!string.IsNullOrEmpty(Model.BarcodeImage))
+                                                        {
+                                                            <img src="@Model.BarcodeImage" alt="" style="max-width: 100%;" />
+                                                            <br />
+                                                            <span>@Model.ReturnNumber</span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-6 pl-lg-2 account-profile-section" style="max-width: 50%; padding: 0 15px;  margin-bottom: 30px;">
+                                            <div class="col-12 p-0 h-100 dashboard-content" style="border: 1px solid #c5b7b7; border-radius: 2px;">
+                                                <h3 class="b2b-section-header">@WebStore_Resources.LabelShippingTo</h3>
+                                                <div class="col-12 dashboard-addresses">
+                                                    <div class="py-3">
+                                                        @Html.RenderBlock(Model.ShippingToAddressHtml)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-6 pl-lg-2 account-profile-section" style="max-width: 50%; padding: 0 15px;  margin-bottom: 30px;">
+                                            <div class="col-12 p-0 h-100 dashboard-content" style="border: 1px solid #c5b7b7; border-radius: 2px;">
+                                                <h3 class="b2b-section-header">@WebStore_Resources.TitleShippingFrom</h3>
+                                                <div class="col-12 dashboard-addresses">
+                                                    <div class="py-3">
+                                                        @Html.RenderBlock(Model.ShippingFromAddressHtml)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row no-gutters">
+                                        <div class="col-12 p-0 mb-4 dashboard-content" style="border: 1px solid #c5b7b7; border-radius: 2px;">
+                                            <div class="col-12 mb-3 p-0 return-item-list shopping-cart">
+                                                @if (Model?.ReturnLineItems?.Count > 0)
+                                                {
+                                                    <h3 class="b2b-section-header">@WebStore_Resources.TitleProductsReturnList</h3>
+                                                    <div class="table-responsive" style="max-width: 99.5%; margin: 0 auto; ">
+                                                        <table class="table table-tr" aria-describedby="Product Return List">
+                                                            <tr class="table-heading" style="border-bottom:1px solid #c3c3c3;background:#FAFAFA;color:#01579B;">
+                                                                <th scope="col" class="table-td receipt-column-item">@WebStore_Resources.LabelProduct </th>
+                                                                <th scope="col" class="table-td receipt-column-item">@WebStore_Resources.LabelReason</th>
+                                                                <th scope="col" class="table-td receipt-column-item">@WebStore_Resources.LabelUnitPrice</th>
+                                                                <th scope="col" class="table-td receipt-column-quantity">@WebStore_Resources.LabelExpectedQty</th>
+                                                                @if (isReturnsDetailsReceipt)
+                                                                {
+                                                                    <th scope="col" class="table-td receipt-column-price">@WebStore_Resources.LabelConfirmedQty</th>
+                                                                    <th scope="col" class="table-td receipt-column-price">@WebStore_Resources.ColumnShipping</th>
+                                                                }
+                                                                <th scope="col" class="table-td receipt-column-price">@WebStore_Resources.TitleTotal</th>
+                                                            </tr>
+                                                            @foreach (var items in Model?.ReturnLineItems)
+                                                            {
+                                                            <tr>
+                                                                <td>
+                                                                    <span>@items.ProductName</span><br />
+                                                                    <span>@WebStore_Resources.TitleSKU:  @items.Sku</span><br />
+                                                                    @if (items?.PersonaliseValuesDetail?.Count > 0)
+                                                                    {
+                                                                        foreach (var item in items.PersonaliseValuesDetail)
+                                                                        {
+                                                                            if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                                                                            {
+                                                                                <div class="cart-item-description">
+                                                                                    <p> @item.PersonalizeName : @item.PersonalizeValue </p>
+                                                                                </div>
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    else if (items?.PersonaliseValueList?.Count > 0)
+                                                                    {
+                                                                        foreach (var item in items.PersonaliseValueList)
+                                                                        {
+                                                                            if (!Equals(item.Key, null) && !Equals(item.Value, string.Empty))
+                                                                            {
+                                                                                <p> @item.Key : @item.Value </p>
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    @Html.RenderBlock(@items.Description)
+                                                                </td>
+                                                                <td>
+                                                                    <span>@items.RmaReasonForReturn</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>@Helper.FormatPriceWithCurrency(items.Price, Model.CultureCode)</span>
+                                                                </td>
+                                                                <td class="table-td receipt-column-quantity">
+                                                                    @if ((items.ExpectedReturnQuantity) % 1 == 0)
+                                                                    {
+                                                                        @($"{items.ExpectedReturnQuantity.ToInventoryRoundOff():n0}")
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        var returnedQuantity = double.Parse(Convert.ToString(items.ExpectedReturnQuantity.ToInventoryRoundOff()));
+                                                                        @returnedQuantity
+                                                                    }
+                                                                </td>
+                                                                @if (isReturnsDetailsReceipt)
+                                                                {
+                                                                    <td class="table-td receipt-column-quantity">
+                                                                        @if (items.RmaReturnStateId == (int)ZnodeReturnStateEnum.REJECTED || items.ReturnedQuantity == null)
+                                                                        {
+                                                                            if ((items.ExpectedReturnQuantity) % 1 == 0)
+                                                                            {
+                                                                                @($"{items.ExpectedReturnQuantity.ToInventoryRoundOff():n0}")
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var expectedReturnQuantity = double.Parse(Convert.ToString(items.ExpectedReturnQuantity.ToInventoryRoundOff()));
+                                                                                @expectedReturnQuantity
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if ((items.ReturnedQuantity) % 1 == 0)
+                                                                            {
+                                                                                @($"{items.ReturnedQuantity.ToInventoryRoundOff():n0}")
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var confirmedQuantity = double.Parse(Convert.ToString(items.ReturnedQuantity.ToInventoryRoundOff()));
+                                                                                @confirmedQuantity
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @{
+                                                                            var shippingCost = items.ShippingCost;
+                                                                        }
+                                                                        @Helper.FormatPriceWithCurrency(shippingCost, Model.CultureCode)
+                                                                    </td>
+                                                                }
+                                                                <td class="table-td receipt-column-total">
+                                                                    @if (string.IsNullOrEmpty(items.ReturnedQuantity.ToString()))
+                                                                    {
+                                                                        @Helper.FormatPriceWithCurrency(items.ExpectedReturnQuantity * items.Price, Model.CultureCode)
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Helper.FormatPriceWithCurrency(items.ReturnedQuantity * items.Price, Model.CultureCode)
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                            }
+                                                        </table>
+                                                    </div>
+                                                }
+                                            </div>
+
+
+                                            <div class="col-12 col-lg-8 p-0 ml-auto receipt-item-list shopping-cart">
+                                                <div class="col-12 cart-total mt-4 cart-summary receipt-totals" style="padding: 0; max-width: 50%; float: right;">
+                                                    @{
+                                                        cssClass = (Model.ReturnShippingCost > 0 || Model.ReturnTaxCost > 0) ? "form-group" : "form-group border-line";
+                                                    }
+
+                                                    <div class="@cssClass">
+                                                        <div class="row no-gutters">
+                                                            <div class="col-7">@WebStore_Resources.ColumnSubTotal</div>
+                                                            <div class="col-5 pr-4 text-right" data-test-selector="divSubtotal">@Helper.FormatPriceWithCurrency(Model.SubTotal, Model.CultureCode)</div>
+                                                        </div>
+                                                    </div>
+
+                                                    @{
+                                                        cssClass = "form-group";
+                                                    }
+
+                                                    <div class="@cssClass">
+                                                        <div class="row no-gutters">
+                                                            <div class="col-7">@WebStore_Resources.ColumnShipping</div>
+                                                            <div class="col-5 pr-4 text-right" data-test-selector="divShippingCost"> + @Helper.FormatPriceWithCurrency(Model.ReturnShippingCost, Model.CultureCode)</div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group border-line">
+                                                        <div class="row no-gutters">
+                                                            <div class="col-7">@WebStore_Resources.ColumnTax</div>
+                                                            <div class="col-5 pr-4 text-right" data-test-selector="divTaxCost"> + @Helper.FormatPriceWithCurrency(Model.ReturnTaxCost, Model.CultureCode)</div>
+                                                        </div>
+                                                    </div>
+
+                                                    @{
+                                                        cssClass = (Model.CSRDiscount > 0 || Model.ReturnShippingDiscount > 0) ? "form-group" : "form-group border-line";
+                                                    }
+                                                    @if (Model.DiscountAmount > 0)
+                                                    {
+
+                                                        <div class="@cssClass">
+                                                            <div class="row no-gutters">
+                                                                <div class="col-7">@WebStore_Resources.ColumnDiscounts</div>
+                                                                <div class="col-5 pr-4 text-right" data-test-selector="divDiscountAmount"> - @Helper.FormatPriceWithCurrency(Model.DiscountAmount, Model.CultureCode)</div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    }
+
+                                                    @{
+                                                        cssClass = (Model.ReturnShippingDiscount > 0) ? "form-group" : "form-group border-line";
+                                                    }
+                                                    @if (Model.CSRDiscount > 0)
+                                                    {
+                                                        
+                                                            <div class="@cssClass">
+                                                                <div class="row no-gutters">
+                                                                    <div class="col-7">@WebStore_Resources.LabelCSRDiscountAmount</div>
+                                                                    <div class="col-5 pr-4 text-right" data-test-selector="divTaxCost"> - @Helper.FormatPriceWithCurrency(Model.CSRDiscount, Model.CultureCode)</div>
+                                                                </div>
+                                                            </div>
+                                                       
+                                                    }
+
+                                                    @if (Model.ReturnImportDuty > 0)
+                                                    {
+                                                        <div class="form-group">
+                                                            <div class="row no-gutters">
+                                                                <div class="col-7">@WebStore_Resources.ColumnImportDuty</div>
+                                                                <div class="col-5 pr-4 text-right" data-test-selector="divImportDuty"> + @Helper.FormatPriceWithCurrency(Model.ReturnImportDuty, Model.CultureCode)</div>
+                                                            </div>
+                                                        </div>
+                                                    }
+
+                                                    @if (Model.ReturnShippingDiscount > 0)
+                                                    {
+                                                        <div class="form-group border-line">
+                                                            <div class="row no-gutters">
+                                                                <div class="col-7">@WebStore_Resources.LabelShippingDiscount</div>
+                                                                <div class="col-5 pr-4 text-right" data-test-selector="divShippingDiscount"> - @Helper.FormatPriceWithCurrency(Model.ReturnShippingDiscount, Model.CultureCode)</div>
+                                                            </div>
+                                                        </div>
+                                                    }
+
+                                                    @if (Model.ReturnCharges > 0)
+                                                    {
+                                                        <div class="form-group border-line">
+                                                            <div class="row no-gutters">
+                                                                <div class="col-7">@WebStore_Resources.LabelReturnCharges</div>
+                                                                <div class="col-5 pr-4 text-right" data-test-selector="divReturnCharges"> - @Helper.FormatPriceWithCurrency(Model.ReturnCharges, Model.CultureCode)</div>
+                                                            </div>
+                                                        </div>
+                                                    }
+
+
+
+                                                    <div class="form-group total receipt-total">
+                                                        <div class="row no-gutters">
+                                                            <div class="col-7"><h2>@WebStore_Resources.LabelReturnTotal</h2></div>
+                                                            <div class="col-5 pr-4 text-right" data-test-selector="divOrderTotal"><h2>@Helper.FormatPriceWithCurrency(Convert.ToDecimal(Model.TotalReturnAmount), Model.CultureCode)</h2></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.IsReturnDetailsReceipt, new { @id = "hdnIsReturnsDetailsReceipt" })
+}

@@ -1,0 +1,24 @@
+﻿@model Znode.Engine.Admin.Models.BaseDropDownOptionsModel
+@{
+    string selected = "";
+    string disabled = Model.Disabled ? "disabled='disabled'" : "";
+}
+
+@if (Model?.DropDownOptions?.Count > 0)
+{
+    <select id="@Model.ControlId" onchange="@Model.Onchange" @disabled data-test-selector="drpList">
+        @foreach (var item in Model.DropDownOptions)
+        {
+            if (Model.Id > 0 && Model.Id == Convert.ToInt32(item.Id))
+            {
+                selected = "selected='selected'";
+            }
+            else
+            {
+                selected = "";
+            }
+            <option value="@item.Value" id="@item.Id" @selected data-type="@item.Type">@item.Text</option>
+        }
+    </select>
+    <input id="@Model.Name" name="@Model.Name" value="0" type="hidden">
+}

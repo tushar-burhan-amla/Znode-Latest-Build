@@ -1,0 +1,101 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@model UserApproverListViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    int UserId = Convert.ToInt32(Request.QueryString["userId"]);
+    Model.UserId = UserId;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string cancleUrl = "/Customer/CustomersList";
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = cancleUrl, FormId = "frmCreatePermissionCode", Callback = "", IsSaveCloseEnable = true };
+    string displayName = string.IsNullOrEmpty(Convert.ToString(TempData["CustomerDisplayName"+ @Model.UserId])?.Trim()) ? Admin_Resources.LabelAssociateApprovals : Convert.ToString(TempData["CustomerDisplayName" + @Model.UserId]);
+}
+
+<div class="col-sm-12 title-container">
+    <h1>
+        @Admin_Resources.LabelManage @Admin_Resources.LabelUser <em class="z-minus"></em>
+        <span>@displayName</span>
+    </h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        <input type="button" id="btnSaveApprovers" hidden />
+    </div>
+</div>
+
+@if (!actionName.ToLower().Contains("customercreate"))
+{
+    @Html.Partial("~/views/User/_asidecustomermanagepanel.cshtml")
+}
+<section class="main-container">
+    <!--Main Container-->
+    <div id="ApproverPopup">
+            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                        new PopupModel()
+                        {
+                            Title = @Admin_Resources.HeaderSave,
+                            Description = "Are you sure you want to save the details?",
+                            ModalPopUpId = "ApproverDeletePopup",
+                            Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk,ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "SaveCancel.prototype.SubmitForm('frmCreatePermissionCode');" },
+                               }
+                        })
+    </div>
+    <section class="col-sm-12 nopadding dirtyignore">
+
+        @using (Html.BeginForm("SavePermissionSetting", controllerName, FormMethod.Post, new { id = "frmCreatePermissionCode" }))
+        {
+
+            <div class="form-group" id="divRole">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.PermissionCode)
+                    </div>
+                    <div class="control-md selected-permission">
+                        <div id="permission_options" onchange="Account.prototype.OnSelectPermissionCode(this);"></div>
+                        @Html.HiddenFor(model => model.PermissionCode)
+                        @Html.Hidden("UserId")
+                    </div>
+                    <div class="pull-right dirtyignore" id="add_partial_button">
+                        @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonAdd, "CreateApproverLevel", "Account", new { id = "defaultValue -add-new-row", @class = "btn-text btn-text-secondary ", onclick = "Account.prototype.AddNewArea();" })
+                    </div>
+                </div>
+                <div class="col-sm-9 nopadding margin-top budget-error-msg">
+                    <div style="color:grey;">@Admin_Resources.BudgetAccountRangeNotification</div>
+                </div>
+
+            </div>
+            @Html.HiddenFor(m => m.AccountUserPermissionId)
+            @Html.HiddenFor(m => m.AccountPermissionAccessId)
+            @Html.HiddenFor(m => m.UserId, new { @id = "userId" })
+        }
+        @Html.HiddenFor(x => x.AccountId, new { id = "accountId" })
+        @Html.HiddenFor(x => x.PortalId, new { id = "portalId" })
+        <div id="content-to-dispaly-in-approval-table" class="margin-top">
+            @Html.Partial("~/Views/Account/_createEditView.cshtml", Model)
+        </div>
+
+        <div class="col-sm-9 nopadding margin-top budget-error-msg">
+            <div style="color:grey;">@Admin_Resources.NoLimitNotification</div>
+        </div>
+    </section>
+</section>
+<script>
+    $(document).ready(function () {
+        User.prototype.GetUserPermissionList();
+        Account.prototype.PermissionCodeValue();
+        var event = $("#dvSave").attr('onclick');
+        $("#dvSave").attr('onclick', '');
+        $("#dvSave").on("click", function () {
+            if ($("#ddlPermission option:selected").data('permissioncode') == "DNRA") {
+                $("#ApproverDeletePopup").modal("show");
+            }
+            else {
+                $('#btnSaveApprovers').attr('onclick', event);
+                $('#btnSaveApprovers').click();
+            }
+        });
+        User.prototype.OnPermissionSelection();
+    });
+</script>

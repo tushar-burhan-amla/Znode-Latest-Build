@@ -1,0 +1,29 @@
+﻿
+// Category List Widget.
+
+.category-list-widget,.brand-list-widget{
+    ul{width:100%;display:block;padding:0;margin:0;
+        li{width:18.99%;display:inline-block;margin:0 5px 10px;text-align:center;box-shadow:0 0 5px 0 rgba(23, 84, 116, 0.18);border:1px solid $base-color-white;
+           &:hover{border:1px solid $border-bgcolor-default;}
+           img{max-width:100px;margin:0 auto;padding:5px;}
+           a{display:block;width:100%;}
+           label{font-weight:normal;color:$text-fgcolor-default;cursor:pointer;
+                 &:hover{color:$base-color-primary;}
+           }
+        }
+    }
+}
+
+// Media Query.
+@include screensize(x-small) { 
+    .category-list-widget ul li,.brand-list-widget ul li{width:45.88%;}
+}
+@include screensize(small) { 
+    .category-list-widget ul li,.brand-list-widget ul li{width:18.55%;}
+}
+@include screensize(medium) { 
+    .category-list-widget ul li,.brand-list-widget ul li{width:18.77%;}
+}
+@include screensize(desktop) { 
+    .category-list-widget ul li,.brand-list-widget ul li{width:18.99%;}
+}

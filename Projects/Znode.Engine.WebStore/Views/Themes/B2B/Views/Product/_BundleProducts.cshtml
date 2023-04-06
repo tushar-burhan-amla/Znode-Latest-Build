@@ -1,0 +1,233 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model  List<AssociatedPublishBundleProductViewModel>
+@{
+    bool isParentProductObsolete = Convert.ToBoolean(ViewBag.IsObsolete);
+    Layout = null;
+}
+<div class="col-12 p-0 b2b-bundle-product">
+    <div class="bundle-products">
+        <table class="table" aria-describedby="Bundle Products">
+            <thead>
+                <tr>
+                    <th scope="col" class="b2b-select-quantity" colspan="2">@WebStore_Resources.LabelIncludedProducts</th>
+                    <th scope="col" class="b2b-select-quantity text-center">@WebStore_Resources.LabelQuantityInBundle</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var product in Model)
+                    {
+                        bool isShowPriceAndInventoryToLoggedInCustomersOnly = GlobalAttributeHelper.IsShowPriceAndInventoryToLoggedInUsersOnly();
+                        bool showDefaultAndAllLocationsInventory = GlobalAttributeHelper.IsShowAllLocationsInventory();
+                        bool isDontTrackInventory = product.Attributes.Where(y => y.AttributeCode == ZnodeConstant.OutOfStockOptions).FirstOrDefault().SelectValues.Where(x => x.Code == ZnodeConstant.DontTrackInventory).Any();
+                        bool isAllowBackOrdering = product.Attributes.Where(y => y.AttributeCode == ZnodeConstant.OutOfStockOptions).FirstOrDefault().SelectValues.Where(x => x.Code == ZnodeConstant.AllowBackOrdering).Any();
+                        bool isDisablePurchasing = Convert.ToBoolean(product.Attributes?.FirstOrDefault(y => y.AttributeCode.Equals(ZnodeConstant.OutOfStockOptions, StringComparison.InvariantCultureIgnoreCase))?.SelectValues?.Where(x => x.Code.Equals(ZnodeConstant.DisablePurchasing, StringComparison.InvariantCultureIgnoreCase))?.Any());
+                        string typicalLeadTime = Convert.ToString(product.Attributes?.FirstOrDefault(x => x.AttributeCode.Equals(ZnodeConstant.TypicalLeadTime, StringComparison.InvariantCultureIgnoreCase))?.AttributeValues);
+                        string imageThumbNailPath = !string.IsNullOrEmpty(@product.ImageThumbNailPath) ? @product.ImageThumbNailPath : "";
+                        string backOrderMessage = product?.BackOrderMessage ?? WebStore_Resources.TextBackOrderMessage;
+                        string allowBackOrderMessage = product?.Quantity <= 0 ? backOrderMessage : product?.InventoryMessage;
+                        <tr>
+                            <td>
+                                <div class="bundle-item ml-2">
+                                    <img class="img-responsive bundle-item-img bundle" src="@imageThumbNailPath" alt="@Attributes.Value(product.Attributes,ZnodeConstant.ImageAlternateText)" data-bundlesku="@product.SKU"/>
+                                </div>
+                            </td>
+                            <td>
+                                <p class="bundle-item-title">@Html.RenderBlock(product.Name)</p>
+                                <div class="row bundle-item-sku">
+                                    <div class="col-12 col-sm-4 label-sku">@WebStore_Resources.TitleSKU: </div>
+                                    <div class="col-sm-8">
+                                        @Html.Label(product.SKU, new { @class = "child-product-sku" })
+                                    </div>
+                                </div>
+                                @if (!isShowPriceAndInventoryToLoggedInCustomersOnly || Request.IsAuthenticated)
+                                {
+                                    if (!isParentProductObsolete)
+                                    {
+                                        if (!isDontTrackInventory && !isAllowBackOrdering)
+                                        {
+                                            if (showDefaultAndAllLocationsInventory)
+                                            {
+                                                if (!HelperUtility.IsNull(product.Quantity) && product.Quantity.GetValueOrDefault() > 0)
+                                                {
+                                                    <div class="row bundle-item-inventory">
+                                                        <div class="col-12 col-sm-4 label-inventory">@WebStore_Resources.TitleInventory: </div>
+                                                        <div class="col-sm-8 details-inventory">
+                                                            @Html.Label(Convert.ToString(product.DefaultInventoryCount ?? "0"), new { @id = "lblDefaultInventoryCount", @class = "label-locations success-msg m-0" })
+                                                            @Html.Label(Convert.ToString(product.DefaultWarehouseName), new { @id = "lblDefaultLocationName", @class = "default-name px-1 m-0" })
+                                                            <span class="d-lg-block d-xl-inline">
+                                                                (@Html.Label(Convert.ToString(product.Quantity), new { @id = "lblAllInventoryCount", @class = "label-locations success-msg m-0" })
+                                                                <span class="default-name"><a onclick="Product.prototype.DisplayChildAllLocationInventory(@product.PublishProductId)" class="read-reviews" data-test-selector="linkInventoryDetail">@WebStore_Resources.LabelAllLocations</a></span>)
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="row bundle-item-inventory">
+                                                        <div class="col-12 col-sm-4 label-inventory">@WebStore_Resources.TitleInventory: </div>
+                                                        <div class="col-sm-8 error-msg">
+                                                            @product.InventoryMessage
+                                                        </div>
+                                                    </div>
+
+                                                }
+
+                                            }
+                                            else if (!isDontTrackInventory && isAllowBackOrdering)
+                                            {
+                                                if (!HelperUtility.IsNull(product.Quantity) && product.Quantity.GetValueOrDefault() > 0 && !isShowPriceAndInventoryToLoggedInCustomersOnly)
+                                                {
+                                                    <div class="row bundle-item-inventory">
+                                                        <div class="col-12 col-sm-4 label-inventory">@WebStore_Resources.TitleInventory: </div>
+                                                        <div class="col-sm-8 details-inventory">
+                                                            @Html.Label(Convert.ToString(product.DefaultInventoryCount ?? "0"), new { @id = "lblDefaultInventoryCount", @class = "label-locations success-msg m-0" })
+                                                            @Html.Label(Convert.ToString(product.DefaultWarehouseName), new { @id = "lblDefaultLocationName", @class = "default-name px-1 m-0" })
+                                                            <span class="d-lg-block d-xl-inline">
+                                                                (@Html.Label(Convert.ToString(product.Quantity), new { @id = "lblAllInventoryCount", @class = "label-locations success-msg m-0" })
+                                                                <span class="default-name"><a onclick="Product.prototype.DisplayChildAllLocationInventory(@product.PublishProductId)" class="read-reviews" data-test-selector="linkInventoryDetail">@WebStore_Resources.LabelAllLocations</a></span>)
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (!HelperUtility.IsNull(product.Quantity) && product.Quantity.GetValueOrDefault() > 0 && !isShowPriceAndInventoryToLoggedInCustomersOnly)
+                                                {
+                                                    <div class="row bundle-item-inventory">
+                                                        <div class="col-12 col-sm-4 label-inventory">@WebStore_Resources.TitleInventory: </div>
+                                                        <div class="col-sm-8 in-stock-section success-msg">
+                                                            @Html.Label(product.InventoryMessage, new { @class = "label-locations" })
+                                                            <span>
+                                                                (@Html.Label(Convert.ToString(product.Quantity), new { @id = "lblAllInventoryCount", @class = "label-locations" }))
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (isDisablePurchasing)
+                                                {
+                                                    if (showDefaultAndAllLocationsInventory)
+                                                    {
+                                                        if (HelperUtility.IsNotNull(product.Quantity) && product.Quantity.GetValueOrDefault() > 0)
+                                                        {
+                                                            <div class="row bundle-item-inventory">
+                                                                <div class="col-12 col-sm-4 label-inventory">@WebStore_Resources.TitleInventory: </div>
+                                                                <div class="col-sm-8 details-inventory">
+                                                                    @Html.Label(Convert.ToString(product.DefaultInventoryCount ?? "0"), new { @id = "lblDefaultInventoryCount", @class = "label-locations success-msg m-0" })
+                                                                    @Html.Label(Convert.ToString(product.DefaultWarehouseName), new { @id = "lblDefaultLocationName", @class = "default-name px-1 m-0" })
+                                                                    <span class="d-lg-block d-xl-inline">
+                                                                        (@Html.Label(Convert.ToString(product.Quantity), new { @id = "lblAllInventoryCount", @class = "label-locations success-msg m-0" })
+                                                                        <span class="default-name"><a onclick="Product.prototype.DisplayChildAllLocationInventory(@product.PublishProductId)" class="read-reviews" data-test-selector="linkInventoryDetail">@WebStore_Resources.LabelAllLocations</a></span>)
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (HelperUtility.IsNotNull(product.Quantity) && product.Quantity.GetValueOrDefault() > 0)
+                                                        {
+                                                            <div class="row bundle-item-inventory">
+                                                                <div class="col-12 col-sm-4 label-inventory">@WebStore_Resources.TitleInventory: </div>
+                                                                <div class="col-sm-8 success-msg">
+                                                                    @product.InventoryMessage
+                                                                    <span>
+                                                                        (@Html.Label(Convert.ToString(product.Quantity), new { @id = "lblAllInventoryCount", @class = "label-locations", data_test_selector = "lblInventoryLocation" + product.SKU }))
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="row bundle-item-inventory">
+                                                                <div class="col-12 col-sm-4 label-inventory" data-test-selector="lblInventory">@WebStore_Resources.TitleInventory: </div>
+                                                                <div class="col-sm-7 pr-0 in-stock-section error-msg">
+                                                                    @Html.Label(product.InventoryMessage, new { @class = "label-locations", @data_test_selector = "lblInventoryMessage" })
+                                                                </div>
+                                                            </div>
+                                                        }
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="row bundle-item-inventory">
+                                                        <div class="col-12 col-sm-4 label-inventory">@WebStore_Resources.TitleInventory: </div>
+                                                        <div class="col-sm-8 error-msg">
+                                                            @product.InventoryMessage
+                                                        </div>
+                                                    </div>
+
+                                                }
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            if (isAllowBackOrdering)
+                                            {
+                                                <div class="row bundle-item-inventory">
+                                                    <div class="col-12 col-sm-4 label-inventory">@WebStore_Resources.TitleInventory: </div>
+                                                    <div class="col-sm-8 in-stock-section success-msg">
+                                                        @Html.Label(allowBackOrderMessage, new { @class = "label-locations", @data_test_selector = "lblInventoryMessage" })
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="row bundle-item-inventory">
+                                                    <div class="col-12 col-sm-4 label-inventory">@WebStore_Resources.TitleInventory: </div>
+                                                    <div class="col-sm-8 in-stock-section success-msg">
+                                                        @Html.Label(product.InventoryMessage, new { @class = "label-locations" })
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                        if (!string.IsNullOrEmpty(@typicalLeadTime))
+                                        {
+                                            <div class="row bundle-item-title bundle-item-leadtime mt-3 mt-sm-0" data-test-selector="hdgProductLead">
+                                                <div class="col-12 col-sm-4 leadtime-label">@WebStore_Resources.LabelTypicalLeadTime:</div>
+                                                <div class="col-12 col-sm-8 typical-leadtime">@typicalLeadTime @WebStore_Resources.LabelDays</div>
+                                            </div>
+                                        }
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <p class="bundle-item-title text-center" data-test-selector="hdgProductQTY">@product.AssociatedQuantity</p>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        $(".Bundale_Products").owlCarousel({
+            autoPlay: false,
+            navigation: true,
+            items: 4,
+            itemsCustom: [
+                [0, 1],
+                [320, 1],
+                [480, 1],
+                [600, 1],
+                [768, 2],
+                [992, 2],
+                [1200, 2]
+            ],
+            navigationText: [
+                "<span class='left-icon'></span>",
+                "<span class='right-icon'></span>"
+            ]
+        });
+        jQuery('img').on('error', function (e) {
+            this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+        });
+    });
+</script>

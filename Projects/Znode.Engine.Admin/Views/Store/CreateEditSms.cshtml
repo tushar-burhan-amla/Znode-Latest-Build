@@ -1,0 +1,59 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalSMSViewModel
+@using Znode.Engine.Admin.ViewModels;
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formCreateEditSMS", SaveHeader = Admin_Resources.ButtonAdd, CancelHeader = Admin_Resources.ButtonCancel, CancelUrl = "/Store/List", IsSaveCloseEnable = true };
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelStore)<i class="z-minus"></i><span>@Model.PortalName</span></h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<div class="main-wrapper">
+    @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "formCreateEditSMS" }))
+        {
+            <div id="div_smsprovider_option">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelProvider, new { @data_test_selector = "lblProvider" })
+                        </div>
+                        <div class="control-md order-details">
+                            <select id="ddlProviderTypes" name="ddlProviderTypes" onchange="Sms.prototype.ShowProviderHtml();" data-test-selector="drpProviderTypes">
+                                <option id="defaultType">@Admin_Resources.LabelSelect </option>
+                                @foreach (var item in Model.SmsProviderList)
+                                {
+                                    if (Convert.ToInt32(item.Id) == Model.SMSProviderId)
+                                    {
+                                        <option value="@item.Value" id="@item.Id" data-smsprovider-type="@item.Type"selected>@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value" id="@item.Id" data-smsprovider-type="@item.Type">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                            @Html.HiddenFor(model => model.PortalId, new { @id = "hdnportalId" })
+                        </div>
+                    </div>
+                </div>
+
+                <div data-test-selector="divProviderTypeForm" id="providertypeform-container">
+                </div>
+            </div>
+        }
+    </section>
+</div>
+<script>
+    $(document).ready(function () {
+        Sms.prototype.ShowProviderHtml();
+    })
+ </script>

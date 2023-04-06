@@ -1,0 +1,129 @@
+﻿@model Znode.Engine.WebStore.ViewModels.QuoteResponseViewModel
+@{
+    string paymentSettingId = ViewData["PaymentSettingId"]?.ToString();
+    string paymentCode = ViewData["PaymentCode"]?.ToString();
+    string clientId = ViewData["ClientId"]?.ToString();
+    string sellerId = ViewData["SellerId"]?.ToString();
+    bool testMode = Convert.ToBoolean(ViewData["TestMode"]);
+    string accesstoken = ViewData["AccessToken"]?.ToString();
+    int QuoteId = Convert.ToInt32(ViewData["QuoteId"]);
+}
+
+<script type="text/javascript">
+    window.onAmazonLoginReady = function () {
+        amazon.Login.setClientId("@clientId");
+    };
+</script>
+@if (testMode)
+{
+    <script src="https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js"></script>
+}
+else
+{
+    <script src="https://static-na.payments-amazon.com/OffAmazonPayments/us/js/Widgets.js"></script>
+}
+
+<script type="text/javascript">
+    document.getElementById('log-off1').onclick = function () {
+        amazon.Login.logout();
+    };
+</script>
+<script type='text/javascript'>
+
+    new OffAmazonPayments.Widgets.Wallet({
+        sellerId: "@sellerId",
+        onOrderReferenceCreate: function (orderReference) {
+            // Use the following cod to get the generated Order Reference ID.
+            orderReferenceId = orderReference.getAmazonOrderReferenceId();
+            $("#hdnOrderReferenceId").val(orderReferenceId);
+        },
+        displayMode: 'Edit',
+        design: {
+            designMode: 'responsive'
+        },
+        onPaymentSelect: function (billingAgreement) {
+            // this method is triggered when the payment instrument is selected.
+            $("#btnContineu").show();
+        },
+        onError: function (error) {
+            ZnodeNotification.prototype.DisplayNotificationMessagesHelper(error.getErrorCode() + ": " + error.getErrorMessage(), "error", false, 0);
+        }
+    }).bind("AmazonWalletWidget");
+
+
+</script>
+<div class="col">
+    @Html.Partial("../_LearnMore", Model)
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a>@WebStore_Resources.LabelAmazonCheckout</div>
+                <div id="WalletLink" style="display:none"></div>
+                <input type="hidden" id="hdnOrderReferenceId" />
+                <input type="hidden" id="hdnBillingAggriment" />
+                <input type="hidden" id="hdnPaymentSettingId" value="@paymentSettingId" />
+                <input type="hidden" id="hdnAccessToken" value="@accesstoken" />
+            </div>
+        </div>
+    </div>
+    <div class="row b2b-checkout-page amazon-checkout">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="page-title">@WebStore_Resources.TitleSinglePageCheckoutProcess</h1>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="row">
+                        <div class="col-12 mb-4 address-book">
+                            <div class="col-12 p-0 h-100 b2b-block">
+                                <h3 class="block-title"><span>3</span>@WebStore_Resources.SinglePageCheckoutPaymentMethod</h3>
+                                <div id="AmazonWalletWidget" style="max-width:380px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 text-left mb-5 quotebutton">
+                    <button type="button" onclick="Quote.prototype.ProcessAmazonPayment('@Model.QuoteTotal','@paymentSettingId','@paymentCode')" id="btnContineu" class="btn btn-primary">@WebStore_Resources.btnPlaceOrder</button>
+                    <button type="button" id="log-off1" onclick="location.href='@Url.Action("GetQuote", "Quote", new { omsQuoteId = QuoteId})';amazon.Login.logout(); " class="btn btn-secondary mt-3 ml-md-3">@WebStore_Resources.LabelAmazonLogout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="AmazonPaymentModal" role="dialog">
+    <div class="modal-dialog compare-product-popup">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@WebStore_Resources.LabelPaymentApplication</h4>
+            </div>
+            <div class="modal-body">
+                <p>@WebStore_Resources.TextPaymentMethod</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Error Payment Modal-->
+<div class="modal fade" id="ErrorPaymentModal" role="dialog">
+    <div class="modal-dialog compare-product-popup">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@WebStore_Resources.LabelPaymentApplication</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="zf-close-circle close-icon"></span></button>
+            </div>
+            <div class="modal-body">
+                <p></p>
+                <div class="col-12 margin-top-bottom nopadding">
+                    <div class="pull-right">
+                        <button type="button" class="btn-text btn-bg-primary btn" data-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id='Single-loader-content-backdrop' class='modal-backdrop fade in' style="display:none"><div id='loading' class='loader loader-body'></div></div>
+@Html.Hidden("QuoteId", QuoteId)

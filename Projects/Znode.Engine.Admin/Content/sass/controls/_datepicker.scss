@@ -1,0 +1,38 @@
+﻿//DatePicker
+.datepicker{font-family:$base-font-family;top:0;left:0;padding:5px 10px;margin-top:0;background-color:$base-color-white !important;cursor:pointer !important;z-index:9999 !important;-webkit-transition: all 0s ease;-moz-transition: all 0s ease;-o-transition: all 0s ease;-ms-transition: all 0s ease;transition: all 0s ease;border-radius:0;}
+.datepicker-orient-top:before{content:'';display:inline-block;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:7px solid $border-bgcolor-primary;border-bottom-color:rgba(0,0,0,0.2);position:absolute;top:-7px;left:6px;}
+.datepicker-orient-top:after{content:'';display:inline-block;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid $base-color-white;position:absolute;top:-6px;left:7px;}
+.datepicker-orient-bottom:before{content:'';display:inline-block;position:absolute;bottom:-12px;left:6px;width:0;height:0;border-color: rgba(0,0,0,0.2) transparent transparent transparent;border-style: solid;border-width: 6px;}
+.datepicker-orient-bottom:after{content:'';display:inline-block;position:absolute;bottom:-12px;left:7px;width:0;height:0;border-color: $base-color-white transparent transparent transparent;border-style: solid;border-width: 6px;}
+.datepicker>div{display:none;}
+.datepicker table{width:100%;margin:0;}
+.datepicker td,.datepicker th{text-align:center;width:40px;height:20px;}
+.datepicker td.day:hover{background:#e6e9e6;cursor:pointer;}
+.datepicker td.old,.datepicker td.new{color:#999;}
+.datepicker td.active,.datepicker td.active:hover{background:$base-color-secondary;color:$base-color-white;}
+.datepicker td.active:hover,.datepicker td.active:hover:hover,.datepicker td.active:active,.datepicker td.active:hover:active,.datepicker td.active.active,.datepicker td.active:hover.active,.datepicker td.active.disabled,.datepicker td.active:hover.disabled,.datepicker td.active[disabled],.datepicker td.active:hover[disabled]{background-color:$base-color-secondary;color:$base-color-white;}
+.datepicker td.active:active,.datepicker td.active:hover:active,.datepicker td.active.active,.datepicker td.active:hover.active{background-color:#039 \9;}
+.datepicker td span{display:block;width:47px;height:54px;line-height:54px;float:left;margin:2px;cursor:pointer;}
+.datepicker td span:hover{background:#e6e9e6;}
+.datepicker td span.active{background:$base-color-secondary;color:$base-color-white;}
+.datepicker td span.active:hover,.datepicker td span.active:active,.datepicker td span.active.active,.datepicker td span.active.disabled,.datepicker td span.active[disabled]{background:$base-color-secondary;color:$base-color-white;}
+.datepicker td span.active:active,.datepicker td span.active.active{background-color:#039 \9;}
+.datepicker td span.old{color:#999;}
+.datepicker th.switch{width:145px;}
+.datepicker thead tr:first-child th{cursor:pointer;}
+.datepicker thead tr:first-child th:hover{background:$base-color-white;}
+.datepicker-months table tbody tr td,.datepicker-years table tbody tr td{width:220px !important;}
+
+//Custom code for datepicker
+.datepicker table thead tr{padding:5px 0;
+    .prev,.next{color:$base-color-secondary;}
+    .dow{font-weight:normal;color:$form-group-label-color;font-size:12px;}
+}
+.datepicker table tbody{background-color:#ececec;
+    tr td{background-color:#fff;border:1px solid #ececec;}    
+}
+
+//Timepicker
+.timepicker .timepicker-picker .timepicker-hour,.timepicker .timepicker-picker .timepicker-minute{text-align:center;display:block;}
+.timepicker .timepicker-picker .glyphicon{color:$base-color-secondary;}
+.timepicker .timepicker-picker .btn-primary{background:$base-color-secondary;border:1px solid $base-color-secondary;}

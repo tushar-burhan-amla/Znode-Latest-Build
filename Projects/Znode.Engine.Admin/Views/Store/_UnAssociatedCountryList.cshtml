@@ -1,0 +1,32 @@
+﻿@model Znode.Engine.Admin.ViewModels.CountryListViewModel
+@using Znode.Engine.Admin.ViewModels
+<div id="@Model.GridModel.FrontObjectName">
+    <div id="aside-popup-panel">
+        <div class="col-sm-12 title-container">
+            <h1>@Admin_Resources.LabelAssociateCountry</h1>
+            <div class="pull-right btn-container">
+                <button type="button" class="btn-text-icon margin-bottom" onclick="Store.prototype.CloseUnassociateCountriesPopup()" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                <div class="pull-right">
+                    <button type="button" class="btn-text btn-text-secondary" onclick="Store.prototype.AssociateCountries()" data-test-selector="linkSave">@Admin_Resources.ButtonSave</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 page-container">
+            <div id="associatedCountryId" class="text-danger" style="display:none">
+                <div class="messageBoxContainer error-msg text-center" id="messageBoxContainerId">@Admin_Resources.PleaseSelectAtleastOneRecord</div>
+            </div>
+            @using (Ajax.BeginForm("GetUnAssociatedCountryList", "Store", new { portalId = Model.PortalId }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+            {
+                <div id="filterComponent">
+                    @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                </div>
+            }
+            <div class="col-sm-12 list-container unassociated-list">
+                @{
+                    @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                }
+            </div>
+        </div>
+        @Html.HiddenFor(x => x.PortalId)
+    </div>
+</div>

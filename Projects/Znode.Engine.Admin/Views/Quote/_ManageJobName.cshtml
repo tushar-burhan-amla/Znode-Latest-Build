@@ -1,0 +1,17 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model QuoteInfoViewModel
+@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("UpdateJobName", "Quote", new AjaxOptions
+{
+    UpdateTargetId = "labelJobName",
+    HttpMethod = "POST",
+    OnSuccess = "Quote.prototype.ChangeJobNameSuccessCallback"
+}, new { @class = "dirtylisten dirty", @id = "JobNameView" }))
+{
+    <div class="col-sm-12 nopadding">
+        @Html.TextBoxFor(model => model.JobName, new { @maxlength = "100", @data_test_selector = "txtJobName", @Onchange = "Quote.prototype.SubmitForm(this)" })
+        @Html.HiddenFor(model => model.OmsQuoteId, new { @id = "hdnJobNameQuoteId" })
+    </div>
+}

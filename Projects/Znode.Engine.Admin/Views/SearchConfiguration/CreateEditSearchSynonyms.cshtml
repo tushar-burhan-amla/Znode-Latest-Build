@@ -1,0 +1,107 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model SearchSynonymsViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateEditSynonyms", CancelUrl = "/SearchConfiguration/SearchSynonymsList", IsSaveCloseEnable = true };
+}
+
+<div id="aside-popup-panel">
+    <div class="col-sm-12 title-container">
+        <h1>@Admin_Resources.LabelSearchSettings</h1>
+        <div class="pull-right">
+            <div class="pull-right btn-container">
+                <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('divAddSynonymsPopup')" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                <div class="pull-right padding-left">
+                    <button type="button" class=" btn-text btn-text-secondary" onclick="SearchConfiguration.prototype.CreateSynonyms()" data-test-selector="linkSave">@Admin_Resources.ButtonSave</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="col-sm-12 page-container scheduler-status">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateEditSynonyms" }))
+        {
+            <span id="CreateSynonymsError" class="error-msg display-none"></span>
+            <h3 class="section-heading" data-test-selector="hdgSynonyms">Synonyms</h3>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.SynonymCode, new { @class = "required", @data_test_selector = "lblSynonymCode" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.SynonymCode, new { @onblur = "ZnodeBase.prototype.ValidateCodeField('[name=SynonymCode]','" + Model.SynonymCode + "','/SearchConfiguration/IsSynonymCodeExists')", @data_test_selector = "txtSynonymCode" })
+                        @Html.ValidationMessageFor(model => model.SynonymCode, "", new {@id= "valSynonymCode", @data_test_selector = "valSynonymCode" })
+                    </div>            
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding"  onfocusout ="SearchConfiguration.prototype.RemoveSynonymsOriginalTermValidation()">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.OriginalTerm, new { @class = "required", @data_test_selector = "lblOriginalTerm" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.OriginalTerm, new { @data_role = "tagsinput", @data_test_selector = "txtOriginalTerm" })
+                        @Html.ValidationMessageFor(model => model.OriginalTerm, "", new { @id = "valOriginalTerm", @data_test_selector = "valOriginalTerm" })
+                    </div>
+                    <div class="col-sm-3 nopadding">
+                        <div class="query-help-text">
+                            @Html.Partial("_HelpText", Admin_Resources.HelpDescriptionOriginalTerm)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding"  onfocusout="SearchConfiguration.prototype.RemoveSynonymsReplacedByTermValidation()">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ReplacedBy, new { @class = "required", @data_test_selector = "lblReplacedBy" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ReplacedBy, new { data_role = "tagsinput", @data_test_selector = "txtReplacedBy" })
+                        @Html.ValidationMessageFor(model => model.ReplacedBy, "", new { @id = "valReplacedBy", @data_test_selector = "valReplacedBy" })
+                    </div>
+                    <div class="col-sm-3 nopadding">
+                        <div class="query-help-text">
+                            @Html.Partial("_HelpText", Admin_Resources.HelpDescriptionReplacedByTerm)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                    </div>
+                    <div class="control-md">
+                        <label>
+                            @if (Model.SearchSynonymsId < 1)
+                            {
+                                <input @("checked='checked'") id="IsBidirectional" name="IsBidirectional" type="checkbox" value="true">
+                            }
+                            else
+                            {
+                                <input @(Model.IsBidirectional ? "checked='checked'" : "") id="IsBidirectional" name="IsBidirectional" type="checkbox" value="true">
+                            }
+                            <span class="lbl padding-8" data-test-selector="spnIsBidirectional">@Admin_Resources.LabelIsBidirectional</span>
+                            <input name="IsBidirectional" type="hidden" value="false">
+                        </label>
+                        <span class="query-help-text">
+                            @Html.Partial("_HelpText", Admin_Resources.HelpDescriptionIsBidirectional)
+                        </span>
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.PublishCatalogId)
+            @Html.HiddenFor(model => model.SearchSynonymsId)
+        }
+    </section>
+</div>
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/References/bootstrap-tagsinput.js"></script>
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+</script>

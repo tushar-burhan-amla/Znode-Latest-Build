@@ -1,0 +1,263 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Agents
+@model CartViewModel
+@{
+    bool insufficientQuantity = (Model?.ShoppingCartItems?.Any(x => x.InsufficientQuantity)).GetValueOrDefault();
+    bool isShoppingCartContainsItems = Model?.ShoppingCartItems?.Any() ?? false;
+    bool isShowPriceAndInventoryToLoggedInCustomersOnly = GlobalAttributeHelper.IsShowPriceAndInventoryToLoggedInUsersOnly();
+    bool isQuoteRequestEnabled = GlobalAttributeHelper.IsQuoteRequestEnabled();
+    string removeItemOnClickEvent = Helper.IsEnhancedEcommerceTrackingEnabled() ? "SendEcommerceDataForRemoveAllCartItems(this)" : "javascript:$($(this).closest('form').submit());";
+    string checkoutButtonOnClickEvent = Helper.IsEnhancedEcommerceTrackingEnabled() ? "ValidateAndSendCheckoutData();" : "Cart.prototype.ValidateProductQuantity();";
+    bool isCartRecommendationEnabled = (PortalAgent.CurrentPortal?.RecommendationSetting?.IsCartRecommendation).GetValueOrDefault();
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    string cartPageAdSpaceContainerPartialViewPath = "~/Views/Themes/Templates/_CartPageAdSpace.cshtml";
+    bool isEnableTradeCentric = GlobalAttributeHelper.IsTradeCentricUserActive();
+}
+
+<div class="container">
+    <div id="divShoppingCart" class="col-md-12">
+        <div class="b2b-cart-page">
+            <div class="row">
+                <div class="col-12 shopping-cart">
+                    <div class="row">
+                        <div class="col-12 col-lg-8 d-flex justify-content-between pr-md-0 pl-md-4 flex-wrap flex-column flex-lg-row align-items-lg-center">
+                            <h1 class="page-title" data-test-selector="hdgShoppingCartHeading">@WebStore_Resources.LabelCart</h1>
+                            @if (isShoppingCartContainsItems && !isEnableTradeCentric)
+                            {
+                                <div>
+                                    <a href="/" class="btn btn-secondary d-block d-lg-inline-block" data-test-selector="linkContinue">@WebStore_Resources.ButtonContinueShopping</a>
+                                    @if (Request.IsAuthenticated)
+                                    {
+                                        <a href="JavaScript:void(0);" id="btnSaveCart" class="btn btn-secondary d-block d-lg-inline-block mt-3 mt-lg-0 ml-0 ml-lg-1" data-toggle="modal" data-target="#modalSaveCart" data-test-selector="linkSaveCart">@WebStore_Resources.SaveCart</a>
+                                    }
+                                </div>
+                            }
+
+                        </div>
+                        <div class="col-12 col-lg-4 b2b-right-cart-container pl-md-4 justify-content-end flex flex-column flex-sm-row">
+
+                            @if (isEnableTradeCentric && isShoppingCartContainsItems && (!isShowPriceAndInventoryToLoggedInCustomersOnly || Request.IsAuthenticated))
+                            {
+                                <a href="Punchout/TransferCart" class="btn btn-primary mt-3 mt-md-0 w-100 ml-0 ml-sm-2" id="cartTransfer-link" onclick="return @checkoutButtonOnClickEvent" data-test-selector="lnkCartTransfer">@WebStore_Resources.ButtonCartTransfer</a>
+                            }
+                            else if ((!isShowPriceAndInventoryToLoggedInCustomersOnly || Request.IsAuthenticated) && isShoppingCartContainsItems)
+                            {
+                                if (Request.IsAuthenticated && isQuoteRequestEnabled)
+                                {
+                                    <a href="/Quote/Index" class="btn btn-primary mt-3 mt-md-0 mr-sm-2 w-100" id="requestQuote-link" onclick="return Cart.prototype.ValidateProductQuantityForQuote();" data-test-selector="lnkRequestQuote">@WebStore_Resources.ButtonRequestQuote</a>
+                                }
+                                <a href="/Checkout" class="btn btn-primary mt-3 mt-md-0 w-100 ml-0" id="checkOut-link" onclick="return @checkoutButtonOnClickEvent" data-test-selector="lnkCheckout">@WebStore_Resources.ButtonCheckout</a>
+                            }
+                            @*if store level flag - 'show price to logged-in users only' is set to yes and user is logged off then do not show price to users.*@
+                            @if (isShowPriceAndInventoryToLoggedInCustomersOnly && !Request.IsAuthenticated)
+                            {
+                                if (isShoppingCartContainsItems)
+                                {
+                                    <div class="loged-out-product-details text-center text-md-right mt-4 pt-0">
+                                        <div class="loged-out-product-title">@WebStore_Resources.TitleReadyForCheckout</div>
+                                        <div class="loged-out-product-text">
+                                            <a href="JavaScript:void(0);" data-target="#sign-in-nav" class="OpenNav" onclick="User.prototype.LoginInPopup()">@WebStore_Resources.LabelSignIn</a>
+                                            @WebStore_Resources.TextOR
+                                            <a href="/User/Signup/@("?returnUrl=" + HttpContext.Current.Request.Url.LocalPath.ToString())">@WebStore_Resources.LabelRegister</a>
+                                            @WebStore_Resources.TextViewPriceAndPlaceOrders
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    @*<div class="row">
+                        <div class="col-12 p-0">*@
+                    @if (Model?.ShoppingCartItems?.Any() ?? false)
+                    {
+                        <div class="row">
+                            <div class="col-12 col-lg table-responsive mb-5 pl-md-4 pr-md-1">
+                                <div class="cart-products mb-4">
+                                    <div class="col-12 cart-total-title d-flex flex-wrap">
+                                        @if (!isShowPriceAndInventoryToLoggedInCustomersOnly || Request.IsAuthenticated)
+                                        {
+                                            <h2>@WebStore_Resources.B2BTextYourTotal <span id="dynamic-cart-order-total">@Helper.FormatPriceWithCurrency(Model.Total, Model.CultureCode)</span> <span>for @Helper.GetRoundOffQuantity(WidgetHelper.GetCartCount()) items</span></h2>
+                                        }
+                                        <div class="col-12 col-md d-md-flex justify-content-md-end p-0">
+                                            @using (Html.BeginForm("RemoveAllCartItem", "Cart", FormMethod.Post))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <a href="JavaScript:void(0);" class="cart-item-remove mt-3 mt-md-0 mr-4" onclick=@removeItemOnClickEvent data-test-selector="linkRemoveAllCartItem"><span class="close-circle-icon"></span>@WebStore_Resources.LabelRemoveAllItems</a>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-12 b2b-cart">
+                                        @*To show the recently added product on the top of cart.*@
+                                        @foreach (CartItemViewModel cartItem in Model.ShoppingCartItems.AsEnumerable().Reverse())
+                                        {
+                                            @Html.Partial("_CartRow", cartItem)
+                                        }
+                                    </div>
+                                </div>
+
+                                @*To Render the Saved Items block*@
+                                @if (Request.IsAuthenticated && PortalAgent.CurrentPortal.EnableSaveForLater)
+                                {
+                                    Html.RenderAction("GetSavedCartForLater", "SaveForLater");
+                                }
+
+
+                            </div>
+                            @if (!isShowPriceAndInventoryToLoggedInCustomersOnly || Request.IsAuthenticated)
+                            {
+                                <div class="col-12 col-lg-4 cart-summary mb-5 pl-md-4 pr-md-0">
+                                    <div class="row">
+                                        <div class="col-12 cart-total mb-4">
+                                            @* Do not remove order-summary class *@
+                                            <div class="b2b-block order-summary" id="summary-details">
+                                                <div class="carttotalcontentarea"> <img src='../Content/Images/loading.svg' alt="Loading" class="dashboard-loader d-flex justify-content-center"> </div>
+                                                <script>
+                                                    $.get("/cart/CalculateCart", function (res) {
+                                                        $(".carttotalcontentarea").html(res); if ($('#dynamic-order-total')) $('#dynamic-cart-order-total').html($('#dynamic-order-total')[0].innerText); $(".dashboard-loader").hide();
+                                                    });
+                                                </script>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-4">
+                                            @Html.Partial("../_ApplyCoupon", Model)
+                                        </div>
+                                        <div class="col-12 mb-4">
+                                            @if (!string.IsNullOrEmpty(Model.ZipCode))
+                                            {
+                                                @Html.Partial("../_ShippingEstimator", Model.ZipCode)
+                                            }
+                                            else
+                                            {
+                                                @Html.Partial("../_ShippingEstimator", string.Empty)
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-12 p-0 mb-5 cart-summary">
+                            <p class="text-center margin-top-bottom">@WebStore_Resources.NoItemCartErrorMessage</p>
+                        </div>
+                        if (Request.IsAuthenticated && PortalAgent.CurrentPortal.EnableSaveForLater)
+                        {
+                            <div>
+                                @{Html.RenderAction("GetSavedCartForLater", "SaveForLater");}
+                            </div>
+                        }
+                    }
+                    <div class="col p-0 content-container">
+                        <!--Cart Page Container Widget-->
+                        <z-widget>@Html.WidgetPartialAuto("ContentContainer", "Content Container", "1789", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), cartPageAdSpaceContainerPartialViewPath, portalId)</z-widget>
+                    </div>
+
+                    @if (Model?.ShoppingCartItems?.Any() ?? false)
+                    {<!--promotion & shipping bar-->
+                        <div class="cart-promotion-bar col-xs-12 nopadding"></div>
+                        <script>$.get("/cart/CartPromotionBar", function (res) { $(".cart-promotion-bar").html(res); });</script>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (isCartRecommendationEnabled == true)
+    {
+        <div class="col-xs-12 margin-top nopadding">
+            <!--Recommended Products Widget, will be displayed on cart page-->
+            <div data-test-selector="divRecommendedProductList">
+                <z-widget>
+                    @Html.WidgetPartialAjax("CartRecommendations", "RecommendedProducts", "6611", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())
+                </z-widget>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Save Cart Modal -->
+<div class="modal fade modal-save-cart" id="modalSaveCart" tabindex="-1" role="dialog" aria-labelledby="modalSaveCart" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" id="savecartmodals" role="document">
+        <div class="modal-content rounded-0">
+            <div class="border-bottom p-3" id="buttonview">
+                <p class="modal-title text-uppercase title-save-cart" data-test-selector="paraSaveCart">@WebStore_Resources.SaveCart</p>
+            </div>
+
+            <div class="modal-body save-cart-container" id="Saved-Cart-Name">
+                <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link rounded-0" id="" data-toggle="tab" href="#SavedCarts-view-content" role="tab" aria-controls="saved-cart" aria-selected="true" data-test-selector="linkSavedCarts">@WebStore_Resources.SavedCarts</a>
+                    <a class="nav-item nav-link active rounded-0" id="" data-toggle="tab" href="#saveNewCart" role="tab" aria-controls="save-new-cart" aria-selected="false" data-test-selector="linkSaveNewCart">@WebStore_Resources.SaveNewCart</a>
+                </div>
+                <div class="tab-content" id="nav-tabContent">
+
+                    <div class="tab-pane fade" id="SavedCarts-view-content"></div>
+
+                    <div class="tab-pane fade show active" id="saveNewCart">
+                        <div class="pl-2">
+                            <div class="control-label">
+                                <label class="title-save-cart-name required" data-test-selector="lblSavedCartName">@WebStore_Resources.SavedCartName</label>
+                            </div>
+                            <div class="control-md w-75 pb-3">
+                                <input type="text" data-payment="text" class="creditCardPayment" id="SavedCartName" data-test-selector="txtSavedCartName" />
+                                @Html.ValidationMessage("errorname", null, new { id = "errorname", @data_test_selector = "spnCartNameError", @class = "error-msg" })
+                            </div>
+                        </div>
+
+                        <div class="modal-footer border-0 pr-0 pb-2" id="SavedCartsbutton">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-test-selector="btnCancel">@WebStore_Resources.ButtonCancel</button>
+                            <button type="submit" class="btn btn-primary" data-test-selector="btnSave" onclick="Checkout.prototype.SavedNewcart()">@WebStore_Resources.Save</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@Html.Hidden("IsAuthenticatedUser", Request.IsAuthenticated.ToString())
+@Html.Hidden("EnableSaveForLater", PortalAgent.CurrentPortal.EnableSaveForLater.ToString())
+
+<script>
+    window.onload = function () {
+        if ('@insufficientQuantity' == 'True' || $('#InvalidQuantity').val() == 'True') {
+            $("#checkOut-link").addClass('disable-anchor');
+            $("#requestQuote-link").addClass('disable-anchor');
+            $("#btnCompleteCheckout").addClass('disable-anchor');
+            $("#paypal-express-checkout").addClass('disable-anchor');
+            $("#btnSaveCart").addClass('disable-anchor');
+            $("#cartTransfer-link").addClass('disable-anchor');
+        }
+        if ($("#IsAuthenticatedUser").val().toLowerCase() == "true") {
+            Checkout.prototype.GetSavedCartList();
+        }
+    }
+</script>
+@if (Helper.IsEnhancedEcommerceTrackingEnabled())
+{
+    <script>
+        var data = @Html.RenderBlock(Json.Encode(Model.GetEcommerceCartItemsData()));
+        function SendEcommerceDataForRemoveAllCartItems(control) {
+            GoogleAnalytics.prototype.SendRemoveFromCartsForAllCartItems(data);
+            $(control).closest('form').submit();
+        }
+        function SendEcommerceDataForRemoveSingleCartItem(control, sku) {
+            var dec = decodeURI(sku);
+            $.each(data, function (v, e) {
+                if (dec == e.SKU) {
+                    GoogleAnalytics.prototype.SendRemoveFromCartsForSingleCartItem(e);
+                }
+            });
+            $(control).closest('form').submit();
+        }
+        function ValidateAndSendCheckoutData() {
+            var isValid = new Boolean(Cart.prototype.ValidateProductQuantity());
+            if (isValid) {
+            GoogleAnalytics.prototype.SendEcommerceCheckoutData(data);
+        }
+        return isValid;
+    }
+    </script>
+}

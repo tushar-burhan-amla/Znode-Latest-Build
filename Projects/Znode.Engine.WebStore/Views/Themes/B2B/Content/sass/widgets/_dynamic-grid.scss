@@ -1,0 +1,91 @@
+﻿
+.table{margin-bottom:0;font-size:13px;
+       thead {color:$text-fgcolor-default;border-top:1px solid $border-bgcolor-default;
+              tr{min-height:30px;
+                  th{font-weight:normal;border:0;padding:5px;
+                      a{color:$text-fgcolor-default;display:block;
+                        i{color:#c5c5c5;padding-left:4px;font-size:12px;}
+                      }
+                      a.selected i{color:$base-color-secondary;padding-left:2px;font-size:10px;}
+                  }
+              }             
+       }
+       tbody{border-top:1px solid $border-bgcolor-default;border-bottom:1px solid $border-bgcolor-default;
+            tr td{padding:5px;vertical-align:middle;border:0;
+              .zf-inactive, .close-icon{color:$error-msg-fgcolor;}
+              .zf-active, .zf-ok{color:$success-msg-fgcolor;}                 
+              .zf-file-text{font-size:32px;}
+              label{font-weight:normal;}
+            }
+       }
+       tfoot{display:none;}   
+       tbody tr:hover{background-color:#f8f3f3;}
+}
+.no-record {text-align:center;padding:5px 0;}
+
+.grid-control{height:24px;
+    .padding-left{padding-left:6px;}
+}
+.pagination-top{padding:0 0 7px;float:left;}
+.pagination-bottom{padding:10px 0 0;float:left;}
+.pagination{padding-right:15px;float:left;margin:0;font-size:12px;
+    i{color:$base-color-primary;}
+}
+.pagination .page-limit{padding-right:7px;border-right:1px solid $border-bgcolor-default;}
+.pagination .page-limit input[type=text]{width:30px;float:none;text-align:center;height:26px;border-radius:2px;}
+.pagination .show-per-page{padding-left:7px;
+    select{width:54px;float:none;height:26px;border-radius:2px;}
+    .separator{margin-right:15px;border-right:1px solid $border-bgcolor-default;padding-right:15px;padding-left:3px;display:inline-block;height:24px;line-height:24px;}
+}
+
+.action-ui{margin:0;padding:0;
+    li{padding:0 3px;list-style:none;display:inline-block;border-radius:0;min-width:22px;text-align:center;min-height:20px;border-right:1px solid $border-bgcolor-default;
+       a{color:$base-color-primary;font-size:13px;line-height:17px;cursor:pointer;
+         &:hover{color:$base-color-secondary;}
+       }
+        &:last-child{margin-right:0;border-right:none;}
+      }
+}
+
+.imageicon{text-align:center;width:100px;
+    .grid-img{max-width:35px;max-height:35px;min-height:35px;border:1px solid $border-bgcolor-default;}
+}
+
+.navgation-control{
+    a,button{display:inline-block;text-align:center;border:1px solid $border-bgcolor-default;border-radius:4px;padding:0 10px;margin-left:5px;height:26px;line-height:26px;
+             &:hover{color:$base-color-secondary;cursor:pointer;}
+    }
+    p{line-height:26px;margin:0 5px;}
+}
+
+.grid-checkbox{width:30px;}
+
+.JCLRgrip .JColResizer{width:4px !important;border-right:1px solid #3e8cf0;background-color:transparent !important; 
+        &:hover,&:active,&:focus{opacity:0.5;}
+}
+
+// Media Query.
+@include screensize(x-small){
+.pagination{padding-right:0;margin-bottom:5px;
+    .page-limit{padding-right:3px;}
+    .show-per-page{padding-left:3px;}
+}
+.grid-control .dropdown:hover .dropdown-menu{position:absolute;}
+}
+@include screensize(small){
+.pagination{padding-right:7px;margin-bottom:auto;
+    .page-limit{padding-right:7px;}
+    .show-per-page{padding-left:7px;}
+}
+}
+@include screensize(desktop){
+.pagination{padding-right:7px;
+    .page-limit{padding-right:7px;}
+    .show-per-page{padding-left:7px;}
+} 
+.page-container{
+    .show-per-page {
+        .separator {margin-right:7px;padding:4px 4px 4px 0;}
+       }        
+    }
+}

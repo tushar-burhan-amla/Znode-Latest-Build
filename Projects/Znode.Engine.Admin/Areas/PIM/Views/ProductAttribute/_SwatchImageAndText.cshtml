@@ -1,0 +1,28 @@
+﻿@model List<Znode.Engine.Admin.AttributeValidationHelpers.DefaultValueListModel>
+@using Znode.Engine.Admin.Helpers
+@{   
+    string _Swatch = string.Empty;    
+}
+@{
+    int _rowSwatchIndex = 0;
+    if (Model?.FirstOrDefault()?.AttributeDefaultValueCodeList?.Count > 0)
+    {
+        foreach (var item in Model.FirstOrDefault().AttributeDefaultValueCodeList)
+        {
+            _Swatch += "<div class='control-md' id=swatch" + _rowSwatchIndex + ">";
+            _Swatch += Convert.ToString("<div class='upload-images' id='divMediaId'><img id='MediaId' onclick='EditableText.prototype.BrowseMedia(' MediaId','False','True','True')' src='@mediapath' alt='Swatch Image " + _rowSwatchIndex + "' class='img-responsive'><span class='change-image' onclick='EditableText.prototype.BrowseMedia(' MediaId','False','True','True')'>" + Admin_Resources.LinkChange + "</span>" + Html.Hidden("MediaId") + "<input type='hidden' value=" + AdminConstants.ImageExtensions + " Id='hdnMediaId' /></div>");
+            _Swatch += "</div>";
+            _rowSwatchIndex++;
+        }
+    }
+    else
+    {
+        _Swatch += "<div class='control-md' id=swatch" + _rowSwatchIndex + ">";
+        _Swatch += Convert.ToString("<div class='upload-images' id='divMediaId'><img id='MediaId' onclick='EditableText.prototype.BrowseMedia(' MediaId','False','True','True')' src='@mediapath' alt='brandimage" + _rowSwatchIndex + "' class='img-responsive'><span class='change-image' onclick='EditableText.prototype.BrowseMedia(' MediaId','False','True','True')'>" + Admin_Resources.LinkChange + "</span>" + Html.Hidden("MediaId") + "<input type='hidden' value=" + AdminConstants.ImageExtensions + " Id='hdnMediaId' /></div>");
+        _Swatch += "</div>";
+        _Swatch += "<div id='UploadMediaId' class='appendMediaModel'></div>";
+        _rowSwatchIndex++;
+    }   
+}
+<div id="divMediaUploaderPopup">
+</div>

@@ -1,0 +1,54 @@
+﻿@model PIMAttributeGroupListViewModel
+@using Znode.Engine.Admin.ViewModels;
+
+@{
+    string area = "PIM";
+    string controller = ViewContext.RouteData.Values["controller"].ToString();
+    string action = "AssignedPIMAttributes";
+    int attributeFamilyId = Model.PimAttributeFamilyId;
+}
+
+<div class="collapsible-grid dirtyignore">
+    <table class="table" aria-describedby="Product Attributes Table">
+        <thead>
+            <tr>
+                <th scope="col">@Attributes_Resources.LabelFamilyGroupCode</th>
+                <th scope="col">@Admin_Resources.LabelType</th>
+                <th scope="col">@Admin_Resources.LabelRequired</th>
+                <th scope="col">@Attributes_Resources.LabelAttributeLocalizable</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{foreach (PIMAttributeGroupViewModel item in Model.AttributeGroupList)
+                {
+                    <tr>
+                        <td colspan="5">
+                            <table class="table child-table" aria-describedby="Product Attribute Child Table">
+                                <thead>
+                                    <tr class="header">
+                                        <th class="th-header" scope="col" colspan="7">
+                                            <button type="button" class="btn-dropdown" onclick="javascript: var _CollapsibleGrid = new CollapsibleGrid(); _CollapsibleGrid.HideShowExpandOption(this,'@area','@controller','@action');" data-attributegroupid="@item.PimAttributeGroupId" data-attributefamilyid="@attributeFamilyId"><em class="z-add"></em></button>
+                                            @item.GroupCode
+                                            @Html.AuthorizedRawActionLink("<em class='z-delete'></em>", "UnAssignAttributeGroups", controller, new { @pimAttributeGroupId = item.PimAttributeGroupId }, new { @class = "pull-right", title = "Delete" })
+                                            <a class="pull-right padding-right" title="Edit" onclick="PIMAttributeFamily.prototype.EditDisplayOrder('@item.PimAttributeGroupId', '@item.GroupCode', '@item.DisplayOrder')"><em class="z-edit"></em></a>
+                                            <span id="UnAssignedAttributesForGroup_@item.PimAttributeGroupId">
+                                                <a class="pull-right padding-right" title="GetUnAssignedAttributes" onclick="PIMAttributeFamily.prototype.GetUnAssignedAttributes('@controller','@item.PimAttributeGroupId', '@item.PimAttributeFamilyId')"></a>
+                                            </span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="attributeData">
+
+                                    @*Attribute Data will be rendered here*@
+
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

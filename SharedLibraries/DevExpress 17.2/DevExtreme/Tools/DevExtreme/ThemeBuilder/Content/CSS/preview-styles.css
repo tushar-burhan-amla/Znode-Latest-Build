@@ -1,0 +1,200 @@
+﻿/*
+    todo: find a better place
+*/
+.preview .desktop-layout .wrapper {
+    width: 400px;
+}
+
+.preview .desktop-layout .logo {
+    background-image: url(../Images/logo.png);
+}
+
+.dx-theme-ios7.dx-device-tablet .list-item-selected {
+    background: #ccf;
+}
+.dx-theme-android.dx-device-tablet .list-item-selected {
+    background: rgba(44,159,201,.8);
+}
+
+html, 
+body {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    overflow: auto !important;
+    height: auto;
+}
+
+body {
+    padding-bottom: 20px;
+}
+
+body.application {
+    height: 100%;
+}
+
+body.application .preview {
+    height: 95%;
+    border: none;
+}
+
+    body.application .preview legend {
+        display: none;
+    }
+
+html {
+    height: 100%;
+}
+
+.loader {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background: #fff;
+}
+
+.with-padding {
+    padding: 20px;
+}
+
+.preview.is-mobile {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.preview {
+    margin: 0 20px;
+    border: 1px solid rgba(240, 91, 65, 0.8);
+    position: relative;
+}
+
+.preview:last-child {
+    margin-bottom: 10px;
+}
+
+.preview legend {
+    margin-left: -6px;
+    text-transform: uppercase;
+    padding: 16px 4px 4px 4px;
+    color: #f05b41;
+    font-family: "Segoe UI Light","Segoe UI";
+    font-weight: 300;
+    line-height: 13px;
+    font-size: 18px;
+}
+
+.preview.base-preview {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.coloring-dark .preview.base-preview {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.preview.base-preview legend {
+    color: #98a2ab;
+}
+
+.coloring-dark .preview.base-preview legend {
+    color: #79868e;
+}
+
+
+
+.preview-container.overlays-common-group .dxbutton-box,
+.preview-container.overlays-toasts-group .dxbutton-box {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+
+
+.dx-theme-generic-typography .base-common-group .widget-box-1.dxlist-box {
+    float: left;
+    width: 285px;
+}
+
+.dx-theme-generic-typography .base-common-group .widget-box-2.dxselectbox-box {
+    padding-top: 23px;
+}
+
+.dx-theme-generic-typography .base-common-group .widget-box-2.dxselectbox-box,
+.dx-theme-generic-typography .base-common-group .widget-box-3.dxselectbox-box,
+.dx-theme-generic-typography .base-common-group .widget-box-4.dxslider-box,
+.dx-theme-generic-typography .base-common-group .widget-box-5.dxlookup-box {
+    margin-left: 315px;
+}
+
+.dx-theme-generic-typography .base-common-group .widget-box-6.dxbutton-box,
+.dx-theme-generic-typography .base-common-group .widget-box-7.dxbutton-box,
+.dx-theme-generic-typography .base-common-group .widget-box-8.dxbutton-box,
+.dx-theme-generic-typography .base-common-group .widget-box-9.dxbutton-box {
+    float: right;
+}
+
+.base-common-group .widget-box-0.dxdatagrid-box {
+    margin-bottom: 10px;
+}
+
+.base-common-group .widget-box-2.dxselectbox-box {
+    margin-bottom: 10px;
+}
+
+.base-common-group .widget-box-3.dxselectbox-box,
+.base-common-group .widget-box-4.dxslider-box {
+    margin-bottom: 15px;
+}
+
+.base-common-group .widget-box-5.dxlookup-box {
+    margin-bottom: 27px;
+}
+
+.base-common-group .widget-box-7.dxbutton-box,
+.base-common-group .widget-box-8.dxbutton-box,
+.base-common-group .widget-box-9.dxbutton-box {
+    margin-right: 3px;
+}
+
+.base-common-group .widget-box-10.dxscheduler-box {
+    padding-top: 20px;
+    display: inline-block;
+}
+
+
+
+.badges-group .widget-box-0.dxlist-box {
+    margin-bottom: 20px;
+}
+
+.list-group .widget-box-0.dxlist-box {
+    height: 410px;
+}
+
+.base-typography-group .dx-fieldset {
+    margin: 30px 0;
+}
+
+.dx-theme-android5-typography .base-typography-group .dx-fieldset {
+    margin-top: 10px;
+}
+
+.icons-preview .dx-button-has-icon{
+    margin-right: 10px;
+}
+
+.dx-scheduler-appointment-popup .dx-layout-manager-one-col .dx-field-item {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.dx-scheduler-appointment-popup .dx-layout-manager-one-col .dx-scheduler-recurrence-rule-item {
+    padding-left: 0;
+}

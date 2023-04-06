@@ -1,0 +1,38 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+
+@model SearchResultViewModel
+<div class="list-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title panel-title-edit accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne_Cat"><span>@WebStore_Resources.TextMoreCategories</span></h4>
+        </div>
+        <div id="collapseOne_Cat" class="panel-collapse collapse in show">
+            <div class="panel-body">
+                <ul class="filter-list">
+                    @if (Model?.Categories.Count>0)
+                    {
+                        foreach (var category in Model.Categories)
+                        {
+                            <li class="styled-input">
+                                <a href="@category.Categoryurl">@category.CategoryName</a>
+                                <span class="facet-count">@category.Count</span>
+                                @if (!Equals(category.Hierarchy, null) && category.Hierarchy.Count > 0)
+                                {
+                                    <ul class="filter-list">
+                                        @foreach (var subCategory in category.Hierarchy)
+                                        {
+                                            <li class="styled-input">
+                                                <a href="@subCategory.Categoryurl">@subCategory.CategoryName</a>
+                                                <span class="facet-count">@subCategory.Count</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

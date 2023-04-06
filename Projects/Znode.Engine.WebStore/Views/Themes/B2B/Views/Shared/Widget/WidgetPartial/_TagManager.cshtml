@@ -1,0 +1,9 @@
+﻿
+@model Znode.Engine.WebStore.ViewModels.WidgetTextViewModel
+@if (!Equals(Model, null))
+{
+    string _data = Model?.Text?.Replace("<p>", string.Empty);
+    _data = _data?.Replace("</p>", string.Empty);
+
+    @Html.RenderBlock(HttpUtility.HtmlDecode(_data?.Trim()))
+}

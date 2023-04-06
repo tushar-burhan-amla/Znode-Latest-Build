@@ -1,0 +1,48 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model CartViewModel
+<div class="col-12 b2b-block">
+    @using (Ajax.BeginForm("ApplyDiscount", "Checkout", null, new AjaxOptions { HttpMethod = "Post", OnBegin = "return Checkout.prototype.CheckDiscountCodeValue('coupon')", OnSuccess = "Checkout.prototype.DisplayAppliedDiscountCode" }, new { @id = "applyCoupon" }))
+    {
+        @Html.AntiForgeryToken();
+        <div class="form-group">
+            <div class="col-12 block-title promotion-title" data-test-selector="divPromotionsTitle">
+                @WebStore_Resources.LabelPromotions
+            </div>
+            <div class="col-12 block-content">
+                <div class="block-items-title" data-test-selector="divPromoCodeTitle">
+                    @WebStore_Resources.LabelPromoCode
+                </div>
+                <div id="cart-apply-promocode" class="d-flex flex-wrap flex-md-nowrap block-items">
+                    <div class="shipping-estimator-input row">
+                        <div class="col-12 col-sm-7 pr-sm-2">
+                            @if (Model.Coupons?.Count > 0)
+                            {
+                                <input data-test-selector="txtPromoCode" type="text" id="promocode" name="discountCode" aria-label="@WebStore_Resources.LabelEnterCouponCode" value="@Model.Coupons[@Model.Coupons.Count-1].Code" class="promocode" size="40" maxlength="100" />
+                            }
+                            else
+                            {
+                                <input data-test-selector="txtPromoCode" type="text" id="promocode" name="discountCode" aria-label="@WebStore_Resources.LabelEnterCouponCode" class="promocode" />
+                            }
+                            <span id="RequiredCouponErrorMessage" class="error-msg"></span>
+                        </div>
+                        <div class="col-12 col-sm-4 mt-2 mt-sm-0 px-md-1">
+                            <button data-test-selector="btnButtonCouponApply" type="submit" class="btn btn-secondary">@WebStore_Resources.ButtonApply</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+    <div id="couponMessageContainer" class="px-4 pb-2">
+        <div class="col-12">
+            @if (Model.Coupons?.Count > 0)
+            {
+                foreach (var item in Model.Coupons)
+                {
+                    <p class="@(item.CouponApplied ? "success-msg padding-top" : "error-msg") text-break" data-test-selector="paraCouponMsg"><a class="close-icon zf-close" onclick="Checkout.prototype.RemoveCoupon('@item.Code');" title="Remove Coupon Code"></a><b>@item.Code</b> - @item.PromotionMessage </p>
+                }
+            }
+        </div>
+    </div>
+</div>

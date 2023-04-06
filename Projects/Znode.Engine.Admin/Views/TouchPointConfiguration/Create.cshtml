@@ -1,0 +1,24 @@
+﻿@using Znode.Engine.Admin.ViewModels
+
+@model ERPTaskSchedulerViewModel
+@{ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;}
+<div id="grid-container">
+    <!--Main Container-->
+    @Html.Partial("~/Views/TouchPointConfiguration/_CreateScheduler.cshtml", Model)
+</div>
+<script src="~/Content/bootstrap-3.3.7/js/moment-with-locales.js"></script>
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#ExpireTime').datetimepicker({
+            format: 'LT'
+        });
+    });
+    $('#StartDate').on('click', function () {
+        $(this).addClass('datepicker');
+        $(this).datepicker().datepicker('show');
+    })
+    $("#StartTime, #ExpireTime").on("click", function () {
+        $(".bootstrap-datetimepicker-widget").css("display", "block");
+    });
+</script>

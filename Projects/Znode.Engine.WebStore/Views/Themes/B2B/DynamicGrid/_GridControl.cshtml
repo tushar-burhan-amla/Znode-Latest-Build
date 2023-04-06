@@ -1,0 +1,118 @@
+﻿@using Znode.Engine.WebStore.Models
+@model  GridModel
+@using Znode.Engine.WebStore.Helpers
+
+@{
+
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string _url = string.Empty;
+    string area = Convert.ToString(ViewContext.RouteData.DataTokens["area"]);
+    string queryString = string.Empty;
+    foreach (string key in Request.Params.AllKeys)
+    {
+        if (key != "__RequestVerificationToken")
+        {
+            if (key != null && key != "activetab" && key != "CurrentUrl" && key != "recordPerPage" && key != "page" && key != "sort" && key != "sortdir" && key != "ViewMode")
+            {
+                queryString += string.IsNullOrEmpty(queryString) ? $"?{key}={HttpUtility.UrlEncode(Request.Params[key])}" : $"&{key}={HttpUtility.UrlEncode(Request.Params[key])}";
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    _url = string.IsNullOrEmpty(area) ? $"/{controllerName}/{actionName}{queryString}" : $"/{area}/{controllerName}/{actionName}{queryString}";
+    var list = new List<BaseDropDownList>();
+    foreach (var item in Model.GridColumnList)
+    {
+        if (item.mustshow == DynamicGridConstants.No && item.musthide == DynamicGridConstants.No)
+        {
+            list.Add(new BaseDropDownList() { id = item.name, DataId = Convert.ToInt32(item.id), name = item.headertext, IsChecked = item.isvisible == "y" ? true : false });
+        }
+    }
+    DropDownOptions _data = new DropDownOptions() { DropDownId = "DropDownId1", DropDownList = list, assignable = true, SortAction = "SortAction", Action = "ShowHidecolumn", Controller = "XMLGenerator", IsAjax = true, SuccessCallBack = "DynamicGrid.prototype.ShowHidecolumn", IsMultiple = true, IsDraggable = true, IsAllowCheckAll = false, SelectOptionName = "Manage columns", IsDropDownHidden = true };
+}
+<div class="col-12 p-0">
+    <section data-container-name="gridpager" data-pager-url="@_url" update-container-id="@Model.FrontObjectName">
+        <div id="Dynamic_Grid">
+            @if (Model?.DataTableToList?.Count > 0)
+            {
+
+                @Html.Hidden("hdnDeleteActionURL")
+
+                if (!string.IsNullOrEmpty(Model.SubRecordFilterKeyName) && !string.IsNullOrEmpty(Model.DelegateTypeName) && !string.IsNullOrEmpty(Model.DelegateTypeMethodName))
+                {
+                    Model.WebGridColumn.Add(new WebGridColumn()
+                    {
+                        Format = (item) =>
+                        {
+                            WebGrid subGrid = new WebGrid(source: FilterHelpers.GetSubRecords(item, Model.SubRecordFilterKeyName, Model.DelegateTypeName, Model.DelegateTypeMethodName), canSort: false);
+                            return subGrid.GetHtml(
+                                htmlAttributes: new { id = "subT", @style = "width:50%;" },
+                                columns: subGrid.Columns(
+                                subGrid.Column("Text", header: "", format: (item1) => new HtmlString(item1.Text))
+                                ));
+                        }
+                    });
+                }
+
+                WebGrid grid = new WebGrid(rowsPerPage: Model.RowPerPageCount, ajaxUpdateContainerId: Model.FrontObjectName,
+                    ajaxUpdateCallback: "DynamicGrid.prototype.SetSortOrder");
+                grid.Bind(source: Model.DataTableToList,
+                    rowCount: Model.TotalRecordCount, autoSortAndPage: false);
+                grid.SortDirection = Model.GridSortDirection;
+                grid.SortColumn = Model.GridSortColumn;
+
+                <div class="col-12 pagination-top">
+                    @grid.CustomPager(Html)
+                    @Html.Hidden("dir", grid.SortDirection) @Html.Hidden("col", grid.SortColumn)
+                    <div class="grid-control">
+                        @Html.Partial("_GridViewType")
+                        <!-- Tools -->
+
+                        @if (Model.FilterColumn.ToolMenuList?.Count > 0)
+                        {
+                            <div class="mt-4 mt-lg-0">
+                                <div class="dropdown-tool" id="poptreeview">
+                                    <a href="#" class="btn-dropdown dropdown-toggle" data-toggle="dropdown">
+                                        <i class="z-setting"></i>&nbsp;<span>@Admin_Resources.LabelTool</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right dropdown-list-ul">
+                                        @foreach (var item in Model.FilterColumn.ToolMenuList)
+                                        {
+                                            <li class="px-3">
+                                                <a @(string.IsNullOrEmpty(item.ControlId) ? "" : "id=" + item.ControlId ) href="@(string.IsNullOrEmpty(item.Url) ? "#" : item.Url)" @(string.IsNullOrEmpty(item.DataToggleModel) ? "" : "data-toggle=" + item.DataToggleModel ) @(string.IsNullOrEmpty(item.DataTarget) ? "" : "data-target=" + item.DataTarget ) @(string.IsNullOrEmpty(item.JSFunctionName) ? "" : "onclick=" + item.JSFunctionName ) @(!Equals(item.DataDisable, null) ? (item.DataDisable == true ? "data-enable=" + item.DataDisable : "data-disable=" + item.DataDisable) : "" )>@item.DisplayText</a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <div class="table-responsive col-12 p-0">
+                    @Html.RenderBlock(HttpUtility.HtmlDecode(grid.Table(
+                     htmlAttributes: new { id = "grid", @class = "table orders-table" },
+                     headerStyle: "grid-header",
+                     columns: Model.WebGridColumn).ToHtmlString()))
+                </div>
+                <div class="col-12 pagination-bottom">
+                    @grid.CustomPager(Html)
+                    @Html.Hidden("dir", grid.SortDirection) @Html.Hidden("col", grid.SortColumn)
+                </div>
+            }
+            else
+            {
+                <div class="col-12 no-record p-4">
+                    <p>@Admin_Resources.NoRecordFoundText</p>
+                </div>
+            }
+            @Html.HiddenFor(m => m.ViewMode)
+        </div>
+    </section>
+</div>

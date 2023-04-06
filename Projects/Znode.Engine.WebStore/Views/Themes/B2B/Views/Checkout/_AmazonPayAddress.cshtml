@@ -1,0 +1,287 @@
+﻿@using Znode.Engine.WebStore.Helpers;
+@model Znode.Engine.WebStore.ViewModels.CartViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+
+    string shippingOptionId = ViewData["ShippingOptionId"]?.ToString();
+    string shippingAddressId = ViewData["ShippingAddressId"]?.ToString();
+    string shippingCode = ViewData["ShippingCode"]?.ToString();
+
+    string paymentSettingId = ViewData["PaymentSettingId"]?.ToString();
+    string paymentApplicationSettingId = ViewData["PaymentApplicationSettingId"]?.ToString();
+    string paymentCode = ViewData["PaymentCode"]?.ToString();
+    string clientId = ViewData["ClientId"]?.ToString();
+    string sellerId = ViewData["SellerId"]?.ToString();
+    bool testMode = Convert.ToBoolean(ViewData["TestMode"]);
+    string accesstoken = ViewData["AccessToken"]?.ToString();
+
+    //for artifi
+    string _display = string.Empty;
+    bool isGuest = true;
+    if (User.Identity.IsAuthenticated)
+    {
+        _display = Model.UserId < 1 ? "display:block;" : "display:none;";
+        isGuest = false;
+    }
+    else
+    {
+        _display = Model.UserId < 1 ? "display:block;" : "display:none;";
+    }
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+}
+
+
+<title>Address</title>
+<style>
+    #AmazonAddressWidget {
+        width: 400px;
+        height: 228px;
+    }
+
+    #AmazonWalletWidget, #AmazonConsentWidget {
+        width: 400px;
+        height: 228px;
+    }
+
+    .title span {
+        background: #c00;
+        padding: 7px 15px;
+        margin-right: 8px;
+        font-size: 16px;
+        color: #fff;
+    }
+
+    h3 {
+        background: #d5d5d5;
+        padding: 9px 0;
+        font-size: 16px;
+        color: #343434;
+    }
+
+    .address-book {
+        padding-right: 10px;
+        margin: 10px 0;
+    }
+
+    .order-btn {
+        width: 100%;
+        max-width: 250px;
+    }
+</style>
+<script type="text/javascript">
+    window.onAmazonLoginReady = function () {
+        amazon.Login.setClientId("@clientId");
+    };
+</script>
+@if (testMode)
+{
+    <script src="https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js"></script>
+}
+else
+{
+    <script src="https://static-na.payments-amazon.com/OffAmazonPayments/us/js/Widgets.js"></script>
+}
+
+<script type="text/javascript">
+    document.getElementById('log-off1').onclick = function () {
+        alert("call logout");
+        amazon.Login.logout();
+    };
+</script>
+<script type='text/javascript'>
+
+    new OffAmazonPayments.Widgets.AddressBook({
+        sellerId: "@sellerId",
+        displayMode: 'Edit',
+        design: {
+            designMode: 'responsive'
+        },
+        onOrderReferenceCreate: function (orderReference) {
+            // Here is where you can grab the Order Reference ID.
+            $("#hdnOrderReferenceId").val(orderReference.getAmazonOrderReferenceId());
+        },
+        onBillingAgreementCreate: function (billingAgreement) {
+            $("#hdnBillingAggriment").val(billingAgreement.getAmazonBillingAgreementId());
+        //Below line is commented to solve issue for shipping radio button reset.
+        // Checkout.prototype.AmazonShippingOptions($("#hdnOrderReferenceId").val(), $("#hdnPaymentSettingId").val(), "0");
+        },
+        onAddressSelect: function (billingAgreement) {
+            Checkout.prototype.CalculateAmazonShipping('', $("#hdnOrderReferenceId").val());
+            Checkout.prototype.AmazonShippingOptions($("#hdnOrderReferenceId").val(), $("#hdnPaymentSettingId").val(), "0", $("#hdnAccessToken").val());
+        },
+        onError: function (error) {
+            alert(error.getErrorCode() + ":error " + error.getErrorMessage());
+        }
+    }).bind("AmazonAddressWidget");
+
+
+
+</script>
+<script type='text/javascript'>
+
+    new OffAmazonPayments.Widgets.Wallet({
+        sellerId: "@sellerId",
+        amazonOrderReferenceId: $("#hdnOrderReferenceId").val(),
+        displayMode: 'Edit',
+        design: {
+            designMode: 'responsive'
+        },
+        onPaymentSelect: function (billingAgreement) {
+            // this method is triggered when the payment instrument is selected.
+            $("#btnContineu").show();
+        },
+        onError: function (error) {
+            alert(error.getErrorCode() + ": " + error.getErrorMessage());
+        }
+    }).bind("AmazonWalletWidget");
+
+
+</script>
+<div class="col">
+    @Html.Partial("../_LearnMore", Model)
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a>Amazon Checkout</div>
+                <div id="WalletLink" style="display:none"></div>
+                <input type="hidden" id="hdnOrderReferenceId" />
+                <input type="hidden" id="hdnBillingAggriment" />
+                <input type="hidden" id="hdnPaymentSettingId" value="@paymentSettingId" />
+            </div>
+        </div>
+    </div>
+    <div class="row b2b-checkout-page amazon-checkout">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="page-title">@WebStore_Resources.TitleSinglePageCheckoutProcess</h1>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-4 address-book">
+                            <div class="col-12 p-0 h-100 b2b-block">
+                                <h3 class="block-title"><span>1</span>@WebStore_Resources.TitleShippingAddress</h3>
+                                <div id="AmazonAddressWidget" style="max-width:380px;"></div>
+                                <div id="WalletLink" style="display:none"></div>
+                                <input type="hidden" id="hdnOrderReferenceId" />
+                                <input type="hidden" id="hdnBillingAggriment" />
+                                <input type="hidden" id="hdnShippingOptionId" value="@shippingOptionId" />
+                                <input type="hidden" id="hdnShippingAddressId" value="@shippingAddressId" />
+                                <input type="hidden" id="hdnShippingCode" value="@shippingCode" />
+                                <input type="hidden" id="hdnPaymentSettingId" value="@paymentSettingId" />
+                                <input type="hidden" id="hdnAccessToken" value="@accesstoken" />
+                            </div>
+                        </div>                        
+                        <div class="col-12 col-md-6 mb-4 pl-md-2 address-book">
+                            <div class="col-12 p-0 h-100 b2b-block">
+                                <h3 class="block-title"><span>2</span>@WebStore_Resources.SinglePageCheckoutShippingMethod</h3>
+                                <div class="row p-4">
+                                  
+                                    <div class="shipping-method col-md-12 text-break">
+                                        <div id="loaderId" style="max-width:380px;" class="padding-top"></div>
+                                    </div>
+                                    <div class="col-md-12 amazon-shipping-inhand">
+                                        <div class="row p-4 align-items-center">
+                                            <div class="col-lg-4 p-0">
+                                                <label data_test_selector="lblInHandDate" class = "font-weight-bold">@WebStore_Resources.LabelInHandDate:</label>
+                                         
+                                            </div>
+                                            <div class="col-lg-4 p-0 in-hand-block">
+                                                <div class="mw-350">
+                                                    <div class="inhand-date-picker">
+                                                        @Html.TextBoxFor(model => model.InHandDate, Model?.InHandDate != null ? Model.InHandDate.ToDateTimeFormat() : string.Empty, new { @mindate = HelperMethods.GetDateTime(), @class = "datepicker", @group = "inhanddate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtInHandDate" })
+                                                        <span class="icon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></span>
+                                                    </div>
+                                                </div>
+                                            
+                                                
+                                            </div>
+                                        </div>
+
+                                        @if (Model?.ShippingConstraints?.Count > 0)
+                                        {
+                                            var selectedShippingConstraint = Model.ShippingConstraints.FirstOrDefault(w => w.IsSelected == true);
+
+                                            <div class="row p-4">
+                                                <div class="col-lg-4 p-0">
+                                                    <label data_test_selector="lblShippingConstraintCode" class="font-weight-bold">@WebStore_Resources.LabelShippingConstraintsCode:</label>
+                                                  
+                                                </div>
+                                                <div class="col-md-8 p-0">
+                                                    @for (int i = 0; i < Model.ShippingConstraints.Count; i++)
+                                                    {
+                                                        <div class="styled-input d-block mb-3">
+                                                            <input type="radio" id="@Model.ShippingConstraints[i].ShippingConstraintCode.Replace(" ", "_")" name="ShippingConstraintCode" value="@Model.ShippingConstraints[i].ShippingConstraintCode" data-shipping-name="@WebUtility.HtmlDecode(Model.ShippingConstraints[i].Description)" data-test-selector="chk@(Model.ShippingConstraints[i].ShippingConstraintCode)" @(((selectedShippingConstraint == null && i == 0) || Model.ShippingConstraints[i].IsSelected) ? "checked=checked" : "") />
+                                                            <label data-test-selector="lbl@(Model.ShippingConstraints[i].ShippingConstraintCode)" for="@Model.ShippingConstraints[i].ShippingConstraintCode.Replace(" ", " _")">@WebUtility.HtmlDecode(Model.ShippingConstraints[i].Description)</label>
+                                                        </div>
+                                                    }
+                                                </div>
+                                              
+                                            </div>
+                                        }
+                                    </div>                                    
+                                </div>
+                            </div>                            
+                        </div>
+                        <div class="col-12 col-md-6 mb-4 address-book">
+                            <div class="col-12 p-0 h-100 b2b-block">
+                                <h3 class="block-title"><span>3</span>@WebStore_Resources.SinglePageCheckoutPaymentMethod</h3>
+                                <div id="AmazonWalletWidget" style="max-width:380px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 review-order">
+                    <div class="row" id="cart-review-content">
+                        @{Html.RenderAction("CartReview", "Checkout");}
+                    </div>
+                </div>
+                <div class="col-12 p-0 text-right mt-2 mb-5 quotebutton">
+                    <button type="button" onclick="Checkout.prototype.AmazonPayProcess('@Model.Total','@paymentSettingId','@paymentCode')" id="btnContineu" class="btn btn-primary">@WebStore_Resources.TextCompletePurchase</button>
+                    <button type="button" id="log-off1" onclick="location.href='@Url.Action("Index", "Checkout")';amazon.Login.logout(); " class="btn btn-secondary mt-3 ml-md-3">Amazon Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="PaymentModal" role="dialog">
+    <div class="modal-dialog compare-product-popup">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@WebStore_Resources.LabelPaymentApplication</h4>
+            </div>
+            <div class="modal-body">
+                <p>@WebStore_Resources.TextPaymentMethod</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Error Payment Modal-->
+<div class="modal fade" id="ErrorPaymentModal" role="dialog">
+    <div class="modal-dialog compare-product-popup">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@WebStore_Resources.LabelPaymentApplication</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="zf-close-circle close-icon"></span></button>
+            </div>
+            <div class="modal-body">
+                <p></p>
+                <div class="col-12 margin-top-bottom nopadding">
+                    <div class="pull-right">
+                        <button type="button" class="btn-text btn-bg-primary btn" data-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id='Single-loader-content-backdrop' class='modal-backdrop fade in' style="display:none"><div id='loading' class='loader loader-body'></div></div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Checkout.prototype.AmazonShippingOptions();
+    });
+</script>

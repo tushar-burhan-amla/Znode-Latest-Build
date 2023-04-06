@@ -1,0 +1,61 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ShippingOptionListViewModel
+@{ var selectedShippingName = Model?.ShippingOptions?.FirstOrDefault(x => x.IsSelected == true)?.ClassName; }
+<div>
+    @using (Ajax.BeginForm("AmazonCartReview", "Checkout", new AjaxOptions() { UpdateTargetId = "cart-review-content", OnSuccess = "Checkout.prototype.ShippingErrorMessage();", OnBegin = "Checkout.prototype.ShowPaymentLoader();", OnComplete = "Checkout.prototype.HidePaymentLoader();", OnFailure = "Checkout.prototype.HidePaymentLoader();" }))
+    {
+    if (Model?.ShippingOptions?.Count > 0)
+    {
+
+    if (!Model.ShippingOptions.Any(x => x.IsSelected))
+    {
+    Model.ShippingOptions.FirstOrDefault(x => x.IsSelected = Model.IsB2BUser && Model.OmsQuoteId > 0 ? true : false);
+    }
+
+    foreach (ShippingOptionViewModel option in Model.ShippingOptions)
+    {
+    string estimateDate = !string.IsNullOrEmpty(option.EstimateDate) ? " - (" + (@WebUtility.HtmlDecode(option.EstimateDate)) + ")" : string.Empty;
+    <div class="col-12 nopadding styled-input">
+        <input type="radio" id="@option.ShippingCode.Replace(" ", " _")" data-shippingCode="@option.Description" name="ShippingOptions" value="@option.ShippingId" onclick="Checkout.prototype.CalculateAmazonShipping('@option.ClassName','');" @( option.IsSelected ? "checked=checked" : "") />
+        <label for="@option.ShippingCode.Replace(" ", " _")">@WebUtility.HtmlDecode(option.Description) @estimateDate - @WebUtility.HtmlDecode(option.FormattedShippingRate)</label>
+    </div>
+    }
+    <div class="col-sm-12 nopadding" id="customerShippingDiv" style="display:none">
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.AccountNumber, new { @class = "required" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.AccountNumber, new { @maxLength = "100", @onblur = "Checkout.prototype.ValidateCustomerShipping();" })
+                    <div id="errorAccountNumber" class="field-validation-error" style="display: none">@WebStore_Resources.ErrorAccountNumber</div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.ShippingMethod, new { @class = "required" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.ShippingMethod, new { @maxLength = "100", @onblur = "Checkout.prototype.ValidateCustomerShipping();" })
+                    <div id="errorShippingMethod" class="field-validation-error" style="display: none">@WebStore_Resources.ErrorShippingMethod</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="hndShippingclassName" value="" />
+    }
+    else
+    {
+    <p class="text-center">@WebStore_Resources.ErrorAddAddressShippingOption</p>
+    }
+    <div id="message-freeshipping" class="success-msg" style="display:none;"><span>@WebStore_Resources.FreeShippingMessage</span></div>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        var selectedShippingClass = '@selectedShippingName';
+        Checkout.prototype.AmazonPayOnReadyShippingCalculate(selectedShippingClass);
+    });
+</script>

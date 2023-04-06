@@ -1,0 +1,44 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@model PriceSKUDataViewModel
+@{
+    string displayCustom1 = "display:none";
+    string displayCustom2 = "display:none";
+    string displayCustom3 = "display:none";
+    if (Model?.PriceTierList != null)
+    {
+        displayCustom1 = Model.PriceTierList.Any(m => m.Custom1 != "") ? "" : "display:none";
+        displayCustom2 = Model.PriceTierList.Any(m => m.Custom2 != "") ? "" : "display:none";
+        displayCustom3 = Model.PriceTierList.Any(m => m.Custom3 != "") ? "" : "display:none";
+    }
+
+}
+@for (int i = 0; i < Model.PriceTierList?.Count; i++)
+{
+<tr>
+    <td>
+        @Html.TextBoxFor(m => m.PriceTierList[i].Quantity, new { @id = "tierQuantity", @required = "required", data_val_required = @Admin_Resources.MinQtyRequiredMsg, onfocusout = "Inventory.prototype.ValidateSKU()", @data_test_selector = "txtTierQuantity" })
+        @Html.Label(Admin_Resources.HeadingAndAbove)
+        @Html.ValidationMessageFor(model => model.PriceTierList[i].Quantity, "", new { @data_test_selector = "valQuantity" })
+    </td>
+    <td>
+        @Html.TextBoxFor(m => m.PriceTierList[i].Price, new { @id = "priceTier", @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidPriceForRoundOff, Admin_Resources.ErrorValidPrice), data_val_required = @Admin_Resources.TierPriceRequiredMsg })
+        @Html.ValidationMessageFor(model => model.PriceTierList[i].Price)
+    </td>
+    <td style="@displayCustom1" class="Custom1">
+        @Html.TextBoxFor(m => m.PriceTierList[i].Custom1, new { @id = "priceTier1", @data_Custom1 = Model.PriceTierList[i].Custom1 })
+
+    </td>
+    <td style="@displayCustom2" class="Custom2">
+        @Html.TextBoxFor(m => m.PriceTierList[i].Custom2, new { @id = "priceTier2", @data_Custom2 = Model.PriceTierList[i].Custom2 })
+
+    </td>
+    <td style="@displayCustom3" class="Custom3">
+        @Html.TextBoxFor(m => m.PriceTierList[i].Custom3, new { @id = "priceTier3", @data_Custom3 = Model.PriceTierList[i].Custom3 })
+
+    </td>
+    <td class="grid-action"><a href="Javascript:Products.prototype.fnDeleteTierPrice(@Model.PriceTierList[i].PriceTierId)" data-id="@Model.PriceTierList[i].PriceTierId" class="img-icon-delete dirtyignore" title="@Admin_Resources.ButtonDelete"><em class="z-delete"></em></a></td>
+
+    <td><div style="display:none">@Html.TextBoxFor(m => m.PriceTierList[i].PriceTierId, new { @hidden = "hidden", @class = "priceTierId" })</div></td>
+</tr>
+}

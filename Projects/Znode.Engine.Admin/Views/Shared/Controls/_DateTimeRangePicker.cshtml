@@ -1,0 +1,42 @@
+﻿@using Znode.Engine.Admin.Helpers
+@using Znode.Engine.Admin.Models
+@model GridModel
+
+@{
+    var selectedValue = HelperMethods.GetValuesInDefaultFormat(Model.FilterColumn.FilterColumnList.FirstOrDefault(x => x.ColumnName == AdminConstants.DateTimeRange)?.Value);
+}
+
+<div id="dateTimeRangePicker" class="date-timepicker-section" data-test-selector="divDateTimeRangePicker">
+    <input type="text" id="hdnDateTimeRange" name="" form="searchform" value="" selected-filter-value="@selectedValue" default-date-format="@HelperMethods.GetStringDateFormat()" default-time-format="@HelperMethods.GetStringTimeFormat()" hidden />
+    <div class="col-xs-12 nopadding time-picker-date" id="date-time-field">
+        <input type="text" id="dateTimeRange" data-test-selector="txtDateTimeRangePicker" disabled />
+    </div>
+    <div class="col-xs-12 nopadding time-picker-range" id="date-time-show">
+        <div id="reportrange" class="total-date-range">
+            <em class="z-calendar"></em><span></span><em class="z-down"></em>
+        </div>
+    </div>
+</div>
+<input type="hidden" name="DataOperatorId" value="92" />
+@Scripts.Render("~/bundles/DateTimeRangeFilter")
+
+
+<script>
+    document.getElementById("dateTimeRangePicker").setAttribute("style", "display: none");
+
+    $(document).ready(function () {
+        // Following code is to make the date picker field responsive (in some cases ZPD-8518).
+        if ($('[class*=logmessage-]').length > 0 && $('[class*=logmessage-] #filter-content-main ul li').length == 0) {
+            if ($('#spanRecordFound').length > 0 && $('#spanRecordFound').css('display') != 'none') {
+
+                $('#date-time-field').removeClass('col-xs-12');
+                $('#date-time-show').removeClass('col-xs-12');
+
+                $('#date-time-field').addClass('col-xs-9');
+                $('#date-time-show').addClass('col-xs-9');
+            }
+        }
+
+        $('#dateTimeRangePicker').fadeIn(200);
+    });
+</script>

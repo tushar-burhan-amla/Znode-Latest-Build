@@ -1,0 +1,82 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model BlogNewsViewModel
+@{
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(m => m.BlogNewsTitle, new { @class = "required", @data_test_selector = "lblBlogNewsTitle" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => m.BlogNewsTitle, new { @data_test_selector = "txtBlogNewsTitle" })
+                @Html.ValidationMessageFor(m => m.BlogNewsTitle, "", new { @data_test_selector = "valBlogNewsTitle" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label("Overview", new { @data_test_selector = "lblOverview" })
+            </div>
+            <div class="control-md">
+                <div id="areaList">
+                    @Html.TextAreaFor(model => model.BodyOverview, new { @rows = "5", @data_test_selector = "txtOverview" })
+                    @Html.ValidationMessageFor(model => model.BodyOverview, "", new { @data_test_selector = "valOverview" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.Tags, new { @data_test_selector = "lblTags" })
+            </div>
+            <div class="control-md">
+                <div id="areaList">
+                    @Html.TextBoxFor(model => model.Tags, new { @data_test_selector = "txtTags" })
+                    @Html.ValidationMessageFor(model => model.Tags, "", new { @data_test_selector = "valTags" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(m => m.SEOTitle, new { @data_test_selector = "lblSEOTitle" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => m.SEOTitle, new { @data_test_selector = "txtSEOTitle" })
+                @Html.ValidationMessageFor(m => m.SEOTitle, "", new { @data_test_selector = "valSEOTitle" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(m => m.SEOKeywords, new { @data_test_selector = "lblSEOKeywords" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => m.SEOKeywords, new { @data_test_selector = "txtSEOKeywords" })
+                @Html.ValidationMessageFor(m => m.SEOKeywords, "", new { @data_test_selector = "valSEOKeywords" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(m => m.SEODescription, new { @data_test_selector = "lblSEODescription" })
+            </div>
+            <div class="control-md">
+                @Html.TextAreaFor(m => m.SEODescription, new { @rows = "3", @data_test_selector = "txtSEODescription" })
+                @Html.ValidationMessageFor(m => m.SEODescription, "", new { @data_test_selector = "valSEODescription" })
+            </div>
+        </div>
+    </div>
+
+    @Html.HiddenFor(model => model.BlogNewsLocaleId)
+    @Html.HiddenFor(model => model.CMSSEODetailLocaleId)
+}

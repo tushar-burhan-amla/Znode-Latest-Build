@@ -1,0 +1,19 @@
+﻿@model Znode.Engine.Admin.ViewModels.WebSiteLogoViewModel
+@{
+    ViewBag.Title = Admin_Resources.LabelCMS + " | " + Admin_Resources.Multifront;
+}
+
+<!--Left Panel-->
+@Html.Partial("~/Views/WebSite/_asideWebSiteManagePanel.cshtml", Model)
+<!--Main Container-->
+<section class="main-container">
+    <div id="WebSiteConfigurationDiv">
+        @if (string.IsNullOrEmpty(Model?.FileName))
+        {
+            @Html.Partial("_ManagePartial", Model)
+        }
+    </div>
+</section>
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup">
+</div>

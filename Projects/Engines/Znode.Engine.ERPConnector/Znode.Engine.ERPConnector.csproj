@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{48991FBC-D7C4-44BE-9C88-669614ECE325}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Znode.Engine.ERPConnector</RootNamespace>
+    <AssemblyName>Znode.Engine.ERPConnector</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Int|AnyCPU'">
+    <OutputPath>bin\Int\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'loadtest|AnyCPU'">
+    <OutputPath>bin\loadtest\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'automation|AnyCPU'">
+    <OutputPath>bin\automation\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'B2B|AnyCPU'">
+    <OutputPath>bin\B2B\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LB|AnyCPU'">
+    <OutputPath>bin\LB\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Znode.Libraries.Framework.Business.9.7.5\lib\net48\Znode.Libraries.Framework.Business.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ABSConnector\Mapper\ABSMapper.cs" />
+    <Compile Include="ABSConnector\ZnodeABSConnector.cs" />
+    <Compile Include="App_Start\ERPAutoMapperConfig.cs" />
+    <Compile Include="EpicorConnector\Mapper\EpicorMapper.cs" />
+    <Compile Include="InforConnector\Mapper\InforMapper.cs" />
+    <Compile Include="JDEConnector\Mapper\JDEMapper.cs" />
+    <Compile Include="MockERPConnector\Mapper\MockERPMapper.cs" />
+    <Compile Include="Model\ERPParameterModel.cs" />
+    <Compile Include="MockERPConnector\ZnodeMockERPConnector.cs" />
+    <Compile Include="EpicorConnector\ZnodeEpicorConnector.cs" />
+    <Compile Include="BaseERP.cs" />
+    <Compile Include="InforConnector\ZnodeInforConnector.cs" />
+    <Compile Include="JDEConnector\ZnodeJDEConnector.cs" />
+    <Compile Include="Model\XMLConfigurationModel.cs" />
+    <Compile Include="Model\XMLControlListModel.cs" />
+    <Compile Include="Model\XMLControlModel.cs" />
+    <Compile Include="Model\XMLSelectOptions.cs" />
+    <Compile Include="Model\XMLValidationModel.cs" />
+    <Compile Include="MSDynamicsConnector\Mapper\MSDynamicMapper.cs" />
+    <Compile Include="MSDynamicsConnector\ZnodeMSDynamicsConnector.cs" />
+    <Compile Include="QuickBooksConnector\Constants\DefaultData.cs" />
+    <Compile Include="QuickBooksConnector\Constants\QuickBooksConstants.cs" />
+    <Compile Include="QuickBooksConnector\Helper\AuthenticationHelper.cs" />
+    <Compile Include="QuickBooksConnector\Helper\QuickBooksWebServiceHelper.cs" />
+    <Compile Include="QuickBooksConnector\Mapper\CustomerMapper.cs" />
+    <Compile Include="QuickBooksConnector\Mapper\InventoryMapper.cs" />
+    <Compile Include="QuickBooksConnector\Mapper\SalesOrderMapper.cs" />
+    <Compile Include="QuickBooksConnector\Models\QuickBooks\Address.cs" />
+    <Compile Include="QuickBooksConnector\Models\QuickBooks\BaseModel.cs" />
+    <Compile Include="QuickBooksConnector\Models\QuickBooks\Customer\CustomerAdd.cs" />
+    <Compile Include="QuickBooksConnector\Models\QuickBooks\Customer\CustomerAddRq.cs" />
+    <Compile Include="QuickBooksConnector\Models\QuickBooks\Inventory\ItemInventoryAdd.cs" />
+    <Compile Include="QuickBooksConnector\Models\QuickBooks\Inventory\ItemInventoryAddRq.cs" />
+    <Compile Include="QuickBooksConnector\Models\QuickBooks\Ref.cs" />
+    <Compile Include="QuickBooksConnector\Models\QuickBooks\SalesOrder\SalesOrderAdd.cs" />
+    <Compile Include="QuickBooksConnector\Models\QuickBooks\SalesOrder\SalesOrderAddRq .cs" />
+    <Compile Include="QuickBooksConnector\Models\QuickBooks\SalesOrder\SalesOrderLineAdd.cs" />
+    <Compile Include="QuickBooksConnector\Utilitites\HelperUtility.cs" />
+    <Compile Include="QuickBooksConnector\Utilitites\TextFileUtility.cs" />
+    <Compile Include="QuickBooksConnector\Utilitites\ZnodeLoggerUtility.cs" />
+    <Compile Include="QuickBooksConnector\XML\CustomerQBXML.cs" />
+    <Compile Include="QuickBooksConnector\XML\InventoryQBXML.cs" />
+    <Compile Include="QuickBooksConnector\XML\SalesOrderQBXML.cs" />
+    <Compile Include="QuickBooksConnector\ZnodeQuickBooksConnector.cs" />
+    <Compile Include="SAGEConnector\Mapper\SAGEMapper.cs" />
+    <Compile Include="SAGEConnector\ZnodeSAGEConnector.cs" />
+    <Compile Include="SAPConnector\Mapper\SAPMapper.cs" />
+    <Compile Include="SAPConnector\ZnodeSAPConnector.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.Admin\Znode.Libraries.Admin.csproj">
+      <Project>{D24B86B3-2CA1-431D-AFB5-E59C313283EB}</Project>
+      <Name>Znode.Libraries.Admin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.Data\Znode.Libraries.Data.csproj">
+      <Project>{786f7274-2f78-4282-b91c-978cb79fb2f3}</Project>
+      <Name>Znode.Libraries.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.ECommerce.Utilities\Znode.Libraries.ECommerce.Utilities.csproj">
+      <Project>{f3703cce-eec4-46b0-a54f-83857d4014df}</Project>
+      <Name>Znode.Libraries.ECommerce.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.MongoDB.Data\Znode.Libraries.MongoDB.Data.csproj">
+      <Project>{5b6482f4-7b81-4d7c-a099-78237c8a55b3}</Project>
+      <Name>Znode.Libraries.MongoDB.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Engine.ABSConnector\Znode.Engine.ABSConnector.csproj">
+      <Project>{78b2154a-aa94-4f6a-827b-cc8434e59a63}</Project>
+      <Name>Znode.Engine.ABSConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Engine.Api.Client\Znode.Engine.Api.Client.csproj">
+      <Project>{4ff2a227-f7eb-41ee-ada9-f46a297e7be8}</Project>
+      <Name>Znode.Engine.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Engine.Api.Models\Znode.Engine.Api.Models.csproj">
+      <Project>{05a4b1d5-82d1-4e47-afd9-4b01ac5917bd}</Project>
+      <Name>Znode.Engine.Api.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Engine.Exceptions\Znode.Engine.Exceptions.csproj">
+      <Project>{5dd35fd8-feeb-46b2-87c5-97f05e80aa6b}</Project>
+      <Name>Znode.Engine.Exceptions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ABSConnector\ZnodeABSConnector.config" />
+    <EmbeddedResource Include="EpicorConnector\ZnodeEpicorConnector.config" />
+    <EmbeddedResource Include="InforConnector\ZnodeInforConnector.config" />
+    <EmbeddedResource Include="JDEConnector\ZnodeJDEConnector.config" />
+    <EmbeddedResource Include="MockERPConnector\ZnodeMockERPConnector.config">
+    </EmbeddedResource>
+    <None Include="ABSConnector\ZnodeABSConnector.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="EpicorConnector\ZnodeEpicorConnector.config" />
+    <None Include="InforConnector\ZnodeInforConnector.config" />
+    <None Include="JDEConnector\ZnodeJDEConnector.config" />
+    <None Include="MockERPConnector\ZnodeMockERPConnector.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="MSDynamicsConnector\ZnodeMSDynamicsConnector.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="QuickBooksConnector\ZnodeQuickBooksConnector.config" />
+    <None Include="SAGEConnector\ZnodeSAGEConnector.config" />
+    <None Include="SAPConnector\ZnodeSAPConnector.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>attrib -R "$(SolutionDir)\Znode.Engine.Api\Data\ERPScheduler\*.config" 
+XCOPY "$(ProjectDir)MockERPConnector\ZnodeMockERPConnector.config" "$(SolutionDir)\Znode.Engine.Api\Data\ERPScheduler" /Y 
+XCOPY "$(ProjectDir)SAPConnector\ZnodeSAPConnector.config" "$(SolutionDir)\Znode.Engine.Api\Data\ERPScheduler" /Y
+XCOPY "$(ProjectDir)EpicorConnector\ZnodeEpicorConnector.config" "$(SolutionDir)\Znode.Engine.Api\Data\ERPScheduler"  /Y
+XCOPY "$(ProjectDir)InforConnector\ZnodeInforConnector.config" "$(SolutionDir)\Znode.Engine.Api\Data\ERPScheduler"  /Y
+XCOPY "$(ProjectDir)JDEConnector\ZnodeJDEConnector.config" "$(SolutionDir)\Znode.Engine.Api\Data\ERPScheduler" /Y 
+XCOPY "$(ProjectDir)MSDynamicsConnector\ZnodeMSDynamicsConnector.config" "$(SolutionDir)\Znode.Engine.Api\Data \ERPScheduler" /Y
+XCOPY "$(ProjectDir)SAGEConnector\ZnodeSAGEConnector.config" "$(SolutionDir)\Znode.Engine.Api\Data\ERPScheduler"  /Y
+XCOPY "$(ProjectDir)MSDynamicsConnector\ZnodeMSDynamicsConnector.config" "$(SolutionDir)\Znode.Engine.Api\Data\ERPScheduler"  /Y
+XCOPY "$(ProjectDir)QuickBooksConnector\ZnodeQuickBooksConnector.config" "$(SolutionDir)\Znode.Engine.Api\Data\ERPScheduler"  /Y
+XCOPY "$(ProjectDir)ABSConnector\ZnodeABSConnector.config" "$(SolutionDir)\Znode.Engine.Api\Data\ERPScheduler"  /Y</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

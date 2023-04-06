@@ -1,0 +1,122 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+@using System.Configuration;
+@model TaxClassViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = "/TaxClass/List", FormId = "frmTaxClasss", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    @if (string.Equals(actionName.ToLower(), "create"))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.HeadingTax)</h1>
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.HeadingTax)<em class="z-minus"></em><span>@Model.Name</span></h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<div class="main-wrapper">
+    @Html.Partial("~/Views/TaxClass/_asideTaxPanel.cshtml", Model)
+    <section class="main-container">
+        <div id="frmCreateEditTaxClass">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmTaxClasss", enctype = "multipart/form-data" }))
+            {
+                <div class="col-sm-12 nopadding">
+                    @if (string.Equals(actionName.ToLower(), "create"))
+                {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.Name, new { @class = "required", @data_test_selector = "lblTaxClassName" })
+                                </div>
+                                <div class="control-md">
+                                    @Html.TextBoxFor(model => model.Name, new { @data_test_selector = "txtTaxClassName" })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @data_test_selector = "valTaxClassName" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.Name, new { @class = "required", @data_test_selector = "lblTaxClassName" })
+                                </div>
+                                <div class="control-md">
+                                    @Html.TextBoxFor(model => model.Name, new { @data_test_selector = "txtTaxClassName" })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @data_test_selector = "valTaxClassName" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.DisplayOrder, new { @class = "required", @data_test_selector = "lblDisplayOrder" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.DisplayOrder, new { @data_test_selector = "txtDisplayOrder" })
+
+                                @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @data_test_selector = "valDisplayOrder" })
+                            </div>
+                            @Html.Partial("_HelpText", Admin_Resources.HelptextTaxDisplayOrder)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control-md control-non">
+                            <label>
+                                <input id="IsActive" data-test-selector="txtIsActive" name="IsActive" checked="@Model.IsActive" type="checkbox" value="true">
+                                <span class="lbl padding-8" data-test-selector="lblIsActive" for="IsActive">@Admin_Resources.Activate</span>
+                                <input name="IsActive" type="hidden" value="false">
+                            </label>
+                        </div>
+                    </div>
+
+                    @Html.HiddenFor(model => model.TaxClassId)
+                </div>
+            }
+
+            @if (actionName == "Edit")
+            {
+                <div class="col-sm-12 nopadding" id="taxRule">
+                    <div class="margin-top-25 clearfix">
+                        <button id="addTaxRule" type="button" data-test-selector="btnAddTaxRule" class="btn-text btn-text-secondary pull-right margin-bottom-20" onclick="">@Admin_Resources.AddRule</button>
+                        <h3 class="section-heading pull-left" data-test-selector="hdgTaxRuleList">@Admin_Resources.HeadingTaxRuleList</h3>
+                    </div>
+                    <div>
+                        <p data-test-selector="infoOrderOfPrecedence">@Admin_Resources.SubHeaderTaxRulesAreAppliedInTheOrderOfPrecedence</p>
+                        <ul>
+                            <li data-test-selector="listAddFirstTaxRuleWith">@Admin_Resources.SubHeaderAddTaxRuleWith</li>
+                            <li data-test-selector="listAddSecondTaxRuleWith">@Admin_Resources.SubHeaderAddSecondTaxRuleWithCountry</li>
+                        </ul>
+                    </div>
+                    <div id="AssociatedRuleList" class="col-sm-12 associated-rule-list nopadding margin-top">
+                        @* Tax Rule list will display in this div *@
+                    </div>
+                    <div id="divAddRule" class="aside-popup-panel modal-dialog modal-lg">
+                        @*Don't delete this div, mainly due to "Add Rule popup" will display in this div*@
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+</div>
+<script>
+    $(document).ready(function () {
+        $.when(
+            TaxClass.prototype.TaxRuleList()
+        ).done(function () {
+            ZnodeNotification.prototype.DisplayNotificationMessages();
+        })
+    });
+</script>

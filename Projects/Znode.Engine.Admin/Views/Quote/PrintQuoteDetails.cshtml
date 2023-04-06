@@ -1,0 +1,299 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Libraries.ECommerce.Utilities;
+@model QuoteResponseViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS;
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+}
+<div>
+    <title>@Admin_Resources.HeaderQuoteInformation</title>
+    <div>
+        <div style="font-family: Arial, Helvetica; font-size: 10px; text-align: left; color: #292a2a; border: solid 1px #c3c3c3; margin-top: 10px;">
+            <div style="background-color: #eff3fb; color: #292a2a; font-size: 1.5em; font-weight: bold; padding: .5em; border-bottom: solid 1px #c3c3c3;">@Model.QuoteInformation.StoreName&nbsp;Quote Receipt</div>
+            <div style="padding: 10px;">
+                <div style="font-family: Verdana; color: #333333; font-size: 11px;"></div>
+                <table style="width:100%;font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; border-collapse: separate; border-spacing: 3px; border: 0px;" aria-describedby="Quote Details Table">
+                    <tbody>
+                        <tr>
+                            <th scope="col" colspan="5" style="padding:0px;">
+                                <hr>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style=" text-align:left; white-space:nowrap; width:25%;">
+                                <div style="color: #292a2a; font-weight: bold; font-size: 11px; padding-bottom: 5px;">@Admin_Resources.HeaderQuoteInformation</div>
+                            </td>
+                            <td style=" text-align:left; white-space:nowrap;" colspan="2">
+                                <div style="color: #292a2a; font-weight: bold; font-size: 11px; padding-bottom: 5px;">Customer Service</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style=" text-align:left; white-space:nowrap; width:10%;"><strong>@Admin_Resources.LabelQuoteNumber:</strong></td>
+                            <td style=" text-align:left; white-space:nowrap; width:30%;">@Model.QuoteInformation.QuoteNumber</td>
+                            <td style=" text-align:left; white-space:nowrap; width:4%;"><strong>E-Mail:</strong></td>
+                            <td style=" text-align:left; white-space:nowrap;">@Model.CustomerServiceEmail</td>
+                        </tr>
+                        <tr>
+                            <td style=" text-align:left; white-space:nowrap;"><strong>@Admin_Resources.LabelQuoteDate:</strong></td>
+                            <td style=" text-align:left; white-space:nowrap;">@Model.QuoteInformation.QuoteDateWithTime</td>
+                            <td style=" text-align:left; white-space:nowrap;"><strong>Phone:</strong></td>
+                            <td style=" text-align:left; white-space:nowrap;">@Model.CustomerServicePhoneNumber</td>
+                        </tr>
+
+
+                        <tr>
+                            <td style=" text-align:left; white-space:nowrap;"><strong>@Admin_Resources.LabelQuoteStatus:</strong></td>
+                            <td style=" text-align:left; white-space:nowrap;">@Model.QuoteStatus</td>
+                        </tr>
+                        <tr>
+                            <td style=" text-align:left; white-space:nowrap;"><strong>@Admin_Resources.LabelQuoteExpirationDate:</strong></td>
+                            <td style=" text-align:left; white-space:nowrap;">@Model.QuoteInformation.QuoteExpirationDate</td>
+                        </tr>
+                        <tr>
+                            <td style=" text-align:left; white-space:nowrap;"><strong>@Admin_Resources.LabelInHandsDate:</strong></td>
+                            <td style=" text-align:left; white-space:nowrap;">@Model.QuoteInformation.InHandDate</td>
+                        </tr>
+                        <tr>
+                            <td style=" text-align:left; white-space:nowrap;"><strong>@Admin_Resources.ShippingType:</strong></td>
+                            <td style=" text-align:left; white-space:nowrap;">@Model.QuoteInformation.ShippingTypeDescription</td>
+                        </tr>
+                        <tr>
+                            <td style=" text-align:left; white-space:nowrap;"><strong>@Admin_Resources.LabelJobName:</strong></td>
+                            <td style=" text-align:left; white-space:nowrap;">@Model.QuoteInformation.JobName</td>
+                        </tr>
+                        <tr>
+                            <td style=" text-align:left; white-space:nowrap;"><strong>@Admin_Resources.LabelShippingConstraintsCode:</strong></td>
+                            <td style=" text-align:left; white-space:nowrap;">@(string.IsNullOrWhiteSpace(Model.QuoteInformation.ShippingConstraintCode) ? string.Empty : HelperUtility.GetEnumDescriptionValue((ShippingConstraintsEnum)Enum.Parse(typeof(ShippingConstraintsEnum), Model.QuoteInformation.ShippingConstraintCode)))</td>                         
+                        </tr>
+
+                        <tr>
+                            @if (!string.IsNullOrEmpty(@Model.QuoteInformation.ShippingMethod))
+                            {
+                                <td style=" text-align:left; white-space:nowrap;"><strong>@Admin_Resources.LabelShippingMethod:</strong></td>
+                                <td style=" text-align:left; white-space:nowrap;">@Model.QuoteInformation.ShippingMethod</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                                <td></td>
+                            }
+                        </tr>
+
+                        <tr>
+                            @if (!string.IsNullOrEmpty(@Model.QuoteInformation.AccountNumber))
+                            {
+                                <td style=" text-align:left; white-space:nowrap;"><strong>@Admin_Resources.LabelAccountNumber:</strong></td>
+                                <td style=" text-align:left; white-space:nowrap;">@Model.QuoteInformation.AccountNumber</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                                <td></td>
+                            }
+                        </tr>
+                        <tr>
+                            <td style=" text-align:left; white-space:nowrap;"><strong></strong></td>
+                            <td style=" text-align:left; white-space:nowrap;"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <hr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:left; width:45%; white-space:nowrap;font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px;">
+                                <div style="color: #292a2a; font-weight: bold; font-size: 11px; padding-bottom: 5px;">@Admin_Resources.LabelBillingTo</div>
+                            </td>
+                            <td style=" text-align:left;" colspan="2">
+                                <div style="color: #292a2a; font-weight: bold; font-size: 11px; padding-bottom: 5px;">@Admin_Resources.LabelShippingTo</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style=" text-align:left; white-space:nowrap;" colspan="2">
+                                @Model.CustomerInformation.BillingAddress.FirstName  @Model.CustomerInformation.BillingAddress.LastName 
+                                @if (!Equals(Model.CustomerInformation.BillingAddress.CompanyName, null))
+                                {<br>@Model.CustomerInformation.BillingAddress.CompanyName}<br>@Model.CustomerInformation.BillingAddress.Address1 
+                                @if (!Equals(Model.CustomerInformation.BillingAddress.Address2, null)){<br>@Model.CustomerInformation.BillingAddress.Address2}<br>@Model.CustomerInformation.BillingAddress.CityName<br>@Model.CustomerInformation.BillingAddress.StateName<br>@Model.CustomerInformation.BillingAddress.PostalCode<br>@Model.CustomerInformation.BillingAddress.CountryName<br>Phone Number : @Model.CustomerInformation.BillingAddress.PhoneNumber
+                            </td>
+                            <td  style=" text-align:left; white-space:nowrap;vertical-align:top;" colspan="3">
+                                @Model.CustomerInformation.ShippingAddress.FirstName @Model.CustomerInformation.ShippingAddress.LastName
+                                @if (!Equals(Model.CustomerInformation.ShippingAddress.CompanyName, null))
+                                {<br>@Model.CustomerInformation.ShippingAddress.CompanyName}<br>@Model.CustomerInformation.ShippingAddress.Address1 @if (!Equals(Model.CustomerInformation.ShippingAddress.Address2, null))
+                                {<br>@Model.CustomerInformation.ShippingAddress.Address2}<br>@Model.CustomerInformation.ShippingAddress.CityName<br>@Model.CustomerInformation.ShippingAddress.StateName<br>@Model.CustomerInformation.ShippingAddress.PostalCode<br>@Model.CustomerInformation.ShippingAddress.CountryName<br>Phone Number : @Model.CustomerInformation.ShippingAddress.PhoneNumber
+                                @*<br>Email : @Model.CustomerInformation.ShippingAddress*@
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="7">&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="color: #292a2a; font-weight: bold; font-size: 11px; padding-bottom: 5px;">@Admin_Resources.LabelProductsInQuote</div>
+                @if (Model.CartInformation.ShoppingCartItems.Count > 0)
+                {
+                    <div>
+                        <table style="border-collapse: separate; border-spacing: 0px;padding:3px;width:100%;"  aria-describedby="Cart Information">
+                            <tbody>
+                                <tr>
+                                    <th scope="col" style="color: #292a2a;font-weight: bold; font-size: 11px; padding-bottom:5px;" colspan="6"></th>
+                                </tr>
+                                <tr>
+                                    <td style="color: black;  font-size: 10px;" colspan="6"></td>
+                                </tr>
+                                <tr style="background-color: #eff3fb">
+                                    <td style="border: silver 1px solid; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px;padding:0 5px;"><strong>@Admin_Resources.LabelSKU</strong></td>
+                                    <td style="border: silver 1px solid; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px;padding:0 5px;"><strong>@Admin_Resources.LabelProductItem</strong></td>
+                                    <td style="border: silver 1px solid; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px;padding:0 5px;"><strong>@Admin_Resources.LabelDescription</strong></td>
+                                    <td style="border: silver 1px solid; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; text-align:center;"><strong>@Admin_Resources.LabelQty</strong></td>
+                                    <td style="border: silver 1px solid; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px;padding:0 5px;"><strong>@Admin_Resources.LabelPrice</strong></td>
+                                    <td style="border: silver 1px solid; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px;padding:0 5px;text-align:right;"><strong>@Admin_Resources.LabelTotal</strong></td>
+                                </tr>
+                                @foreach (var cartItem in Model.CartInformation.ShoppingCartItems.AsEnumerable()?.Reverse())
+                                {
+                                    <tr>
+                                        <td style="border: silver 1px solid; font-family: Verdana, Helvetica, sans-serif;color: #333333; font-size: 10px;padding:0 5px;text-align:left; width:10%;">
+                                            @cartItem.SKU
+                                            @if (!string.IsNullOrEmpty(cartItem.DownloadableProductKey))
+                                            {
+                                                <br />
+                                                List<string> keys = cartItem?.DownloadableProductKey.Split(',').ToList();
+                                                <h10>Product Keys</h10>
+                                                foreach (string item in keys)
+                                                { <div>@Html.RenderBlock(item)</div>}
+                                        }
+                                        </td>
+
+                                        <td style="border: silver 1px solid; font-family: Verdana, Helvetica, sans-serif;color: #333333; font-size: 10px;padding:0 5px;text-align:left; width:25%;">@Html.RenderBlock(cartItem.ProductName)</td>
+                                        <td style="border: silver 1px solid; font-family: Verdana, Helvetica, sans-serif;color: #333333; font-size: 10px;padding:0 5px;text-align:left; width:25%;">
+                                            @if (cartItem?.PersonaliseValuesDetail?.Count > 0)
+                                            {
+                                                foreach (var item in cartItem.PersonaliseValuesDetail)
+                                                {
+                                                    if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                                                    {
+                                                        <p> @item.PersonalizeName : @item.PersonalizeValue </p>
+                                                    }
+                                                }
+                                            }
+                                            else if (cartItem?.PersonaliseValuesList?.Count > 0)
+                                            {
+                                                foreach (var item in cartItem?.PersonaliseValuesList)
+                                                {
+                                                    if (!Equals(item.Value, null) && !Equals(item.Value, string.Empty))
+                                                    {
+                                                        <p>
+                                                            @item.Key: @item.Value
+                                                        </p>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @Html.RenderBlock(@cartItem.Description)
+                                            }
+                                        </td>
+                                        <td style="border: silver 1px solid; font-family: Verdana, Helvetica, sans-serif;color: #333333; font-size: 10px;padding:0 5px;text-align:center; width:15%;">@cartItem.Quantity</td>
+                                        <td style="border: silver 1px solid; font-family: Verdana, Helvetica, sans-serif;color: #333333; font-size: 10px;padding:0 5px; text-align:left; width:15%;">@HelperMethods.FormatPriceWithCurrency(cartItem.UnitPrice, cultureCode)</td>
+                                        <td style="border: silver 1px solid; font-family: Verdana, Helvetica, sans-serif;color: #333333; font-size: 10px;padding:0 5px; text-align:right; width:15%;">@HelperMethods.FormatPriceWithCurrency(cartItem.ExtendedPrice, cultureCode)</td>
+                                    </tr>
+                                }
+
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td style="text-align:left; border-left: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; padding:3px 5px;" colspan="2"><strong>@Admin_Resources.LabelSubTotal</strong></td>
+                                    <td style="text-align:right;border-right: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; padding:3px 5px;">@HelperMethods.FormatPriceWithCurrency(Model.CartInformation.SubTotal, cultureCode)</td>
+                                </tr>
+                                @if (Model.CartInformation.ImportDuty > 0)
+                                {
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <td style="text-align:left;border-left: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; padding:3px 5px;" colspan="2"><strong>@Admin_Resources.LabelImportDuty</strong></td>
+                                        <td style="text-align:right;border-right: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; padding:3px 5px;">@HelperMethods.FormatPriceWithCurrency(Model.CartInformation.ImportDuty, cultureCode)</td>
+                                    </tr>
+                                }
+                                @if (Model.CartInformation.TaxCost > 0)
+                                {
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <td style="text-align:left;border-left: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; padding:3px 5px;" colspan="2"><strong>@Admin_Resources.LabelTax</strong></td>
+                                        <td style="text-align:right;border-right: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; padding:3px 5px;">@HelperMethods.FormatPriceWithCurrency(Model.CartInformation.TaxCost, cultureCode)</td>
+                                    </tr>
+                                    if ( Model?.CartInformation?.TaxSummaryList?.Count > 0)
+                                    {
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <td style="border-left: 1px solid silver;  border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; background-color: #eff3fb; font-size: 9px; padding: 3px 5px;" align="left"><strong>@Admin_Resources.ColumnTitleTaxName</strong></td>
+                                            <td style="border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; background-color: #eff3fb; font-size: 9px; padding: 3px 5px;" align="center"><strong>@Admin_Resources.ColumnTitleRate</strong></td>
+                                            <td style="border-right: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; background-color: #eff3fb; font-size: 9px; padding: 3px 5px;" align="right"><strong>@Admin_Resources.ColumnTitleTaxesFees</strong></td>
+                                        </tr>
+                                        foreach (var tax in Model.CartInformation.TaxSummaryList)
+                                        {
+                                            <tr>
+                                                <td colspan="3"></td>
+                                                <td style="border-left: 1px solid silver; border-bottom: 1px solid silver;  font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 9px; padding: 3px 5px;" align="left">@tax.TaxName</td>
+                                                <td style="border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 9px; padding: 3px 5px;" align="center">@tax.Rate</td>
+                                                <td style="border-right: 1px solid silver;  border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 9px; padding: 3px 5px;" align="right">@tax.Tax</td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                                @if (Model.CartInformation.ShippingCost > 0)
+                                {
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <td style="text-align:left;border-left: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; padding:3px 5px;" colspan="2"><strong>@Admin_Resources.LabelShippingCost (@HttpUtility.HtmlDecode(Model.QuoteInformation.ShippingTypeDescription))</strong></td>
+                                        <td style="text-align:right;border-right: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; padding:3px 5px;">@HelperMethods.FormatPriceWithCurrency(Model.CartInformation.ShippingCost, cultureCode)</td>
+                                    </tr>
+                                }
+                                 @if (Model.CartInformation.ShippingHandlingCharges > 0)
+                                {
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <td style=" text-align:left;border-left: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; padding:3px 5px;" colspan="2"><strong>@Admin_Resources.LabelShippingHandlingCharges)</strong></td>
+                                        <td style="text-align:right;border-right: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; padding:3px 5px;">@HelperMethods.FormatPriceWithCurrency(Model.CartInformation.ShippingHandlingCharges, cultureCode)</td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td style="border-left: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #292a2a; font-size: 11px;padding: 5px;" align="left" colspan="2"><strong>@Admin_Resources.LabelQuoteTotal</strong></td>
+                                    <td style="text-align:right;border-right: 1px solid silver; border-bottom: 1px solid silver; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px; padding: 5px;"><strong>@HelperMethods.FormatPriceWithCurrency(Model.CartInformation.Total, cultureCode)</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-sm-12 nopadding cart-summary">
+                        <p class="text-center margin-top-bottom no-record">@Admin_Resources.TextNoOrderedItems</p>
+                    </div>
+                }
+            </div>
+            <table style="border-collapse: separate; border-spacing: 0px;width:100%; padding:10px; display: inline-block;" aria-describedby="Ordered Items Details">
+                <tbody>
+                    <tr>
+                        <th scope="col" colspan="2" style="white-space:nowrap; text-align:left;border: none; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px;">
+                            <div style="color: #292a2a; font-weight: bold; font-size: 11px; padding-bottom: 5px;"></div>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="border: none; font-family: Verdana, Helvetica, sans-serif; color: #333333; font-size: 10px;">
+                            <div  style="width: 675px;text-align:justify;">	</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="border: none; font-family: Verdana, Helvetica, sans-serif;color: #333333; font-size: 10px;">
+                            <div style="margin-bottom: 5px;">&nbsp;</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style=" text-align:left; white-space:nowrap; border: none; font-family: Verdana, Helvetica, sans-serif;color: #333333; font-size: 10px;">									</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

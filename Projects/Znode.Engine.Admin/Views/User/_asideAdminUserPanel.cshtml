@@ -1,0 +1,23 @@
+﻿
+@{
+    bool hasUserId = Model.GetType().GetProperty("UserId") != null;
+    int user_Id = hasUserId ? Model.UserId : Model.EntityId;
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    bool isSalesRep = Equals(controllerName, "SalesRep");
+}
+<aside>
+    <button id="slide-menu" class="slide-menu-btn" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+
+            @if (isSalesRep)
+            {
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.GeneralSettings, "EditUser", "SalesRep", new { userId = user_Id }, new { @data_test_selector = "linkGeneralSettings" })</li>
+            }
+            else
+            {
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.GeneralSettings, "EditUser", "User", new { userId = user_Id }, new { @data_test_selector = "linkGeneralSettings" })</li>
+            }
+        </ul>
+    </div>
+</aside>

@@ -1,0 +1,228 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model AddressViewModel
+@{
+    string _IsDefaultShippingValidation = Model.IsDefaultShipping ? "onclick=\"return false;\" onkeydown=\"return false;\"" : string.Empty;
+    string _IsDefaultBillingValidation = Model.IsDefaultBilling ? "onclick=\"return false;\" onkeydown=\"return false;\"" : string.Empty;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string display = string.Empty;
+    Model.IsBilling = true;
+    Model.IsShipping = true;
+    if (Model.UserId > 0)
+    {
+        display = ((Model.ListCount <= 0 && Model.AddressId <= 0) && string.IsNullOrEmpty(Model.FromBillingShipping)) ? "display:none" : display;
+    }
+}
+<div>
+    @if (Model?.AddressId > 0 && !Model.IsGuest && Model.DontAddUpdateAddress)
+    {
+    <div class="form-group">
+        <div id="divmessage" class="address-note">Note : @Admin_Resources.OmsUnsavedAddressNote</div>
+    </div>
+    }
+    @if (!Model.IsGuest)
+    {
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(m => m.DisplayName, new { @class = "required", @data_test_selector = "lblDisplayName" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.DisplayName, new { @data_test_selector = "txtDisplayName" })
+                @Html.ValidationMessageFor(model => model.DisplayName, "", new { @data_test_selector = "valDisplayName" })
+            </div>
+            @Html.Partial("_HelpText", @Admin_Resources.HelptextAddressName)
+        </div>
+    </div>
+    }
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(m => m.FirstName, new { @class = "required", @data_test_selector = "lblFirstName" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.FirstName, new { @data_test_selector = "txtFirstName" })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @data_test_selector = "valFirstName" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(m => m.LastName, new { @class = "required", @data_test_selector = "lblLastName" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.LastName, new { @data_test_selector = "txtLastName" })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @data_test_selector = "valLastName" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lblCompanyName">@Admin_Resources.HeaderCompanyName</label>
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.CompanyName, new { @data_test_selector = "txtCompanyName" })
+                @Html.ValidationMessageFor(model => model.CompanyName, "", new { @data_test_selector = "valCompanyName" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(m => m.Address1, new { @class = "required", @data_test_selector = "lblAddress1" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.Address1, new { @data_test_selector = "txtAddress1" })
+                @Html.ValidationMessageFor(model => model.Address1, "", new { @data_test_selector = "valAddress1" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(m => m.Address2, new { @data_test_selector = "lblAddress2" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.Address2, new { @data_test_selector = "txtAddress2" })
+                @Html.ValidationMessageFor(model => model.Address2, "", new { @data_test_selector = "valAddress2" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.CountryName, new { @data_test_selector = "lblCountryName" })
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(model => model.CountryName, Model.Countries, new { @onchange = "Account.prototype.BindStates()", @id = "CountryCode", @data_test_selector = "drpCountryName" })
+                @Html.ValidationMessageFor(m => m.CountryName, "", new { @data_test_selector = "valCountryName" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(m => m.StateName, new { @data_test_selector = "lblStateName" })
+            </div>
+            <div class="control-md">
+                <div id="dev-statecode-textbox">
+                    @Html.TextBoxFor(model => model.StateName, new { @id = "StateName", @data_test_selector = "txtStateName" })
+                </div>
+                <div style="display:none;" id="dev-statecode-select">
+                    <select class="valid" id="SelectStateName" name="StateName"></select>
+                </div>
+                @Html.ValidationMessageFor(model => model.StateName, "", new { @data_test_selector = "valStateName" })
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.CityName, new { @class = "required", @data_test_selector = "lblCityName" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.CityName, new { @id = "StateName", @data_test_selector = "txtCityName" })
+                    @Html.ValidationMessageFor(model => model.CityName, "", new { @data_test_selector = "valCityName" })
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.AddressId)
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(m => m.PostalCode, new { @class = "required", @data_test_selector = "lblPostalCode" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.PostalCode, new { @id = "TextPostalCode", @data_test_selector = "txtPostalCode" })
+                @Html.ValidationMessageFor(model => model.PostalCode, "", new { @data_test_selector = "valPostalCode" })
+                <span class="error-msg" id="ValidatePostalCode" style="display: none;" data-test-selector="valPostalCode">@Admin_Resources.ValidationPostalCode</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="billingPhoneNo">
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.PhoneNumber, new { @class = "required", @data_test_selector = "lblPhoneNumber" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.PhoneNumber, new { @data_test_selector = "txtPhoneNumber" })
+                    @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @data_test_selector = "valPhoneNumber" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chkShippingBilling" style=@display>
+        <div class="form-group" id="DefaultBillingAddressDiv">
+            <div class="control-md control-non">
+                <label>
+                    <input checked="@Model.IsDefaultBilling" data-test-selector="chk@(Admin_Resources.TextDefaultBillingAddress.Replace(" "," "))" id="CompanyAccount_Address_IsDefaultBilling" name="@(Model.CheckboxPrefix)IsDefaultBilling" @Html.RenderBlock(_IsDefaultBillingValidation) type="checkbox" value="true">
+                    <span data-test-selector="span@(Admin_Resources.TextDefaultBillingAddress.Replace(" "," "))" class="lbl padding-8">@Admin_Resources.TextDefaultBillingAddress</span>
+                    <input name="@(Model.CheckboxPrefix)IsDefaultBilling" type="hidden" value="false">
+                </label>
+            </div>
+        </div>
+        <div class="form-group" id="DefaultShippingAddressDiv">
+            <div class="control-md control-non">
+                <label>
+                    <input checked="@Model.IsDefaultShipping" data-test-selector="chk@(Admin_Resources.TextDefaultShippingAddress.Replace(" "," "))" id="CompanyAccount_Address_IsDefaultShipping" name="@(Model.CheckboxPrefix)IsDefaultShipping" @Html.RenderBlock(_IsDefaultShippingValidation) type="checkbox" value="true">
+                    <span data-test-selector="span@(Admin_Resources.TextDefaultShippingAddress.Replace(" "," "))" class="lbl padding-8">@Admin_Resources.TextDefaultShippingAddress</span>
+                    <input name="@(Model.CheckboxPrefix)IsDefaultShipping" type="hidden" value="false">
+                </label>
+            </div>
+        </div>
+        <div class="input-checkbox_container" style="display:none !important">
+            <label class="input-checkbox-IsAddUpdateAddress">
+                <input type="checkbox" class="input-checkbox" name="DontAddUpdateAddress" id="is_addupdate_address" checked="checked" value="false" text="Add/update my address book">
+                <span class="input-checkbox_appearance">
+                    <svg viewBox="0 0 20.7 20.7">
+                        <path d="M11.2 18.3H9.3L7 12.1H5.5V9.8h3l1.7 4.5 4-11.6h2.4z" />
+                    </svg>
+                </span>
+                <span class="lbl padding-8">Add/update my address book</span>
+            </label>
+        </div>
+
+    </div>
+    @if (Model.AddressId <= 0)
+    {
+    @Html.HiddenFor(m => m.ListCount)
+    }
+    @Html.HiddenFor(m => m.AccountId)
+    @Html.HiddenFor(m => m.AccountAddressId)
+    @Html.HiddenFor(m => m.UserId)
+    @Html.HiddenFor(m => m.UserAddressId)
+    @Html.HiddenFor(m => m.PortalId)
+    @Html.HiddenFor(m => m.IsGuest)
+    @Html.HiddenFor(m => m.ExternalId)
+    @Html.HiddenFor(m => m.omsOrderShipmentId)
+    @Html.HiddenFor(m => m.FromBillingShipping, new { @id ="hdnFromBillingShipping"})
+    @Html.HiddenFor(m => m.IsShippingBillingDifferent)
+    @Html.HiddenFor(m => m.IsShipping)
+    @Html.HiddenFor(m => m.IsBilling)
+    @Html.HiddenFor(m => m.DontAddUpdateAddress)
+    @Html.HiddenFor(m => m.StateName, new { @id = "hdn_StateCode" })
+    @if (controllerName.ToLower() == "order")
+    {
+    @Html.HiddenFor(m => m.IsDefaultBilling)
+    @Html.HiddenFor(m => m.IsDefaultShipping)
+    }
+</div>
+<script>
+    //Bootstrap ToolTip Call
+    $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover', html: true });
+    var controllerName = '@controllerName.ToLower()';
+    if (controllerName == "order") {
+        Order.prototype.RemoveFormDataValidation();
+    }
+
+    Account.prototype.BindStates();
+</script>

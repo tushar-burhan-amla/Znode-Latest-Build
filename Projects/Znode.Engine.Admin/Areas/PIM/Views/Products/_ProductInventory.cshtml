@@ -1,0 +1,192 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.Extensions;
+@model InventorySKUViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = "AddUpdateSKUInventoryProduct"; //ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = "Inventory"; //ViewContext.RouteData.Values["controller"].ToString();
+    bool isDownloadable = Model.IsDownloadable;
+}
+
+@using (Ajax.BeginForm(actionName, controllerName,
+                         new AjaxOptions
+                         {
+                             HttpMethod = "Post",
+                             OnSuccess = "Products.prototype.SuccessErrorInventoryNotification",
+                         }, new { @id = "frmProductInventory" }))
+{
+    if (!isDownloadable)
+    {
+        <div class="panel-container">
+            <div class="pull-right">
+                <button type="submit" class="btn-text btn-text-secondary" data-test-selector="linkSave">@Admin_Resources.ButtonSave</button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="panel-container">
+            <div class="pull-right">
+                <button type="button" onclick="Products.prototype.SaveProductInventory()" class="btn-text btn-text-color-icon btn-text-secondary">@*<em class="z-save"></em>*@@Admin_Resources.ButtonSave</button>
+            </div>
+        </div>
+    }
+
+    <div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.HeaderWarehouse, new { @class = isDownloadable ? "" : "required" })
+                </div>
+                <div class="control-md">
+
+                    @if (isDownloadable)
+                    {
+                        @Html.DropDownListFor(model => model.WarehouseId, Model.WarehouseNameList,
+                                Admin_Resources.LabelSelectWarehouse,
+                                new { @OnChange = "Products.prototype.GetInventoryBySKU()", @disabled = "disabled" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.WarehouseId, Model.WarehouseNameList,
+                                Admin_Resources.LabelSelectWarehouse,
+                                new { @OnChange = "Products.prototype.GetInventoryBySKU()" })
+
+                        @Html.ValidationMessageFor(model => model.WarehouseId)
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.Quantity, new { @class = isDownloadable ? "" : "required" })
+                </div>
+                <div class="control-md">
+                    @if (isDownloadable)
+                    {
+                        @Html.TextBoxFor(model => model.Quantity, new
+                        {
+                            @validationrule = "RoundOff",
+                             @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForInventory(),
+                             @Message = HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorValidQuantityFromInventoryForRoundOff, Admin_Resources.ErrorValidInventory),
+                             @disabled = "disabled",@id="QuantityInventory"
+                        })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.Quantity, new
+                   {
+                       @validationrule = "RoundOff",
+                       @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForInventory(),
+                       @Message = HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorValidQuantityFromInventoryForRoundOff, Admin_Resources.ErrorValidInventory),
+                       @id = "QuantityInventory"
+
+                   })
+                    }
+                    @Html.ValidationMessageFor(model => model.Quantity)
+
+                </div>
+                <div class="pull-left inventory-add-keys">
+                    @if (isDownloadable)
+                    {
+                        <a class="btn-narrow-icon" id="btnAddKeys" value="Add Keys" data-toggle="tooltip" data-placement="top" data-original-title="Add Keys"
+                           onclick="ZnodeBase.prototype.BrowseAsidePoupPanel('/Inventory/AddDownloadableProductKeys?productId=@Model.ProductId&sku=@Model.SKU','divAsidePanelDownloadableProduct')"><em class="z-add"></em></a>
+                    }
+                </div>
+                @Html.Partial("_HelpText", @Admin_Resources.HelptextQuantityForDownloadableProduct)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.ReOrderLevel)
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.ReOrderLevel, new
+                    {
+                        @validationrule = "RoundOff",
+                        @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForInventory(),
+                        @Message = HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorValidReOrderLevelFromInventoryForRoundOff, Admin_Resources.ErrorValidInventory)
+                    })
+
+                    @Html.ValidationMessageFor(model => model.ReOrderLevel)
+                </div>
+            </div>
+        </div>
+
+
+        <h3 class="section-heading margin-top-25" data-test-selector="hdgBackorderInformation">Backorder Information</h3>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.BackOrderQuantity, new { @data_test_selector = "lblBackOrderQuantity" })
+                </div>
+                <div class="control-md">
+                    @if (isDownloadable)
+                    {
+                        @Html.TextBoxFor(model => model.BackOrderQuantity, new { @disabled = "disabled", @data_test_selector = "txtBackOrderQuantity" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.BackOrderQuantity, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForInventory(), @Message = HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorValidQuantityFromInventoryForRoundOff, Admin_Resources.ErrorValidBackOrder), @data_test_selector = "txtBackOrderQuantity" })
+                    }
+                    @Html.ValidationMessageFor(model => model.BackOrderQuantity, "", new { @data_test_selector = "valBackOrderQuantity" })
+                </div>
+                @Html.Partial("_HelpText", @Admin_Resources.HelptextBackorderQuantityForDownloadableProduct)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.BackOrderExpectedDate, new { @data_test_selector = "lblBackOrderExpectedDate" })
+                </div>
+                <div class="control-md">
+                    <div class="right-inner-icon">
+                        @if (isDownloadable)
+                        {
+                            @Html.TextBox("BackOrderExpectedDate", Model.BackOrderExpectedDate != null ? Model.BackOrderExpectedDate.ToDateTimeFormat() : string.Empty, new { @disabled = "disabled", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtBackOrderExpectedDate" })
+                        }
+                        else
+                        {
+                            @Html.TextBox("BackOrderExpectedDate", Model.BackOrderExpectedDate != null ? Model.BackOrderExpectedDate.ToDateTimeFormat() : string.Empty, new { @class = "datepicker", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtBackOrderExpectedDate" })
+                        }
+                        <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.BackOrderExpectedDate, "", new { @data_test_selector = "valBackOrderExpectedDate" })
+                </div>
+                @Html.Partial("_HelpText", @Admin_Resources.HelptextBackorderExpectedDateForDownloadableProduct)
+            </div>
+        </div>
+
+    </div>
+
+    @Html.HiddenFor(m => m.InventoryListId)
+    @Html.HiddenFor(m => m.InventoryId)
+    @Html.HiddenFor(m => m.ListName)
+    @Html.HiddenFor(m => m.SKU)
+    @Html.HiddenFor(m => m.Quantity)
+    @Html.HiddenFor(m => m.ProductId)
+    @Html.HiddenFor(m => m.IsDownloadable)
+    @Html.HiddenFor(m => m.ProductId, new { id = "hdnProductId" })
+}
+
+@if (isDownloadable)
+{
+    <div id="GetDownloadableProductKeys"></div>
+}
+
+<div id="divAsidePanelDownloadableProduct" class="aside-popup-panel modal-dialog modal-xl">
+    @*Partial View*@
+</div>
+
+@*<div id="skuList" class="aside-popup-panel"></div>*@
+<script>
+    CommonHelper.prototype.DisplayTooltip();
+</script>
+@Scripts.Render("~/bundles/jqueryval")

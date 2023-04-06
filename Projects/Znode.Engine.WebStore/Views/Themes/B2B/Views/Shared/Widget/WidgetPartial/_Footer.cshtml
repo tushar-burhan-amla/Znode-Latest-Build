@@ -1,0 +1,34 @@
+﻿@using Znode.Engine.WebStore.Agents
+@using Znode.Libraries.ECommerce.Utilities
+@{              
+                int portalId = PortalAgent.CurrentPortal.PortalId;
+                string logo = !string.IsNullOrEmpty(PortalAgent.CurrentPortal.WebsiteLogo) ? MediaPaths.MediaPath + PortalAgent.CurrentPortal.WebsiteLogo : string.Empty;
+                string title = PortalAgent.CurrentPortal.WebsiteTitle;
+}
+<div class="row footer-container pb-4">
+    <div class="col-12 col-lg-6 col-xl-5">
+        <div class="row" itemscope itemtype="http://schema.org/WebPage">
+            <div class="col-12 col-md-6 footer-block mt-5">
+                <z-widget>@Html.WidgetPartial("CustomerSupport", "CustomerSupport", "109", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())</z-widget>
+            </div>
+            <div class="col-12 col-md-6 footer-block mt-4 mt-md-5 p-lg-0">
+                <h3 class="footer-header" data-test-selector="lblFooterHelpHeading">@WebStore_Resources.LabelHelp</h3>
+                <z-widget>@Html.WidgetPartial("LinkPanel", "HelpSection", "2243", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), PortalAgent.CurrentPortal.PortalId)</z-widget>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-6 col-xl-5">
+        <div class="row" itemscope itemtype="http://schema.org/WebPage">
+            <div class="col-12 col-md-6 footer-block mt-5">
+                <h3 class="footer-header" data-test-selector="lblFooterStoreInfo">@WebStore_Resources.TitleStoreInfo</h3>
+                <z-widget>@Html.WidgetPartial("LinkPanel", "StoreInfo", "2253", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), PortalAgent.CurrentPortal.PortalId)</z-widget>
+            </div>
+            <div class="col-12 col-md-6 footer-block mt-4 mt-md-5">
+                <img data-src="@logo" alt="@title" class="img-fluid b-lazy" />
+                <div class="footer-copyright mt-2 mb-4 mb-lg-3 key-FooterCopyrightText">@Html.RenderMessage(WebStoreConstants.FooterCopyrightText)</div>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="javascript:void(0);" class="back-to-top" data-test-selector="linkBackToTop" aria-hidden="true" tabindex="-1"><span class="up-icon"></span></a>
+<script>$('[itemtype = "http://schema.org/WebPage"] a').attr("itemprop", "significantLinks"); $('.back-to-top').click(function(){ $("html, body").animate({ scrollTop: 0 }, 600);});</script>

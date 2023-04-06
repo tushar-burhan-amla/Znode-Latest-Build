@@ -1,0 +1,90 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model ConfigurationSettingViewModel
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront; ;
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div class="col-sm-12 title-container">
+    <h1>@GlobalSetting_Resources.TitleGlobalSetting</h1>
+    <div class="pull-right btn-container">
+        <a id="dvSave" data-test-selector="linkSave" class="btn-text btn-text-secondary" onclick="SaveCancel.prototype.SubmitForm('frmConfigurationSetting')">Save</a>
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/Views/Shared/_asideGlobalSettingPanel.cshtml")
+    <section class="main-container">
+        @using (Html.BeginForm("UpdateConfigurationSettings", controllerName, FormMethod.Post, new { id = "frmConfigurationSetting", @class = "dirtyignore" }))
+        {
+            <h3 class="section-heading" data-test-selector="hdgAnalyticsSettings">@GlobalSetting_Resources.LabelPromotionAndCouponSettings</h3>
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+
+                        <div class="control-label">
+                            <label>@Admin_Resources.LabelPromotionAndCouponTogether</label>
+                        </div>
+                        <div class="switch-field control-yes-no">
+                            @if (Model.IsAllowWithOtherPromotionsAndCoupons)
+                            {
+                                @Html.RadioButtonFor(x => x.IsAllowWithOtherPromotionsAndCoupons, "true", new { @name = "btnAllowedPromotionsAndCoupons", @checked = true, @id = "AllowedPromotionsAndCoupons_left" }) <label for="AllowedPromotionsAndCoupons_left">Yes</label>
+                                @Html.RadioButtonFor(x => x.IsAllowWithOtherPromotionsAndCoupons, "false", new { @name = "btnAllowedPromotions", @id = "AllowedPromotionsAndCoupons_right" }) <label for="AllowedPromotionsAndCoupons_right">No</label>
+                            }
+                            else
+                            {
+                                @Html.RadioButtonFor(x => x.IsAllowWithOtherPromotionsAndCoupons, "true", new { @name = "btnAllowedPromotionsAndCoupons", @id = "AllowedPromotionsAndCoupons_left" }) <label for="AllowedPromotionsAndCoupons_left">Yes</label>
+                                @Html.RadioButtonFor(x => x.IsAllowWithOtherPromotionsAndCoupons, "false", new { @name = "btnAllowedPromotionsAndCoupons", @checked = true, @id = "AllowedPromotionsAndCoupons_right" }) <label for="AllowedPromotionsAndCoupons_right">No</label>}
+                        </div>
+
+                        <div class="help-text">
+                            <em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpTextAllowedPromotions"></em>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-12 nopadding">
+                        <div class="col-xs-8 nopadding">
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.Label(@Admin_Resources.LabelPromotionsWithExceptions)
+                                    </div>
+                                    <div class="control-md">
+                                        @Html.TextBoxFor(model => model.AllowedPromotions, new { @id = "ValPromotionsWithExceptions" })
+                                    </div>
+                                    <div class="help-text">
+                                        <em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpTextPromotionsWithExceptions"></em>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+
+                        <div class="control-label">
+                            <label>@Admin_Resources.LabelCalculateTaxOnDiscountedPrice</label>
+                        </div>
+                        <div class="switch-field control-yes-no">
+                            @if (Model.IsCalculateTaxAfterDiscount)
+                            {
+                                @Html.RadioButtonFor(x => x.IsCalculateTaxAfterDiscount, "true", new { @name = "btnIsCalculateTaxAfterDiscount", @checked = true, @id = "IsCalculateTaxAfterDiscount_left" }) <label for="IsCalculateTaxAfterDiscount_left">Yes</label>
+                                @Html.RadioButtonFor(x => x.IsCalculateTaxAfterDiscount, "false", new { @name = "btnApprovalManagement", @id = "IsCalculateTaxAfterDiscount_right" }) <label for="IsCalculateTaxAfterDiscount_right">No</label>
+                            }
+                            else
+                            {
+                                @Html.RadioButtonFor(x => x.IsCalculateTaxAfterDiscount, "true", new { @name = "btnIsCalculateTaxAfterDiscount", @id = "IsCalculateTaxAfterDiscount_left" }) <label for="IsCalculateTaxAfterDiscount_left">Yes</label>
+                                @Html.RadioButtonFor(x => x.IsCalculateTaxAfterDiscount, "false", new { @class = "ApprovalManagement", @name = "btnIsCalculateTaxAfterDiscount", @checked = true, @id = "IsCalculateTaxAfterDiscount_right" }) <label for="IsCalculateTaxAfterDiscount_right">No</label>}
+                        </div>
+                        <div class="help-text">
+                            <em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpTextCalculateTaxOnDiscountedPrice"></em>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+</div>

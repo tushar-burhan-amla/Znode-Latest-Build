@@ -1,0 +1,30 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PortalSortSettingListViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmPriceManagement" };
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelStore)<em class="z-minus"></em><span>@Model.PortalName</span></h1>
+    <div class="pull-right">
+        @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "List", "Store", null, new { @class = "btn-text-icon" })
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    <aside>
+        @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+    </aside>
+    <!--Main Container-->
+    <section class="main-container">
+            @*Div for creating tabs*@
+            <div class="nopadding padding-top">
+                @Html.Hidden("PortalId", Convert.ToInt32(Request.QueryString["PortalId"]))
+                @{Html.RenderAction("GetTabStructureForSearch", controllerName, new { @portalId = @Model.PortalId });}
+            </div>
+    </section>
+</div>

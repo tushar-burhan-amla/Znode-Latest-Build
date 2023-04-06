@@ -1,0 +1,43 @@
+﻿<form name="my_form" enctype="multipart/form-data">
+    <input type="file" id="FileUpload" name="my_field" onchange="ValidateUploadedImage(this)">
+    <input type="button" id="richSumbit" value="Submit" onClick="FileBrowserDialogue.mySubmit();">
+    <div id="FileUploader">
+        <div id="richMedia" class="col-sm-12 nopadding">
+        </div>
+
+    </div>
+</form>
+<script src="../References/jquery-1.10.2.min.js"></script>
+<script src="TinymceCustom.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/MediaManager/MediaManager/MediaManagerList',
+            data: {
+                isMediaTileView: true
+            },
+            error: function () {
+                $('#richMedia').html('<p>An error has occurred</p>');
+            },
+            success: function (data) {
+                $("#richMedia").html(data);
+            },
+            type: 'GET'
+        });
+    });
+
+    Upload = function () {
+        var arrayURL = [];
+        $("#grid").find("tr").each(function () {
+            if ($(this).find(".grid-row-checkbox").length > 0) {
+                if ($(this).find(".grid-row-checkbox").is(":checked")) {
+                    var URL = $(this).find(".grid-row-checkbox").parent().parent().find(".imageicon").find("img").attr("src");
+                    arrayURL.push(URL);
+                }
+            }
+        });
+    }
+</script>
+
+

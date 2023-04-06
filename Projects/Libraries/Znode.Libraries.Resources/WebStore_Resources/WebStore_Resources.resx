@@ -1,0 +1,3887 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddressMandatoryMsg" xml:space="preserve">
+    <value>Address field cannot be left blank.</value>
+  </data>
+  <data name="ButtonAddToCart" xml:space="preserve">
+    <value>Add To Cart</value>
+  </data>
+  <data name="ButtonAddToWishlist" xml:space="preserve">
+    <value>Add To Wishlist</value>
+  </data>
+  <data name="ButtonApply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="ButtonApplyGiftCard" xml:space="preserve">
+    <value>Apply Gift Card</value>
+  </data>
+  <data name="ButtonCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ButtonCheckBalance" xml:space="preserve">
+    <value>Check Balance</value>
+  </data>
+  <data name="ButtonCheckout" xml:space="preserve">
+    <value>Checkout</value>
+  </data>
+  <data name="ButtonContinue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="ButtonContinueShopping" xml:space="preserve">
+    <value>Continue Shopping</value>
+  </data>
+  <data name="ButtonCreateAccount" xml:space="preserve">
+    <value>Create Account</value>
+  </data>
+  <data name="ButtonDeleteWishlist" xml:space="preserve">
+    <value>Delete Wishlist</value>
+  </data>
+  <data name="ButtonEditCart" xml:space="preserve">
+    <value>Edit Cart</value>
+  </data>
+  <data name="ButtonLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="ButtonResetPassword" xml:space="preserve">
+    <value>Create Your Password</value>
+  </data>
+  <data name="ButtonSaveChanges" xml:space="preserve">
+    <value>Save Changes</value>
+  </data>
+  <data name="ButtonSubmitRequest" xml:space="preserve">
+    <value>Submit Request</value>
+  </data>
+  <data name="ButtonSubmitReview" xml:space="preserve">
+    <value>Submit Review</value>
+  </data>
+  <data name="CardSecurityNumberRange" xml:space="preserve">
+    <value>Card security number must be a 3 digit number.</value>
+  </data>
+  <data name="CheckBoxTextBillingAddress" xml:space="preserve">
+    <value>Set as default billing address</value>
+  </data>
+  <data name="CheckBoxTextNewsLetter" xml:space="preserve">
+    <value>Receive Periodic Emails And Special Offers</value>
+  </data>
+  <data name="CheckBoxTextShippingAddress" xml:space="preserve">
+    <value>Set as the default shipping address</value>
+  </data>
+  <data name="ColumnAddress" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="ColumnAddressValue" xml:space="preserve">
+    <value>One Microsoft Way&lt;br /&gt;
+	   Redmond, WA 98052-6399</value>
+  </data>
+  <data name="ColumnCity" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="ColumnCompanyName" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="ColumnCountry" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="ColumnCreatePassword" xml:space="preserve">
+    <value>Create a password</value>
+  </data>
+  <data name="ColumnDiscounts" xml:space="preserve">
+    <value>Discount (On Subtotal)</value>
+  </data>
+  <data name="ColumnDisplayName" xml:space="preserve">
+    <value>Display Name</value>
+  </data>
+  <data name="ColumnEmailAddress" xml:space="preserve">
+    <value>Email Address</value>
+  </data>
+  <data name="ColumnFirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="ColumnGeneralEmail" xml:space="preserve">
+    <value>General@example.com</value>
+  </data>
+  <data name="ColumnLastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="ColumnNewPassword" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="ColumnOrderTotal" xml:space="preserve">
+    <value>Order Total</value>
+  </data>
+  <data name="ColumnPassword" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="ColumnPONumber" xml:space="preserve">
+    <value>PO Number</value>
+  </data>
+  <data name="ColumnRating" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="ColumnReTypeNewPassword" xml:space="preserve">
+    <value>Confirm new password</value>
+  </data>
+  <data name="ColumnReTypePassword" xml:space="preserve">
+    <value>Confirm new password</value>
+  </data>
+  <data name="ColumnReview" xml:space="preserve">
+    <value>Review</value>
+  </data>
+  <data name="ColumnReviewFor" xml:space="preserve">
+    <value>Review for</value>
+  </data>
+  <data name="ColumnReviewHeadline" xml:space="preserve">
+    <value>Review headline</value>
+  </data>
+  <data name="ColumnReviewLocation" xml:space="preserve">
+    <value>Your state/country</value>
+  </data>
+  <data name="ColumnReviewName" xml:space="preserve">
+    <value>Your name</value>
+  </data>
+  <data name="ColumnSecurityAnswer" xml:space="preserve">
+    <value>Security Answer</value>
+  </data>
+  <data name="ColumnSecurityQuestion" xml:space="preserve">
+    <value>Security Question</value>
+  </data>
+  <data name="ColumnShipping" xml:space="preserve">
+    <value>Shipping</value>
+  </data>
+  <data name="ColumnState" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="ColumnStreetAddress" xml:space="preserve">
+    <value>Street Address</value>
+  </data>
+  <data name="ColumnSubTotal" xml:space="preserve">
+    <value>Sub Total</value>
+  </data>
+  <data name="ColumnTax" xml:space="preserve">
+    <value>Tax</value>
+  </data>
+  <data name="ColumnTextAdded" xml:space="preserve">
+    <value>Added</value>
+  </data>
+  <data name="ColumnTitleItem" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="ColumnTitleItemPrice" xml:space="preserve">
+    <value>Item Price</value>
+  </data>
+  <data name="ColumnTitlePrice" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="ColumnTitleQty" xml:space="preserve">
+    <value>Qty</value>
+  </data>
+  <data name="ColumnTitleQuantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="ColumnTitleTotal" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="ColumnUsername" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="ColumnYourPrice" xml:space="preserve">
+    <value>Your price</value>
+  </data>
+  <data name="DropdownNameAtoZ" xml:space="preserve">
+    <value>Sort by: Name, A to Z</value>
+  </data>
+  <data name="DropdownNameZToA" xml:space="preserve">
+    <value>Sort by: Name, Z to A</value>
+  </data>
+  <data name="DropdownPopularItems" xml:space="preserve">
+    <value>Sort by: Popular items</value>
+  </data>
+  <data name="DropdownPriceHighToLow" xml:space="preserve">
+    <value>Sort by: Price, High to Low</value>
+  </data>
+  <data name="DropdownPriceLowToHigh" xml:space="preserve">
+    <value>Sort by: Price, Low to High</value>
+  </data>
+  <data name="ErrorAddAddress" xml:space="preserve">
+    <value>Unable to add/update address.</value>
+  </data>
+  <data name="ErrorCardNumber" xml:space="preserve">
+    <value>Enter Valid Credit Card Number.</value>
+  </data>
+  <data name="ErrorChangePassword" xml:space="preserve">
+    <value>Unable to change the password.</value>
+  </data>
+  <data name="ErrorCouponCode" xml:space="preserve">
+    <value>That is not a valid coupon code.</value>
+  </data>
+  <data name="ErrorDefaultBillingAddress" xml:space="preserve">
+    <value>At least one address must be your default billing address.</value>
+  </data>
+  <data name="ErrorDefaultBillingShippingAddress" xml:space="preserve">
+    <value>At least one address must be your default billing and/or shipping address.</value>
+  </data>
+  <data name="ErrorDefaultShippingAddress" xml:space="preserve">
+    <value>At least one address must be your default shipping address.</value>
+  </data>
+  <data name="ErrorDeleteAddress" xml:space="preserve">
+    <value>Addresses cannot be deleted.</value>
+  </data>
+  <data name="ErrorDeleteBillingAddress" xml:space="preserve">
+    <value>Default billing addresses can not be deleted. Set some other address as your default billing address and then try again.</value>
+  </data>
+  <data name="ErrorDeleteShippingAddress" xml:space="preserve">
+    <value>Default shipping addresses can not be deleted. Set some other address as your default shipping address and then try again.</value>
+  </data>
+  <data name="ErrorGiftCard" xml:space="preserve">
+    <value>Gift card invalid</value>
+  </data>
+  <data name="ErrorGiftCardNumber" xml:space="preserve">
+    <value>Gift card number invalid</value>
+  </data>
+  <data name="ErrorLoginWishlist" xml:space="preserve">
+    <value>Please login to add this product to your wishlist.</value>
+  </data>
+  <data name="ErrorNoCartItemsFound" xml:space="preserve">
+    <value>No items found in your cart.</value>
+  </data>
+  <data name="ErrorNoPrimaryAddress" xml:space="preserve">
+    <value>No Address Set</value>
+  </data>
+  <data name="ErrorNoReviewsFound" xml:space="preserve">
+    <value>No Reviews Found</value>
+  </data>
+  <data name="ErrorNoWishlist" xml:space="preserve">
+    <value>No wishlisted products to show.</value>
+  </data>
+  <data name="ErrorOutofStock" xml:space="preserve">
+    <value>Selected quantity is out of stock.</value>
+  </data>
+  <data name="ErrorPasswordMatch" xml:space="preserve">
+    <value>The passwords do not match.</value>
+  </data>
+  <data name="ErrorProcessingRequest" xml:space="preserve">
+    <value>An error occurred while processing your request.</value>
+  </data>
+  <data name="ErrorProductAddWishlist" xml:space="preserve">
+    <value>Product could not be added to wishlist.</value>
+  </data>
+  <data name="ErrorProductDeleteWishlist" xml:space="preserve">
+    <value>Unable to delete the product from the wishlist.</value>
+  </data>
+  <data name="ErrorProductExistingWishlist" xml:space="preserve">
+    <value>This product is already added to your wishlist.</value>
+  </data>
+  <data name="ErrorProductSearchResult" xml:space="preserve">
+    <value>There are currently no products listed under {0}</value>
+  </data>
+  <data name="ErrorSelectAttribute" xml:space="preserve">
+    <value>Selected options are not available, please try a different option.</value>
+  </data>
+  <data name="ErrorUnablePlaceOrder" xml:space="preserve">
+    <value>Unable to place the order.</value>
+  </data>
+  <data name="ErrorUpdateProfile" xml:space="preserve">
+    <value>Unable to update the profile.</value>
+  </data>
+  <data name="ErrorWriteReview" xml:space="preserve">
+    <value>Unable to submit a review.</value>
+  </data>
+  <data name="HintTextCreditCardSecurityNumber" xml:space="preserve">
+    <value>A 3-digit number usually found on the back of your card.</value>
+  </data>
+  <data name="HintTextDisplayName" xml:space="preserve">
+    <value>Examples: Home, Grandma, Dad, Aunt Sally</value>
+  </data>
+  <data name="InvalidAccountInformation" xml:space="preserve">
+    <value>The entered Username is invalid.</value>
+  </data>
+  <data name="InvalidSecurityQuestion" xml:space="preserve">
+    <value>We're sorry, wrong answer. Please try again.</value>
+  </data>
+  <data name="LinkAddNewAddress" xml:space="preserve">
+    <value>Add Address</value>
+  </data>
+  <data name="LinkSeeMore" xml:space="preserve">
+    <value>See more </value>
+  </data>
+  <data name="LinkTextAddress" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="LinkTextAddressBook" xml:space="preserve">
+    <value>Address Book</value>
+  </data>
+  <data name="LinkTextBackToAccount" xml:space="preserve">
+    <value>Back to Your Account</value>
+  </data>
+  <data name="LinkTextChange" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="LinkTextChangeAddress" xml:space="preserve">
+    <value>Change{0} Address</value>
+  </data>
+  <data name="LinkTextChangePassword" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="LinkTextCheckAnotherBalance" xml:space="preserve">
+    <value>Check another balance?</value>
+  </data>
+  <data name="LinkTextClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="LinkTextCompleteOrderHistory" xml:space="preserve">
+    <value>View Complete Order History</value>
+  </data>
+  <data name="LinkTextContactus" xml:space="preserve">
+    <value>Contact us</value>
+  </data>
+  <data name="LinkTextDeleteAddress" xml:space="preserve">
+    <value>Delete this address</value>
+  </data>
+  <data name="LinkTextEditAddress" xml:space="preserve">
+    <value>Edit Address</value>
+  </data>
+  <data name="LinkTextEditCart" xml:space="preserve">
+    <value>Edit Cart</value>
+  </data>
+  <data name="LinkTextEditProfile" xml:space="preserve">
+    <value>Edit Profile</value>
+  </data>
+  <data name="LinkTextForgetPassword" xml:space="preserve">
+    <value>Forgot your Password?</value>
+  </data>
+  <data name="LinkTextGetAnAccount" xml:space="preserve">
+    <value>Get an account</value>
+  </data>
+  <data name="LinkTextGiftcards" xml:space="preserve">
+    <value>Gift cards</value>
+  </data>
+  <data name="LinkTextGuestCheckout" xml:space="preserve">
+    <value>Checkout as a guest</value>
+  </data>
+  <data name="LinkTextLogOff" xml:space="preserve">
+    <value>Log off</value>
+  </data>
+  <data name="LinkTextMoreProductImages" xml:space="preserve">
+    <value>More product images</value>
+  </data>
+  <data name="LinkTextMoreReview" xml:space="preserve">
+    <value>Read {0} more reviews</value>
+  </data>
+  <data name="LinkTextNeedMoreGiftCard" xml:space="preserve">
+    <value>Need more gift cards?</value>
+  </data>
+  <data name="LinkTextOrderHistory" xml:space="preserve">
+    <value>Order History</value>
+  </data>
+  <data name="LinkTextPrimaryBilling" xml:space="preserve">
+    <value>Set as primary Billing</value>
+  </data>
+  <data name="LinkTextPrimaryShipping" xml:space="preserve">
+    <value>Set as primary Shipping</value>
+  </data>
+  <data name="LinkTextReadReviews" xml:space="preserve">
+    <value>Read reviews</value>
+  </data>
+  <data name="LinkTextRemove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="LinkTextRemoveItem" xml:space="preserve">
+    <value>Remove item</value>
+  </data>
+  <data name="LinkTextViewAddressBook" xml:space="preserve">
+    <value>View Address Book</value>
+  </data>
+  <data name="LinkTextViewReviews" xml:space="preserve">
+    <value>View All Reviews</value>
+  </data>
+  <data name="LinkTextViewWishList" xml:space="preserve">
+    <value>View Wishlist</value>
+  </data>
+  <data name="LinkTextWishlist" xml:space="preserve">
+    <value>Wishlist</value>
+  </data>
+  <data name="LinkTextWriteReview" xml:space="preserve">
+    <value>Write a review</value>
+  </data>
+  <data name="LinkTextYourAccount" xml:space="preserve">
+    <value>Your Account</value>
+  </data>
+  <data name="LinkTextYourCart" xml:space="preserve">
+    <value>Your cart</value>
+  </data>
+  <data name="LinkTextYourWishlist" xml:space="preserve">
+    <value>Your wishlist</value>
+  </data>
+  <data name="ProductViewMode" xml:space="preserve">
+    <value>View Mode:</value>
+  </data>
+  <data name="RequiredComments" xml:space="preserve">
+    <value>Comment is required.</value>
+  </data>
+  <data name="RequiredConfirmPassword" xml:space="preserve">
+    <value>You must confirm your password.</value>
+  </data>
+  <data name="RequiredCountryCode" xml:space="preserve">
+    <value>Country Code is required.</value>
+  </data>
+  <data name="RequiredCouponCode" xml:space="preserve">
+    <value>Coupon Code is required.</value>
+  </data>
+  <data name="RequiredDisplayName" xml:space="preserve">
+    <value>Display Name is required.</value>
+  </data>
+  <data name="RequiredFirstName" xml:space="preserve">
+    <value>First Name is required.</value>
+  </data>
+  <data name="RequiredGiftCard" xml:space="preserve">
+    <value>Gift Card number is required</value>
+  </data>
+  <data name="RequiredLastName" xml:space="preserve">
+    <value>Last Name is required.</value>
+  </data>
+  <data name="RequiredNewConfirmPassword" xml:space="preserve">
+    <value>You must confirm your new password.</value>
+  </data>
+  <data name="RequiredNewPassword" xml:space="preserve">
+    <value>New Password is required.</value>
+  </data>
+  <data name="RequiredPassword" xml:space="preserve">
+    <value>Password is required.</value>
+  </data>
+  <data name="RequiredRating" xml:space="preserve">
+    <value>Rating is required.</value>
+  </data>
+  <data name="RequiredReviewHeadline" xml:space="preserve">
+    <value>Review headline is required.</value>
+  </data>
+  <data name="RequiredReviewLocation" xml:space="preserve">
+    <value>Your state/country  is required.</value>
+  </data>
+  <data name="RequiredReviewName" xml:space="preserve">
+    <value>Name is required.</value>
+  </data>
+  <data name="RequiredSecurityAnswer" xml:space="preserve">
+    <value>Security answer is required.</value>
+  </data>
+  <data name="RequiredState" xml:space="preserve">
+    <value>State is required</value>
+  </data>
+  <data name="RequiredStreetAddress" xml:space="preserve">
+    <value>Street Address is required.</value>
+  </data>
+  <data name="RequiredUserName" xml:space="preserve">
+    <value>Username is required.</value>
+  </data>
+  <data name="RequiredUserNameEmail" xml:space="preserve">
+    <value>Username and Email Address are required.</value>
+  </data>
+  <data name="RequiredZipCode" xml:space="preserve">
+    <value>Zip Code is required.</value>
+  </data>
+  <data name="ReviewCreateTime" xml:space="preserve">
+    <value>By {0} in {1} , {2}</value>
+  </data>
+  <data name="SubTextChangePassword" xml:space="preserve">
+    <value>Use the form below to change your password. You will use your new password the next time you login.</value>
+  </data>
+  <data name="SubTextEditProfile" xml:space="preserve">
+    <value>If you change your email address, you will need to use your new email address the next time you login.</value>
+  </data>
+  <data name="SubTextOrderHistory" xml:space="preserve">
+    <value>Select any order to see the complete receipt.</value>
+  </data>
+  <data name="SubTextResetPassword" xml:space="preserve">
+    <value>Submit your Username below and we'll send you a special link to your Email Address to create your password.</value>
+  </data>
+  <data name="SubTextReviewHistory" xml:space="preserve">
+    <value>Select an item to see the complete review with the product. You cannot edit or remove your reviews once they are submitted.</value>
+  </data>
+  <data name="SubTextReviewItems" xml:space="preserve">
+    <value>You have reviewed {0} item(s).</value>
+  </data>
+  <data name="SubTextReviewProducts" xml:space="preserve">
+    <value>You have reviewed {0} product(s).</value>
+  </data>
+  <data name="SubTextWishList" xml:space="preserve">
+    <value>Select any item to view current details.</value>
+  </data>
+  <data name="SubTextWishlistCount" xml:space="preserve">
+    <value>Showing &lt;span id='wishlistcount'&gt;{0}&lt;/span&gt; items.</value>
+  </data>
+  <data name="SubTextWishlistItems" xml:space="preserve">
+    <value>You have marked {0} item(s).</value>
+  </data>
+  <data name="SubTextYourReviews" xml:space="preserve">
+    <value>Your Reviews</value>
+  </data>
+  <data name="SubTextYourWishList" xml:space="preserve">
+    <value>On Your Wishlist</value>
+  </data>
+  <data name="SubTitlePrimaryBilling" xml:space="preserve">
+    <value>Primary Billing</value>
+  </data>
+  <data name="SubTitlePrimaryShipping" xml:space="preserve">
+    <value>Primary Shipping</value>
+  </data>
+  <data name="SubTitleProductReview" xml:space="preserve">
+    <value>View product details</value>
+  </data>
+  <data name="SubTitleReceipt" xml:space="preserve">
+    <value>Receipt</value>
+  </data>
+  <data name="SubTitleRecentOrders" xml:space="preserve">
+    <value>Recent Orders</value>
+  </data>
+  <data name="SubTitleRefineBrowsing" xml:space="preserve">
+    <value>Refine your browsing</value>
+  </data>
+  <data name="SubTitleReviewOrder" xml:space="preserve">
+    <value>Review Order</value>
+  </data>
+  <data name="SuccessAddressAdded" xml:space="preserve">
+    <value>Address created successfully</value>
+  </data>
+  <data name="SuccessAddressUpdated" xml:space="preserve">
+    <value>Address updated successfully</value>
+  </data>
+  <data name="SuccessDeleteAddress" xml:space="preserve">
+    <value>Address deleted successfully</value>
+  </data>
+  <data name="SuccessPasswordChanged" xml:space="preserve">
+    <value>Password changed successfully.</value>
+  </data>
+  <data name="SuccessProductAddWishlist" xml:space="preserve">
+    <value>Product added to your wishlist.</value>
+  </data>
+  <data name="SuccessProductDeleteWishlist" xml:space="preserve">
+    <value>Product deleted from the wishlist.</value>
+  </data>
+  <data name="SuccessProfileUpdated" xml:space="preserve">
+    <value>Profile updated successfully.</value>
+  </data>
+  <data name="SuccessResetPassword" xml:space="preserve">
+    <value>A link to reset the password has been sent to your Email Address.</value>
+  </data>
+  <data name="SuccessWriteReview" xml:space="preserve">
+    <value>Review submitted successfully. Your review will be displayed once it is approved.</value>
+  </data>
+  <data name="TextBackOrderMessage" xml:space="preserve">
+    <value>Back Order</value>
+  </data>
+  <data name="TextCompletePurchase" xml:space="preserve">
+    <value>Complete purchase</value>
+  </data>
+  <data name="TextCopyRights" xml:space="preserve">
+    <value>Copyright 2015 Maxwell's  Inc. All Rights Reserved.</value>
+  </data>
+  <data name="TextCustomerReviews" xml:space="preserve">
+    <value>Reviews</value>
+  </data>
+  <data name="TextCustomerSupport" xml:space="preserve">
+    <value>Customer support</value>
+  </data>
+  <data name="TextDetails" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="TextInstock" xml:space="preserve">
+    <value>In Stock</value>
+  </data>
+  <data name="TextNewCustomer" xml:space="preserve">
+    <value>Sign-up for an account to get quick checkout, address books, and order history.</value>
+  </data>
+  <data name="TextOrderHistory" xml:space="preserve">
+    <value>Showing {0} orders</value>
+  </data>
+  <data name="TextOutofStock" xml:space="preserve">
+    <value>Out of stock</value>
+  </data>
+  <data name="TextPrint" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="TextProductDetails" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="TextProductSpecifications" xml:space="preserve">
+    <value>Specifications</value>
+  </data>
+  <data name="TextReorder" xml:space="preserve">
+    <value>Reorder</value>
+  </data>
+  <data name="TextResetPassword" xml:space="preserve">
+    <value>Reset password</value>
+  </data>
+  <data name="TextReviews" xml:space="preserve">
+    <value>All submissions are reviewed and must be approved before they are displayed along with the product. We reserve the right to reject or edit reviews that we deem inappropriate due to language or content.</value>
+  </data>
+  <data name="TextStoreName" xml:space="preserve">
+    <value>Store name</value>
+  </data>
+  <data name="TextSwatchOnCategoryPage" xml:space="preserve">
+    <value>Colors</value>
+  </data>
+  <data name="TextYourTotal" xml:space="preserve">
+    <value>Your total is</value>
+  </data>
+  <data name="TitleAccount" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="TitleAccountProfile" xml:space="preserve">
+    <value>Account Profile</value>
+  </data>
+  <data name="TitleAddAddress" xml:space="preserve">
+    <value>Add{0} Address</value>
+  </data>
+  <data name="TitleAddressBook" xml:space="preserve">
+    <value>Address Book</value>
+  </data>
+  <data name="TitleAddresses" xml:space="preserve">
+    <value>Addresses</value>
+  </data>
+  <data name="TitleAllAddress" xml:space="preserve">
+    <value>All Addresses</value>
+  </data>
+  <data name="TitleBillingAddress" xml:space="preserve">
+    <value>Billing Address</value>
+  </data>
+  <data name="TitleBillingTo" xml:space="preserve">
+    <value>Billing To:</value>
+  </data>
+  <data name="TitleChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="TitleCreditCard" xml:space="preserve">
+    <value>Credit card</value>
+  </data>
+  <data name="TitleCustomerLogin" xml:space="preserve">
+    <value>Customer Login</value>
+  </data>
+  <data name="TitleDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="TitleEditAddress" xml:space="preserve">
+    <value>Edit Address</value>
+  </data>
+  <data name="TitleEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="TitleGiftCard" xml:space="preserve">
+    <value>Gift card</value>
+  </data>
+  <data name="TitleHelp" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="TitleNewCustomer" xml:space="preserve">
+    <value>New Customer?</value>
+  </data>
+  <data name="TitleOrder" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="TitleOrderReceipt" xml:space="preserve">
+    <value>Order receipt {0}</value>
+  </data>
+  <data name="TitlePayment" xml:space="preserve">
+    <value>Payment</value>
+  </data>
+  <data name="TitlePhone" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="TitleProductReview" xml:space="preserve">
+    <value>Product review</value>
+  </data>
+  <data name="TitlePurchaseOrder" xml:space="preserve">
+    <value>Purchase order</value>
+  </data>
+  <data name="TitleRegisterAccount" xml:space="preserve">
+    <value>Register for an Account</value>
+  </data>
+  <data name="TitleReviewHistory" xml:space="preserve">
+    <value>Review history</value>
+  </data>
+  <data name="TitleShippingAddress" xml:space="preserve">
+    <value>Shipping Address</value>
+  </data>
+  <data name="TitleStoreInfo" xml:space="preserve">
+    <value>Store info</value>
+  </data>
+  <data name="TitleSummary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="TitleTotal" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="ValidCouponCode" xml:space="preserve">
+    <value>The promotion attached to this coupon code was applied!</value>
+  </data>
+  <data name="ValidEmailAddress" xml:space="preserve">
+    <value>Please enter a valid email address.</value>
+  </data>
+  <data name="ValidGiftCard" xml:space="preserve">
+    <value>Gift card applied to order.</value>
+  </data>
+  <data name="ValidPassword" xml:space="preserve">
+    <value>Password must be at least 8 alphanumeric characters and contain at least one number.</value>
+  </data>
+  <data name="AddMoreButtonLabel" xml:space="preserve">
+    <value>Add More</value>
+  </data>
+  <data name="AddNewCreditCardDetails" xml:space="preserve">
+    <value>Add New Credit Card</value>
+  </data>
+  <data name="AddressValidationFailed" xml:space="preserve">
+    <value>Your Shipping Address is not a valid address. Please enter valid address to continue.</value>
+  </data>
+  <data name="AutoCompleteLabelQuickOrder" xml:space="preserve">
+    <value>&lt;div class="auto-list"&gt;&lt;h4&gt;{0}&lt;/h4&gt;&lt;p&gt;{1}&lt;/p&gt;&lt;p&gt;{2}&lt;/p&gt;&lt;p&gt;{3}&lt;/p&gt;&lt;p&gt;{4}&lt;/p&gt;&lt;/div&gt;&lt;div class="auto-img"&gt;&lt;img class="img-responsive" src={5} onerror="this.src='/Content/Images/no-image.png';" &gt;&lt;/div&gt;</value>
+  </data>
+  <data name="BackNavigation" xml:space="preserve">
+    <value>Back to the Product page</value>
+  </data>
+  <data name="BillingAddressRequired" xml:space="preserve">
+    <value>Billing Address is required.</value>
+  </data>
+  <data name="BillingAddressValidationFailed" xml:space="preserve">
+    <value>Your Billing Address is not a valid address. Please enter valid address to continue.</value>
+  </data>
+  <data name="ButtonAddToTemplate" xml:space="preserve">
+    <value>Add To Template</value>
+  </data>
+  <data name="ButtonApprove" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="ButtonBack" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="ButtonBackToProduct" xml:space="preserve">
+    <value>Back to Product</value>
+  </data>
+  <data name="ButtonClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="ButtonContinueToCart" xml:space="preserve">
+    <value>Continue to Cart</value>
+  </data>
+  <data name="ButtonGenerateInvoice" xml:space="preserve">
+    <value>Generate Invoice</value>
+  </data>
+  <data name="ButtonProceedToCheckout" xml:space="preserve">
+    <value>Proceed to Checkout</value>
+  </data>
+  <data name="ButtonQuickView" xml:space="preserve">
+    <value>Quick View</value>
+  </data>
+  <data name="ButtonReject" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="ButtonReview" xml:space="preserve">
+    <value>In Review</value>
+  </data>
+  <data name="ButtonSaveDraft" xml:space="preserve">
+    <value>Save Draft</value>
+  </data>
+  <data name="ButtonSearch" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="ButtonSubmit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="ButtonSubmitForApproval" xml:space="preserve">
+    <value>Submit for Approval</value>
+  </data>
+  <data name="ButtonUpdateStatus" xml:space="preserve">
+    <value>Update Status</value>
+  </data>
+  <data name="CategoryProductCompareErrorMessage" xml:space="preserve">
+    <value>This product can not be compared.</value>
+  </data>
+  <data name="CheckBoxTextFeedbackShare" xml:space="preserve">
+    <value>It is ok to share this feedback with other customers.</value>
+  </data>
+  <data name="ColumnContactInformation" xml:space="preserve">
+    <value>Contact Information</value>
+  </data>
+  <data name="ColumnDepartment" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="ColumnDepartmentName" xml:space="preserve">
+    <value>Department Name</value>
+  </data>
+  <data name="ColumnExternalId" xml:space="preserve">
+    <value>External Id</value>
+  </data>
+  <data name="ColumnFor" xml:space="preserve">
+    <value>for</value>
+  </data>
+  <data name="ColumnLocation" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="ColumnMaxBudget" xml:space="preserve">
+    <value>Max Budget</value>
+  </data>
+  <data name="ColumnPhoneNo" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="ColumnRole" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="ConfirmDeleteTitle" xml:space="preserve">
+    <value>Confirm Delete?</value>
+  </data>
+  <data name="CreditCardHolderName" xml:space="preserve">
+    <value>Credit Card Holder Name</value>
+  </data>
+  <data name="DeleteFailMessage" xml:space="preserve">
+    <value>Failed to delete the record.</value>
+  </data>
+  <data name="DeleteMessage" xml:space="preserve">
+    <value>Record deleted successfully.</value>
+  </data>
+  <data name="EnableDisableConfirmMessage" xml:space="preserve">
+    <value>Please confirm that you want to {0} the account.</value>
+  </data>
+  <data name="ErrorCustomerShippingAddress" xml:space="preserve">
+    <value>Customer shipping address is not a valid address. Please enter valid address to continue.</value>
+  </data>
+  <data name="ErrorDeleteDepartment" xml:space="preserve">
+    <value>Department cannot be deleted.</value>
+  </data>
+  <data name="ErrorLoginFailed" xml:space="preserve">
+    <value>Invalid Username or Password</value>
+  </data>
+  <data name="ErrorNoItemsShoppingCart" xml:space="preserve">
+    <value>There are no items in your shopping cart. Please add items to your shopping cart before checking out.</value>
+  </data>
+  <data name="ErrorQuoteUpdated" xml:space="preserve">
+    <value>Unable to update the quote.</value>
+  </data>
+  <data name="ErrorSocialLoginFailed" xml:space="preserve">
+    <value>Unable to login with the selected social networking site.</value>
+  </data>
+  <data name="FranchisePaymentOptionsNotAvailableMessage" xml:space="preserve">
+    <value>Payment options for this site are not configured. Please contact Znode customer support.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>An error occurred while processing your request. Please try again. If the problem persist, contact a site Administrator.</value>
+  </data>
+  <data name="HeaderCardInformation" xml:space="preserve">
+    <value>Card Information</value>
+  </data>
+  <data name="HeaderCategoryMap" xml:space="preserve">
+    <value>Catalog Map</value>
+  </data>
+  <data name="HeaderCreditCardPayment" xml:space="preserve">
+    <value>Credit Card Payment</value>
+  </data>
+  <data name="HeaderCustomerFeedback" xml:space="preserve">
+    <value>Please Provide Your Feedback</value>
+  </data>
+  <data name="HeaderCustomPayment" xml:space="preserve">
+    <value>Custom Payment</value>
+  </data>
+  <data name="HeaderProductCompare" xml:space="preserve">
+    <value>Product Compare</value>
+  </data>
+  <data name="HeaderQuickOrder" xml:space="preserve">
+    <value>Quick Order</value>
+  </data>
+  <data name="HeaderQuickOrderPad" xml:space="preserve">
+    <value>Quick Order Pad</value>
+  </data>
+  <data name="HeaderSiteMap" xml:space="preserve">
+    <value>Site Map</value>
+  </data>
+  <data name="HeaderTextContactUs" xml:space="preserve">
+    <value>Please submit your comments below. We will respond to your request as soon as possible.</value>
+  </data>
+  <data name="CustomerFeedbackIntroText" xml:space="preserve">
+    <value>Please let us know how your shopping experience was. Any feedback that can help us improve our store is greatly appreciated.</value>
+  </data>
+  <data name="HttpAntiforgeryTokenExceptionMessage" xml:space="preserve">
+    <value>Either you have cookies disabled or cleared. Please click on the link given below.</value>
+  </data>
+  <data name="HttpCode_401_AccessDeniedMsg" xml:space="preserve">
+    <value>The page cannot be displayed. Make sure you are authorized to view this page.</value>
+  </data>
+  <data name="HttpCode_404_PageNotFoundMsg" xml:space="preserve">
+    <value>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</value>
+  </data>
+  <data name="HttpCode_500_InternalServerErrorMsg" xml:space="preserve">
+    <value>Oops! Something went wrong here. We're working on it. Please come back later.</value>
+  </data>
+  <data name="HttpCode_500_RequestValidationErrorMsg" xml:space="preserve">
+    <value>An invalid request is received. Try again with valid input.</value>
+  </data>
+  <data name="LabelAddTemplate" xml:space="preserve">
+    <value>Create Template</value>
+  </data>
+  <data name="LabelAreaCode" xml:space="preserve">
+    <value>Area Code</value>
+  </data>
+  <data name="LabelBrandName" xml:space="preserve">
+    <value>Brand Name</value>
+  </data>
+  <data name="LabelCity" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="LabelComments" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="LabelCompanyName" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="LabelCompareLink" xml:space="preserve">
+    <value>Compare</value>
+  </data>
+  <data name="LabelDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="LabelEditTemplate" xml:space="preserve">
+    <value>Edit Template</value>
+  </data>
+  <data name="LabelEmailAddress" xml:space="preserve">
+    <value>Email Address</value>
+  </data>
+  <data name="LabelFeatureDescription" xml:space="preserve">
+    <value>Feature Description</value>
+  </data>
+  <data name="LabelFirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="LabelHeight" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="LabelLastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="LabelLength" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="LabelMaxQuantity" xml:space="preserve">
+    <value>Max Quantity</value>
+  </data>
+  <data name="LabelNarrowResults" xml:space="preserve">
+    <value>Narrow Results</value>
+  </data>
+  <data name="LabelNoRecordFound" xml:space="preserve">
+    <value>No Record Found</value>
+  </data>
+  <data name="LabelPhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="LabelProductBrand" xml:space="preserve">
+    <value>Brand:</value>
+  </data>
+  <data name="LabelProductController" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="LabelProductItem" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="LabelProductName" xml:space="preserve">
+    <value>Product Name</value>
+  </data>
+  <data name="LabelProductSpecification" xml:space="preserve">
+    <value>Product Specification</value>
+  </data>
+  <data name="LabelQuickOrderMultiplePartSku" xml:space="preserve">
+    <value>Enter Multiple SKUs</value>
+  </data>
+  <data name="LabelQuoteDetails" xml:space="preserve">
+    <value>Quote Details</value>
+  </data>
+  <data name="LabelQuoteList" xml:space="preserve">
+    <value>Quote List</value>
+  </data>
+  <data name="LabelReceiverMailId" xml:space="preserve">
+    <value>Friend's Email Address</value>
+  </data>
+  <data name="LabelRemoveAllLink" xml:space="preserve">
+    <value>Remove all</value>
+  </data>
+  <data name="LabelSaveTimewithQuickOrder" xml:space="preserve">
+    <value>Save time with Quick Order</value>
+  </data>
+  <data name="LabelSearchMiles" xml:space="preserve">
+    <value>Search Within</value>
+  </data>
+  <data name="LabelSenderMailId" xml:space="preserve">
+    <value>Your Email Address</value>
+  </data>
+  <data name="LabelSendMail" xml:space="preserve">
+    <value>Send Mail</value>
+  </data>
+  <data name="LabelSignUpNewsletter" xml:space="preserve">
+    <value>Sign Up For Email</value>
+  </data>
+  <data name="LabelState" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="LabelTierPrice" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="LabelWeight" xml:space="preserve">
+    <value>Weight</value>
+  </data>
+  <data name="LabelWidth" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="LabelZipCode" xml:space="preserve">
+    <value>Enter your zip code.</value>
+  </data>
+  <data name="LabelOrderList" xml:space="preserve">
+    <value>Order List</value>
+  </data>
+  <data name="LinkSavedCC" xml:space="preserve">
+    <value>View Saved CC</value>
+  </data>
+  <data name="LinkSavedCreditCard" xml:space="preserve">
+    <value>Saved CC</value>
+  </data>
+  <data name="LinkTextAccountInformation" xml:space="preserve">
+    <value>Account Information</value>
+  </data>
+  <data name="LinkTextAdd" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="LinkTextCustomerService" xml:space="preserve">
+    <value>Customer Service</value>
+  </data>
+  <data name="LinkTextDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="LinkTextGiftCardHistory" xml:space="preserve">
+    <value>Gift Card History</value>
+  </data>
+  <data name="LinkTextLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LinkTextOrderTemplate" xml:space="preserve">
+    <value>Order Templates</value>
+  </data>
+  <data name="LinkTextQuoteHistory" xml:space="preserve">
+    <value>Pending Quote History</value>
+  </data>
+  <data name="LinkTextReview" xml:space="preserve">
+    <value>Review History</value>
+  </data>
+  <data name="LinkTextTemplateDescription" xml:space="preserve">
+    <value>Create a list of frequently purchased items for convenience and fast re-ordering. You can build order templates for Complete systems, Track Stock, Warehouse Inventory, Tools and Suppliers, or really anything that you want to have very quick access to purchase. To create an order template simply click on the "Create Order Template" button, enter the name for the template, and then just add the items you want to include.</value>
+  </data>
+  <data name="LinkTextTemplateList" xml:space="preserve">
+    <value>Template List</value>
+  </data>
+  <data name="LinkTextToTop" xml:space="preserve">
+    <value>To Top</value>
+  </data>
+  <data name="LinkTextViewGiftCardHistory" xml:space="preserve">
+    <value>View Gift Card History</value>
+  </data>
+  <data name="LinkUserBuyerManagement" xml:space="preserve">
+    <value>Buyer Management</value>
+  </data>
+  <data name="LinkUserDepartments" xml:space="preserve">
+    <value>Departments</value>
+  </data>
+  <data name="MessageCustomerFeedbackFalse" xml:space="preserve">
+    <value>Comments: {0} &lt;br/&gt; City: {1} &lt;br/&gt; State: {2} &lt;br/&gt; It is OK to share this feedback with other customers - False</value>
+  </data>
+  <data name="MessageCustomerFeedbackTrue" xml:space="preserve">
+    <value>Comments: {0} &lt;br/&gt; City: {1} &lt;br/&gt; State: {2} &lt;br/&gt; It is OK to share this feedback with other customers - True</value>
+  </data>
+  <data name="MessageNoItem" xml:space="preserve">
+    <value>There are no items to display.</value>
+  </data>
+  <data name="MessageNotAddedSuccessfully" xml:space="preserve">
+    <value>Failed to add a product.</value>
+  </data>
+  <data name="NewsLetterSignUpError" xml:space="preserve">
+    <value>Failed to sign up for our newsletter. Please try again.</value>
+  </data>
+  <data name="NewsLetterSignUpSuccess" xml:space="preserve">
+    <value>Congratulations, you have successfully signed up for our newsletter!</value>
+  </data>
+  <data name="NoteCVCNo" xml:space="preserve">
+    <value>A 3-digit number usually found on the back of your card.</value>
+  </data>
+  <data name="OkButtonLabel" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="OrderColumnSubTotal" xml:space="preserve">
+    <value>Order Subtotal</value>
+  </data>
+  <data name="OutofStockMessage" xml:space="preserve">
+    <value>This item is out of stock.</value>
+  </data>
+  <data name="ProductCategoryChangeErrorMessage" xml:space="preserve">
+    <value>Products added to the compare product list will be lost. Do you want to continue?</value>
+  </data>
+  <data name="ProductCompareErrorMessage" xml:space="preserve">
+    <value>Need 2 or more products to compare.</value>
+  </data>
+  <data name="ProductCompareLimitReachedErrorMessage" xml:space="preserve">
+    <value>The maximum limit has been reached. You can not add more than 4 products.</value>
+  </data>
+  <data name="ProductCompareProductExistErrorMessage" xml:space="preserve">
+    <value>The selected product has already been added to your comparison list.</value>
+  </data>
+  <data name="ProductCompareQuantityErrorMessage" xml:space="preserve">
+    <value>Need 2 or more products to compare. Click Add More to add another product.</value>
+  </data>
+  <data name="ProductCompareSuccessMessage" xml:space="preserve">
+    <value>The selected product has been added to your comparison list.</value>
+  </data>
+  <data name="PromotionalMessageContentPage" xml:space="preserve">
+    <value>Promotional Message</value>
+  </data>
+  <data name="QuickOrderDescription" xml:space="preserve">
+    <value>If you already know one of the many product SKU numbers from previous catalogs, price lists, our website, or old invoices, enter them with a quantity in the Quick Order Pad and click Add to Cart.</value>
+  </data>
+  <data name="QuickOrderStepOne" xml:space="preserve">
+    <value>&lt;strong&gt;Step 1&lt;/strong&gt;: Enter the product SKU with quantities for each in the fields provided.</value>
+  </data>
+  <data name="QuickOrderStepTwo" xml:space="preserve">
+    <value>&lt;strong&gt;Step 2&lt;/strong&gt;: Click Add to Cart when you are finished.</value>
+  </data>
+  <data name="QuoteConfirmMessage" xml:space="preserve">
+    <value>Do you want to proceed to checkout with the Quote as there are {0} products already present in the cart?</value>
+  </data>
+  <data name="QuoteSentForApproval" xml:space="preserve">
+    <value>Your quote has been submitted for approval. You can checkout once it gets approved.</value>
+  </data>
+  <data name="RequiredDepartmentName" xml:space="preserve">
+    <value>Department is required.</value>
+  </data>
+  <data name="RequiredMaxBudget" xml:space="preserve">
+    <value>Max Budget is required.</value>
+  </data>
+  <data name="RequiredPhoneNumber" xml:space="preserve">
+    <value>Phone Number is required.</value>
+  </data>
+  <data name="RequiredRole" xml:space="preserve">
+    <value>Role is required.</value>
+  </data>
+  <data name="revMaxBudget" xml:space="preserve">
+    <value>You must enter a valid Max Budget (ex: 123.45)</value>
+  </data>
+  <data name="rfvAddOnCheckBox" xml:space="preserve">
+    <value>Please select at least one {0}</value>
+  </data>
+  <data name="SaveCreditCardForFutureUse" xml:space="preserve">
+    <value>Save this credit card for future use</value>
+  </data>
+  <data name="SendMailMessage" xml:space="preserve">
+    <value>Email sent successfully.</value>
+  </data>
+  <data name="ShipmentLabel" xml:space="preserve">
+    <value>Shipment</value>
+  </data>
+  <data name="SinglePageCheckoutAdditionalInstructions" xml:space="preserve">
+    <value>Additional Instructions</value>
+  </data>
+  <data name="SinglePageCheckoutColumnGiftCart" xml:space="preserve">
+    <value>Gift Card Number</value>
+  </data>
+  <data name="SinglePageCheckoutCreditCardExpirationDate" xml:space="preserve">
+    <value>Credit Card Expiration Date</value>
+  </data>
+  <data name="SinglePageCheckoutCreditCardNoTitle" xml:space="preserve">
+    <value>Credit Card Number</value>
+  </data>
+  <data name="SinglePageCheckoutCreditCardSecurityNo" xml:space="preserve">
+    <value>Card Security Number</value>
+  </data>
+  <data name="SinglePageCheckoutPaymentMethod" xml:space="preserve">
+    <value>Payment Method</value>
+  </data>
+  <data name="SinglePageCheckoutReviewOrder" xml:space="preserve">
+    <value>Review Your Order</value>
+  </data>
+  <data name="SinglePageCheckoutShippingAddress" xml:space="preserve">
+    <value>Shipping Address</value>
+  </data>
+  <data name="SinglePageCheckoutShippingMethod" xml:space="preserve">
+    <value>Shipping Method</value>
+  </data>
+  <data name="SubTextGiftCardHistory" xml:space="preserve">
+    <value>Gift Card History</value>
+  </data>
+  <data name="SubTextGiftCardHistoryItems" xml:space="preserve">
+    <value>You have applied {0} item(s).</value>
+  </data>
+  <data name="SuccessDeleteDepartment" xml:space="preserve">
+    <value>Department deleted successfully.</value>
+  </data>
+  <data name="SuccessDepartmentAdded" xml:space="preserve">
+    <value>Department created successfully.</value>
+  </data>
+  <data name="SuccessDraftDeleted" xml:space="preserve">
+    <value>Draft deleted successfully.</value>
+  </data>
+  <data name="SuccessMessageContactUs" xml:space="preserve">
+    <value>We have received your information and will be contacting you soon. Thank you.</value>
+  </data>
+  <data name="SuccessMessageCustomerFeedback" xml:space="preserve">
+    <value>Thank you for taking the time to share your feedback with us. We hope that you enjoyed shopping with us.</value>
+  </data>
+  <data name="TextCheckoutAsGuest" xml:space="preserve">
+    <value>You don't need to create an account to order from Maxwell.</value>
+  </data>
+  <data name="TextCustomerFeedback" xml:space="preserve">
+    <value>Click here to give us feedback on your ordering experience.</value>
+  </data>
+  <data name="TextEnterSku" xml:space="preserve">
+    <value>Enter SKU</value>
+  </data>
+  <data name="TextFreePurchase" xml:space="preserve">
+    <value>Included for free with purchase:</value>
+  </data>
+  <data name="TextGiftCardHistory" xml:space="preserve">
+    <value>Showing {0} Gift Cards</value>
+  </data>
+  <data name="TextMoreCategories" xml:space="preserve">
+    <value>More Categories</value>
+  </data>
+  <data name="TextProductRating" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="TextSavedCCDetailsCount" xml:space="preserve">
+    <value>&lt;div&gt; You have saved  &lt;span id = 'creditCardCount'&gt;0&lt;/ span &gt; credit card details.&lt;/div&gt;</value>
+  </data>
+  <data name="TextShowHideSubCategory" xml:space="preserve">
+    <value>Show/Hide SubCategory</value>
+  </data>
+  <data name="TextVendorName" xml:space="preserve">
+    <value>Vendor: </value>
+  </data>
+  <data name="TextView" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="TextYouTubeVideos" xml:space="preserve">
+    <value>YouTube Video</value>
+  </data>
+  <data name="TitleAccountInformation" xml:space="preserve">
+    <value>Account Information</value>
+  </data>
+  <data name="TitleGiftCardHistory" xml:space="preserve">
+    <value>Gift Card History</value>
+  </data>
+  <data name="TitleGiftCardNumber" xml:space="preserve">
+    <value>Gift Card Number</value>
+  </data>
+  <data name="TitleMapLink" xml:space="preserve">
+    <value>Map and Directions</value>
+  </data>
+  <data name="TitleName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="TitleOrderNo" xml:space="preserve">
+    <value>Order No.</value>
+  </data>
+  <data name="TitleSearch" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="TitleSinglePageCheckoutProcess" xml:space="preserve">
+    <value>Proceed to Checkout</value>
+  </data>
+  <data name="TitleStoreLocator" xml:space="preserve">
+    <value>Locate a Store</value>
+  </data>
+  <data name="TitleTracking" xml:space="preserve">
+    <value>Tracking Number</value>
+  </data>
+  <data name="TitleTransactionAmount" xml:space="preserve">
+    <value>Transaction Amount of Gift Cards</value>
+  </data>
+  <data name="TitleTransactionDate" xml:space="preserve">
+    <value>Transaction Date</value>
+  </data>
+  <data name="TitleUserFeedback" xml:space="preserve">
+    <value>User Feedback</value>
+  </data>
+  <data name="TitleZipCode" xml:space="preserve">
+    <value>Zip Code</value>
+  </data>
+  <data name="ValidationEnterValidDate" xml:space="preserve">
+    <value>Enter a Valid Month.</value>
+  </data>
+  <data name="ValidationEnterValidYear" xml:space="preserve">
+    <value>Enter a Valid Year.</value>
+  </data>
+  <data name="ValidationPurchaseOrderNo" xml:space="preserve">
+    <value>Please enter your purchase order number.</value>
+  </data>
+  <data name="ViewComparisonButtonLabel" xml:space="preserve">
+    <value>View Comparison</value>
+  </data>
+  <data name="WarningSelectedQuantity" xml:space="preserve">
+    <value>Selected quantity should be in between {0} and {1}.</value>
+  </data>
+  <data name="TestLocale" xml:space="preserve">
+    <value>Test Locale</value>
+  </data>
+  <data name="InvalidContactEmail" xml:space="preserve">
+    <value>Enter a valid email address.</value>
+  </data>
+  <data name="AddressNameCodeLengthErrorMessage" xml:space="preserve">
+    <value>Address name can not exceed 100 characters.</value>
+  </data>
+  <data name="CityCodeLengthErrorMessage" xml:space="preserve">
+    <value>City can not exceed 100 characters.</value>
+  </data>
+  <data name="FirstNameLengthError" xml:space="preserve">
+    <value>First Name can not exceed 100 characters.</value>
+  </data>
+  <data name="FirstNameLengthErrorMessage" xml:space="preserve">
+    <value>First Name can not exceed 100 characters. </value>
+  </data>
+  <data name="LabelAddress1" xml:space="preserve">
+    <value>Address Line 1</value>
+  </data>
+  <data name="LabelAddress2" xml:space="preserve">
+    <value>Address Line 2</value>
+  </data>
+  <data name="LabelAddress3" xml:space="preserve">
+    <value>Address Line 3</value>
+  </data>
+  <data name="LabelCountry" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="LabelPostalCode" xml:space="preserve">
+    <value>Postal Code</value>
+  </data>
+  <data name="LabelStoreName" xml:space="preserve">
+    <value>Store Name</value>
+  </data>
+  <data name="LastNameLengthError" xml:space="preserve">
+    <value>Last Name can not exceed 100 characters.</value>
+  </data>
+  <data name="LastNameLengthErrorMessage" xml:space="preserve">
+    <value>Last Name can not exceed 100 characters.</value>
+  </data>
+  <data name="MessageFailedToSendRequest" xml:space="preserve">
+    <value>Failed to send request.</value>
+  </data>
+  <data name="PhoneNumberMaxLengthErrorMessage" xml:space="preserve">
+    <value>Phone Number can not exceed 30 characters.</value>
+  </data>
+  <data name="PostalCodeLengthErrorMessage" xml:space="preserve">
+    <value>Postal Code can not exceed 50 characters.</value>
+  </data>
+  <data name="RequiredAddress1" xml:space="preserve">
+    <value>Address Name is required.</value>
+  </data>
+  <data name="RequiredAddress2" xml:space="preserve">
+    <value>Address line 1 is required.</value>
+  </data>
+  <data name="RequiredCityCode" xml:space="preserve">
+    <value>City is required.</value>
+  </data>
+  <data name="RequiredPostalCode" xml:space="preserve">
+    <value>Postal/ZIP Code is required.</value>
+  </data>
+  <data name="RequiredStateCode" xml:space="preserve">
+    <value>State/Province/Region is required.</value>
+  </data>
+  <data name="StateProvinceRegionCodeLengthErrorMessage" xml:space="preserve">
+    <value>State/Province/Region can not exceed 100 characters.</value>
+  </data>
+  <data name="StreetCodeLengthErrorMessage" xml:space="preserve">
+    <value>Street can not exceed 100 characters.</value>
+  </data>
+  <data name="Show12" xml:space="preserve">
+    <value>Show 12</value>
+  </data>
+  <data name="Show16" xml:space="preserve">
+    <value>Show 16</value>
+  </data>
+  <data name="Show8" xml:space="preserve">
+    <value>Show 8</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Show All</value>
+  </data>
+  <data name="NoStoresFoundMessage" xml:space="preserve">
+    <value>No stores were found at the above location.</value>
+  </data>
+  <data name="LabelMobileNumber" xml:space="preserve">
+    <value>Mobile Number</value>
+  </data>
+  <data name="MobileNumberMaxLengthErrorMessage" xml:space="preserve">
+    <value>Mobile Number can not exceed 50 characters.</value>
+  </data>
+  <data name="RequiredMobileNumber" xml:space="preserve">
+    <value>Mobile Number is required.</value>
+  </data>
+  <data name="CompanyNameLengthError" xml:space="preserve">
+    <value>Company name can not exceed 100 characters.</value>
+  </data>
+  <data name="DisplayNameLengthError" xml:space="preserve">
+    <value>Address Name can not exceed 100 characters.</value>
+  </data>
+  <data name="ValidPhoneNumber" xml:space="preserve">
+    <value>Please enter a valid phone number.</value>
+  </data>
+  <data name="ValidPostalCode" xml:space="preserve">
+    <value>Please enter a valid postal code.</value>
+  </data>
+  <data name="LabelGo" xml:space="preserve">
+    <value>Go</value>
+  </data>
+  <data name="ButtonNewsletter" xml:space="preserve">
+    <value>Join</value>
+  </data>
+  <data name="ButtonPrint" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="LabelCategory" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="LabelHelp" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="LabelLoginStatus" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LabelSearch" xml:space="preserve">
+    <value>Search...</value>
+  </data>
+  <data name="LabelShop" xml:space="preserve">
+    <value>Shop</value>
+  </data>
+  <data name="ValidFirstName" xml:space="preserve">
+    <value>Please enter a valid First Name.</value>
+  </data>
+  <data name="ValidLastName" xml:space="preserve">
+    <value>Please enter a valid Last Name.</value>
+  </data>
+  <data name="InvalidUserNamePassword" xml:space="preserve">
+    <value>The entered Email Address or Password does not exist.</value>
+  </data>
+  <data name="ErrorAccountLocked" xml:space="preserve">
+    <value>This account is disabled. Please contact the site administrator.</value>
+  </data>
+  <data name="ErrorOneAttemptRemain" xml:space="preserve">
+    <value>You are left with ONE more attempt. If failed, your account will get locked.</value>
+  </data>
+  <data name="ErrorTwoAttemptsRemain" xml:space="preserve">
+    <value>You are left with TWO more attempts. If failed, your account will get locked.</value>
+  </data>
+  <data name="ChangePasswordButtonText" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Email Address</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Forgot password?</value>
+  </data>
+  <data name="InValidPasswordLength" xml:space="preserve">
+    <value>You have reached the maximum password length.</value>
+  </data>
+  <data name="LabelCurrentPassword" xml:space="preserve">
+    <value>Current Password</value>
+  </data>
+  <data name="LabelNewPassword" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="LabelReTypeNewPassword" xml:space="preserve">
+    <value>Confirm New Password</value>
+  </data>
+  <data name="LabelUsername" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="ResetPasswordButtonText" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="ResetPasswordLinkExpired" xml:space="preserve">
+    <value>The reset link you clicked on has expired. Please request a new one.</value>
+  </data>
+  <data name="LabelLogOff" xml:space="preserve">
+    <value>Log Out</value>
+  </data>
+  <data name="ErrorFailedToCreate" xml:space="preserve">
+    <value>Failed to create.</value>
+  </data>
+  <data name="ErrorUserNameAlreadyExists" xml:space="preserve">
+    <value>This username already exists. Please choose a different username.</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Remember Me</value>
+  </data>
+  <data name="RequiredEmail" xml:space="preserve">
+    <value>Email Address is required.</value>
+  </data>
+  <data name="TextSelect" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="LabelBrands" xml:space="preserve">
+    <value>Brands</value>
+  </data>
+  <data name="TextNoOrders" xml:space="preserve">
+    <value>There are no orders.</value>
+  </data>
+  <data name="EmailAlreadyExistMsg" xml:space="preserve">
+    <value>This Email address already exists.</value>
+  </data>
+  <data name="LabelShoppingCart" xml:space="preserve">
+    <value>Shopping Cart</value>
+  </data>
+  <data name="LabelItem" xml:space="preserve">
+    <value>Item(s)</value>
+  </data>
+  <data name="LabelSubTotal" xml:space="preserve">
+    <value>Sub Total</value>
+  </data>
+  <data name="LabelSelectCustomerAddress" xml:space="preserve">
+    <value>Select a Saved Address</value>
+  </data>
+  <data name="LabelSelectPaymentType" xml:space="preserve">
+    <value>Select a Payment Type</value>
+  </data>
+  <data name="LableSelectShippingMethod" xml:space="preserve">
+    <value>Select a Shipping Method</value>
+  </data>
+  <data name="ProcessingFailedError" xml:space="preserve">
+    <value>Pre-submit order processing failed.</value>
+  </data>
+  <data name="LabelCompareProduct" xml:space="preserve">
+    <value>Compare Product</value>
+  </data>
+  <data name="TitleShopByBrand" xml:space="preserve">
+    <value>Shop by Brand</value>
+  </data>
+  <data name="LabelViewAllBrands" xml:space="preserve">
+    <value>View all Brands</value>
+  </data>
+  <data name="CustomerFeedbackConfirmationIntroText" xml:space="preserve">
+    <value>Thank you for taking the time to share your feedback with us. We hope that you enjoyed shopping with us.</value>
+  </data>
+  <data name="TitleAdditionalInformation" xml:space="preserve">
+    <value>Additional Information</value>
+  </data>
+  <data name="LabelEnterCouponCode" xml:space="preserve">
+    <value>Have a Promo Code?</value>
+  </data>
+  <data name="LabelGiftCardNumber" xml:space="preserve">
+    <value>Gift Card Number</value>
+  </data>
+  <data name="ErrorEmptyCouponCode" xml:space="preserve">
+    <value>Coupon Code cannot be empty.</value>
+  </data>
+  <data name="ErrorEmailSend" xml:space="preserve">
+    <value>Failed to send mail.</value>
+  </data>
+  <data name="ErrorAddUpdateAddressNewCustomer" xml:space="preserve">
+    <value>A Default Billing and Shipping Address must be selected for a new customer.</value>
+  </data>
+  <data name="NoItemCartErrorMessage" xml:space="preserve">
+    <value>No items are in your Shopping Cart.</value>
+  </data>
+  <data name="LabelVariants" xml:space="preserve">
+    <value>Variants</value>
+  </data>
+  <data name="ErrorOrderEmailNotSend" xml:space="preserve">
+    <value>Order has been placed but due to smtp setting of portal, the confirmation email can not be sent.</value>
+  </data>
+  <data name="ErrorPriceNotAssociate" xml:space="preserve">
+    <value>Price is not set for this product.</value>
+  </data>
+  <data name="ProfileLoginFailedErrorMessage" xml:space="preserve">
+    <value>Unable to login. Please contact customer support.</value>
+  </data>
+  <data name="InvalidUsernameLength" xml:space="preserve">
+    <value>Username can not exceed 100 characters.</value>
+  </data>
+  <data name="LabelOldPassword" xml:space="preserve">
+    <value>Old Password</value>
+  </data>
+  <data name="MultipleCartSuccessMessage" xml:space="preserve">
+    <value>Product successfully added to the cart.</value>
+  </data>
+  <data name="LabelViewAll" xml:space="preserve">
+    <value>View All</value>
+  </data>
+  <data name="LabelCreditCardDetails" xml:space="preserve">
+    <value>Credit Card Details</value>
+  </data>
+  <data name="LabelSavedCC" xml:space="preserve">
+    <value>Saved Credit Cards</value>
+  </data>
+  <data name="ErrorProcessPayment" xml:space="preserve">
+    <value>Unable to process the payment.</value>
+  </data>
+  <data name="ErrorTemplateSaved" xml:space="preserve">
+    <value>Failed to save template.</value>
+  </data>
+  <data name="SuccessTemplateSaved" xml:space="preserve">
+    <value>Template saved successfully.</value>
+  </data>
+  <data name="ValidTemplateName" xml:space="preserve">
+    <value>Please enter template name.</value>
+  </data>
+  <data name="TitleQuoteConfirm" xml:space="preserve">
+    <value>Confirm Quote?</value>
+  </data>
+  <data name="CustomerUsernameLength" xml:space="preserve">
+    <value>Username can not exceed 300 characters.</value>
+  </data>
+  <data name="CutomerReviewLength" xml:space="preserve">
+    <value>Product Review can not exceed 500 characters.</value>
+  </data>
+  <data name="HeadlineLength" xml:space="preserve">
+    <value>Headline can not exceed 200 characters.</value>
+  </data>
+  <data name="UserLocationLength" xml:space="preserve">
+    <value>User Location can not exceed 1000 characters.</value>
+  </data>
+  <data name="ChangedPrimaryBilling" xml:space="preserve">
+    <value>Primary Billing Address changed.</value>
+  </data>
+  <data name="ChangedPrimaryShipping" xml:space="preserve">
+    <value>Primary Shipping Address changed.</value>
+  </data>
+  <data name="ErrorChangedAddress" xml:space="preserve">
+    <value>Failed to update address.</value>
+  </data>
+  <data name="ColumnGiftCardAmount" xml:space="preserve">
+    <value>Gift Card Amount</value>
+  </data>
+  <data name="TextForKeyword" xml:space="preserve">
+    <value> for &lt;b&gt;"{0}" &lt;/b&gt;</value>
+  </data>
+  <data name="TextFoundProducts" xml:space="preserve">
+    <value>Showing {0} results</value>
+  </data>
+  <data name="TextInCategory" xml:space="preserve">
+    <value>in &lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="GotoQuoteHistoryText" xml:space="preserve">
+    <value>You can look up quote history details through your account.</value>
+  </data>
+  <data name="QuoteNoDisplayText" xml:space="preserve">
+    <value>Your tracking number is</value>
+  </data>
+  <data name="QuoteUpdatedThankyouText" xml:space="preserve">
+    <value>Thank you for your Order.</value>
+  </data>
+  <data name="UnableToDeleteErrMessageForRejectedQuote" xml:space="preserve">
+    <value>Unable to delete quote. At least one product should be present in the quote.</value>
+  </data>
+  <data name="AddressValidationError" xml:space="preserve">
+    <value>Your address is not valid. Please enter a valid address to continue.</value>
+  </data>
+  <data name="LabelShippingCost" xml:space="preserve">
+    <value>Shipping</value>
+  </data>
+  <data name="GroupProductMessage" xml:space="preserve">
+    <value>Starting at: {0}</value>
+  </data>
+  <data name="ErrorOutOfStockMessage" xml:space="preserve">
+    <value>This item is currently not available.</value>
+  </data>
+  <data name="TextClearAll" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
+  <data name="DraftDeleteAllErrorMessage" xml:space="preserve">
+    <value>If you remove this product, its quote will be deleted. Do you want to remove this product?</value>
+  </data>
+  <data name="DraftUpdateMessage" xml:space="preserve">
+    <value>Draft updated successfully.</value>
+  </data>
+  <data name="TextAlreadyHaveAccount" xml:space="preserve">
+    <value>Already have an account?</value>
+  </data>
+  <data name="TextLoginSocialMedia" xml:space="preserve">
+    <value>Login with social media</value>
+  </data>
+  <data name="TextOR" xml:space="preserve">
+    <value>or</value>
+  </data>
+  <data name="ButtonViewDetails" xml:space="preserve">
+    <value>View Details</value>
+  </data>
+  <data name="NoSearchResultsFound" xml:space="preserve">
+    <value>&lt;p style="padding:5px 0;"&gt;Your search &lt;b&gt;{0}&lt;/b&gt; did not match any products.&lt;/p&gt;&lt;p style="padding:5px 0;"&gt;&lt;b&gt;Try something like:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Using more general terms&lt;/li&gt;&lt;li&gt;Checking your spelling&lt;/li&gt;&lt;/ul&gt;</value>
+  </data>
+  <data name="ProductCombinationErrorMessage" xml:space="preserve">
+    <value>This product is not available.</value>
+  </data>
+  <data name="TextTemplateName" xml:space="preserve">
+    <value>Template Name</value>
+  </data>
+  <data name="ErrorAddAddressShippingOption" xml:space="preserve">
+    <value>Please enter valid address for shipping options.</value>
+  </data>
+  <data name="BrowseButton" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="FileSizeExceededErrorMessage" xml:space="preserve">
+    <value>Maximum file size must be less than 5 MB.</value>
+  </data>
+  <data name="ErrorBrandNotFound" xml:space="preserve">
+    <value>The brand you are looking for is currently not available.</value>
+  </data>
+  <data name="ErrorCategoryNotFound" xml:space="preserve">
+    <value>The category you are looking for is currently not available.</value>
+  </data>
+  <data name="ProductNotFoundError" xml:space="preserve">
+    <value>The product you are looking for is currently not available.</value>
+  </data>
+  <data name="HeaderAccountAddress" xml:space="preserve">
+    <value>Account Addresses</value>
+  </data>
+  <data name="LengthStateCode" xml:space="preserve">
+    <value>State Code can not exceed 50.</value>
+  </data>
+  <data name="LabelEstimate" xml:space="preserve">
+    <value>Estimate</value>
+  </data>
+  <data name="LabelEstimateShipping" xml:space="preserve">
+    <value>Estimated Shipping</value>
+  </data>
+  <data name="LabelAddProducts" xml:space="preserve">
+    <value>Add Products</value>
+  </data>
+  <data name="ErrorAddOnPrice" xml:space="preserve">
+    <value>Price is not associated to selected add-on.</value>
+  </data>
+  <data name="LabelUserNameEmail" xml:space="preserve">
+    <value>Username/Email</value>
+  </data>
+  <data name="LinkTextHome" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="SeeMoreClass" xml:space="preserve">
+    <value>class='d-flex align-items-center'&gt;&lt;i class='icon-see-more'&gt;&lt;/i</value>
+  </data>
+  <data name="TextSeeMore" xml:space="preserve">
+    <value>See More </value>
+  </data>
+  <data name="TextDiscount" xml:space="preserve">
+    <value>Discount (On Subtotal)</value>
+  </data>
+  <data name="LabelPODocument" xml:space="preserve">
+    <value>Purchase Order Documentation</value>
+  </data>
+  <data name="LabelCouponCode" xml:space="preserve">
+    <value>Coupon Code</value>
+  </data>
+  <data name="LabelAddressName" xml:space="preserve">
+    <value>Address Name</value>
+  </data>
+  <data name="LabelCSRDiscountAmount" xml:space="preserve">
+    <value>CSR Discount</value>
+  </data>
+  <data name="LabelPaymentApplication" xml:space="preserve">
+    <value>Payment Application</value>
+  </data>
+  <data name="TextPaymentMethod" xml:space="preserve">
+    <value>Your payment is processing. Please wait and do not close this window.</value>
+  </data>
+  <data name="TextOutOfStockAddon" xml:space="preserve">
+    <value>Selected add-on is out of stock.</value>
+  </data>
+  <data name="TitleAddonOption" xml:space="preserve">
+    <value>Add-on options</value>
+  </data>
+  <data name="LabelBudgetAmount" xml:space="preserve">
+    <value>Budget Amount</value>
+  </data>
+  <data name="FreeShippingMessage" xml:space="preserve">
+    <value>Congratulations, you have qualified for FREE shipping!</value>
+  </data>
+  <data name="TitleOrderNumber" xml:space="preserve">
+    <value>Order Number</value>
+  </data>
+  <data name="OutOfStockException" xml:space="preserve">
+    <value>Unable to place the order as the product is not available.</value>
+  </data>
+  <data name="CheckBoxTextBillingShippingSame" xml:space="preserve">
+    <value>Billing address is same as shipping</value>
+  </data>
+  <data name="ErrorProductAreadyExistsInTemplate" xml:space="preserve">
+    <value>Product already exists in template.</value>
+  </data>
+  <data name="DraftCreatedMessage" xml:space="preserve">
+    <value>Draft created successfully.</value>
+  </data>
+  <data name="WarningSelectedQuantityGroupProduct" xml:space="preserve">
+    <value>Selected quantity should be in between {0} and {1} for {2}.</value>
+  </data>
+  <data name="TextRating" xml:space="preserve">
+    <value> {0}   |   ({1})  </value>
+  </data>
+  <data name="TextViewMoreDetails" xml:space="preserve">
+    <value>View More Details</value>
+  </data>
+  <data name="TextHighestRatingFirst" xml:space="preserve">
+    <value>Highest Rating First</value>
+  </data>
+  <data name="TextLowestRatingFirst" xml:space="preserve">
+    <value>Lowest Rating First</value>
+  </data>
+  <data name="TextNewestFirst" xml:space="preserve">
+    <value>Newest First</value>
+  </data>
+  <data name="TextOldestFirst" xml:space="preserve">
+    <value>Oldest First</value>
+  </data>
+  <data name="LabelAffiliateInformation" xml:space="preserve">
+    <value>Affiliate Information</value>
+  </data>
+  <data name="LabelReferralCommission" xml:space="preserve">
+    <value>Referral Commission</value>
+  </data>
+  <data name="LabelReferralCommissionType" xml:space="preserve">
+    <value>Referral Commission Type</value>
+  </data>
+  <data name="LabelTrackingLink" xml:space="preserve">
+    <value>Tracking Link</value>
+  </data>
+  <data name="LinkAffiliateInformation" xml:space="preserve">
+    <value>Affiliate Information</value>
+  </data>
+  <data name="MessageNoAffiliateInformation" xml:space="preserve">
+    <value>No affiliate information available.</value>
+  </data>
+  <data name="DropdownHighestRating" xml:space="preserve">
+    <value>Highest Rating</value>
+  </data>
+  <data name="DropdownMostReview" xml:space="preserve">
+    <value>Most Review</value>
+  </data>
+  <data name="ErrorValidCVC" xml:space="preserve">
+    <value>Enter a Valid Card Security Number.</value>
+  </data>
+  <data name="ErrorTemplateNameLength" xml:space="preserve">
+    <value>Input value must not exceed the maximum character limit of 100.</value>
+  </data>
+  <data name="ForgotPasswordMessage" xml:space="preserve">
+    <value>Submit the required information to change your password. Use the new password the next time you log in.</value>
+  </data>
+  <data name="LabelConfirmPassword" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
+  <data name="LabelGetOrderDetails" xml:space="preserve">
+    <value>Get Order Details</value>
+  </data>
+  <data name="LabelStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="LabelReason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="LabelReturnItemList" xml:space="preserve">
+    <value>Return Item List</value>
+  </data>
+  <data name="LabelTrackingNumber" xml:space="preserve">
+    <value>Tracking Number</value>
+  </data>
+  <data name="LabelCustomerInformation" xml:space="preserve">
+    <value>Customer Information</value>
+  </data>
+  <data name="TitleOrderDetails" xml:space="preserve">
+    <value>Order Details- {0} on {1}</value>
+  </data>
+  <data name="LabelShippingPlusHandling" xml:space="preserve">
+    <value>Shipping + Handling</value>
+  </data>
+  <data name="Show32" xml:space="preserve">
+    <value>Show 32</value>
+  </data>
+  <data name="Show64" xml:space="preserve">
+    <value>Show 64</value>
+  </data>
+  <data name="LabelTrackOrder" xml:space="preserve">
+    <value>Track Order</value>
+  </data>
+  <data name="ErrorOrderNORequired" xml:space="preserve">
+    <value>Order Number is required.</value>
+  </data>
+  <data name="AllowedTerritoriesError" xml:space="preserve">
+    <value>Some shopping cart items not allowed to ship in the selected country.</value>
+  </data>
+  <data name="AllowedTerritoriesProductError" xml:space="preserve">
+    <value>Selected items can not be shipped to the selected shipping country.</value>
+  </data>
+  <data name="AddOnRequiredError" xml:space="preserve">
+    <value>Add-on {0} is required.</value>
+  </data>
+  <data name="LabelBlog" xml:space="preserve">
+    <value>Blog</value>
+  </data>
+  <data name="LabelNews" xml:space="preserve">
+    <value>News</value>
+  </data>
+  <data name="TextTags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="ErrorCommentRequired" xml:space="preserve">
+    <value>Enter comment.</value>
+  </data>
+  <data name="ButtonNewComment" xml:space="preserve">
+    <value>New Comment</value>
+  </data>
+  <data name="TextForEmptyBlogNewsList" xml:space="preserve">
+    <value>No {0} to display.</value>
+  </data>
+  <data name="TextLeaveComment" xml:space="preserve">
+    <value>Leave your comment</value>
+  </data>
+  <data name="NoDataFound" xml:space="preserve">
+    <value>No Data Found</value>
+  </data>
+  <data name="ReadMore" xml:space="preserve">
+    <value>Read more</value>
+  </data>
+  <data name="ErrorProductNotFound" xml:space="preserve">
+    <value>The product you are looking for is currently not available.</value>
+  </data>
+  <data name="ErrorCardHolderName" xml:space="preserve">
+    <value>Enter a Valid Card Holder Name.</value>
+  </data>
+  <data name="AlphabetsOnly" xml:space="preserve">
+    <value>Only letters are allowed.</value>
+  </data>
+  <data name="MessageNumericValueAllowed" xml:space="preserve">
+    <value>Only numbers are allowed.</value>
+  </data>
+  <data name="ErrorGenerateInvoice" xml:space="preserve">
+    <value>Unable to generate an invoice.</value>
+  </data>
+  <data name="ErrorAccountNumber" xml:space="preserve">
+    <value>Please enter an account number.</value>
+  </data>
+  <data name="ErrorShippingMethod" xml:space="preserve">
+    <value>Please enter a shipping method.</value>
+  </data>
+  <data name="DropdownInStock" xml:space="preserve">
+    <value>In Stock</value>
+  </data>
+  <data name="DropdownOutOfStock" xml:space="preserve">
+    <value>Out Of Stock</value>
+  </data>
+  <data name="TextFoundProductsOutOf" xml:space="preserve">
+    <value>Showing {0} out of {1} results</value>
+  </data>
+  <data name="FormBuilderFailed" xml:space="preserve">
+    <value>Failed to save the Record.</value>
+  </data>
+  <data name="FormBuilderSuccess" xml:space="preserve">
+    <value>Record saved successfully.</value>
+  </data>
+  <data name="EnterCouponMessage" xml:space="preserve">
+    <value>Enter your coupon code if you have one.</value>
+  </data>
+  <data name="EnterGiftCardMessage" xml:space="preserve">
+    <value>Enter gift card number if you have one.</value>
+  </data>
+  <data name="LabelGrandTotal" xml:space="preserve">
+    <value>Grand Total</value>
+  </data>
+  <data name="LabelCartTotal" xml:space="preserve">
+    <value>Cart Total</value>
+  </data>
+  <data name="ErrorAlreadyExistsAttributeCode" xml:space="preserve">
+    <value>{0} already exists.</value>
+  </data>
+  <data name="InvalidEntityInformation" xml:space="preserve">
+    <value>Invalid Entity Id or Entity Type.</value>
+  </data>
+  <data name="TextInvalidData" xml:space="preserve">
+    <value>Invalid Data</value>
+  </data>
+  <data name="LabelRecommendedAddress" xml:space="preserve">
+    <value>Recommended Address</value>
+  </data>
+  <data name="LabelEnteredAddress" xml:space="preserve">
+    <value>You entered the following address</value>
+  </data>
+  <data name="LabelConfirmAddress" xml:space="preserve">
+    <value>Please confirm your Address</value>
+  </data>
+  <data name="EventDate" xml:space="preserve">
+    <value>Event Date:</value>
+  </data>
+  <data name="LabelImportShippingAddress" xml:space="preserve">
+    <value>Import Shipping Address</value>
+  </data>
+  <data name="LabelDownloadTemplate" xml:space="preserve">
+    <value>Download Template</value>
+  </data>
+  <data name="LabelImport" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="ImportProcessFailed" xml:space="preserve">
+    <value>Import process failed.</value>
+  </data>
+  <data name="LabelImportUser" xml:space="preserve">
+    <value>Import User</value>
+  </data>
+  <data name="ImportProcessInitiated" xml:space="preserve">
+    <value>Import process initiated.</value>
+  </data>
+  <data name="LabelFileName" xml:space="preserve">
+    <value>File Name</value>
+  </data>
+  <data name="SelectCSVFileInstructionText" xml:space="preserve">
+    <value>Please select files with a ".csv" extension.</value>
+  </data>
+  <data name="InHandsDate" xml:space="preserve">
+    <value>In Hands Date</value>
+  </data>
+  <data name="TextOk" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Activate" xml:space="preserve">
+    <value>Activate</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>Delete</value>
+    <comment>Generalised Key</comment>
+  </data>
+  <data name="DeActivate" xml:space="preserve">
+    <value>Deactivate</value>
+  </data>
+  <data name="LabelUserManagement" xml:space="preserve">
+    <value>User Management</value>
+  </data>
+  <data name="LabelGlobalAttribute" xml:space="preserve">
+    <value>Global Attribute</value>
+  </data>
+  <data name="HeaderImportLogDetails" xml:space="preserve">
+    <value>Import Log Details</value>
+  </data>
+  <data name="TextConfirmDelete" xml:space="preserve">
+    <value>Are you sure you want to delete the selected record?</value>
+  </data>
+  <data name="ErrorAccessDenied" xml:space="preserve">
+    <value>Access Denied. Please contact a site Administrator.</value>
+  </data>
+  <data name="ErrorDisableLoggedInUser" xml:space="preserve">
+    <value>A currently logged in user cannot be disabled.</value>
+  </data>
+  <data name="AccountLockedErrorMessage" xml:space="preserve">
+    <value>Your account has been locked. Please contact a site Administrator.</value>
+  </data>
+  <data name="ErrorResetPassword" xml:space="preserve">
+    <value>Unable to reset the password for {0}.</value>
+  </data>
+  <data name="ResetPasswordTemplateNotFound" xml:space="preserve">
+    <value>Unable to send email as the email template for resetting a password does not exists.</value>
+  </data>
+  <data name="TextBrandNotAvailable" xml:space="preserve">
+    <value>Brand not available</value>
+  </data>
+  <data name="DisableAccountConfirmationMessage" xml:space="preserve">
+    <value>Please confirm that you want to disable this account.</value>
+  </data>
+  <data name="EnableAccountConfirmationMessage" xml:space="preserve">
+    <value>Please confirm that you want to enable this account.</value>
+  </data>
+  <data name="ErrorValidBudgetAmountForRoundOff" xml:space="preserve">
+    <value>You must enter a valid budget amount (ex: 123.{0})</value>
+  </data>
+  <data name="LabelSelectAccount" xml:space="preserve">
+    <value>Select Account</value>
+  </data>
+  <data name="LabelSelectDepartment" xml:space="preserve">
+    <value>Select Department</value>
+  </data>
+  <data name="LabelSelectStore" xml:space="preserve">
+    <value>Select Store</value>
+  </data>
+  <data name="ManageGeneralInformation" xml:space="preserve">
+    <value>General Information</value>
+  </data>
+  <data name="ManageLoginInformation" xml:space="preserve">
+    <value>Login Information</value>
+  </data>
+  <data name="Multifront" xml:space="preserve">
+    <value>Multifront®</value>
+  </data>
+  <data name="NoteExternalId" xml:space="preserve">
+    <value>External ID/ERP account number. Leave blank if not applicable.</value>
+  </data>
+  <data name="NoteSendPeriodicMail" xml:space="preserve">
+    <value>Send periodic emails and special offers.</value>
+  </data>
+  <data name="SearchExistingAccountButton" xml:space="preserve">
+    <value>Search Existing Account</value>
+  </data>
+  <data name="TextConfirmResetPassword" xml:space="preserve">
+    <value>Do you want to proceed and send this user an email with a new password?</value>
+  </data>
+  <data name="TitleAdd" xml:space="preserve">
+    <value>Add {0}</value>
+  </data>
+  <data name="TitleConfirmResetPassword" xml:space="preserve">
+    <value>Confirm Reset Password</value>
+  </data>
+  <data name="TitleCustomers" xml:space="preserve">
+    <value>Customers</value>
+  </data>
+  <data name="TitleEdit" xml:space="preserve">
+    <value>Edit {0}</value>
+  </data>
+  <data name="TitleManage" xml:space="preserve">
+    <value>Manage {0}</value>
+  </data>
+  <data name="TitleStoreAndReps" xml:space="preserve">
+    <value>Stores &amp; Reps</value>
+  </data>
+  <data name="ValidBudgetAmountWithoutRoundOff" xml:space="preserve">
+    <value>You must enter a valid Price (ex: 123)</value>
+  </data>
+  <data name="LabelAccount" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="DisableMessage" xml:space="preserve">
+    <value>Record disabled successfully.</value>
+  </data>
+  <data name="EnableMessage" xml:space="preserve">
+    <value>Record enabled successfully.</value>
+  </data>
+  <data name="ErrorFailedToDelete" xml:space="preserve">
+    <value>Failed to delete the record.</value>
+  </data>
+  <data name="ErrorProfileNotExistsWhileUpdate" xml:space="preserve">
+    <value>Could not update the user account because the system was unable to find a Default Profile for the portal. Please configure a default profile for anonymous and registered users.</value>
+  </data>
+  <data name="UpdateErrorMessage" xml:space="preserve">
+    <value>Failed to update the record.</value>
+  </data>
+  <data name="UpdateMessage" xml:space="preserve">
+    <value>Record updated successfully.</value>
+  </data>
+  <data name="Errorlength" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="ErrorMaxBudget" xml:space="preserve">
+    <value>Max Budget</value>
+  </data>
+  <data name="ExternalIdCodeLengthErrorMessage" xml:space="preserve">
+    <value>External Id Code</value>
+  </data>
+  <data name="InvalidMaxBudget" xml:space="preserve">
+    <value>Invalid Max Budget</value>
+  </data>
+  <data name="LabelAccountName" xml:space="preserve">
+    <value>Account Name</value>
+  </data>
+  <data name="LabelApprovalName" xml:space="preserve">
+    <value>Approval Name</value>
+  </data>
+  <data name="LabelDepartment" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="LabelEmail" xml:space="preserve">
+    <value>Email Address</value>
+  </data>
+  <data name="LabelDeliveryMessage" xml:space="preserve">
+    <value>The estimated delivery date is based on the selection of ground delivery.</value>
+  </data>
+  <data name="LabelEstimatedDeliveryDate" xml:space="preserve">
+    <value>Estimated delivery date</value>
+  </data>
+  <data name="LabelExternalId" xml:space="preserve">
+    <value>External Id</value>
+  </data>
+  <data name="LabelFullName" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
+  <data name="LabelPermissionName" xml:space="preserve">
+    <value>Permission Name</value>
+  </data>
+  <data name="LabelRoleName" xml:space="preserve">
+    <value>Role Name</value>
+  </data>
+  <data name="LabelStore" xml:space="preserve">
+    <value>Store</value>
+  </data>
+  <data name="LabelUserId" xml:space="preserve">
+    <value>User Id</value>
+  </data>
+  <data name="LabelUserType" xml:space="preserve">
+    <value>User Type</value>
+  </data>
+  <data name="RequiredUserId" xml:space="preserve">
+    <value>Username is required.</value>
+  </data>
+  <data name="UserIdLengthErrorMessage" xml:space="preserve">
+    <value>User Id too long </value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error!!</value>
+  </data>
+  <data name="ErrorSelectRecord" xml:space="preserve">
+    <value>Please select at least one record.</value>
+  </data>
+  <data name="UserManagement" xml:space="preserve">
+    <value>User Management</value>
+  </data>
+  <data name="FormattedThemeNotFoundMessage" xml:space="preserve">
+    <value>&lt;p style='text-align:center;font-size:30;'&gt; Theme or view not found please check your theme folder.&lt;/p&gt;</value>
+  </data>
+  <data name="ErrorStoreNotPublished" xml:space="preserve">
+    <value>&lt;p style='text-align:center;font-size:30;'&gt; This store has not been published yet.&lt;/p&gt;</value>
+  </data>
+  <data name="ErrorMessageContactUs" xml:space="preserve">
+    <value>Error while submitting the form. Please try again later.</value>
+  </data>
+  <data name="ErrorAvailableStockMessage" xml:space="preserve">
+    <value>Limited stock available.</value>
+  </data>
+  <data name="EmailMaxLengthError" xml:space="preserve">
+    <value>Email Address can not exceed 50 characters.</value>
+  </data>
+  <data name="FirstNameMaxLength" xml:space="preserve">
+    <value>First Name can not exceed 100 characters.</value>
+  </data>
+  <data name="LastNameMaxLength" xml:space="preserve">
+    <value>Last Name can not exceed 100 characters.</value>
+  </data>
+  <data name="PhoneNumberMaxLength" xml:space="preserve">
+    <value>Phone Number can not exceed 30 characters.</value>
+  </data>
+  <data name="TextAttributesNotAvailable" xml:space="preserve">
+    <value>No attributes are associated with this form.</value>
+  </data>
+  <data name="LengthErrorMessage" xml:space="preserve">
+    <value>{0} cannot be longer than {1} characters.</value>
+  </data>
+  <data name="StreetAddressLengthErrorMessage" xml:space="preserve">
+    <value>Street Address cannot be longer than {1} characters.</value>
+  </data>
+  <data name="LinkTextViewOrderTemplate" xml:space="preserve">
+    <value>View Order Template</value>
+  </data>
+  <data name="LinkTextViewQuoteHistory" xml:space="preserve">
+    <value>View Pending Order History</value>
+  </data>
+  <data name="LabelPostalZipCode" xml:space="preserve">
+    <value>Postal/ZIP Code</value>
+  </data>
+  <data name="LabelApproverHistory" xml:space="preserve">
+    <value>Approver History</value>
+  </data>
+  <data name="TextApproverName" xml:space="preserve">
+    <value>Approver Name</value>
+  </data>
+  <data name="TextLevel" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="TextNoApprovers" xml:space="preserve">
+    <value>No approvers are set for the user.</value>
+  </data>
+  <data name="TextPendingOrderApprovalHistory" xml:space="preserve">
+    <value>Pending Order Approval History</value>
+  </data>
+  <data name="TextPendingOrderStatus" xml:space="preserve">
+    <value>Pending Order Status</value>
+  </data>
+  <data name="TextViewPendingOrderApprovalHistory" xml:space="preserve">
+    <value>View Pending Order Approval History</value>
+  </data>
+  <data name="TextApprovalList" xml:space="preserve">
+    <value>Approval Hierarchy</value>
+  </data>
+  <data name="TextUserApprovalList" xml:space="preserve">
+    <value>User Approval List</value>
+  </data>
+  <data name="AnnualOrderLimitFailed" xml:space="preserve">
+    <value>You've exceed the annual order limit. Please delete some of the items from your shopping cart or manage the quantity and try again please. Your annual limit is</value>
+  </data>
+  <data name="PerOrderLimitFailed" xml:space="preserve">
+    <value>You've exceed the per order limit. Please delete some of the items from your shopping cart or manage the quantity and try again please. Your per order limit is  </value>
+  </data>
+  <data name="TextApprovalTime" xml:space="preserve">
+    <value>Approval Date/Time</value>
+  </data>
+  <data name="TextPlaceOrder" xml:space="preserve">
+    <value>Complete purchase</value>
+  </data>
+  <data name="LabelPendingOrderDetail" xml:space="preserve">
+    <value>Pending Order Detail #</value>
+  </data>
+  <data name="LinkTextPendingPaymentHistory" xml:space="preserve">
+    <value>Pending Payment History</value>
+  </data>
+  <data name="LinkTextViewPendingPaymentHistory" xml:space="preserve">
+    <value>View Pending Payment History</value>
+  </data>
+  <data name="LabelApprovalOrder" xml:space="preserve">
+    <value>Approval Order</value>
+  </data>
+  <data name="LabelFromBudgetAmount" xml:space="preserve">
+    <value>From Amount</value>
+  </data>
+  <data name="LabelToBudgetAmount" xml:space="preserve">
+    <value>To Amount</value>
+  </data>
+  <data name="LabelApproveAndPlaceOrder" xml:space="preserve">
+    <value>Approve and place the order</value>
+  </data>
+  <data name="CheckBoxTextAddToAddressBook" xml:space="preserve">
+    <value>Don’t save this address for future use</value>
+  </data>
+  <data name="CheckBoxTextDefaultAddress" xml:space="preserve">
+    <value>Set as default</value>
+  </data>
+  <data name="CheckBoxTextUseSameAsAddress" xml:space="preserve">
+    <value>Same as {0} address</value>
+  </data>
+  <data name="ButtonImportShippingLogsText" xml:space="preserve">
+    <value>View Import Shipping Logs</value>
+  </data>
+  <data name="ButtonImportUserLogsText" xml:space="preserve">
+    <value>View Import User Logs</value>
+  </data>
+  <data name="ECertTotalAvailableBalanceLabel" xml:space="preserve">
+    <value>Certificate Balance: {0}</value>
+  </data>
+  <data name="ECertManageECertificateButtonLabel" xml:space="preserve">
+    <value>Manage eCertificate(s)</value>
+  </data>
+  <data name="ECertUserProfileDashboardTotalText" xml:space="preserve">
+    <value>eCertificate Current Balance: {0}</value>
+  </data>
+  <data name="ECertNoAssociationMessage" xml:space="preserve">
+    <value>No current eCertificates are available in your account.</value>
+  </data>
+  <data name="ECertAddToBalancePageHeading" xml:space="preserve">
+    <value>Do you have eCertificate that you would like to add to your balance ?</value>
+  </data>
+  <data name="ECertAddToBalancePageTitle" xml:space="preserve">
+    <value>Add to your Balance</value>
+  </data>
+  <data name="ECertAddToBalanceSubmitButtonLabel" xml:space="preserve">
+    <value>Add to Balance</value>
+  </data>
+  <data name="ECertAvailableListLabel" xml:space="preserve">
+    <value>The eCertificate(s) that have been added to your account balance:</value>
+  </data>
+  <data name="ECertBalancePageHeading" xml:space="preserve">
+    <value>eCertificate Balance/Reload</value>
+  </data>
+  <data name="ECertBalancePageTitle" xml:space="preserve">
+    <value>eCertificate Balance</value>
+  </data>
+  <data name="ECertKeyDisplayText" xml:space="preserve">
+    <value>eCertificate Number</value>
+  </data>
+  <data name="SuccessECertAddedToBalance" xml:space="preserve">
+    <value>eCertificate is added to the balance successfully.</value>
+  </data>
+  <data name="ECertAlreadyExistErrorMessage" xml:space="preserve">
+    <value>This eCertificate has already been added to an account balance.</value>
+  </data>
+  <data name="ECertInputKeyPlaceHolder" xml:space="preserve">
+    <value>00000000000000</value>
+  </data>
+  <data name="ECertInvalidDataErrorMessage" xml:space="preserve">
+    <value>An invalid eCertificate number was entered.</value>
+  </data>
+  <data name="ECertRequiredDataErrorMessage" xml:space="preserve">
+    <value>Please enter your eCertificate number.</value>
+  </data>
+  <data name="SuccessECertZeroBalanceAdded" xml:space="preserve">
+    <value>This eCertificate has a $0.00 balance.</value>
+  </data>
+  <data name="LabelPendingOrderApproval" xml:space="preserve">
+    <value>Pending Orders </value>
+  </data>
+  <data name="LinkTextPendingOrderHistory" xml:space="preserve">
+    <value>Pending Order History</value>
+  </data>
+  <data name="LabelPendingOrders" xml:space="preserve">
+    <value>Pending Orders</value>
+  </data>
+  <data name="TextPendingOrderDetail" xml:space="preserve">
+    <value>You can review and check the status of this request from your account &lt;a href="{0}"&gt;Pending Order History&lt;/a&gt; </value>
+  </data>
+  <data name="AutoCompleteLabelForSearchForLocation" xml:space="preserve">
+    <value>&lt;div class='auto-list'&gt;&lt;b&gt;{6}&lt;/b&gt;&lt;b&gt;{0}&lt;/b&gt;&lt;div&gt;{1} {2} | {3}, {4} {5} &lt;/div&gt;</value>
+  </data>
+  <data name="TextNoAddressMatched" xml:space="preserve">
+    <value>No address matched your search.</value>
+  </data>
+  <data name="AddressHTML" xml:space="preserve">
+    <value>&lt;p class="address-name"&gt;&lt;b&gt;{0}&lt;/b&gt;&lt;/p&gt;&lt;div class="address-street"&gt;{1} {2} | &lt;span class="address-citystate"&gt;{3}, {4} {5} &lt;/span&gt;&lt;/div&gt;</value>
+  </data>
+  <data name="RecipientNameLabel" xml:space="preserve">
+    <value>Recipient Name</value>
+  </data>
+  <data name="SearchForAddressLabel" xml:space="preserve">
+    <value>Search For {0} Address</value>
+  </data>
+  <data name="ErrorSpecialCharatersNotAllowed" xml:space="preserve">
+    <value>Special characters are not allowed.</value>
+  </data>
+  <data name="LabelPendingPayment" xml:space="preserve">
+    <value>Pending Payment</value>
+  </data>
+  <data name="SuccessOrderCreated" xml:space="preserve">
+    <value>Order created successfully.</value>
+  </data>
+  <data name="ErrorRequiredDetails" xml:space="preserve">
+    <value>Please enter the required details.</value>
+  </data>
+  <data name="RequiredCaptchaCode" xml:space="preserve">
+    <value>Captcha Code is required.</value>
+  </data>
+  <data name="B2BDropdownHighestRating" xml:space="preserve">
+    <value>Highest Rating</value>
+  </data>
+  <data name="B2BDropdownInStock" xml:space="preserve">
+    <value>In Stock</value>
+  </data>
+  <data name="B2BDropdownMostReview" xml:space="preserve">
+    <value>Most Review</value>
+  </data>
+  <data name="B2BDropdownNameAtoZ" xml:space="preserve">
+    <value>Name, A to Z</value>
+  </data>
+  <data name="B2BDropdownNameZToA" xml:space="preserve">
+    <value>Name, Z to A</value>
+  </data>
+  <data name="B2BDropdownOutOfStock" xml:space="preserve">
+    <value>Out Of Stock</value>
+  </data>
+  <data name="B2BDropdownPopularItems" xml:space="preserve">
+    <value>Popular items</value>
+  </data>
+  <data name="B2BDropdownPriceHighToLow" xml:space="preserve">
+    <value>Price, High to Low</value>
+  </data>
+  <data name="B2BDropdownPriceLowToHigh" xml:space="preserve">
+    <value>Price, Low to High</value>
+  </data>
+  <data name="B2BGotoQuoteHistoryText" xml:space="preserve">
+    <value>You can review and check the status of your quote in your account</value>
+  </data>
+  <data name="B2BLabelQuickOrderMultiplePartSku" xml:space="preserve">
+    <value>Add multiple items</value>
+  </data>
+  <data name="B2BLabelSearchByPartOrName" xml:space="preserve">
+    <value>Search by Part # or Name</value>
+  </data>
+  <data name="B2BLinkTextChangeAddress" xml:space="preserve">
+    <value>Change{0} Address</value>
+  </data>
+  <data name="B2BLinkTextCompleteOrderHistory" xml:space="preserve">
+    <value>View Order History</value>
+  </data>
+  <data name="B2BLinkTextQuoteHistory" xml:space="preserve">
+    <value>Pending Quote History</value>
+  </data>
+  <data name="B2BQuoteNoDisplayText" xml:space="preserve">
+    <value>Your tracking number is</value>
+  </data>
+  <data name="B2BQuoteUpdatedThankyouText" xml:space="preserve">
+    <value>Thank you for your Quote</value>
+  </data>
+  <data name="B2BRequiredPostalCode" xml:space="preserve">
+    <value>Postal/ZIP Code is required.</value>
+  </data>
+  <data name="B2BShow12" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="B2BShow16" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="B2BShow32" xml:space="preserve">
+    <value>32</value>
+  </data>
+  <data name="B2BShow64" xml:space="preserve">
+    <value>64</value>
+  </data>
+  <data name="B2BShow8" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="B2BTextCustomerFeedback" xml:space="preserve">
+    <value>Give us feedback</value>
+  </data>
+  <data name="B2BTextYourTotal" xml:space="preserve">
+    <value>Your total is </value>
+  </data>
+  <data name="B2BTitleAddAddress" xml:space="preserve">
+    <value>Add Address</value>
+  </data>
+  <data name="B2BTitleEditAddress" xml:space="preserve">
+    <value>Edit Address</value>
+  </data>
+  <data name="LabelSignInRegister" xml:space="preserve">
+    <value>Sign In/Register</value>
+  </data>
+  <data name="LabelFindABranch" xml:space="preserve">
+    <value>Find a Branch</value>
+  </data>
+  <data name="LabelIncludedProducts" xml:space="preserve">
+    <value>Included Products</value>
+  </data>
+  <data name="LabelItemsPerPage" xml:space="preserve">
+    <value>Items per page:</value>
+  </data>
+  <data name="LabelSelectQuantity" xml:space="preserve">
+    <value>Select the Quantity of Each</value>
+  </data>
+  <data name="TextOverview" xml:space="preserve">
+    <value>Product Details</value>
+  </data>
+  <data name="TitleMyAccount" xml:space="preserve">
+    <value>My Account</value>
+  </data>
+  <data name="TitleSKU" xml:space="preserve">
+    <value>SKU</value>
+  </data>
+  <data name="LabelCart" xml:space="preserve">
+    <value>Cart</value>
+  </data>
+  <data name="LabelRemoveAllItems" xml:space="preserve">
+    <value>Remove all Items</value>
+  </data>
+  <data name="LabelSortBy" xml:space="preserve">
+    <value>Sort By:</value>
+  </data>
+  <data name="LabelView" xml:space="preserve">
+    <value>View:</value>
+  </data>
+  <data name="LabelPromoCode" xml:space="preserve">
+    <value>Promo Code</value>
+  </data>
+  <data name="LabelEstimateShippingCosts" xml:space="preserve">
+    <value>Estimate the Shipping Costs</value>
+  </data>
+  <data name="LabelFreeInstorePickup" xml:space="preserve">
+    <value>Free in-store Pickup</value>
+  </data>
+  <data name="LabelHaveAGiftCard" xml:space="preserve">
+    <value>Have a gift card?</value>
+  </data>
+  <data name="LabelSearchByPartOrName" xml:space="preserve">
+    <value>Search by Part # or Name</value>
+  </data>
+  <data name="TextClearAllItems" xml:space="preserve">
+    <value>Clear all items</value>
+  </data>
+  <data name="TextFreeShipping" xml:space="preserve">
+    <value>Free Shipping</value>
+  </data>
+  <data name="TextShippingCostRule" xml:space="preserve">
+    <value>Shipping Cost Rule</value>
+  </data>
+  <data name="TextShippingInformation" xml:space="preserve">
+    <value>Shipping information</value>
+  </data>
+  <data name="TextShipSeparately" xml:space="preserve">
+    <value>Shipped separately</value>
+  </data>
+  <data name="TextPendingPaymentSection" xml:space="preserve">
+    <value>You can look up your &lt;a href="{0}"&gt;pending payment section&lt;/a&gt; through your account.</value>
+  </data>
+  <data name="LabelPaymentDisplayName" xml:space="preserve">
+    <value>Payment</value>
+  </data>
+  <data name="TextApproverOrder" xml:space="preserve">
+    <value>Approver Order</value>
+  </data>
+  <data name="LabelUpdateAndApproveOrder" xml:space="preserve">
+    <value>Update and approve order</value>
+  </data>
+  <data name="ButtonEditQuote" xml:space="preserve">
+    <value>Edit Order</value>
+  </data>
+  <data name="CheckBoxTextShippingBillingSame" xml:space="preserve">
+    <value>Same as billing address</value>
+  </data>
+  <data name="LabelApproverComments" xml:space="preserve">
+    <value>Approver comments</value>
+  </data>
+  <data name="ErrorInvalidURL" xml:space="preserve">
+    <value>&lt;p style='text-align:center;font-size:30;'&gt; Invalid URL Entered.&lt;/p&gt;</value>
+  </data>
+  <data name="ColumnUserprofile" xml:space="preserve">
+    <value>User profile</value>
+  </data>
+  <data name="LabelApproverCommentsOptional" xml:space="preserve">
+    <value>Approver comments (optional)</value>
+  </data>
+  <data name="GenericConfigurationError" xml:space="preserve">
+    <value>&lt;p style="text-align:center;font-size:30;"&gt;A generic error occurred.&lt;/p&gt;</value>
+  </data>
+  <data name="ExceedingAvailableQuantity" xml:space="preserve">
+    <value>Exceeding the available quantity({0}).</value>
+  </data>
+  <data name="LoginWithSocial" xml:space="preserve">
+    <value>Log in with</value>
+  </data>
+  <data name="HeadingOrderSummary" xml:space="preserve">
+    <value>Order Summary</value>
+  </data>
+  <data name="TextRemoveAllCartItems" xml:space="preserve">
+    <value>Remove all the items from your shopping cart</value>
+  </data>
+  <data name="TitleShippingTo" xml:space="preserve">
+    <value>Shipping To:</value>
+  </data>
+  <data name="ValidationZipCode" xml:space="preserve">
+    <value>Postal/ZIP code is not valid</value>
+  </data>
+  <data name="SuccessWriteReviewWhenApproverRequired" xml:space="preserve">
+    <value>Review submitted successfully.</value>
+  </data>
+  <data name="LoggedInAs" xml:space="preserve">
+    <value>logged in as</value>
+  </data>
+  <data name="InvalidCSRToken" xml:space="preserve">
+    <value>An invalid CSR Token.</value>
+  </data>
+  <data name="LabelBarcodeScan" xml:space="preserve">
+    <value>Scan</value>
+  </data>
+  <data name="BarcodeInvalidMessage" xml:space="preserve">
+    <value>Product not found</value>
+  </data>
+  <data name="BarcodeResult" xml:space="preserve">
+    <value>Result :</value>
+  </data>
+  <data name="ButtonTextManageCards" xml:space="preserve">
+    <value>Manage Cards</value>
+  </data>
+  <data name="CreditCardMessageText" xml:space="preserve">
+    <value>You have &amp;lt;a href="/User/GetSavedCreditCards"&amp;gt;&amp;lt;span id="creditCardCount"&amp;gt;0&amp;lt;/span&amp;gt; Saved credit card(s)&amp;lt;/a&amp;gt; in your account.</value>
+  </data>
+  <data name="LabelAccountDashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="LabelAccountOverview" xml:space="preserve">
+    <value>Account Overview</value>
+  </data>
+  <data name="LabelAddNewAddress" xml:space="preserve">
+    <value>Add New Address</value>
+  </data>
+  <data name="LabelAllLocations" xml:space="preserve">
+    <value>All Locations</value>
+  </data>
+  <data name="LabelApprovalLimit" xml:space="preserve">
+    <value>Approval Limit</value>
+  </data>
+  <data name="LabelApprovingManager" xml:space="preserve">
+    <value>Approving Manager</value>
+  </data>
+  <data name="LabelButtonView" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="LabelConvertedToOrder" xml:space="preserve">
+    <value>Converted To Order</value>
+  </data>
+  <data name="LabelDaily" xml:space="preserve">
+    <value>Daily</value>
+  </data>
+  <data name="LabelDashboardUserName" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="LabelMyProfile" xml:space="preserve">
+    <value>My Profile</value>
+  </data>
+  <data name="LabelOpenAccount" xml:space="preserve">
+    <value>Open Account #</value>
+  </data>
+  <data name="LabelPerOrder" xml:space="preserve">
+    <value>Per Order</value>
+  </data>
+  <data name="LabelPONumbers" xml:space="preserve">
+    <value>PO Numbers</value>
+  </data>
+  <data name="LabelProductLists" xml:space="preserve">
+    <value>Product Lists</value>
+  </data>
+  <data name="LabelPromotions" xml:space="preserve">
+    <value>Promotions</value>
+  </data>
+  <data name="LabelPurchaseOrders" xml:space="preserve">
+    <value>Purchase Orders</value>
+  </data>
+  <data name="LabelRegister" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="LabelSavedCreditCards" xml:space="preserve">
+    <value>SAVED CREDIT CARDS</value>
+  </data>
+  <data name="LabelSaveOrderTemplate" xml:space="preserve">
+    <value>Save Order Template</value>
+  </data>
+  <data name="LabelSeeApproverHistory" xml:space="preserve">
+    <value>See Approver History</value>
+  </data>
+  <data name="LabelSignIn" xml:space="preserve">
+    <value>Sign In</value>
+  </data>
+  <data name="LabelViewTemplate" xml:space="preserve">
+    <value>View Template</value>
+  </data>
+  <data name="LabelYearly" xml:space="preserve">
+    <value>Yearly</value>
+  </data>
+  <data name="LabelYourServiceRep" xml:space="preserve">
+    <value>Sales Representative</value>
+  </data>
+  <data name="ObsoleteMessage" xml:space="preserve">
+    <value>This product is obsolete. Please choose from suggested &amp;lt;a href="#link-products"&amp;gt;replacement&amp;lt;/a&amp;gt; products.</value>
+  </data>
+  <data name="SinglePageCheckoutOrderSummary" xml:space="preserve">
+    <value>Order Summary</value>
+  </data>
+  <data name="SubTitleMyOrders" xml:space="preserve">
+    <value>My Orders</value>
+  </data>
+  <data name="TextEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="TextForPricing" xml:space="preserve">
+    <value>for pricing.</value>
+  </data>
+  <data name="TextHelloFirstName" xml:space="preserve">
+    <value>Hello, {0}</value>
+  </data>
+  <data name="TextLoginInWith" xml:space="preserve">
+    <value>Log In With</value>
+  </data>
+  <data name="TextNoAddressesSaved" xml:space="preserve">
+    <value>There are no addresses saved.</value>
+  </data>
+  <data name="TextViewPrice" xml:space="preserve">
+    <value>to view price.</value>
+  </data>
+  <data name="TextViewPriceAndPlaceOrders" xml:space="preserve">
+    <value>to view prices and place orders.</value>
+  </data>
+  <data name="TextYourProfile" xml:space="preserve">
+    <value>Your Profile</value>
+  </data>
+  <data name="TitleAction" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="TitleBrand" xml:space="preserve">
+    <value>Brand</value>
+  </data>
+  <data name="TitleCreatedDate" xml:space="preserve">
+    <value>Created Date</value>
+  </data>
+  <data name="TitleCustomerName" xml:space="preserve">
+    <value>Customer Name</value>
+  </data>
+  <data name="TitleInventory" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
+  <data name="TitlePaymentStatus" xml:space="preserve">
+    <value>Payment Status</value>
+  </data>
+  <data name="TitleOrderStatus" xml:space="preserve">
+    <value>Order Status</value>
+  </data>
+  <data name="TitleOrderTotal" xml:space="preserve">
+    <value>Order Amount</value>
+  </data>
+  <data name="TitleReadyForCheckout" xml:space="preserve">
+    <value>Ready for checkout?</value>
+  </data>
+  <data name="TitleSpecialPriceOffers" xml:space="preserve">
+    <value>Special Price Offers</value>
+  </data>
+  <data name="TitleWhatsThePrice" xml:space="preserve">
+    <value>What's the price?</value>
+  </data>
+  <data name="TitleOrderType" xml:space="preserve">
+    <value>Order Type</value>
+  </data>
+  <data name="NoOrdersText" xml:space="preserve">
+    <value>There are no orders placed recently.</value>
+  </data>
+  <data name="LinkHomeIcon" xml:space="preserve">
+    <value>class='home-icon pr-5' title='Home'</value>
+  </data>
+  <data name="AdminApprovalSuccessMessage" xml:space="preserve">
+    <value>Thank you for registering for an account. You will receive an email as soon as your account is verified.</value>
+  </data>
+  <data name="EmailVerificationSuccessMessage" xml:space="preserve">
+    <value>Thank you for registering for an account. You will receive an email shortly with instructions and next steps for accessing your account.</value>
+  </data>
+  <data name="LoginFailAdminApproval" xml:space="preserve">
+    <value>Your account verification is in progress. Please try to login again later</value>
+  </data>
+  <data name="PLPObsoleteMessage" xml:space="preserve">
+    <value>This product is obsolete. View &amp;lt;a href="{0}#link-products"&amp;gt;replacement&amp;lt;/a&amp;gt; products.</value>
+  </data>
+  <data name="QuickViewObsoleteMessage" xml:space="preserve">
+    <value>This product is obsolete. Please choose from suggested &amp;lt;a href="{0}#link-products"&amp;gt;replacement&amp;lt;/a&amp;gt; products.</value>
+  </data>
+  <data name="PLPInventoryMessage" xml:space="preserve">
+    <value>View product details for inventory levels</value>
+  </data>
+  <data name="BillingAddressType" xml:space="preserve">
+    <value>billing</value>
+  </data>
+  <data name="ErrorInvalidRecommendationWidgetCode" xml:space="preserve">
+    <value>Invalid recommendation widget code.</value>
+  </data>
+  <data name="TitleHello" xml:space="preserve">
+    <value>Hello,</value>
+  </data>
+  <data name="NoResult" xml:space="preserve">
+    <value>No record found.</value>
+  </data>
+  <data name="ErrorFailedToSaveSearchReport" xml:space="preserve">
+    <value>Failed to save search report.</value>
+  </data>
+  <data name="LinkTextShopDepartments" xml:space="preserve">
+    <value>Shop Departments</value>
+  </data>
+  <data name="TextPaymentCaptureFailed" xml:space="preserve">
+    <value>Payment Capture Failed</value>
+  </data>
+  <data name="LabelAccountNumber" xml:space="preserve">
+    <value>Account Number</value>
+  </data>
+  <data name="LabelShippingMethod" xml:space="preserve">
+    <value>Shipping Method</value>
+  </data>
+  <data name="NoCMSPageSearchResultFound" xml:space="preserve">
+    <value>&lt;p style="padding:5px 0;"&gt;Your search 
+	&lt;b&gt;{0}&lt;/b&gt; did not match the content of any pages.
+&lt;/p&gt;
+&lt;p style="padding:5px 0;"&gt;
+	&lt;b&gt;Try something like:&lt;/b&gt;
+&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;Using more general terms&lt;/li&gt;
+	&lt;li&gt;Checking your spelling&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="TextSearchResult" xml:space="preserve">
+    <value>Search results for "{0}"</value>
+  </data>
+  <data name="LabelPageResultsPerPage" xml:space="preserve">
+    <value>Page Results Per Page:</value>
+  </data>
+  <data name="LabelProductsPerPage" xml:space="preserve">
+    <value>Products Per Page:</value>
+  </data>
+  <data name="LabelTextSelectYourOrderNumber" xml:space="preserve">
+    <value>Select Your Order Number</value>
+  </data>
+  <data name="LinkTextReturns" xml:space="preserve">
+    <value>Returns</value>
+  </data>
+  <data name="TitleReturnDate" xml:space="preserve">
+    <value>Return Date</value>
+  </data>
+  <data name="TitleReturnNumber" xml:space="preserve">
+    <value>Return Number</value>
+  </data>
+  <data name="TitleExpectedReturnQuantity" xml:space="preserve">
+    <value>Total Expected Qty</value>
+  </data>
+  <data name="TitleReturnStatus" xml:space="preserve">
+    <value>Return Status</value>
+  </data>
+  <data name="LabelCreateReturn" xml:space="preserve">
+    <value>Create Return</value>
+  </data>
+  <data name="TextReturnsNotAvailable" xml:space="preserve">
+    <value>No Returns Available</value>
+  </data>
+  <data name="TitleReturnHistory" xml:space="preserve">
+    <value>Return History</value>
+  </data>
+  <data name="TitleCreateReturn" xml:space="preserve">
+    <value>Create Return</value>
+  </data>
+  <data name="TextTransactionPreAuthorized" xml:space="preserve">
+    <value>The transaction is pre-authorized.</value>
+  </data>
+  <data name="LabelStartReturn" xml:space="preserve">
+    <value>Start Return</value>
+  </data>
+  <data name="ErrorOrderNotEligibleForReturn" xml:space="preserve">
+    <value>The selected order is not eligible for return.</value>
+  </data>
+  <data name="ButtonDeleteReturn" xml:space="preserve">
+    <value>Delete Return</value>
+  </data>
+  <data name="ButtonSaveReturn" xml:space="preserve">
+    <value>Save As Draft</value>
+  </data>
+  <data name="ButtonSubmitReturn" xml:space="preserve">
+    <value>Submit Return</value>
+  </data>
+  <data name="ErrorInvalidReturnShippedQuantity" xml:space="preserve">
+    <value>Enter return quantity less than or equals to shipped quantity.</value>
+  </data>
+  <data name="LabelImage" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="LabelOrderDate" xml:space="preserve">
+    <value>Order Date</value>
+  </data>
+  <data name="LabelOrderDetails" xml:space="preserve">
+    <value>Order Details</value>
+  </data>
+  <data name="LabelOrderTotal" xml:space="preserve">
+    <value>Order Total</value>
+  </data>
+  <data name="LabelReturnQty" xml:space="preserve">
+    <value>Return Qty</value>
+  </data>
+  <data name="LabelReturnTotal" xml:space="preserve">
+    <value>Return Total</value>
+  </data>
+  <data name="LabelShippedQty" xml:space="preserve">
+    <value>Shipped Qty</value>
+  </data>
+  <data name="LabelTotalPrice" xml:space="preserve">
+    <value>Total Price</value>
+  </data>
+  <data name="LabelUnitPrice" xml:space="preserve">
+    <value>Unit Price</value>
+  </data>
+  <data name="LabelExpectedQty" xml:space="preserve">
+    <value>Expected Qty</value>
+  </data>
+  <data name="LabelProduct" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="LabelThankYou" xml:space="preserve">
+    <value>THANK YOU</value>
+  </data>
+  <data name="LabelThankYouForReturn" xml:space="preserve">
+    <value>Thank You For Your Return</value>
+  </data>
+  <data name="TextThankYouReturn" xml:space="preserve">
+    <value>Please retain the return order number for future purpose and print the packaging slip &amp; include it with the items you are returning. We will process your return as soon as we receive your shipment.</value>
+  </data>
+  <data name="TitleProductsReturnList" xml:space="preserve">
+    <value>Products Return List</value>
+  </data>
+  <data name="TitleReturnCode" xml:space="preserve">
+    <value>Return Code</value>
+  </data>
+  <data name="TitleReturnDetails" xml:space="preserve">
+    <value>Return Details</value>
+  </data>
+  <data name="TitleReturnOrder" xml:space="preserve">
+    <value>Return Order</value>
+  </data>
+  <data name="TitleShippingFrom" xml:space="preserve">
+    <value>Shipping From</value>
+  </data>
+  <data name="LabelAllOrders" xml:space="preserve">
+    <value>All Orders</value>
+  </data>
+  <data name="ErrorDeleteReturn" xml:space="preserve">
+    <value>Failed to delete return.</value>
+  </data>
+  <data name="SuccessDeleteReturn" xml:space="preserve">
+    <value>Return deleted successfully.</value>
+  </data>
+  <data name="LabelCalculateReturnTotal" xml:space="preserve">
+    <value>Calculate Return Total</value>
+  </data>
+  <data name="ErrorOrderEligibilityForReturn" xml:space="preserve">
+    <value>This order is not eligible for return</value>
+  </data>
+  <data name="ErrorSubmitReturn" xml:space="preserve">
+    <value>Failed to submit the return</value>
+  </data>
+  <data name="SuccessSubmitReturn" xml:space="preserve">
+    <value>Return submitted successfully</value>
+  </data>
+  <data name="ErrorFailToCalculateReturnTotal" xml:space="preserve">
+    <value>Failed to calculate return total</value>
+  </data>
+  <data name="LabelNotes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="LabelConfirmedQty" xml:space="preserve">
+    <value>Confirmed Qty</value>
+  </data>
+  <data name="LabelTime" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="LabelUpdatedBy" xml:space="preserve">
+    <value>Updated By</value>
+  </data>
+  <data name="ReturnSavedSuccessfully" xml:space="preserve">
+    <value>Return saved successfully</value>
+  </data>
+  <data name="TitleEditReturn" xml:space="preserve">
+    <value>Edit Return</value>
+  </data>
+  <data name="ButtonRequestQuote" xml:space="preserve">
+    <value>Request Quote</value>
+  </data>
+  <data name="LabelInHandDate" xml:space="preserve">
+    <value>In Hands Date</value>
+  </data>
+  <data name="ButtonSubmitQuote" xml:space="preserve">
+    <value>Submit Quote</value>
+  </data>
+  <data name="QuoteCreatedThankyouText" xml:space="preserve">
+    <value>Thank You For Your Quote Request.</value>
+  </data>
+  <data name="TitleInHandDate" xml:space="preserve">
+    <value>In Hands Date</value>
+  </data>
+  <data name="TitleQuoteAmount" xml:space="preserve">
+    <value>Quote Amount</value>
+  </data>
+  <data name="TitleQuoteCreatedBy" xml:space="preserve">
+    <value>Quote Created By</value>
+  </data>
+  <data name="TitleQuoteExpirationDate" xml:space="preserve">
+    <value>Quote Expiration Date</value>
+  </data>
+  <data name="TitleQuoteStatus" xml:space="preserve">
+    <value>Quote Status</value>
+  </data>
+  <data name="TitleShippingType" xml:space="preserve">
+    <value>Shipping Type</value>
+  </data>
+  <data name="YourQuoteNumberText" xml:space="preserve">
+    <value>Your quote number is</value>
+  </data>
+  <data name="QuoteCreatedReviewText" xml:space="preserve">
+    <value>You can review and check the status of your Quote in your account</value>
+  </data>
+  <data name="TextQuoteDetails" xml:space="preserve">
+    <value>Quote Details</value>
+  </data>
+  <data name="TitleEmailId" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TitleQuoteDate" xml:space="preserve">
+    <value>Quote Date</value>
+  </data>
+  <data name="TitleQuoteNumber" xml:space="preserve">
+    <value>Quote Number</value>
+  </data>
+  <data name="LabelQuoteHistory" xml:space="preserve">
+    <value>Quote History</value>
+  </data>
+  <data name="TitleExpiredDate" xml:space="preserve">
+    <value>Expiration Date</value>
+  </data>
+  <data name="NoQuoteMessage" xml:space="preserve">
+    <value>There are no quotes.</value>
+  </data>
+  <data name="NoPendingOrderMessage" xml:space="preserve">
+    <value>No orders awaiting approval.</value>
+  </data>
+  <data name="LabelQuotes" xml:space="preserve">
+    <value>Quotes</value>
+  </data>
+  <data name="TitleQuote" xml:space="preserve">
+    <value>Quote</value>
+  </data>
+  <data name="QuoteCreateErrorMessage" xml:space="preserve">
+    <value>Failed to create the quote request.</value>
+  </data>
+  <data name="QuoteCreateSuccessMessage" xml:space="preserve">
+    <value>A Quote Request has been successfully created.</value>
+  </data>
+  <data name="SubTitleRecentQuotes" xml:space="preserve">
+    <value>Recent Quotes</value>
+  </data>
+  <data name="LinkTextCompleteQuoteHistory" xml:space="preserve">
+    <value>View Quote History</value>
+  </data>
+  <data name="ButtonConvertQuoteToOrder" xml:space="preserve">
+    <value>Convert To Order</value>
+  </data>
+  <data name="ColumnTitleImage" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="ColumnTitleProduct" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="ColumnTitleUnitPrice" xml:space="preserve">
+    <value>Unit price</value>
+  </data>
+  <data name="HeadingProductsInQuote" xml:space="preserve">
+    <value>Products In Quote</value>
+  </data>
+  <data name="TitleCheckout" xml:space="preserve">
+    <value>Checkout</value>
+  </data>
+  <data name="TitleQuoteRequest" xml:space="preserve">
+    <value>Quote Request</value>
+  </data>
+  <data name="TitleQuoteNo" xml:space="preserve">
+    <value>Quote No. {0}</value>
+  </data>
+  <data name="LabelShippingTo" xml:space="preserve">
+    <value>Shipping To</value>
+  </data>
+  <data name="LabelJobName" xml:space="preserve">
+    <value>Job / Project Name</value>
+  </data>
+  <data name="LabelShippingConstraintsCode" xml:space="preserve">
+    <value>Shipping Constraints</value>
+  </data>
+  <data name="TitleAdditionalInfo" xml:space="preserve">
+    <value>Additional Info</value>
+  </data>
+  <data name="HeadingInventoryCheck" xml:space="preserve">
+    <value>Inventory Check</value>
+  </data>
+  <data name="LabelDefaultLocation" xml:space="preserve">
+    <value>Default Location</value>
+  </data>
+  <data name="LabelOthersLocation" xml:space="preserve">
+    <value>Other Locations</value>
+  </data>
+  <data name="LabelDays" xml:space="preserve">
+    <value>Days</value>
+  </data>
+  <data name="LabelTypicalLeadTime" xml:space="preserve">
+    <value>Typical Lead Time</value>
+  </data>
+  <data name="ConvertQuoteToOrderErrorMessage" xml:space="preserve">
+    <value>Failed to convert the quote to an order.</value>
+  </data>
+  <data name="btnPlaceOrder" xml:space="preserve">
+    <value>Place Order</value>
+  </data>
+  <data name="TitleSelectPaymentMethod" xml:space="preserve">
+    <value>Select Payment Method</value>
+  </data>
+  <data name="TitleGetOrderStatus" xml:space="preserve">
+    <value>Get Order Status</value>
+  </data>
+  <data name="LinkPowerBIReports" xml:space="preserve">
+    <value>BI Reports</value>
+  </data>
+  <data name="TitlePowerBIReports" xml:space="preserve">
+    <value>BI Reports</value>
+  </data>
+  <data name="LabelPowerBIReports" xml:space="preserve">
+    <value>BI Reports</value>
+  </data>
+  <data name="ErrorPowerBISettings" xml:space="preserve">
+    <value>Required Power BI settings configured by Admin are either incorrect or not available.</value>
+  </data>
+  <data name="PowerBIWebconfigSettings" xml:space="preserve">
+    <value>Required PowerBI settings are not configured by Admin.</value>
+  </data>
+  <data name="ErrorPowerBIAccessToken" xml:space="preserve">
+    <value>Failed to generate Power BI embed token.</value>
+  </data>
+  <data name="ErrorPowerBIAuthentication" xml:space="preserve">
+    <value>Authentication error, please validate username/password.</value>
+  </data>
+  <data name="ErrorPowerBIReportId" xml:space="preserve">
+    <value>Please validate Report Id.</value>
+  </data>
+  <data name="ButtonViewCartAndCheckout" xml:space="preserve">
+    <value>View Cart &amp; Checkout</value>
+  </data>
+  <data name="LabelAddedToCart" xml:space="preserve">
+    <value>ADDED TO CART</value>
+  </data>
+  <data name="LabelQTY" xml:space="preserve">
+    <value>QTY</value>
+  </data>
+  <data name="LabelSKU" xml:space="preserve">
+    <value>SKU</value>
+  </data>
+  <data name="PendingOrderThankyouText" xml:space="preserve">
+    <value>Thank You For Your Pending Order Request</value>
+  </data>
+  <data name="PendingOrderTrackingNumber" xml:space="preserve">
+    <value>Your Pending Order tracking number is</value>
+  </data>
+  <data name="LinkTextVouchers" xml:space="preserve">
+    <value>Vouchers</value>
+  </data>
+  <data name="LinkTextViewAllVouchers" xml:space="preserve">
+    <value>View All Vouchers</value>
+  </data>
+  <data name="LinkTextVouchersHistory" xml:space="preserve">
+    <value>Voucher History</value>
+  </data>
+  <data name="TitleAvailableVouchers" xml:space="preserve">
+    <value>Available Vouchers</value>
+  </data>
+  <data name="LabelExpirationDate" xml:space="preserve">
+    <value>Expiration Date</value>
+  </data>
+  <data name="LabelStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="LabelVoucherAmount" xml:space="preserve">
+    <value>Voucher Amount</value>
+  </data>
+  <data name="LabelVoucherName" xml:space="preserve">
+    <value>Voucher Name</value>
+  </data>
+  <data name="LabelVoucherNumber" xml:space="preserve">
+    <value>Voucher Number</value>
+  </data>
+  <data name="TitleRemaningAmount" xml:space="preserve">
+    <value>Amount Remaning</value>
+  </data>
+  <data name="TitleVoucherDetail" xml:space="preserve">
+    <value>Voucher Detail</value>
+  </data>
+  <data name="TitleTotalRemaining" xml:space="preserve">
+    <value>Total Remaining</value>
+  </data>
+  <data name="ColumnVoucherAmount" xml:space="preserve">
+    <value>Voucher Amount</value>
+  </data>
+  <data name="HeadingQuoteSummary" xml:space="preserve">
+    <value>Quote Summary</value>
+  </data>
+  <data name="LabelQuoteTotal" xml:space="preserve">
+    <value>Quote Total</value>
+  </data>
+  <data name="LabelAmazonCheckout" xml:space="preserve">
+    <value>Amazon Checkout</value>
+  </data>
+  <data name="LabelAmazonLogout" xml:space="preserve">
+    <value>Amazon Logout</value>
+  </data>
+  <data name="InvalidProductCount" xml:space="preserve">
+    <value>{0} product was invalid, check the SKU Lists input field to correct them</value>
+  </data>
+  <data name="InvalidProductsCount" xml:space="preserve">
+    <value>{0} products were invalid, check the SKU Lists input field to correct them</value>
+  </data>
+  <data name="ValidProductCount" xml:space="preserve">
+    <value>{0} product was added to your ‘Quick List’</value>
+  </data>
+  <data name="ValidProductsCount" xml:space="preserve">
+    <value>{0} products were added to your ‘Quick List’</value>
+  </data>
+  <data name="ButtonAddAllToQuick" xml:space="preserve">
+    <value>Add All To Quick List</value>
+  </data>
+  <data name="LabelDownloadSpreadsheetTemplate" xml:space="preserve">
+    <value>Download Spreadsheet Template</value>
+  </data>
+  <data name="LabelFormattedExample" xml:space="preserve">
+    <value>Formatted Example</value>
+  </data>
+  <data name="LabelGuideSpreadsheets" xml:space="preserve">
+    <value>Guide: using spreadsheet</value>
+  </data>
+  <data name="LabelSKULists" xml:space="preserve">
+    <value>SKU Lists</value>
+  </data>
+  <data name="QuickOrderMultiplePasteDesc" xml:space="preserve">
+    <value>Use our spreadsheet template with columns for SKU and quantity. Copy/paste directly into our form.</value>
+  </data>
+  <data name="QuickPasteMultiple" xml:space="preserve">
+    <value>Paste Multiple</value>
+  </data>
+  <data name="QuickSearchLabel" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="QuickTableSKUOnly" xml:space="preserve">
+    <value>SKU Only</value>
+  </data>
+  <data name="QuickTableSKUOnlyComma" xml:space="preserve">
+    <value>SKU + Quantity (comma-separated)</value>
+  </data>
+  <data name="QuickTableSKUOnlyTab" xml:space="preserve">
+    <value>SKU + Quantity (tab-sparated)</value>
+  </data>
+  <data name="IsShippingReturn" xml:space="preserve">
+    <value>Shipping Returned?</value>
+  </data>
+  <data name="LabelReturnCharges" xml:space="preserve">
+    <value>Return Charges (Non Refunded Amount)</value>
+  </data>
+  <data name="LabelShippingDiscount" xml:space="preserve">
+    <value>Shipping Discount</value>
+  </data>
+  <data name="LabelShippingHandlingCharge" xml:space="preserve">
+    <value>Handling Charges</value>
+  </data>
+  <data name="TitleReturnChargesTooltip" xml:space="preserve">
+    <value>Return Charges include sum of non-refunded shipping price, tax on shipping and remainders from partially refunded amounts in Returns</value>
+  </data>
+  <data name="LabelExpectedReturnsQuantity" xml:space="preserve">
+    <value>Total Expected Qty</value>
+  </data>
+  <data name="LabelOrdersNumber" xml:space="preserve">
+    <value>Order Number</value>
+  </data>
+  <data name="LabelOrdersPaymentType" xml:space="preserve">
+    <value>Payment Type</value>
+  </data>
+  <data name="LabelOrdersStatus" xml:space="preserve">
+    <value>Order Status</value>
+  </data>
+  <data name="LabelQuotesCreatedBy" xml:space="preserve">
+    <value>Quote Created By</value>
+  </data>
+  <data name="LabelQuotesDate" xml:space="preserve">
+    <value>Quote Date</value>
+  </data>
+  <data name="LabelQuotesExpirationDate" xml:space="preserve">
+    <value>Quote Expiration Date</value>
+  </data>
+  <data name="LabelQuotesNumber" xml:space="preserve">
+    <value>Quote Number</value>
+  </data>
+  <data name="LabelQuotesStatus" xml:space="preserve">
+    <value>Quote Status</value>
+  </data>
+  <data name="LabelReturnsDate" xml:space="preserve">
+    <value>Return Date</value>
+  </data>
+  <data name="LabelReturnsNumber" xml:space="preserve">
+    <value>Return Number</value>
+  </data>
+  <data name="LabelReturnsStatus" xml:space="preserve">
+    <value>Return Status</value>
+  </data>
+  <data name="ErrorCaptchaCode" xml:space="preserve">
+    <value>The CAPTCHA code is incorrect. Please try again.</value>
+  </data>
+  <data name="LabelAmountToBePaid" xml:space="preserve">
+    <value>Amount To Be Paid</value>
+  </data>
+  <data name="LabelAmountPaid" xml:space="preserve">
+    <value>Amount Paid</value>
+  </data>
+  <data name="ErrorCreateGuestReturn" xml:space="preserve">
+    <value>This order is associated with another account. Please login with the respective account and try again.</value>
+  </data>
+  <data name="ErrorLoginToCreateReturn" xml:space="preserve">
+    <value>Please login to create a return request.</value>
+  </data>
+  <data name="LabelAvailableQty" xml:space="preserve">
+    <value>Available Qty</value>
+  </data>
+  <data name="SkipToContent" xml:space="preserve">
+    <value>Skip to content</value>
+  </data>
+  <data name="TravelMode" xml:space="preserve">
+    <value>Mode of Travel</value>
+  </data>
+  <data name="EnterQuantity" xml:space="preserve">
+    <value>Enter Quantity</value>
+  </data>
+  <data name="SuccessPlacedOrderForApproval" xml:space="preserve">
+    <value>Pending Order created successfully. An approval request has been sent for this order. </value>
+  </data>
+  <data name="LabelQuantityInBundle" xml:space="preserve">
+    <value>Quantities In Bundle</value>
+  </data>
+  <data name="ExceedingAvailableWithoutQuantity" xml:space="preserve">
+    <value>Exceeding the available quantity</value>
+  </data>
+  <data name="LabelQuantityIncluded" xml:space="preserve">
+    <value>Quantity Included</value>
+  </data>
+  <data name="EmailAFriend" xml:space="preserve">
+    <value>Email A Friend</value>
+  </data>
+  <data name="ErrorWrongCaptcha" xml:space="preserve">
+    <value>Wrong Captcha</value>
+  </data>
+  <data name="RequiredCaptcha" xml:space="preserve">
+    <value>Captcha is required</value>
+  </data>
+  <data name="ColumnTitleRate" xml:space="preserve">
+    <value>Rate</value>
+  </data>
+  <data name="ColumnTitleTaxesFees" xml:space="preserve">
+    <value>Taxes/Fees</value>
+  </data>
+  <data name="ColumnTitleTaxName" xml:space="preserve">
+    <value>Tax Name</value>
+  </data>
+  <data name="ImportDuty" xml:space="preserve">
+    <value>Import Duty</value>
+  </data>
+  <data name="ColumnImportDuty" xml:space="preserve">
+    <value>Import Duty</value>
+  </data>
+  <data name="InActive" xml:space="preserve">
+    <value>The entered SKU is invalid.</value>
+  </data>
+  <data name="IsObsoleteMessage" xml:space="preserve">
+    <value>The product is marked as obsolete, please try our other range of products.</value>
+  </data>
+  <data name="InvalidQuantity" xml:space="preserve">
+    <value>Please enter valid quantity</value>
+  </data>
+  <data name="ErrorBadRequest" xml:space="preserve">
+    <value>Bad request. You are not authorize to perform any operation.</value>
+  </data>
+  <data name="LabelPendingOrderDate" xml:space="preserve">
+    <value>Pending Order Date</value>
+  </data>
+  <data name="LabelPendingOrderDetails" xml:space="preserve">
+    <value>Pending Order Details</value>
+  </data>
+  <data name="LabelPendingOrdersNumber" xml:space="preserve">
+    <value>Pending Order Number</value>
+  </data>
+  <data name="LabelPendingOrdersStatus" xml:space="preserve">
+    <value>Pending Order Status</value>
+  </data>
+  <data name="LabelPendingOrderTotal" xml:space="preserve">
+    <value>Pending Order Total</value>
+  </data>
+  <data name="PendingPaymentThankyouText" xml:space="preserve">
+    <value>Thank You For Your Pending Payment Request</value>
+  </data>
+  <data name="PendingPaymentTrackingNumber" xml:space="preserve">
+    <value>Your Pending Payment tracking number is</value>
+  </data>
+  <data name="ErrorDeleteShippingAddressAndDeleteBillingAddress" xml:space="preserve">
+    <value>Default addresses can not be deleted. Set some other address as your default address and then try again.</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="BannerSlider" xml:space="preserve">
+    <value>BannerSlider</value>
+  </data>
+  <data name="CategoryList" xml:space="preserve">
+    <value>CategoryList</value>
+  </data>
+  <data name="FormWidget" xml:space="preserve">
+    <value>FormWidget</value>
+  </data>
+  <data name="ImageWidget" xml:space="preserve">
+    <value>ImageWidget</value>
+  </data>
+  <data name="LinkPanel" xml:space="preserve">
+    <value>LinkPanel</value>
+  </data>
+  <data name="OfferBanner" xml:space="preserve">
+    <value>OfferBanner</value>
+  </data>
+  <data name="ProductList" xml:space="preserve">
+    <value>ProductList</value>
+  </data>
+  <data name="SearchWidget" xml:space="preserve">
+    <value>SearchWidget</value>
+  </data>
+  <data name="TemplateLinkPanel" xml:space="preserve">
+    <value>TemplateLinkPanel</value>
+  </data>
+  <data name="TemplateProductList" xml:space="preserve">
+    <value>TemplateProductList</value>
+  </data>
+  <data name="TemplateTextEditor" xml:space="preserve">
+    <value>TemplateTextEditor</value>
+  </data>
+  <data name="TextEditor" xml:space="preserve">
+    <value>TextEditor</value>
+  </data>
+  <data name="VideoWidget" xml:space="preserve">
+    <value>VideoWidget</value>
+  </data>
+  <data name="LinkTextEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="ContentContainerWidget" xml:space="preserve">
+    <value>ContentContainer</value>
+  </data>
+  <data name="SuccessMoveToCart" xml:space="preserve">
+    <value>Saved Cart moved back to the Cart successfully.</value>
+  </data>
+  <data name="FailedSaveForLater" xml:space="preserve">
+    <value>Failed to add the item.</value>
+  </data>
+  <data name="SuccessSaveForLater" xml:space="preserve">
+    <value>Item moved to saved items successfully</value>
+  </data>
+  <data name="FailedMoveToCart" xml:space="preserve">
+    <value>Failed to save the product</value>
+  </data>
+  <data name="LabelMoveToCart" xml:space="preserve">
+    <value>MOVE TO CART</value>
+  </data>
+  <data name="OrderPaymentPendingForReviewMessage" xml:space="preserve">
+    <value>Due to some technical issues, this order needs re-verification. We will review and process this order further in the next 2-3 days. Please contact the customer support for more details.</value>
+  </data>
+  <data name="TextForPricingAndInventory" xml:space="preserve">
+    <value>for pricing and inventory.</value>
+  </data>
+  <data name="HeadingProductsInOrder" xml:space="preserve">
+    <value>Products In Order</value>
+  </data>
+  <data name="HeadingProductsInPendingOrder" xml:space="preserve">
+    <value>Products In Pending Order</value>
+  </data>
+  <data name="LinkTextAccountOrders" xml:space="preserve">
+    <value>Account Orders</value>
+  </data>
+  <data name="LinkTextAccountUsers" xml:space="preserve">
+    <value>Account Users</value>
+  </data>
+  <data name="SaveACHCardForFutureUse" xml:space="preserve">
+    <value>Save this account  for future use</value>
+  </data>
+  <data name="ACHAccountNoRoutingNo" xml:space="preserve">
+    <value>Account Number &amp; Routing Number</value>
+  </data>
+  <data name="ACHBasicInformation" xml:space="preserve">
+    <value>Enter your basic information in following format:</value>
+  </data>
+  <data name="ACHDetails" xml:space="preserve">
+    <value>ACH Details</value>
+  </data>
+  <data name="ACHRoutingNoAccountNo" xml:space="preserve">
+    <value>Routing Number/Account Number</value>
+  </data>
+	<data name="TextForPricingAndInventory" xml:space="preserve">
+    <value>for pricing and inventory.</value>
+  </data>
+  <data name="SubmitPayment" xml:space="preserve">
+    <value>SUBMIT PAYMENT</value>
+  </data>
+  <data name="MakePayment" xml:space="preserve">
+    <value>MAKE PAYMENT</value>
+  </data>
+  <data name="OrderInformation" xml:space="preserve">
+    <value>Order Information</value>
+  </data>
+  <data name="HelpTextWebstorePhoneNumber" xml:space="preserve">
+    <value>Country Code for the Phone number is required for receiving SMS notifications, Expected Phone Number Format (+Country code with phone number, no spaces to be included)</value>
+  </data>
+  <data name="LabelMakePayment" xml:space="preserve">
+    <value>Make Payment</value>
+  </data>
+  <data name="OrderReceiptThankYouText" xml:space="preserve">
+    <value>Thank you for submitting a payment.</value>
+  </data>
+  <data name="StatusOrder" xml:space="preserve">
+    <value>ordered</value>
+  </data>
+  <data name="StockNoticeMessage" xml:space="preserve">
+    <value>&lt;strong&gt;Not enough Inventory?&lt;/strong&gt; Submit your email address and desired total quantity below, and we will notify you when stock arrives.</value>
+  </data>
+  <data name="TitleStockNotice" xml:space="preserve">
+    <value>Stock Notice</value>
+  </data>
+  <data name="LabelPayments" xml:space="preserve">
+    <value>Payments</value>
+  </data>
+  <data name="UserTypeGuest" xml:space="preserve">
+    <value>guest</value>
+  </data>
+  <data name="LabelAmount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="EnterYourEmail" xml:space="preserve">
+    <value>Enter Your Email</value>
+  </data>
+  <data name="LabelPaymentsHistory" xml:space="preserve">
+    <value>Payment History</value>
+  </data>
+  <data name="NoPaymentAssociated" xml:space="preserve">
+    <value>Payment Method not configured, kindly contact Admin.</value>
+  </data>
+  <data name="ValidMonthYear" xml:space="preserve">
+    <value>Enter a Valid Month/Year.</value>
+  </data>
+  <data name="StockNotification" xml:space="preserve">
+    <value>Stock Notification</value>
+  </data>
+  <data name="CheckBoxReceiveSMSNotification" xml:space="preserve">
+    <value>Receive SMS Notifications</value>
+  </data>
+  <data name="ErrorCardConnectGatewayResponse" xml:space="preserve">
+    <value>Do not honor</value>
+  </data>
+  <data name="ResetPasswordSuccess" xml:space="preserve">
+    <value>Password reset successfully. Please log in with the password to access your account.</value>
+  </data>
+  <data name="TitleCSVLink" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="TItleXLSXLink" xml:space="preserve">
+    <value>XLSX</value>
+  </data>
+  <data name="LabelUploadSpreadsheet" xml:space="preserve">
+    <value>Upload your spreadsheet</value>
+  </data>
+  <data name="TextSelectUploadFile" xml:space="preserve">
+    <value>Select CSV or XLSX file.</value>
+  </data>
+  <data name="NoDataToGenerateFeed" xml:space="preserve">
+    <value>No data available to generate the requested feed.</value>
+  </data>
+  <data name="SiteMapNotAvailable" xml:space="preserve">
+    <value>No sitemap available for this store.</value>
+  </data>
+  <data name="AccountDisableErrorMessage" xml:space="preserve">
+    <value>The entered Username is invalid.</value>
+  </data>
+  <data name="SubmitAndPay" xml:space="preserve">
+    <value>Submit and pay</value>
+  </data>
+  <data name="Saved Cart" xml:space="preserve">
+    <value>Saved Cart</value>
+  </data>
+  <data name="FailedSavedCart" xml:space="preserve">
+    <value>Failed to Saved the Cart.</value>
+  </data>
+  <data name="SaveCart" xml:space="preserve">
+    <value>Save Cart</value>
+  </data>
+  <data name="SavedCarts" xml:space="preserve">
+    <value>Saved Carts</value>
+  </data>
+  <data name="SaveNewCart" xml:space="preserve">
+    <value>Save New Cart</value>
+  </data>
+  <data name="SelectSavedCart" xml:space="preserve">
+    <value>Select Saved Cart</value>
+  </data>
+  <data name="SavedCartName" xml:space="preserve">
+    <value>Save Cart Name</value>
+  </data>
+  <data name="NoItemsInSavedCart" xml:space="preserve">
+    <value>No carts available in your Saved Cart.</value>
+  </data>
+  <data name="SubmitAndPayAuthorizeIframeButton" xml:space="preserve">
+    <value>Submit And Pay</value>
+  </data>
+  <data name="FailedEditSavedCartName" xml:space="preserve">
+    <value>Failed to edit save cart name.</value>
+  </data>
+  <data name="EditSavedCart" xml:space="preserve">
+    <value>Edit Saved Cart</value>
+  </data>
+  <data name="MoveItemsToCart" xml:space="preserve">
+    <value>MOVE ITEMS TO CART</value>
+  </data>
+  <data name="LabelCardNumber" xml:space="preserve">
+    <value>Card Number</value>
+  </data>
+  <data name="LabelExpiryMonth" xml:space="preserve">
+    <value>Expiry month</value>
+  </data>
+  <data name="LabelExpiryYear" xml:space="preserve">
+    <value>Expiry year</value>
+  </data>
+  <data name="LabelSecurityCode" xml:space="preserve">
+    <value>Security Code</value>
+  </data>
+  <data name="PayAndSubmit" xml:space="preserve">
+    <value>Pay And Submit</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SuccessSavedCart" xml:space="preserve">
+    <value>Cart has been Saved Successfully.</value>
+  </data>
+	<data name="SaveCart" xml:space="preserve">
+    <value>Save Cart</value>
+  </data>
+	<data name="SavedCarts" xml:space="preserve">
+    <value>Saved Carts</value>
+  </data>
+	<data name="SaveNewCart" xml:space="preserve">
+    <value>Save New Cart</value>
+  </data>
+	<data name="SelectSavedCart" xml:space="preserve">
+    <value>Select Saved Cart</value>
+  </data>
+	<data name="NoItemsInSavedCart" xml:space="preserve">
+    <value>No carts available in your Saved Cart.</value>
+  </data>
+  <data name="SavedCartDeleteMessage" xml:space="preserve">
+    <value>Saved Cart deleted successfully</value>
+  </data>
+  <data name="SavedCartDeleteFailMessage" xml:space="preserve">
+    <value>Failed to delete Saved Cart</value>
+  </data>
+  <data name="ErrorEditSavedCart" xml:space="preserve">
+    <value>Failed to save cart.</value>
+  </data>
+  <data name="SuccessEditSavedCart" xml:space="preserve">
+    <value>Changes saved successfully.</value>
+  </data>
+  <data name="SuccessMoveToCartForLater" xml:space="preserve">
+    <value>Item moved back to the Cart.</value>
+  </data>
+  <data name="EmptySavedCart" xml:space="preserve">
+    <value>No items are in your Saved Cart</value>
+  </data>
+  <data name="LabelShopDepartments" xml:space="preserve">
+    <value>Shop Departments</value>
+  </data>
+  <data name="NoteQuickOrderLimit" xml:space="preserve">
+    <value>&lt;strong&gt;Note&lt;/strong&gt;: Maximum 50 Products can be added into the Quick List.</value>
+  </data>
+  <data name="ButtonCartTransfer" xml:space="preserve">
+    <value>Transfer Cart</value>
+  </data>
+  <data name="InvalidTradeCentricToken" xml:space="preserve">
+    <value>An invalid TradeCentric Token.</value>
+  </data>
+  <data name="TradeCentricTransferCartErrorMessage" xml:space="preserve">
+    <value>Failed to Transfer Cart</value>
+  </data>
+  <data name="TradeCentricUserModelNotNull" xml:space="preserve">
+    <value>TradeCentric user model cannot be null.</value>
+  </data>
+  <data name="ProductVideo1" xml:space="preserve">
+    <value>Video1</value>
+  </data>
+  <data name="ProductVideo2" xml:space="preserve">
+    <value>Video2</value>
+  </data>
+  <data name="ErrorConnectingPaymentMethod" xml:space="preserve">
+    <value>Unable to contact payment application. Please contact the administrator and try again.</value>
+  </data>
+  <data name="TextPaypalPaymentMethod" xml:space="preserve">
+    <value>Please wait and do not close this window.</value>
+  </data>
+  <data name="AuthorizeLoadingMessage" xml:space="preserve">
+    <value>Please wait while the page is loading...</value>
+  </data>
+  <data name="TextPrimaryBillingAddress" xml:space="preserve">
+    <value>PRIMARY BILLING ADDRESS</value>
+  </data>
+  <data name="TextPrimaryShippingAddress" xml:space="preserve">
+    <value>PRIMARY SHIPPING ADDRESS</value>
+  </data>
+  <data name="ErrorTradeCentricUserNotExist" xml:space="preserve">
+    <value>User does not exist.</value>
+  </data>
+  <data name="ErrorPaymentNotAssociated" xml:space="preserve">
+    <value>No supported payment method is associated</value>
+  </data>
+  <data name="ErrorShippingNotAssociated" xml:space="preserve">
+    <value>No supported shipping method is associated</value>
+  </data>
+</root>

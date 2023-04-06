@@ -1,0 +1,11 @@
+﻿<aside>
+    <button type="button" id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">        
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelWarehouseInformation, "Edit", "Warehouse", new { @warehouseId = Model.WarehouseId },new { @data_test_selector = "linkWarehouseInformation" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.HeaderAssociatedProducts, "GetAssociatedInventoryList", "Warehouse", new { @warehouseId = Model.WarehouseId, @warehouseName = Model.WarehouseName }, new { @data_test_selector = "linkAssociatedProduct" })</li>
+        </ul>
+    </div>
+</aside>
+
+

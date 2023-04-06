@@ -1,0 +1,44 @@
+﻿@using Znode.Libraries.Resources
+@using Znode.Engine.WebStore.Models
+@model PopupModel
+
+@if (!Equals(Model, null))
+{
+    <div class="modal fade" id="@Model.ModalPopUpId" role="dialog">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center justify-content-start">
+                    <button type="button" class="close" data-dismiss="modal"><i class="z-close-circle"></i></button>
+                    <h4 class="modal-title">@Model.Title</h4>
+                </div>
+                <div class="modal-body">
+                    <p>@Model.Description</p>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-right">
+                        @if (Model.Buttons?.Count > 0)
+                        {
+                            foreach (PopUpButtonModel button in Model.Buttons)
+                            {
+                                string className = "btn btn-primary";
+                                if (!string.IsNullOrEmpty(button.CSSClassName))
+                                {
+                                    className = button.CSSClassName;
+                                }
+                                <button type='button' @button.ButtonAttributes class='@className' data-dismiss="modal" onclick="javascript:$('body').removeClass('modal-open');$('body').removeAttr('style'); @button.OnClickFunctionName"><i class='z-ok'></i>@button.ButtonText</button>
+                            }
+                        }
+                        @if (Model.IsErrorPopUp == false)
+                        {
+                            <button type="button" id="btn-cancel-popup" class="btn btn-secondary ml-2" data-dismiss="modal"><i class='z-cancel'></i>@WebStore_Resources.ButtonCancel</button>
+                        }
+                        else
+                        {
+                            <button type="button" id="btn-cancel-popup" class="btn btn-primary" data-dismiss="modal"><i class='z-ok'></i>@WebStore_Resources.TextOk</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

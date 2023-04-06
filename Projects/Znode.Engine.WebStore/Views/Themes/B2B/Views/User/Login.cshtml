@@ -1,0 +1,100 @@
+﻿@using Znode.Libraries.ECommerce.Utilities
+@model Znode.Engine.WebStore.ViewModels.LoginViewModel
+@{
+    string rememberMeStatus = (!Equals(Model, null) && Model.RememberMe) ? "checked='checked'" : string.Empty;
+    string _isDisplayGuestcheckout = Convert.ToString(Request.QueryString["returnUrl"])?.ToLower() == "~/checkout" ? "checkout-guest" : "checkout-new";
+    string isAuthorizationMandatory = ZnodeDependencyResolver.GetService<IAuthenticationHelper>().IsAuthorizationMandatory();
+}
+<div class="container login-container">
+    <div class="row">
+        <div class="col-12 my-4 b2b-form">
+            <div class="row">
+                <div class="col-12 col-lg-6 mb-4">
+                    <h3 class="page-title">@WebStore_Resources.TitleCustomerLogin</h3>
+                    <form method="POST" action="/User/Login" class="login-form form">
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                <label for="login_username">@WebStore_Resources.LabelUserNameEmail</label>
+                            </div>
+                            <div class="col-12 p-0">
+                                <i class="zf-login-user login-icon"></i>
+                                @Html.TextBoxFor(model => model.Username, new { @id = "login_username", @data_test_selector = "txtUserName" })
+                                <p class="error-msg">@Html.ValidationMessageFor(m => m.Username, "", new { @data_test_selector = "spnErrUsername" })</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                <label for="login_password">@WebStore_Resources.ColumnPassword</label>
+                            </div>
+                            <div class="col-12 p-0">
+                                <i class="zf-key login-icon"></i>
+                                @Html.PasswordFor(model => model.Password, new { @id = "login_password", @data_test_selector = "txtLoginPassword" })
+                                <p class="error-msg">@Html.ValidationMessageFor(m => m.Password, "", new { @data_test_selector = "spnErrPassword" })</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div id="div-captcha">
+                                @Html.ZnodeCaptcha(WebStoreConstants.CaptchaRequiredForLogin, string.Empty)
+                                @if (Model != null)
+                                {
+                                    <span id="valueCaptchaError" class="field-validation-error">@Model.ErrorMessage</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 styled-input p-0 remember-me">
+                                <input @rememberMeStatus type="checkbox" value="true" name="RememberMe" id="SaveMe" data-val-required="The Remember Me field is required." data-val="true">
+                                <label for="SaveMe">@WebStore_Resources.RememberMe</label>
+                                <input type="hidden" value="false" name="RememberMe">
+                            </div>
+                            <div class="col-12 styled-input p-0">
+                                @if (ViewBag.CheckoutLogin != null)
+                                {
+                                    @Html.Hidden("returnUrl", "~/Checkout")
+                                }
+                                else
+                                {
+                                    @Html.Hidden("returnUrl", !string.IsNullOrEmpty(Request.QueryString["returnUrl"]) ? Request.QueryString["returnUrl"] : "/")
+                                }
+                                <a href="/user/forgotpassword" class="login-form-forgotpassword d-none" title="@WebStore_Resources.LinkTextForgetPassword">@WebStore_Resources.LinkTextForgetPassword</a>
+                            </div>
+                        </div>
+                        <div class="quotebutton">
+                            <button type="submit" class="btn btn-primary" onclick="User.prototype.AppendLoaderOnSubmit()" id="loginButton">@WebStore_Resources.ButtonLogin</button>
+                        </div>
+                    </form>
+                    <div class="col-12 col-sm-11 col-md-8 external-login">
+                        @Html.Partial("_ExternalLoginsListPartial")
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 account-signup-container @_isDisplayGuestcheckout">
+                    <div id="layout-account-login" class="col-12 p-0 mb-5">
+                        <div class="user-icon img-circle">
+                            <i class="zf-login-user"></i>
+                        </div>
+                        <div class="col-12 p-0">
+                            <h3 class="page-title">@WebStore_Resources.TitleNewCustomer</h3>
+                            <p class="sub mb-2 py-2"> @WebStore_Resources.TextNewCustomer</p>
+                            <div class="form-group">
+                                <a href="/User/Signup/@(!string.IsNullOrEmpty(Request.QueryString["returnUrl"]) ? "?returnUrl=" + Request.QueryString["returnUrl"] : "")" class="btn btn-secondary d-inline-block account-signup-link"><i class="zf-checkout"></i> @WebStore_Resources.LinkTextGetAnAccount</a>
+                            </div>
+                        </div>
+                        @if (!Convert.ToBoolean(isAuthorizationMandatory))
+                        {
+                            <div class="col-12 p-0 checkout-guest-container">
+                                <h3 class="page-title">@WebStore_Resources.LinkTextGuestCheckout</h3>
+                                <p class="sub mb-2 py-2">@Html.RenderMessage(WebStoreConstants.CheckoutAsAGuestMessage)</p>
+                                <div class="form-group">
+                                    <a href="/Checkout?mode=guest" class=" btn btn-secondary d-inline-block checkout-login-asguest"  data-test-selector="linkCheckoutGuest"><i class="zf-checkout"></i>@WebStore_Resources.LinkTextGuestCheckout</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

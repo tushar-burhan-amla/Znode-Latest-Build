@@ -1,0 +1,161 @@
+﻿@model Znode.Engine.Admin.ViewModels.ContentContainerViewModel
+@using Znode.Engine.Admin.ViewModels;
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateContentContainer", CancelUrl = "/ContentContainer/List", IsSaveCloseEnable = true, Callback = "ContentContainer.prototype.ValidateData" };
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "btnSave", ControlId = "dvSave", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "ContentContainer.prototype.SubmitCreateVariantsForm(this)" });
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "btnSaveNClose", ControlId = "btnSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "ContentContainer.prototype.SubmitCreateVariantsForm(this)" });
+
+}
+<div id="AddContainer" class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgContentContainer">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelContentContainer)</h1>
+    <div class="btn-container">
+        <div class="btn-text-group padding-left pull-right">
+            <a class="btn-text btn-text-secondary" id="btnNextTab" data-test-selector="btnNext" onclick="ContentContainer.prototype.AddDefaultVariantDetails();">
+                <span>@Admin_Resources.TextNext</span>
+            </a>
+        </div>
+    </div>
+    <div id="btnCancel" class="pull-right">
+        @{
+            string returnurl = string.IsNullOrEmpty(actionModel.CancelUrl) ? HttpUtility.UrlDecode(actionModel.ReturnUrl) : actionModel.CancelUrl;
+        }
+        @if (actionModel.IsCancelIsShow)
+        {
+            if (!string.IsNullOrEmpty(returnurl))
+            {
+                <a href="@returnurl" class="btn-text-icon" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+            }
+            else
+            {
+                @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "Dashboard", "Dashboard", null, new { @class = "btn-text-icon", @id = "dvCancel", @data_test_selector = "linkCancel", @onclick = "SaveCancel.prototype.Cancel()" })
+            }
+        }
+    </div>
+</div>
+<div id="AddVariant" class="col-sm-12 title-container" style="display: none;">
+    <h1 data-test-selector="hdgContentContainer"><span id="addVariantHeading"></span></h1>
+    <div class="pull-right">
+        <div id="dvSubmitCancel" class="btn-container">
+            <a href="JavaScript:void(0);" onclick="ContentContainer.prototype.ShowContainerGeneralInformation();" class="btn-text-icon" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+            @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+        </div>
+    </div>
+</div>
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateContentContainer" }))
+    {
+        <div class="content-widget-section dirtyignore" id="divContainerGeneralInformation">
+
+            <h3 class="section-heading margin-bottom-20 padding-bottom">@Admin_Resources.LabelGeneralInformation</h3>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.ContainerKey, new { @class = "required", @data_test_selector = "lblContainerKey" })
+                    </div>
+                    <div class="control-md">
+                        <div id="areaList">
+                            @Html.TextBoxFor(m => m.ContainerKey, new { @data_test_selector = "txtContainerKey" })
+
+                            @Html.ValidationMessageFor(model => model.ContainerKey, "", new { @data_test_selector = "valContainerKey", @id = "errorSpanContainerKey" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.Name, new { @class = "required", @data_test_selector = "lblContainerName" })
+                    </div>
+                    <div class="control-md">
+                        <div id="areaList">
+                            @Html.TextBoxFor(m => m.Name, new { @data_test_selector = "txtContainerName", @id = "ContainerName" })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @data_test_selector = "valContainerName", @id = "errorSpanName" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.Tags, new { @data_test_selector = "lblContainerTag" })
+                    </div>
+                    <div class="control-md">
+                        <div id="areaList">
+                            @Html.TextAreaFor(m => m.Tags, new { @data_test_selector = "txtContainerTag" })
+                            @Html.ValidationMessageFor(model => model.Tags, "", new { @data_test_selector = "valContainerTag" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.FamilyCode, new { @data_test_selector = "lblFamilyName", @class = "required" })
+                    </div>
+                    <div class="control-md">
+                        <div id="areaList">
+                            @Html.DropDownListFor(x => x.FamilyCode, Model.ContainerFamilies, Admin_Resources.LabelSelectContainerFamily, new { @id = "drpFamilyName", @data_test_selector = "drpFamilyName", onChange = "ContentContainer.prototype.GetGlobalAttributeData();" })
+
+                            @Html.ValidationMessageFor(model => model.FamilyCode, "", new { @data_test_selector = "valFamilyName", @id = "errorSpanFamilyCode" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(x => x.ContainerKey)
+        @Html.HiddenFor(x => x.ContentContainerId)
+        @Html.HiddenFor(x => x.LocaleId)
+        @Html.Hidden("IsRedirectToEditVariantScreen", false)
+
+        <div id="divAddDefaultVariant" style="display:none;" class="dirtyignore">
+
+            <div class="form-group">
+                <div class="col-sm-12 padding-left-20 nopadding" id="variantContainerTemplate">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.TemplateName, new { @data_test_selector = "lblTemplateName" })
+                    </div>
+                    <div class="control-md">
+                        <div id="areaList">
+                            @Html.DropDownListFor(x => x.ContainerTemplateId, Model.ContainerTemplates, Admin_Resources.LabelSelectOptionalTemplate, new { @id = "drpContainerTemplate", @data_test_selector = "drpContainerTemplate" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 padding-left-20 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(x => x.LocaleId, new { @data_test_selector = "lblLocale" })
+                    </div>
+                    <div class="control-md">
+                        @*@Html.DropDownListFor(m => m.LocaleId, Model.Locale, new { @id = "ddl_locale_list_containers", @data_test_selector = "drpLocale", disabled = "disabled" })*@
+                        @Html.DropDownList("LocaleId", Model.Locale, new { @id = "ddl_locale_list_containers", @data_test_selector = "drpLocale", disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-md padding-left-20 control-non">
+                    <label>
+                        <input id="IsActive" name="IsActive" checked disabled type="checkbox" value="true" data-test-selector="chkIsActive">
+                        <span class="lbl padding-8" for="IsActive" data-test-selector="spnIsActive">@Admin_Resources.LabelIsActive</span>
+                        <input name="IsActive" type="hidden" value="true">
+                    </label>
+                </div>
+            </div>
+            <div id="AssociatedGroups" class="col-sm-12 associated-group"></div>
+        </div>
+    }
+</section>
+<script>
+    $(document).ready(function () {
+        ContentContainer.prototype.GetGlobalAttributeData();
+        $("#frmCreateContentContainer").find('.panel-collapse').first().attr("style", "display:block")
+    });
+</script>

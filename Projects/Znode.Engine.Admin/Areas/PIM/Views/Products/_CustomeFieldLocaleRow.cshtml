@@ -1,0 +1,53 @@
+﻿@model Znode.Engine.Admin.ViewModels.CustomFieldViewModel
+
+@if (Model.CustomFieldLocales.Count() > 0)
+{
+    for (int i = 0; i < Model.CustomFieldLocales.Count(); i++)
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+
+                @if (Model.CustomFieldLocales[i].IsDefault)
+                {
+                    <div class="control-label">
+                        @Html.Label(Model.CustomFieldLocales[i].LocaleName, new { @class = "required" })
+                    </div>
+                    if (Convert.ToBoolean(ViewData["CustomKeyExists"]))
+                    {
+                        <div class="control-md">
+                            @Html.TextBoxFor(m => m.CustomFieldLocales[i].CustomKey, new { required = "required" })
+                            @Html.ValidationMessageFor(m => m.CustomFieldLocales[i].CustomKey)
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="control-md" id="CustomKeyValue">
+                            @Html.TextBoxFor(m => m.CustomFieldLocales[i].CustomKeyValue, new { required = "required" })
+                            @Html.ValidationMessageFor(m => m.CustomFieldLocales[i].CustomKeyValue)
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="control-label">
+                        @Html.Label(Model.CustomFieldLocales[i].LocaleName)
+                    </div>
+                    <div class="control-md">
+                        @if (Convert.ToBoolean(ViewData["CustomKeyExists"]))
+                        {
+                            @Html.TextBoxFor(m => m.CustomFieldLocales[i].CustomKey)
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.CustomFieldLocales[i].CustomKeyValue)
+                        }
+                    </div>
+                }
+            </div>
+
+            @Html.HiddenFor(x => x.CustomFieldLocales[i].LocaleId)
+            @Html.HiddenFor(x => x.CustomFieldLocales[i].CustomFieldLocaleId)
+            @Html.HiddenFor(x => x.CustomFieldLocales[i].CustomFieldId)
+        </div>
+    }
+}

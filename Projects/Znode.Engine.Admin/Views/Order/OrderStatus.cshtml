@@ -1,0 +1,27 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model OrderStateParameterViewModel
+@{
+    Layout = null;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formOrderStatus", SaveHeader = "Update", CancelHeader = Admin_Resources.ButtonCancel };
+}
+@using (Ajax.BeginForm(actionName, controllerName
+                                , new AjaxOptions
+                                {
+                                    OnSuccess = "alert(0);",
+                                    OnFailure = "",
+                                }, new { id = "formOrderStatus" }))
+{
+    <div class="col-sm-12 nopadding">
+        <div class="control-md control-non">
+            @Html.DropDownListFor(model => model.OmsOrderStateId, Model.OrderStatusList, new { @class = "margin-bottom" })
+            <button type="submit" class="btn-text pull-right">@Admin_Resources.ButtonUpdate</button>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.OmsOrderId)
+    @Html.HiddenFor(model => model.OmsOrderStateId)
+    @Html.HiddenFor(model => model.UserId)
+    @Html.HiddenFor(model => model.AccountId)
+    @Html.HiddenFor(model => model.UpdatePageType)
+}

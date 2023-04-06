@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="robots" content="noindex,nofollow">
+    <link href="~/Content/Images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    @Styles.Render("~/content/css/AllCss")
+    <script src="~/Scripts/References/jquery-3.3.1.min.js"></script>
+    @Scripts.Render("~/bundles/TinymceJs")   
+</head>
+<body id="@ViewContext.RouteData.Values["Controller"].ToString()" class="@ViewContext.RouteData.Values["Action"] login-page" data-controller="@ViewContext.RouteData.Values["Controller"].ToString()" data-view="@ViewContext.RouteData.Values["Action"].ToString()" onload="javascript: var notification = new ZnodeNotification(); notification.DisplayNotificationMessages();">
+
+    <div class="container-fluid wrapper">
+        <div class="row">
+            <div class="container">
+                <div class="col-sm-12 nopadding notification-msg" id="body">
+                    <div class="messageBoxContainer" id="messageBoxContainerId" data-message="@TempData["Notifications"]"></div>
+                </div>
+                @{
+                    TempData.Remove("Notifications");
+                }
+            </div>
+            <div class="login-container">
+                @RenderBody()
+            </div>
+            <div class="footer-login">
+                <p>@String.Format(@Admin_Resources.Copyright + @System.Configuration.ConfigurationManager.AppSettings["BuildVersion"], DateTime.Now.Year)</p>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/loginpagevalidate")
+    @Scripts.Render("~/bundles/loginpage")
+
+    <div id="divcssaddpopup" class="modal fade" role="dialog">
+
+        @* Don't delete  *@
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                    <h4 class="modal-title">@Admin_Resources.ChangePassword</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            @Admin_Resources.TextPasswordChange
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer right">
+                    <div class="pull-left  margin-top-bottom">
+                        <label>
+                            <input class="" name="Dont-Show-Message" type="checkbox" id="Dont-Show-Message" value="false">
+                            <span class="lbl padding-8">@Admin_Resources.LabelDontShowMessage</span>
+                            <input name="IsActive" type="hidden" value="false">
+                        </label>
+                    </div>
+
+                    <div class="pull-right  margin-top-bottom">
+
+                        <button type="button" class="btn-text btn-text-secondary" id="Later">@Admin_Resources.LabelChangeLater</button>
+
+                        <button type="button" class="btn-text margin-left-10" id="ResetAdminPassword">@Admin_Resources.LinkChange</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

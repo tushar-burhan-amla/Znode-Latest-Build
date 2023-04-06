@@ -1,0 +1,27 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model RMAReturnViewModel
+@{
+    Layout = null;
+}
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgCustomer">Return Notes</h1>
+    <div class="pull-right">
+        <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('AdditionalReturnNotes')" data-test-selector="linkBack"><em class="z-back"></em>Back</button>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="form-group order-notes-padding">
+        <div class="col-sm-12 nopadding margin-bottom margin-top-25 d-flex align-items-start order-note-popup">
+            <div class="label">
+                @Html.Label(Admin_Resources.LabelAdditionalNotes, new { @data_test_selector = "lblAdditionalNotes" })
+            </div>
+            <div id="areaList" class="col-xs-12 nopadding textbox">
+                @Html.TextAreaFor(m => m.AdditionalReturnNotes, new { maxlength = 500, @data_test_selector = "txtAdditionalReturnNotes", @id = "Notes" })
+                @Html.ValidationMessageFor(model => model.AdditionalReturnNotes, "", new { @data_test_selector = "valAdditionalReturnNotes" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-xs-12 modal-footer">
+    <button type="button" class="btn-text btn-text-secondary pull-right" id="AddReturnNote" onclick="RMAReturn.prototype.SaveAddedReturnNote()" data-test-selector="btnAddReturnNote">@Admin_Resources.LabelAddNote</button>
+</div>

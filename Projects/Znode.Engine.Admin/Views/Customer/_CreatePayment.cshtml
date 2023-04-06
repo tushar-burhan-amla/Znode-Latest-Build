@@ -1,0 +1,100 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+@model GiftCardViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateGiftCard", CancelUrl = "/Customer/GetAffiliate?userId=" + @Model.UserId , IsSaveCloseIsShow = false};
+    string cultureCode = Equals(Model.CultureCode, null) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+}
+<div id="grid-container">
+    @using (Html.BeginForm(actionName, controllerName, new { userId = Model.UserId }, FormMethod.Post, new { @id = "frmCreateGiftCard" }))
+    {
+        <div class="col-sm-12 title-container">
+            <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelVoucher)</h1>
+            <div class="pull-right">
+                @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+            </div>
+        </div>
+        <!--Main Container-->
+        <section class="col-sm-12 page-container">
+            <div id="loginForm" class="box-container">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.OwedAmount)
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBox("OwedAmount", @HelperMethods.FormatPriceWithCurrency(Model.OwedAmount, cultureCode), new { @disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.CardNumber)
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.CardNumber, new { @disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.Name, new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.Name)
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.GiftCardAmount, new { @class = "required" })
+                        </div>
+                        <div class="control-sm left-inner-icon">
+                            <em class="unit"><span for="CurrencySymbol"></span></em>
+                            @Html.TextBoxFor(m => m.GiftCardAmount, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidPriceForRoundOff, Admin_Resources.ErrorValidPrice) })
+                        </div>
+                        <div class="pull-left padding-left">
+                            <label for="CurrencyName" style="vertical-align: middle"></label>
+                        </div>
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-md control-non">
+                                @Html.ValidationMessageFor(model => model.GiftCardAmount)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.ExpirationDate, new { @class = "required" })
+                        </div>
+                        <div class="control-sm">
+                            <div class="right-inner-icon">
+                                @Html.TextBox("ExpirationDate", Model.ExpirationDate != null ? Model.ExpirationDate.ToDateTimeFormat() : string.Empty, new { @id = "ExpirationDate", @mindate = HelperMethods.GetDateTime().Date, @class = "datepicker", @group = "expirationdate", @data_date_format = HelperMethods.GetDateFormat() })
+                                <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.ExpirationDate)
+                        </div>
+                    </div>
+                </div>
+                @Html.HiddenFor(model => model.GiftCardId)
+                @Html.HiddenFor(model => model.CardNumber)
+                @Html.HiddenFor(model => model.OwedAmount)
+                @Html.HiddenFor(model => model.UserId)
+                @Html.HiddenFor(model => model.PortalId)
+                @Html.HiddenFor(model => model.CultureCode)
+                @Html.HiddenFor(model => model.StartDate)
+            </div>
+</section>
+    }
+
+</div>

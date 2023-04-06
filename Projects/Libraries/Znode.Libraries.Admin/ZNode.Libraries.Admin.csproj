@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D24B86B3-2CA1-431D-AFB5-E59C313283EB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Znode.Libraries.Admin</RootNamespace>
+    <AssemblyName>Znode.Libraries.Admin</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Int|AnyCPU'">
+    <OutputPath>bin\Int\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'loadtest|AnyCPU'">
+    <OutputPath>bin\loadtest\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'automation|AnyCPU'">
+    <OutputPath>bin\automation\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'B2B|AnyCPU'">
+    <OutputPath>bin\B2B\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LB|AnyCPU'">
+    <OutputPath>bin\LB\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <Reference Include="GenericParsing, Version=1.1.5.29274, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GenericParser.1.1.5\lib\net20\GenericParsing.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MongoDB.Bson.2.10.2\lib\net452\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MongoDB.Driver.2.10.2\lib\net452\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MongoDB.Driver.Core.2.10.2\lib\net452\MongoDB.Driver.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.GridFS, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MongoDB.Driver.GridFS.2.10.2\lib\net452\MongoDB.Driver.GridFS.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Legacy, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\mongocsharpdriver.2.10.2\lib\net452\MongoDB.Driver.Legacy.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Znode_9_0_0_QA\SharedLibraries\NuGet_Packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Znode.Libraries.Framework.Business.9.7.5\lib\net48\Znode.Libraries.Framework.Business.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Extentions\MongoTranslatorExtension.cs" />
+    <Compile Include="Extentions\TranslatorExtension.cs" />
+    <Compile Include="Import\IImportHelper.cs" />
+    <Compile Include="Import\ImportHelper.cs" />
+    <Compile Include="OMS\DiscountHelper.cs" />
+    <Compile Include="OMS\GenerateRandomNumber.cs" />
+    <Compile Include="OMS\HtmlParser.cs" />
+    <Compile Include="OMS\IDiscountHelper.cs" />
+    <Compile Include="OMS\IZnodeOrderHelper.cs" />
+    <Compile Include="OMS\IZnodeQuoteHelper.cs" />
+    <Compile Include="OMS\ZnodeQuoteHelper.cs" />
+    <Compile Include="OMS\ZnodeReceiptHelper.cs" />
+    <Compile Include="OMS\ZnodeOrderHelper.cs" />
+    <Compile Include="PIM\AttributeHelper.cs" />
+    <Compile Include="PIM\IPublishProductHelper.cs" />
+    <Compile Include="PIM\PublishProductHelper.cs" />
+    <Compile Include="ProductFeed\IZnodeProductFeed.cs" />
+    <Compile Include="ProductFeed\ZnodeProductFeed.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\ReportGenerator.cs" />
+    <Compile Include="Report\ReportHelper.cs" />
+    <Compile Include="Report\ReportingService\ReportingService2005.cs" />
+    <Compile Include="Report\ReportUploader.cs" />
+    <Compile Include="Search\SearchHelper.cs" />
+    <Compile Include="V2\OMS\ZnodeOrderHelperV2.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.ABSConnector\Znode.Engine.ABSConnector.csproj">
+      <Project>{78B2154A-AA94-4F6A-827B-CC8434E59A63}</Project>
+      <Name>Znode.Engine.ABSConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.Api.Models\Znode.Engine.Api.Models.csproj">
+      <Project>{05a4b1d5-82d1-4e47-afd9-4b01ac5917bd}</Project>
+      <Name>Znode.Engine.Api.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.Promotions\Znode.Engine.Promotions.csproj">
+      <Project>{0b46a894-d427-4372-a4c3-c47cc2c7e036}</Project>
+      <Name>Znode.Engine.Promotions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZNode.Libraries.Data\Znode.Libraries.Data.csproj">
+      <Project>{786f7274-2f78-4282-b91c-978cb79fb2f3}</Project>
+      <Name>Znode.Libraries.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZNode.Libraries.ECommerce.Entities\Znode.Libraries.ECommerce.Entities.csproj">
+      <Project>{c0e80bd4-5d88-4b0b-9f2f-23d51c2f973a}</Project>
+      <Name>Znode.Libraries.ECommerce.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZNode.Libraries.ECommerce.Utilities\Znode.Libraries.ECommerce.Utilities.csproj">
+      <Project>{f3703cce-eec4-46b0-a54f-83857d4014df}</Project>
+      <Name>Znode.Libraries.ECommerce.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZNode.Libraries.MongoDB.Data\Znode.Libraries.MongoDB.Data.csproj">
+      <Project>{5b6482f4-7b81-4d7c-a099-78237c8a55b3}</Project>
+      <Name>Znode.Libraries.MongoDB.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Libraries.Observer\Znode.Libraries.Observer.csproj">
+      <Project>{FF50503A-684E-41D6-B2BF-61C522F12405}</Project>
+      <Name>Znode.Libraries.Observer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZNode.Libraries.Resources\Znode.Libraries.Resources.csproj">
+      <Project>{0461ba0d-6141-47d7-a78e-c166ff5a75f0}</Project>
+      <Name>Znode.Libraries.Resources</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

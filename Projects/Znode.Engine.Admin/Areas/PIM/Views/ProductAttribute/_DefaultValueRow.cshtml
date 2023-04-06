@@ -1,0 +1,29 @@
+﻿@model List<Znode.Engine.Admin.AttributeValidationHelpers.DefaultValueModel>
+@{
+    int _localeId = Convert.ToInt32(ViewData["LocaleId"]);
+    int _rowIndex = 0;
+    if (!Equals(Model, null) && Model.Count > 0)
+    {
+    <td>
+        @foreach (var _item in Model)
+                {
+            <div id="rowIndex_@_rowIndex">
+                @Html.TextBox("DefaultValue-" + _item.LocaleId, _item.Value, new { @style = "display:none;", @Localeid = _item.LocaleId })
+                <label>@_item.Value</label>
+            </div>
+                _rowIndex++;
+            }
+    </td>
+    }
+    else
+    {
+    <td>
+        <div id="rowIndex_0">
+            @Html.TextBox("DefaultValue", null, new { @Localeid = _localeId })
+            <label style="display: none;"></label>
+        </div>
+    </td>
+    }
+}
+
+

@@ -1,0 +1,48 @@
+﻿@using Znode.Libraries.Resources
+@{
+    ViewBag.Title = "Znode Activation";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/jquery-3.3.1.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		$("#Checkbox1").click(function () {
+			$('#ActivateButton').attr("disabled", !this.checked);
+		});
+
+		$("input[name$='LicenseType']").click(function () {
+			var value = $(this).val();
+			if (value == 'FreeTrial') {
+				$("#serialNumberRow").hide();
+			} else {
+				$("#serialNumberRow").show();
+			}
+		});
+	});
+</script>
+
+@using (Html.BeginForm("LicenseInformation", "Activate"))
+{
+    <div id="body">
+        <h2>@Api_Resources.ActivateyourLicense</h2>
+
+        <section id="Display">
+            <p>
+               @Html.Raw(@Api_Resources.ActivatelicenseText) 
+                <br />
+                <br />
+                @Html.ActionLink("Click here", "Updatelicense", "Activate", new { area = "" }, null) to check for update of your existing license.
+                <br />
+            </p>
+
+            <input id="Checkbox1" type="checkbox" /> @Api_Resources.LicenceConfirmationMessage<br>
+
+            <br />
+
+            <input id="ActivateButton" type="submit" value="Proceed With Activation" disabled="disabled" />
+        </section>
+    </div>
+}

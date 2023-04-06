@@ -1,0 +1,49 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model IEnumerable<OrdersViewModel>
+
+@if (Model.Any())
+{
+
+    <div class="table-responsive">
+        <table class="table" aria-describedby="Order Details">
+            <thead>
+                <tr>
+                    <th scope="col" data-test-selector="tblHdTitleOrderNumber">@WebStore_Resources.TitleOrderNumber</th>
+                    <th scope="col" data-test-selector="tblHdTitleOrderStatus">@WebStore_Resources.TitleOrderStatus</th>
+                    <th scope="col" data-test-selector="tblHdTitlePaymentStatus">@WebStore_Resources.TitlePaymentStatus</th>
+                    <th scope="col" data-test-selector="tblHdTitleCreatedDate">@WebStore_Resources.TitleCreatedDate</th>
+                    <th scope="col" data-test-selector="tblHdTitleOrderTotal">@WebStore_Resources.TitleOrderTotal</th>
+                    <th scope="col" data-test-selector="tblHdTitleAction">@WebStore_Resources.TitleAction</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (OrdersViewModel order in Model)
+                {
+                    <tr>
+                        <td data-test-selector="colOrderNumber">
+                            <a href="/User/OrderReceipt?omsOrderId=@order.OmsOrderId" data-test-selector="linkOrderNumber">@order.OrderNumber</a>
+                        </td>
+                        <td data-test-selector="colOrderState">@order.OrderState</td>
+                        <td data-test-selector="colPaymentStatus">@order.PaymentStatus</td>
+                        <td data-test-selector="colOrderDate">@order.OrderDate.ToDateTimeFormat()</td>
+                        <td data-test-selector="colTotal">@Helper.FormatPriceWithCurrency(order.Total, order.CultureCode)</td>
+                        <td data-test-selector="colOmsOrderId">
+                            <a href="/User/OrderReceipt?OmsOrderId=@order.OmsOrderId&portalId=@order.PortalId" class="remove-compare" onclick="" data-test-selector="linkOrderReceipt" data-toggle="tooltip" data-placement="top" title="View Order"><span class="zf-view"></span></a>
+                            <a href="/User/ReorderProducts?OmsOrderId=@order.OmsOrderId" class="cart-icon-block" onclick="" data-test-selector="linkReorderProducts" data-toggle="tooltip" data-placement="top" title="Reorder"><span class="cart-icon"></span></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="col-12 account-recent-orders">
+        <div class="row">
+            <div class="col-12 pl-2 py-4">
+                <div class="b2b-recent-order-detail">@WebStore_Resources.TextNoOrders</div>
+            </div>
+        </div>
+    </div>
+}

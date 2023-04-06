@@ -1,0 +1,66 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@using System.Web.Configuration;
+@model PortalViewModel
+@{
+    string sch_url = @ZnodeWebstoreSettings.ZnodeWebStoreUri;
+}
+
+@*Tag Organization*@
+<script type="application/ld+json">
+    {
+    "@@context" : "http://schema.org",
+    "@@type" : "Organization",
+    "@@id"  : "@sch_url",
+    "name" : "@Model.Name",
+    "url" : "@sch_url",
+    "logo" : "@Model.WebsiteLogo",
+    "contactPoint": [{
+    "@@type" : "ContactPoint",
+    "telephone" : "@Model.CustomerServicePhoneNumber",
+    "contactType" : "customer service",
+    "contactOption" : "TollFree"
+    }],
+    "sameAs" : [
+    "https://www.facebook.com/",
+    "https://twitter.com/",
+    "https://www.linkedin.com/",
+    "https://plus.google.com/",
+    "https://www.instagram.com/",
+    "https://www.pinterest.com/"
+    ]
+    }
+</script>
+@*Tag WebSite*@
+<script type=application/ld+json>
+    {"@@context": "http://schema.org",
+    "@@type": "WebSite",
+    "url": "@sch_url",
+    "potentialAction": {
+    "@@type": "SearchAction" ,
+    "target": "@sch_url/search?SearchTerm={search_term}",
+    "query-input": "{search_term}"
+    }
+    }
+</script>
+@*Tag LocalBusiness*@
+<script type="application/ld+json">
+    {
+    "@@context": "http://schema.org/",
+    "@@type": "LocalBusiness",
+    "name": "@Model.Name",
+    "image": "@Model.WebsiteLogo",
+    "priceRange" : "$",
+    "telephone": "@Model.CustomerServicePhoneNumber",
+    "email": "@Model.CustomerServiceEmail",
+    "url"  : "@sch_url",
+    "address": {
+    "@@context": "http://schema.org/",
+    "@@type": "PostalAddress",
+    "streetAddress": "Street One",
+    "addressLocality": "Example area",
+    "addressRegion": "OH",
+    "postalCode": "45828"
+    }
+    }
+</script>

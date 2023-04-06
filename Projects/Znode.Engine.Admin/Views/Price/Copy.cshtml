@@ -1,0 +1,100 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+
+@model PriceViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = "/Price/List", FormId = "frmCopyPrice", IsSaveCloseEnable = true};
+}
+
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleCopy, Admin_Resources.TextPrice)</h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCopyPrice" }))
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.ListCode, new { @class = "required", @data_test_selector = "lblCode" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.ListCode, new { @data_test_selector = "txtCode" })
+                    @Html.ValidationMessageFor(model => model.ListCode, "", new { @data_test_selector = "valCode" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.ListName, new { @class = "required", @data_test_selector = "lblName" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.ListName, new { @data_test_selector = "txtName" })
+                    @Html.ValidationMessageFor(model => model.ListName, "", new { @data_test_selector = "valName" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.CurrencyId, new { @data_test_selector = "lblCurrencyId" })
+                </div>
+                <div class="control-md">
+                    @{ Html.RenderAction("GetCurrency", controllerName, new { @currencyId = @Model.CurrencyId });}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.CultureId, new { @data_test_selector = "lblCultureId" })
+                </div>
+                <div class="control-md">
+                    @{ Html.RenderAction("GetCulture", controllerName, new { @cultureId = @Model.CultureId, @currencyId = @Model.CurrencyId });}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.ActivationDate, new { @data_test_selector = "lblActivationDate" })
+                </div>
+                <div class="control-sm">
+                    <div class="right-inner-icon">
+                        @Html.TextBox("ActivationDate", Model.ActivationDate != null ? Model.ActivationDate.ToDateTimeFormat() : string.Empty, new { @id = "ActivationDate", @data_test_selector = "txtActivationDate", @mindate = "", @class = "datepicker", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat() })
+                        <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.ExpirationDate, new { @data_test_selector = "lblExpirationDate" })
+                </div>
+                <div class="control-sm">
+                    <div class="right-inner-icon">
+                        @Html.TextBox("ExpirationDate", Model.ExpirationDate != null ? Model.ExpirationDate.ToDateTimeFormat() : string.Empty, new { @id = "ExpirationDate", @data_test_selector = "txtExpirationDate", @class = "datepicker", @maxdate = "", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat() })
+                        <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(model => model.PriceListId)
+        @Html.HiddenFor(model => model.ListCode)
+        @Html.HiddenFor(model => model.OldCurrencyId)
+    }
+</section>

@@ -1,0 +1,171 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@model CreateOrderViewModel
+@using Znode.Libraries.ECommerce.Utilities
+
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    Model.IsQuote = true;
+    Model.ShippingListViewModel.IsQuote = true;
+    Model.UserAddressDataViewModel.IsOrderQuote = true;
+}
+
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.TitleAdd</h1>
+    @if (actionName.ToLower().Contains("createquote"))
+    {
+        <div class="pull-right dirtyignore">
+            <button type="button" id="serachCustomer" onclick="Order.prototype.GetCustomerList();" class="btn-text-icon"><em class='z-search'></em>@Admin_Resources.SearchExistingCustomerButton</button>
+            @Html.AuthorizedPrototypeRawActionLink("<em class='z-add-circle'></em>" + Admin_Resources.AddNewCustomerButton, "AddNewCustomer", "Order", new { @class = "btn-text-icon", onclick = "ZnodeBase.prototype.BrowseAsidePoupPanel('/Order/AddNewCustomer','customerDetails')" })
+            @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "AccountQuoteList", "Account", new { userId = Model.UserId, accountId = Model.AccountId }, new { @class = "btn-text-icon" })
+            <a href="javascript:void(0)" class="btn-text-icon" id="btnContinue" onclick="OrderSidePanel.prototype.ContinueOrder();"><em class='z-continue'></em>@Admin_Resources.ButtonContinue</a>
+            <a id="btnCreateOrder" onclick="Order.prototype.SubmitQuote();" style="display:none;" class="btn-text-icon"><em class="z-check-circle"></em>@Admin_Resources.LabelCreateQuote</a>
+        </div>
+    }
+</div>
+
+<div class="main-wrapper">
+    <!--Left Panel for quote-->
+    @Html.Partial("~/views/Order/_asideQuoteManagePanel.cshtml")
+
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { name = "checkoutform", id = "checkoutform" }))
+            {
+            <div id="CustomerDiv" class="dirtyignore">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.PortalId, new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @if (actionName.ToLower() == "createquote")
+                            {
+                                <div class="control-md">
+                                    @Html.TextBoxFor(m => m.StoreName, new { @disabled = "disabled", @class = "readonly", @placeholder = Admin_Resources.LabelSelectStore, @id = "txtPortalName" })
+                                    @Html.ValidationMessageFor(model => model.StoreName, null, new { id = "errorRequiredStore" })
+                                </div>
+                                if (actionName.ToLower().Contains("create"))
+                                {
+                                    <div class="pull-left dirtyignore">
+                                        <a id="serachCustomer" onclick="Order.prototype.GetPortalList();" class="btn-narrow-icon" data-toggle="tooltip" data-placement="top" data-original-title="@Admin_Resources.SearchExistingPortalButton"><em class='z-search'></em></a>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                if (DefaultSettingHelper.AllowGlobalLevelUserCreation)
+                                {
+                                    <div class="control-md">
+                                        @Html.TextBoxFor(m => m.StoreName, new { @disabled = "disabled", @class = "readonly", @placeholder = Admin_Resources.LabelSelectStore, @id = "txtPortalName" })
+                                    </div>
+
+                                    <div class="pull-left dirtyignore">
+                                        <a id="serachCustomer" onclick="Order.prototype.GetPortalList();" class="btn-narrow-icon" data-toggle="tooltip" data-placement="top" data-original-title="@Admin_Resources.SearchExistingPortalButton"><em class='z-search'></em></a>
+                                    </div>
+                                    @Html.Hidden("isAllowGlobalLevelUserCreation", true)
+                                }
+                                else
+                                {
+                                    <div class="control-md">
+                                        @Html.TextBoxFor(m => m.StoreName, new { @disabled = "disabled", @class = "readonly", @placeholder = Admin_Resources.LabelSelectStore, @id = "txtPortalName" })
+                                    </div>
+                                    @Html.HiddenFor(model => model.OrderId)
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.CustomerName, new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.HiddenFor(model => model.UserId, new { @id = "hdnUserId" })
+                            @Html.HiddenFor(model => model.AccountId, new { @id = "hdnAccountId" })
+
+                            @Html.TextBoxFor(model => model.CustomerName, new { @placeholder = Admin_Resources.TextEnterCustomerName, @id = "txtCustomerName", @readonly = "readonly" })
+
+                            @Html.HiddenFor(model => model.UserAddressDataViewModel.FullName)
+                            <span class="field-validation-error col-sm-12 nopadding" id="CustomerNameError"></span>
+                        </div>
+                        <div class="pull-left">
+                            @if (actionName.ToLower() == "createquote")
+                            {
+                                <a id="serachCustomer" onclick="Order.prototype.GetCustomerList();" class="btn-narrow-icon" data-toggle="tooltip" data-placement="top" data-original-title="@Admin_Resources.SearchExistingCustomerButton"><em class='z-search'></em></a>
+                                <a class="btn-narrow-icon" onclick="Order.prototype.AddNewUser()"><em class="z-add"></em></a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="AddressDiv" style="display:none;">
+                @Html.Partial("UserShippingBillingAddress", Model.UserAddressDataViewModel)
+            </div>
+
+
+            <div id="ShoppingCartDiv" style="display:none;">
+                @if (HelperUtility.IsNull(Model.CartViewModel))
+                {
+                    @Html.Partial("ShoppingCart", new CartViewModel() { IsQuote = true })
+                }
+                else
+                {
+                    {
+                        Model.CartViewModel.IsQuote = true;
+                    }
+                    @Html.Partial("ShoppingCart", Model.CartViewModel)
+                    @Html.HiddenFor(model => model.CartViewModel.ShoppingCartItems.Count, new { id = "hdnShoppingCartCount" })
+                }
+
+            </div>
+
+            <div id="shippingMethodDiv" style="display:none;">
+                @{Html.RenderPartial("ShippingOptions", Model.ShippingListViewModel, new ViewDataDictionary { TemplateInfo = new System.Web.Mvc.TemplateInfo { HtmlFieldPrefix = "shippingListViewModel" } });}
+            </div>
+
+            <div id="paymentMethodsDiv" style="display:none;">
+                <div id="divAdditionalInfo" class="col-sm-12 nopadding">
+                    <div class="form-group">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelAdditionalNotes)
+                        </div>
+                        <div class="control-md">
+                            @Html.TextAreaFor(m => m.AdditionalNotes, new { maxlength = 500 })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="ReviewDiv" style="display:none;">
+
+            </div>
+            @Html.HiddenFor(model => model.UserAddressDataViewModel.UserId, new { id = "UserAddressDataViewModel.UserId" })
+                    @Html.HiddenFor(model => model.UserAddressDataViewModel.IsMultipleCouponCodeAllowed, new { id = "UserAddressDataViewModel.IsMultipleCouponCodeAllowed" })
+                    <div id="OrderQuoteData">
+                        @Html.HiddenFor(model => model.UserAddressDataViewModel.BudgetAmount, new { id = "UserAddressDataViewModel_BudgetAmount" })
+                        @Html.HiddenFor(model => model.UserAddressDataViewModel.PermissionCode, new { id = "UserAddressDataViewModel_PermissionCode" })
+                        @Html.HiddenFor(model => model.UserAddressDataViewModel.AccountId, new { id = "UserAddressDataViewModel_AccountId" })
+                        @Html.HiddenFor(model => model.UserAddressDataViewModel.IsOrderQuote, new { id = "UserAddressDataViewModel_IsOrderQuote" })
+                    </div>
+                    }
+        <div id="publishProductDv" style="display:none;"></div>
+    </section>
+
+    @* Here Customer Details will display *@
+    <div id="customerDetails" class="aside-popup-panel modal-dialog modal-xl">
+    </div>
+    @* Here Customer address Details will display *@
+    <div id="addressDetails" class="aside-popup-panel modal-dialog modal-md">
+    </div>
+    <div id="getProductsList" class="aside-popup-panel modal-dialog modal-lg">
+    </div>
+    <div id="productDetailsPanel" class="aside-popup-panel modal-dialog modal-md">
+    </div>
+</div>
+@Html.HiddenFor(m => m.IsQuote, new { id = "IsQuote" })
+@Html.HiddenFor(model => model.PortalId)
+@Html.HiddenFor(model => model.StoreName)

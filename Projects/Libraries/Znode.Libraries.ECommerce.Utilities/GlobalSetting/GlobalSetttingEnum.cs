@@ -1,0 +1,60 @@
+﻿namespace Znode.Libraries.ECommerce.Utilities
+{
+    public enum GlobalSettingEnum
+    {
+        Locale,
+        Portal,
+        DateFormat,
+        TimeZone,
+        WeightUnit,
+        Currency,
+        DisplayUnit,
+        PriceRoundOff,
+        InventoryRoundOff,
+        AllowGlobalLevelUserCreation,
+        SaveOrderAttribute,
+        Country,
+        BuildEnvironment,
+        CartAttribute,
+        GroupIdFormat,
+        CurrentEnvironment,
+        WebApiClientKey,
+        WebsiteCode,
+        DomainName,
+        IsAllowWithOtherPromotionsAndCoupons,
+        IsColumnEncryptionSettingEnabled,
+        TimeFormat,      
+        Culture,
+        ClearLoadBalancerAPICacheIPs,
+        ClearLoadBalancerWebStoreCacheIPs,
+        ClearOnlyHttpsDomainCache,
+        DefaultProductLimitForRecommendations,
+        AnalyticsJSONKey,
+        IsCalculateTaxAfterDiscount, 
+        AllowedPromotions,
+        CMSPageSearchableAttributes,
+        PowerBIApplicationId,
+        PowerBITenantId,
+        PowerBIReportId,
+        PowerBIGroupId,
+        PowerBIUserName,
+        PowerBIPassword,
+        OldOrderIdentifierOrderId,
+        DeleteAlreadySentEmails,
+        DeletePendingEmails
+    }
+
+    public enum LoggingSettingEnum
+    {
+        IsLoggingLevelsEnabledError,
+        IsLoggingLevelsEnabledWarning,
+        IsLoggingLevelsEnabledInfo,
+        IsLoggingLevelsEnabledDebug,
+        IsLoggingLevelsEnabledAll,
+        IsDataBaseLoggingEnabled,
+        IsErrorLoggingEnabled,
+        IsEventLoggingEnabled,
+        IsIntegrationLoggingEnabled,
+
+    }
+}

@@ -1,0 +1,15 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CatalogViewModel
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+}
+
+<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">        
+        <ul class="aside-panel">
+            <li><a href="/PIM/Catalog/CatalogList">@PIM_Resources.LabelCatalogList</a></li>
+        </ul>
+    </div>
+</aside>

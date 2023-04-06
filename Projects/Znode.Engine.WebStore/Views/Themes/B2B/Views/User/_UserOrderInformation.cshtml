@@ -1,0 +1,78 @@
+﻿@model Znode.Engine.WebStore.ViewModels.UserOrderViewModel
+@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+
+<div id="layout-account-editprofile" class="col-12 main-wrapper">
+    <div class="container">
+        <div class="row user-account border-bottom">
+            <div class="col-md-12">
+                <h1 class="page-title">@WebStore_Resources.TitleGetOrderStatus</h1>
+            </div>
+            <div class="col-md-12 account-dashboard">
+                <div class="row">
+                    <div class="col-md-6 col-lg-5">
+                        @using (Ajax.BeginForm("GetOrderDetails", "User", new { orderNumber = Model.OrderNumber, firstName = Model.FirstName, LastName = Model.LastName, emailAddress = Model.EmailAddress }, new AjaxOptions()
+                        {
+                            HttpMethod = "post",
+                            UpdateTargetId = "userorderdetails",
+                            InsertionMode = InsertionMode.Replace,
+                            OnBegin = "ZnodeBase.prototype.ShowLoader();",
+                            OnComplete = "RMAReturn.prototype.CheckOrderEligibilityForReturn(); ZnodeBase.prototype.HideLoader();"
+                        }, new { @id = "frmOrderDetails" }))
+                        {
+                            <div>
+                                <div class="form-group">
+                                    <div>
+                                        <label class="required">@WebStore_Resources.TitleOrderNo</label>
+                                    </div>
+                                    <div>
+                                        @Html.TextBoxFor(model => model.OrderNumber)
+                                        <p class="error-msg">@Html.ValidationMessageFor(m => m.OrderNumber)</p>
+                                    </div>
+                                </div>
+                                <div style="display:none">
+                                    <div class="form-group">
+                                        <div>
+                                            <label>@WebStore_Resources.LabelFirstName</label>
+                                        </div>
+                                        <div>
+                                            @Html.TextBoxFor(model => model.FirstName)
+                                            <p class="error-msg">@Html.ValidationMessageFor(m => m.FirstName)</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div>
+                                            <label>@WebStore_Resources.LabelLastName</label>
+                                        </div>
+                                        <div>
+                                            @Html.TextBoxFor(model => model.LastName)
+                                            <p class="error-msg">@Html.ValidationMessageFor(m => m.LastName)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <label class="required">@WebStore_Resources.LabelEmailAddress</label>
+                                    </div>
+                                    <div>
+                                        @Html.TextBoxFor(model => model.EmailAddress)
+                                        <p class="error-msg">@Html.ValidationMessageFor(m => m.EmailAddress)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group d-flex flex-wrap align-items-center pt-3">
+                                <button type="submit" class="btn btn-primary shadow-md mb-3">@WebStore_Resources.LabelGetOrderDetails</button>
+                                <a href="/" class="btn btn-secondary px-3 ml-2 mb-3">@WebStore_Resources.ButtonCancel</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="userorderdetails" class="col-12">
+            </div>
+        </div>
+    </div>
+</div>
+

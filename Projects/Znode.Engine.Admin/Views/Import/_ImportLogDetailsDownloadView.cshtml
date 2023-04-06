@@ -1,0 +1,61 @@
+﻿@model Znode.Engine.Admin.ViewModels.ImportLogsDownloadListViewModel
+
+
+<table class="center">
+    <thead>
+       
+    </thead>
+    <tbody>
+        <tr style="page-break-inside: avoid">
+            <th>
+                @Html.DisplayNameFor(model => model.ImportLogId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RowNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ColumnName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ColumnValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ErrorDescription)
+            </th>
+        </tr>
+        @foreach (var item in Model.LogsList)
+        {
+            <tr style="page-break-inside: avoid">
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImportLogId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RowNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ColumnName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ColumnValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ErrorDescription)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<style>
+    table, td, th {
+        border: 1px solid black;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,td {
+        text-align: center;
+    }
+</style>

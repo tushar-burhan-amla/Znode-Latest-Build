@@ -1,0 +1,36 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model SearchProfileListViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<div id="Resultpartial">
+    <div id="searchSettings">
+        <div class="title-container">
+            <h1>@Admin_Resources.LabelSearchSettings</h1>
+        </div>
+        <div class="main-wrapper">
+            <!--Left Panel-->
+            @Html.Partial("~/Views/SearchConfiguration/_asidePanel.cshtml")
+            <!--Main Container-->
+            <section class="main-container clearfix">
+                <div id="createIndexSection">
+                    <div id="@Model.GridModel.FrontObjectName" class="search-redirect-list">
+                        <div id="searchSettings">
+                            <div id="profileListGrid">
+                                @Html.Partial("~/Areas/Search/Views/Search/_List.cshtml", Model)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="BoostSetting"></div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<div id="divCataloglistPopup" class="aside-popup-panel modal-dialog modal-lg">
+</div>

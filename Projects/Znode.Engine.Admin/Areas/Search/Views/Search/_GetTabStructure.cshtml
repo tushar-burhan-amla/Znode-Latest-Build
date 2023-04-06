@@ -1,0 +1,19 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+@model SearchProfileViewModel
+
+@{
+    ViewBag.Title = ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string cancelUrl = "/Search/Search/GetSearchProfiles?catalogId=" + Model.PublishCatalogId + "&catalogName=" + Model.CatalogName;
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateSearchProfile", CancelUrl = cancelUrl, IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleEdit, "Search Profile")<em class="z-minus"></em><span>@Html.RenderBlock(Model.ProfileName)</span></h1>
+</div>
+<section class="col-sm-12 page-container">
+    <div class="col-sm-12 nopadding search-profile">
+        @Html.Partial("~/Views/Shared/Controls/_TabStructure.cshtml", Model.Tabs)
+    </div>
+</section>

@@ -1,0 +1,151 @@
+﻿@model Znode.Engine.WebStore.ViewModels.RMAReturnCartItemViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.WebStore.Helpers;
+@{
+    string imagePath = string.IsNullOrEmpty(Model?.ImagePath) ? ZnodeAdminSettings.DefaultImagePath : Model?.ImagePath;
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    string sku = string.IsNullOrEmpty(Model.ConfigurableProductSKUs) ? Model.SKU : Model.ConfigurableProductSKUs;
+}
+
+<td class="imageicon sp-image mw-100">
+    <img src="@imagePath" alt="@Html.RenderBlock(Model.ProductName) Image" class="grid-img" style="max-width: 40px;max-height: 40px;min-height: 40px;" />
+    @Html.Hidden("hdnCurrencySymbol_" + Model.ExternalId, (HelperMethods.FormatPriceWithCurrency(0.00M, cultureCode)).Replace("0.00", ""))
+</td>
+@if (Model.GroupProducts?.Count > 0)
+{
+    string mainProductName = Model.ProductName;
+    foreach (var product in Model.GroupProducts)
+    {
+        <td class="mw-100">
+            @Html.DisplayTextFor(model => product.Sku)
+        </td>
+        <td class="mw-200">
+            <div>@Html.RenderBlock(mainProductName)</div>
+            @if (Model?.PersonaliseValuesDetail?.Count > 0)
+            {
+                foreach (var item in Model.PersonaliseValuesDetail)
+                {
+                    if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                    {
+                        <div class="cart-item-description">
+                            <p> @item.PersonalizeName : @item.PersonalizeValue </p>
+                        </div>
+                    }
+                }
+            }
+            else if (Model?.PersonaliseValuesList?.Count > 0)
+            {
+                foreach (var item in Model.PersonaliseValuesList)
+                {
+                    if (!Equals(item.Key, null) && !Equals(item.Value, string.Empty))
+                    {
+                        <p> @item.Key : @item.Value </p>
+                    }
+                }
+            }
+            @if (string.IsNullOrEmpty(Model.CartDescription?.Trim()))
+            {
+                <p><span class="right-icon"></span>@Html.RenderBlock(product.ProductName)</p>
+            }
+            else
+            {
+                <div class="cart-item-description">@Html.RenderBlock(Model.CartDescription)</div>
+            }
+
+        </td>
+        <td class="mw-100">
+            @if (!Equals(Model.ReasonForReturnItems, null))
+            {
+                @Html.DropDownListFor(model => model.ReasonForReturnId, Model.ReasonForReturnItems, new { @id = "ddlReasonList_" + Model.ExternalId })
+                <input type="hidden" id="oldReasonForReturnId_@Model.ExternalId" value="@Model.ReasonForReturnId" />
+            }
+        </td>
+        <td class="mw-100">
+            <span>@Helper.FormatPriceWithCurrency(Model.UnitPrice, Model.CultureCode)</span>
+        </td>
+        <td class="mw-100">
+            <span>@product.Quantity</span>
+            <input id="shippedquantity_@Model.ExternalId" value="@product.Quantity" data-return-productid="@product.ProductId" style="display:none" />
+        </td>
+        @*<td class="mw-100">
+                <span>@HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode)</span>
+                <input id="unitprice_@Model.ExternalId" value="@Model.UnitPrice" style="display:none" />
+            </td>*@
+        <td class="mw-100">
+            @Html.TextBoxFor(model => model.ExpectedReturnQuantity, new { @id = "expectedReturnQuantity_" + Model.ExternalId, @style = "width : 40%", @onchange = "RMAReturn.prototype.ValidateReturnLineItem('" + Model.ExternalId + "')" })
+            <div id="expectedReturnQuantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+            <input type="hidden" id="oldExpectedReturnQuantity_@Model.ExternalId" value="@Model.ExpectedReturnQuantity" />
+        </td>
+    }
+}
+else
+{
+    <td class="mw-100">
+        <label>@sku</label>
+    </td>
+    <td class="mw-200">
+        <p>@Html.RenderBlock(Model.ProductName)</p>
+
+        @if (Model?.PersonaliseValuesDetail?.Count > 0)
+        {
+            foreach (var item in Model.PersonaliseValuesDetail)
+            {
+                if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                {
+                    <div class="cart-item-description">
+                        <p> @item.PersonalizeName : @item.PersonalizeValue </p>
+                    </div>
+                }
+            }
+        }
+        else if (Model?.PersonaliseValuesList?.Count > 0)
+        {
+            foreach (var item in Model.PersonaliseValuesList)
+            {
+                if (!Equals(item.Key, null) && !Equals(item.Value, string.Empty))
+                {
+                    <p> @item.Key : @item.Value </p>
+                }
+            }
+        }
+
+        @Html.RenderBlock(Model.CartDescription)
+    </td>
+    <td class="mw-100">
+        @if (!Equals(Model.ReasonForReturnItems, null))
+        {
+            @Html.DropDownListFor(model => model.ReasonForReturnId, Model.ReasonForReturnItems, new { @id = "ddlReasonList_" + Model.ExternalId })
+            <input type="hidden" id="oldReasonForReturnId_@Model.ExternalId" value="@Model.ReasonForReturnId" />
+        }
+    </td>
+    <td class="mw-100">
+        <span>@Helper.FormatPriceWithCurrency(Model.UnitPrice, Model.CultureCode)</span>
+    </td>
+    <td class="mw-100">
+        <span>@Model.Quantity</span>
+        <input id="shippedquantity_@Model.ExternalId" value="@Model.Quantity" data-return-productid="@Model.ProductId" style="display:none" />
+    </td>
+    @*<td class="mw-100">
+            <span>@HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode)</span>
+            <input id="unitprice_@Model.ExternalId" value="@Model.UnitPrice" style="display:none" />
+        </td>*@
+    <td class="mw-100">
+        @Html.TextBoxFor(model => model.ExpectedReturnQuantity, new { @id = "expectedReturnQuantity_" + Model.ExternalId, @style = "width : 40%", @onchange = "RMAReturn.prototype.ValidateReturnLineItem('" + Model.ExternalId + "')" })
+        <div id="expectedReturnQuantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+        <input type="hidden" id="oldExpectedReturnQuantity_@Model.ExternalId" value="@Model.ExpectedReturnQuantity" />
+    </td>
+}
+
+<td>
+    <span id="returnTotalPrice_@Model.ExternalId" name="returnTotalPrice">@Model.TotalLineItemPriceWithCurrency</span>
+</td>
+
+@Html.Hidden("ShipSeperately_" + Model.ExternalId, Model.ShipSeperately)
+@Html.HiddenFor(model => model.ProductType)
+@Html.Hidden("OmsOrderLineItemsId_" + Model.ExternalId, Model.OmsOrderLineItemsId)
+@Html.Hidden("RmaReturnLineItemsId_" + Model.ExternalId, Model.RmaReturnLineItemsId)
+<script>
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>

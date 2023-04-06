@@ -1,0 +1,48 @@
+﻿
+@using Znode.Libraries.ECommerce.Utilities;
+
+@{
+    bool hasCMSMappingId = false;
+    int cmsMapping_Id = 0;
+    int widgetId = 0;
+    string widgetkey = string.Empty;
+    string mappingType = string.Empty;
+    string displayName = string.Empty;
+
+    hasCMSMappingId = Model.GetType().GetProperty("CMSMappingId") != null;
+    if (hasCMSMappingId)
+    {
+        cmsMapping_Id = Model.CMSMappingId;
+    }
+    else
+    {
+        hasCMSMappingId = Model.GetType().GetProperty("CMSContentPagesId") != null;
+        cmsMapping_Id = hasCMSMappingId ? Model.CMSContentPagesId : Model.EntityId;
+    }
+    widgetId = Model.CMSWidgetsId;
+    widgetkey = Model.WidgetsKey;
+    mappingType = Model.TypeOFMapping;
+    displayName = Model.DisplayName;
+}
+<aside>
+    <button id="slide-menu" class="slide-menu-btn" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+            <li>
+                @Ajax.AuthorizedRawActionLink(Admin_Resources.FormInfo, "ManageFormWidgetConfiguration", "WebSite",
+                        new { mappingId = cmsMapping_Id, widgetId = widgetId, widgetkey = widgetkey, mappingType = mappingType, displayName = displayName }
+                       ,new AjaxOptions { UpdateTargetId = "divFormTemplate", InsertionMode = InsertionMode.Replace,  OnSuccess = "Content.prototype.SetFormWidgetActiveTab('FormWidget');" }, new { @id = "FormWidget", @data_test_selector = "linkFormContent" }  )
+            </li>
+            <li>
+                @Ajax.AuthorizedRawActionLink(Admin_Resources.Email, "FormWidgetEmailConfiguration", "WebSite",
+               new { cmsMappingId = cmsMapping_Id, widgetId = widgetId, widgetkey = widgetkey, mappingType = mappingType, displayName = displayName }
+                 ,  new AjaxOptions { UpdateTargetId = "divFormTemplate", InsertionMode = InsertionMode.Replace, OnSuccess = "Content.prototype.SetFormWidgetActiveTab('EmailWidget');" }, new { @id = "EmailWidget", @data_test_selector = "linkEmailContent" })
+            </li>
+        </ul>
+    </div>
+</aside>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Content.prototype.SetFormWidgetActiveTabOnLoad();
+    });
+</script>

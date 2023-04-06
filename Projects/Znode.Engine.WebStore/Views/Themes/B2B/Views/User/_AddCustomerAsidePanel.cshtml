@@ -1,0 +1,382 @@
+﻿@using Znode.Engine.WebStore.Models
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Helpers
+
+@model CustomerAccountViewModel
+@{
+    ViewBag.Title = WebStore_Resources.TitleCustomers + " | " + WebStore_Resources.Multifront; ;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string styleToDisplayContent = Model.AccountId > 0 ? "style=display:none" : "";
+    string cancelUrl = "/User/CustomersList?accountId=" + Model.AccountId;
+    string mainWrapperClass = !actionName.ToLower().Contains("customercreate") ? "main-wrapper" : "";
+    string mainContainer = !actionName.ToLower().Contains("customercreate") ? "main-container" : "col-sm-12 page-container";
+}
+
+
+<div id="layout-account-dashboard" class="main-wrapper sp-accounts">
+    <div class="container">
+        <div class="row user-account">
+            <div class="col-xs-12 nopadding">
+                @if (actionName.ToLower().Contains("edit"))
+                {
+                    <h1 class="page-title">@string.Format(@WebStore_Resources.TitleEdit, "User")<i class="z-minus"></i><span>@Model.FullName</span></h1>
+                }
+                else
+                {
+                    <h1 class="page-title">@string.Format(@WebStore_Resources.TitleAdd, "User")</h1>
+                }
+            </div>
+            <div class="col-xs-12 account-dashboard nopadding">
+                <div class="col-sm-3 col-lg-2 nopadding">
+                    <nav class="account-container-menu">
+                        @Html.Partial("../GlobalAttribute/_AsideUserPannel", Model)
+                    </nav>
+                </div>
+                <div class="col-xs-12 col-sm-6 right-container">
+                    <div class="@mainWrapperClass">
+                        <!--Main Container-->
+                        <section class="@mainContainer">
+                            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateEditCustomerAccount" }))
+                            {
+                                if (!DefaultSettingHelper.AllowGlobalLevelUserCreation)
+                                {
+                                    if (!(Model.AccountId > 0))
+                                    {
+                                        <h3 id="customer_general_information" class="section-heading">@WebStore_Resources.ManageGeneralInformation</h3>
+                                    }
+                                    <div class="form-group" id="ddlPortals" @styleToDisplayContent>
+                                        <div class="col-sm-12 nopadding">
+                                            <div id="areaList">
+                                                @if (string.Equals(actionName.ToLower(), "customercreate"))
+                                                {
+                                                    <div class="control-label">
+                                                        @Html.LabelFor(m => m.StoreName, new { @class = "required" })
+                                                    </div>
+                                                    <div class="control-md">
+                                                        @Html.TextBoxFor(m => m.StoreName, new { @class = "readonly", @placeholder = WebStore_Resources.LabelSelectStore, @id = "txtPortalName" })
+                                                        @Html.ValidationMessageFor(model => model.StoreName, null, new { id = "errorRequiredStore" })
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    if (actionName.ToLower().Equals("customeredit"))
+                                    {
+                                        <div class="form-group">
+                                            <div class="col-sm-12 nopadding">
+                                                <div class="control-label">
+                                                    @Html.LabelFor(m => m.StoreName, new { @class = "required" })
+                                                </div>
+                                                <div class="control-md">
+                                                    @Html.TextBoxFor(m => m.StoreName, new { @disabled = "disabled", @class = "readonly" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <h3 class="section-heading margin-top-25">@WebStore_Resources.ManageLoginInformation</h3>
+                                }
+                                else
+                                {
+                                    <h3 class="section-heading margin-top">@WebStore_Resources.ManageLoginInformation</h3>
+                                }
+                                if (actionName.ToLower().Equals("customeredit"))
+                                {
+                                    <div class="form-group">
+                                        <div class="col-sm-12 nopadding">
+                                            <div class="control-label">
+                                                @Html.LabelFor(model => model.UserName, new { @class = "required" })
+                                            </div>
+                                            @if (string.IsNullOrEmpty(Model.AspNetUserId))
+                                            {
+                                                <div class="control-md">
+                                                    @Html.TextBoxFor(model => model.UserName)
+                                                    @Html.ValidationMessageFor(model => model.UserName)
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="control-md">
+                                                    <input type="text" value="@Model.UserName" readonly="readonly" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-sm-12 nopadding">
+                                                        <div class="control-label">
+                                                            <label>@WebStore_Resources.ButtonResetPassword</label>
+                                                        </div>
+                                                        <div class="control-md">
+                                                            <button type="button" class="btn-text btn-primary btn-margin-left" data-toggle='modal' data-target='#PopUpConfirmResetPassword'>@WebStore_Resources.ButtonSubmit</button>
+                                                            @Html.Partial("../Controls/_PopUp",
+                            new PopupModel()
+                            {
+                                Title = @WebStore_Resources.TitleConfirmResetPassword,
+
+                                Description = @WebStore_Resources.TextConfirmResetPassword,
+                                ModalPopUpId = "PopUpConfirmResetPassword",
+                                Buttons = new List<PopUpButtonModel>
+                                () { new PopUpButtonModel { ButtonText = @WebStore_Resources.TextOk, OnClickFunctionName = "User.prototype.ResetPasswordUsers()" } }
+                            })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-12 nopadding">
+                                            <div class="control-label">
+                                                @Html.LabelFor(model => model.Email, new { @class = "required" })
+                                            </div>
+                                            <div class="control-md">
+                                                @Html.TextBoxFor(model => model.Email)
+                                                @Html.ValidationMessageFor(model => model.Email, null, new { id = "errorRequiredEmail" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group">
+                                        <div class="col-sm-12 nopadding">
+                                            <div class="control-label">
+                                                @Html.LabelFor(model => model.UserName, new { @class = "required" })
+                                            </div>
+                                            <div class="control-md">
+                                                @Html.TextBoxFor(model => model.UserName)
+                                                @Html.ValidationMessageFor(model => model.UserName)
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="form-group">
+                                    <div class="col-sm-12 nopadding">
+                                        <div class="control-label">
+                                            @Html.LabelFor(model => model.ExternalId)
+                                        </div>
+                                        <div class="control-md">
+                                            @Html.TextBoxFor(model => model.ExternalId, new { @maxlength = 50 })
+                                            @Html.ValidationMessageFor(model => model.ExternalId)
+                                        </div>
+                                        @Html.Partial("_HelpText", @WebStore_Resources.NoteExternalId)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12 nopadding">
+                                        <div class="control-label">
+                                            @Html.LabelFor(model => model.FirstName, new { @class = "required" })
+                                        </div>
+                                        <div class="control-md">
+                                            @Html.TextBoxFor(model => model.FirstName)
+                                            @Html.ValidationMessageFor(model => model.FirstName)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-12 nopadding">
+                                        <div class="control-label">
+                                            @Html.LabelFor(model => model.LastName, new { @class = "required" })
+                                        </div>
+                                        <div class="control-md">
+                                            @Html.TextBoxFor(model => model.LastName)
+                                            @Html.ValidationMessageFor(model => model.LastName)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-12 nopadding">
+                                        <div class="control-label">
+                                            @Html.LabelFor(model => model.PhoneNumber)
+                                        </div>
+                                        <div class="control-md">
+                                            @Html.TextBoxFor(model => model.PhoneNumber)
+                                            @Html.ValidationMessageFor(model => model.PhoneNumber)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                if (actionName.ToLower().Equals("customeredit"))
+                                {
+                                    <div class="form-group">
+                                        <div class="control-md control-non">
+                                            <label>
+                                                <input type="checkbox" name="EmailOptIn" value="true" checked="@Model.EmailOptIn" />
+                                                <span class="lbl padding-8">@WebStore_Resources.NoteSendPeriodicMail</span>
+                                                <input name="CustomerAccount.EmailOptIn" type="hidden" value="false">
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group">
+                                        <div class="control-md control-non">
+                                            <label>
+                                                <input type="checkbox" name="EmailOptIn" value="true" checked="checked" />
+                                                <span class="lbl padding-8">@WebStore_Resources.NoteSendPeriodicMail</span>
+                                                <input name="CustomerAccount.EmailOptIn" type="hidden" value="false">
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+
+                                <div class="form-group">
+                                    <div class="col-sm-12 nopadding">
+                                        <div class="control-label">
+                                            @Html.LabelFor(model => model.AccountId)
+                                        </div>
+                                        @if (Model.UserId > 0 && Model.AccountId > 0)
+                                        {
+                                            <div class="control-md">
+                                                @Html.TextBoxFor(model => model.AccountName, new { @disabled = "disabled", @class = "readonly" })
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="control-md">
+                                                @Html.TextBoxFor(model => model.AccountName, new { @disabled = "disabled", @placeholder = WebStore_Resources.LabelSelectAccount })
+                                            </div>
+                                            <div class="control-sm dirtyignore">
+                                                    <div class="pull-left">
+                                                        @{
+                                                            int selectedPortal = Convert.ToInt32(Model.UserId > 0 ? Model.PortalId : 0);
+                                                        }
+                                                        <a id="searchCustomer" onclick="User.prototype.GetAccountList(@selectedPortal);" class="btn-narrow-icon" data-toggle="tooltip" data-placement="top" data-original-title="@WebStore_Resources.SearchExistingAccountButton"><i class='z-search'></i></a>
+                                                    </div>
+                                                    <a class="btn-narrow-icon" onclick="User.prototype.ClearAccountName();" data-toggle="tooltip" data-placement="top" data-original-title="Clear Account Name"><i class="z-clear-cache"></i></a>
+                                                </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                styleToDisplayContent = Model.AccountId > 0 ? "" : "style=display:none";
+
+
+                                <div class="form-group" id="divDepartmentId" @styleToDisplayContent>
+                                    <div class="col-sm-12 nopadding">
+                                        <div class="control-label">
+                                            @Html.LabelFor(model => model.DepartmentId)
+                                        </div>
+                                        <div class="control-md">
+                                            @Html.DropDownListFor(model => model.DepartmentId, Model.AccountDepartmentList, WebStore_Resources.LabelSelectDepartment, new { @id = "ddlDepartment" })
+                                            @Html.HiddenFor(model => model.DepartmentId)
+                                        </div>
+                                    </div>
+                                </div>
+                                                        <div class="form-group" @styleToDisplayContent>
+                                                            <div class="col-sm-12 nopadding">
+                                                                <div class="control-label">
+                                                                    @Html.LabelFor(model => model.RoleName)
+                                                                </div>
+                                                                <div class="control-md">
+                                                                    @if (actionName.ToLower().Equals("customeredit") && Model.AccountId > 0)
+                                                                    {
+                                                                        @Html.DropDownListFor(model => model.RoleId, Model.Roles ?? new List<SelectListItem>
+                        (), new { @id = "ddlUserType", @OnChange = "User.prototype.OnUserTypeSelection();", @disabled = "disabled", @class = "readonly" })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.DropDownListFor(model => model.RoleId, Model.Roles ?? new List<SelectListItem>
+                            (), new { @id = "ddlUserType", @OnChange = "User.prototype.OnUserTypeSelection();" })
+                                                                    }
+                                                                    @Html.HiddenFor(model => model.RoleName, new { @id = "hdnRoleName" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                styleToDisplayContent = (Model.AccountId > 0 && Equals(Model.RoleName?.ToLower(), "user")) ? "" : "style=display:none";
+
+
+                                <div class="form-group" id="divRole" @styleToDisplayContent>
+                                    <div class="col-sm-12 nopadding">
+                                        <div class="control-label">
+                                            @Html.LabelFor(model => model.PermissionCode)
+                                        </div>
+                                        <div class="control-md">
+                                            <div id="permission_options">
+
+                                            </div>
+                                            @Html.HiddenFor(model => model.PermissionCode)
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                styleToDisplayContent = (Model.AccountId > 0 && Model.ApprovalUserId > 0 && Equals(Model.RoleName?.ToLower(), "user") && !Equals(Model.PermissionCode, ZnodePermissionCodeEnum.DNRA.ToString())) ? "" : "style=display:none";
+
+
+                                <div class="form-group" id="approvalNamesDiv" @styleToDisplayContent>
+                                    <div class="col-sm-12 nopadding">
+                                        <div class="control-label">
+                                            @Html.LabelFor(model => model.ApprovalUserId, new { @class = "required" })
+                                        </div>
+                                        <div class="control-md">
+                                            @Html.DropDownListFor(model => model.ApprovalUserId, Model.UserApprovalList ?? new List<SelectListItem>
+                        (), new { @id = "ddlApproverList" })
+                                            @Html.ValidationMessageFor(model => model.ApprovalUserId)
+                                            @Html.HiddenFor(model => model.ApprovalUserId)
+                                            <span class="error-msg" id="errorRequiredApprovalUserId"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                styleToDisplayContent = (Model.AccountId > 0 && Equals(Model.RoleName.ToLower(), "user") && Equals(Model.PermissionCode, ZnodePermissionCodeEnum.SRA.ToString())) ? "" : "style=display:none";
+
+
+                                <div class="form-group" id="maxBudgetDiv" @styleToDisplayContent>
+                                    <div class="col-sm-12 nopadding">
+                                        <div class="control-label">
+                                            @Html.LabelFor(model => model.BudgetAmount, new { @class = "required" })
+                                        </div>
+                                        <div class="control-sm left-inner-icon">
+                                            <i class="unit"><span for="CurrencySymbol"></span></i>
+                                            @Html.TextBoxFor(model => model.BudgetAmount, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(WebStore_Resources.ErrorValidBudgetAmountForRoundOff, WebStore_Resources.ValidBudgetAmountWithoutRoundOff) })
+                                        </div>
+                                        <div class="pull-left padding-left">
+                                            <label for="CurrencyName" style="vertical-align: middle"></label>
+                                        </div>
+                                        <div class="col-sm-12 nopadding">
+                                            <div class="control-md control-non">
+                                                @Html.ValidationMessageFor(model => model.BudgetAmount, null, new { id = "errorRequiredAccountPermissionAccessId" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                                        @Html.HiddenFor(model => model.UserName)
+                                                        @Html.HiddenFor(model => model.AccountName, new { @id = "selectedAccountName" })
+                                                        @Html.HiddenFor(model => model.AspNetUserId)
+                                                        @Html.HiddenFor(model => model.AccountId)
+                                                        @Html.HiddenFor(model => model.StoreName)
+                                                        @Html.HiddenFor(model => model.UserId)
+                                                        @Html.HiddenFor(model => model.PortalId, new { @id = "hdnPortalId" })
+                                                        @Html.HiddenFor(model => model.PortalId)
+                                                        @Html.HiddenFor(model => model.IsSelectAllPortal)
+                                                        @Html.HiddenFor(model => model.RoleName)
+                                                        @Html.HiddenFor(model => model.AccountPermissionAccessId)
+                                                        @Html.HiddenFor(model => model.Email)
+                                                        @Html.HiddenFor(model => model.CustomerPaymentGUID)
+                                                        @Html.Hidden("AllowGlobalLevelUserCreation", DefaultSettingHelper.AllowGlobalLevelUserCreation)
+
+                                                        <div class="pull-right">
+                                                            <button type="submit" class="btn-text btn-primary btn-margin-left" onclick="User.prototype.SubmitCustomerCreateEditForm();">@WebStore_Resources.ButtonSaveChanges</button>
+                                                            <a class="btn-text btn-secondary" href=@cancelUrl>@WebStore_Resources.ButtonCancel</a>
+                                                        </div>
+                            }
+
+                        </section>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

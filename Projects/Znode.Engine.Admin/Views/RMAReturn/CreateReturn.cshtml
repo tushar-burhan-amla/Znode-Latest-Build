@@ -1,0 +1,120 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model RMAReturnOrderDetailViewModel
+@using Znode.Engine.Admin.Models
+
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgOrder">@string.Format(@Admin_Resources.ButtonCreateReturn)</h1>
+    <div class="pull-right btn-container dirtyignore">
+        <div class="pull-right">
+            <a id="btnCreateReturn" onclick="RMAReturn.prototype.SubmitReturn();" style="display:none;" class="btn-text btn-text-secondary" data-test-selector="linkSubmitOrder">@Admin_Resources.TextConfirmSubmitReturn</a>
+        </div>
+        <div class="pull-left">
+            <a href="javascript:void(0)" class="btn-text-icon" id="btnCancelOrderId" onclick="RMAReturn.prototype.ConfirmCancelCreateReturnPopUp(PopUpConfirmCancelCreateReturn);" data-test-selector="linkCancel"><em class='z-back'></em>@Admin_Resources.ButtonBack</a>
+        </div>
+
+    </div>
+</div>
+<div class="oms-container dirtyignore">
+    <!--Main Container-->
+    <section class="page-container">
+        <div>
+            <input style="opacity: 0; position: absolute; z-index: -1;" id="userNameDummy" />
+        </div>
+        <!--Tab Panel-->
+        @Html.Partial("~/views/RMAReturn/_asideReturnManagePanel.cshtml")
+        <br />
+        <div class="tab-content">
+            <!-- Return Details Tab Starts -->
+            <div id="return-details-tab" class="">
+                <div class="row">
+                    <div class="form-group col-xs-12 d-flex align-items-center">
+                        <div class="detail-padding-right">
+                            <h3>Order Detail:</h3>
+                        </div>
+                            <div class="detail-padding-right d-flex align-items-center justify-content-start">
+                                <div class="padding-left">
+                                    <label data-test-selector="lblOrderNumber">@Admin_Resources.LabelOrderNumber</label>
+                                </div>
+                                <div class="padding-left order-number">
+                                    <span id="lblOrderNumber" class="padding-left" data-test-selector="spnOrderNumber">@Model.OrderNumber</span>
+                                </div>
+                            </div>
+
+                            <div class="detail-padding-right d-flex align-items-center justify-content-start">
+                                <div class="padding-left">
+                                    <label data-test-selector="lblOrderDate">@Admin_Resources.LabelOrderDate</label>
+                                </div>
+                                <div class="padding-left">
+                                    <span id="labelOrderDate" class="padding-left" data-test-selector="spnOrderDate">@Model.OrderDate</span>
+                                </div>
+                            </div>
+                            <div class="detail-padding-right d-flex align-items-center justify-content-start">
+                                <div class="padding-left">
+                                    <label data-test-selector="lblTotalCost">@Admin_Resources.LabelOrderTotal</label>
+                                </div>
+                                <div class="padding-left">
+                                    <span id="labelTotalCost" class="padding-left" data-test-selector="spnTotalCost">@HelperMethods.FormatPriceWithCurrency(Model.Total ?? 0, Model.CultureCode)</span>
+                                </div>
+                            </div>
+                 
+                    </div>
+
+                </div>
+
+                <div class="">
+                    @if (!string.IsNullOrEmpty(Model?.OrderNumber) && Model?.ReturnCartViewModel != null && Model?.ReturnCartViewModel?.ShoppingCartItems?.Count > 0)
+                    {
+                        @Html.Partial("ReturnItemsList", Model)
+                    }
+                </div>
+                <div id="divReturnNotesAndButtons">
+                    <div class="col-xs-12 nopadding">
+                        <div><span style="font-size: 22px;">Return Notes</span></div>
+                        @Html.TextAreaFor(Model => Model.ReturnNote, new { rows = "5" })
+                        <input type="hidden" id="hdnOldReturnNote" value="@Model.ReturnNote" />
+                    </div>
+                </div>
+            </div>
+        </div>
+            <!-- Return Details Tab Ends -->
+            <div>
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                             new PopupModel()
+                             {
+                                 Title = @Admin_Resources.ConfirmText,
+                                 Description = @Admin_Resources.TextConfirmCancelCreateReturn,
+                                 ModalPopUpId = "PopUpConfirmCancelCreateReturn",
+                                 Buttons = new List<PopUpButtonModel>
+                                 () {
+                                new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "RMAReturn.prototype.ConfirmCancelCreateReturn()" },
+                                    }
+                             })
+            </div>
+    </section>
+
+    @* Here Customer Details will display *@
+    <div id="customerDetails" class="aside-popup-panel modal-dialog modal-xl new-customer-popup"></div>
+</div>
+
+@Html.Hidden("hdnUserId", Model.UserId)
+@Html.Hidden("hdnPortalId", Model.PortalId)
+@Html.Hidden("hdnOrderDetailId", Model.OmsOrderDetailsId)
+
+<script>
+    $(document).ready(function () {
+        Order.prototype.AutoCompleteApprovalUsers();
+        Order.prototype.SetAttributeForPortalId();
+        if ($("#hdnPortalId").val() != 0) {
+            $("#txtCustomerName").prop("disabled", false);
+        }
+        $('#PopUpConfirmCancelReturn').on('shown.bs.modal', function () {
+            $("body.modal-open").css({ 'padding-right': 0, 'overflow': 'auto' });
+        });
+    })
+</script>

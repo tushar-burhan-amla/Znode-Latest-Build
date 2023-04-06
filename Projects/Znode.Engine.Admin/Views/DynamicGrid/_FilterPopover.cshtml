@@ -1,0 +1,135 @@
+﻿@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Extensions
+@using Znode.Engine.Admin.Helpers
+@using System.Globalization
+@model FilterColumnListModel
+
+@{
+    string dateFormat = HelperMethods.GetDateFormat();
+}
+<div class='parent-content-popover' style="display:none">
+    <h3 class='manage-heading'>@Admin_Resources.TitleFilterResults</h3>
+    <div id="container" data-test-selector="popDivFilterContainer" class="containerClass padding-left-15 padding-right-15 padding-bottom-15">
+        @foreach (FilterColumnModel filterColumn in Model.FilterColumnList)
+        {
+            if (filterColumn.DataOperatorId != 0)
+            {
+                <div id="contentData" class="content-filter-list">
+                    <select id="columnList" data-test-selector="drpColumnList" class="columnList" onchange="DynamicGrid.prototype.OnFilterColumnChange(this)">
+                        <option value="0">Select Column</option>
+                        @foreach (FilterColumnModel column in Model.FilterColumnList)
+                        {
+                            if (column.Id > 0)
+                            {
+                                <option value="@column.Id" @(string.IsNullOrEmpty(filterColumn.ColumnName) ? "" : Equals(column.ColumnName, @filterColumn.ColumnName) ? "selected" : "" ) data-columnId="@column.Id" data-column-dateformat="@dateFormat" data-valuetext="@column.Value">@column.HeaderText</option>
+                            }
+                        }
+                    </select>
+                    <select name="DataOperatorId"  id="optionList" data-test-selector="drpOptionList" class="optionList">
+                        @Html.RenderBlock(filterColumn.SelectListOfDatatype)
+                    </select>
+                    <div class="filtervalueinput" id="filter-componant-control-content">
+                        @{
+                            string textValue = (filterColumn.Value.IndexOf("''") >= 0) ? filterColumn.Value.Replace("''", "'") : filterColumn.Value;
+                            if ((Equals(filterColumn.DataType.ToLower(), "date") || Equals(filterColumn.DataType.ToLower(), "datetime")) && !string.IsNullOrEmpty(filterColumn.Value))
+                            {
+                                textValue = (filterColumn.Value.IndexOf("'") >= 0) ? filterColumn.Value.Replace("'", "") : filterColumn.Value;
+                                if (textValue.Contains("AND"))
+                                {
+                                    textValue = textValue.Split(new string[] { "AND" }, StringSplitOptions.None)[0];
+                                }
+                                textValue = Convert.ToDateTime(textValue).ToDateTimeFormat();
+                            }
+
+                            textValue = textValue.Contains("\"") ? textValue.Replace("\"", "&#34;") : textValue.Contains("'") ? textValue.Replace("'", "&#39;") : textValue;
+                            if (textValue.Trim().ToLower() == "true" || textValue.Trim().ToLower() == "false")
+                            {
+                                textValue = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(textValue).Trim();
+                            }
+                            string mxlen = Equals(filterColumn.DataType, "Int32") ? "maxlength=20" : string.Empty;
+
+                            if (filterColumn.DataType == "Boolean")
+                            {
+                                string isSelectedTrue = "";
+                                if (textValue == "False")
+                                {
+                                    isSelectedTrue = "selected";
+                                }
+                                <select id="@filterColumn.ColumnName" name="@filterColumn.ColumnName" style="float:left;width:80px;" data-test-selector="drpIsActive"><option value='True'>True</option><option value='False' @isSelectedTrue>False</option></select>
+                                <input type="hidden" name="@filterColumn.ColumnName" value="" />
+                            }
+                            else if (filterColumn.DataType == "Date" || filterColumn.DataType == "DateTime")
+                            {
+
+                                <input id="filtercolumn" data-test-selector="txtFilterInput" type="text"
+                                       data-datype="@filterColumn.DataType"
+                                       name="@filterColumn.ColumnName"
+                                       data-columnname="@filterColumn.ColumnName"
+                                       value="@textValue" class="filtercolumn datepicker" data-date-format="@dateFormat" maxlength="50" />
+
+                            }
+                            else
+                            {                   
+                                <input id="filtercolumn" data-test-selector="txtFilterInput" class="filtercolumn" type="text" data-datype="@filterColumn.DataType" name="@filterColumn.ColumnName" data-columnname="" value="@HttpUtility.HtmlDecode(textValue)" maxlength="@mxlen" />
+                            }
+                        }
+                    </div>
+                    <em class="z-cancel-circle" id="close" onclick="DynamicGrid.prototype.RemoveFilterText(this,'@filterColumn.ColumnName')"></em>
+                </div>
+            }
+        }
+        <div class="add-filter-selection" style='@(Model.FilterColumnList.All(m=>m.DataOperatorId==0) ? "" : "display:none")'>
+            <select id="columnList" data-test-selector="drpColumnList" class="columnList" onchange="DynamicGrid.prototype.OnFilterColumnChange(this)">
+                <option value="0">Select Column</option>
+                @foreach (FilterColumnModel column in Model.FilterColumnList)
+                {
+                    if (column.Id > 0)
+                    {
+                        <option value="@column.Id" data-columnId="@column.Id" data-valuetext="@column.Value" data-column-dateformat="@dateFormat">@column.HeaderText</option>
+                    }
+                }
+
+            </select>
+            <select name="DataOperatorId" id="optionList" data-test-selector="drpOptionList" class="optionList"></select>
+            <div class="filtervalueinput" id="filter-componant-control-content">
+                <input id="filtercolumn" data-test-selector="txtFilterInput" class="filtercolumn" type="text" data-datype="" name="" data-columnname="" value="" maxlength="130" />
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 nopadding footer-filter padding-top-15 padding-bottom-15">
+        <div class="pull-right padding-right">
+            <a href='#' class='filter-close pull-left' id='ManageFilterClose'><em class='z-cancel-circle' id="popoverclose"><span>Cancel</span></em></a>
+            <button type="button" id="addfilter" data-test-selector="popBtnAddFilter" class="btn-text btn-add-filter" @(Model.FilterColumnList.Count == 1 ? "disabled" : "") onclick="DynamicGrid.prototype.AddFilterButton(this)">@Admin_Resources.ButtonAddFilter</button>
+            <button id="apply-filter" data-test-selector="popBtnApplyFilter" type="button" class="btn-text btn-text-secondary margin-left-10" onclick="DynamicGrid.prototype.FilterButtonPress(this);return false;">@Admin_Resources.ButtonApplyFilter</button>
+        </div>
+    </div>
+</div>
+
+<div class='add-filter-template' style='display:none;'>
+    <select id="columnList" data-test-selector="drpColumnList" class="columnList" onchange="DynamicGrid.prototype.OnFilterColumnChange(this)">
+        <option value="0">Select Column</option>
+        @foreach (FilterColumnModel column in Model.FilterColumnList)
+        {
+            if (column.DataOperatorId == 0 && column.Id > 0)
+            {
+                <option value="@column.Id" data-columnId="@column.Id" data-valuetext="@column.Value" data-column-dateformat="@dateFormat">@column.HeaderText</option>
+            }
+
+        }
+    </select>
+    <select name="DataOperatorId" id="optionList" data-test-selector="drpOptionList" class="optionList"></select>
+    <div class="filtervalueinput" id="filter-componant-control-content">
+        <input id="filtercolumn" data-test-selector="txtFilterInput" class="filtercolumn" type="text" data-datype="" name="" data-columnname="" value="" maxlength="130" />
+    </div>
+    <em class="z-cancel-circle" data-test-selector="poplinkCloseFilterRow" id="close" onclick="DynamicGrid.prototype.RemoveFilterText(this)"></em>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var arr = JSON.parse('@Html.RenderBlock(Json.Encode(@Model.FilterColumnList))')
+        DynamicGrid.prototype.SetColumnList(arr);
+    });
+</script>
+
+
+

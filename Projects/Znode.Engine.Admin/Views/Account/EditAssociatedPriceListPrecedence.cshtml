@@ -1,0 +1,66 @@
+﻿@model Znode.Engine.Admin.ViewModels.PriceAccountViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+@using (Ajax.BeginForm(actionName, controllerName, new AjaxOptions()
+{
+    HttpMethod = "post",
+    OnSuccess = "Account.prototype.EditAssociatedPriceListPrecedenceResult",
+    UpdateTargetId = "priceListPrecedence",
+    InsertionMode = InsertionMode.Replace,
+},
+                 new { @id = "editAssociatedPriceListPrecedenceForm" }))
+{
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+                <h4 class="modal-title" data-test-selector="hdg@(Admin_Resources.TextEditPrecedence)">@Admin_Resources.TextEditPrecedence</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12 page-container">
+                    <div id="createFormId" class="col-sm-12 nopadding">
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(m => m.Name, new { @data_test_selector = "lblName" })
+                                </div>
+                                <div class="control-md">
+                                    @Html.TextBoxFor(model => model.Name, new { @disabled = "disabled", @data_test_selector = "txtName" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(m => m.Precedence, new { @class = "required", @data_test_selector = "lblPrecedence" })
+                                </div>
+                                <div class="control-md" id="divMinQtyId">
+                                    @Html.TextBoxFor(model => model.Precedence, new { maxlength = 3, @data_test_selector = "txtPrecedence" })
+                                    @Html.ValidationMessageFor(model => model.Precedence, "", new { @data_test_selector = "valPrecedence" })
+                                </div>
+                            </div>
+                        </div>
+                        @Html.HiddenFor(m => m.AccountId)
+                        @Html.HiddenFor(m => m.PriceListAccountId)
+                        @Html.HiddenFor(m => m.Name)
+                        @Html.HiddenFor(m => m.PriceListId)
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 nopadding">
+                    <div class="pull-right margin-top-bottom">
+                        <button type="submit" class="btn-text-icon" id="editStorePrecedence" data-test-selector="linkSave"><em class="z-save"></em>@Admin_Resources.ButtonSave</button>
+                        <button type="button" class="btn-text-icon" data-dismiss="modal" data-test-selector="linkCancel"><em class="z-cancel"></em>@Admin_Resources.ButtonCancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/bundles/jqueryval")

@@ -1,0 +1,166 @@
+﻿@model PortalSEOSettingViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = AdminConstants.SaveSEOSetting;
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+@using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreatEditPortalSEOSetting" }))
+{
+    <div class="col-sm-12 title-container">
+        <h1 data-test-selector="hgd@(Admin_Resources.LabelSEOSettings.Replace(" ",""))">@Admin_Resources.LabelSEOSettings</h1>
+        <div class="pull-right btn-container">
+            @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.TextUpdate, "SaveSEOSetting", "SEO", new { @class = "btn-text btn-text-secondary", @style="margin-top:5px;", onclick = "$('#frmCreatEditPortalSEOSetting').submit()", @data_test_selector = "btnUpdate" })
+        </div>
+    </div>
+    <section class="col-sm-12 page-container">
+        <div class="col-sm-12 nopadding">
+            <p data-test-selector="paraSeoSetting">@Html.RenderBlock(@Admin_Resources.DefaultSEOHint)@Admin_Resources.DefaultSEOHintName<br />@Admin_Resources.DefaultSEOHintNumber<br />@Admin_Resources.DefaultSEOHintSKU<br />@Admin_Resources.DefaultSEOHintBRAND</p>
+        </div>
+        <div class="col-sm-12 nopadding">
+            <h3 class="section-heading margin-top-25">@Admin_Resources.LabelStoreSetting</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.PortalId, new { @data_test_selector = "lblStoreName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.FastSelectFor(model => model.StoreName, model => model.PortalId, "GetSuggestions", "Typeahead", "SEO.prototype.OnSelectPortalResult", 1, true,
+                       new
+                       {
+                           htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @onchange = "SEO.prototype.GetSelectedStoreSEOSetting()", @data_test_selector = "txtStoreName" },
+                           parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                       })
+                        @Html.HiddenFor(model => model.PortalId, new { @id = "hdnPortalId" })
+                        @Html.ValidationMessageFor(model => model.PortalId, "", new { @data_test_selector = "valStoreName" })
+                    </div>                   
+                </div>
+            </div>
+            <h3 class="section-heading margin-top-25">
+                @Admin_Resources.LabelDefaultProductSetting
+                <div class='help-text'><em class='z-help-circle' data-toggle='tooltip' data-placement='right' title='@Admin_Resources.ProductSEOHelpDescription'></em> </div>
+            </h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding dirtyignore">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ProductTitle, new { @data_test_selector = "lblProductTitle" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ProductTitle, new { @class = "AllowHtml", @data_test_selector = "txtProductTitle" })
+                        @Html.ValidationMessageFor(model => model.ProductTitle, "", new { @data_test_selector = "valProductTitle" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding dirtyignore">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ProductDescription, new { @data_test_selector = "lblProductDescription" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ProductDescription, new { @class = "AllowHtml", @data_test_selector = "txtProductDescription" })
+
+                        @Html.ValidationMessageFor(model => model.ProductDescription, "", new { @data_test_selector = "valProductDescription" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding dirtyignore">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ProductKeyword, new { @data_test_selector = "lblProductKeyword" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ProductKeyword, new { @class = "AllowHtml", @data_test_selector = "txtProductKeyword" })
+                        @Html.ValidationMessageFor(model => model.ProductKeyword, "", new { @data_test_selector = "valProductKeyword" })
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-heading margin-top-25">
+                @Admin_Resources.LabelDefaultCategorySetting
+                <div class='help-text'><em class='z-help-circle' data-toggle='tooltip' data-placement='right' data-original-title='@Admin_Resources.CategorySEOHelpDescription'></em></div>
+            </h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding dirtyignore">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.CategoryTitle, new { @data_test_selector = "lblCategoryTitle" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.CategoryTitle, new { @class = "AllowHtml", @data_test_selector = "txtCategoryTitle" })
+
+                        @Html.ValidationMessageFor(model => model.CategoryTitle, "", new { @data_test_selector = "valCategoryTitle" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding dirtyignore">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.CategoryDescription, new { @data_test_selector = "lblCategoryDescription" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.CategoryDescription, new { @class = "AllowHtml", @data_test_selector = "txtCategoryDescription" })
+                        @Html.ValidationMessageFor(model => model.CategoryDescription, "", new { @data_test_selector = "valCategoryDescription" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding dirtyignore">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.CategoryKeyword, new { @data_test_selector = "lblCategoryKeyword" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.CategoryKeyword, new { @class = "AllowHtml", @data_test_selector = "txtCategoryKeyword" })
+                        @Html.ValidationMessageFor(model => model.CategoryKeyword, "", new { @data_test_selector = "valCategoryKeyword" })
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-heading margin-top-25">
+                @Admin_Resources.LabelContentPageSetting
+                <div class='help-text'><em class='z-help-circle' data-toggle='tooltip' data-placement='right' title='@Admin_Resources.ContentPageSEOHelpDescription'></em> </div>
+            </h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding dirtyignore">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ContentTitle, new { @data_test_selector = "lblContentTitle" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ContentTitle, new { @class = "AllowHtml", @data_test_selector = "txtContentTitle" })
+                        @Html.ValidationMessageFor(model => model.ContentTitle, "", new { @data_test_selector = "valContentTitle" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding dirtyignore">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ContentDescription, new { @data_test_selector = "lblContentDescription" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ContentDescription, new { @class = "AllowHtml", @data_test_selector = "txtContentDescription" })
+                        @Html.ValidationMessageFor(model => model.ContentDescription, "", new { @data_test_selector = "valContentDescription" })
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding dirtyignore">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ContentKeyword, new { @data_test_selector = "lblContentKeyword" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ContentKeyword, new { @class = "AllowHtml", @data_test_selector = "txtContentKeyword" })
+                        @Html.ValidationMessageFor(model => model.ContentKeyword, "", new { @data_test_selector = "valContentKeyword" })
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.CMSPortalSEOSettingId)
+        </div>
+    </section>
+}
+<div id="divStoreListAsidePanel" class="aside-popup-panel modal-dialog modal-lg"></div>
+<script>
+    jQuery(document).ready(function ($) {
+        $("[data-toggle=tooltip]").tooltip({ html: true });
+    });
+</script>

@@ -1,0 +1,18 @@
+﻿@model  Znode.Engine.WebStore.Models.GridModel
+@{
+    string viewActionUrl = string.Join("/", "..", ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString());
+}
+@if
+    (!Equals(Model.ViewModeType, null))
+{
+<div class="grid-view-option" id="grid-view-type">
+    <button class="btn-dropdown dropdown-toggle" data-toggle="dropdown"><i class="z-detail-view"></i></button>
+    <ul class="dropdown-menu dropdown-menu-right dropdown-list-ul ">
+        @foreach (var item in Model.ViewModeType)
+            {
+            <li><a href="#" class="detail_view" value="@item.Value">@item.Text</a></li>
+        }
+    </ul>
+        @Html.Hidden("GridViewType", Model.ViewModeType.FirstOrDefault(x => x.Selected == true).Value, new { @id = "viewmode" })
+</div>
+}

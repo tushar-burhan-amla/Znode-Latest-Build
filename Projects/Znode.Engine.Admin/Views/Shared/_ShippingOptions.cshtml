@@ -1,0 +1,81 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model ShippingListViewModel
+
+<div>
+    @if (Model?.ShippingList?.Count > 0)
+    {
+        <div id="shippingOptionMethod">
+            @foreach (ShippingViewModel option in Model.ShippingList)
+            {
+                var originalShippingRate = !string.IsNullOrEmpty(option?.FormattedShippingRateWithoutDiscount) ? "{" + option.FormattedShippingRateWithoutDiscount + "}": string.Empty;
+                var selectedShippingCode = Model.SelectedShippingCode > 0 ? Model.SelectedShippingCode : Model.ShippingList.First().ShippingId;
+                if (option.ShippingCode == "FreeShipping")
+                {
+                    <div id="FreeShippingDiv" style="display: none;">
+                        <label class="pull-left margin-left-20">
+                            <input type="radio" id="@option.ShippingCode.Replace(" ", "_")" name="ShippingId" data-ShippingClassName="@option.ClassName" data-ShippingValue="@option.FormattedShippingRate" value="@option.ShippingId" @(selectedShippingCode == option.ShippingId && Model?.ShippingId > 0 ? "checked=checked" : "") data-shipping-name="@WebUtility.HtmlDecode(option.Description)" data-test-selector="chkShippingCode" />
+                            <span class="lbl padding-8" for="@option.ShippingCode.Replace(" ", "_")" data-test-selector="spnShippingCode">@WebUtility.HtmlDecode(option.Description)</span>
+                            <span class="ShippingOptionsWithRates lbl padding-8" id="ShippingId_@option.ShippingId" data-test-selector="spnShippingRate"> @option.FormattedShippingRate</span>
+                            <input type="hidden" id="hdnIsFreeShipping" value="@(selectedShippingCode == option.ShippingId && Model?.ShippingId > 0?"True":"False")" ShippingId="@option.ShippingId" name="@option.ShippingCode.Replace(" ", "_")" data-ShippingClassName="@option.ClassName" />
+                        </label>
+                    </div>
+                }
+                else
+                {
+                    <div id="div_@option.ShippingId">
+                        <div class="row d-flex align-items-center shipping-method-list">
+                            <div class="col-xs-12 d-flex align-items-center">
+                                <label class="pull-left">
+                                    <input type="radio" id="@option.ShippingCode.Replace(" ", "_")" name="ShippingId" data-ShippingClassName="@option.ClassName" data-ShippingValue="@option.FormattedShippingRate" value="@option.ShippingId" @(selectedShippingCode == option.ShippingId && Model?.ShippingId > 0 ? "checked=checked" : "") onchange="Order.prototype.ShippingChangeHandler('@option.ClassName', '@option.ShippingCode.Replace(" ", "_")')" data-shipping-name="@WebUtility.HtmlDecode(option.Description)" data-test-selector="chkShippingCode" />
+                                    <span class="lbl padding-8" for="@option.ShippingCode.Replace(" ", "_")" data-test-selector="spnShippingCode">@WebUtility.HtmlDecode(option.Description)</span>
+                                    <span class="ShippingOptionsWithRates lbl padding-8" id="ShippingDollar_@option.ShippingId" data-test-selector="spnShippingRateSign"> - $ </span>
+                                    <span class="ShippingOptionsWithRates lbl padding-8" id="ShippingId_@option.ShippingId" data-test-selector="spnShippingRate"> @option.FormattedShippingRate.Replace("$", "") <s class="strike-msg">@originalShippingRate</s> </span>
+                                </label>
+                                @{
+                                    string shippingCode = option.ShippingCode.Replace(" ", "_");
+                                    string shippingRate = option.FormattedShippingRate.Replace("$", "");
+                                }
+                                <div class="shipping-text-block col-xs-2">
+                                    <div class="form-group mb-1">
+                                        <div class="dev-custom-shipping" id="div_@shippingCode" style="display: none;">
+                                            <input id="CustomShipping_@shippingCode" name="OrderTextValue" type="text" class="dev-custom-shipping-value" data-estimate-shipping="@option.ShippingRate" data-test-selector="txtEditDiscount" value="@option.FormattedShippingRate" onchange="Order.prototype.AddCustomShippingAmount(this.value, '@option.FormattedShippingRate')">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            }
+
+            <div id="message-freeshipping" class="success-msg" style="padding-top: 10px; display: none; float: left;"><span data-test-selector="spnFreeShippingMessage">@Admin_Resources.FreeShippingMessage</span></div>
+            <div class="col-sm-12 nopadding" id="customerShippingDiv" style="display: none">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.AccountNumber, new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.AccountNumber, new { @id = "ShippingListViewModel_AccountNumber", Name = "ShippingListViewModel.AccountNumber" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.ShippingMethod, new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.ShippingMethod, new { @id = "ShippingListViewModel_ShippingMethod", Name = "ShippingListViewModel.ShippingMethod" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div id="divNoShippingOptions" class="col-sm-12 text-center margin-bottom" data-test-selector="divNoShippingOptionAvailable" data-shipping="@Admin_Resources.DisplayShippingOption">@Admin_Resources.DisplayShippingOption</div>
+    }
+</div>

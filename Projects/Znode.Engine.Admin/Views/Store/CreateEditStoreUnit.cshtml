@@ -1,0 +1,102 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalUnitViewModel
+@using Znode.Engine.Admin.ViewModels;
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmEditUnits", SaveHeader = Admin_Resources.ButtonEdit, CancelHeader = Admin_Resources.ButtonCancel, Callback = "" ,CancelUrl = "/Store/List" , IsSaveCloseEnable = true};
+    ViewBag.Title = @Admin_Resources.TitleStoreAndReps + " | " + @Admin_Resources.TitleMultifront;
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelStore)<em class="z-minus"></em><span>@Model.PortalName</span></h1>
+    <div class="pull-right">
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm(actionName, controllerName, new { portalId = Model.PortalId }, FormMethod.Post, new { @id = "frmEditUnits" }))
+        {
+            <h3 class="section-heading" data-test-selector="hdgUnitSettings">@Admin_Resources.LabelUnitSettings</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.WeightUnit, new { @data_test_selector = "lblWeightUnit" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(m => m.WeightUnit, Model.WeightUnits ?? new List<SelectListItem>(), new { @data_test_selector = "drpWeightUnit" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group border-bottom">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.DimensionUnit, new { @data_test_selector = "lblDimensionUnit" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(m => m.DimensionUnit, Model.DimensionUnits ?? new List<SelectListItem>(), new { @data_test_selector = "drpDimensionUnit" })
+                    </div>
+                </div>
+            </div>
+            <h3 class="section-heading margin-top-25" data-test-selector="hdgCurrencySettings">@Admin_Resources.LabelCurrencySettings</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.CurrencyTypeID, new { @data_test_selector = "lblActiveCurrency" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(m => m.CurrencyTypeID, Model.CurrencyTypes ?? new List<SelectListItem>(), new { @id = "ddlCurrencyType", @onChange = "Store.prototype.BindCurrencyInfo()", @data_test_selector = "drpActiveCurrency" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label("Culture")
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(m => m.CultureId, Model.Culture ?? new List<SelectListItem>(), new { @id = "ddlCultureType", @onChange = "Store.prototype.BindCultureInfo()" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(@Admin_Resources.LabelCurrencySuffix, new { @data_test_selector = "lblCurrencySuffix" })
+                    </div>
+                    <div class="control-md">
+                        <input type="text" id="txtCurrencySuffix" value="@Model.CurrencySuffix" disabled="disabled" data-test-selector="txtCurrencySuffix" />
+                        @Html.TextBoxFor(m => m.CurrencySuffix, Model.CurrencySuffix, new { @id = "txtCurrencySuffix", @style = "display:none", @data_test_selector = "txtCurrencySuffix" })
+                        @Html.ValidationMessageFor(model => model.CurrencySuffix, "", new { @data_test_selector = "valCurrencySuffix" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(@Admin_Resources.LabelPreview, new { @data_test_selector = "lblPreview" })
+                    </div>
+                    <div class="control-md">
+                        <input type="text" id="txtCurrencyPreviewVal" value="@Model.CurrencyPreview" disabled="disabled" data-test-selector="txtPreview" />
+                        @Html.TextBoxFor(m => m.CurrencyPreview, new { @id = "txtCurrencyPreviewVal", @style = "display:none", @data_test_selector = "txtPreview" })
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.PortalId)
+            @Html.HiddenFor(m => m.PortalName)
+            @Html.HiddenFor(model => model.PortalUnitId)
+            @Html.HiddenFor(model => model.OldCurrencyId)
+            @Html.HiddenFor(model => model.OldCultureId)
+            @Html.HiddenFor(model => model.CurrencySuffix)
+            @Html.HiddenFor(model => model.CurrencyPreview)
+        }
+    </section>
+</div>

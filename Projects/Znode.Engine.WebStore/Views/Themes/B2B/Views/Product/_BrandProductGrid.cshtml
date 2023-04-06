@@ -1,0 +1,24 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ProductListViewModel
+
+<div class="row mx-0">
+    <div id="facets" class="col-12 col-lg-3 p-0 side-nav nav-right b2b-side-bar">
+        <div class="d-lg-none">
+            <div class="col-12 text-right nav-header">
+                <a href="JavaScript:void(0);" class="CloseNav p-0 close-icon"></a>
+                <div class="nav-label"><div class="cut-text"> Sort & Filter</div></div>
+            </div>
+        </div>
+
+        @{Html.RenderPartial("_FacetList", Model.SearchResultViewModel);}
+
+        <div class="col-12 p-0 b2b-compare-product-list">
+            <div id="compareProductList">
+            </div>
+        </div>
+    </div>
+    <!--Brand Banner-->
+    <div class="col-12 col-lg-9 b2b-product-list">
+        @{Html.RenderPartial("_ProductGrid", Model);}
+    </div>
+</div>

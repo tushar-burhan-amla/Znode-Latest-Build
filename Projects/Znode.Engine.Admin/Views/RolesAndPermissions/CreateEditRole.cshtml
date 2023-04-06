@@ -1,0 +1,144 @@
+﻿@model Znode.Engine.Admin.ViewModels.RoleViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string _IsSystemDefinedValidation = Model.IsSystemDefined ? "onclick=\"return false;\" onkeydown=\"return false;\"" : string.Empty;
+    bool isAddMode = actionName.ToLower() == "role";
+    string cancelUrl = "/RoleAndAccessRight/RoleList";
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = "ManagePermission", Controller = "RoleAndAccessRight", ControlId = "btn-text-icon", DataTestSelector = "linkSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "RoleAndAccessRight.prototype.SaveMenuRights('" + cancelUrl + "')" });
+    primaryPageAction.PageActions.Add(new PageAction { Action = "ManagePermission", Controller = "RoleAndAccessRight", ControlId = "dvSave", DataTestSelector = "linkSave", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "RoleAndAccessRight.prototype.SaveMenuRights()" });
+
+}
+<div class="col-sm-12 title-container">
+    @{
+        if (actionName.ToLower() == "role")
+        {
+                <h1 data-test-selector="hdgRoles">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelRoleRight)</h1>
+        }
+        else
+        {
+                <h1 data-test-selector="hdgRoles">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelRoleRight)<em class="z-minus"></em><span data-test-selector="spnRoleName">@Model.Name</span></h1>
+        }
+    }
+    <div class="pull-right dirtyignore">
+        <div id="GlobalButtons" class="btn-container">
+            @Html.AuthorizedPrototypeRawActionLink("<em class='z-back' data-test-selector='linkCancel'></em>" + Admin_Resources.ButtonCancel, "RoleList", "RoleAndAccessRight", "btn-text-icon", "RoleAndAccessRight.prototype.RedirectToRoleList()")
+            <div class="pull-right">
+                @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+            </div>
+        </div>
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container dirtyignore">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmRole" }))
+    {
+        string isActiveStatus = (!Equals(Model, null) && Model.IsActive) ? "checked='checked'" : string.Empty;
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.Name, new { @class = "required", @data_test_selector = "lblName" })
+                </div>
+                <div class="control-md">
+                    @if (Model.IsSystemDefined)
+                    {
+                        @Html.TextBoxFor(model => model.Name, new { @readonly = "readonly", @data_test_selector = "txtName" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.Name, new { @data_test_selector = "txtName" })
+                    }
+                    @Html.ValidationMessageFor(m => m.Name, "", new { id = "errorSpanRoleName", @data_test_selector = "valName" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.IsActive, new { @data_test_selector = "lblIsActive" })
+                </div>
+                <div class="control-md">
+                    <label>
+                        @if (Model.IsAssociated)
+                        {
+                            <input data-test-selector="chkIsActive" @isActiveStatus id="IsActive" onclick="return false" style="cursor:not-allowed;" onkeydown="return false;" name="IsActive" @Html.RenderBlock(_IsSystemDefinedValidation) type="checkbox" value="true">
+                        }
+                        else
+                        {
+                            <input data-test-selector="chkIsActive" @isActiveStatus id="IsActive" name="IsActive" @Html.RenderBlock(_IsSystemDefinedValidation) type="checkbox" value="true">
+                        }
+                        <span class="lbl padding-8"></span>
+                        <input name="IsActive" type="hidden" value="false">
+                    </label>
+                </div>
+            </div>
+        </div>
+        @Html.Hidden("id", Model.Id)
+        @Html.HiddenFor(m => m.IsSystemDefined)
+
+        <div class="list-container margin-top-25">
+            <table class="table table-striped" id="RolesAndPermissions" data-test-selector="tblRolesAndPermissions" aria-describedby="Roles And Permissions">
+                <thead>
+                    <tr>
+                        <th scope="col" data-test-selector="tblHdMenuName">@Admin_Resources.LabelMenuName</th>
+                        <th scope="col" data-test-selector="tblHdParentMenuName">@Admin_Resources.LabelParentMenuName</th>
+                        <th scope="col"><a data-test-selector="linkFullAcces" class="radio-allCheck fullaccess">Full Access</a></th>
+                        <th scope="col" style="display:none"><a data-test-selector="linkReadOnly" class="radio-allCheck readonly">Read Only</a></th>
+                        <th scope="col"><a data-test-selector="linkNoAccess" class="radio-allCheck noaccess">No Access</a></th>
+                        <th scope="col" data-test-selector="tblHdDeleteAccess">Delete Access</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Equals(Model, null) & !Equals(Model.Menus, null))
+                    {
+                        foreach (var item in Model.Menus)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.RenderBlock("<label class='Menu' id='menu_" + item.MenuId + "' data-controller=" + item.ControllerName + "><span class='lbl padding-8'>" + item.MenuName + "</span></label><input type='hidden' class='RoleMenuIdClass' value='" + item.MenuId + "' /><input type='hidden' class='ParentMenuIdClass' value='" + item.ParentMenuId + "' />")
+                                </td>
+                                <td>
+                                    @Html.RenderBlock("<label>" + item.ParentMenuName + " </label>")
+                                </td>
+                                <td>
+                                    <label><input type="radio" class='rights-checkbox full-access' data-permissions="@string.Join(",", Model.Permissions.Where(x => x.TypeOfPermission != "B2B" && x.PermissionCode == ZnodeRoleAccessEnum.WR.ToString() || x.PermissionCode == ZnodeRoleAccessEnum.ED.ToString()).Select(y => y.PermissionId).ToList())" name="@item.MenuId" /><span class='lbl padding-8'></span> </label>
+                                </td>
+                                <td style="display:none">
+                                    <label><input type="radio" class='rights-checkbox read-only' data-permissions="@string.Join(",", Model.Permissions.Where(x => x.TypeOfPermission != "B2B" && x.PermissionCode == ZnodeRoleAccessEnum.RO.ToString()).Select(y => y.PermissionId).ToList())" name="@item.MenuId" /><span class='lbl padding-8'></span></label>
+                                </td>
+                                <td>
+                                    <label><input type="radio" class='rights-checkbox no-access' data-permissions="" name="@item.MenuId" /><span class='lbl padding-8'></span></label>
+                                </td>
+                                <td>
+                                    @Html.RenderBlock("<label><input type='checkbox' id='delete_" + item.MenuId + "'  class='rights-checkbox delete-access' data-permissions='" + string.Join(", ", Model.Permissions.Where(x => x.TypeOfPermission != "B2B" && x.PermissionCode == ZnodeRoleAccessEnum.DEL.ToString()).Select(y => y.PermissionId).ToList()) + "' /><span  class='lbl padding-8'></span></label>")
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.HiddenFor(m => m.PermissionAccessString)
+        @Html.HiddenFor(m => m.TypeOfRole)
+        @Html.HiddenFor(m => m.IsAssociated)
+    }
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var permissionAccess = @Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(Model?.RoleMenuAccessMapper?.Select(x=> new { permission = x.AccessPermissionsId, RoleMenuId= x.MenuId})));
+        var accessMode = @Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(isAddMode));
+        RoleAndAccessRight.prototype.SetRoleAccessPermissions(permissionAccess,accessMode);
+
+        //Important because it is used to restrict enter button while creating or edit Role.
+        RoleAndAccessRight.prototype.RestrictEnterButton();
+
+        RoleAndAccessRight.prototype.ValidateRole();
+    });
+</script>

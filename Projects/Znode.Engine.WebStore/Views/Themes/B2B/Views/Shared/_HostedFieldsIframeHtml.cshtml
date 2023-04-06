@@ -1,0 +1,22 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model PaymentTokenViewModel
+
+<div class="braintree-payment">
+    <form id="payment-form" data-test-selector="formBrainTreePayment">
+        <section>
+            <div class="bt-drop-in-wrapper">
+                <div id="bt-dropin"></div>
+            </div>
+        </section>
+        <input id="nonce" name="payment_method_nonce" type="hidden" />
+        <input id="details" name="payment_method_details" type="hidden" />
+
+        <div class="text-right mt-3">
+            <button class="btn btn-primary btn-pay-and-submit mr-sm-2" type="submit" id="BraintreeSubmitButton" data-test-selector="popBtnPayAndSubmit"><span>@WebStore_Resources.PayAndSubmit</span></button>
+            <button class="btn btn-secondary btn-pay-cancel mt-2 mt-md-0" data-dismiss="modal" id="BraintreeCancelButton" data-test-selector="popBtnCancel">@WebStore_Resources.ButtonCancel</button>
+        </div>
+    </form>
+    <div>
+        <input type="hidden" name="token" value='@Model.PaymentGatewayToken' />
+    </div>
+</div>

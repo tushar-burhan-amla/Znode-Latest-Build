@@ -1,0 +1,44 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.Extensions;
+
+@model ERPTaskSchedulerViewModel
+
+
+<div class="col-sm-12 nopadding">
+    <div class="control-label">
+        @Html.Label(ERP_Resources.LabelERPTaskSchedulerStartDate, new { @class = "required", @data_test_selector = "lblSchedulerStartDate" })
+    </div>
+    @Html.Partial("_HelpText", Admin_Resources.TimeZoneHelpText);
+    <div class="control-sm">
+        <div class="right-inner-icon">
+            @Html.TextBoxFor(model => model.StartDate, Model?.StartDate != null ? Model.StartDate.ToDateTimeFormat() : string.Empty, new { @data_test_selector = "txtSchedulerStartDate", @mindate = DateTime.Now.Date, @maxdate = "", @data_date_format = HelperMethods.GetDateFormat(), @autocomplete = "off", required = "required", title= Admin_Resources.StartDateRequiredMessage })
+            <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+         </div>
+        @Html.ValidationMessageFor(model => model.StartDate, "", new { @id = "valStartDate", @data_test_selector = "valSchedulerStartDate" })
+        <span id="createSchedulerError" class="error-msg display-none margin-top-5"></span>
+    </div>
+    <div class="control-sm padding-left">
+        <div class="right-inner-icon">
+            @Html.TextBoxFor(model => model.StartTime, string.Empty, new { @class = "timepicker", style = "cursor:pointer", @data_test_selector = "txtSchedulerStartTime", @autocomplete = "off", required = "required", title = Admin_Resources.StartTimeRequiredMessage })
+            <em class="z-time-picker" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+        </div>
+        @Html.ValidationMessageFor(model => model.StartTime, "", new { @id = "valStartTime", @data_test_selector = "valSchedulerStartTime" })
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#StartTime').datetimepicker({
+            format: 'LT'
+        });
+        $('#StartDate').on('click', function () {
+            $(this).addClass('datepicker');
+            $(this).datepicker().datepicker('show');
+        })
+        $("#StartTime, #ExpireTime").on("click", function () {
+            $(".bootstrap-datetimepicker-widget").css("display", "block");
+        });
+    });
+</script>

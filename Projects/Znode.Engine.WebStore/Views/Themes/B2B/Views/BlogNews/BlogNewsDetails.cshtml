@@ -1,0 +1,80 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model BlogNewsViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string imagePath = PortalAgent.CurrentPortal.MediaServerUrl;
+    string href = string.Equals(Model.BlogNewsType, @WebStore_Resources.LabelBlog, StringComparison.InvariantCultureIgnoreCase) ? "/blog" : "/news";
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+}
+
+<div class="col main-wrapper">
+    <div class="contain-pages mb-4">
+        <div class="col-12 p-0 blog-details">
+            <div class="blog-image-bg" style="background-image: url(@imagePath/@Model.MediaPath)">
+            </div>
+            <div class="blog-content-container">
+                <div class="col-12 p-0">
+                    <div id="comments-section" class="success-msg"></div>
+                    <div class="col-12 p-0 title-container blog-news-title">
+                        <h1 class="page-title">@Model.BlogNewsTitle</h1>
+                    </div>
+                </div>
+                <div class="col-12 mb-3 blog-news-date-time">
+                    @Model.ActivationDate.ToDateTimeFormat()
+                </div>
+                <div class="col-12 p-0 mb-3 blog-news-text">
+                    <p>@Html.RenderBlock(Model.BlogNewsContent)</p>
+                </div>
+                @if (!string.IsNullOrEmpty(Model?.Tags))
+                {
+                <div class="col-12 p-0 pull-right my-3 blog-news-tags"><b>@WebStore_Resources.TextTags:</b> @Model.Tags</div>
+                }
+                <div class="text-left back-btn">
+                    <button type="button" class="btn btn-secondary" { onclick="javascript: location.href = '@href';" })>@WebStore_Resources.ButtonBack</button>
+                </div>
+                @if (Model.IsAllowGuestComment)
+                {
+                using (Ajax.BeginForm("SaveComments", "BlogNews", null, new AjaxOptions
+                {
+                HttpMethod = "POST",
+                OnSuccess = "BlogNews.prototype.SavedCommentSuccessMessage",
+                UpdateTargetId = "comments-display-section"
+                }))
+                {
+                <div id="comments-display-section" class="comments-display-section">
+                    @{
+                    Html.RenderPartial(_fileLocation + "/Views/BlogNews/_ComentDisplaySection.cshtml", Model.Comments);
+                    }
+                </div>
+                @Html.AntiForgeryToken()
+                @Html.Hidden("BlogNewsId", Model.BlogNewsId)
+                <div class="col-12 p-0 mb-3">
+                    <h6>@WebStore_Resources.TextLeaveComment</h6>
+                    <div class="col-12 p-0">
+                        @Html.TextAreaFor(model => model.BlogNewsComment, new { @rows = "10" })
+                        @Html.ValidationMessageFor(m => m.BlogNewsComment)
+                    </div>
+                </div>
+                <div class="quotebutton text-right">
+                    <button type="submit" class="btn btn-primary">@WebStore_Resources.ButtonSubmit</button>
+                </div>
+                }
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ajaxStart(function () {
+        $("#submit").prop("disabled", true);
+    });
+    $(document).ajaxStop(function () {
+        $("#submit").prop("disabled", false);
+    });
+</script>
+

@@ -1,0 +1,62 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model AddressViewModel
+
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<div id="divCustomerAddressPopup">
+    <div id="aside-popup-panel">
+
+        @using (Ajax.BeginForm("ManageCustomerAddress", controllerName, new AjaxOptions() { HttpMethod = "post", OnBegin = "Quote.prototype.ValidateShippingMethod()", OnSuccess = "Quote.prototype.ChangeAddressSuccessForManage" }, new { @id = "frmUserAddress" }))
+        {
+            <div class="col-sm-12 nopadding">
+                <div class="col-sm-12 title-container">
+                    <h1 data-test-selector="hdgCustomerAddress">@Admin_Resources.LabelCustomerAddress</h1>
+                    <div class="pull-right btn-container">
+                        <button type="submit" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('addressDetails')" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                        <div class="pull-right padding-left">
+                            <button type="submit" class="btn-text btn-text-secondary" data-test-selector="linkSave">@Admin_Resources.ButtonSave</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="asidePannelmessageBoxContainerId" style="display:none">
+                    <div class="col-sm-12 text-center error-msg margin-bottom" style="position:relative;"></div>
+                </div>
+                <div class="col-sm-12 page-container">
+                    @if (!Model.IsGuest && !Model.DontAddUpdateAddress)
+                    {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    <label data-test-selector="lblSelectCustomerAddress">@Admin_Resources.LabelSelectCustomerAddress</label>
+                                </div>
+                                <div class="control-md">
+                                    @Html.DropDownListFor(model => model.AddressId, Model.UsersAddressNameList, new { @id = "UsersAddressNameList", @data_test_selector = "drpSelectCustomerAddress", @Onchange = "Order.prototype.GetUserAddressBySelectedAddress(this);" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div id="addressDiv">
+                        @{
+                            Html.RenderPartial("~/Views/Account/_Address.cshtml", Model);}
+                    </div>
+                </div>
+                @Html.HiddenFor(model => model.SelectedBillingId)
+                @Html.HiddenFor(model => model.SelectedShippingId)
+                @Html.HiddenFor(model => model.PortalId)
+                @Html.HiddenFor(model => model.IsShippingAddressChange)
+                @Html.HiddenFor(model => model.FromBillingShipping)
+                @Html.HiddenFor(model => model.AddressId)
+                @Html.HiddenFor(model => model.OmsQuoteId)
+                @Html.HiddenFor(model => model.IsShippingBillingDifferent)
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        Quote.prototype.CustomerAddressViewHandler($("#hdnIsShipping").val());
+    });
+</script>
+

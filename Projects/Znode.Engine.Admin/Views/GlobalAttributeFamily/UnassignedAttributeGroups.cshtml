@@ -1,0 +1,12 @@
+﻿
+@using Znode.Engine.Admin.Models
+@model List<BaseDropDownList>
+
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    DropDownOptions attributeGroupDropdown = new DropDownOptions() { DropDownId = "DropDownId1", DropDownList = Model, assignable = true, SortAction = "", Action = "AssignAttributeGroups", Controller = controllerName, IsAjax = false, SuccessCallBack = "", IsMultiple = true, IsDraggable = true, IsAllowCheckAll = false, SelectOptionName = "Add Attribute Groups", ShowSubmitButton = true, IsSubOptions = false };
+}
+
+<div class="pull-right padding-left action-dropdown dirtyignore">
+    @Html.Partial("~/Views/Shared/Controls/_CheckBoxDropDown.cshtml", attributeGroupDropdown)
+</div>

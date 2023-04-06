@@ -1,0 +1,75 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model HighlightViewModel
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.HighlightCode, new { @class = "required", @data_test_selector = "lblHighlightCode" })
+        </div>
+        <div class="control-md">
+            @if (Model.HighlightId > 0)
+            {
+                @Html.TextBoxFor(m => m.HighlightName, new { @readonly = "readonly", @data_test_selector = "txtHighlightCode" })
+            }
+            else
+            {
+                @Html.DropDownListFor(model => model.HighlightCode, Model.HighlightCodeList, new { @id = "ddlHighlightCodeList", @data_test_selector = "drpHighlightCode" })
+            }
+            @Html.ValidationMessageFor(m => m.HighlightCode)
+        </div>
+    </div>
+</div>
+<div class="form-group" id="divBehavior">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            <label data-test-selector="lblOnClickBehavior">@Admin_Resources.LabelOnClickBehavior</label>
+        </div>
+        <div class="control-md">
+            <div class="col-sm-12 nopadding">
+                <label><input @(Model.IsHyperlink ? "checked='checked'" : "") type="radio" name="HighlightBehavior" value="Hyperlink" onclick="Highlight.prototype.HighlightBehaviorOnChange();" /><span class="lbl padding-8" data-test-selector="lbl@(Admin_Resources.LabelRedirectToURL.Replace(" ",""))">@Admin_Resources.LabelRedirectToURL</span></label>
+            </div>
+            <div class="col-sm-12 nopadding">
+                <label><input @(!Model.IsHyperlink ? "checked='checked'" : "") type="radio" name="HighlightBehavior" value="Description" onclick="Highlight.prototype.HighlightBehaviorOnChange();" /><span class="lbl padding-8" data-test-selector="lbl@(Admin_Resources.LabelDisplayTheTextEnteredBelow.Replace(" ",""))">@Admin_Resources.LabelDisplayTheTextEnteredBelow</span></label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group" id="divHyperlink">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.Hyperlink, new { @data_test_selector = "lblHyperlink" })
+        </div>
+        <div class="control-md">
+            @Html.EditorFor(m => m.Hyperlink, new { @data_test_selector = "txtHyperlink" })
+            @Html.ValidationMessageFor(m => m.Hyperlink, "", new { @data_test_selector = "valHyperlink" })
+        </div>
+    </div>
+</div>
+<div class="form-group" id="divDescription" style="display:none">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(Admin_Resources.LabelAllowedMessageTokens, new { @data_test_selector = "lblAllowedMessageTokens" })
+        </div>
+        <div class="control-md" data-test-selector="divAllowedMessageTokens">
+            @Model.TemplateTokensPartOne
+            <div class="display-none" id="templateTokensData">
+                @Model.TemplateTokensPartTwo
+            </div>
+            <a id="templateTokens" style="@(Model.TemplateTokensPartTwo=="" ? "display:none" : "display:block")" class="dirtyignore">@Admin_Resources.TextSeeMore</a>
+        </div>
+
+    </div>
+    <div class="col-sm-12 nopadding margin-top-15">
+        <div class="control-label">
+            @Html.LabelFor(m => m.Description, new { @data_test_selector = "lblDescription" })
+        </div>
+        <div class="control-md">
+            @Html.EditorFor(m => m.Description, new { @data_test_selector = "txtDescription" })
+            @Html.ValidationMessageFor(m => m.Description, "", new { @data_test_selector = "txtDescription" })
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(m => m.HighlightLocaleId)
+@Html.HiddenFor(m => m.IsDescription)
+@Html.HiddenFor(m => m.HighlightName)
+@Html.HiddenFor(m => m.DisplayPopup)

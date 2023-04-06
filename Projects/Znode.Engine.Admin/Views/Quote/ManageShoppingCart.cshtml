@@ -1,0 +1,85 @@
+﻿@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model QuoteCartViewModel
+
+@{
+    int QuoteId = HelperUtility.IsNotNull(Request.UrlReferrer) ? Convert.ToInt32(HttpUtility.ParseQueryString(Request.UrlReferrer.Query)["OmsQuoteId"]) : 0;
+    int cartCount = Model.ShoppingCartItems.Count;
+
+}
+<div id="divShoppingCart">
+
+    <div id="layout-cart">
+        <div class="panel-heading">
+            <h4 class="panel-title panel-title-edit" data-test-selector="hdgItemsOrdered">@Admin_Resources.LabelProductsInQuote</h4>
+        </div>
+        @if (Model?.ShoppingCartItems?.Any() ?? false)
+        {
+            <div class="col-xs-12 cart-products nopadding margin-bottom">
+                <div class="table" data-test-selector="tblItemsOrdered">
+                    <div class="col-xs-12 nopadding table-head">
+                        <ul class="col-xs-12 nopadding">
+                            <li class="imageicon sp-image" data-test-selector="tblHdImage">
+                                <span data-test-selector="spnImage">@Admin_Resources.LabelImage</span>
+                            </li>
+                            <li class="sp-sku" data-test-selector="tblHdSKU">
+                                <span data-test-selector="spnSKU">@Admin_Resources.LabelSKU</span>
+                            </li>
+                            <li class="sp-product-name" data-test-selector="tblHdProduct">
+                                <span data-test-selector="spnProduct">@Admin_Resources.LabelProductName</span>
+                            </li>
+                            <li data-test-selector="tblHdUnitPrice" class="table-unitprice sp-unit-price">
+                                <span data-test-selector="spnUnitPrice">@Admin_Resources.LabelUnitPrice</span>
+                            </li>
+                            <li data-test-selector="tblHdQuantity" class="table-quantity sp-quantity">
+                                <span data-test-selector="spnQuantity">@Admin_Resources.LabelQuantity</span>
+                            </li>
+                            <li data-test-selector="tblHdShipping" class="sp-shipping">
+                                <span data-test-selector="spnShipping">@Admin_Resources.LabelShipping</span>
+                            </li>
+                            <li data-test-selector="tblHdTotal" class="table-total sp-total">
+                                <span data-test-selector="spnTotal">@Admin_Resources.LabelTotal</span>
+                            </li>
+                            <li class="sp-actions" data-test-selector="tblHdAction">
+                                <span data-test-selector="spnAction">@Admin_Resources.LabelAction</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <ul class="col-xs-12 table-body">
+                        @if (Model.ShoppingCartItems != null)
+                        {
+                            foreach (var items in Model?.ShoppingCartItems?.AsEnumerable()?.Reverse())
+                            {
+                                string guid = items?.ExternalId;
+                                <li class="cartItem" onchange="Quote.prototype.UpdateCartItem('@guid')" data-cart-lineitem="@guid">
+                                    <ul class="line-items">
+                                        @Html.Partial("_ManageCartRow", items)
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cart-total col-sm-6 col-md-6 col-lg-4 nopadding pull-right margin-bottom quote-manage-total" id="divTotal">
+                @Html.Partial("_ManageTotalTable", Model)
+            </div>
+
+            @Html.Hidden("hdnTotalAmt", Model.Total)
+            @Html.Hidden("hdnShoppingCartCount", Model.ShoppingCartItems.Count)
+            @Html.Hidden("hdnIsAnyProductOutOfStock", Model.ShoppingCartItems.Any(b => b.InsufficientQuantity))
+            @Html.Hidden("hdnHasError", Model.HasError)
+            @Html.Hidden("hdnShippiingErrorMessage", Model.ShippingErrorMessage)
+        }
+        else
+        {
+            <div class="col-sm-12 nopadding cart-summary">
+                <p class="text-center margin-top-bottom no-record">@Admin_Resources.TextNoOrderedItems</p>
+            </div>
+        }
+    </div>
+</div>
+@Html.Hidden("hdnCartCount", cartCount)

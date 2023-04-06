@@ -1,0 +1,62 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model Znode.Engine.Admin.ViewModels.FormBuilderAttributeGroupViewModel
+@{
+    ViewBag.Title = Admin_Resources.LabelOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    int prevGroupId = 0;
+    int sequence = 1;
+}
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelManage<em class="z-minus"></em><span>@Model.FormCode</span></h1>
+    <div class="pull-right btn-container">
+        <a href="/FormSubmission/List" class="btn-text-icon"><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+    </div>
+</div>
+
+<section class="col-sm-12 page-container">
+    @foreach (var ctrl in Model.Attributes)
+    {
+        int? groupId = ctrl.GlobalAttributeGroupId;
+        if (groupId == null)
+        {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding formbuilder-submission">
+                    <div class="control-label">
+                        @Html.Label(ctrl.AttributeName)
+                    </div>
+                    <div class="control-lg update-order-status dirtyignore">
+                        @Html.RenderBlock(ctrl.AttributeValue)
+                    </div>
+                </div>
+            </div>
+            sequence++;
+        }
+        else
+        {
+            if (prevGroupId != groupId.Value)
+            {
+                var attributesAssociatedWithGroup = Model.Attributes.Where(x => x.GlobalAttributeGroupId == groupId).ToList();
+                var groupName = Model.Groups.FirstOrDefault(x => x.GlobalAttributeGroupId == groupId).AttributeGroupName;
+                <div class="col-xs-12 nopadding formbuilder-submission">
+                    <h3 class="section-heading margin-top-25">@groupName</h3>
+                    @foreach (var attributes in attributesAssociatedWithGroup)
+                        {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.Label(attributes.AttributeName)
+                                </div>
+                                <div class="control-lg update-order-status dirtyignore">
+                                    @Html.RenderBlock(attributes.AttributeValue)
+                                </div>
+                            </div>
+                        </div>
+                        sequence++;
+                    }
+                </div>
+                prevGroupId = groupId.Value;
+            }
+        }
+    }
+</section>

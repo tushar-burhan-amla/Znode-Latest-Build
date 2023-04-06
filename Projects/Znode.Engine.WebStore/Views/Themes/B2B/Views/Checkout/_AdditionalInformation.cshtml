@@ -1,0 +1,54 @@
+﻿@using Znode.Custom.Engine.WebStore.ViewModels
+@model CustomAdditionalInformationViewModel
+
+<div class="col-xs-12 nopadding sp-additional-info">
+    <h3 class="title"><span>2</span>Additional Information</h3>
+    <div class="col-xs-12 nopadding padding-top">
+        <div class="col-xs-6 nopadding padding-right">
+            <div class="form-group">
+                <div class="">
+                    @Html.LabelFor(x => x.ProductUseList)
+                </div>
+                <div class="col-xs-12 nopadding">
+                    @Html.DropDownListFor(m => m.ProductUseList, Model.ProductUseList, new { @id = "productuselist", @class = "spp-dev-additional-info" })
+                    <p class="error-msg" id="err_productuselist">@Html.ValidationMessageFor(m => m.ProductUseList)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 nopadding">
+            <div class="form-group sp-recipient">
+                <div class="col-xs-12 nopadding">
+                    @Html.LabelFor(x => x.RecipientProductList)
+                </div>
+                <div class="col-xs-12 nopadding">
+                    @Html.ListBoxFor(m => m.RecipientProductList, Model.RecipientProductList, new { @id = "recipientproductlist", @class="spp-dev-additional-info"})
+                    <p class="error-msg" id="err_recipientproductlist">@Html.ValidationMessageFor(m => m.RecipientProductList)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 nopadding">
+        <div class="col-xs-6 nopadding padding-right">
+            <div class="form-group">
+                <div class="col-xs-12 nopadding">
+                    @Html.LabelFor(x => x.ApproverManager)
+                </div>
+                <div class="input-group">
+                    @Html.TextBoxFor(m => m.ApproverManager, new { @id = "txtapprovermanager", @class = "txtapprovermanager spp-dev-additional-info" })
+                    <p class="error-msg" id="err_txtapprovermanager">@Html.ValidationMessageFor(m => m.ApproverManager, null, new { @id = "valtxtapprovermanager" })</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 nopadding padding-left">
+            <div class="form-group">
+                <div class="">
+                    @Html.LabelFor(x => x.ProjectName)
+                </div>
+                <div class="input-group">
+                    @Html.TextBoxFor(m => m.ProjectName, new { @id = "txtprojectname", @class = "txtprojectname spp-dev-additional-info" })
+                    <p class="error-msg" id="err_txtprojectname">@Html.ValidationMessageFor(m => m.ProjectName, null, new { @id = "valtxtprojectname" })</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

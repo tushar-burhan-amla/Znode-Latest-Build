@@ -1,0 +1,48 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model IEnumerable<AccountQuoteViewModel>
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table" aria-describedby="Quote Order Details">
+            <thead>
+                <tr>
+                    <th scope="col">@WebStore_Resources.TitleOrderType</th>
+                    <th scope="col">@WebStore_Resources.TitleOrderNumber</th>
+                    <th scope="col">@WebStore_Resources.TitleCustomerName</th>
+                    <th scope="col">@WebStore_Resources.TitleOrderStatus</th>
+                    <th scope="col">@WebStore_Resources.TitleOrderTotal</th>
+                    <th scope="col">@WebStore_Resources.TitleCreatedDate</th>
+                    <th scope="col">@WebStore_Resources.TitleAction</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (AccountQuoteViewModel quote in Model)
+                {
+                    <tr>
+                        <td>@quote.OrderType</td>
+                        <td>
+                            <a href="/User/QuoteView?omsQuoteId=@quote.OmsQuoteId&orderStatus=@quote.OrderStatus">
+                                @quote.OmsQuoteId
+                            </a>
+                        </td>
+                        <td>@quote.UserName</td>
+                        <td>@quote.OrderStatus</td>
+                        <td>@quote.QuoteOrderTotal</td>
+                        <td>@quote.CreatedDate.ToDateTimeFormat()</td>
+                        <td><a href="/User/QuoteView?omsQuoteId=@quote.OmsQuoteId&orderStatus=@quote.OrderStatus" class="remove-compare" onclick="" data-toggle="tooltip" data-placement="top" title="View Order"><span class="zf-view"></span></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="col-12 account-recent-orders">
+        <div class="row">
+            <div class="col-12 pl-2 py-4">
+                <div class="b2b-recent-order-detail">@WebStore_Resources.NoPendingOrderMessage</div>
+            </div>
+        </div>
+    </div>
+}

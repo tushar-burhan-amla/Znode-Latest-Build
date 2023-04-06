@@ -1,0 +1,20 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model OrderInfoViewModel
+@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("UpdateTrackingNumber", "order"
+                                        , new AjaxOptions
+                                        {
+                                            UpdateTargetId = "labelTrackingNumber",
+                                            HttpMethod = "GET",
+                                            OnSuccess = "Order.prototype.ChangeTrackingNumberSuccessCallback"
+                                        }, new { @class = "dirtylisten dirty", @id = "TrackingNumberView" }))
+{
+    <div class="col-sm-12 nopadding">
+        @Html.TextBoxFor(model => model.TrackingNumber, new { @maxlength = "100", @data_test_selector = "txtTrackingNumber", @Onchange = "Order.prototype.SaveFields(this)" })
+        @Html.HiddenFor(model => model.OmsOrderId, new { @id = "hdnTrackingNumberViewOrderId" })
+    </div>
+
+}
+

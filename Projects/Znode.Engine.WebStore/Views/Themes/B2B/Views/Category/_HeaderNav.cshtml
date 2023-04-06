@@ -1,0 +1,23 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model CategoryHeaderListViewModel
+
+<ul class="d-flex list-unstyled flex-column position-relative h-100 py-3">
+    <li class="main-nav-back-btn d-lg-none"><span class="left-icon"></span>@WebStore_Resources.ButtonBack</li>
+    @{
+        foreach (var category in Model.Categories)
+        {
+            <li class="dropdown d-flex" data-test-selector="listCategories">
+                <a href="@Url.GetCategoryUrl(category.SEOPageName, null, category.CategoryId)">@Html.RenderBlock(WebUtility.HtmlDecode(category.CategoryName))</a>
+                @if (!Equals(category.SubCategoryItems, null) && category.SubCategoryItems.Count > 0)
+                {
+                    <div class="ml-auto right-icon open-child-menu"></div>
+                    <ul class="dropdown-menu side-nav nav-left py-3">
+                        <li class="nav-back-btn" data-test-selector="listSubCategoriesBack"><span class="left-icon"></span>@WebStore_Resources.ButtonBack</li>
+                        @Html.Partial("_HeaderSubNav", category.SubCategoryItems)
+                    </ul>
+                }
+            </li>
+        }
+        
+    }
+</ul>

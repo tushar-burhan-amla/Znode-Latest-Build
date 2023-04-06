@@ -1,0 +1,161 @@
+﻿@using Znode.Libraries.Resources
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.WebStore.Agents
+@using Znode.Engine.WebStore.Models
+@{
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+    if (String.IsNullOrWhiteSpace(ViewBag.Title))
+    {
+        ViewBag.Title = PortalAgent.CurrentPortal.WebsiteTitle;
+    }
+
+    string _customModule = ViewContext.RouteData.Values["Controller"].ToString().FirstCharToUpper() == ViewContext.Controller.GetType().Name.Replace("Controller", "") ? string.Empty : $".{ViewContext.Controller.GetType().Name.Replace("Controller", "")}";
+
+
+}
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    @Html.Partial("_LayoutHead")
+</head>
+<body id="@ViewContext.RouteData.Values["Controller"].ToString().FirstCharToUpper()" class="@ViewContext.RouteData.Values["Action"]" data-controller="@ViewContext.RouteData.Values["Controller"].ToString().FirstCharToUpper()@_customModule" data-view="@ViewContext.RouteData.Values["Action"].ToString().FirstCharToUpper()">
+    @Html.Partial(Helper.GetThemeFilePath($"/Views/Themes/", "/Views/Home/_StoreAnalyticsInstallation.cshtml"), PortalAgent.CurrentPortal)
+    <div id="layout" class="wrapper">
+        <div id="addToCartNotification" class="AddToCartBlock" aria-live="polite"></div>
+        <!--Header Widgets-->
+        <header>
+            <z-widget>@Html.WidgetPartial("Header", "Header", "101", "PortalMapping")</z-widget>
+        </header>
+        <div id="layout-content" class="layout-min-height" role="main">
+            <div class="container-fluid" id="SuccessMessage">
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Notification Msg -->
+                    <div class="container">
+                        <div class="row position-relative">
+                            <div class="notification-msg col p-0" id="body">
+                                <div class="messageBoxContainer" id="messageBoxContainerId" data-message="@TempData["Notifications"]"></div>
+                                @{
+                                    TempData.Remove("Notifications");
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+        <!--Footer Widgets-->
+        @{
+            Html.RenderAction("FooterContent", "Home", new { portalId = _portal.PortalId, publishState = _portal.PublishState, localeId = Helper.GetLocaleId(), profileId = Helper.GetProfileId(), accountId = Helper.GetUserAccountId(), catalogId = Helper.GetUserProfileCatalogId() });
+        }
+    </div>
+    <div class="mega-menu-overlay" id="megamenuoverlay" onclick="closeNav()"></div>
+
+    @Html.Partial("_InlineTemplates")
+
+    @Html.Hidden("hdnPaymentAppUrl", @ZnodeWebstoreSettings.PaymentApplicationUrl)
+    @Scripts.Render("~/bundles/CoreJs")
+    @Scripts.Render("~/bundles/ZnodeCoreJs")
+
+    @RenderSection("scripts", required: false)
+
+    @*---Quick View PopUp----*@
+    <div class="modal fade quick-view-popup" id="quick-view-popup-ipad" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <button type="button" class="btn close close-circle-icon" data-dismiss="modal" data-test-selector="btnQuickViewClose" aria-label="Close"></button>
+                <div class="modal-body">
+                    <div id="quick-view-content" class="quick-view-content">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--inventory popup-->
+    <div class="modal fade inventory-popup" id="inventory-popup" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <button type="button" class="btn close close-circle-icon" data-dismiss="modal" data-test-selector="btnInventoryClose" aria-label="Close"></button>
+                <div class="modal-body p-0">
+                    <div id="inventory-popup-content" class="inventory-popup-content">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial(Helper.GetThemeFilePath($"/Views/Themes/", "/Views/Shared/Controls/_PopUp.cshtml"),
+    new PopupModel()
+    {
+        Title = Admin_Resources.Error,
+        Description = @Admin_Resources.ErrorSelectRecord,
+        ModalPopUpId = "NoCheckboxSelected",
+        IsErrorPopUp = true,
+    })
+
+    @Html.Partial(Helper.GetThemeFilePath($"/Views/Themes/", "/Views/Shared/Controls/_PopUp.cshtml"),
+    new PopupModel()
+    {
+        Title = WebStore_Resources.ConfirmDeleteTitle,
+        Description = WebStore_Resources.TextConfirmDelete,
+        ModalPopUpId = "PopUpConfirm",
+        Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @WebStore_Resources.TextOk, OnClickFunctionName = "DynamicGrid.prototype.RedirectToDelete(this)" } }
+    })
+    @*This div is important for displaying product compare status*@
+    <div id="divAddedForCompare" class="modal fade comparepopup" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="compare-product-popup modal-dialog modal-md modal-dialog-centered" id="popUp_content">
+        </div>
+    </div>
+    <button data-test-selector="btnCompare" id="btnAddCompare" style="display:none" data-toggle="modal" data-target=".comparepopup">Compare</button>
+    @Html.Hidden("hdnPortalId", PortalAgent.CurrentPortal.PortalId)
+    @* Loader *@
+    <div id='Single-loader-content-backdrop' class='loader modal-backdrop' style="display:none">
+        <div id='loading' class='d-flex modal-dialog-centered justify-content-center'>
+            <img src="@_fileLocation/Images/loading.svg" aria-hidden="true" alt="Loading" />
+        </div>
+    </div>
+
+    <script>
+        $(window).on("scroll touchmove", function () {
+            if ($('header').offset().top < 200) {
+                $("body").css('padding-top', $("header").height());
+            }
+        });
+        var dataLayer = [];
+        $(document).ready(function () {
+            var notification = new ZnodeNotification();
+            notification.DisplayNotificationMessages();
+              $("#inventory-popup button.close").click(function () {
+                if ($("#quick-view-popup-ipad").hasClass("show")) {
+                    setTimeout(
+                        function () {
+                            $('body').addClass('modal-open');
+                        }, 350);
+                }
+              });
+        });
+
+    </script>
+</body>
+</html>
+
+@if (Helper.GetCMSMode())
+{
+    <style type="text/css">
+        a, button:not(.btn-text-secondary-custom), .product-item {
+            pointer-events: none;
+        }
+    </style>
+    <script src="~/Scripts/Core/Znode/ConfigButton.js"></script>
+}
+@Html.Hidden("currentThemePath", _portal.Theme)
+@Html.Partial("../Schema/_OrganizationSchema", PortalAgent.CurrentPortal)
+

@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "Payment API | Znode";
+}
+
+<div id="body">
+    <section>
+        <h2>API Overview</h2>
+        <p>The Znode API is organized around REST and is designed to have predictable, resource-oriented URLs and to use HTTP response codes to indicate API errors. The API uses built-in HTTP features &mdash; such as headers, methods, and status codes &mdash; which can be understood by any off-the-shelf HTTP client. The Znode API only supports requests and responses in JSON format.</p>
+    </section>
+
+    <section>
+        <h2>Authentication</h2>
+        <p>The Znode API uses basic authentication with the <strong>Authorization header</strong> to validate requests. An example of the format for the Authorization header is shown below:</p>
+        <p><pre class="code">Authorization: Basic d3d3Lm15LXN0b3JlLmNvbXw1RDJCNEM1RS1EOEIzLTQ0ODgtOTA0RC02NDA5NDc2MkUxMzY=</pre></p>
+        <p>The value after the word "Basic" is a Base64 encoded string that consists of a username and password separated by a pipe character (username|password), as described below:</p>
+        <ul>
+            <li><strong>Username:</strong> This is the domain name for the store whose data will be retrieved during the request (i.e. www.my-store.com).</li>
+            <li><strong>Password:</strong> This is the API key for the domain, as found in the ZNodeDomain table in the Multifront database (i.e. 5D2B4C5E-D8B3-4488-904D-64094762E136).</li>
+        </ul>
+        <p>Any client of the Znode API must concatenate the domain name (username ) with the domain key (password), separated by a pipe, and then Base64 encode that string to pass along in the Authorization header.</p>
+        <p>When a request is made to an endpoint, the Znode API will look for the Authorization header and try to decode it. It will then split the decoded string into the domain name (username) and domain key (password), verify that they are a match, then process the request.</p>
+        <p>If the Authorization header isn't in the request or if either the domain name (username) or domain key (password) are empty, the API request will fail with the following information:</p>
+        <ul>
+            <li><strong>HTTP status code:</strong> 401 Unauthorized</li>
+            <li><strong>HTTP status description:</strong> Domain name and key are either incorrect or missing from the request Authorization header.</li>
+        </ul>
+
+        <h3>Disabling Authentication</h3>
+        <p>Authentication can be disabled by setting <strong>ValidateAuthHeader</strong> to false in the &lt;appSettings&gt; section of the API's web.config file. However, in most cases, this value should be set to true in production environments.</p>
+        <p><pre class="code">&lt;add key="ValidateAuthHeader" value="true" /&gt;</pre></p>
+
+        <h3>During Development</h3>
+        <p>When developing a client that uses the Znode API, it will be useful at times to open endpoints in a browser in order to see data. To ensure this is possible, you need to add an entry in the ZNodeDomain table for the domain of the API itself. In this case, simply disabling authentication will have no effect.</p>
+        <p>For example, if you have the API deployed locally at "api.localhost.com", you should add an entry in the ZNodeDomain table where the DomainName field is "api.localhost.com" with the relevant portal ID. This will be the context for retrieving data when viewing endpoints in a browser.</p>
+        <p><strong><em>IMPORTANT: This should be for development purposes only.</em></strong></p>
+
+        <h3>HTTPS and SSL</h3>
+        <p>The requirement to run under HTTPS is specific to your requirements and infrastructure; therefore, the Znode API doesn't force you to use HTTPS to run it. However, we strongly recommend it, especially for production environments. During development, it would be beneficial to create and install a local SSL certificate in order to properly mimic all calls to the Znode API.</p>
+    </section>
+
+    <section>
+        <h2>HTTP Methods</h2>
+        <p>The Znode API uses standard HTTP methods as actions for all API requests, and most URIs accept multiple HTTP methods (one per request). The table below is a general rule of thumb for which HTTP methods are used and when.</p>
+
+        <table class="help-page-table">
+            <thead>
+                <tr>
+                    <th width="25%">Method</th>
+                    <th width="75%">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td>Retrieves a single object or a list of objects.</td>
+                </tr>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td>Creates an object.</td>
+                </tr>
+                <tr>
+                    <td><strong>PUT</strong></td>
+                    <td>Updates an object.</td>
+                </tr>
+                <tr>
+                    <td><strong>DELETE</strong></td>
+                    <td>Deletes an object.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>HTTP Status Codes</h2>
+        <p>The Znode API uses standard HTTP response codes to indicate success or failure of an API request. In general, codes in the 2xx range indicate success, codes in the 4xx range indicate an error that resulted from the provided information, and codes in the 5xx range indicate a server error.</p>
+
+        <table class="help-page-table">
+            <thead>
+                <tr>
+                    <th width="25%">Code</th>
+                    <th width="45%">Description</th>
+                    <th width="30%">Method Usage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>200 OK</strong></td>
+                    <td>The request was successful.</td>
+                    <td>GET, PUT success</td>
+                </tr>
+                <tr>
+                    <td><strong>201 Created</strong></td>
+                    <td>The item sent in the request was successfully created.</td>
+                    <td>POST success</td>
+                </tr>
+                <tr>
+                    <td><strong>204 No Content</strong></td>
+                    <td>The request was successful, but there was nothing to return.</td>
+                    <td>DELETE success</td>
+                </tr>
+                <tr>
+                    <td><strong>403 Forbidden</strong></td>
+                    <td>API key was invalid or not supplied.</td>
+                    <td>Any</td>
+                </tr>
+                <tr>
+                    <td><strong>404 Not Found</strong></td>
+                    <td>The requested item doesn't exist.</td>
+                    <td>GET failure</td>
+                </tr>
+                <tr>
+                    <td><strong>500 Internal Server Error</strong></td>
+                    <td>Something went wrong processing the request.</td>
+                    <td>GET, POST, PUT, DELETE failure</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <section>
+        <h2>Indentation</h2>
+        <p>Because all responses in the Znode API are JSON strings, it can sometimes be hard to read responses with the human eye, especially for large responses. While this doesn't matter to machines, it can be useful at times to open an endpoint in a browser to see the results. For this, a client can use the <strong>indent</strong> parameter for better readability, as such:</p>
+        <p><pre class="code">GET http://api.mysite.com/attributes?indent=true</pre></p>
+        <p>Setting the indent parameter to true will produce a response with the JSON string properly indented, similar to this sample attributes response:</p>
+        <p>
+            <pre class="code">
+"Attributes": [
+    {
+        "AttributeId": 2,
+        "AttributeTypeId": 1,
+        "DisplayOrder": 1,
+        "ExternalId": null,
+        "IsActive": true,
+        "Name": "Red",
+        "OldAttributeId": null
+    }
+]</pre>
+        </p>
+    </section>
+    
+</div>

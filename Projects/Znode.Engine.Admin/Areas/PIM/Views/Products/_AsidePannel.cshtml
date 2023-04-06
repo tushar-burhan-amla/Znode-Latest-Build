@@ -1,0 +1,50 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@model PIMFamilyDetailsViewModel
+
+@{
+    bool isActiveGroup = true;
+}
+
+<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container dirtyignore">
+        <ul class="aside-panel" id="productAsidePannel">
+            @{
+                var index = 0;
+            }
+            @foreach (var group in Model.Groups)
+            {
+                var htmlClass = isActiveGroup ? "tab-selected" : "";
+                isActiveGroup = false;
+                string associatedAttributeCss = Equals(group.GroupCode, "AssociatedProducts") ? "display:none" : string.Empty;
+                if (index == 0 || group.GroupCode == AdminConstants.AddOn ||
+                    group.GroupCode == AdminConstants.Personalization ||
+                    group.GroupCode == AdminConstants.CustomFields ||
+                    group.GroupCode == AdminConstants.Downloadable ||
+                    group.GroupCode == AdminConstants.FrequentlyBought ||
+                    group.GroupCode == AdminConstants.YouMayAlsoLike ||
+                    group.GroupCode == AdminConstants.AssociatedProducts ||
+                    group.GroupType == AdminConstants.LinkType
+                    )
+                {
+                    <li style="@associatedAttributeCss" data-productid="@Model.ProductId" class="groupPannel @group.GroupCode @htmlClass" data-groupCode="@group.GroupCode@group.PimAttributeFamilyId" data-groupId="@group.PimAttributeGroupId" data-groupType="@group.GroupType" data-group="@group.GroupCode"><a href="#">@group.AttributeGroupName</a></li>
+                    if (index == 0)
+                    {
+                        if (Model.ProductId > 0)
+                        {
+                            <li data-productid="@Model.ProductId" class="groupPannel SEO" data-groupcode="seo"><a href="#" data-test-selector="linkSEO">@PIM_Resources.LabelSEO.ToUpper()</a></li>
+                            <li data-productid="@Model.ProductId" class="groupPannel Catalog" data-groupCode="Catalog"><a href="#">Catalog</a></li>
+                            <li data-productid="@Model.ProductId" class="groupPannel Category" data-groupCode="Category"><a href="#">@PIM_Resources.LabelCategory.ToUpper()</a></li>
+                            <li data-productid="@Model.ProductId" class="groupPannel price" data-groupCode="Price"><a href="#">@PIM_Resources.LabelPricing.ToUpper()</a></li>                            
+                            <li data-productid="@Model.ProductId" class="groupPannel Inventory" data-groupCode="Inventory"><a href="#">@PIM_Resources.LabelInventory.ToUpper()</a></li>
+                        }
+                    }
+                }
+                index += 1;
+            }
+
+            @{isActiveGroup = true; }
+        </ul>
+    </div>
+</aside>

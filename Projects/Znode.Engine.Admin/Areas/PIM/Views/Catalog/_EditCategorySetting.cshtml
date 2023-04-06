@@ -1,0 +1,66 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Extensions
+@using Znode.Engine.Admin.Helpers
+@model CatalogAssociateCategoryViewModel
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+@using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "editAssociatedCategorySettingForm" }))
+{
+    <div id="aside-popup-panel">        
+            <div class="col-sm-12 title-container">
+                <h1>@Admin_Resources.TitleAssociateCategory - @Model.CategoryValue</h1>
+                <div class="pull-right">
+                    <button type="submit" class="btn-text-icon"><em class="z-save" data-test-selector="popLinkSave"></em>@Admin_Resources.ButtonSave</button>
+                    <button type="button" onclick="ZnodeBase.prototype.CancelUpload('target-category-edit-to-display')" class="btn-text-icon"><em class="z-cancel" data-test-selector="popLinkCancel"></em>@Admin_Resources.ButtonCancel</button>
+                </div>
+            </div>
+            <div class="col-sm-12 page-container">
+                                
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label"> 
+                            @Html.Label(Admin_Resources.LabelActivationDate)
+                        </div>
+                        <div class="control-sm">
+                            <div class="right-inner-icon">
+                                @Html.TextBox("ActivationDate", Model.ActivationDate != null ? Model.ActivationDate.ToDateTimeFormat() : string.Empty, new { @id = "ActivationDate", @mindate = "", @class = "datepicker", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat() })
+                                <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelExpirationDate)
+                        </div>
+                        <div class="control-sm">
+                            <div class="right-inner-icon">
+                                @Html.TextBox("ExpirationDate", Model.ExpirationDate != null ? Model.ExpirationDate.ToDateTimeFormat() : string.Empty, new { @id = "ExpirationDate", @maxdate = "", @class = "datepicker", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat() })
+                                <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="control-md control-non">
+                        <label>
+                            <input @(Model.IsActive ? "checked='checked'" : "") id="IsActive" name="IsActive" type="checkbox" value="true">
+                            <span class="lbl padding-8">Is Active</span>
+                            <input name="IsActive" type="hidden" value="false">
+                        </label>
+                    </div>
+                </div>
+            </div>        
+    </div>
+
+    @Html.HiddenFor(model => model.PimCatalogId)
+    @Html.HiddenFor(model => model.PimCategoryHierarchyId)
+    @Html.HiddenFor(model => model.PimCategoryId)
+    @Html.HiddenFor(model => model.ParentPimCategoryHierarchyId)
+    @Html.HiddenFor(model => model.DisplayOrder)
+}
+@Scripts.Render("~/bundles/jqueryval")

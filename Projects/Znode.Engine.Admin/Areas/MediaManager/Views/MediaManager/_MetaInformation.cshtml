@@ -1,0 +1,97 @@
+﻿@model MediaAttributeValuesListViewModel
+@using Znode.Engine.Admin.ViewModels;
+<div class="col-sm-12 nopadding">
+    <h3 class="section-heading">@MediaManager_Resources.MetaInformation</h3>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label for="FileName">@MediaManager_Resources.Name</label>
+            </div>
+            <div class="control-md">
+                <input type="text" IsRequired data-val="true" maxlength="250" name="FileName" id="FileName" value='@Model.FileName' readonly="readonly" />
+                <span class='text-danger' data-valmsg-for='FileName' data-valmsg-replace='true' id='errorSpamFileName'></span>
+            </div>
+        </div>
+    </div>
+    @if (!string.IsNullOrEmpty(Model.Size))
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label for="Size">@MediaManager_Resources.Size</label>
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(m => m.Size, new { @readonly = "readonly" })
+                </div>
+            </div>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.Height))
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label for="Height">@MediaManager_Resources.Height </label>
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(m => m.Height, new { @readonly = "readonly", @style = "display:" + (string.IsNullOrEmpty(Model.Height) ? "none" : "block") })
+                </div>
+            </div>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.Width))
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label for="Width">@MediaManager_Resources.Width</label>
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(m => m.Width, new { @readonly = "readonly" })
+                </div>
+            </div>
+        </div>
+    }
+    @*@if (!string.IsNullOrEmpty(Model.Length))
+        {
+            <div class="form-group" style="display:none;">
+                <div class="col-sm-12 nopadding"><label for="Length">@MediaManager_Resources.Length</label> </div>
+                <div class="col-sm-10 col-lg-8 nopadding">
+                    <div>
+                        @Html.TextBoxFor(m => m.Length, new { @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+        }*@
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label for="Type">@MediaManager_Resources.Type</label>
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => m.Type, new { @readonly = "readonly" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label for="CreatedDate">@MediaManager_Resources.CreatedDate</label>
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => m.CreatedDate, new { @readonly = "readonly" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label for="ModifiedDate">@MediaManager_Resources.ModifiedDate</label>
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => m.ModifiedDate, new { @readonly = "readonly" })
+                @Html.HiddenFor(m => m.MediaPathId)
+            </div>
+        </div>
+    </div>
+</div>

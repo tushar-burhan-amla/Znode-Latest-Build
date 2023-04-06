@@ -1,0 +1,9 @@
+﻿<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelThemeInformation, "EditTheme", "Theme", new { @cmsThemeId = Model.CMSThemeId },new { @data_test_selector = "linkThemeInformation" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelCSSConfiguration, "Manage", "Theme", new { @cmsThemeId = Model.CMSThemeId },new { @data_test_selector = "linkCSSConfiguration" })</li>
+        </ul>
+    </div>
+</aside>

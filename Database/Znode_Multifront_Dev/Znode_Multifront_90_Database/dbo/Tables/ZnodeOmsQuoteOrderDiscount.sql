@@ -1,0 +1,27 @@
+﻿CREATE TABLE [dbo].[ZnodeOmsQuoteOrderDiscount] (
+    [OmsQuoteOrderDiscountId]        INT             IDENTITY (1, 1) NOT NULL,
+    [OmsQuoteId]         INT             NULL,
+    [OmsQuoteLineItemId]        INT             NULL,
+    [OmsDiscountTypeId]         INT             NULL,
+    [DiscountCode]              VARCHAR (MAX)   NULL,
+    [DiscountAmount]            NUMERIC (28, 6) NULL,
+    [Description]               NVARCHAR (MAX)  NULL,
+    [CreatedBy]                 INT             NOT NULL,
+    [CreatedDate]               DATETIME        NOT NULL,
+    [ModifiedBy]                INT             NOT NULL,
+    [ModifiedDate]              DATETIME        NOT NULL,
+    [PerQuantityDiscount]       NUMERIC (28, 6) NULL,
+    [DiscountMultiplier]        NUMERIC (28, 6) NULL,
+    [ParentOmsQuoteLineItemId] INT             NULL,
+    [DiscountLevelTypeId]       INT             NULL,
+    [PromotionName]             NVARCHAR (600)  NULL,
+	[PromotionTypeId]           INT             NULL,
+	[DiscountAppliedSequence]   INT             NULL,
+	[PromotionMessage]          NVARCHAR (MAX)  NULL,
+    CONSTRAINT [PK_ZnodeOmsQuoteOrderDiscount] PRIMARY KEY CLUSTERED ([OmsQuoteOrderDiscountId] ASC) WITH (FILLFACTOR = 90),
+    CONSTRAINT [FK_ZnodeOmsQuoteOrderDiscount_ZnodeOmsDiscountType] FOREIGN KEY ([OmsDiscountTypeId]) REFERENCES [dbo].[ZnodeOmsDiscountType] ([OmsDiscountTypeId]),
+    CONSTRAINT [FK_ZnodeOmsQuoteOrderDiscount_ZnodeOmsQuoteId] FOREIGN KEY ([OmsQuoteId]) REFERENCES [dbo].[ZnodeOmsQuote] ([OmsQuoteId]),
+    CONSTRAINT [FK_ZnodeOmsQuoteOrderDiscount_ZnodeOmsQuoteLineItem] FOREIGN KEY ([OmsQuoteLineItemId]) REFERENCES [dbo].[ZnodeOmsQuoteLineItem] ([OmsQuoteLineItemId]),
+    CONSTRAINT [FK_ZnodeOmsQuoteOrderDiscount_ZnodePromotionType] FOREIGN KEY ([PromotionTypeId]) REFERENCES [dbo].[ZnodePromotionType] ([PromotionTypeId])
+);
+

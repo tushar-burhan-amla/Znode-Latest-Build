@@ -1,0 +1,179 @@
+﻿@using Znode.Engine.WebStore.Agents
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.WebStore.Models
+@{
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    string logo = !string.IsNullOrEmpty(PortalAgent.CurrentPortal.WebsiteLogo) ? MediaPaths.MediaPath + PortalAgent.CurrentPortal.WebsiteLogo : string.Empty;
+    string title = PortalAgent.CurrentPortal.WebsiteTitle;
+    var _portal = PortalAgent.CurrentPortal;
+    bool isLoginAuthorization = Convert.ToBoolean(_portal.GlobalAttributes.Attributes.Where(x => x.AttributeCode == "LoginRequired").Select(x => x.AttributeValue).FirstOrDefault());
+    bool IsLoginUser = Convert.ToBoolean(SessionProxyHelper.IsLoginUser());
+    bool isEnableVoiceBasedSearch = (bool)PortalAgent.CurrentPortal.PortalFeatureValues.Where(x => x.Key.Contains(HelperUtility.StoreFeature.Enable_Voice_Based_Search.ToString()))?.FirstOrDefault().Value;
+    bool isEnableTradeCentric = GlobalAttributeHelper.IsTradeCentricUserActive();
+}
+
+<div class="container header">
+    <!--Start Skip Navigation-->
+    <a href="#layout-content" class="skip-nav">@WebStore_Resources.SkipToContent</a>
+    <!--End Skip Navigation-->
+    @if (Request.IsAuthenticated && SessionHelper.GetDataFromSession<ImpersonationModel>
+        (WebStoreConstants.ImpersonationSessionKey) != null)
+    {
+        ImpersonationModel impersonation = SessionHelper.GetDataFromSession<ImpersonationModel>
+    (WebStoreConstants.ImpersonationSessionKey);
+
+        <div class="row proxy-login-section">
+            <div class="container proxy-login d-flex justify-content-center align-items-center">
+                <span>
+                    @impersonation.CRSName   @WebStore_Resources.LoggedInAs   @impersonation.ShopperName
+                </span>
+                <a href="/User/Logout" aria-label="logout" class="log-off btn btn-secondary px-2 py-1 mx-2 my-1" id="log-off" data-test-selector="linkLogOff"> @WebStore_Resources.LabelLogOff</a>
+            </div>
+        </div>
+    }
+    <div class="header-locale-container mt-2">
+        <div class="container-fluid">
+            <div class="row justify-content-end">
+                @*@Html.Partial(Helper.GetThemeFilePath($"/Views/Themes/", "/Views/Shared/_CurrentEnvironment.cshtml"))*@
+                <div class="track-order">
+                    @*@Html.ActionLink(WebStore_Resources.LabelTrackOrder, "GetOrderDetails", "User", "", new { @data_test_selector = "linkTrackOrder" })*@
+                    <a data-test-selector="linkTrackOrder" href="/user/getorderdetails?Length=0">@WebStore_Resources.LabelTrackOrder <i class="icon-track-order"></i></a>
+                </div>
+                <!--Locales Widget-->
+                <div>
+                    <z-widget>@Html.WidgetPartial("Locales", "Locales", "123", "PortalMapping", 4)</z-widget>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center" style="z-index: 1;">
+        <div class="site-logo order-2 order-lg-1">
+            <a href="/" class="header-logo">
+                @{
+                    if (string.IsNullOrEmpty(logo))
+                    {
+                        <h1>@title</h1>
+                    }
+                    else
+                    {
+                        <img data-src="@logo" alt="@title" class="img-fluid b-lazy" />
+                    }
+                }
+            </a>
+        </div>
+        <div class="col p-0 site-search order-3 order-lg-2">
+            <!--Search Widget-->
+            <button class="mobile-search-btn d-md-none"><span class="search-icon"></span></button>
+            <z-widget>@Html.WidgetPartial("SearchPanel", "SearchPanel", "105", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId)</z-widget>
+        </div>
+        @if (!(ViewContext.RouteData.Values["controller"].ToString() == "User") && !isEnableTradeCentric)
+        {
+            <div class="d-flex site-inventory header-btn-block order-5 order-lg-4">
+                <button data-target="#b2b-header-quick-order" class="OpenNav header-btn align-self-center">
+                    <div class="d-none d-lg-block">@WebStore_Resources.HeaderQuickOrder </div><span class="clock-icon"></span>
+                </button>
+            </div>
+        }
+
+        @if (Request.IsAuthenticated)
+        {
+            <div class="block order-5 order-lg-4 account-dropdown">
+                <div data-target="#sign-in-nav" class="header-btn align-self-center loginStatus d-none d-lg-block">@WebStore_Resources.LabelFindABranch</div>
+            </div>
+        }
+
+        <div class="d-flex cart-btn-block justify-content-md-end order-5 order-lg-4 cart-button">
+            <a href="/cart" class="cart-btn align-self-center ">
+                <div class="d-none d-lg-block">CART | <span class="cartcount">@Helper.GetRoundOffQuantity(WidgetHelper.GetCartCount())</span> ITEMS</div> <span class="cart-icon"></span>
+                <span class="cartcount-mobile cartcount d-lg-none">@Helper.GetRoundOffQuantity(WidgetHelper.GetCartCount())</span>
+            </a>
+        </div>
+        <div class="w-100 d-none d-lg-block order-lg-5"></div>
+        <div class="col p-0 d-flex navigation order-1 order-lg-6">
+            <button class="mobile-nav-btn d-lg-none" title="Navigation" onclick="openCat()"><span class="icon hamburger-icon"></span></button>
+
+            <ul class="parent-nav mr-auto align-self-stretch">
+                <li>
+                    <a href="JavaScript:void(0);" class="d-none d-lg-block shop" onclick="openNav('leftNav-cat')">@WebStore_Resources.LabelShopDepartments</a>
+                </li>
+                <li>
+                    <z-widget>@Html.WidgetPartial("LinkPanel", "Desktop Navigation", "22530", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), PortalAgent.CurrentPortal.PortalId)</z-widget>
+                </li>
+            </ul>
+        </div>
+        @if (!isEnableTradeCentric)
+        {
+            <div id="find_branch" class="d-flex header-btn-block order-2 order-lg-6 header-nav-links">
+                <div class="header-btn header-btn-txt align-self-center position-static">
+                    <div class="d-none d-lg-block cut-text mt-3 mb-3">
+                        <a href="/Home/storeLocator">@WebStore_Resources.LabelFindABranch </a>
+                    </div>
+                </div>
+            </div>
+        }
+        <div id="my_account" class="d-flex site-login header-btn-block order-3 order-lg-7 header-nav-links">
+
+            <div data-target="#sign-in-nav" class="header-btn align-self-center loginStatus header-btn-txt accountmenus" id="btnSignIn">
+                @Html.Action("LoginStatus", "User")
+            </div>
+        </div>
+    </div>
+
+    @{ Html.RenderAction("GetMegaMenuList", "Category", new { profileId = Helper.GetProfileId(), portalId = Helper.GetCurrentPortalId(), localeId = Helper.GetLocaleId(), publishState = Helper.GetPublishState(), accountId = Helper.GetUserAccountId(), catalogId = Helper.GetUserProfileCatalogId() }); }
+</div>
+
+<div class="side-nav-backdrop"></div>
+<div id="mobile-navigation" class="mobile-navigation side-nav nav-left">
+    <div class="col-12 text-right nav-header">
+        <a href="JavaScript:void(0);" aria-label="Close" class="CloseNav p-0 close-icon"></a>
+    </div>
+    <ul class="parent-nav mr-auto align-self-stretch py-3">
+        <li>
+            <a data-target="#navigation" class="OpenMobileNav" href="JavaScript:void(0);">@WebStore_Resources.LabelShopDepartments</a>
+        </li>
+        <li>
+            <z-widget>@Html.WidgetPartial("LinkPanel", "Mobile Navigation", "22530", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), PortalAgent.CurrentPortal.PortalId)</z-widget>
+        </li>
+    </ul>
+</div>
+
+<div id="navigation" class="navigation side-nav nav-left">
+    <div class="col-12 text-right nav-header">
+        <a href="JavaScript:void(0);" aria-label="Close" class="CloseNav p-0 close-icon"></a>
+    </div>
+    <z-widget>@Html.WidgetPartial("TopLevelNavigation", "TopLevelNavigation", "104", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())</z-widget>
+</div>
+<div id="sign-in-nav" class="side-nav nav-right">
+</div>
+@if (isLoginAuthorization == false || IsLoginUser == true)
+{
+    if (!(ViewContext.RouteData.Values["controller"].ToString() == "User"))
+    {
+        <div id="b2b-header-quick-order" class="side-nav nav-right">
+            <z-widget>@Html.WidgetPartial("QuickOrder", "QuickOrder", "123", "PortalMapping", 4)</z-widget>
+        </div>
+    }
+}
+<script>
+    if ($(".proxy-login-section").length > 0) {
+        $('body').css("padding-top", "150px");
+    }
+
+    // Calculate header height and add padding top to body Starts
+    $("body").css('padding-top', $("header").height());
+    $(window).resize(function () {
+        $("body").css('padding-top', $("header").height());
+    });
+    // Calculate header height and add padding top to body Ends
+
+    // Start ADA Skip Nav Function
+    $(document).ready(function () {
+        $(".skip-nav").click(function (event) {
+            var skipTo = "#" + this.href.split('#')[1];
+            $(skipTo).attr('tabindex', -1).on('blur focusout', function () {
+                $(this).removeAttr('tabindex');
+            }).focus();
+        });
+    });
+    // End ADA Skip Nav Function
+</script>

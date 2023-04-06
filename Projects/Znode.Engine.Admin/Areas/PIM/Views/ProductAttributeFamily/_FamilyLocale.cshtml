@@ -1,0 +1,6 @@
+﻿@model List<Znode.Engine.Admin.AttributeValidationHelpers.LocaleDataModel>
+@{
+    int pimAttributeFamilyId = Convert.ToInt32(Request.QueryString["pimattributefamilyid"]);
+}
+
+@Html.Partial("~/Areas/PIM/Views/ProductAttribute/_Locale.cshtml", Model)

@@ -1,0 +1,82 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+@model ERPConfiguratorViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront; ;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmERPConfigurator", CancelUrl = "/ProviderEngine/ERPConfiguratorList", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleBusinessSystemConnector)</h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<div id="grid-container">
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmERPConfigurator" }))
+            {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ClassName, new { @class = "required", @data_test_selector = "lblClassName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.ClassName, Model.ERPConfiguratorClasses, new { @id = "ddlERPConfiguratorClasses", @data_test_selector = "drpClassName" })
+                        @Html.ValidationMessageFor(model => model.ClassName, "", new { @data_test_selector = "valClassName" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ERPName, new { @class = "required", @data_test_selector = "lblERPName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ERPName, new { @data_test_selector = "txtERPName" })
+                        @Html.ValidationMessageFor(model => model.ERPName, "", new { @data_test_selector = "valERPName" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Description, new { @data_test_selector = "lblDescription" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextAreaFor(model => model.Description, new { @data_test_selector = "txtDescription" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.IsActive, new { @data_test_selector = "lblStatus" })
+                    </div>
+                    <div class="control-md">
+                        <label>
+                            <input id="IsActive" data-test-selector="chkIsActive" name="IsActive" checked="@Model.IsActive" type="checkbox" value="true">
+                            <span class="lbl padding-8" for="IsActive" data-test-selector="spnIsActive">@Admin_Resources.Activate</span>
+                            <input name="IsActive" type="hidden" value="false">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Email, new { @class = "required", @data_test_selector = "lblEmail" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.Email, new { @data_test_selector = "txtEmail" })
+                        @Html.Label(ERP_Resources.LableEmailMessage, new { @data_test_selector = "infoEmail" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @data_test_selector = "valEmail" })
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+</div>
