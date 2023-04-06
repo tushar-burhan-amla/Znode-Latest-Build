@@ -1,0 +1,39 @@
+﻿@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.WebStore.Agents
+<form name="SearchSort">
+    @Html.AntiForgeryToken()
+    @{
+        string sort = Request.QueryString["Sort"] ?? "0";
+        if (!Equals(SessionHelper.GetDataFromSession<string>("PageSizeValue"), null))
+        {
+            sort = SessionHelper.GetDataFromSession<string>("PageSizeValue");
+        }
+    }
+
+
+    @if (PortalAgent.CurrentPortal.SortList.Count > 0)
+    {
+        List<SelectListItem> list = new List<SelectListItem>();
+        PortalAgent.CurrentPortal.SortList.ForEach(m => list.Add(new SelectListItem() { Text = m.SortDisplayName, Value = m.SortValue == null ? "0" : m.SortValue.ToString() }));
+        SelectListItem item = list.Where(m => m.Value == sort).FirstOrDefault() ?? list[0];
+        item.Selected = true;
+        @Html.DropDownList("Sort", list, new { @class = "input-select" })
+    }
+    else
+    {
+        @Html.DropDownList("Sort", new[] {
+                           new SelectListItem() { Text ="Sort by", Value = "0",  Selected = sort == "0"},
+                           new SelectListItem() {Text = WebStore_Resources.B2BDropdownHighestRating, Value = "1",  Selected = sort == "1"},
+                           new SelectListItem() {Text = WebStore_Resources.B2BDropdownMostReview, Value = "2",  Selected = sort == "2"},
+                           new SelectListItem() {Text = WebStore_Resources.B2BDropdownPriceHighToLow, Value = "3",  Selected = sort == "3" },
+                           new SelectListItem() {Text = WebStore_Resources.B2BDropdownPriceLowToHigh, Value = "4",  Selected = sort == "4"},
+                           new SelectListItem() {Text = WebStore_Resources.B2BDropdownNameAtoZ, Value = "5",  Selected = sort == "5"},
+                           new SelectListItem() {Text = WebStore_Resources.B2BDropdownNameZToA, Value = "6",  Selected = sort == "6"},
+                           new SelectListItem() {Text = WebStore_Resources.B2BDropdownOutOfStock, Value = "7",  Selected = sort == "7"},
+                           new SelectListItem() {Text = WebStore_Resources.B2BDropdownInStock, Value = "8",  Selected = sort == "8"}
+})
+    }
+</form>
+
+
+

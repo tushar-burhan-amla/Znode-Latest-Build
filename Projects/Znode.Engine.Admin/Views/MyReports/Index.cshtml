@@ -1,0 +1,150 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+@model ReportViewModel
+@{
+    ViewBag.Title = Admin_Resources.LabelReport + " | " + Admin_Resources.LabelIndex;
+    ReportTypeEnum reportTypeEnum = (ReportTypeEnum)Enum.Parse(typeof(ReportTypeEnum), Model.ReportType);
+}
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelReports</h1>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    <aside>
+        <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            <ul class="aside-panel">
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelSales, "Index", "MyReports", new { @reportType = ReportTypeEnum.Sales.ToString() })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelProducts, "Index", "MyReports", new { @reportType = ReportTypeEnum.Product.ToString() })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelReviews, "Index", "MyReports", new { @reportType = ReportTypeEnum.Review.ToString() })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelCustomers, "Index", "MyReports", new { @reportType = ReportTypeEnum.Customer.ToString() })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelGeneral, "Index", "MyReports", new { @reportType = ReportTypeEnum.General.ToString() })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.CustomReportsHeader, "Index", "MyReports", new { @reportType = ReportTypeEnum.CustomReports.ToString() })</li>
+            </ul>
+        </div>
+    </aside>
+    <!--Main Container-->
+   <section class="main-container">
+    @switch (reportTypeEnum)
+            {
+                case ReportTypeEnum.Sales:
+            <div class="row">
+                <ul class="report-blocks clearfix">
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelOrders</h3>
+                        <p>@Admin_Resources.OrderReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "Orders", @reportName= @Admin_Resources.LabelOrders  }, new { target = "_blank" })
+                    </li>                   
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelCouponUsage</h3>
+                        <p>@Admin_Resources.CouponUsageReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "CouponUsage", @reportName = @Admin_Resources.LabelCouponUsage }, new { target = "_blank" })
+                    </li>
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelSalesTax</h3>
+                        <p>@Admin_Resources.SalesTaxReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "SalesTax", @reportName = @Admin_Resources.LabelSalesTax }, new { target = "_blank" })
+                    </li>
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelAffiliateOrders</h3>
+                        <p>@Admin_Resources.AffiliateOrdersReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "AffiliateOrder", @reportName = @Admin_Resources.LabelAffiliateOrders }, new { target = "_blank" })
+                    </li>
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelOrderPickList</h3>
+                        <p>@Admin_Resources.OrderPickListReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "OrderPickList", @reportName = @Admin_Resources.LabelOrderPickList }, new { target = "_blank" })
+                    </li>
+                </ul>
+            </div>
+            break;
+        case ReportTypeEnum.Product:
+            <div class="row">
+                <ul class="report-blocks clearfix">
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelBestSellers</h3>
+                        <p>@Admin_Resources.BestSellersReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "BestSellerProduct", @reportName = @Admin_Resources.LabelBestSellers }, new { target = "_blank" })
+                    </li>
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelInventoryReOrder</h3>
+                        <p>@Admin_Resources.InventoryReOrderReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "InventoryReorder", @reportName = @Admin_Resources.LabelInventoryReOrder }, new { target = "_blank" })
+                    </li>
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelTopEarningProducts</h3>
+                        <p>@Admin_Resources.TopEarningProductsReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "TopEarningProduct", @reportName = @Admin_Resources.LabelTopEarningProducts }, new { target = "_blank" })
+                    </li>
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelPopularSearch</h3>
+                        <p>@Admin_Resources.PopularSearchReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "PopularSearch" , @reportName= @Admin_Resources.LabelPopularSearch }, new { target = "_blank" })
+                    </li>
+                </ul>
+            </div>
+            break;
+        case ReportTypeEnum.Review:
+            <div class="row">
+                <ul class="report-blocks clearfix">
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.HeaderServiceRequest</h3>
+                        <p>@Admin_Resources.ServiceRequestReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "ServiceRequest", @reportName = @Admin_Resources.HeaderServiceRequest }, new { target = "_blank" })
+                    </li>
+                </ul>
+            </div>
+            break;
+        case ReportTypeEnum.Customer:
+            <div class="row">
+                <ul class="report-blocks clearfix">
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelUsers</h3>
+                        <p>@Admin_Resources.UsersReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "Users", @reportName = @Admin_Resources.LabelUsers }, new { target = "_blank" })
+                    </li>
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelEmailOptInCustomers</h3>
+                        <p>@Admin_Resources.EmailOptInCustomersReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "EmailOptInCustomer", @reportName = @Admin_Resources.LabelEmailOptInCustomers }, new { target = "_blank" })
+                    </li>
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelMostFrequentCustomers</h3>
+                        <p>@Admin_Resources.MostFrequentCustomersReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "MostFrequentCustomer", @reportName = @Admin_Resources.LabelMostFrequentCustomers }, new { target = "_blank" })
+                    </li>
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelTopSpendingCustomers</h3>
+                        <p>@Admin_Resources.TopSpendingCustomersReportsText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "TopSpendingCustomers", @reportName = @Admin_Resources.LabelTopSpendingCustomers }, new { target = "_blank" })
+                    </li>
+                </ul>
+            </div>
+            break;
+        case ReportTypeEnum.General:
+            <div class="row">
+                <ul class="report-blocks clearfix">                  
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.LabelVendorList</h3>
+                        <p>@Admin_Resources.VendorListReportText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "GetReport", "MyReports", new { @reportPath = "Vendors", @reportName= @Admin_Resources.LabelVendorList }, new { target = "_blank" })
+                    </li>
+                </ul>
+            </div>
+            break;
+        case ReportTypeEnum.CustomReports:
+            <div class="row">
+                <ul class="report-blocks clearfix">
+                    <li class="col-md-4">
+                        <h3 class="section-heading">@Admin_Resources.CustomReportsHeader</h3>
+                        <p>@Admin_Resources.DynamicReportsText</p>
+                        @Html.AuthorizedRawActionLink(@Admin_Resources.LabelViewReport + "<em class='z-right-all'></em>", "List", "MyReports", new { }, new { target = "_blank" })
+                    </li>
+                    </ul>
+                </div>
+            break;
+        default:
+            break;
+    }
+        </section>
+</div>

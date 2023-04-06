@@ -1,0 +1,138 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+    bool isLiteVersion = false;
+    if (ViewBag.IsLite != null) { isLiteVersion = (bool)ViewBag.IsLite; }
+}
+
+<div class="col-12 p-0 image-view" id="ProductImage">
+    @if (Convert.ToBoolean(Model.Attributes?.Value("NewProduct")))
+    {
+        <img src="@_fileLocation/Images/new-product-tag.png" alt="New Product" class="img-responsive new-product-tag" />
+    }
+    @if (Model.IsAddedInWishList)
+    {
+        <button type="button" id="btnAddToWishList" data-id="@Model.PublishProductId" data-sku="@Model.SKU" class="btn-wishlist button-wishlist added-to-wishlist" onclick="Product.prototype.RemoveFromFavourites(@Model.WishListId)"><span class="heart-icon" title="Wishlist"></span></button>
+    }
+    else
+    {
+        <button type="button" id="btnAddToWishList" data-id="@Model.PublishProductId" data-sku="@Model.SKU" class="btn-wishlist button-wishlist" onclick="Product.prototype.AddToFavourites(this)"><span class="heart-icon" title="Wishlist"></span></button>
+    }
+    @*<a class="b2b-email-to-friend" data-toggle="modal" data-target="#modelEmailToFriend"><span class="envelop-icon" title="Email A Friend"></span></a>*@
+    <div class="easyzoom easyzoom-overlay easyzoom-with-thumbnails" id="ProductZoomImage">
+        <a href="@Model.ImageLargePath" class="easyzoom-img">
+            <img src="@Model.ImageLargePath" class="img-fluid" data-test-selector="imgLargePath" alt="@Html.RenderBlock(Model.Name)" />
+        </a>
+    </div>
+    <div id="ProductVideo" class="product-video">
+        <embed src="" id="PlayVideo" autoplay="0" data-test-selector="embedProductVideo"/>
+    </div>
+    <div id="Errormessage" class="easyzoom-img"> 
+        <img src='../Content/Images/no-video.png' alt="Loading" class="img-fluid">
+    </div>
+
+    <div class="col-12 p-0 product-altimages">
+        <div id="alt-images" class="owl-carousel alternate-img simpleLens-thumbnails-container Product_Altimages">
+            @if (isLiteVersion)
+            {
+                @Ajax.Partial("AlternateImages", "AlternateProductImagesZoomEffect", "Product", new { id = ViewBag.ProductId, expands = "ProductImage", seo = ViewBag.Seo, isquickview = ViewBag.IsQuickView, publishstate = PortalAgent.CurrentPortal.PublishState })
+            }
+            else
+            {
+                if (Model.Attributes?.FirstOrDefault(x => x.AttributeCode == WebStore_Resources.ProductVideo1) != null)
+                {
+                    <div class="item">
+                        <a href="@Model.Attributes.Where(x => x.AttributeCode == WebStore_Resources.ProductVideo1).Select(x => x.AttributeValues).FirstOrDefault()" data-standard="@Model.Attributes.Where(x => x.AttributeCode == WebStore_Resources.ProductVideo1).Select(x => x.AttributeValues).FirstOrDefault()">
+                            <img src='../Content/Images/download.png' alt="Loading" class="dashboard-loader">
+                        </a>
+                    </div>}
+                if (Model.Attributes?.FirstOrDefault(x => x.AttributeCode == WebStore_Resources.ProductVideo2) != null)
+                {
+                    <div class="item">
+                        <a href="@Model.Attributes.Where(x => x.AttributeCode == WebStore_Resources.ProductVideo2).Select(x => x.AttributeValues).FirstOrDefault()" data-standard="@Model.Attributes.Where(x => x.AttributeCode == WebStore_Resources.ProductVideo2).Select(x => x.AttributeValues).FirstOrDefault()">
+                            <img src='../Content/Images/download.png' alt="Loading" class="dashboard-loader">
+                        </a>
+                    </div>}
+                if (Model.AlternateImages?.Count > 0 || Model.Attributes?.FirstOrDefault(x => x.AttributeCode == WebStore_Resources.ProductVideo1) != null || Model.Attributes?.FirstOrDefault(x => x.AttributeCode == WebStore_Resources.ProductVideo2) != null)
+                {
+                    <div class="item">
+                        <a href="@Model.ImageLargePath" data-standard="@Model.ImageLargePath">
+                            <img src="@Model.ImageMediumPath" data-test-selector="imgMediumPath" alt="@Html.RenderBlock(Model.Name)" />
+                        </a>
+                    </div>
+
+                    foreach (var image in Model.AlternateImages)
+                    {
+                        <div class="item">
+                            <a href="@image.OriginalImagePath" data-standard="@image.OriginalImagePath">
+                                <img src="@image.ImageThumbNailPath" data-test-selector="imgThumbNailPath" alt="@Html.RenderBlock(Model.Name)" />
+                            </a>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#Errormessage").hide();
+        var wishlistStatus = localStorage.getItem("Status")
+        //get it if Status key found
+        if (!(wishlistStatus == null) && !(wishlistStatus == "undefined")) {
+            ZnodeNotification.prototype.DisplayNotificationMessagesHelper(wishlistStatus ? "Product added to wishlist." : "Product could not be added to wishlist.", wishlistStatus ? "success" : "error", true, fadeOutTime);
+            localStorage.clear();
+        }
+        $("#ProductVideo").hide();
+    });
+
+    $(function () {
+        // Instantiate EasyZoom instances
+        var $easyzoom = $('.easyzoom').easyZoom();
+        // Setup thumbnails example
+        var imagePath = $easyzoom.filter('.easyzoom-with-thumbnails').data('easyZoom');
+
+        $(".Product_Altimages .item").on('click', 'a', function (e) {
+            e.preventDefault();
+            $('#PlayVideo').attr('src', $('#PlayVideo').attr('src'));
+
+            // Use EasyZoom's `swap` method
+            Product.prototype.SwapImageAndVideoURL(this, imagePath);
+        });
+
+        $(".Product_Altimages").owlCarousel({
+            autoPlay: false,
+            navigation: true,
+            items: 4,
+            itemsCustom: [
+                [0, 1],
+                [320, 3],
+                [480, 4],
+                [600, 4],
+                [768, 4],
+                [992, 5],
+                [1200, 5]
+            ],
+            navigationText: [
+                "<span class='left-icon'></span>",
+                "<span class='right-icon'></span>"
+            ]
+        });
+    });
+
+    $(".product-altimages .item").click(function () {
+        // Select all list items
+        var listItems = $(".item");
+
+        // Remove 'active' tag for all list items
+        for (let i = 0; i < listItems.length; i++) {
+            listItems[i].classList.remove("active");
+        }
+
+        // Add 'active' tag for currently selected item
+        this.classList.add("active");
+    });
+</script>

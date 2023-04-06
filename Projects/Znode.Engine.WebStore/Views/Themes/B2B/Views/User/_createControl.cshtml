@@ -1,0 +1,15 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model GlobalAttributeValuesViewModel
+
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label for="@Model.ControlProperty.Name">@Model.AttributeName</label>
+            </div>
+            @Html.CreateControl(@Model.ControlProperty)
+        </div>
+    </div>
+
+
+

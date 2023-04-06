@@ -1,0 +1,97 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PaymentTokenViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    
+</head>
+@Html.Hidden("OrderNumber", Model.OrderNumber)
+@Html.Hidden("CustomerProfileId", Model.CustomerProfileId)
+<body>
+    <div id="loadingMessage">
+        <h6 class="pl-5 pt-5 text-center">@Admin_Resources.AuthorizeLoadingMessage</h6>
+    </div>
+    <div id="iframe_holder" class="center-block" style="visibility:hidden">
+        <iframe id="AuthNetIFrame" class="embed-responsive-item authorizenetIframe" name="AuthNetIFrame" frameborder="0" scrolling="yes"></iframe>
+    </div>
+
+    <form id="send_token" action="" method="post" target="AuthNetIFrame">
+        <input type="hidden" name="token" value='@Model.PaymentGatewayToken' />
+    </form>
+    <div id="TokenForm" class="dirtyignore"></div>
+
+    <input id="ValidateTokenDiv" style="display:none" value="false" />
+    <script type="text/javascript">
+          $(function () {
+            $("#AuthNetIFrame").show();
+            var delayInMilliseconds = 2000;
+            var delaySubmit = 10000;
+
+            setTimeout(function () {
+                $("#send_token").attr({ "action": '@Model.PaymentGatewayTokenUrl', "target": "AuthNetIFrame" }).submit();
+            }, delayInMilliseconds);
+
+
+            $(window).scrollTop($('#AuthNetIFrame').offset().top - 50);
+            $("#payBtn").hide();
+
+              setTimeout(function () {
+                var isvalidPayment = window.parent.parent.document.getElementById("ValidateTokenDiv").value;
+                if (isvalidPayment != "true") {
+                    $("#AuthNetIFrame").html("");
+                    $("#AuthorizeNetModal").modal('hide');
+                    $("#payBtn").hide();
+                    Checkout.prototype.ClearPaymentAndDisplayMessage("This payment option is currently unavailable. Please try again in a few minutes.");
+                }
+            }, delaySubmit);
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        (function () {
+            if (!window.AuthorizeNetIFrame) window.AuthorizeNetIFrame = { };
+            AuthorizeNetIFrame.onReceiveCommunication = function (querystr) {
+                var params = parseQueryString(querystr);
+                switch (params["action"]) {
+                    case "successfulSave":
+                        break;
+                    case "cancel":
+                        Order.prototype.HideAuthorizeIframe();
+                        break;
+                    case "Ok":
+                        break;
+                    case "transactResponse":
+                        var response = params["response"];
+
+                        if ($("#OmsOrderId").val() > 0) {
+                            Order.prototype.SubmitAuthorizeEditOrderPayment(response);
+                        }
+                        else if ($("#OmsQuoteId").val() > 0) {
+                            Quote.prototype.SubmitAuthorizeNetPayment(response);
+                        }
+                        else {
+                            Order.prototype.SubmitAuthorizeNetPayment(response);
+                        }
+                        var ifrm = document.getElementById("AuthNetIFrame");
+                        ifrm.style.display = 'none';
+                }
+            };
+
+            function parseQueryString(str) {
+                var vars = [];
+                var arr = str.split('&');
+                var pair;
+                for (var i = 0; i < arr.length; i++) {
+                    pair = arr[i].split('=');
+                    vars.push(pair[0]);
+                    vars[pair[0]] = unescape(pair[1]);
+                }
+                return vars;
+            }
+        }());
+    </script>
+
+</body>
+</html>

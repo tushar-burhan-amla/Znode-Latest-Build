@@ -1,0 +1,46 @@
+﻿@using Znode.Libraries.ECommerce.Utilities;
+
+@{
+    bool hasPortalId = Model.GetType().GetProperty("PortalId") != null;
+    int portalId = hasPortalId ? Model.PortalId : Model.EntityId;
+    bool hasStoreCode = Model.GetType().GetProperty("StoreCode") != null;
+    string storeCode = hasStoreCode ? Model.StoreCode : null;
+}
+
+<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+            @if (!string.IsNullOrEmpty(storeCode))
+            {
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelGeneral, "UpdateStore", "Store", new { @StoreCode = storeCode }, new { @data_test_selector = "linkGeneral" })</li>
+            }
+            else
+            {
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelGeneral, "EditStore", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkGeneral" })</li>
+            }
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitlePortalUrl, "UrlList", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkUrls" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelProfile, "PortalProfileList", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkProfiles" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelPriceLists, "GetPriceManagement", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkPriceLists" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.BrandHeading, "BrandList", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkBrandLists" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleInventoryList, "GetAssociatedWarehouseList", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkInventory" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelShippingOrigin, "EditStoreShipping", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkShippingOrigin" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelShippingMethods, "GetAssociatedShippingList", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkShippingMethods" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelForPaymentList, "GetAssociatedPaymentList", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkPaymentMethod" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelForOfflinePayment, "GetAssociatedInvoiceManagementPaymentList", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkPaymentMethod" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TextTaxDetails, "EditStoreTax", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkTaxDetails" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleTaxesList, "TaxList", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkTaxe" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleCountry, "GetAssociatedCountryList", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkCountries" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelLocales, "LocaleList", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkLocales" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelSearchFilterSettings, "GetSearchSetting", "Store", new { @PortalId = portalId })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleSMTP, "EditStoreSMTP", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkSMTP" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleEmailMarketing, "EditStoreKlaviyo", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkKlaviyo" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleSMSNotification, "EditStoreSMSNotification", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkSMSNotification" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelUnits, "CreateEditStoreUnit", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkUnits" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelAnalytics, "GetAnalytics", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkAnalytics" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelRobotsTxt, "GetRobotsTxt", "Store", new { @PortalId = portalId }, new { @data_test_selector = "linkRobotsTxt" })</li>
+            <li>@Html.GlobalAttributeActionLink(Admin_Resources.LabelAdditionalAttributes, portalId, Convert.ToString(EntityTypeEnum.Store), new { @data_test_selector = "linkAdditionalAttributes", @onclick = "GlobalAttribute.prototype.ResetTabs()" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.ApprovalManagement, "GetPortalApproverDetailsById", "Store", new { @PortalId = portalId })</li>
+        </ul>
+    </div>
+</aside>

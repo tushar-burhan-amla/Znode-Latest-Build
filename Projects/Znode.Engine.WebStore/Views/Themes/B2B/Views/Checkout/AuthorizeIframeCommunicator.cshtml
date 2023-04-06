@@ -1,0 +1,37 @@
+﻿<script type="text/javascript">
+
+    window.parent.parent.document.getElementById("ValidateTokenDiv").value = true;
+    var element = window.parent.parent.document.getElementById("iframe_holder");
+    window.parent.parent.document.getElementById("loadingMessage").style.display = 'none';
+    element.style.visibility = 'visible';
+    //<![CDATA[
+    if (window.addEventListener) {
+        window.addEventListener("message", receiveMessage, false);
+
+    } else if (window.attachEvent) {
+        window.attachEvent("onmessage", receiveMessage);
+    }
+
+    function callParentFunction(str) {
+        if (str && str.length > 0
+            && window.parent
+            && window.parent.parent
+            && window.parent.parent.AuthorizeNetIFrame
+            && window.parent.parent.AuthorizeNetIFrame.onReceiveCommunication){
+            // Errors indicate a mismatch in domain between the page containing the iframe and this page.
+            window.parent.parent.AuthorizeNetIFrame.onReceiveCommunication(str);
+        }
+    }
+
+    function receiveMessage(event) {
+        if (event && event.data) {
+            callParentFunction(event.data);
+        }
+    }
+
+    if (window.location.hash && window.location.hash.length > 1) {
+        if (window.location.hash != '#action=transactResponse&response={')
+            callParentFunction(window.location.hash);
+
+    }
+</script>

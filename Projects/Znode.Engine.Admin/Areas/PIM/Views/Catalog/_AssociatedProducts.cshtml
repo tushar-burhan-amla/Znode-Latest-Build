@@ -1,0 +1,54 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CatalogAssociationViewModel
+
+<div class="col-sm-12 title-container">
+    <h1>@PIM_Resources.TitlePIMCatalog<span class="separator"> | </span><span class="title-action">@Admin_Resources.TitleEdit</span><span class="separator"> - </span><span id="GroupCodeLable" class="title-item">@Model.CatalogName</span></h1>
+    <div class="pull-right btn-container">
+        @Html.AuthorizedRawActionLink(Admin_Resources.ButtonBack, "CatalogList", "Catalog", null, new { @class = "btn-text" })
+        @Html.AuthorizedPrototypeRawActionLink(PIM_Resources.ButtonReady, "publish", "Catalog",new { @onclick = "Catalog.prototype.PublishCatalog()", @class="btn-text" })        
+    </div>
+</div>
+
+<div id="productunassociatedcatalog">
+    <div class="col-sm-12 nopadding category-assocation box-container">
+        <h3 class="section-heading">@PIM_Resources.TitlePIMCatalogProductAssociation</h3>
+        <div class="left-panel">
+            <h3 class="section-heading">@PIM_Resources.LabelAvailableProduct</h3>
+            <div class="list unassociated-section">
+                @Html.TextBox("UnAssociatedProductSearch", null, new { @OnInput = "Catalog.prototype.GetAutoCompleteProductList()" })
+                <ul class="unassocated-list">
+                    @if (Model?.UnAssociatedProductList?.Count > 0)
+                    {
+                        foreach (SelectListItem product in Model.UnAssociatedProductList)
+                        {
+                            <li class="categoryproduct-list" draggable="true">
+                                <label>
+                                    <input class="product" name="IsActive" type="checkbox" value="true" data-productid="@product.Value">
+                                    <span class="lbl padding-8">@product.Text</span>
+                                    <input name="IsActive" type="hidden" value="false">
+                                </label>
+                            </li>
+                        }
+                    }
+                </ul>
+                <span id="searchresult" class="error-msg"></span>
+            </div>
+        </div>
+        <div class="nav-panel">
+            <div class="navgation-control">
+                <button id="movetoassign" data-toggle="tooltip" data-placement="right" title="Associated"><em class="z-last"></em></button>
+                <button id="movetounassign" data-toggle="tooltip" data-placement="left" title="Un-associated"><em class="z-first"></em></button>
+            </div>
+        </div>
+        <div class="right-panel">
+            <h3 class="section-heading">@PIM_Resources.LabelSelectedProduct</h3>
+            <div class="list">
+                <div>
+                    @Html.TextBox("TreeSearch")
+                    <span id="searchresultforAssociated" class="error-msg"></span>
+                </div>
+                <div id="Category_Tree"></div>
+            </div>
+        </div>
+    </div>
+</div>

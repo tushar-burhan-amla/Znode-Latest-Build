@@ -1,0 +1,84 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model RMAReturnViewModel
+@{
+    Layout = null;
+}
+<div class="col-sm-12 nopadding dashboard-panel">
+    <div class="dashboard-panel-heading">
+        <h4 data-test-selector="hdgCustomerInformation" class="dashboard-panel-title">@Admin_Resources.LabelCustomerInformation</h4>
+    </div>
+    <div class="col-sm-12 nopadding margin-bottom-15">
+        <div class="order-subtitle">
+            <h4>Customer</h4>
+        </div>
+        <div class="col-xs-12 nopadding cust-info">
+            <div class="form-group margin-bottom-16">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        <label data-test-selector="lblCustomerName">@Admin_Resources.LabelCustomerName</label>
+                    </div>
+                    <div class="control-lg limit-text-chars">
+                        @if (!string.IsNullOrEmpty(Model.FirstName) && !string.IsNullOrEmpty(Model.LastName))
+                        {
+                            <span id="labelCustomerName" class="padding-left" data-test-selector="spnCustomerName">
+                                @Model.FirstName @Model.LastName
+                            </span>
+                        }
+                        else
+                        {
+                            <span id="labelCustomerName" class="padding-left" data-test-selector="spnCustomerName">
+                                @Model.EmailId
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="form-group margin-bottom-16">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        <label data-test-selector="lblEmailID">@Admin_Resources.LabelEmailID</label>
+                    </div>
+                    <div class="control-lg">
+                        <span id="labelCustomerName" class="margin-left-10" data-test-selector="spnEmailID">
+                            @Html.RenderBlock(Model.EmailId)
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group margin-bottom-16">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        <label data-test-selector="lblPhoneNumber">@Admin_Resources.LabelPhoneNumber</label>
+                    </div>
+                    <div class="control-lg">
+                        <span id="labelCustomerId" class="margin-left-10" data-test-selector="spnCustomerId">
+                            @Model.PhoneNumber
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 nopadding margin-top-15" id="customerAddresses">
+            <div class="col-sm-6 nopadding">
+                <div class="order-subtitle">
+                    <h4 class="margin-top margin-bottom" data-test-selector="hdgBillingAddress">@Admin_Resources.LabelShippingTo</h4>
+                </div>
+                <div data-test-selector="divBillingAddress" id="customerBillingAddresses" class="address-block">
+                    <div class="padding-left-20">
+                        @Html.RenderBlock(Model.ShippingToAddressHtml)
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 padding-none">
+                <div class="order-subtitle">
+                    <h4 data-test-selector="hdgShippingAddress" class="margin-top margin-bottom">@Admin_Resources.LabelShippingFrom</h4>
+                </div>
+                <div data-test-selector="divShippingAddress" id="customerShippingAddresses" class="address-block">
+                    <div class="padding-left-20">
+                        @Html.RenderBlock(Model.ShippingFromAddressHtml)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

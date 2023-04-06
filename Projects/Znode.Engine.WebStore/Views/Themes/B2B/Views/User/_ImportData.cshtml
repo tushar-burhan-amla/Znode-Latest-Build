@@ -1,0 +1,36 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ImportViewModel
+<div class="import-browse-button">
+    <div id="shippingAddressUploader" class="shipping-uploader">
+        @Html.EditorFor(model => model.ImportData)
+        <button id="importFile" type="submit" onclick="return Import.prototype.ValidateImportFile();" class="btn-text btn-bg-primary">@WebStore_Resources.LabelImport</button>
+    </div>
+    <div>
+        <div class="col-xs-12 nopadding po-document-details">
+            <span class="field-validation-error" id="error-file-upload"></span>
+            <span id="importErrorFileTypeAndSize" class="error-msg" style="display:block;"></span>
+            <input type="hidden" id="shipping-document-path" />
+            <span id="importFileName" class="import-name"></span>
+        </div>
+    </div>
+</div>
+<script>
+    $("#ImportData").on("change", function () {
+        var totalFiles = $(this)[0].files;
+        $("#importFileName").text("");
+        if (totalFiles.length > 0) {
+            var fileExtension = $(this).val().split('.').pop().toLowerCase();
+            if (fileExtension != "") {
+                if ($.inArray(fileExtension, ['csv']) == -1) {
+                    $("#importErrorFileTypeAndSize").html(ZnodeBase.prototype.getResourceByKeyName("ErrorCSVFileTypeMessage"));
+                    $("#importFile").attr("disabled", "disabled");
+                    return false;
+                }
+
+                $("#importFileName").text(this.files[0].name);
+            }
+            $("#importFile").removeAttr("disabled");
+            $("#importErrorFileTypeAndSize").html("");
+        }
+    });
+</script>

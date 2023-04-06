@@ -1,0 +1,79 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model EmailTemplateAreaMapperViewModel
+
+
+@using (Ajax.BeginForm("SaveEmailTemplateAreaConfiguration", "EmailTemplate", new AjaxOptions()
+{
+    HttpMethod = "post",
+    OnSuccess = "EmailTemplate.prototype.AreaMapperAddResult(data,this)",
+    InsertionMode = InsertionMode.Replace,
+
+}, new { id = "frmEmailTemplateArea_" + Model.EmailTemplateMapperId }))
+{
+<div class="tr-div" id="PartialPage">
+    <div class="col-1">
+        @if (Model.IsAddMode && Model?.EmailTemplateAreaList?.Count > 0)
+        {
+            @Html.DropDownListFor(m => m.EmailTemplateAreasId, Model.EmailTemplateAreaList, new { @id = "emailArea_" + Model.EmailTemplateMapperId + "", @Onchange = "EmailTemplate.prototype.OnEmailTemplateAreaChange()", @data_test_selector = "drpEmailTemplateArea" })
+            @Html.ValidationMessageFor(model => model.EmailTemplateAreasId,"",new { @data_test_selector = "valEmailTemplateAreaName" })
+        }
+        else
+        {
+            @Html.TextBoxFor(m => m.EmailTemplateAreaName, new { @id = "emailArea_" + Model.EmailTemplateMapperId + "", disabled = "disabled", @data_test_selector = "txtEmailTemplateArea"})
+            @Html.ValidationMessageFor(model => model.EmailTemplateAreaName,"" ,new { @data_test_selector = "valEmailTemplateAreaName" })
+        }
+    </div>
+    <div class="col-2">
+        @if (Model.IsAddMode)
+        {
+            @Html.TextBoxFor(m => m.EmailTemplateName, new { @placeholder = Admin_Resources.TextEnterEmailTemplate, @id = "emailTemplate_" + Model.EmailTemplateMapperId + "", @class = "txtEmailTemplate", @data_test_selector = "txtEmailTemplateName" })
+            @Html.ValidationMessageFor(model => model.EmailTemplateName, "", new { @id = "valEmailTemplate_" + Model.EmailTemplateMapperId + "", @data_test_selector = "valEmailTemplateName" })
+        }
+        else
+        {
+            @Html.TextBoxFor(m => m.EmailTemplateName, new { @placeholder = Admin_Resources.TextEnterEmailTemplate, @id = "emailTemplate_" + Model.EmailTemplateMapperId + "", disabled = "disabled", @class = "txtEmailTemplate", @data_test_selector = "txtEmailTemplateName" })
+            @Html.ValidationMessageFor(model => model.EmailTemplateName, "", new { @id = "valEmailTemplate_" + Model.EmailTemplateMapperId + "", @data_test_selector = "valEmailTemplateName" })
+        }
+    </div>
+    <div class="col-3">
+        <label>
+            <input id="areaActive_@Model.EmailTemplateMapperId" name="IsActive" checked="@Model.IsActive" type="checkbox" value="true" disabled="disabled">
+            <span class="lbl padding-8" for="IsActive"></span>
+            <input name="IsActive" type="hidden" value="false">
+        </label>
+    </div>
+    <div class="col-3">
+        <label>
+            <input id="areaIsEnableBcc_@Model.EmailTemplateMapperId" name="IsEnableBcc" checked="@Model.IsEnableBcc" type="checkbox" value="true" disabled="disabled">
+            <span class="lbl padding-8" for="IsEnableBcc"></span>
+            <input name="IsEnableBcc" type="hidden" value="false">
+        </label>
+    </div>
+    <div class="col-3">
+        <label>
+            <input id="areaSmsActive_@Model.EmailTemplateMapperId" name="IsSMSNotificationActive" checked="@Model.IsSMSNotificationActive" type="checkbox" value="true" disabled="disabled">
+            <span class="lbl padding-8" for="IsSMSActive"></span>
+            <input name="IsSMSActive" type="hidden" value="false">
+        </label>
+    </div>
+    <div class="col-3">
+        <button type="submit" id="saveAreaMapping_@Model.EmailTemplateMapperId" class="btn-narrow-icon btnSaveTemplateMapping" title="Save" style="display:none !important;" data-test-selector="btnSaveAreaMapping"><em class="z-ok"></em></button>
+        <button type="button" id="CancelAreaMapping_@Model.EmailTemplateMapperId" class="btn-narrow-icon" title="Cancel" style="display:none !important" onclick="EmailTemplate.prototype.CancelNewAddAreaMapping('CancelAreaMapping_@Model.EmailTemplateMapperId',this)" data-test-selector="btnCancelAreaMapping"><em class="z-close"></em></button>
+        @Html.AuthorizedPrototypeRawActionLink(" ", "SaveEmailTemplateAreaConfiguration", "EmailTemplate", new { id = "EditAreaMapping_" + Model.EmailTemplateMapperId + "", @class = "img-icon-edit btn-narrow-icon z-edit", title = Admin_Resources.ButtonEdit, onclick = "EmailTemplate.prototype.EditAreaMapping(" + Model.EmailTemplateMapperId + ")", @data_test_selector = "btnEditAreaMapping" })
+        @Html.AuthorizedPrototypeRawActionLink(" ", "SaveEmailTemplateAreaConfiguration", "EmailTemplate", new { id = "deleteAreaMapping_" + Model.EmailTemplateMapperId + "", @class = "img-icon-delete btn-narrow-icon z-delete", title = Admin_Resources.ButtonDelete, onclick = "EmailTemplate.prototype.DeleteAreaMapping(" + Model.EmailTemplateMapperId + "," + "this" + ")", @data_test_selector = "btnDeleteAreaMapping" })
+    </div>
+</div>
+    @Html.HiddenFor(x => x.EmailTemplateMapperId)
+    @Html.HiddenFor(x => x.EmailTemplateId)
+    @Html.HiddenFor(x => x.EmailTemplateAreasId)
+    @Html.HiddenFor(x => x.PortalId, new { @id = "hdn_portal_id_emailtemplate" })
+    @Html.HiddenFor(x => x.EmailTemplateMapperId, new { @id = "hdn_portal_id_emailtemplatemapper" })
+    <input id="EmailTemplateMapperId" name="EmailTemplateMapperId" type="hidden" value="@Model.EmailTemplateMapperId">
+    }
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            EmailTemplate.prototype.AutoCompleteEmailTemplates();
+            EmailTemplate.prototype.SaveTemplateMapping();
+        });
+    </script>

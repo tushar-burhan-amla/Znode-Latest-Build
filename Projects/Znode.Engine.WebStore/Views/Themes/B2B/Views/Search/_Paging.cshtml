@@ -1,0 +1,49 @@
+﻿@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.WebStore.Agents
+<form name="SearchPaging">
+    @Html.AntiForgeryToken()
+    @{
+        string pageSize = Request.QueryString["PageSize"] ?? "1";
+
+        if (!Equals(SessionHelper.GetDataFromSession<int?>("PageSizeValue"), null))
+        {
+            pageSize = Convert.ToString(SessionHelper.GetDataFromSession<int?>("PageSizeValue"));
+        }
+    }
+
+    @if (PortalAgent.CurrentPortal.PageList.Count > 0)
+    {
+        List<SelectListItem> list = new List<SelectListItem>();
+        PortalAgent.CurrentPortal.PageList.ForEach(m => list.Add(new SelectListItem() { Text = m.PageDisplayName, Value = m.PageValue == null ? "0" : m.PageValue.ToString() }));
+        SelectListItem item = list.Where(m => m.Value == pageSize).FirstOrDefault() ?? list[0];
+        item.Selected = true;
+        @Html.DropDownList("PageSize", list, new { @class = "input-select" })
+    }
+    else
+    {
+            @Html.DropDownList("PageSize", new[] {
+                              new SelectListItem() {Text = WebStore_Resources.Show16, Value = "16", Selected = pageSize == "16" },
+                              new SelectListItem() {Text = WebStore_Resources.Show32, Value = "32",  Selected = pageSize == "32"},
+                              new SelectListItem() {Text = WebStore_Resources.Show64, Value = "64",  Selected = pageSize == "64" },
+                            })
+    }
+</form>
+<script>
+    $(document).ready(function () {
+        totalPages = parseInt($("#hdnTotalPages").val(), 10);
+        var pageno = ZSearch.prototype.GetQueryStringParameterByName("pagenumber");
+        if (totalPages == 1) {
+            $('.prev-page-search').addClass('disabled');
+            $('.next-page-search').addClass('disabled');
+            return false;
+        }
+        if (parseInt(pageno) == 1 || pageno == "") {
+            $('.prev-page-search').addClass('disabled');
+            return false;
+        }
+        if (parseInt(pageno) == (totalPages)) {
+            $('.next-page-search').addClass('disabled');
+            return false;
+        }
+    });
+</script>

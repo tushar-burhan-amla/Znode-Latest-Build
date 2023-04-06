@@ -1,0 +1,111 @@
+﻿@model AutoComplete
+@using Znode.Engine.WebStore.Agents
+@using System.Globalization
+@using Znode.Libraries.ECommerce.Utilities;
+@{
+    string regionName = string.Empty;
+    bool isChromeSpecificVoiceSearch = false;
+    foreach (var item in PortalAgent.CurrentPortal.Locales)
+    {
+        int localeid = Convert.ToInt32(Request.Cookies["_WebStoreculture"].Value);
+        if (item.LocaleId == localeid)
+        {
+            CultureInfo culture = new CultureInfo(item.Code);
+            regionName = culture.Name;
+        }
+    }
+
+    bool isEnableVoiceBasedSearch = (bool)PortalAgent.CurrentPortal.PortalFeatureValues.Where(x => x.Key.Contains(HelperUtility.StoreFeature.Enable_Voice_Based_Search.ToString()))?.FirstOrDefault().Value;
+    bool isEnableBarcodeScanner = (bool)PortalAgent.CurrentPortal.PortalFeatureValues.Where(x => x.Key.Contains(HelperUtility.StoreFeature.Enable_Barcode_Scanner.ToString()))?.FirstOrDefault().Value;
+
+}
+<div class="search-widget-mobile d-md-none">
+    <div class="label-que">WHAT CAN WE HELP YOU FIND TODAY?</div>
+    <div class="d-flex flex-row justify-content-center align-items-center">
+        @if (isEnableVoiceBasedSearch)
+        {
+            <a data-test-selector="btnVoiceSearch" href="javascript:void(0)" id="btnVoiceSearch" class="keyboard-icon">
+                <span class="icon-voice" data-test-selector="spnVoiceSearch"></span>
+            </a>
+        }
+        @if (isEnableBarcodeScanner)
+        {
+            <a data-test-selector="btnSearchScan" href="javascript:void(0)" onclick="Home.prototype.LoadBarcodeScanner();return false;" id="btnSearchScan" class="btn-scan-search">
+                <span class="icon-scan" data-test-selector="spnSearchScan"></span>
+            </a>
+        }
+    </div>
+</div>
+
+
+<div class="search-widget">
+    <form id="searchForm" action="/Search" method="GET">
+        <div class="col p-0">
+            <label for="searchTextBox" class="visuallyhidden">@WebStore_Resources.B2BLabelSearchByPartOrName</label>
+            @Html.AutocompleteFor(model => model.Name, model => model.Id, "GetSuggestions", "Search", "Product.prototype.GetSuggestionResult", false, new { htmlAttributes = new { @placeholder = WebStore_Resources.B2BLabelSearchByPartOrName, @class = "", @Name = "SearchTerm", @id = "searchTextBox", @data_test_selector = "txtSearch", @title = "Search", @minInputLength = "3" } })
+            <button type="submit" class="b2b-search-btn search-icon" id="btnSearchTerm" data-test-selector="btnSearchTerm" aria-label="@WebStore_Resources.B2BLabelSearchByPartOrName"></button>
+            <div id="suggestionList" class="search-history" style="display:none;"></div>
+        </div>
+        <div id="typeahead-results" class="ui-autocomplete-home"></div>
+    </form>
+    @if (isEnableVoiceBasedSearch)
+    {
+        <a data-test-selector="btnVoiceSearch" href="javascript:void(0)" onclick="$('#btnVoiceSearch').trigger('click');" class="keyboard-icon d-flex align-items-center justify-content-center pl-2" style="font-size:28px;color:#fff;" aria-label="Voice Search">
+            <span class="icon-voice" data-test-selector="spnVoiceSearch"></span>
+        </a>
+    }
+    @if (isEnableBarcodeScanner)
+    {
+        <div class="d-none d-md-flex col-1 p-0 pl-2 site-inventory scan-search order-4 order-lg-3">
+            <a data-test-selector="btnSearchScan" href="javascript:void(0)" onclick="Home.prototype.LoadBarcodeScanner();return false;" id="btnSearchScan" class="btn-scan-search d-flex align-items-center justify-content-center">
+                <span class="icon-scan" data-placement="right" title="Scan" data-test-selector="spnSearchScan"></span>
+            </a>
+        </div>
+    }
+</div>
+<input type="hidden" id="isCategoryLinkClicked"  value='false' />
+<script>   
+    $(document).ready(function () {
+        Search.prototype.ValidateSearch();
+    });
+
+    $("#searchTextBox").focus(function () {
+        Search.prototype.ShowRememberedSearchTerms();
+    });
+
+    $(document).on("click", function (event) {
+        Search.prototype.HideRememberedSearchTerms(event
+        );
+    });
+
+    $("#searchTextBox").keydown(function () {
+        $("#suggestionList").hide();
+    });
+
+    $("#btnVoiceSearch").on("click", function () {
+        if ($(this).hasClass("keyboard-icon")) {
+            $(this).removeClass("keyboard-icon");
+            $(this).addClass("active");
+            VoiceRecognition.prototype.startRecording(@Convert.ToString(isChromeSpecificVoiceSearch).ToLower(), '@regionName', function (convertedText) {
+                $("#searchTextBox").val(convertedText);
+                $("#searchForm").submit();
+            });
+        }
+        else {
+            $(this).removeClass("active");
+            $(this).addClass("keyboard-icon");
+            if (!@Convert.ToString(isChromeSpecificVoiceSearch).ToLower()) {
+                VoiceRecognition.prototype.stopRecording();
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        if ($(window).width() > 992) {
+            $("#searchTextBox").hover(function () {
+                closeNav();
+            });
+        }
+    });
+
+</script>

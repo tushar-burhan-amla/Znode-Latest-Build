@@ -1,0 +1,73 @@
+﻿<div class="file-upload">
+    <button class="btn btn-primary" title="Upload">@WebStore_Resources.BrowseButton</button>
+    @{
+        var metadata = ViewData.ModelMetadata;
+        var prop = metadata.ContainerType.GetProperty(metadata.PropertyName);
+        var attributes = prop.GetCustomAttributes(false);
+
+        switch (prop.Name)
+        {
+            case "PODocument":
+                @Html.TextBox("", null, new { type = "file", @id = "PODocument" })
+                break;
+            default:
+                @Html.TextBox("", null, new { type = "file", @id = prop.Name })
+                break;
+        }
+    }
+
+    <span id="errorFileTypeAndSize" class="error-msg" style="display:block;"></span>
+    <span id="podocumentRemoveMessage" class="error-msg"></span>
+    <input type="hidden" id="po-document-path" />
+    <div class="col-xs-12 nopadding po-document-details">
+        <a class="close-icon" id="podocumentremove" title="Remove"></a>
+        <span id="PODocumentFileName"></span>
+    </div>
+</div>
+<script>
+    $("#PODocument").on("change", function () {
+        var totalFiles = $(this)[0].files;
+        $("#PODocumentFileName").text("");
+        if (totalFiles.length > 0) {
+            var fileExtension = $(this).val().split('.').pop().toLowerCase();
+            if (fileExtension !== "") {
+                if ($.inArray(fileExtension, ['gif', 'png', 'jpg', 'jpeg', 'pdf', 'doc', 'docx', 'ppt', 'xls', 'zip', 'ttf', 'xlsx', 'odt', 'csv', 'txt', 'zip']) == -1) {
+                    $("#errorFileTypeAndSize").html(ZnodeBase.prototype.getResourceByKeyName("ErrorFileTypeMessage"));
+                    $("#podocumentremove").hide();
+                    $("#btnCompleteCheckout").attr("disabled", "disabled");
+                    return false;
+                }
+                if (totalFiles[0].size > 5242880) {
+                    $("#errorFileTypeAndSize").html(ZnodeBase.prototype.getResourceByKeyName("ErrorFileSizeMessage"));
+                    $("#podocumentremove").hide();
+                    $("#btnCompleteCheckout").attr("disabled", "disabled");
+                    return false;
+                }
+
+                $("#PODocumentFileName").text(this.files[0].name);
+                Checkout.prototype.UploadPODocument(totalFiles, function (response) {
+                    $("#po-document-path").val(response.FileName);
+                    $("#podocumentremove").show();
+                });
+            }
+            $("#btnCompleteCheckout").removeAttr("disabled");
+            $("#errorFileTypeAndSize").html("");
+        }
+    });
+    $("#podocumentremove").on("click", function () {
+        var fileName = $("#po-document-path").val();
+        if (fileName !== undefined) {
+            Checkout.prototype.RemovePoDocument(fileName, function (response) {
+                if (response.IsDocumentRemove) {
+                    $("#PODocumentFileName").html("");
+                    $("#podocumentremove").hide();
+                    $("#PODocument").val('');
+                    $("#po-document-path").val('');
+                }
+            });
+        }
+    });
+    $(".file-upload button[title='Upload']").on("click", function () {
+        $("input[name='PODocument']").trigger("click");
+    });
+</script>

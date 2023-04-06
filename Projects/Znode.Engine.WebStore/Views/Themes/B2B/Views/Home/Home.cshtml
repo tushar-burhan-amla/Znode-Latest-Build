@@ -1,0 +1,9 @@
+﻿@using Znode.Engine.WebStore.Agents
+<div id="layout-home" class="container-fluid">
+    <div class="row">
+        @{
+            var _portal = PortalAgent.CurrentPortal;
+            Html.RenderAction("HomeContent", "Home", new { portalId = _portal.PortalId, publishState = _portal.PublishState, localeId = Helper.GetLocaleId(), profileId = Helper.GetProfileId(), accountId = Helper.GetUserAccountId(), catalogId = Helper.GetUserProfileCatalogId() });
+        }
+    </div>
+</div>

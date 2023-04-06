@@ -1,0 +1,164 @@
+@using Znode.Engine.WebStore.Agents
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    Layout = null;
+}
+<style>
+    .background-color-white {
+        background-color: #fff;
+    }
+
+    .margin-bottom {
+        margin-bottom: 15px;
+    }
+
+    .margin-top-bottom {
+        margin: 15px 0;
+    }
+
+    .template-title {
+        padding: 20px;
+        text-align: center;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .title-container-first {
+        background: linear-gradient(274deg,#cc0000,#f7bb97);
+        background: -webkit-linear-gradient(274deg,#cc0000,#f7bb97);
+        background: -ms-linear-gradient(274deg,#cc0000,#f7bb97);
+        background: -o-linear-gradient(274deg,#cc0000,#f7bb97);
+        padding: 10px;
+        text-align: center;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .title-container-second {
+        background: linear-gradient(97deg,#64ecba,#5cb85c);
+        background: -webkit-linear-gradient(97deg,#64ecba,#5cb85c);
+        background: -ms-linear-gradient(97deg,#64ecba,#5cb85c);
+        background: -o-linear-gradient(97deg,#64ecba,#5cb85c);
+        padding: 10px;
+        text-align: center;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .border-bottom {
+        border-bottom: 2px solid #cc0000;
+    }
+
+    .newsletter {
+        min-height: 40px;
+        border: 1px solid #c3c3c3;
+        margin: 20px 0;
+        padding: 10px;
+        text-align: center;
+        background: #fff;
+        background: -moz-linear-gradient(top, #ffffff 0, #f1f1f1 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(100%, #f1f1f1));
+        background: -webkit-linear-gradient(top, #ffffff 0, #f1f1f1 100%);
+        background: -o-linear-gradient(top, #ffffff 0, #f1f1f1 100%);
+        background: -ms-linear-gradient(top, #ffffff 0, #f1f1f1 100%);
+        background: linear-gradient(to bottom, #ffffff 0, #f1f1f1 100%);
+    }
+
+        .newsletter p {
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .newsletter .newsletter-widget label, .newsletter .newsletter-widget button, .newsletter .newsletter-widget input[type="text"] {
+            color: #666;
+        }
+
+    .payment-options h3, .social-media h3 {
+        font-size: 16px;
+        font-weight: 500;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row default-template">
+        <div class="container-fluid">
+            <div class="row background-color-white">
+                <!--Template Title-->
+
+                <div class="col-sm-12 col-12 p-0 template-title border-bottom nopadding">
+                    <z-widget>@Html.WidgetPartial("ImageWidget", "Image Widget", "996000", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+
+
+                <div class="col-sm-12 col-12 p-0 template-title border-bottom nopadding">
+                    <z-widget>@Html.WidgetPartial("VideoWidget", "Video Widget", "996001", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+
+                <div class="col-sm-12 col-12 p-0 template-title border-bottom nopadding">
+                    <z-widget>@Html.WidgetPartial("TemplateTextEditor", "TemplateTextEditor", "996079", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+            </div>
+            <!--Advertisement Video-->
+            <div class="row">
+                <div class="col-sm-12 col-12 p-0 text-center nopadding margin-top-bottom cms-advertisement-banner">
+                    <z-widget>@Html.WidgetPartial("TemplateTextEditor", "AdvertisementVideo", "996083", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+            </div>
+        </div>
+        <div class="container margin-top">
+            <!--Advertisement Banner-->
+            <div class="row">
+                <div class="col-sm-12 nopadding col-12 p-0 margin-bottom">
+                    <z-widget>@Html.WidgetPartial("OfferBanner", "Advertisement", "996073", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+            </div>
+            <!--Super Deals-->
+            <div class="row background-color-white margin-bottom">
+                <div class="col-sm-12 nopadding col-12 p-0 title-container-first margin-bottom">
+                    <!--Title-->
+                    <z-widget>@Html.WidgetPartial("TemplateTextEditor", "SuperDeals", "996078", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+                <div class="col-sm-12 nopadding col-12 p-0">
+                    <z-widget>@Html.WidgetPartial("ProductList", "DealsProductList", "996077", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+            </div>
+            <!--Newsletter-->
+            <div class="row background-color-white newsletter margin-bottom">
+                <div class="text-center">
+                    <p>Register now to get updates on Offers,promotions & coupons.</p>
+                </div>
+                <div class="col-xs-12 col-sm-offset-2 col-sm-8 offset-sm-2">
+                    <!--News Letter Widget-->
+                    <z-widget>@Html.WidgetPartial("NewsLetter", "NewsLetter", "996074", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId)</z-widget>
+                </div>
+            </div>
+            <!--Best Deals Product List-->
+            <div class="row background-color-white margin-bottom">
+                <div class="col-sm-12 nopadding col-12 p-0 title-container-second margin-bottom">
+                    <!--Title-->
+                    <z-widget>@Html.WidgetPartial("TemplateTextEditor", "DealsProductList", "996076", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+                <div class="col-sm-12 nopadding col-12 p-0">
+                    <z-widget>@Html.WidgetPartial("TemplateProductList", "DealsProductList", "996075", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+            </div>
+            <!--Terms & Conditions-->
+            <div class="row background-color-white margin-bottom">
+                <div class="col-sm-12 nopadding col-12 p-0 margin-bottom">
+                    <z-widget>@Html.WidgetPartial("TemplateTextEditor", "TermsAndConditions", "996080", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+            </div>
+            <!--Socal Media-->
+            <div class="row background-color-white margin-bottom">
+                <div class="col-sm-6 payment-options nopadding col-6 p-0 margin-bottom">
+                    <h3>Payment Options</h3>
+                    <z-widget>@Html.WidgetPartial("LinkPanel", "PaymentOptions", "996081", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+                <div class="col-sm-6 social-media nopadding col-6 p-0 margin-bottom">
+                    <h3>Connect</h3>
+                    <z-widget>@Html.WidgetPartial("LinkPanel", "SocialMedia", "996082", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

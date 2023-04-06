@@ -1,0 +1,66 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Models
+@using Znode.Libraries.Resources
+@model PublishStateMappingListViewModel
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+}
+<div id="@Model.GridModel.FrontObjectName">
+    <div class="col-sm-12 title-container">
+        <h1>@GlobalSetting_Resources.TitleGlobalSetting</h1>
+        <div class="pull-right">
+
+        </div>
+    </div>
+    <div class="main-wrapper">
+        <!--Left Panel-->
+        @Html.Partial("~/Views/Shared/_asideGlobalSettingPanel.cshtml")
+        <!--Main Container-->
+        <section class="main-container">
+            @using (Ajax.BeginForm("PublishSettings", "GeneralSetting", null, new AjaxOptions() { UpdateTargetId = @Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+            {
+                <div id="filterComponent">
+                    @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                </div>
+            }
+            <div class="col-sm-12 list-container">
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                      new PopupModel()
+                                      {
+                                          Title = @Admin_Resources.Enable,
+                                          Description = @Admin_Resources.EnablePublishStateMappingConfirmationMessage,
+                                          ModalPopUpId = "publishStateMappingEnable",
+                                          Buttons = new List<PopUpButtonModel>
+                                          () {
+                                        new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "GeneralSetting.prototype.EnablePublishStateMapping()"}
+                                          }
+                                      })
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                          new PopupModel()
+                                          {
+                                              Title = Admin_Resources.Disable,
+                                              Description = Admin_Resources.DisablePublishStateMappingConfirmationMessage,
+                                              AdditionalNote = Admin_Resources.DisablePublishStateMappingWarning,
+                                              ModalPopUpId = "publishStateMappingDisable",
+                                              Buttons = new List<PopUpButtonModel>
+                                              () {
+                                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "GeneralSetting.prototype.DisablePublishStateMapping()"}
+                                              }
+                                          })
+                @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+
+            </div>
+        </section>
+    </div>
+    <div id="divPublishHistoryListPopup" class="aside-popup-panel modal-dialog modal-xl"></div>
+</div>
+
+<input type="hidden" id="HdnPublishStateMappingId" />
+<script>
+    $(document).ready(function () {
+        GeneralSetting.prototype.ToggleEnableDisableAction();
+    });
+    $(".z-enable").off("click").on("click", function () { GeneralSetting.prototype.EnablePublishStateMappingPopup($(this)); });
+    $(".z-disable").off("click").on("click", function () { GeneralSetting.prototype.DisablePublishStateMappingPopup($(this)); });
+    $(".z-view").off("click").on('click', function () { GeneralSetting.prototype.GetPublishHistoryPopup($(this)) });
+</script>

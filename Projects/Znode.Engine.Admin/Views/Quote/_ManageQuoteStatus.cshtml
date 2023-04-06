@@ -1,0 +1,22 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model OrderStatusList
+@{
+    Layout = null;
+
+}
+@using (Ajax.BeginForm("UpdateQuoteStatus", "Quote"
+            , new AjaxOptions
+            {
+                OnSuccess = "Quote.prototype.OnUpdateQuoteStatus",
+                OnFailure = "",
+            }, new { id = "QuoteStatus", @class = "dirtylisten dirty" }))
+{
+    <div class="col-sm-12 nopadding">
+        @Html.DropDownListFor(model => model.SelectedItemId, Model.listItem, new { @id = "ddlQuoteStatus", onChange = "Quote.prototype.OnQuoteStatusChange(this);", @data_test_selector = "drpQuoteStatus" })
+
+        @Html.HiddenFor(model => model.OmsQuoteId, new { @id = "hdnQuoteStatusQuoteId" })
+        @Html.HiddenFor(model => model.SelectedItemId)
+        @Html.HiddenFor(model => model.SelectedItemValue)
+    </div>
+}
+

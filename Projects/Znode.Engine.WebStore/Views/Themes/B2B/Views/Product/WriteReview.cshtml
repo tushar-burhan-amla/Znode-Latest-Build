@@ -1,0 +1,109 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+
+@model ProductReviewViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<div id="layout-writereview" class="col-12 main-wrapper">
+    <div class="row">
+        <div class="container">
+            <div class="row write-review mb-5">
+                <div class="col-12">
+                    <h1 class="page-title" data-test-selector="hdgReviewTitle">@WebStore_Resources.TitleProductReview</h1>
+                </div>
+                <div class="col-12 col-sm-7 col-lg-6">
+                    <form method="POST" action="/Product/WriteReview/@Model.PublishProductId" class="form b2b-form">
+                        @Html.AntiForgeryToken()
+                        <div class="col-xs-12 p-0">
+                            <div class="form-group">
+                                <div class="col-12 p-0">
+                                    <div class="control-label p-0 form-title">
+                                        <label>@WebStore_Resources.ColumnReviewFor</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 p-0 form-title font-16" data-test-selector="divReviewProdName">@Html.RenderBlock(Model.ProductName)</div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-12 p-0">
+                                    <div class="control-label p-0 form-title">
+                                        <label class="required">@WebStore_Resources.ColumnRating</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 p-0 star-rating setrating">
+                                    <label data-test-selector="lblSetRating1" for="set-rating1" class="star-full-icon star1 @(Model.Rating >= 1 ? "full" : "empty")" data-stars="1"></label>
+                                    <label data-test-selector="lblSetRating2" for="set-rating2" class="star-full-icon star2 @(Model.Rating >= 2 ? "full" : "empty")" data-stars="2"></label>
+                                    <label data-test-selector="lblSetRating3" for="set-rating3" class="star-full-icon star3 @(Model.Rating >= 3 ? "full" : "empty")" data-stars="3"></label>
+                                    <label data-test-selector="lblSetRating4" for="set-rating4" class="star-full-icon star4 @(Model.Rating >= 4 ? "full" : "empty")" data-stars="4"></label>
+                                    <label data-test-selector="lblSetRating5" for="set-rating5" class="star-full-icon star5 @(Model.Rating >= 5 ? "full" : "empty")" data-stars="5"></label>
+                                    @Html.HiddenFor(model => model.Rating)
+                                </div>
+                                <p class="error-msg">@Html.ValidationMessageFor(m => m.Rating)</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-12 p-0">
+                                    <div class="control-label form-title">
+                                        <label for="review_subject" class="required" data-test-selector="lblReviewSubject">@WebStore_Resources.ColumnReviewHeadline</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 p-0">
+                                    @Html.TextBoxFor(m => m.Headline, new { @id = "review_subject", @class = "form-input-long" , @data_test_selector = "txtReviewHeadline" })
+                                    <p data-test-selector="txtReviewHeadlineValidation" class="error-msg">@Html.ValidationMessageFor(m => m.Headline, "", new { @data_test_selector = "spnReviewHeadline" })</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-12 p-0">
+                                    <div class="control-label form-title">
+                                        <label for="review_text" class="required" data-test-selector="lblReviewText">@WebStore_Resources.ColumnReview</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 p-0">
+                                    @Html.TextAreaFor(m => m.Comments, new { @id = "review_text", rows = "8", cols = "45" })
+                                    <p data-test-selector="paraReviewValidation" class="error-msg">@Html.ValidationMessageFor(m => m.Comments, "", new { @data_test_selector = "spnReviewComments" })</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-12 p-0">
+                                    <div class="control-label form-title">
+                                        <label for="review_name" class="required" data-test-selector="lblReviewUserName">@WebStore_Resources.ColumnReviewName</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 p-0">
+                                    @Html.TextBoxFor(m => m.UserName, new { @id = "review_name", @data_test_selector = "txtYourName" })
+                                    <p class="form-error" data-test-selector="paraUserNameValidation">@Html.ValidationMessageFor(m => m.UserName, "", new { @data_test_selector = "spnReviewUserName" })</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-12 p-0">
+                                    <div class="control-label form-title">
+                                        <label for="review_location" class="required" data-test-selector="lblReviewUserLocation">@WebStore_Resources.ColumnReviewLocation</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 p-0">
+                                    @Html.TextBoxFor(m => m.UserLocation, new { @id = "review_location", @data_test_selector = "txtLocation" })
+                                    <p class="error-msg" data-test-selector="paraUserLocationValidation">@Html.ValidationMessageFor(m => m.UserLocation, "", new { @data_test_selector = "spnReviewLocation" })</p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-12 p-0 mb-3">
+                            <p class="sub">@WebStore_Resources.TextReviews</p>
+                        </div>
+                        <div class="col-12 p-0">
+                            <div class="quotebutton">
+                                <button data-test-selector="btnSubmit" type="submit" class="btn btn-primary">@WebStore_Resources.ButtonSubmitReview</button>
+                                <a data-test-selector="linkCancel" href="@Url.GetProductUrl(Model.SEOUrl, Convert.ToString(Model.PublishProductId))" class="btn btn-secondary ml-md-3 mt-3 d-block d-md-inline-block">@WebStore_Resources.ButtonCancel</a>
+                            </div>
+                        </div>
+                        @Html.HiddenFor(m => m.PublishProductId)
+                        @Html.HiddenFor(m => m.ProductName)
+                        @Html.HiddenFor(Model => Model.SKU)
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

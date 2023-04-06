@@ -1,0 +1,38 @@
+﻿@using Znode.Admin.Core.Areas.Search.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model  List<SearchProfileProductViewModel>
+<div class="search-products">
+    <div class="row product-grid">
+        <div class="col-xs-12 nopadding"><span class="error-msg record-error">@Convert.ToString(ViewBag.ErrorMessage)</span></div>
+        @if (Model.Count == 0)
+        {
+            <div class="col-xs-12 nopadding"><span class="error-msg record-error">No record found.</span></div>
+        }
+        <div class="col-xs-12 product-view nopadding">
+            <ul id="view-option-productgrid" infinnity-loading="false" class="product-grid-ul grid-view">
+                @{
+                    if (!Equals(Model, null))
+                    {
+                        foreach (var p in Model)
+                        {
+                            <li>
+                                <article class="product-item">
+                                    @Html.Partial("../Search/_ProductTile", p)
+                                </article>
+                            </li>
+                        }
+                    }
+                }
+            </ul>
+
+            <div id="loading" class="loader" style="display:none;"></div>
+        </div>
+    </div>
+</div>
+   
+                    
+<script>
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>

@@ -1,0 +1,52 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Models
+@model ImportProcessLogsListViewModel
+
+<div id=@Model.GridModel.FrontObjectName>
+    <div class="main-wrapper">
+        <div class="container">
+            <div class="row user-account">
+                <div class="col-xs-12 nopadding">
+                    <h1 class="page-title">@WebStore_Resources.LabelImportUser</h1>
+                </div>
+                <div class="col-xs-12 account-dashboard nopadding">
+                    <div class="col-xs-12 nopadding order-history right-container">
+                        <div class="col-xs-12 nopadding">
+                            <div class="col-xs-12 product-search nopadding">
+                                <div class="col-xs-12 nopadding padding-bottom">
+                                    <a href="/User/ImportUser" class="btn-text btn-bg-primary  pull-right" id="btnImportUser">@WebStore_Resources.LabelImportUser</a>
+                                </div>
+                                <div class="col-xs-12 filter-component">
+                                    @using (Ajax.BeginForm("ImportUserLogs", "User", new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+                                    {
+                                        <div id="filterComponent">
+                                            @Html.Partial("_FilterComponent", Model.GridModel.FilterColumn)
+                                        </div>
+                                    }
+                                </div>
+                                @Html.Partial("../Controls/_PopUp",
+                                                    new PopupModel()
+                                                    {
+                                                        Title = WebStore_Resources.ConfirmDeleteTitle,
+                                                        Description = WebStore_Resources.TextConfirmDelete,
+                                                        ModalPopUpId = "ImportUserLogsDeletePopup",
+                                                        Buttons = new List<PopUpButtonModel>() {
+                                                        new PopUpButtonModel { ButtonText = @WebStore_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Import.prototype.DeleteUserImportLogs(this)"}
+                                                        }
+                                                    })
+                                <div class="col-xs-12 list-container margin-top nopadding">
+                                    <div class="col-xs-12 nopadding">
+                                        @Html.Partial("_DynamicGrid", Model.GridModel)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

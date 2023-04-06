@@ -1,0 +1,100 @@
+﻿.file-preview{background-color:#5d6e7e;color:$base-color-white;height:34px;line-height:34px;margin:0 auto;min-width:32px;border:none;
+    &:hover {background-color:$base-color-primary;}
+    i{font-size:$base-font-size + 4;line-height:34px;}
+}
+.import-grid{float:left; width:100%; max-height:300px;overflow-y:auto;}
+.catalog-tree{color:$text-fgcolor-default;
+    #Catalog_Tree{padding-top:40px;}
+}
+.catalog-tree-search{background-color:#e2d6d6;color:$text-fgcolor-default;padding:8px 15px;border-bottom:1px solid $border-bgcolor-default;margin-bottom:5px;position:fixed;width:246px;z-index:999;-moz-transition: all 0.3s linear 0s;-webkit-transition: all 0.3s linear 0s;transition: all 0.3s linear 0s;
+        i.z-search{margin-right:0;line-height:3px;font-size:$base-font-size + 1;}
+    }
+
+.tire-price-data{max-height:380px;overflow-y:auto;width:100%;
+    .display-none{display:none;}
+    table thead{pointer-events:none;}
+    table tbody{
+        td{min-height:50px;vertical-align:middle;
+           &:last-child{display:none;}
+        }        
+    } 
+}
+//downloadable-products css
+.product-keys-table{width:100% !important;
+    tbody td{
+         width:auto;
+    }
+} 
+
+.product-sku-list .table tbody tr {
+    td a{color:$base-color-secondary;}
+    &:hover {cursor:pointer;}
+}
+.shipping-sku-list{padding:0 20px;}
+.store-getassociatedportalcatalog .ManageFilter,.associated-rule-list .ManageFilter{display:none;}
+.store-list .grid-action{width:175px;}
+.store-map{padding-right:25px;
+    .help-text-label{display:flex;
+        .help-text i{line-height:30px;}
+    }
+}
+.store-form-field .btn-narrow-icon {height:34px;line-height:34px !important;margin-left: 3px;padding: 0 10px;}
+.storelocator-create,.storelocator-update
+{
+    .control-optional-profile{color:#a0a0a0;font-size:12px;}
+    .twitter-typeahead{width:100%;}
+     #frmcreatestorelocator .tt-dropdown-menu{width:100%;background-color:$base-color-white;max-height:300px;overflow-y:auto;overflow-x:hidden;border:1px solid $border-bgcolor-primary;margin-top:-10px;margin-bottom:10px;
+      .tt-dataset-autos{padding:5px 0 0 4px;font-weight:bold;}
+    }
+}
+// Customer Field
+.vertical-tab-container{
+    .tabs-left,.tabs-right{border-bottom:none;padding-top:2px;
+            &>li{float:none;margin-bottom:2px}
+    }
+    .tabs-left{border-right:1px solid $base-color-primary;margin-left:-15px;}
+    .tabs-right{border-left:1px solid $border-bgcolor-default;}
+    .tabs-left>li{margin-right:-1px}
+    .tabs-right>li{margin-left:-1px}
+    .tabs-left>li.active>a,.tabs-left>li.active>a:focus,.tabs-left>li.active>a:hover{border-color: $base-color-primary;border-right-color:transparent;color:$base-color-primary;background-color:#fbf7f7;}
+    .tabs-right>li.active>a,.tabs-right>li.active>a:focus,.tabs-right>li.active>a:hover{border-bottom:1px solid  $base-color-primary;border-left-color:transparent;background-color:#fbf7f7;}
+    .tabs-left>li>a{border-radius:0;margin-right:0;display:block;color:$text-fgcolor-default;padding:8px 10px;word-break:break-word;}
+    .tabs-right>li>a{border-radius:0;margin-right:0;color:$text-fgcolor-default;padding:8px 10px;}
+    .tabs-left > li > a:hover, .tabs-left > li > a:focus{background-color:$aside-tab-selected-bg;border:1px solid  $base-color-primary;border-right-color:transparent;}
+    .tabs-left > li.active-tab-validation a{background-color:$base-color-primary;color:$base-color-white;border:1px solid  $base-color-primary;border-right-color:transparent;}
+    .vertical-text{margin-top:50px;border:none;position:relative;
+            &>li{height:20px;width:120px;margin-bottom:100px;
+                 &>a{border-bottom:1px solid $border-bgcolor-default;border-right-color:transparent;text-align:center;border-radius:0;}
+            }
+            &.tabs-right>li{-webkit-transform:rotate(90deg);-moz-transform:rotate(90deg);-ms-transform:rotate(90deg);-o-transform:rotate(90deg);transform:rotate(90deg)}
+            &.tabs-left>li{-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-ms-transform:rotate(-90deg);-o-transform:rotate(-90deg);transform:rotate(-90deg)}
+    }
+    .vertical-text>li.active>a,.vertical-text>li.active>a:focus,.vertical-text>li.active>a:hover{border-bottom-color:transparent;border-right-color:$base-color-primary;border-left-color:$base-color-primary}
+    .vertical-text.tabs-left{left:-50px}
+    .vertical-text.tabs-right{right:-50px}
+}
+
+
+@include screensize(xlarge) {
+    .tire-price-data {
+        max-height: 380px;
+    }
+}
+
+//Store CSS
+.store-checkbox {
+    input[type=checkbox] + .lbl {
+        line-height: 20px;
+        margin-bottom: 14px;
+
+        &:before {
+            margin-top: 3px;
+        }
+
+        .help-text {
+            em {
+                line-height: 0px;
+            }
+        }
+    }
+}

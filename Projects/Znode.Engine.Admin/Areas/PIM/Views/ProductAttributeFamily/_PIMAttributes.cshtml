@@ -1,0 +1,36 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model PIMAttributeListViewModel
+
+@{
+    string controller = ViewContext.RouteData.Values["controller"].ToString();  
+}
+
+@foreach (var attr in Model.List)
+{
+    <tr>
+        <td>@attr.AttributeCode</td>
+
+        <td>@attr.AttributeTypeName</td>
+        @{
+            if ((bool)attr.IsRequired)
+            {
+                <td><em class="z-ok"></em></td>
+            }
+            else
+            {
+                <td><em class="z-close"></em></td>
+            }
+            if (attr.IsLocalizable.Value)
+            {
+                <td><em class="z-ok"></em></td>
+            }
+            else
+            {
+                <td><em class="z-close"></em></td>
+            }
+        }
+        <td class="attribute-delete">@Html.AuthorizedRawActionLink("<em class='z-delete'></em>", "UnAssignAttributes", controller, new { @pimAttributeId = attr.PimAttributeId, @pimAttributeGroupId = Model.AttributeGroupId }, new { title = "Delete" })</td>
+    </tr>
+            }
+
+

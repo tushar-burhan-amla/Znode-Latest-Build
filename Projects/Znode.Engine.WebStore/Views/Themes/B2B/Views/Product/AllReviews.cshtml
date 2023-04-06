@@ -1,0 +1,73 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductAllReviewListViewModel
+@using Znode.Engine.WebStore.Models
+@{
+    string sort = Request.QueryString["Sort"] ?? "0";
+}
+<div id="layout-allreviews" class="col-12 main-wrapper p-0">
+    <div class="container">
+        <div class="row all-reviews">
+            <div class="col-12">
+                <div class="page-title">
+                    <h1 class="location-title" data-test-selector="hdgTextCustomerReviews">@WebStore_Resources.TextCustomerReviews</h1>
+                </div>    
+            </div>
+            <div class="col-12 p-0" id="pagingsearching">
+                <div class=" d-flex b2b-filters justify-content-center m-0 px-0">
+                    <div id="layout-paging">
+                        <div class="search-paging col-12 col-sm-8 d-flex">
+                            <div class="search-pagination b2b-pagination">
+                                <ul>
+                                    <li class="search-more-nav arrow-left px-0"><a data-test-selector="linkArrowLeft" id="prev-page-search" href="javascript: void(0)" data-pageno="@Request.QueryString["pagenumber"]" class="button" title="Previous"><span class='left-icon'></span></a></li>
+                                    <li class="search-more-nav arrow-right"><a data-test-selector="linkArrowRight" id="next-page-search" href="javascript: void(0)" data-pageno="@Request.QueryString["pagenumber"]" class="button" title="Next"><span class='right-icon'></span></a></li>
+                                </ul>
+                                @Html.HiddenFor(model => model.TotalPages, new { id = "hdnTotalPages" })
+                            </div>
+                            <div>
+                                @Html.Partial("../Search/_Paging", new ViewDataDictionary(new { Id = "Page", @class = "pull-right" }))
+                            </div>
+                        </div>
+                    </div>
+                    <div id="layout-search">
+                        <div class="search-sorting col-12 col-sm-4 margin-top pr-md-3">
+                            <div>
+                                @Html.DropDownList("Sort", new[] {
+                               new SelectListItem() {Text = WebStore_Resources.TextNewestFirst, Value = WebStoreConstants.NewestFirst,  Selected = sort == WebStoreConstants.NewestFirst},
+                               new SelectListItem() {Text = WebStore_Resources.TextOldestFirst, Value = WebStoreConstants.OldestFirst,  Selected = sort == WebStoreConstants.OldestFirst },
+                               new SelectListItem() {Text = WebStore_Resources.TextHighestRatingFirst, Value = WebStoreConstants.HighestRatingFirst ,Selected = sort == WebStoreConstants.HighestRatingFirst},
+                               new SelectListItem() {Text = WebStore_Resources.TextLowestRatingFirst, Value = WebStoreConstants.LowestRatingFirst,  Selected = sort == WebStoreConstants.LowestRatingFirst} })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 margin-top-bottom p-0">
+                <div class="col-12 my-3">
+                    <h3 class="review-productname margin-bottom">
+                        @if (!string.IsNullOrEmpty(Model.ProductName))
+                        {
+                            @Html.RenderBlock(Model.ProductName)
+                        }
+                    </h3>
+                </div>
+                <div class="col-12 quotebutton text-right mb-3 mb-md-0"!>
+                    <a href="@Url.GetProductUrl(Model.AllReviewsList.FirstOrDefault().SEOUrl, Convert.ToString(Model.ProductId))" class="d-block d-md-inline-block btn btn-primary">@WebStore_Resources.SubTitleProductReview</a>
+                    @Html.ActionLink(WebStore_Resources.LinkTextWriteReview, "Writereview", "Product", new { id = Model.ProductId, name = @Model.ProductName }, new { @class = "d-block d-md-inline-block btn btn-secondary ml-md-3 mt-3 mt-md-0" + "" })
+                </div>
+
+                <div id="reviewrowlist" class="col-12 mt-0 mb-5">
+                    @foreach (var item in Model.AllReviewsList)
+                    {
+                        @Html.Partial("_ReviewRow", item)
+                    }
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(x => x.ProductId)
+        @Html.HiddenFor(model => model.TotalPages, new { id = "hdnTotalPages" })
+    </div>
+</div>
+<script>
+    $(window).on("load", function () {
+        ZSearch.prototype.Init();
+    });
+</script>

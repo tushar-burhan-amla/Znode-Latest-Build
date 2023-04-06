@@ -1,0 +1,29 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model  List<BlogNewsCommentViewModel>
+@{
+    Layout = null;
+}
+<div class="col-12 p-0">
+    <div class="col-12 p-0 mt-4">
+        @if (Model?.Count > 0)
+        {
+            <div class="col-12 p-0 title mb-3">
+                <h4 class="comment-heading">@WebStore_Resources.LabelComments</h4>
+            </div>
+        }
+        @foreach (var blogNewsComment in Model)
+        {
+            <div class="col-12 p-0 comment-list border-bottom mb-3 pb-3">
+                <div class="comments">
+                    <div class="col-12 p-0  comment blog-comment">
+                        <div class="row no-gutters">
+                            <div class="col-12 comment-text">
+                                @blogNewsComment.BlogNewsComment
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

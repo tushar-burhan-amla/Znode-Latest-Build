@@ -1,0 +1,44 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model DashboardListViewModel
+
+<div class="d-flex flex-wrap justify-content-between padding-top padding-bottom table-heading-section">
+    <h2 class="margin-left-15">Brands</h2>
+    <div class="margin-right-15">
+        <button class=" btn-text btn-text-secondary">button</button>
+    </div>
+</div>
+@*<h3 class="margin-left-20">@Admin_Resources.LabelTopBrands</h3>*@
+
+<table class="table" aria-describedby="Top Brands List Table">
+    <thead class="thead-inverse">
+        <tr>
+            <th scope="col">@Admin_Resources.LabelBrand</th>
+            <th scope="col">@Admin_Resources.LabelOrders</th>
+            <th scope="col">@Admin_Resources.LabelSales</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.DashboardViewModelList.Count > 0 && Model.DashboardViewModelList.Any(x => string.Equals(x.Type, ZnodeConstant.Brand, StringComparison.InvariantCultureIgnoreCase)))
+        {
+            foreach (DashboardTopItemsViewModel item in Model.DashboardViewModelList)
+            {
+                if (string.Equals(item.Type, ZnodeConstant.Brand, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    <tr>
+                        <td>@item.Brands</td>
+                        <td>@item.Orders</td>
+                        <td>@item.Sales</td>
+                    </tr>
+                }
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">@Admin_Resources.NoRecordFoundText</td>
+            </tr>
+        }
+
+    </tbody>
+</table>

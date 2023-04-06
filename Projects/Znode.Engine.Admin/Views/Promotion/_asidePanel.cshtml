@@ -1,0 +1,31 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PromotionViewModel
+
+@{
+    bool isActiveGroup = true;
+}
+<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container dirtyignore">        
+        <ul class="aside-panel" id="promotionAsidePannel">
+
+            @{
+                var promoClass = isActiveGroup ? "tab-selected" : "";
+                isActiveGroup = false;
+                <li data-promotionid="@Model.PromotionId" class="groupPannel Promotion Info @promoClass" data-groupCode="PromotionInfo"><a href="#" data-test-selector="linkPromotionInfo" >@Admin_Resources.LabelPromotionInformation</a></li>
+            }
+            @{
+                var discountClass = isActiveGroup ? "tab-selected" : "";
+                isActiveGroup = false;
+                <li data-promotionid="@Model.PromotionId" class="groupPannel Discount Info @discountClass"  data-groupCode="DiscountInfo"><a href="#" data-test-selector="linkDiscountInfo">@Admin_Resources.LabelDiscountInformation</a></li>
+            }
+            @{
+                var couponClass = isActiveGroup ? "tab-selected" : "";
+                isActiveGroup = false;
+                <li data-promotionid="@Model.PromotionId" class="groupPannel Coupon Info @couponClass" id="CouponInfoTab" style="display:none;" data-groupCode="CouponInfo"><a href="#" data-test-selector="linkCouponInfo">@Admin_Resources.LabelCouponInformation</a></li>
+            }
+        </ul>
+    </div>
+</aside>
+
+

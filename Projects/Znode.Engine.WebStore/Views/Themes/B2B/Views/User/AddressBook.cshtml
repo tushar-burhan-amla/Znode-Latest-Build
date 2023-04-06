@@ -1,0 +1,334 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+
+@model AddressListViewModel
+@using Znode.Engine.WebStore.Agents;
+<div id="layout-account-book" class="main-wrapper col">
+    <div class="row">
+        <div class="container-fluid profile-dashboard">
+            <div class="row">
+                <div class="container">
+                    @Html.Partial("_AccountMenuDashboard")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a><a href="/User/Dashboard">@WebStore_Resources.TitleMyAccount</a> / @WebStore_Resources.TitleAddressBook</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container">
+            <div class="row user-account">
+                <div class="col-12 account-dashboard">
+                    <div class="row mb-5">
+                        <div class="col-12 col-lg-9 address-book right-container">
+                            <div class="col-12 p-0">
+                                <h1 class="page-title" data-test-selector="hdgTitleAddressBook">@WebStore_Resources.TitleAddressBook</h1>
+                            </div>
+                            <div id="addressList">
+                                <div class="col-12 address-list address-list-primary p-0 mb-4">
+                                    <div class="row">
+                                        <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                                            <div class="col-12 dashboard-content p-0 h-100">
+                                                <h5 class="b2b-section-header" data-test-selector="hdgSubTitlePrimaryShipping">@WebStore_Resources.SubTitlePrimaryShipping</h5>
+                                                @if (!Equals(Model?.ShippingAddress, null))
+                                                {
+                                                    Model.ShippingAddress.RoleName = Model.RoleName;
+                                                    <div class="col-12">
+                                                        @Html.Partial("../User/_DisplayAddress", Model.ShippingAddress ?? new AddressViewModel())
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="p-4">@WebStore_Resources.ErrorNoPrimaryAddress</div>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-6 pl-lg-2">
+                                            <div class="col-12 dashboard-content p-0 h-100">
+                                                <h5 class="b2b-section-header" data-test-selector="hdgSubTitlePrimaryBilling">@WebStore_Resources.SubTitlePrimaryBilling</h5>
+                                                @if (!Equals(Model?.BillingAddress, null))
+                                                {
+                                                    Model.BillingAddress.RoleName = Model.RoleName;
+                                                    <div class="col-12">
+                                                        @Html.Partial("../User/_DisplayAddress", Model.BillingAddress ?? new AddressViewModel())
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="p-4">@WebStore_Resources.ErrorNoPrimaryAddress</div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (!Equals(Model?.AddressList, null))
+                            {
+                                if (Model.AddressList.Any())
+                                {
+                            <div class="col-12 dashboard-content p-0 add-address-block">
+                                @if (Model.AccountId > 0)
+                                {
+                                    <div class="col-12 b2b-section-header d-flex p-0 px-4 border-bottom align-items-center justify-space-between">
+                                        <div class="b2b-section-header pl-0 border-bottom-0">@WebStore_Resources.HeaderAccountAddress</div>
+                                        @if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                                        {
+
+                                        @Html.ActionLink(@WebStore_Resources.LinkAddNewAddress, "Address", "User", new { @class = "btn btn-secondary d-block d-md-inline-block" })
+
+                                        }
+                                    </div>
+
+                                            <div class="col-12 address-list p-0">
+                                                <div class="row m-0">
+                                                    @{
+                                                        int counter = 1;
+                                                    }
+                                                    @foreach (var item in Model.AddressList)
+                                                    {
+                                                        if (counter % 2 == 0)
+                                                        {
+                                                            <div class="col-12 col-lg-6 p-4 address-blocks">
+                                                                <div class="address-block p-0 py-2 w-100">
+                                                                    <div class="d-flex address-action-btns">
+                                                                        <p class="address-title" data-test-selector="paraDisplayName">@item.DisplayName</p>
+                                                                        <div class="address-change">
+                                                                            <div>
+                                                                                @if (!string.Equals(Model.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                                                                                {
+                                                                                    <a href="Address?id=@item.AddressId" class="change-address" data-test-selector="linkEditAddress"><span class="icon edit-icon" title="@WebStore_Resources.LinkTextEditAddress" data-test-selector="spnEditAddress"></span></a>
+                                                                                }
+                                                                                @if (!string.Equals(Model.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                                                                                {
+                                                                                    <a href="DeleteAddress?addressId=@item.AddressId" id="delete-address" class="change-address" data-test-selector="linkDeleteAddress"><span class="icon delete-icon" title="@WebStore_Resources.LinkTextDeleteAddress" data-test-selector="spnDeleteAddress"></span></a>
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <p class="address-title" data-test-selector="paraCompanyName">@item.CompanyName</p>
+                                                                    <p class="address-name" data-test-selector="paraFirstName">@item.FirstName @item.LastName</p>
+                                                                    <p class="address-street" data-test-selector="paraAddress1">@item.Address1<br />@item.Address2</p>
+                                                                    <p class="address-citystate" data-test-selector="paraCityName">@item.CityName, @item.StateName, @item.CountryName @item.PostalCode</p>
+                                                                    <p class="address-phonenumber" data-test-selector="paraPhoneNumber">Ph: @item.PhoneNumber</p>
+                                                                </div>
+                                                                <div class="address-block p-0 py-2 w-100">
+                                                                    <div class="action-links pt-4 mt-auto less-padding w-100">
+                                                                        <form method="POST" class="form">
+                                                                            @if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase) && item.IsDefaultShipping != true)
+                                                                            {
+                                                                                @Html.AntiForgeryToken()
+                                                                                <button type="submit" class="margin-top btn btn-secondary btn-block" data-test-selector="btnPrimaryShipping">@WebStore_Resources.LinkTextPrimaryShipping</button>
+                                                                            }
+                                                                            else if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase) && item.IsDefaultShipping)
+                                                                            {
+                                                                                <div class="btn btn-secondary btn-block primary-shipping-address" data-test-selector="divPrimaryShippingAddress">@WebStore_Resources.TextPrimaryShippingAddress</div>
+                                                                            }
+                                                                            <input type="hidden" value="@item.AddressId" name="id" />
+                                                                            <input type="hidden" value="false" name="isDefaultBillingAddress" />
+                                                                        </form>
+                                                                        <form method="POST" class="form">
+                                                                            @if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase) && item.IsDefaultBilling != true)
+                                                                            {
+                                                                                @Html.AntiForgeryToken()
+                                                                                <button type="submit" class="margin-top btn btn-secondary btn-block mt-3" data-test-selector="btnPrimaryBilling">@WebStore_Resources.LinkTextPrimaryBilling</button>
+                                                                            }
+                                                                            else if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase) && item.IsDefaultBilling)
+                                                                            {
+                                                                                <div class="btn btn-secondary btn-block primary-billing-address mt-3" data-test-selector="divPrimaryBillingAddress">@WebStore_Resources.TextPrimaryBillingAddress</div>
+                                                                            }
+                                                                            <input type="hidden" value="@item.AddressId" name="id" />
+                                                                            <input type="hidden" value="true" name="isDefaultBillingAddress" />
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="col-12 col-lg-6 p-4 address-blocks">
+                                                                <div class="address-block p-0 py-2 w-100">
+                                                                    <div class="d-flex address-action-btns">
+                                                                        <p class="address-title" data-test-selector="paraDisplayName">@item.DisplayName</p>
+                                                                        <div class="address-change">
+                                                                            <div>
+                                                                                @if (!string.Equals(Model.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                                                                                {
+                                                                                    <a href="Address?id=@item.AddressId" class="change-address" data-test-selector="linkEditAddress"><span class="icon edit-icon" title="@WebStore_Resources.LinkTextEditAddress" data-test-selector="spnEditAddress"></span></a>
+                                                                                }
+                                                                                @if (!string.Equals(Model.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                                                                                {
+                                                                                    <a href="DeleteAddress?addressId=@item.AddressId" id="delete-address" class="change-address" data-test-selector="linkDeleteAddress"><span class="icon delete-icon" title="@WebStore_Resources.LinkTextDeleteAddress" data-test-selector="spnDeleteAddress"></span></a>
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <p class="address-title" data-test-selector="paraCompanyName">@item.CompanyName</p>
+                                                                    <p class="address-name" data-test-selector="paraFirstName">@item.FirstName @item.LastName</p>
+                                                                    <p class="address-street" data-test-selector="paraAddress1">@item.Address1<br />@item.Address2</p>
+                                                                    <p class="address-citystate" data-test-selector="paraCityName">@item.CityName, @item.StateName, @item.CountryName @item.PostalCode</p>
+                                                                    <p class="address-phonenumber" data-test-selector="paraPhoneNumber">Ph: @item.PhoneNumber</p>
+                                                                </div>
+                                                                <div class="address-block p-0 py-2 w-100">
+                                                                    <div class="action-links pt-4 mt-auto less-padding w-100">
+                                                                        <form method="POST" class="form">
+                                                                            @if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase) && item.IsDefaultShipping != true)
+                                                                            {
+                                                                                @Html.AntiForgeryToken()
+                                                                                <button type="submit" class="margin-top btn btn-secondary btn-block" data-test-selector="btnPrimaryShipping">@WebStore_Resources.LinkTextPrimaryShipping</button>
+                                                                            }
+                                                                            else if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase) && item.IsDefaultShipping)
+                                                                            {
+                                                                                <div class="btn btn-secondary btn-block primary-shipping-address" data-test-selector="divPrimaryShippingAddress">@WebStore_Resources.TextPrimaryShippingAddress</div>
+                                                                            }
+                                                                            <input type="hidden" value="@item.AddressId" name="id" />
+                                                                            <input type="hidden" value="false" name="isDefaultBillingAddress" />
+                                                                        </form>
+                                                                        <form method="POST" class="form">
+                                                                            @if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase) && item.IsDefaultBilling != true)
+                                                                            {
+                                                                                @Html.AntiForgeryToken()
+                                                                                <button type="submit" class="margin-top btn btn-secondary btn-block mt-3" data-test-selector="btnPrimaryBilling">@WebStore_Resources.LinkTextPrimaryBilling</button>
+                                                                            }
+                                                                            else if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase) && item.IsDefaultBilling)
+                                                                            {
+                                                                                <div class="btn btn-secondary btn-block primary-billing-address mt-3" data-test-selector="divPrimaryBillingAddress">@WebStore_Resources.TextPrimaryBillingAddress</div>
+                                                                            }
+                                                                            <input type="hidden" value="@item.AddressId" name="id" />
+                                                                            <input type="hidden" value="true" name="isDefaultBillingAddress" />
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        counter++;
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (Model?.AccountId <= 0)
+                                        {
+                                            <div class="col-12 p-0">
+                                                <div class="col-12 p-0 px-4 b2b-address d-flex border-bottom justify-content-between align-items-center">
+
+                                                    <h5 class="b2b-section-header pl-0 border-bottom-0">@WebStore_Resources.TitleAllAddress</h5>
+                                                    @if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                                                    {
+
+                                                        @Html.ActionLink(@WebStore_Resources.LinkAddNewAddress, "Address", "User", new { @class = "btn btn-secondary d-block d-md-inline-block my-3" })
+
+                                                    }
+                                                </div>
+                                                <div class="col-12 address-list">
+                                                    <div class="row">
+                                                        @{
+                                                            int counter = 1;
+                                                        }
+                                                        @foreach (var address in Model?.AddressList)
+                                                        {
+                                                            address.RoleName = Model?.RoleName;
+                                                            if (counter % 2 == 0)
+                                                            {
+                                                                <div class="col-12 col-lg-6 p-4 address-blocks">
+                                                                    <div class="col-12 p-0 d-flex flex-wrap h-100">
+                                                                        @Html.Partial("../User/_DisplayAddress", address)
+                                                                        <div class="action-links pt-4 mt-auto less-padding w-100">
+                                                                            <form method="POST" class="form">
+                                                                                @if (address.IsDefaultShipping != true)
+                                                                                {
+                                                                                    @Html.AntiForgeryToken()
+                                                                                    <button type="submit" class="btn btn-secondary btn-block" data-test-selector="btnPrimaryShipping">@WebStore_Resources.LinkTextPrimaryShipping</button>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <div class="btn btn-secondary btn-block primary-shipping-address" data-test-selector="divPrimaryShippingAddress">@WebStore_Resources.TextPrimaryShippingAddress</div>
+                                                                                }
+                                                                                <input type="hidden" value="@address.AddressId" name="id" />
+                                                                                <input type="hidden" value="false" name="isDefaultBillingAddress" />
+                                                                            </form>
+                                                                            <form method="POST" class="form">
+                                                                                @if (address.IsDefaultBilling != true)
+                                                                                {
+                                                                                    @Html.AntiForgeryToken()
+                                                                                    <button type="submit" class="btn btn-secondary btn-block mt-3" data-test-selector="btnPrimaryBilling">@WebStore_Resources.LinkTextPrimaryBilling</button>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <div class="btn btn-secondary btn-block primary-billing-address mt-3" data-test-selector="divPrimaryBillingAddress">@WebStore_Resources.TextPrimaryBillingAddress</div>
+                                                                                }
+                                                                                <input type="hidden" value="@address.AddressId" name="id" />
+                                                                                <input type="hidden" value="true" name="isDefaultBillingAddress" />
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="col-12 col-lg-6 p-4 address-blocks">
+                                                                    <div class="col-12 p-0 d-flex flex-wrap h-100">
+                                                                        @Html.Partial("../User/_DisplayAddress", address)
+                                                                        <div class="action-links pt-4 mt-auto less-padding w-100">
+                                                                            <form method="POST" class="form">
+                                                                                @if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase) && address.IsDefaultShipping != true)
+                                                                                {
+                                                                                    @Html.AntiForgeryToken()
+                                                                                    <button type="submit" class="btn btn-secondary btn-block">@WebStore_Resources.LinkTextPrimaryShipping</button>
+                                                                                }
+                                                                                else if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase) && address.IsDefaultShipping)
+                                                                                {
+                                                                                    <div class="btn btn-secondary btn-block primary-shipping-address" data-test-selector="divPrimaryShippingAddress">@WebStore_Resources.TextPrimaryShippingAddress</div>
+                                                                                }
+                                                                                <input type="hidden" value="@address.AddressId" name="id" />
+                                                                                <input type="hidden" value="false" name="isDefaultBillingAddress" />
+                                                                            </form>
+                                                                            <form method="POST" class="form">
+                                                                                @if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase) && address.IsDefaultBilling != true)
+                                                                                {
+                                                                                    @Html.AntiForgeryToken()
+                                                                                    <button type="submit" class="btn btn-secondary btn-block mt-3">@WebStore_Resources.LinkTextPrimaryBilling</button>
+                                                                                }
+                                                                                else if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase) && address.IsDefaultBilling)
+                                                                                {
+                                                                                    <div class="btn btn-secondary btn-block primary-billing-address mt-3" data-test-selector="divPrimaryBillingAddress">@WebStore_Resources.TextPrimaryBillingAddress</div>
+                                                                                }
+                                                                                <input type="hidden" value="@address.AddressId" name="id" />
+                                                                                <input type="hidden" value="true" name="isDefaultBillingAddress" />
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                            counter++;
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            }
+                            else if (!string.Equals(Model?.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model?.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                <div class="col-12 p-0 text-right">
+                                    @Html.ActionLink(@WebStore_Resources.LinkAddNewAddress, "Address", "User", new { @class = "btn btn-secondary d-block d-md-inline-block my-3" })
+                                </div>
+                            }
+                        </div>
+                        <div class="col-12 col-lg-3 p-0 mt-4 pt-3">
+                            <div class="col-12">
+                                <p class="key-PromoSpot">@Html.RenderMessage("PromoSpot")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

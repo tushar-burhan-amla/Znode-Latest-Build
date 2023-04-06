@@ -1,0 +1,97 @@
+﻿
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+@model SearchProfileViewModel
+@{
+    ViewBag.Title = ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string cancelUrl = "/Search/Search/GetSearchProfiles";
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateSearchProfile", CancelUrl = cancelUrl, IsSaveCloseEnable = true, Callback = "Search.prototype.ValidateSearchProfileData" };
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "btnSaveNClose", DataTestSelector = "linkSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "SaveCancel.prototype.SubmitForm('" + actionModel.FormId + "','" + actionModel.Callback + "', '" + actionModel.CancelUrl + "')" });
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "PublishLink", DataTestSelector = "linkPublish", LinkType = LinkType.OnClick, LinkDisplayName = @PIM_Resources.ButtonReady, OnClick= "Search.prototype.PublishSearchProfile()" });
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleAdd, "Search Profile")</h1>
+    <div class="pull-right btn-container">
+        <a id="btnCancel" class="btn-text-icon pull-left margin-right" href=@cancelUrl data-test-selector="linkCancel"><em class='z-back'></em>@Admin_Resources.ButtonBack</a>
+        @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+    </div>
+</div>
+@using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateSearchProfile", @class = "dirtyignore" }))
+{
+
+    <section class="col-sm-12 page-container">
+       
+   
+
+                <div class="col-sm-12 catalog-search-profile nopadding d-flex align-items-center" id="loginForm">
+                    <div id="divSearchCatalogCreate">
+                        <div class="">
+                            <label class="profile-label">@Html.LabelFor(m => m.CatalogName, new { @class = "required", @data_test_selector = "lblCatalogName" })</label>
+                        </div>                  
+                            <div class="search-catalog-box">
+                                @Html.FastSelectFor(model => model.CatalogName, model => model.PublishCatalogId, "GetUnassociatedCatalogList", "Search", "Search.prototype.OnSelectGetCatalogProfileList", 1, true,
+                                    new
+                                    {
+                                        htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectCatalog, @class = "", @id = "txtCatalogNameCreate", @data_test_selector = "valCatalogName" },
+                                        parameters = new { @type = ZnodeTypeAheadEnum.CatalogList.ToString() }
+                                    })
+                                @Html.HiddenFor(model => model.PublishCatalogId, new { @id = "hdnPublishCatalogIdCreate" })
+                                @Html.ValidationMessageFor(model => model.CatalogName, "", new { @id = "errorRequiredCatalog", @data_test_selector = "valCatalogName" })
+                            </div>
+                       
+                    </div>
+                    <div class="margin-left-15">
+                        <div class="col-xs-12 nopadding">
+                            <label class="profile-label">@Html.LabelFor(m => m.ProfileName, new { @class = "required", @data_test_selector = "lblProfileName" })</label>
+                        </div>
+                        <div class="col-xs-12 nopadding">
+                            @Html.TextBoxFor(model => model.ProfileName, new { @id = "hdnProfileName", @data_test_selector = "txtProfileName" })
+                            @Html.ValidationMessageFor(model => model.ProfileName, null, new { id = "errorRequiredSearchProfileName", @data_test_selector = "valProfileName" })
+                        </div>
+                    </div>
+                    <div class="margin-top-20 margin-left-15">@Admin_Resources.SearchProfilePublishRequiredMessage</div>
+                </div>
+
+            <div class="col-sm-3 col-lg-4 search-aside-panel nopadding">
+                <div class="col-sm-12 nopadding padding-bottom">
+
+                    @Html.Partial("_SearchSettings", Model)
+                    @Html.HiddenFor(m => m.SearchProfileId)
+
+                </div>
+            </div>
+            <div class="col-sm-9 col-lg-8 search-right-panel nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="col-xs-12 nopadding">
+                            <div class="input-group search-go-section padding-top-20">
+                                <input data-test-selector="txtSearchTerm" class="form-control" placeholder="Search" name="search" id="SearchTerm" onKeyDown="if (event.keyCode == 13) Search.prototype.GetSerchTermProducts(this);" />
+                                <div class="input-group-btn">
+                                    <button type="button" id="searchResult" onclick="Search.prototype.GetSerchTermProducts(this)" class="btn-text" data-test-selector="btnGO"><em class='z-search'></em></button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span id="errorSelectCatalog" class="error-msg"></span>
+                <div id="SomeDivToShowTheResult">
+                    <div class="col-sm-12 no-record-search nopadding">
+                        <p data-test-selector="paraSearchResult">Your search results will appear here...</p>
+                    </div>
+                </div>
+            </div>
+       
+       
+    </section>
+
+}
+<div id="divCataloglistPopup" class="aside-popup-panel modal-dialog modal-xl">
+    @*Publish Catalog List Panel shown here*@
+</div>
+<div id="addAttributesPanel" class="aside-popup-panel modal-dialog modal-xl">
+    @*Add attributes Popup shown here*@
+</div>

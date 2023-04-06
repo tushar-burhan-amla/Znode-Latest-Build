@@ -1,0 +1,30 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model PIMAttributeGroupMapperListViewModel
+
+@foreach (var attr in Model.AttributeGroupMappers)
+{
+    <tr>
+
+        <td>@attr.AttributeCode</td>
+
+        <td>@attr.AttributeType</td>
+        @{
+            if (attr.IsRequired)
+            {
+            <td><em class="z-ok"></em></td>
+            }
+            else
+            {
+            <td><em class="z-close"></em></td>
+            }
+            if (attr.IsLocalizable.Value)
+            {
+            <td><em class="z-ok"></em></td>
+            }
+            else
+            {
+            <td><em class="z-close"></em></td>
+            }
+        }
+    </tr>
+            }

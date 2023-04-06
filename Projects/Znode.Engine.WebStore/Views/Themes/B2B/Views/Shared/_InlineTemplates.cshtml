@@ -1,0 +1,11 @@
+﻿<script id="tmpl-typeahead-results" type="text/template">
+    <a href="#" class="close"><span class="close-icon close"></span></a>
+    <ul>
+        {{#matches}}
+        <li><a href="/Search?searchTerm={{term}}&category={{category}}"><strong>{{product}}</strong> {{suffix}}</a></li>
+        {{/matches}}
+    </ul>
+</script>
+<script id="tmpl-alertmessage" type="text/template">
+    <div id="status-message" class="{{style}} alert alert-info text-center">{{message}}</div>
+</script>

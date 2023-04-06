@@ -1,0 +1,19 @@
+﻿
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+}
+
+@if (actionName != "Create")
+{
+    <aside>
+        <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            <ul class="aside-panel">
+
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.ManageTaxes, "Edit", "TaxClass", new { taxClassId = Model?.TaxClassId }, new { @data_test_selector = "linkManageTaxes" })</li>
+                <li>@Html.AuthorizedRawActionLink(@PIM_Resources.TitleAssociatedProducts, "TaxClassSKUList", "TaxClass", new { taxClassId = Model?.TaxClassId, name = Model?.Name }, new { @data_test_selector = "linkAssociatedProducts" })</li>
+            </ul>
+        </div>
+    </aside>
+}
+

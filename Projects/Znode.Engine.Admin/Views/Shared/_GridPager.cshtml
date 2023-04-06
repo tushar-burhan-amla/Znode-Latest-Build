@@ -1,0 +1,44 @@
+﻿@model Znode.Engine.Admin.Models.GridPagerModel
+@{
+    int countFrom = Model.PageIndex > 0 ? (Model.PageSize * Model.PageIndex) + 1 : 1;
+    int countTo = Model.PageIndex > 0 ? (countFrom - 1) + Model.PageSize : Model.PageSize;
+    countTo = (Model.PageCount - 1) == Model.PageIndex ? Model.TotalRecoredCount : countTo;
+}
+<div class="pagination">
+    <div class="paginationContent">
+        <div class="PageLimit page-limit pull-left">
+            <a id="first" href="javascript:void(0)" class="first"><em class="z-backward-arrow" data-test-selector="linkFirstPage" data-toggle="tooltip" data-placement="top" title="First"></em></a>
+            <a id="previousPage" href="javascript:void(0)" class="Previous"><em class="z-first" data-test-selector="linkPreviousPage" data-toggle="tooltip" data-placement="top" title="Previous Page"></em></a>
+            <span data-test-selector="lblPage"> @Admin_Resources.LabelPage </span>
+            @Html.TextBox("pagerTxt", null, new { @class = "pagerTxt", @data_test_selector = "txtPageNumber",autocomplete = "off" })
+            <span class="LowerCase" data-test-selector="lblTotalPageCount">/ @Model.PageCount&nbsp;</span>
+            <a id="nextPage" href="javascript:void(0)" class="Next"><em class="z-last" data-test-selector="linkNextPage" data-toggle="tooltip" data-placement="top" title="Next Page"></em></a>
+            <a id="last" href="javascript:void(0)" class="last"><em class="z-forward-arrow" data-test-selector="linkLastPage" data-toggle="tooltip" data-placement="top" title="Last"></em></a>
+        </div>
+        <div class="ShowPerPage show-per-page pull-left">
+            <div class="total-record" data-test-selector="divTotalRecords"><span data-test-selector="lblShowing">@Admin_Resources.LabelShowing </span><span>@countFrom</span><span> - </span><span>@countTo</span><span>&nbsp;of&nbsp;</span><span id="totalRecoredCount" data-test-selector="lblTotalRecordsCount">@Model.TotalRecoredCount</span></div>
+            <div class="showing padding-left" data-test-selector="divShow"><span class="padding-right" data-test-selector="lblShow"> @Admin_Resources.LabelShow </span>@Html.DropDownListFor(ob => ob.PageSize, Model.PageSizeOptions, new { @class = "pageSizeList", id = "pageSizeList", @data_test_selector = "drpPageSizeList"  })</div>
+            &nbsp;<a href="#" id="refreshGrid"><em class="z-new-refresh" data-test-selector="linkRefreshGrid" data-toggle="tooltip" data-placement="top" title="Refresh"></em></a>
+        </div>        
+    </div>
+</div>
+@Html.HiddenFor(x => x.PageIndex)
+@Html.HiddenFor(x => x.PageCount)
+@Html.HiddenFor(x => x.PageSize)
+@Html.HiddenFor(x => x.RecordPerPageFieldName)
+@Html.HiddenFor(x => x.PageFieldName)
+@Html.HiddenFor(x => x.Sort)
+@Html.HiddenFor(x => x.SortDir)
+@Html.HiddenFor(x => x.SortFieldName)
+@Html.HiddenFor(x => x.SortDirFieldName)
+<script type="text/javascript">
+    PageIndex = parseInt('@Model.PageIndex');
+    PageCount = parseInt('@Model.PageCount');
+    PageSize = '@Model.PageSize';
+    RecordPerPageFieldName = '@Model.RecordPerPageFieldName';
+    PageFieldName = '@Model.PageFieldName';
+    Sort = '@Model.Sort';
+    SortDir = '@Model.SortDir';
+    SortFieldName = '@Model.SortFieldName';
+    SortDirFieldName = '@Model.SortDirFieldName';
+</script>

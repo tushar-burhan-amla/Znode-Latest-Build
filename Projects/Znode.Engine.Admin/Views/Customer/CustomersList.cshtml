@@ -1,0 +1,131 @@
+﻿@model Znode.Engine.Admin.ViewModels.CustomerListViewModel
+@using Znode.Engine.Admin.Models
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    bool IsGuestUser = actionName.Contains("GuestUser");
+    string heading = IsGuestUser ? Admin_Resources.LabelGuestUsers : Admin_Resources.LabelUsers;
+}
+<div id="userList">
+    <div id="@Model.GridModel.FrontObjectName">
+        <div class="col-sm-12 title-container">
+            <h1 data-test-selector="hdgUsers">@heading<span class="total-count"><p>@Model.GridModel.TotalRecordCount</p></span></h1>
+            @if (actionName.ToLower().Contains("customer"))
+            {
+                if (SessionProxyHelper.IsSalesRepUser() == false)
+                {
+                    <div class="pull-right btn-container">
+                        @Html.AuthorizedRawActionLink(Admin_Resources.ButtonAdd, "CustomerCreate", "Customer", null, new { @class = "btn-text btn-text-secondary", @data_test_selector = "linkAddNew" })
+                    </div>
+                }
+            }
+        </div>
+        <!--Main Container-->
+        <section class="col-sm-12 page-container">
+            <div class="col-xs-12 nopadding user-filters-container">
+                @if (actionName.ToLower().Contains("customer"))
+                {
+                    <div class="col-md-2 user-filter">
+                        @Html.HiddenFor(model => model.PortalId, new { @id = "hdnFilterPortalId" })
+                        @Html.HiddenFor(model => model.PortalName, new { @id = "hdnFilterPortalName" })
+                        @Html.FastSelectFor(model => model.PortalName, model => model.PortalId, "GetSuggestions", "Typeahead", "Customer.prototype.OnSelectStoreAutocompleteDataBind", 1, true,
+                         new
+                         {
+                             htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @Name = "SearchTerm", @id = "txtFilterPortalName", @data_test_selector = "txtFilterPortal_Name" },
+                             parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString(), additionalOptions = ZnodeTypeAheadListGenericOptions.All.ToString()}
+                         })
+                    </div>
+                }
+                @using (Ajax.BeginForm(actionName, controllerName, new { portalId = Model.PortalId, portalName = Model.PortalName }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+                {
+                    <div id="filterComponent">
+                        @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                    </div>
+                }
+            </div>
+
+
+            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                new PopupModel()
+                {
+                    Title = @Admin_Resources.HeaderConfirmDelete,
+                    Description = @Admin_Resources.TextAccountConfirmDelete,
+                    ModalPopUpId = "MediaDeletePopup",
+                    Buttons = new List<PopUpButtonModel>
+                    () {
+                    new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "User.prototype.DeleteCustomer(this)"}
+                    }
+                })
+            <div class="col-sm-12 list-container">
+                @{
+                    @Html.Hidden("hdnEnableDisableActionURL")
+                    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                        new PopupModel()
+                        {
+                            Title = @Admin_Resources.ConfirmText,
+
+                        Description = @Admin_Resources.LockMultipleAccountConfirmationMessage,
+                        ModalPopUpId = "PopUpConfirmDisable",
+                        Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes = "data-dismiss=modal", OnClickFunctionName = "DynamicGrid.prototype.RedirectToEnableDisable()" } }
+                    })
+                    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                            new PopupModel()
+                            {
+                                Title = @Admin_Resources.ConfirmText,
+                                Description = @Admin_Resources.UnlockMultipleAccountConfirmationMessage,
+                                ModalPopUpId = "PopUpConfirmEnable",
+                                Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes = "data-dismiss=modal", OnClickFunctionName = "DynamicGrid.prototype.RedirectToEnableDisable()" } }
+                            })
+                    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                new PopupModel()
+                                {
+                                    Title = @Admin_Resources.ConfirmText,
+                                    Description = @Admin_Resources.UnlockMultipleAccountConfirmationMessage,
+                                    ModalPopUpId = "accountEnable",
+                                    Buttons = new List<PopUpButtonModel>
+                                    () {
+                                    new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "User.prototype.EnableCustomerAccount()"}
+                                    }
+                                })
+                    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                    new PopupModel()
+                                    {
+                                        Title = @Admin_Resources.ConfirmText,
+                                        Description = @Admin_Resources.LockMultipleAccountConfirmationMessage,
+                                        ModalPopUpId = "accountdisable",
+                                        Buttons = new List<PopUpButtonModel>
+                                        () {
+                                        new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "User.prototype.DisableCustomerAccount()"}
+                                        }
+                                    })
+                    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                    new PopupModel()
+                                    {
+                                        Title = @Admin_Resources.ResetPasswordButtonText,
+                                        Description = @Admin_Resources.TextConformResetPassword,
+                                        ModalPopUpId = "accountresetpassword",
+                                        Buttons = new List<PopUpButtonModel>() {
+                                        new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "User.prototype.CustomerResetPassword()"}
+                                        }
+                                    })
+                    @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                }
+            </div>
+        </section>
+    </div>
+    <script>
+        $(document).ready(function () {
+            Customer.prototype.HideGuestUserColumn();
+            $('.z-enable').attr('title', 'Enable');
+            $('*[data-url]').each(function () { fastselectwrapper($(this), $(this).data("onselect-function")); });
+
+            // filter border
+            if ($("#filter-content-main li").length > 0) {
+                $("#filter-content-main").css("border-bottom", "1px solid #DBDDDD");
+            }
+        });
+    </script>
+</div>

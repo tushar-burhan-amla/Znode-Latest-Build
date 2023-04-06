@@ -1,0 +1,209 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Znode.Multifront.PaymentApplication.Api", "Znode.Multifront.PaymentApplication.Api\Znode.Multifront.PaymentApplication.Api.csproj", "{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Znode.Libraries.PaypalRest", "Znode.Libraries.PaypalRest\Znode.Libraries.PaypalRest.csproj", "{62B9A1F5-63F4-462D-831A-636DF91B7775}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Znode.Multifront.PaymentApplication.Models", "Znode.Multifront.PaymentApplication.Models\Znode.Multifront.PaymentApplication.Models.csproj", "{8D756FD6-8C4C-4885-97E5-C104A236B31D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Znode.Libraries.Paypal", "Znode.Libraries.Paypal\Znode.Libraries.Paypal.csproj", "{84B7D6FD-B088-449C-A8F0-1A741E1161BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Znode.Multifront.PaymentApplication.Data", "Znode.Multifront.PaymentApplication.Data\Znode.Multifront.PaymentApplication.Data.csproj", "{13820B70-AAD5-4166-87D9-3C4A97A152B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Znode.Multifront.PaymentApplication.Helpers", "Znode.Multifront.PaymentApplication.Helpers\Znode.Multifront.PaymentApplication.Helpers.csproj", "{7AD72856-700D-490A-BAAF-5031BFCB56E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Znode.Multifront.PaymentApplication.Providers", "Znode.Multifront.PaymentApplication.Providers\Znode.Multifront.PaymentApplication.Providers.csproj", "{1DBAE43A-1755-4EB8-8297-323411252AE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureNetRestApiSDK", "PaymentGateways\SecureNetRestApiSDK\SecureNetRestApiSDK.csproj", "{06162613-960B-4949-9617-6DB96CF4B325}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNET.Core", "PaymentGateways\SNET.Core\SNET.Core.csproj", "{773C5633-1029-4F1B-A6A4-42BC3274AAC4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PaymentGateways", "PaymentGateways", "{8F4A5965-010E-4D73-BD92-8ECE685D1FB2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		automation|Any CPU = automation|Any CPU
+		B2B|Any CPU = B2B|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		DEV|Any CPU = DEV|Any CPU
+		Int|Any CPU = Int|Any CPU
+		QA|Any CPU = QA|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.automation|Any CPU.ActiveCfg = automation|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.automation|Any CPU.Build.0 = automation|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.B2B|Any CPU.ActiveCfg = B2B|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.B2B|Any CPU.Build.0 = B2B|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.DEV|Any CPU.ActiveCfg = DEV|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.DEV|Any CPU.Build.0 = DEV|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.Int|Any CPU.ActiveCfg = Int|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.Int|Any CPU.Build.0 = Int|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.QA|Any CPU.Build.0 = QA|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E54502BD-A39F-4AC6-918D-E6DC46FE66A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.automation|Any CPU.ActiveCfg = automation|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.automation|Any CPU.Build.0 = automation|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.B2B|Any CPU.ActiveCfg = B2B|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.B2B|Any CPU.Build.0 = B2B|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.DEV|Any CPU.ActiveCfg = Debug|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.DEV|Any CPU.Build.0 = Debug|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.Int|Any CPU.ActiveCfg = Int|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.Int|Any CPU.Build.0 = Int|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.QA|Any CPU.Build.0 = QA|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62B9A1F5-63F4-462D-831A-636DF91B7775}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.automation|Any CPU.ActiveCfg = automation|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.automation|Any CPU.Build.0 = automation|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.B2B|Any CPU.ActiveCfg = B2B|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.B2B|Any CPU.Build.0 = B2B|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.DEV|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.DEV|Any CPU.Build.0 = Debug|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.Int|Any CPU.ActiveCfg = Int|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.Int|Any CPU.Build.0 = Int|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.QA|Any CPU.Build.0 = QA|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D756FD6-8C4C-4885-97E5-C104A236B31D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.automation|Any CPU.ActiveCfg = automation|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.automation|Any CPU.Build.0 = automation|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.B2B|Any CPU.ActiveCfg = B2B|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.B2B|Any CPU.Build.0 = B2B|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.DEV|Any CPU.ActiveCfg = Debug|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.DEV|Any CPU.Build.0 = Debug|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.Int|Any CPU.ActiveCfg = Int|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.Int|Any CPU.Build.0 = Int|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.QA|Any CPU.Build.0 = QA|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84B7D6FD-B088-449C-A8F0-1A741E1161BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.automation|Any CPU.ActiveCfg = automation|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.automation|Any CPU.Build.0 = automation|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.B2B|Any CPU.ActiveCfg = B2B|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.B2B|Any CPU.Build.0 = B2B|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.DEV|Any CPU.ActiveCfg = Debug|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.DEV|Any CPU.Build.0 = Debug|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.Int|Any CPU.ActiveCfg = Int|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.Int|Any CPU.Build.0 = Int|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.QA|Any CPU.Build.0 = QA|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13820B70-AAD5-4166-87D9-3C4A97A152B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.automation|Any CPU.ActiveCfg = automation|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.automation|Any CPU.Build.0 = automation|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.B2B|Any CPU.ActiveCfg = B2B|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.B2B|Any CPU.Build.0 = B2B|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.DEV|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.DEV|Any CPU.Build.0 = Debug|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.Int|Any CPU.ActiveCfg = Int|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.Int|Any CPU.Build.0 = Int|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.QA|Any CPU.Build.0 = QA|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AD72856-700D-490A-BAAF-5031BFCB56E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.automation|Any CPU.ActiveCfg = automation|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.automation|Any CPU.Build.0 = automation|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.B2B|Any CPU.ActiveCfg = B2B|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.B2B|Any CPU.Build.0 = B2B|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.DEV|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.DEV|Any CPU.Build.0 = Debug|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.Int|Any CPU.ActiveCfg = Int|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.Int|Any CPU.Build.0 = Int|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.QA|Any CPU.Build.0 = QA|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DBAE43A-1755-4EB8-8297-323411252AE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.automation|Any CPU.ActiveCfg = automation|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.automation|Any CPU.Build.0 = automation|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.B2B|Any CPU.ActiveCfg = B2B|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.B2B|Any CPU.Build.0 = B2B|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.DEV|Any CPU.ActiveCfg = Debug|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.DEV|Any CPU.Build.0 = Debug|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.Int|Any CPU.ActiveCfg = Int|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.Int|Any CPU.Build.0 = Int|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.QA|Any CPU.Build.0 = QA|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06162613-960B-4949-9617-6DB96CF4B325}.Release|Any CPU.Build.0 = Release|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.automation|Any CPU.ActiveCfg = automation|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.automation|Any CPU.Build.0 = automation|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.B2B|Any CPU.ActiveCfg = B2B|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.B2B|Any CPU.Build.0 = B2B|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.DEV|Any CPU.ActiveCfg = Debug|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.DEV|Any CPU.Build.0 = Debug|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.Int|Any CPU.ActiveCfg = Int|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.Int|Any CPU.Build.0 = Int|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.QA|Any CPU.Build.0 = QA|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{06162613-960B-4949-9617-6DB96CF4B325} = {8F4A5965-010E-4D73-BD92-8ECE685D1FB2}
+		{773C5633-1029-4F1B-A6A4-42BC3274AAC4} = {8F4A5965-010E-4D73-BD92-8ECE685D1FB2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B90E3A8-C661-4BB3-BA20-3E2A48A939FC}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 10
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://tfs.amla.io:8080/tfs/znode
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Znode.Multifront.PaymentApplication.Api\\Znode.Multifront.PaymentApplication.Api.csproj
+		SccProjectName1 = Znode.Multifront.PaymentApplication.Api
+		SccLocalPath1 = Znode.Multifront.PaymentApplication.Api
+		SccProjectUniqueName2 = Znode.Libraries.PaypalRest\\Znode.Libraries.PaypalRest.csproj
+		SccProjectName2 = Znode.Libraries.PaypalRest
+		SccLocalPath2 = Znode.Libraries.PaypalRest
+		SccProjectUniqueName3 = Znode.Multifront.PaymentApplication.Models\\Znode.Multifront.PaymentApplication.Models.csproj
+		SccProjectName3 = Znode.Multifront.PaymentApplication.Models
+		SccLocalPath3 = Znode.Multifront.PaymentApplication.Models
+		SccProjectUniqueName4 = Znode.Libraries.Paypal\\Znode.Libraries.Paypal.csproj
+		SccProjectName4 = Znode.Libraries.Paypal
+		SccLocalPath4 = Znode.Libraries.Paypal
+		SccProjectUniqueName5 = Znode.Multifront.PaymentApplication.Data\\Znode.Multifront.PaymentApplication.Data.csproj
+		SccProjectName5 = Znode.Multifront.PaymentApplication.Data
+		SccLocalPath5 = Znode.Multifront.PaymentApplication.Data
+		SccProjectUniqueName6 = Znode.Multifront.PaymentApplication.Helpers\\Znode.Multifront.PaymentApplication.Helpers.csproj
+		SccProjectName6 = Znode.Multifront.PaymentApplication.Helpers
+		SccLocalPath6 = Znode.Multifront.PaymentApplication.Helpers
+		SccProjectUniqueName7 = Znode.Multifront.PaymentApplication.Providers\\Znode.Multifront.PaymentApplication.Providers.csproj
+		SccProjectName7 = Znode.Multifront.PaymentApplication.Providers
+		SccLocalPath7 = Znode.Multifront.PaymentApplication.Providers
+		SccProjectUniqueName8 = PaymentGateways\\SecureNetRestApiSDK\\SecureNetRestApiSDK.csproj
+		SccProjectTopLevelParentUniqueName8 = Znode.Multifront.PaymentApplication.sln
+		SccProjectName8 = PaymentGateways/SecureNetRestApiSDK
+		SccLocalPath8 = PaymentGateways\\SecureNetRestApiSDK
+		SccProjectUniqueName9 = PaymentGateways\\SNET.Core\\SNET.Core.csproj
+		SccProjectTopLevelParentUniqueName9 = Znode.Multifront.PaymentApplication.sln
+		SccProjectName9 = PaymentGateways/SNET.Core
+		SccLocalPath9 = PaymentGateways\\SNET.Core
+	EndGlobalSection
+EndGlobal

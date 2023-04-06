@@ -1,0 +1,12 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@model GlobalAttributeViewModel
+
+@if (Equals(Model.AttributeTypeName, "Multi Select") || Equals(Model.AttributeTypeName, "Simple Select"))
+{
+    <div id="swatchType" class="switch-field dirtyignore pull-right padding-left padding-bottom">
+        @Html.RadioButtonFor(x => x.IsSwatchImage, "true", new { @id = "IsSwatchImage_yes" }) <label id="IsSwatchImage_yes" for="IsSwatchImage_yes" class="switchSwatchType" style="width:100px" data-test-selector="lblIsSwatchImageYes">Swatch Image</label>
+        @Html.RadioButtonFor(x => x.IsSwatchImage, "false", new { @id = "IsSwatchImage_no" }) <label id="IsSwatchImage_no" for="IsSwatchImage_no" class="switchSwatchType" style="width:100px" data-test-selector="lblIsSwatchImageNo">Swatch Text</label>
+        @Html.RadioButtonFor(x => x.IsSwatchImage, "null", new { @checked = true, @id = "IsText" }) <label id="IsText" for="IsText" class="switchSwatchType" style="width:100px" data-test-selector="lblIsText">Text</label>
+    </div>
+}

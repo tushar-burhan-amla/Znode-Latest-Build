@@ -1,0 +1,257 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model TaxRuleViewModel
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    Model.DestinationCountryCode = string.IsNullOrEmpty(Model.DestinationCountryCode) ? DefaultSettingHelper.DefaultCountry : Model.DestinationCountryCode;
+}
+
+@using (Ajax.BeginForm(actionName, controllerName, new AjaxOptions()
+{
+    HttpMethod = "post",
+    OnSuccess = "TaxClass.prototype.TaxRuleAddResult",
+    UpdateTargetId = "divAddRule",
+    InsertionMode = InsertionMode.Replace,
+},
+                                                new { @id = "addTaxRuleForm" }))
+{
+    <div id="aside-popup-panel">
+        <div class="col-sm-12 title-container">
+            @if (actionName.ToLower().Contains("edittaxrule"))
+                { <h1>@Admin_Resources.EditRule</h1>}
+                else
+                { <h1>@Admin_Resources.AddRule</h1>}
+                  <div class="pull-right">
+                      <button type="button" class="btn-text-icon margin-bottom" data-test-selector="linkCancel" onclick="ZnodeBase.prototype.CancelUpload('divAddRule')"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                      <div class="pull-right">
+                          <button type="submit" class="btn-text btn-text-secondary margin-left-10" data-test-selector="linkSave" id="addTaxRule">@Admin_Resources.ButtonSave</button>
+                      </div>
+                  </div>
+        </div>
+        <div id="createFormRule" class="col-sm-12 page-container">
+            <div class="col-sm-12 nopadding" id="generalSettings">
+                <h3 data-test-selector="hdgGeneralSettings" class="section-heading">@Admin_Resources.GeneralSettings</h3>
+                <div class="form-group" id="taxtype-content">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.TaxRuleTypeId, new { @class = "required", @data_test_selector = "lblTaxType" })
+                        </div>
+                        <div class="control-lg">
+                            @Html.DropDownListFor(model => model.TaxRuleTypeId, Model.TaxRuleTypeList, Admin_Resources.LabelSelectTaxRuleType, new { @id = "ddlTaxRuleTypeList", @data_test_selector = "drpTaxType", @onChange = "TaxClass.prototype.ShowHideContainer()" })
+                            @Html.ValidationMessageFor(model => model.TaxRuleTypeId, "", new { @data_test_selector = "valTaxType" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group tax-shipping-class" id="taxshipping-content">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label data-test-selector="lblTaxShipping">
+                            @Admin_Resources.LabelTaxShipping
+                        </label>
+                    </div>
+                    <div class="control-lg">
+                        <label>
+                            <input id="TaxShipping" data-test-selector="txtTaxShipping" name="TaxShipping" @(Model.TaxShipping == true ? "checked='checked'" : "") type="checkbox" value="true">
+                            <span class="lbl padding-8" for="TaxShipping"></span>
+                            <input name="TaxShipping" type="hidden" value="false">
+                        </label>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="precedence-content">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Precedence, new { @class = "required", @data_test_selector = "lblPrecedence" })
+                    </div>
+                    <div class="control-lg">
+                        @if (actionName.ToLower().Contains("addtaxrule"))
+                        {
+                            @Html.TextBoxFor(model => model.Precedence, new { @Value = "1", @maxlength = "9", @data_test_selector = "txtPrecedence" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.Precedence, new { @maxlength = "9", @data_test_selector = "txtPrecedence" })
+                        }
+                        @Html.ValidationMessageFor(model => model.Precedence, "", new { @data_test_selector = "valPrecedence" })
+                    </div>
+                    @Html.Partial("_HelpText", Admin_Resources.HelptextTaxPrecedence)
+                </div>
+            </div>
+
+            <div class="tax-rate-class">
+                <div class="col-sm-12 nopadding" id="taxregion">
+                    <h3 data-test-selector="hdgTaxRegion" class="section-heading margin-top-25">@Admin_Resources.TaxRegion</h3>
+
+                    <div class="form-group" id="country-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.DestinationCountryCode, new { @class = "required", @data_test_selector = "lblDestinationCountry" })
+                            </div>
+                            <div class="control-lg">
+                                @Html.DropDownListFor(model => model.DestinationCountryCode, Model.CountryList, new { @id = "ddlCountryList", @onchange = "TaxClass.prototype.BindStateList('ddlStateList',this.value);", @data_test_selector = "drpDestinationCountry" })
+                                @Html.ValidationMessageFor(model => model.DestinationCountryCode, "", new { @data_test_selector = "valDestinationCountry" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="state-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.DestinationStateCode, new { @class = "required", @data_test_selector = "lblDestinationState" })
+                            </div>
+                            <div class="control-lg">
+                                @Html.DropDownListFor(model => model.DestinationStateCode, Model.StateList, new { @id = "ddlStateList", @data_test_selector = "drpDestinationState" })
+                                @Html.ValidationMessageFor(model => model.DestinationStateCode, "", new { @data_test_selector = "valDestinationState" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="county-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.ZipCode, new { @data_test_selector = "lblZipCode" })
+                            </div>
+                            <div class="control-lg">
+                                @Html.TextBoxFor(model => model.ZipCode, new { @data_test_selector = "txtZipCode" })
+                                <p data-test-selector="infoZipCode">@Admin_Resources.HintLabelZipCode</p>
+                                @Html.ValidationMessageFor(model => model.ZipCode, "", new { @data_test_selector = "valZipCode" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 nopadding" id="taxrate">
+                    <h3 data-test-selector="hdgTaxRate" class="section-heading margin-top-25">@Admin_Resources.TaxRate</h3>
+                    <div class="form-group" id="salestax-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.SalesTax, new { @class = "required", @data_test_selector = "lblSalesTax" })
+                            </div>
+                            <div class="control-lg">
+                                <div class="right-inner-icon">
+                                    <em class="unit-text">%</em>
+                                    @if (actionName.ToLower().Contains("addtaxrule"))
+                                    {
+                                        @Html.TextBoxFor(model => model.SalesTax, new { @Value = "0.00", @maxlength = "5", @data_test_selector = "txtSalesTax" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.SalesTax, new { @data_test_selector = "txtSalesTax" })
+                                    }
+                                </div>
+                                @Html.ValidationMessageFor(model => model.SalesTax, "", new { @data_test_selector = "valSalesTax" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="vattax-content">
+                        <div class="col-sm-12 nopadding ">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.VAT, new { @class = "required", @data_test_selector = "lblVATTax" })
+                            </div>
+                            <div class="control-lg">
+                                <div class="right-inner-icon">
+                                    <em class="unit-text">%</em>
+                                    @if (actionName.ToLower().Contains("addtaxrule"))
+                                    {
+                                        @Html.TextBoxFor(model => model.VAT, new { @Value = "0.00", @maxlength = "5", @data_test_selector = "txtVATTax" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.VAT, new { @data_test_selector = "txtVATTax" })
+                                    }
+                                </div>
+                                @Html.ValidationMessageFor(model => model.VAT, "", new { @data_test_selector = "valVATTax" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="gsttax-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.GST, new { @class = "required", @data_test_selector = "lblGSTTax" })
+                            </div>
+                            <div class="control-lg">
+                                <div class="right-inner-icon">
+                                    <em class="unit-text">%</em>
+                                    @if (actionName.ToLower().Contains("addtaxrule"))
+                                    {
+                                        @Html.TextBoxFor(model => model.GST, new { @Value = "0.00", @maxlength = "5", @data_test_selector = "txtGSTTax" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.GST, new { @data_test_selector = "txtGSTTax" })
+                                    }
+                                </div>
+                                @Html.ValidationMessageFor(model => model.GST, "", new { @data_test_selector = "valGSTTax" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="psttax-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.PST, new { @class = "required", @data_test_selector = "lblPSTTax" })
+                            </div>
+                            <div class="control-lg">
+                                <div class="right-inner-icon">
+                                    <em class="unit-text">%</em>
+                                    @if (actionName.ToLower().Contains("addtaxrule"))
+                                    {
+                                        @Html.TextBoxFor(model => model.PST, new { @Value = "0.00", @maxlength = "5", @data_test_selector = "txtPSTTax" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.PST, new { @data_test_selector = "txtPSTTax" })
+                                    }
+                                </div>
+                                @Html.ValidationMessageFor(model => model.PST, "", new { @data_test_selector = "valPSTTax" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="hsttax-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.HST, new { @class = "required", @data_test_selector = "lblHSTTax" })
+                            </div>
+                            <div class="control-lg">
+                                <div class="right-inner-icon">
+
+                                    <em class="unit-text">%</em>
+                                    @if (actionName.ToLower().Contains("addtaxrule"))
+                                    {
+                                        @Html.TextBoxFor(model => model.HST, new { @Value = "0.00", @maxlength = "5", @data_test_selector = "txtHSTTax" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.HST, new { @data_test_selector = "txtHSTTax" })
+                                    }
+                                </div>
+                                @Html.ValidationMessageFor(model => model.HST, "", new { @data_test_selector = "valHSTTax" })
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+            @Html.HiddenFor(m => m.TaxRuleId)
+            @Html.HiddenFor(m => m.TaxClassId)
+            @Html.HiddenFor(m => m.DestinationStateCode, new { id = "hdnStateCode" })
+            @Html.HiddenFor(m => m.DestinationCountryCode, new { id = "hdnCountryCode" })
+            @Html.HiddenFor(m => m.CountyFIPS, new { id = "hdnCountyCode" })
+            @Html.HiddenFor(m => m.PortalId)
+
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        var countryName = $("#ddlCountryList").val();
+        TaxClass.prototype.BindStateList("ddlStateList", countryName);
+    });
+</script>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    //Bootstrap ToolTip Call
+    $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover', html: true });
+</script>

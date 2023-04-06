@@ -1,0 +1,56 @@
+﻿@using Znode.Engine.Admin.Helpers;
+<h4 class="popup-heading">@Admin_Resources.LabelCreate</h4>
+<ul class="main">
+    @if (SessionProxyHelper.IsSalesRepUser() == false)
+    {
+        <li>
+            <label>@Admin_Resources.TitleStoresList</label>
+            <ul>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelStore, "CreateStore", "Store", new { area = "" }, new { @target = "_blank" })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleStoreLocation, "Create", "StoreLocator", new { area = "" }, new { @target = "_blank" })</li>
+            </ul>
+        </li>
+        <li>
+            <label>@Admin_Resources.TitleProductsList</label>
+            <ul>
+                <li>@Html.AuthorizedRawActionLink("Product", "Create", "Products", new { area = "PIM" }, new { @target = "_blank" })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleCategory, "Create", "Category", new { area = "PIM" }, new { @target = "_blank" })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleCatalog, "Create", "Catalog", new { area = "PIM" }, new { @target = "_blank" })</li>
+                <li>@Html.AuthorizedRawActionLink("Media", "List", "MediaManager", new { area = "MediaManager" }, new { @target = "_blank" })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelBrand, "Create", "Brand", new { area = "PIM" }, new { @target = "_blank" })</li>
+                <li>@Html.AuthorizedRawActionLink("Product Attribute", "Create", "ProductAttribute", new { area = "PIM" }, new { @target = "_blank" })</li>
+                <li>@Html.AuthorizedRawActionLink("Category Attribute", "Create", "CategoryAttribute", new { area = "PIM" }, new { @target = "_blank" })</li>
+            </ul>
+        </li>
+   
+    <li>
+        <label>@Admin_Resources.TitleCustomers</label>
+        <ul>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleAccount, "Create", "Account", new { area = "" }, new { @target = "_blank" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelUser, "CustomerCreate", "Customer", new { area = "" }, new { @target = "_blank" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelUserProfile, "Create", "profiles", new { area = "" }, new { @target = "_blank" })</li>
+        </ul>
+    </li>
+    }
+    <li>
+        <label>@Admin_Resources.TitleOrdersList</label>
+        <ul>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.OrderHeader, "CreateOrder", "Order", new { area = "" }, new { @target = "_blank" })</li>
+            <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleQuote, "CreateQuoteRequest", "Quote", new { area = "" }, new { @target = "_blank" })</li>
+
+            @*Commenting line : As per current API and OAB implementation this is out of scope for 9.0.6.*@
+            @*<li>@Html.AuthorizedRawActionLink(Admin_Resources.TextQuote, "CreateQuote", "Quote", new { area = "" }, new { @target = "_blank" })</li>*@
+        </ul>
+    </li>
+    @if (SessionProxyHelper.IsSalesRepUser() == false)
+    {
+        <li>
+            <label>@Admin_Resources.LabelExperience</label>
+            <ul>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.LabelPage, "AddContentPage", "Content", new { area = "", @folderId = 1 }, new { @target = "_blank" })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleBanner, "GetSliderList", "WebSite", new { area = "" }, new { @target = "_blank" })</li>
+                <li>@Html.AuthorizedRawActionLink(Admin_Resources.TextCoupon, "Create", "Promotion", new { area = "" }, new { @target = "_blank" })</li>
+            </ul>
+        </li>
+    }
+</ul>

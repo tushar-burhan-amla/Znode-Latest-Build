@@ -1,0 +1,47 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model AddressViewModel
+
+<div class="col-xs-12 address-block margin-bottom">
+
+
+    @*@if (!string.IsNullOrEmpty(Model.DisplayName))
+    {
+    <div class="address-title" data-test-selector="divAddressTitle">
+        @Model.DisplayName
+    </div>
+    }*@
+
+    <div class="address-name d-flex align-items-center" data-test-selector="divAddressName">
+        <span title="@Model.FirstName @Model.LastName" class="limit-text-chars">@Model.FirstName @Model.LastName</span>
+        <span>
+            @if(Model.IsAddEditAddressAllow)
+            {
+                <a href="#" class="btn-address edit-action margin-left-10"
+                   onclick="Order.prototype.GetCustomerAddressDetails('@ViewData["addressType"]',@Model.SelectedShippingId, @Model.SelectedBillingId)"
+                   data-test-selector="btnChangeShippingAddress">@Admin_Resources.ButtonEdit</a>
+            }
+            </span>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.CompanyName))
+    {
+        <div class="limit-text-chars" data-test-selector="divCompanyName">@Model.CompanyName</div>
+    }
+    <div class="address-street" data-test-selector="divAddressStreet">@Model.Address1<br />@Model.Address2</div>
+    <div class="address-citystate" data-test-selector="divAddressCityState">@Model.CityName, @Model.StateName, @Model.CountryName @Model.PostalCode</div>
+    <div class="address-phonenumber" data-test-selector="divAddressPhoneNumber">Ph: @Model.PhoneNumber</div>
+
+    @Html.HiddenFor(model => model.AddressId)
+    @Html.HiddenFor(model => model.FirstName)
+    @Html.HiddenFor(model => model.LastName)
+    @Html.HiddenFor(model => model.CompanyName)
+    @Html.HiddenFor(model => model.Address1)
+    @Html.HiddenFor(model => model.Address2)
+    @Html.HiddenFor(model => model.Address3)
+    @Html.HiddenFor(model => model.StateName)
+    @Html.HiddenFor(model => model.CityName)
+    @Html.HiddenFor(model => model.CountryName)
+    @Html.HiddenFor(model => model.PostalCode)
+    @Html.HiddenFor(model => model.PhoneNumber)
+    @Html.HiddenFor(model => model.StateCode)
+</div>

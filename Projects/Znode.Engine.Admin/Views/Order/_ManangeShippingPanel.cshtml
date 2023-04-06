@@ -1,0 +1,44 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model ShippingListViewModel
+<div id="aside-popup-panel">
+    <div class="col-sm-12 nopadding">
+        <div class="col-sm-12 title-container">
+            <h1 data-test-selector="hdgShippingType">@Admin_Resources.TitleShippingType</h1>
+            <div class="pull-right btn-container">
+                <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('ShippingPanel')" data-test-selector="btnCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+            </div>
+        </div>
+        <div id="asidePannelmessageBoxContainerId" style="display:none">
+            <div class="col-sm-12 text-center error-msg margin-bottom" style="position:relative;"></div>
+        </div>
+        <div id="shippingMethodDiv">
+            <div class="col-sm-12 page-container">
+                @if (Equals(Model.ShippingList.Count, 0) || HelperUtility.IsNull(Model.ShippingList))
+                {
+                    <div id="divNoShippingOptions" class="col-sm-12 text-center error-msg margin-bottom">@Admin_Resources.NoShippingOptionList</div>
+                }
+                <div id="ShippingDetails">
+                    @if (Model?.ShippingList?.Count > 0)
+                    {
+                        foreach (ShippingViewModel option in Model.ShippingList)
+                        {
+                            if (!(option.ShippingCode.ToLower() == ZnodeConstant.FreeShipping.ToLower()))
+                            {
+                                var selectedShippingCode = Model.SelectedShippingCode > 0 ? Model.SelectedShippingCode : Model.ShippingList.First().ShippingId;
+                                <div class="col-sm-12 nopadding margin-top" >
+                                    <label>
+                                        <input type="radio" id="@option.ShippingCode.Replace(" ", "_")" name="ShippingId" value="@option.ShippingId" @(selectedShippingCode == option.ShippingId && Model?.ShippingId > 0 ? "checked=checked" : "") onchange="Order.prototype.ShippingSelectHandler(@option.ShippingId ,'@option.ClassName')" data-shipping-name="@WebUtility.HtmlDecode(option.Description)" data-test-selector="txt@(WebUtility.HtmlDecode(option.Description).Replace(" ",""))" />
+                                        <span class="lbl padding-8" for="@option.ShippingCode.Replace(" ", "_")" data-test-selector="spn@(WebUtility.HtmlDecode(option.Description).Replace(" ",""))">@WebUtility.HtmlDecode(option.Description)</span>
+                                        <span class="ShippingOptionsWithRates lbl padding-8" id="ShippingId_@option.ShippingId" data-test-selector="spnRates@(WebUtility.HtmlDecode(option.Description).Replace(" ",""))"> - @option.FormattedShippingRate</span>
+                                    </label>
+                                </div>
+                            }
+                        }
+                        <div id="message-freeshipping" class="success-msg" style="padding-top:10px;display:none;float:left;"><span>@Admin_Resources.FreeShippingMessage</span></div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

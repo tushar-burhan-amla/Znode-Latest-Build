@@ -1,0 +1,245 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+@using System.Globalization;
+@using Znode.Libraries.ECommerce.Utilities;
+@model GiftCardViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    actionName = actionName.ToLower() == "issuegiftcard" ? "Create" : actionName;
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    var isRmaFromController = controllerName.ToLower() == "rmamanager" ? true : false;
+    var cancelUrl = isRmaFromController ? "/RMAManager/RMAList" : "/GiftCard/List";
+    controllerName = controllerName.ToLower() == "rmamanager" ? "GiftCard" : controllerName;
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateGiftCard", CancelUrl = cancelUrl, Callback = "GiftCard.prototype.ValidateUserId", IsSaveCloseEnable = true };
+    string hideHtml = isRmaFromController ? "" : (actionName.ToLower().Equals("edit") && Model.UserId > 0) ? "" : "display:none";
+    CultureInfo ci = new CultureInfo(DefaultSettingHelper.DefaultCulture);
+    string symbol = ci.NumberFormat.CurrencySymbol;
+}
+<div id="grid-container">
+    <div class="col-sm-12 title-container">
+        @if (string.Equals(actionName.ToLower(), "create"))
+        {
+            <h1 data-test-selector="hdgGiftCard">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelVoucher)</h1>
+        }
+        else
+        {
+            <h1 data-test-selector="hdgGiftCard">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelVoucher)<em class="z-minus"></em><span>@Model.Name</span></h1>
+        }
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateGiftCard" }))
+        {
+        <div id="loginForm">
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.CardNumber, new { @data_test_selector = "lblCardNumber" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.CardNumber, new { @disabled = "disabled", @data_test_selector = "txtCardNumber" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.Name, new { @class = "required", @data_test_selector = "lblCardName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.Name, new { @data_test_selector = "txtCardName" })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @data_test_selector = "valCardName" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.PortalId, new { @class = "required", @data_test_selector = "lblStoreName" })
+                    </div>
+
+                    @if (actionName.ToLower().Contains("create"))
+                    {
+                    <div class="control-md">
+                        @Html.FastSelectFor(model => model.StoreName, model => model.PortalId, "GetSuggestions", "Typeahead", "GiftCard.prototype.OnSelectPortalResult", 1, true,
+                        new
+                        {
+                        htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStoreName" },
+                        parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                        })
+                        @Html.ValidationMessageFor(model => model.StoreName, null, new { id = "errorRequiredStore", @data_test_selector = "valStoreName" })
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="control-md">
+                        @Html.TextBoxFor(m => m.StoreName, new { @disabled = "disabled", @class = "readonly", @placeholder = Admin_Resources.LabelSelectStore, @id = "txtPortalName", @data_test_selector = "txtStoreName" })
+                        @Html.ValidationMessageFor(model => model.StoreName, null, new { id = "errorRequiredStore", @data_test_selector = "valStoreName" })
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.GiftCardAmount, new { @class = "required", @data_test_selector = "lblGiftCardAmount" })
+                    </div>
+                    <div class="control-sm left-inner-icon">
+                        <em class="unit"><span for="CurrencySymbol"></span></em>
+                        @Html.TextBoxFor(m => m.GiftCardAmount, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidPriceForRoundOff, Admin_Resources.ErrorValidPrice), @data_test_selector = "txtGiftCardAmount" })
+                    </div>
+                    <div class="pull-left padding-left">
+                        <label for="CurrencyName" style="vertical-align: middle" data-test-selector="lblCurrencyName"></label>
+                    </div>
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-md control-non">
+                            @Html.ValidationMessageFor(model => model.GiftCardAmount, "", new { @data_test_selector = "valGiftCardAmount" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.StartDate, new { @class = "required", @data_test_selector = "lblStartDate" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.TimeZoneHelpText)
+                    <div class="control-sm">
+                        <div class="right-inner-icon">
+                            @Html.TextBox("StartDate", Model.StartDate != null ? Model.StartDate.ToDateTimeFormat() : string.Empty, new { @id = "StartDate", @mindate = HelperMethods.GetDateTime().Date, @class = "datepicker", @group = "promotiondate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtStartDate" })
+                            <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.StartDate, "", new { @data_test_selector = "valStartDate" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.ExpirationDate, new { @class = "required", @data_test_selector = "lblExpirationDate" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.TimeZoneHelpText)
+                    <div class="control-sm">
+                        <div class="right-inner-icon">
+                            @Html.TextBox("ExpirationDate", Model.ExpirationDate != null ? Model.ExpirationDate.ToDateTimeFormat() : HelperMethods.GetDateTime().Date.AddYears(1).ToDateTimeFormat(), new { @id = "ExpirationDate", @mindate = HelperMethods.GetDateTime().Date, @class = "datepicker", @group = "expirationdate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtExpirationDate", @onchange = "GiftCard.prototype.ValidateStartDate();" })
+                            <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                        </div>
+                        <span class="text-danger field-validation-error" id="spamDate"></span>
+                        @Html.ValidationMessageFor(model => model.ExpirationDate, "", new { id = "errorExpirationDate", @data_test_selector = "valExpirationDate" })
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-md control-non">
+                        <label>
+                            <input id="isActive" name="IsActive" checked="@Model.IsActive" type="checkbox" value="true" checked="true" data-test-selector="chkIsActive">
+                            <span class="lbl padding-8" for="IsActive" data-test-selector="spnIsActive">Is Active</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-md control-non">
+                        <label>
+                            @if (isRmaFromController)
+                            {
+                            <input id="RestrictToCustomerAccount" name="RestrictToCustomerAccount" checked="@Model.RestrictToCustomerAccount" disabled="disabled" type="checkbox" value="true" data-test-selector="chkRestrictToCustomerAccount">
+                            }
+                            else
+                            {
+
+                            <input id="RestrictToCustomerAccount" name="RestrictToCustomerAccount" checked="@Model.RestrictToCustomerAccount" type="checkbox" value="true" checked="true" data-test-selector="chkRestrictToCustomerAccount">
+                            }
+                            <span class="lbl padding-8" for="RestrictToCustomerAccount" data-test-selector="spnRestrictToCustomerAccount">@Admin_Resources.RestrictVoucherToCustomer</span>
+                            <em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="When this field is disabled, the voucher can be used by all the customers who have the Voucher Number and when this field is enabled, the voucher can be used by only the customer to whom the voucher is assigned."></em>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" id="ShowUserId">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.CustomerName, new { @data_test_selector = "lblCustomerName" })
+                    </div>
+
+                    @if (isRmaFromController)
+                    {
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.CustomerName, new { @readonly = "readonly", @data_test_selector = "txtUserId" })
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.CustomerName, new { @readonly = "readonly", @data_test_selector = "txtCustomerName" })
+                        @Html.ValidationMessageFor(model => model.CustomerName, null, new { id = "valCustomerName", @data_test_selector = "valCustomerName" })
+                    </div>
+                    <div class="pull-left dirtyignore">
+                        <a id="serachCustomer" onclick="GiftCard.prototype.GetCustomerList();" class="btn-narrow-icon" data-toggle="tooltip" data-placement="top" data-original-title="@Admin_Resources.SearchExistingCustomerButton" data-test-selector="btnSearchCustomer"><em class='z-search'></em></a>
+                        @if (SessionProxyHelper.IsSalesRepUser() == false)
+                        {
+                        <div class="pull-right btn-container ">
+                            <a class="btn-text btn-text-secondary" onclick="GiftCard.prototype.AddNewUser()" data-test-selector="btnAddNewCustomer"> ADD NEW CUSTOMER</a>
+                        </div>
+                        }
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="form-group" id="sendMail">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-md control-non">
+                        <label>
+                            <input id="SendMail" name="SendMail" checked="@Model.SendMail" type="checkbox" value="true" data-test-selector="chkSendMail">
+                            <span class="lbl padding-8" data-test-selector="spnSendMail">@Admin_Resources.CustomerMailConfirmationText</span>
+                            <input name="IsActive" type="hidden" value="false">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            @if (!Equals(Model.RmaRequestModel, null))
+            {
+            @Html.HiddenFor(model => model.RmaRequestModel.RMARequestID)
+            @Html.HiddenFor(model => model.RmaRequestModel.OrderLineItems)
+            @Html.HiddenFor(model => model.RmaRequestModel.Quantities)
+            @Html.HiddenFor(model => model.RmaRequestModel.RmaRequestStatusId)
+            @Html.HiddenFor(model => model.RmaRequestModel.OmsOrderDetailsId)
+            @Html.HiddenFor(model => model.RmaRequestModel.CultureCode)
+            }
+            @Html.HiddenFor(model => model.GiftCardId)
+            @Html.HiddenFor(model => model.CardNumber)
+            @Html.HiddenFor(model => model.IsReferralCommission)
+            @Html.HiddenFor(model => model.PortalId)
+            @Html.HiddenFor(model => model.CultureCode)
+            @Html.HiddenFor(model => model.UserId, new { @maxlength = 8, @data_test_selector = "txtUserId" })
+        </div>
+        }
+    </section>
+</div>
+@* Here Customer Details will display *@
+<div id="customerDetails" class="aside-popup-panel modal-dialog modal-xl"> </div>
+
+@* Here Store List will display *@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        GiftCard.prototype.GetActiveCurrencyToStore("@Model.CultureCode");
+    });
+</script>
+<div id="divStoreListAsidePanel" class="aside-popup-panel modal-dialog modal-xl"> </div>

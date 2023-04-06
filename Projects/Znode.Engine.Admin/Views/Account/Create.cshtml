@@ -1,0 +1,163 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities;
+@model AccountDataViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formCompanyCreate", CancelUrl = "/Account/List", IsSaveCloseEnable = true, Callback = "Account.prototype.ValidateForStore" };
+    Model.CompanyAccount.Address.CheckboxPrefix = "CompanyAccount.Address.";
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleAccount)</h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "formCompanyCreate", @onsubmit = "return ZnodeBase.prototype.ValidateCodeField('[id=accountCode]','" + Model.CompanyAccount.AccountCode + "','/Account/IsAccountCodeExists')" }))
+    {
+        <h3 class="section-heading">@Admin_Resources.ManageAccountInformation</h3>
+        if (!DefaultSettingHelper.AllowGlobalLevelUserCreation)
+        {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(Admin_Resources.TextStoreName, new { @class = "required", @data_test_selector = "lblStoreName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.FastSelectFor(model => model.CompanyAccount.StoreName, model => model.CompanyAccount.PortalId, "GetSuggestions", "Typeahead", "Account.prototype.OnSelectPortalResult", 1, true,
+                       new
+                       {
+                           htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStoreName" , @autocomplete = "portalName" },
+                           parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                       })
+                        @Html.HiddenFor(model => model.CompanyAccount.PortalId, new { @id = "hdnPortalId" })
+                        @Html.ValidationMessageFor(model => model.CompanyAccount.PortalId, null, new { id = "errorRequiredStore", @data_test_selector = "valStoreName" })
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.CompanyAccount.ParentAccountId, new { @data_test_selector = "lblParentAccountId" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.CompanyAccount.ParentAccountName, new { @disabled = "disabled", @id = "parentAccountName", @placeholder = Admin_Resources.LabelSelectAccount, @data_test_selector = "txtAccountId" })
+
+                    @Html.HiddenFor(model => model.CompanyAccount.ParentAccountId, new { @id = "hdnParentAccountId" })
+                    @Html.HiddenFor(model => model.CompanyAccount.ParentAccountName, new { @id = "hdnParentAccountName" })
+                </div>
+                <div class="control-sm dirtyignore">
+                    <div class="pull-left">
+                        <a id="searchParentAccount" onclick="Account.prototype.GetParentAccountList();" class="btn-narrow-icon" data-toggle="tooltip" data-placement="top" data-original-title="@Admin_Resources.SearchExistingAccountButton" data-test-selector="btnSearchAccount"><em class='z-search'></em></a>
+                    </div>
+                    <a class="btn-narrow-icon" onclick="Account.prototype.ClearParentAccountDetails()" data-toggle="tooltip" data-placement="top" data-original-title="Clear Account Name" data-test-selector="btnClearAccountName"><em class="z-clear-cache"></em></a>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.CompanyAccount.Name, new { @class = "required", @data_test_selector = "lblCompanyAccountName" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.CompanyAccount.Name, new { @data_test_selector = "txtCompanyAccountName" })
+                    @Html.ValidationMessageFor(model => model.CompanyAccount.Name, "", new { @data_test_selector = "valCompanyAccountName" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.CompanyAccount.SalesRepUserName, new { @data_test_selector = "lblSalesRep" })
+                </div>
+                <div class="control-md">
+                    @Html.HiddenFor(model => model.CompanyAccount.SalesRepId, new { @id = "hdnSalesRepId" })
+                    <input type="text" data-test-selector="txtSalesRep" id="SalesRep" disabled="disabled" placeholder='@Admin_Resources.TextSalesRep' />
+                </div>
+                <div class="pull-left">
+                    <a id="serachCustomer" onclick="User.prototype.GetSalesRepForAccount('0');" class="btn-narrow-icon dirtyignore" data-toggle="tooltip" data-placement="top" data-original-title="@Admin_Resources.SearchExistingSalesRep" data-test-selector="btnSearchCustomer"><em class='z-search'></em></a>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.CompanyAccount.AccountCode, new { @class = "required", @data_test_selector = "lblCompanyAccountCode" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.CompanyAccount.AccountCode, new { @id = "accountCode", @onblur = "ZnodeBase.prototype.ValidateCodeField('[id=accountCode]','" + Model.CompanyAccount.AccountCode + "','/Account/IsAccountCodeExists')", @data_test_selector = "txtCompanyAccountCode" })
+                    @Html.ValidationMessageFor(model => model.CompanyAccount.AccountCode, "", new { @data_test_selector = "valCompanyAccountCode" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.CompanyAccount.ExternalId, new { @data_test_selector = "lblCompanyAccountExternalId" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.CompanyAccount.ExternalId, new { @data_test_selector = "txtCompanyAccountExternalId" })
+                    @Html.ValidationMessageFor(model => model.CompanyAccount.ExternalId, "", new { @data_test_selector = "lblCompanyAccountExternalId" })
+                </div>
+                @Html.Partial("_HelpText", Admin_Resources.HelptextCompanyAccountExternalId)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.TitleCatalog, new { @class = "required", @data_test_selector = "lblTitleCatalog" })
+                </div>
+                <div class="control-md">
+                    <label class="padding-right">
+                        <input @(Model.CompanyAccount.IsDefault ? "checked='checked'" : "") id="RadioIsDefault" name="IsDefault" type="radio" value="IsDefault" onchange="Account.prototype.RadioChangeEvent(this);">
+                        <span class="lbl padding-8" data-test-selector="radioDefault">Default</span>
+                    </label>
+                    <label class="padding-right">
+                        <input @(!Model.CompanyAccount.IsDefault ? "checked='checked'" : "") id="RadioSpecific" name="IsDefault" type="radio" value="Specific" onchange="Account.prototype.RadioChangeEvent(this);">
+                        <span class="lbl padding-8" data-test-selector="radioSpecific">Specific</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group dirtyignore" style="@(Model.CompanyAccount.IsDefault ? "display:none" : "")" id="catalogField">
+            <div class="col-sm-12 nopadding">
+                <div class="control-md control-non">
+                    @Html.FastSelectFor(model => model.CompanyAccount.CatalogName, model => model.CompanyAccount.CatalogName, "GetSuggestions", "Typeahead", "Store.prototype.OnSelectPubCatalogAutocompleteDataBind", 1, true,
+                              new
+                              {
+                                  htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectCatalog, @class = "", @id = "txtCatalogName", @data_test_selector = "lblCompanyAccountCatalog" },
+                                  parameters = new { @type = ZnodeTypeAheadEnum.CatalogList.ToString() }
+                              })
+                    @Html.HiddenFor(model => model.CompanyAccount.PublishCatalogId, new { @id = "hdnPublishCatalogId" })
+                    @Html.ValidationMessageFor(model => model.CompanyAccount.CatalogName, "", new { @id = "errorRequiredCatalog", @data_test_selector = "valCompanyAccountCatalog" })
+                </div>
+            </div>
+        </div>
+        <div>
+            @Html.HiddenFor(m => m.CompanyAccount.ParentAccountId)
+        </div>
+        <div class="col-sm-12 nopadding">
+            <h3 class="section-heading margin-top-25">@Admin_Resources.LabelAddressDetails</h3>
+            @Html.Partial("_Address", Model.CompanyAccount.Address, new ViewDataDictionary()
+       {
+           TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "CompanyAccount.Address" }
+       })
+        </div>
+    }
+</section>
+<div id="divStoreListAsidePanel" class="aside-popup-panel modal-dialog modal-xl">
+</div>
+<div id="divCataloglistPopup" class="aside-popup-panel modal-dialog modal-xl">
+</div>
+<div id="divParentAccountListPopup" class="aside-popup-panel modal-dialog modal-lg">
+</div>
+<div id="SalesRepAssociationPanel" class="aside-popup-panel modal-dialog modal-xl sales-details"></div>

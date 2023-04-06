@@ -1,0 +1,43 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@model CatalogAssociationViewModel
+
+@if (!Equals(Model, null))
+{
+    if (Model.PimCategoryHierarchyId == -1)
+    {
+        <div class="col-sm-12 nopadding attribut-container">
+            <h1>@Admin_Resources.LabelAssociateCategoriesFromCategoryAssociation @Admin_Resources.TextOr</h1>
+            <a href="#" data-test-selector="linkAssociateCategories" class="btn-text" onclick="Catalog.prototype.CreateNewCategory()">@Admin_Resources.TextAddNewCategory</a>
+        </div>
+    }
+    else
+    {
+        <div class="saved-view-text hide-product-check">
+            <input type="checkbox" @(Model.IsActive ? "checked=checked value=true " : " value=false ") name="IsActive" id="IsActive" class="grid-row-checkbox" onchange="Catalog.prototype.BindProductGridBasedOnStatus();">
+            <label for="IsActive" title="@Admin_Resources.ToolTipActiveProducts" class="public-checkbox lbl padding-8" data-test-selector="IsActive" onclick="Catalog.prototype.ChangeCheckBoxStatus();" >@Admin_Resources.LabelActiveProducts</label>
+            @Html.HiddenFor(m => m.IsActive)
+        </div>
+        using (Ajax.BeginForm("Manage", "Catalog", new { pimCatalogId = Model.CatalogId, pimCategoryHierarchyId = Model.PimCategoryHierarchyId, IsActive = Model.IsActive, displayMode = Model.GridModel.ViewMode }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+        {
+            <div id="filterComponent">
+                @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+            </div>
+        }
+        <div class="col-sm-12 list-container @(Model.GridModel.FilterColumn.FilterColumnList.Any(x => x.DataOperatorId != 0) ? "filter-added" : "")" id="mediaList">
+            @{
+                @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+            }
+        </div>
+    }
+
+    @Html.HiddenFor(Model => Model.GridModel.ViewMode);
+}
+<script>
+    $(document).ready(function () { EditableGridEvent.Init(); })
+    $(".input-text").change(function () {
+        validateForm = Catalog.prototype.ValidateDisplayOrderField(this);
+    });
+    ZnodeBase.prototype.SetNoImageForList();
+    Catalog.prototype.SetProudctQueryString();
+</script>

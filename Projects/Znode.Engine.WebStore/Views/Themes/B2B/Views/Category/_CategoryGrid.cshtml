@@ -1,0 +1,17 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model List<CategoryViewModel>
+@if (Model?.Count > 0)
+{
+    <div class="product-grid category-list">
+        <div id="accordion-category" class="">
+            <ul id="view-option-category" class="view-option-category product-grid-ul grid-view">
+                @foreach (var _category in Model)
+                {
+                    @Html.Partial("_CategoryGridRow", _category)
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-12" id="product-grid"></div>
+}
+

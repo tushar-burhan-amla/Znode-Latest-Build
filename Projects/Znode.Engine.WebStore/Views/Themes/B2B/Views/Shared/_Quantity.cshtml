@@ -1,0 +1,58 @@
+﻿@model Znode.Engine.WebStore.ViewModels.CartItemViewModel
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Api.Models
+@{
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    int inventoryRoundOffValue = string.IsNullOrEmpty(inventoryRoundOff) ? 0 : Convert.ToInt32(inventoryRoundOff);
+    bool invalidQuantity = (Model.Quantity > Model.MaxQuantity || Model.Quantity < Model.MinQuantity);
+}
+
+@if (Model.GroupProducts?.Count > 0)
+{
+    foreach (AssociatedProductModel product in Model.GroupProducts)
+    {
+        using (Ajax.BeginForm("UpdateQuantityOfCartItem", "Cart", new { guid = Model.ExternalId, productId = product.ProductId }, new AjaxOptions() { UpdateTargetId = "divShoppingCart", OnBegin = "User.prototype.ShowLoader()", OnComplete = "Cart.prototype.EnableDisableCheckoutButton();User.prototype.HideLoader()" }, new { @class = "frmCartQuantity", @id = "cartQtyForm" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="text" name='Quantity' aria-label="@WebStore_Resources.ColumnTitleQuantity" value="@Math.Round(product.Quantity, inventoryRoundOffValue)" data-cart-productId="@product.ProductId" data-cart-sku="@Model.SKU" data-cart-minquantity="@product.MinimumQuantity" data-cart-maxquantity="@product.MaximumQuantity" data-inventoryRoundOff="@inventoryRoundOff" onchange="Cart.prototype.UpdateCartQauntity(this);">
+            if (Model.InsufficientQuantity)
+            {
+                if (Model.ProductType != ZnodeConstant.BundleProduct)
+                {
+                    <div id="avl_quantity_error_msg_@product.ProductId" class="error-msg quantity-msg-error">@string.Format(WebStore_Resources.ExceedingAvailableQuantity, Model.QuantityOnHand)</div>
+                }
+                else
+                {
+                    <div id="avl_quantity_error_msg_@product.ProductId" class="error-msg quantity-msg-error">@WebStore_Resources.ExceedingAvailableWithoutQuantity</div>
+                }
+            }
+            <div id="quantity_error_msg_@product.ProductId" class="error-msg"></div>
+        }
+    }
+}
+else
+{
+    using (Ajax.BeginForm("UpdateQuantityOfCartItem", "Cart", new { guid = Model.ExternalId, productId = 0 }, new AjaxOptions() { UpdateTargetId = "divShoppingCart", OnBegin = "User.prototype.ShowLoader()", OnComplete = "Cart.prototype.EnableDisableCheckoutButton();User.prototype.HideLoader()" }, new { @class = "frmCartQuantity", @id = "cartQtyForm" }))
+    {
+        @Html.AntiForgeryToken()
+        string quantity = Helper.GetRoundOffQuantity(Model.Quantity);
+        <input data-test-selector="txtCartQuantity" type="text" name='Quantity' aria-label="@WebStore_Resources.ColumnTitleQuantity" id="cart-quantity" value="@quantity" data-cart-productId="@Model.ProductId" data-cart-sku="@Model.SKU" data-cart-minquantity="@Model.MinQuantity" data-cart-maxquantity="@Model.MaxQuantity" data-inventoryRoundOff="@inventoryRoundOff" onchange="Cart.prototype.UpdateCartQauntity(this);">
+        if (Model.InsufficientQuantity)
+        {
+            if (Model.ProductType != ZnodeConstant.BundleProduct)
+            {
+                <div id="avl_quantity_error_msg_@Model.ProductId" class="error-msg quantity-msg-error">@string.Format(WebStore_Resources.ExceedingAvailableQuantity, Model.QuantityOnHand)</div>
+            }
+            else
+            {
+                <div id="avl_quantity_error_msg_@Model.ProductId" class="error-msg quantity-msg-error">@WebStore_Resources.ExceedingAvailableWithoutQuantity</div>
+            }
+        }
+        <div data-test-selector="divQuantityErrorMsg" id="quantity_error_msg_@Model.ProductId" class="error-msg"></div>
+    }
+    if (invalidQuantity)
+    {<div id="quantity_error_msg" class="error-msg">@string.Format(Api_Resources.InvalidQuantity, Model.MinQuantity, Model.MaxQuantity)</div> }
+    else
+    { <div id="quantity_error_msg" class="error-msg"></div>}
+}
+@Html.Hidden("InvalidQuantity", invalidQuantity)

@@ -1,0 +1,40 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalCatalogListViewModel
+@using Znode.Engine.Admin.Models
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.TitleMultifront;
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+<div id="ReplaceAsidePannelContentDiv">
+    <div id="@Model.GridModel.FrontObjectName">
+        <div id="divPortalCatalog" class="modal fade" role="dialog">
+            @*Don't delete this div, used to render Edit Portal catalog*@
+        </div>
+        <div class="col-sm-12 title-container">
+            <h1>@Admin_Resources.LabelManage<em class="z-minus"></em><span>@Model.PortalName</span></h1>
+            <div class="pull-right">
+                @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "List", "Store", null, new { @class = "btn-text-icon" })
+            </div>
+        </div>        
+        <div class="main-wrapper">
+            <!--Left Panel-->
+            <aside>                
+                <div class="slide-container">
+                    @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+                </div>
+            </aside>
+            <!--Main Container-->
+            <section class="main-container">
+                <div class="col-sm-12 nopadding">                    
+                        @{
+                            @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                        }                    
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        Store.prototype.EditPortalCatalog();
+    })
+</script>

@@ -1,0 +1,63 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductViewModel
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    decimal quantity = string.IsNullOrEmpty(Model.Attributes?.Value(ZnodeConstant.MinimumQuantity)) ? 1 : Convert.ToDecimal(Model.Attributes?.Value(ZnodeConstant.MinimumQuantity));
+    string sku = string.IsNullOrEmpty(Model.ConfigurableProductSKU) ? Model.SKU : Model.ConfigurableProductSKU;
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    string inventoryMessageClass = Model.ShowAddToCart ? "status-outofstock hvr-pulse success-msg" : "error-msg";
+    bool isObsolete = Convert.ToBoolean(Model.Attributes?.FirstOrDefault(x => x.AttributeCode == ZnodeConstant.IsObsolete)?.AttributeValues);
+    bool addToCartDisabled = isObsolete || Model.IsCallForPricing || Convert.ToBoolean(Model.Attributes?.Value(ZnodeConstant.CallForPricing));
+    string maxQty = Model.Attributes?.Value(ZnodeConstant.MaximumQuantity);
+    string minQty = Model.Attributes?.Value(ZnodeConstant.MinimumQuantity);
+    bool IsCloudflareEnabled = GlobalAttributeHelper.IsCloudflareEnabled();
+    string productSku = string.IsNullOrEmpty(Model.ConfigurableProductSKU) ? Model.SKU : Model.ConfigurableProductSKU;
+    string typicalLeadTime = Convert.ToString(Model.Attributes?.FirstOrDefault(x => x.AttributeCode.Equals(ZnodeConstant.TypicalLeadTime, StringComparison.InvariantCultureIgnoreCase))?.AttributeValues);
+    bool isDownloadable = Convert.ToBoolean(Model.Attributes?.FirstOrDefault(x => x.AttributeCode.Equals(ZnodeConstant.IsDownloadable, StringComparison.InvariantCultureIgnoreCase))?.AttributeValues);
+}
+@if (Model.IsConfigurable)
+{
+    @Html.Partial("_ConfigurableAttribute", Model.ConfigurableData)
+}
+@{
+<div class="col-xs-12 nopadding">
+    <div class="form-group">
+        <div class="col-xs-12 nopadding">
+            <label for="Quantity" data-test-selector="lblQuantity">@WebStore_Resources.ColumnTitleQuantity</label>
+        </div>
+        <div class="col-xs-12 nopadding product-details-qty" id="product-details-quantity">
+            <input data-test-selector="txtQuantity" type="text" name='Quantity' value="@quantity" data-sku="@sku" data-maxQuantity="@maxQty" data-minQuantity="@minQty" data-parentsku="@Model.SKU" data-parentProductId="@Model.ParentProductId" data-inventoryRoundOff="@inventoryRoundOff" class="quantity" @(addToCartDisabled ? "disabled" : "" ) id="Quantity">
+            <div data-test-selector="lblQuantityErrMsg" id="quantity-error-msg" class="error-msg"></div>
+            @if (HelperUtility.IsNull(Model?.ConfigurableData?.CombinationErrorMessage) && !Equals(Model.ProductType, ZnodeConstant.GroupedProduct) && !isObsolete)
+            {
+            <div class="time-inventory-fields d-flex align-items-center">
+                <div data-test-selector="lblInventoryMsg" id="dynamic-inventory" class="@inventoryMessageClass">
+                    @Model.InventoryMessage
+                    @if (IsCloudflareEnabled)
+                    {
+                    <span class="product-count padding-left-5 cloudflareInventorySpan" data-type="simpleproduct" data-sku="@productSku" data-id="@Model.PublishProductId">Loading..</span>
+                    }
+                    else if (Model.Quantity > 0)
+                    {
+                    <span class="product-count padding-left-5">(@Model.Quantity)</span>
+                    }
+                </div>
+                @if (!string.IsNullOrEmpty(typicalLeadTime) && !isDownloadable)
+                {
+                <div id="divTypicalLeadTime" class="padding-left-5 typical-time">| <span>@WebStore_Resources.LabelTypicalLeadTime: </span>@typicalLeadTime @WebStore_Resources.LabelDays </div>
+                }
+            </div>
+
+            }
+        </div>
+    </div>
+</div>
+}
+<script>
+    $(document).ready(function () {
+        var IsCloudflareEnabled = '@IsCloudflareEnabled'
+        if (IsCloudflareEnabled == 'True') {
+            Product.prototype.GetInventory('');
+        }
+    })
+
+</script>

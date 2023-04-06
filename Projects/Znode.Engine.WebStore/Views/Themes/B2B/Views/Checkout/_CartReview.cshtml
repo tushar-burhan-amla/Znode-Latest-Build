@@ -1,0 +1,115 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model CartViewModel
+@{
+    string _displayRemoveLink = Request.Path.Contains("Checkout") ? Model.ShoppingCartItems.Any(x => !x.IsAllowedTerritories) ? "" : "display:none" : "";
+    List<CartItemViewModel> cartItemViewModel = Model.ShoppingCartItems?.AsEnumerable().Reverse().ToList();
+
+    //This encrypted total value is being used by Payflow payment ONLY.
+    string encryptedOrderTotal = Helper.GetEncryptedValue(Convert.ToString(Model.Total));
+}
+<div class="col-12 p-0 h-100 b2b-block">
+    <h3 class="block-title">
+        @if (Model.IsQuoteRequest)
+        {
+            @WebStore_Resources.HeadingQuoteSummary
+        }
+        else
+        {
+            @WebStore_Resources.SinglePageCheckoutOrderSummary
+        }
+    </h3>
+    <div class="col-12 b2b-cart">
+        @if (Model.ShoppingCartItems?.Count > 0)
+        {
+            foreach (CartItemViewModel cartItem in Model.ShoppingCartItems.AsEnumerable().Reverse())
+            {
+                @Html.Partial("../cart/_CartRow", cartItem)
+            }
+        }
+    </div>
+
+    <div class="col-12 col-md col-lg p-0 ml-auto">
+        <div class="col-12 cart-total mt-4 cart-total-section order-summary" id="summary-details">
+            @Html.Partial("../_TotalTable", Model)
+        </div>
+    </div>
+</div>
+
+@if (!Model.IsQuoteRequest && Model.Permission)
+{
+    <div class="col-12 p-0 mt-4">
+
+        <div class="row">
+            <div class="col">
+                <div class="col-12 col-md p-0 checkout-promotions-section">
+                    @if (Model.IsSinglePageCheckout)
+                    {
+                    @Html.Partial("../_ApplyCoupon", Model)
+                    }
+                </div>
+            </div>
+        </div>
+        
+    </div>
+}
+
+<div class="col-12 p-0 h-100 b2b-block mt-4">
+        <div class="row">
+            <div class="col">
+                <div class="col-12 col-md p-0 checkout-promotions-section">
+                    <h3 class="block-title">@WebStore_Resources.TitleAdditionalInfo</h3>
+                    <div class="col-12 b2b-block">
+                        <div class="form-group">
+                            <div class="col-12 block-content">
+                                <div class="block-items-title" data-test-selector="divJobName">
+                                    @WebStore_Resources.LabelJobName
+                                </div>
+                                @Html.TextBoxFor(model => model.JobName, new { maxlength = 100, @data_test_selector = "txtJobName" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 b2b-block">
+                        <div class="form-group">
+                            <div class="col-12 block-content">
+                                <div class="block-items-title">
+                                    @WebStore_Resources.TitleAdditionalInformation
+                                </div>
+                                @Html.TextAreaFor(model => model.AdditionalInstruction, new { maxlength = 500, rows = 5 })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    @Html.HiddenFor(m => m.ErrorMessage, new { @id = "ShippingErrorMessage" })
+    @Html.HiddenFor(m => m.IsValidShippingSetting, new { @id = "ValidShippingSetting" })
+    @Html.HiddenFor(m => m.GiftCardMessage, new { @id = "cartGiftCardMessage" })
+    @Html.HiddenFor(m => m.GiftCardApplied, new { @id = "cartGiftCardApplied" })
+    @Html.HiddenFor(m => m.FreeShipping, new { @id = "cartFreeShipping" })
+    <script>
+    $(document).ready(function () {
+        Checkout.prototype.ChangeCartReviewSequence();
+        Checkout.prototype.ChangeSubmitOrderButtonText();
+    })
+    $("#hdnEncryptedTotalAmount").val('@encryptedOrderTotal');
+    </script>
+    @if (Helper.IsEnhancedEcommerceTrackingEnabled())
+    {
+        <script>
+        var data = @Html.RenderBlock(Json.Encode(Model.GetEcommerceCartItemsData()));
+        function SendEcommerceDataForRemoveSingleCartItem(control, sku) {
+            var dec = decodeURI(sku);
+            $.each(data, function (v, e) {
+                if (dec == e.SKU) {
+                    GoogleAnalytics.prototype.SendRemoveFromCartsForSingleCartItem(e);
+                }
+            });
+            $(control).closest('form').submit();
+        }
+        </script>
+    }

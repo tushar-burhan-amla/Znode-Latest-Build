@@ -1,0 +1,123 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Admin.Core.ViewModels
+@model SearchBoostAndBuryRuleViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string IsGlobalRule = (!Equals(Model, null) && Model.IsGlobalRule) ? "checked='checked'" : string.Empty;
+
+}
+
+<div class="pull-right">
+    <label>
+        <input @IsGlobalRule id="IsGlobalRule" name="IsGlobalRule" type="checkbox" value="true" onclick="Search.prototype.IsGlobalRule()">
+        <span class="lbl padding-8" data-test-selector="spnApplyToAllSearchCatalog">@Admin_Resources.LabelApplyToAllSearchCatalog</span>
+        <input name="IsGlobalRule" type="hidden" value="false">
+    </label>
+</div>
+
+<div class="col-sm-12 nopadding tigger-add-block padding-top divSearchTrigger" id="abcdefg" contenteditable="false" style="pointer-events:visible">
+    <div class="col-sm-12 nopadding">
+        <div class="drop-selection pull-left margin-top-bottom">
+            <p>@Admin_Resources.LabelIf</p>
+            <p class="drop-condition">
+                @Html.DropDownListFor(model => model.IsTriggerForAll, new List<SelectListItem> { new SelectListItem { Text = Admin_Resources.LabelAny, Value = AdminConstants.False }, new SelectListItem { Text = Admin_Resources.LabelAll, Value = AdminConstants.True } }, new { @data_test_selector = "drpIsTriggerForAll" })
+            </p>
+            <p>@Admin_Resources.LabelOfTheConditionsAreMet</p>
+        </div>
+        <div class="pull-right">
+            <button type="button" id="defaultValue-add-new-row" class="btn-text btn-text-primary pull-left margin-top-bottom" data-test-selector="btnAddCondition">@Admin_Resources.ButtonAddCondition</button>
+        </div>
+    </div>
+    
+    <div class="col-xs-12 nopadding table-trigger-data">
+        <table id="searchTrigger" class="display table table-striped product-keys-table" aria-describedby="Search Trigger">
+            <tbody id="triggerRuleList">
+
+                @if (Equals(actionName, "UpdateBoostAndBuryRule"))
+                {
+                    for (int i = 0; i < Model.SearchTriggerRuleList.Count; i++)
+                    {
+                        <tr class="update-value-condition">
+                            <th data-test-selector="abc">
+                                @Html.DropDownListFor(model => model.SearchTriggerRuleList[i].SearchTriggerKeyword, new List<SelectListItem> { new SelectListItem { Text = "Keyword", Value = "Keyword" } }, new { @data_test_selector = "drpTriggerKeyword" })
+                            </th>
+                            <th scope="row">
+                                @Html.DropDownListFor(m => m.SearchTriggerRuleList[i].SearchTriggerCondition, new SelectList(Model.TriggerOperatorList, "Value", "Text", Model.SearchTriggerRuleList[i].SearchTriggerCondition), new { @data_test_selector = "drpOperatorList" })
+                            </th>
+                            <th scope="row">
+                                @Html.TextBoxFor(m => m.SearchTriggerRuleList[i].SearchTriggerValue, new { @id = "triggerValue", @placeholder = Admin_Resources.LabelTriggerValue, @data_test_selector = "txtTriggerValue" })
+                                @Html.ValidationMessageFor(model => model.SearchTriggerRuleList[i].SearchTriggerValue, "", new { @data_test_selector = "valTriggerValue" })
+                            </th>
+                            <th scope="row" class="grid-action"><a href="#" class="img-icon-delete" title="@Admin_Resources.ButtonDelete"><em class="z-delete" data-test-selector="btnDelete"></em></a></th>
+
+                            <th scope="row" style="display:none">@Html.TextBoxFor(m => m.SearchTriggerRuleList[i].SearchTriggerRuleId, new { @hidden = "hidden", @class = "priceTierId", @data_test_selector = "txtTriggerRuleId" })</th>
+                        </tr>
+                    }
+
+                }
+                else
+                {
+                    Model.SearchTriggerRuleList = new List<SearchTriggerRuleViewModel>();
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="~/Scripts/References/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        var counter = @Model.SearchTriggerRuleList.Count;
+
+        $('#defaultValue-add-new-row').on('click', function () {
+            if ($('#searchTrigger > tbody > tr').length > 0) {
+                $('#searchTrigger tr:last').after('<tr class="add-trigger-condition">  <td> <select data-test-selector="DropDownKeyword" id="SearchTriggerRuleList[' + counter + '].SearchTriggerKeyword" name="SearchTriggerRuleList[' + counter + '].SearchTriggerKeyword"><option value="Keyword">Keyword</option></select> </td><td> <select data-test-selector="DropDownOptions" id="tierQuantity" name="SearchTriggerRuleList[' + counter + '].SearchTriggerCondition">@foreach (var item in Model.TriggerOperatorList){<option value=@item.Value>@item.Text</option>}</select> <span class="field-validation-valid" data-valmsg-for="SearchTriggerRuleList[' + counter + '].SearchTriggerCondition" data-valmsg-replace="true"></span> <span id="error-price" class="field-validation-error"></span> </td><td> <input data-val="true" data-test-selector="txtTriggerValue" data-val-maxlength="Trigger value can not be longer than 255 characters." data-val-maxlength-max="255" data-val-required="Trigger Value is required." id="SearchTriggerRuleList[' + counter + '].SearchTriggerValue" name="SearchTriggerRuleList[' + counter + '].SearchTriggerValue" placeholder="Trigger Value" type="text" value="" id="triggerValue"> <span class="field-validation-valid" data-valmsg-for="SearchTriggerRuleList[' + counter + '].SearchTriggerValue" data-valmsg-replace="true"><span id="SearchTriggerRuleList[' + counter + '].SearchTriggerValue-error" class="">Trigger Value is required.</span></span> </td><td class="grid-action"><a href="#" class="img-icon-delete" title="Delete"><i class="z-delete" data-test-selector="btnDeleteTrigger"></i></a></td><td style="display:none"><input class="priceTierId" hidden="hidden" id="SearchTriggerRuleList[' + counter + '].SearchTriggerKeyword" name="SearchTriggerRuleList[' + counter + '].SearchTriggerKeyword" type="text" value=""></td></tr>');
+            }
+            else {
+                $('#searchTrigger > tbody').append('<tr class="add-trigger-condition">  <td> <select data-test-selector="DropDownKeyword" id="SearchTriggerRuleList[' + counter + '].SearchTriggerKeyword" name="SearchTriggerRuleList[' + counter + '].SearchTriggerKeyword"><option value="Keyword">Keyword</option></select> </td><td> <select data-test-selector="DropDownOptions" id="tierQuantity" name="SearchTriggerRuleList[' + counter + '].SearchTriggerCondition">@foreach (var item in Model.TriggerOperatorList){<option value=@item.Value>@item.Text</option>}</select> <span class="field-validation-valid" data-valmsg-for="SearchTriggerRuleList[' + counter + '].SearchTriggerCondition" data-valmsg-replace="true"></span> <span id="error-price" class="field-validation-error"></span> </td><td> <input data-val="true" data-test-selector="txtTriggerValue"  data-val-maxlength="Trigger value can not be longer than 255 characters." data-val-maxlength-max="255" data-val-required="Trigger Value is required." id="SearchTriggerRuleList[' + counter + '].SearchTriggerValue" name="SearchTriggerRuleList[' + counter + '].SearchTriggerValue" placeholder="Trigger Value" type="text" value="" id="triggerValue"> <span class="field-validation-valid" data-valmsg-for="SearchTriggerRuleList[' + counter + '].SearchTriggerValue" data-valmsg-replace="true"><span id="SearchTriggerRuleList[' + counter + '].SearchTriggerValue-error" class="">Trigger Value is required.</span></span> </td><td class="grid-action"><a href="#" class="img-icon-delete" title="Delete"><i class="z-delete" data-test-selector="btnDeleteTrigger"></i></a></td><td style="display:none"><input class="priceTierId" hidden="hidden" id="SearchTriggerRuleList[' + counter + '].SearchTriggerKeyword" name="SearchTriggerRuleList[' + counter + '].SearchTriggerKeyword" type="text" value=""></td></tr>');
+            }
+            counter++;
+
+            var form = $("#frmCreateEditBoostAndBuryRule")
+                .removeData("validator") /* added by the raw jquery.validate plugin */
+                .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin */
+
+            $.validator.unobtrusive.parse(form);
+        });
+
+        $.validator.unobtrusive.parse($("#frmCreateEditBoostAndBuryRule"));
+        $('#searchTrigger tbody').on('click', '.img-icon-delete', function () {
+            $(this).closest('tr').remove();
+            var newIndex = 0;
+            $('#searchTrigger tbody tr').each(function () {
+                var select = $(this).find('select');
+                var input = $(this).find('input');
+                select.each(function () {
+                    var _this = this;
+                    var _name = $(_this).attr('name');
+                    var _onchange = $(_this).attr('onchange');
+                    //change name index value
+                    var namesub = _name.substring(_name.indexOf('['), _name.indexOf(']') + 1);
+                    $(_this).attr('name', _name.replace(namesub, '[' + newIndex + ']'));
+                    var _id = $(_this).attr('id');
+                    if (_id != undefined) {
+                        var sub1 = _id.substring(_id.indexOf('_'), _id.indexOf('__') + 2);
+                        $(_this).attr('id', _id.replace(sub1, '_' + newIndex + '__'));
+                    }
+                });
+                input.each(function () {
+                    var _this = this;
+                    var _name = $(_this).attr('name');
+                    var sub = _name.substring(_name.indexOf('['), _name.indexOf(']') + 1);
+                    $(_this).attr('name', _name.replace(sub, '[' + newIndex + ']'));
+                });
+                newIndex++;
+            })
+        });
+
+        Search.prototype.IsGlobalRule();
+    });
+
+</script>

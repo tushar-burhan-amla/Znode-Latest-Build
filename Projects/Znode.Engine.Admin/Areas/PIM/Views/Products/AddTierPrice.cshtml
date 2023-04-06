@@ -1,0 +1,284 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.Models;
+@model PriceSKUDataViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string displayCustom1 = "display:none";
+    string displayCustom2 = "display:none";
+    string displayCustom3 = "display:none";
+    if (Model?.PriceTierList != null)
+    {
+        displayCustom1 = Model.PriceTierList.Any(m => m.Custom1 != "") ? "" : "display:none";
+        displayCustom2 = Model.PriceTierList.Any(m => m.Custom2 != "") ? "" : "display:none";
+        displayCustom3 = Model.PriceTierList.Any(m => m.Custom3 != "") ? "" : "display:none";
+    }
+
+}
+@{
+    DropDownOptions _data = new DropDownOptions() { DropDownId = "DropDownId1", DropDownList = Model.baseDropDownList, IsMultiple = true, IsDraggable = true, IsAllowCheckAll = false, SelectOptionName = "ADD Pricing Columns" };
+}
+
+@using (Ajax.BeginForm("AddTierPrice", controllerName, new AjaxOptions()
+{
+    HttpMethod = "post",
+    OnSuccess = "Price.prototype.TierPriceAddResult",
+    InsertionMode = InsertionMode.Replace,
+},
+                                                  new { @id = "addTierPriceForm" }))
+{
+    @Html.Hidden("pageNumber", Model.PageNumber)
+    @Html.HiddenFor(m => m.PriceListId)
+    @Html.HiddenFor(m => m.PriceSKU.SKU)
+    <div class="col-sm-12 nopadding">
+        <div class="pull-right padding-left action-dropdown">
+            <div class="dropdown">
+                <a href="javascript:void(0)" class="btn-text btn-text-secondary margin-bottom" data-toggle="dropdown">
+                    <span>@_data.SelectOptionName</span><em class="zf-down"></em>
+                </a>
+                <div class='dropdown-menu dropdown-list-container'>
+                    <div class="dropdown-wrapper">
+
+
+                        @if (_data?.DropDownList.Count > 0)
+                        {
+                            <ul id="@_data.DropDownId" class="dropdown-list-ul dropdown-list-multiselect mutliSelect">
+
+                                @foreach (var item in _data.DropDownList)
+                                {
+                                    string _checked = string.Empty;
+
+                                    if (item.id == "Custom1")
+                                    {
+                                        _checked = displayCustom1 == "" ? "checked='checked'" : string.Empty;
+                                    }
+                                    if (item.id == "Custom2")
+                                    {
+                                        _checked = displayCustom2 == "" ? "checked='checked'" : string.Empty;
+                                    }
+                                    if (item.id == "Custom3")
+                                    {
+                                        _checked = displayCustom3 == "" ? "checked='checked'" : string.Empty;
+                                    }
+
+                                    <li class="child-options">
+                                        <label>
+                                            <input type="checkbox" value="@item.id" id="@item.id" @_checked onclick="Price.prototype.ShowHideCustomColumn('@item.id')" data-ismultiple="@_data.IsMultiple" />
+                                            <span class="lbl padding-8">@item.name</span>
+                                        </label>
+                                    </li>
+
+
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" id="defaultValue-add-new-row" class="btn-text btn-text-secondary pull-right margin-bottom" data-test-selector="btnAddNew">@Admin_Resources.ButtonAdd</button>
+        <table id="tierPrice" class="display table table-striped" style="width:100%" aria-describedby="Tier Price">
+            <thead>
+                <tr>
+                    <th scope="col">@Admin_Resources.TextQuantity</th>
+                    <th scope="col">@Admin_Resources.LabelPrice</th>
+                    <th scope="col" style="@displayCustom1" class="Custom1">@Admin_Resources.LabelPriceCustom1</th>
+                    <th  scope="col" style="@displayCustom2" class="Custom2">@Admin_Resources.LabelPriceCustom2</th>
+                    <th scope="col" style="@displayCustom3" class="Custom3">@Admin_Resources.LabelPriceCustom3</th>
+                    <th scope="col" class="grid-action">Action</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody id="tierPriceQuantity">
+                @if (Model?.PriceTierList?.Count > 1)
+                {
+                    @Html.Partial("~/Areas/PIM/Views/Products/_TierPriceRow.cshtml")
+                }
+                else
+                {
+                    if (Equals(actionName, "AddSKUPrice"))
+                    {
+                        Model.PriceTierList = new List<PriceTierViewModel> { new PriceTierViewModel() };
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(m => m.PriceTierList[0].Quantity, new { @id = "tierQuantity", onkeyup = "Price.prototype.ValidateTierPrice()", @data_test_selector = "txtTierQuantity" })
+                                @Html.Label(Admin_Resources.HeadingAndAbove)
+                                @Html.ValidationMessageFor(model => model.PriceTierList[0].Quantity, "", new { @data_test_selector = "valQuantity" })
+                                <span id="error-quantity" class="field-validation-error" />
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.PriceTierList[0].Price, new { @id = "priceTier", onfocusout = "Price.prototype.ValidateTierPrice()", @data_test_selector = "txtPriceTier", @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidPriceForRoundOff, Admin_Resources.ErrorValidPrice) })
+                                @Html.ValidationMessageFor(model => model.PriceTierList[0].Price, "", new { @data_test_selector = "valPriceTier" })
+                                <span id="error-price" class="field-validation-error" />
+                            </td>
+                            <td  style="@displayCustom1" class = "Custom1">
+                                @Html.TextBoxFor(m => m.PriceTierList[0].Custom1, new { @id = "priceTier1", @data_Custom1 = Model.PriceTierList[0].Custom1 })
+
+                            </td>
+                            <td style="@displayCustom2" class = "Custom2">
+                                @Html.TextBoxFor(m => m.PriceTierList[0].Custom2, new { @id = "priceTier2", @data_Custom2 = Model.PriceTierList[0].Custom2})
+
+                            </td>
+                            <td style="@displayCustom3" class = "Custom3">
+                                @Html.TextBoxFor(m => m.PriceTierList[0].Custom3, new { @id = "priceTier3", @data_Custom3 = Model.PriceTierList[0].Custom3})
+
+                            </td>
+                            <td class="grid-action"><a href="#" class="img-icon-delete" title="@Admin_Resources.ButtonDelete"><em class="z-delete"></em></a></td>
+
+                            <td><div style="display:none">@Html.TextBoxFor(m => m.PriceTierList[0].PriceTierId, new { @hidden = "hidden", @class = "priceTierId" })</div></td>
+                        </tr>
+                    }
+                    else if (Model?.PriceTierList?.Count > 0)
+                    {
+                        for (int i = 0; i < Model.PriceTierList.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.TextBoxFor(m => m.PriceTierList[i].Quantity, new { @id = "tierQuantity", @required = "required", data_val_required = @Admin_Resources.MinQtyRequiredMsg, onkeyup = "Price.prototype.ValidateTierPrice()", @data_test_selector = "txtTierQuantity" })
+                                    @Html.Label(Admin_Resources.HeadingAndAbove)
+                                    @Html.ValidationMessageFor(model => model.PriceTierList[i].Quantity, "", new { @data_test_selector = "valQuantity" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.PriceTierList[i].Price, new { @id = "priceTier", @validationrule = "RoundOff", onfocusout = "Price.prototype.ValidateTierPrice()", @data_test_selector = "txtPriceTier", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidPriceForRoundOff, Admin_Resources.ErrorValidPrice), data_val_required = @Admin_Resources.TierPriceRequiredMsg })
+                                    @Html.ValidationMessageFor(model => model.PriceTierList[i].Price, "", new { @data_test_selector = "valPriceTier" })
+                                </td>
+                                <td style="@displayCustom1" class = "Custom1" >
+                                    @Html.TextBoxFor(m => m.PriceTierList[i].Custom1, new { @id = "priceTier1", @data_Custom1 = Model.PriceTierList[i].Custom1})
+
+                                </td>
+                                <td style="@displayCustom2" class = "Custom2">
+                                    @Html.TextBoxFor(m => m.PriceTierList[i].Custom2, new { @id = "priceTier2", @data_Custom2 = Model.PriceTierList[i].Custom2})
+
+                                </td>
+                                <td style="@displayCustom3" class = "Custom3">
+                                    @Html.TextBoxFor(m => m.PriceTierList[i].Custom3, new { @id = "priceTier3", @data_Custom3 = Model.PriceTierList[i].Custom3})
+
+                                </td>
+                                <td class="grid-action"><a href="Javascript:Products.prototype.fnDeleteTierPrice(@Model.PriceTierList[i].PriceTierId)" data-id="@Model.PriceTierList[i].PriceTierId" class="img-icon-delete" title="@Admin_Resources.ButtonDelete"><em class="z-delete"></em></a></td>
+
+                                <td><div style="display:none">@Html.TextBoxFor(m => m.PriceTierList[i].PriceTierId, new { @hidden = "hidden", @class = "priceTierId" })</div></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        Model.PriceTierList = new List<PriceTierViewModel> { new PriceTierViewModel() };
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(m => m.PriceTierList[0].Quantity, new { @id = "tierQuantity", onkeyup = "Price.prototype.ValidateTierPrice()", @data_test_selector = "txtTierQuantity" })
+                                @Html.Label(Admin_Resources.HeadingAndAbove)
+                                @Html.ValidationMessageFor(model => model.PriceTierList[0].Quantity, "", new { @data_test_selector = "valQuantity" })
+                                <span id="error-quantity" class="field-validation-error" />
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.PriceTierList[0].Price, new { @id = "priceTier", onfocusout = "Price.prototype.ValidateTierPrice()", @validationrule = "RoundOff", @data_test_selector = "txtPriceTier",@RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidPriceForRoundOff, Admin_Resources.ErrorValidPrice) })
+                                @Html.ValidationMessageFor(model => model.PriceTierList[0].Price, "", new { @data_test_selector = "valPriceTier" })
+                                <span id="error-price" class="field-validation-error" />
+                            </td>
+                            <td  style="@displayCustom1" class = "Custom1">
+                                @Html.TextBoxFor(m => m.PriceTierList[0].Custom1, new { @id = "priceTier1", @data_Custom1 = Model.PriceTierList[0].Custom1})
+                            </td>
+                            <td style="@displayCustom2" class="Custom2">
+                                @Html.TextBoxFor(m => m.PriceTierList[0].Custom2, new { @id = "priceTier2", @data_Custom2 = Model.PriceTierList[0].Custom2})
+                            </td>
+                            <td style="@displayCustom3" class="Custom3">
+                                @Html.TextBoxFor(m => m.PriceTierList[0].Custom3, new { @id = "priceTier3", @data_Custom3 = Model.PriceTierList[0].Custom3})
+                            </td>
+                            <td class="grid-action"><a href="#" class="img-icon-delete dirtyignore" title="@Admin_Resources.ButtonDelete"><em class="z-delete"></em></a></td>
+
+                            <td><div style="display:none">@Html.TextBoxFor(m => m.PriceTierList[0].PriceTierId, new { @hidden = "hidden", @class = "priceTierId" })</div></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+<script src="~/Scripts/References/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+    //Call AppendTierPriceUsingLazyLoading when scroll is at bottom of page.
+        $(window).on('scroll', function () {
+            if ($(window).scrollTop() + $(window).height() == $(document).height() && $("#loading-div-background").attr("style") == 'display: none;') {
+                Price.prototype.AppendTierPriceUsingLazyLoading();
+            }
+        });
+       
+        //var priceTier= $('#tierPrice').DataTable({"pageLength": 100});
+        var counter = @Model.PriceTierList.Count;
+
+        if(counter==0)
+        {
+            counter =  @Model.PriceTierList.Count + 1;
+        }
+
+        $('#defaultValue-add-new-row').on('click', function () {
+
+            if($('#tierPrice > tbody > tr').length > 0)
+            {
+                $('#tierPrice tr:last').after('<tr><td><input data-val="true" data-val-number="Enter a valid quantity." data-val-required="Minimum quantity is required." data-val-range="Enter quantity between 1-999999." data-val-range-max="999999" data-val-range-min="1" id="tierQuantity" name="PriceTierList['+counter+'].Quantity" type="text" value="" > <label for="And_above">@Admin_Resources.HeadingAndAbove</label><span class="field-validation-valid" data-valmsg-for="PriceTierList['+counter+'].Quantity" data-valmsg-replace="true"></span></td>'+
+                    '<td><input data-val="true" data-val-regex-pattern = "^\\d{0,}(\\.\\d{0,' +@Convert.ToInt32(DefaultSettingHelper.DefaultPriceRoundOff)+'})?$" data-val-regex="@HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidPriceForRoundOff, Admin_Resources.ErrorValidPrice)" data-val-number="The field Price must be a number." data-val-required="Tier Price is required." data-val-range="Enter a number between 0-999999." data-val-range-max="999999" data-val-range-min="0" id="priceTier" name="PriceTierList[' + counter + '].Price" type="text" ><span class="field-validation-valid" data-valmsg-for="PriceTierList[' + counter + '].Price" data-valmsg-replace="true"></span></td>' +
+                     ($('#Custom1').prop('checked') ? '<td  class = "Custom1">' : '<td  style="display:none" class = "Custom1">')
+                    + '<input data-val="true" id="priceTier1" name="PriceTierList[' + counter + '].Custom1" type="text" ></td>' +
+                     ($('#Custom2').prop('checked') ? '<td  class = "Custom2">' : '<td  style="display:none" class = "Custom2">')
+                    + '<input id="priceTier2"  name="PriceTierList[' + counter + '].Custom2" type="text"></td>' +
+                    ($('#Custom3').prop('checked') ? '<td  class = "Custom3">' : '<td  style="display:none" class = "Custom3">')
+                    + '<input id="priceTier3" name="PriceTierList[' + counter + '].Custom3" type="text" ></td>' +
+                    '<td><a href="#" class="img-icon-delete dirtyignore" title="@Admin_Resources.ButtonDelete"><i class="z-delete"></i></a></td>'+
+                    '<td><input class="priceTierId" style="display:none" data-val="true" data-val-number="The field PriceTierId must be a number." id="priceTierId" name="PriceTierList['+counter+'].PriceTierId" type="text" value=""></td></tr>');
+            }
+            else
+            {
+                $('#tierPrice > tbody').append('<tr><td><input data-val="true" data-val-number="Enter a valid quantity." data-val-required="Minimum quantity is required." data-val-range="Enter quantity between 1-999999." data-val-range-max="999999" data-val-range-min="1" id="tierQuantity" name="PriceTierList['+counter+'].Quantity" type="text" value="" > <label for="And_above">@Admin_Resources.HeadingAndAbove</label><span class="field-validation-valid" data-valmsg-for="PriceTierList['+counter+'].Quantity" data-valmsg-replace="true"></span></td>'+
+                    '<td><input data-val="true" data-val-regex-pattern = "^\\d{0,}(\\.\\d{0,' +@Convert.ToInt32(DefaultSettingHelper.DefaultPriceRoundOff)+'})?$" data-val-regex="@HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidPriceForRoundOff, Admin_Resources.ErrorValidPrice)" data-val-number="The field Price must be a number." data-val-required="Tier Price is required." data-val-range="Enter a number between 0-999999." data-val-range-max="999999" data-val-range-min="0" id="priceTier" name="PriceTierList[' + counter + '].Price" type="text" ><span class="field-validation-valid" data-valmsg-for="PriceTierList[' + counter + '].Price" data-valmsg-replace="true"></span></td>' +
+                     ($('#Custom1').prop('checked') ? '<td  class = "Custom1">' : '<td  style="display:none" class = "Custom1">')
+                    + '<input id="priceTier1" name="PriceTierList[' + counter + '].Custom1" type="text" ></td>' +
+                     ($('#Custom2').prop('checked') ? '<td  class = "Custom2">' : '<td  style="display:none" class = "Custom2">')
+                    + '<input id="priceTier2" name="PriceTierList[' + counter + '].Custom2" type="text" ></td>' +
+                     ($('#Custom3').prop('checked') ? '<td  class = "Custom3">' : '<td  style="display:none" class = "Custom3">')
+                    + '<input id="priceTier3" name="PriceTierList[' + counter + '].Custom3" type="text" ></td>' +
+                                                   '<td><a href="#" class="img-icon-delete dirtyignore" title="@Admin_Resources.ButtonDelete"><i class="z-delete"></i></a></td>'+
+                                                   '<td><input class="priceTierId" style="display:none" data-val="true" data-val-number="The field PriceTierId must be a number." id="priceTierId" name="PriceTierList['+counter+'].PriceTierId" type="text" value=""></td></tr>');
+            }
+            counter++;
+            var form = $("#addTierPriceForm")
+             .removeData("validator") /* added by the raw jquery.validate plugin */
+             .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin */
+
+            $.validator.unobtrusive.parse(form);
+
+            var AssociateItemPriceForm = $("#frmAssociateItemPrice")
+            .removeData("validator") /* added by the raw jquery.validate plugin */
+            .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin */
+
+            $.validator.unobtrusive.parse(AssociateItemPriceForm);
+        });
+        $.validator.unobtrusive.parse($("#addTierPriceForm"));
+
+        $.validator.unobtrusive.parse($("#frmAssociateItemPrice"));
+
+        $('#tierPrice tbody').on('click', '.img-icon-delete', function () {
+            $(this).closest('tr').remove();
+        });
+        $.fn.getTierPriceData = function () {
+
+            var PriceTierList=[];
+            //var table = $('#tierPrice').DataTable();
+            var xml = "<rows>";
+            $("#tierPrice tbody tr").each(function () {
+                var priceTierId=0;
+                if(!$(this).find('.priceTierId').val()=="")
+                    priceTierId=$(this).find('.priceTierId').val();
+
+                if(!$(this).find('#tierQuantity').val()=="" && !$(this).find('#priceTier').val()=="")
+                {
+                    xml = xml + "<row><Quantity>" + $(this).find('#tierQuantity').val() + "</Quantity><Price>" + $(this).find('#priceTier').val() + "</Price><Custom1>" + $(this).find('#priceTier1').val() + "</Custom1><Custom2>" + $(this).find('#priceTier2').val() + "</Custom2><Custom3>" + $(this).find('#priceTier3').val() + "</Custom3><PriceTierId>" + priceTierId + "</PriceTierId></row>";
+                }
+            });
+            xml=xml+"</rows>";
+            $('#PriceTierListData').val(xml);
+        }
+        $.fn.getTierPriceData();
+    });
+</script>

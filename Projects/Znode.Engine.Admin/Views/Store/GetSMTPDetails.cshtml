@@ -1,0 +1,82 @@
+﻿@model Znode.Engine.Admin.ViewModels.SMTPViewModel
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.Resources
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelManage<em class="z-minus"></em><span>@Model.PortalName</span></h1>
+    <div class="pull-right">
+        @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "List", "Store", null, new { @class = "btn-text-icon" })
+        @Html.AuthorizedRawActionLink("<em class='z-edit'></em>" + Admin_Resources.ButtonEdit, "EditStoreSMTP", "Store", new { @portalId = Model.PortalId }, new { @class = "btn-text-icon" })        
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.SmtpPort)
+                </div>
+                <div class="control-md">
+                    @if (Model.SmtpPort <= 0)
+                    {
+                        <input type="text" value="@Model.SmtpPort.GetValueOrDefault().ToString()" disabled="disabled" />
+                    }
+                    else
+                    {
+                        <input type="text" value="@Model.SmtpPort" disabled="disabled" />
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.SmtpServer)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.SmtpServer" disabled="disabled" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.SmtpUsername)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.SmtpUsername" disabled="disabled" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.SmtpPassword)
+                    @{
+                        string smtpPassword = (String.IsNullOrEmpty(Model.SmtpPassword) || Model.SmtpPassword.Trim().Length <= 0) ? string.Empty : new string('*', Model.SmtpPassword.Length);
+                    }
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Html.RenderBlock(smtpPassword)" disabled="disabled" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.EnableSslForSmtp)
+                </div>
+                <div class="control-md">
+                    <em class="@HelperMethods.GetCheckMark(@Model.EnableSslForSmtp)"></em>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

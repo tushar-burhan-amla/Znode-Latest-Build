@@ -1,0 +1,36 @@
+﻿@model Znode.Engine.Admin.ViewModels.AddressViewModel
+@using Znode.Engine.Admin.ViewModels;
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.TitleMultifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateUserAddress1", CancelUrl = "/Customer/GetAddressList?userId=" + @Model.UserId };
+    Model.CheckboxPrefix = string.Empty;
+}
+
+<div id="aside-popup-panel">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateUserAddress1" }))
+            {
+        <div class="col-sm-12 title-container">
+            @if (actionName.ToLower().Contains("edit"))
+            {
+                <h1 data-test-selector="hdgAddAddress">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelAddress)<em class="z-minus"></em>@Model.Address1</h1>
+            }
+            else
+            {
+                <h1 data-test-selector="hdgAddAddress">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelAddress)</h1>
+            }
+            <div class="pull-right">
+                <button type="button" class="btn-text-icon margin-bottom-8" onclick="ZnodeBase.prototype.CancelUpload('divCustomerAddressPopup')" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                    <div class="pull-right">
+                        @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, actionModel.Action, actionModel.Controller, new { @class = "btn-text btn-text-secondary", @id = "dvSave", @onclick = "SaveCancel.prototype.SubmitForm('" + actionModel.FormId + "')", @data_test_selector = "linkSave" })
+                    </div>
+                </div>
+            </div>
+    <!--Main Container-->
+        <section class="col-sm-12 page-container">
+            @Html.Partial("~/Views/Account/_Address.cshtml", Model)
+        </section>
+    }
+</div>
+@Scripts.Render("~/bundles/jqueryval")

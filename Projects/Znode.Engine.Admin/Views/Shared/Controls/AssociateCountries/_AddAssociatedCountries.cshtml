@@ -1,0 +1,175 @@
+﻿@model Znode.Engine.Admin.Models.ListViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div id="modelUnAssociatedCategoryProducts" class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" title="@Admin_Resources.ButtonCancel"><em class="z-close-circle"></em></button>
+            <h4 class="modal-title">@Admin_Resources.LabelAssociateCountry</h4>
+        </div>
+        @if (Model.AssignedList.Count() > 0 || Model.UnAssignedList.Count() > 0)
+        {
+
+
+            <div id="listBoxView" class="sorting-container">
+
+                <div class="col-sm-12 nopadding">
+                    <ul>
+                        <li>
+                            <div>
+                                <h4>Available Country</h4>
+                                <div class="col-sm-12 nopadding">
+                                    <ul id="SelectedCities" class="sort-box scroll-default">
+                                        @{
+                                            int counter = 0;
+                                        }
+
+                                        @foreach (var item in Model.AssignedList)
+                                        {
+                                            <li data-id="available_@item.Value" data-value="@item.Text">@item.Text</li>
+                                            counter++;
+                                        }
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <div class="add-remove">
+                                    <div id="btnAllMoveLeft">
+                                        <em class="z-right-all" data-toggle="tooltip" data-placement="right" type="button" title="Add"></em>
+                                    </div>
+                                    <div id="btnAllMoveRight">
+                                        <em class="z-left-all" data-toggle="tooltip" data-placement="right" type="button" title="Add"></em>
+                                    </div>
+                                    <div id="btnMoveLeft">
+                                        <em class="z-right" data-toggle="tooltip" data-placement="right" type="button" title="Add"></em>
+                                    </div>
+                                    <div id="btnMoveRight">
+                                        <em class="z-left" data-toggle="tooltip" data-placement="right" type="button" title="Add"></em>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <h4>Selected Country</h4>
+                                <div class="col-sm-12 nopadding">
+                                    <ul id="UnAssignedListBox" name="UnAssignedListBox" class="sort-box scroll-default">
+                                        @{
+                                            counter = 0;
+                                        }
+
+                                        @foreach (var item in Model.UnAssignedList)
+                                        {
+                                            <li data-id="unassign_@item.Value" data-value="@item.Text">@item.Text</li>
+                                            counter++;
+                                        }
+
+                                    </ul>
+                                    <div class="pull-right top-shift">
+                                        <button type="button" id="btnGridColumn" class="btn-text margin-top-bottom">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </li>
+                        <li>
+                            <div>
+                                <div class="add-remove">
+                                    <div id="btnAllUp">
+                                        <em class="z-up-all" data-toggle="tooltip" data-placement="right" title="" type="button" data-original-title="Add"></em>
+                                    </div>
+                                    <div id="btnMoveUp">
+                                        <em class="z-up" data-toggle="tooltip" data-placement="right" title="" type="button" data-original-title="Add"></em>
+                                    </div>
+                                    <div id="btnMoveDown">
+                                        <em class="z-down" data-toggle="tooltip" data-placement="right" title="" type="button" data-original-title="Add"></em>
+                                    </div>
+                                    <div id="btnAllDown">
+                                        <em class="z-down-all" data-toggle="tooltip" data-placement="right" title="" type="button" data-original-title="Add"></em>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div id="messagebox" style="color: red"></div>
+                </div>
+            </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="MessageBox">@Admin_Resources.NoRecordFoundText</div>
+                                            }
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).on("click", "#btnAllMoveLeft", function () {
+        $("#SelectedCities li").each(function () {
+            $("#UnAssignedListBox").append("<li data-id=" + $(this).attr("data-id") + " title='" + $(this).html() + "' data-value=" + $(this).attr("data-value") + ">" + $(this).html() + "</li>");
+            $(this).remove();
+        });
+
+    });
+    $(document).on("click", "#btnAllMoveRight", function () {
+        $("#UnAssignedListBox li").each(function () {
+            if ($(this).attr("data-mustshow") != "y") {
+                $("#SelectedCities").append("<li data-id=" + $(this).attr("data-id") + " title='" + $(this).html() + "' data-value=" + $(this).attr("data-value") + ">" + $(this).html() + "</li>");
+                $(this).remove();
+            }
+        });
+    });
+    $(document).on("click", "#btnMoveUp", function () {
+        Shippings.prototype.ListboxMove("UnAssignedListBox", "up");
+    });
+    $(document).on("click", "#btnMoveDown", function () {
+        Shippings.prototype.ListboxMove("UnAssignedListBox", "down");
+    });
+    $(document).on("click", "#btnAllUp", function () {
+        Shippings.prototype.ListboxMove("UnAssignedListBox", "First");
+    });
+    $(document).on("click", "#btnAllDown", function () {
+        Shippings.prototype.ListboxMove("UnAssignedListBox", "Last");
+    });
+    $(document).on("click", "#SelectedCities li", function (e) {
+        if ($(this) != undefined) {
+            $("#SelectedCities li").removeClass("selected");
+            $(this).addClass("selected");
+        }
+    });
+    $(document).on("click", "#UnAssignedListBox li", function (e) {
+        if ($(this) != undefined) {
+            $("#UnAssignedListBox li").removeClass("selected");
+            $(this).addClass("selected");
+        }
+    });
+    $(document).on("click", "#btnMoveLeft", function () {
+        var elements = $("#SelectedCities li.selected")
+        if (elements != undefined) {
+            $("#UnAssignedListBox").append($("#SelectedCities li.selected"));
+            elements.removeClass("selected");
+        }
+    });
+    $(document).on("click", "#btnMoveUp", function () {
+        Shippings.prototype.ListboxMove("RequestedSelectedCities", "up");
+    });
+    $(document).on("click", "#btnMoveRight", function () {
+        var elements = $("#UnAssignedListBox li.selected")
+        if (elements != undefined) {
+            $("#SelectedCities").append($("#UnAssignedListBox li.selected"));
+            elements.removeClass("selected");
+        }
+    });
+    $(document).on("click", "#btnGridColumn", function () {
+        Shippings.prototype.GetSelectedCountry(@controllerName);
+    });
+
+</script>
+
+
+

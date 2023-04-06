@@ -1,0 +1,80 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model StoreViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName };
+}
+@using (Ajax.BeginForm(actionName, controllerName,
+                                                                                                        new AjaxOptions()
+                                                                                                        {
+                                                                                                            HttpMethod = "post",
+                                                                                                            OnSuccess = "Store.prototype.CopyStoreResult",
+                                                                                                            UpdateTargetId = "divCopyStorePopup",
+                                                                                                            InsertionMode = InsertionMode.Replace,
+                                                                                                            OnBegin = " return ZnodeBase.prototype.CheckCodeExist('[name=StoreCode]','/Store/IsStoreCodeExists')"
+                                                                                                        },
+                                                                                                        new { @id = "frmCopyStore", }))
+{
+    <div class="modal-dialog modal-md" data-test-selector="divPopUp">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+                <h4 class="modal-title">@Admin_Resources.LabelCopyStore</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12 page-container">
+                    <div class="col-sm-12 nopadding">
+                        <div class="col-sm-12 nopadding">
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.StoreName, new { @class = "required", @data_test_selector = "lblStoreName" })
+                                    </div>
+                                    <div class="control-lg">
+                                        @Html.TextBoxFor(model => model.StoreName, new { @data_test_selector = "txtStoreName" })
+                                        @Html.ValidationMessageFor(model => model.StoreName, "", new { @data_test_selector = "valStoreName" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.CompanyName, new { @class = "required", @data_test_selector = "lblCompanyName" })
+                                    </div>
+                                    <div class="control-lg">
+                                        @Html.TextBoxFor(model => model.CompanyName, new { @data_test_selector = "txtCompanyName" })
+                                        @Html.ValidationMessageFor(model => model.CompanyName, "", new { @data_test_selector = "valCompanyName" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.StoreCode, new { @class = "required", @data_test_selector = "lblStoreCode" })
+                                    </div>
+                                    <div class="control-lg">
+                                        @Html.TextBoxFor(model => model.StoreCode, new { @onblur = "ZnodeBase.prototype.CheckCodeExist('[name=StoreCode]','/Store/IsStoreCodeExists')", @data_test_selector = "txtStoreCode"  })
+                                        @Html.ValidationMessageFor(model => model.StoreCode, "", new { @data_test_selector = "valStoreCode" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 nopadding">
+                    <div class="pull-right">
+                        <button type="submit" class="btn-text-icon" data-test-selector="linkSave"><em class="z-save"></em>@Admin_Resources.ButtonSave</button>
+                        <button type="button" class="btn-text-icon" data-dismiss="modal" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.PortalId)
+}
+@Scripts.Render("~/bundles/jqueryval")

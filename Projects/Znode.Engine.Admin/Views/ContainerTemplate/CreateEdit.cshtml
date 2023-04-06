@@ -1,0 +1,104 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model ContainerTemplateViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmContainerTemplate", CancelUrl = "/ContainerTemplate/List", IsSaveCloseEnable = true, Callback = "WidgetTemplate.prototype.ValidateTemplateCode" };
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.Equals("create", StringComparison.InvariantCultureIgnoreCase))
+    {
+        <h1 data-test-selector="hdgPageTemplate">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.ContainerTemplate)</h1>
+    }
+    else if (actionName.Equals("copy", StringComparison.InvariantCultureIgnoreCase))
+    {
+        <h1 data-test-selector="hdgPageTemplate">@string.Format(@Admin_Resources.TitleCopy, Admin_Resources.ContainerTemplate)<em class="z-minus"></em><span>@Model.Name</span></h1>
+    }
+    else
+    {
+        <h1 data-test-selector="hdgPageTemplate">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.ContainerTemplate)<em class="z-minus"></em><span>@Model.Name</span></h1>
+    }
+
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmContainerTemplate", enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.Code, new { @class = "required", @data_test_selector = "lblCode" })
+                </div>
+                <div class="control-md dirtyignore">
+                    @if (actionName.Equals("edit", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        @Html.TextBoxFor(model => model.Code, new { @readonly = "readonly", @data_test_selector = "txtCode" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.Code, new { @data_test_selector = "txtCode" })
+                    }
+                    @Html.ValidationMessageFor(model => model.Code, "", new { id = "valCode", @data_test_selector = "valCode" })
+                </div>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.Name, new { @class = "required", @data_test_selector = "lblName" })
+                </div>
+                <div class="control-md dirtyignore">
+                    @if (actionName.Equals("edit", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        @Html.TextBoxFor(model => model.Name, new {  @data_test_selector = "txtName" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.Name, new { @data_test_selector = "txtName" })
+                    }
+                    @Html.ValidationMessageFor(model => model.Name, "", new { id = "valFileName", @data_test_selector = "valName" })
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="control-label">
+                @Html.LabelFor(model => model.FileName, new { @class = "required", @data_test_selector = "lblFileName" })
+            </div>
+            <div class="control-md">
+                @if (actionName.Equals("copy", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    @Html.TextBoxFor(model => model.FileName, new { @readonly = "readonly", @data_test_selector = "txtFileName" })
+                }
+                else
+                {
+                    @Html.EditorFor(model => model.FilePath, new { @data_test_selector = "txtFileName" })
+
+                    <span id="errorTemplateFilePath" class="error-msg" />
+                    <span id="fileName" class="file-upload-name" text="dataayaaya" data-test-selector="spnFileName" />
+                }
+            </div>
+        </div>
+       
+
+ @Html.Partial("~/Views/ContainerTemplate/_asideMediaPanel.cshtml")
+
+        @Html.HiddenFor(m => m.ContainerTemplateId)
+        @Html.HiddenFor(m => m.FileName)
+        @Html.HiddenFor(m => m.Code)
+
+    }
+</section>
+<script>
+    $("#txtUpload").attr("title", $("#FileName").val())
+    $("#fileName").attr("title", $("#FileName").val())
+    $("#fileName").text($("#FileName").val())
+</script>

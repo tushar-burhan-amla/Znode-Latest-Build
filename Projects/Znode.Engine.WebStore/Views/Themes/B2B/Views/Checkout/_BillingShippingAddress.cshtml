@@ -1,0 +1,67 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model AddressListViewModel
+@{
+    Model.ShippingAddress.RoleName = Model.RoleName;
+    Model.BillingAddress.RoleName = Model.RoleName;
+    Model.ShippingAddress.AddressCount = Convert.ToInt32(Model?.AddressList?.Count());
+    Model.BillingAddress.AddressCount = Convert.ToInt32(Model?.AddressList?.Count());
+    Model.ShippingAddress.OtherAddressId = Model.BillingAddress.AddressId;
+    Model.BillingAddress.OtherAddressId = Model.ShippingAddress.AddressId;
+    bool isAuthenticated = HttpContext.Current.User.Identity.IsAuthenticated;
+    int quoteId = Convert.ToInt32(Request.QueryString["QuoteId"] ?? "0");
+    if (quoteId > 0)
+    {
+        if (Model?.ShippingAddress != null)
+        {
+            if ((Model.ShippingAddress.FirstName + Model.ShippingAddress.LastName)?.Trim() == string.Empty)
+            {
+                Model.ShippingAddress.FirstName = Model.BillingAddress.FirstName;
+                Model.ShippingAddress.LastName = Model.BillingAddress.LastName;
+            }
+        }
+    }
+}
+<div id="dvBillingShippingContainer">
+    <div class="row">
+        <div id="shipping-content" class="col-12 col-md p-0 mb-4 shipping-address-content">
+            <div class="b2b-block">
+                <h2 class="block-title">@WebStore_Resources.TitleShippingAddress</h2>
+                <div class="col shipping-address-block" id="shipping-address-content">
+                    <div class="block-content d-flex flex-wrap justify-content-between my-2">
+                        <div id="shipping-content-selectoptions" class="checkout-address-info">
+                            <label for="ShippingAddress" class="visuallyhidden">Shipping Address</label>
+                            @if (isAuthenticated)
+                            {
+                                Html.RenderPartial("../Checkout/_AddressOptions", Model, new ViewDataDictionary { { "addressType", "shipping" } });
+                            }
+                        </div>
+                        @{ Html.RenderPartial("../Checkout/_DisplayAddress", Model.ShippingAddress, new ViewDataDictionary { { "addressType", "shipping" } });}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="BillingAddressContainer" class="col-12 col-md p-0 mb-4 billing-address-content">
+            <div class="b2b-block">
+                <h2 class="block-title">@WebStore_Resources.TitleBillingAddress</h2>
+                <div class="col billing-address-block" id="billing-content">
+                    <div class="block-content d-flex flex-wrap justify-content-between my-2">
+                        <div id="billing-content-selectoptions" class="checkout-address-info">
+                            <label for="BillingAddress" class="visuallyhidden">Billing Address</label>
+                            @if (isAuthenticated)
+                            {
+                                Html.RenderPartial("../Checkout/_AddressOptions", Model, new ViewDataDictionary { { "addressType", "billing" } });
+                            }
+                        </div>
+                        @{ Html.RenderPartial("../Checkout/_DisplayAddress", Model.BillingAddress, new ViewDataDictionary { { "addressType", "billing" } });}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("_ModalPopUp", new ViewDataDictionary { { "modal-title", WebStore_Resources.LabelConfirmAddress }, { "jqueryFunction", "onclick=User.prototype.HideShowAddressPopUP()" } })
+<script src="~/Scripts/lib/jquery.validate.unobtrusive.min.js"></script>
+

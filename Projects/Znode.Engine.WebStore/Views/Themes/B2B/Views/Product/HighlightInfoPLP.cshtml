@@ -1,0 +1,18 @@
+﻿@model Znode.Engine.WebStore.ViewModels.HighlightsViewModel
+@if (!Model.DisplayPopup)
+    {<div class="container bio-certified product-view-details mb-5">
+        <div class="row">
+            <div class="col-12 p-0">
+                <div class="col-12 location">
+                    <h3 class="page-title">@Model.HighlightName</h3>
+                </div>
+                <div class="col-12">
+                    @Html.RenderBlock(Model.Description)
+                </div>
+                <div class="col-12 mt-4">
+                    <a href="@Url.GetProductUrl(Model?.SEOUrl, Model?.PublishProductId.ToString())" class="btn btn-primary d-block d-md-inline-block">@WebStore_Resources.BackNavigation</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    }

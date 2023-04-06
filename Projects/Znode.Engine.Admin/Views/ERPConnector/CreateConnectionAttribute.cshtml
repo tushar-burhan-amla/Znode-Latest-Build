@@ -1,0 +1,52 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+@model ERPConnectorListViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront; ;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmERPConnectionAttributes", CancelUrl = "/ERPConnector/CreateConnectionAttributes" };
+}
+
+@Html.Partial("~/Views/TouchPointConfiguration/_asideERPConfiguration.cshtml", Model?.ERPClassName)
+
+
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@ERP_Resources.TitleERPConfiguration, Model.ERPClassName)</h1>
+    <div class="pull-right dirtyignore btn-container">
+        @Html.AuthorizedPrototypeRawActionLink("<em class='z-refresh'></em>" + Admin_Resources.ButtonUpdate, actionModel.Action, actionModel.Controller, new { @class = "btn-text-icon", @id = "dvSave", @onclick = "SaveCancel.prototype.SubmitForm('frmERPConnectionAttributes')" })
+    </div>
+</div>
+<div class="main-wrapper">
+    @Html.Partial("~/Views/TouchPointConfiguration/_asideERPconfiguration.cshtml", Model?.ERPClassName)
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmERPConnectionAttributes" }))
+        {
+            <div class="col-sm-12 list-container erp-configurator">
+                @if (!Equals(Model, null) && (Model.Properties.Count > 0))
+                {
+                    foreach (var Contl in Model.Properties)
+                    {
+                        <div class="form-group" id="@("div" + Contl.Name)">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    <label class="cancel-click" for="@Contl.Name">@Contl.ControlLabel</label>
+                                </div>
+                                @Html.CreateControl(Contl)
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+    </section>
+</div>
+
+
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Content/bootstrap-3.3.7/js/datepicker.js" type="text/javascript"> </script>
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"> </script>
+
+

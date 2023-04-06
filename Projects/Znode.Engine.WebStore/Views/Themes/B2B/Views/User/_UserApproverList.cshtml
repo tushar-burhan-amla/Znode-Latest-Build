@@ -1,0 +1,57 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model  UserApproverListViewModel
+@{
+    Layout = null;
+}
+<div class="col-12 p-0">
+    <div id="user-approver-popup-content">
+        <table id="grid" class="test table" aria-describedby="Approval Order Details">
+            @if (Model?.UserApprover?.Count > 0)
+            {
+                <thead>
+                    <tr class="grid-header">
+                        <th scope="col"><a>@WebStore_Resources.LabelApprovalOrder</a></th>
+                        <th scope="col"><a>@WebStore_Resources.TextApproverName</a></th>
+                        <th scope="col"><a>@WebStore_Resources.TextPendingOrderStatus</a></th>
+                        <th scope="col"><a>@WebStore_Resources.TextApprovalTime</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (UserApproverViewModel userApprover in Model?.UserApprover)
+                    {
+                        <tr>
+                            <td><p>@userApprover.ApproverOrder</p> </td>
+                            <td><p>@userApprover.ApproverName</p></td>
+                            <td><p>@userApprover.OmsOrderState</p></td>
+                            @if (!Equals(userApprover.OmsOrderState, WebStoreConstants.PendingApproval.ToString()))
+                            {
+                                <td><p>@userApprover.StatusModifiedDate</p></td>
+                            }
+                            else
+                            {
+                                <td><p>@string.Empty</p></td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+
+            }
+            else if (Model.HasError)
+            {
+                <tbody data-test-selector="tblBdUserApproval">
+                    <tr>
+                        <td>@Model.ErrorMessage</td>
+                    </tr>
+                </tbody>
+            }
+            else
+            {
+                <tbody>
+                    <tr>
+                        <td>@WebStore_Resources.TextNoApprovers</td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+    </div>
+</div>

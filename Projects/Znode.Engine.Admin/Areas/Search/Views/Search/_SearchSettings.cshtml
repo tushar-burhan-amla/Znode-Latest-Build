@@ -1,0 +1,265 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+@model SearchProfileViewModel
+
+<div class="aside-tab">
+    @*<ul class="nav nav-tabs">
+            <li class="panel-label active"><a href="#Simple" data-toggle="tab" class="tabs">@Admin_Resources.TextSimple</a></li>
+            <li class="panel-label"><a href="#Advanced" data-toggle="tab" class="tabs">@Admin_Resources.TitleAdvanced</a></li>
+        </ul>*@
+    <div class="tab-content query-properties">
+        <!--Panels 1-->
+        @*Panels 2
+               <div class="tab-pane fade" id="@Admin_Resources.TitleAdvanced">
+        </div>*@
+        <div class="panel panel-default search-attributes">
+            <div class="panel-heading">
+                <h4 class="panel-title panel-title-edit accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#divSearchableAttributes" data-test-selector="hdg@(Admin_Resources.TitleSearchableFields.Replace(" ",""))">
+                    @Admin_Resources.TitleSearchableFields
+                    <div class="help-text">
+                        <em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@(Admin_Resources.HelpTextSearchableAttributes)"></em>
+                    </div>
+                </h4>
+            </div>
+            <div class="panel-collapse collapse in" id="divSearchableAttributes" aria-expanded="true">
+                @Html.Partial("~/areas/search/views/search/_searchableattributes.cshtml", Model)
+            </div>
+        </div>
+        <div class="panel panel-default Ngram-List">
+            <div class="panel-heading">
+                <h4 class="panel-title panel-title-edit accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#ngram-List" data-test-selector="hdg@(Admin_Resources.TitleSearchableFields.Replace(" ", ""))">
+                    @Admin_Resources.LabelNgramSetting
+                    <div class="help-text">
+                        <em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@(Admin_Resources.HelpTextForNGram)"></em>
+                    </div>
+                </h4>
+            </div>         
+            <div class="panel-collapse collapse in"  id="ngram-List" aria-expanded="true">
+                <div class="panel-body">
+                    @for (int i = 0; i < Model.FeaturesList.Count; i++)
+                    {
+                        if (string.Equals(Model.FeaturesList[i].FeatureCode, ZnodeConstant.MinGram) || string.Equals(Model.FeaturesList[i].FeatureCode, ZnodeConstant.MaxGram))
+                        {
+                            <div class="row">
+                                <div class="col-md-12 nopadding switch-aside-panel padding-left-15 padding-right-15 padding-top-bottom">
+                                        <div class="col-md-4 control-label">
+                                        <label data-test-selector="lblNGram">@Model.FeaturesList[i].FeatureName</label>
+                                         </div>
+                                    <div class="col-md-3 control-lg padding-rl-5">
+                                        @Html.TextBoxFor(m => @Model.FeaturesList[i].SearchFeatureValue, new { Name = "FeaturesList[" + i + "].SearchFeatureValue", id = @Model.FeaturesList[i].FeatureCode, value = @Model.FeaturesList[i].SearchFeatureValue, @data_test_selector = "txtNgramList", @class = "SearchFeatureValue ", @onblur = "Search.prototype.ShowHideValidationMessage()"})
+                                        @Html.ValidationMessageFor(m => @Model.FeaturesList[i].SearchFeatureValue, null, new { id = "errorSearchFeatureValue" + i })
+                                    </div>
+                                    
+                                </div>
+                                <input type="hidden" id="@Model.FeaturesList[i].FeatureName" name="FeaturesList[@i].FeatureName" value="@Model.FeaturesList[i].FeatureName">
+                                <input type="hidden" id="@Model.FeaturesList[i].SearchFeatureId" name="FeaturesList[@i].SearchFeatureId" value="@Model.FeaturesList[i].SearchFeatureId">
+                                <input type="hidden" id="@Model.FeaturesList[i].ControlType" name="FeaturesList[@i].ControlType" value="@Model.FeaturesList[i].ControlType">
+                                <input type="hidden" id="@Model.FeaturesList[i].FeatureCode" name="FeaturesList[@i].FeatureCode" value="@Model.FeaturesList[i].FeatureCode">
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default search-attributes character-area">
+            @for (int i = 0; i < Model.FeaturesList.Count; i++)
+            {
+                if (string.Equals(Model.FeaturesList[i].FeatureCode, ZnodeConstant.CharacterFilter))
+                {
+                    <div class="panel-heading">
+                        <h4 class="panel-title panel-title-edit accordion-toggle " data-toggle="collapse" data-parent="#accordion" href="#Characters-Filter" data-test-selector="hdg@(Admin_Resources.TitleSearchableFields.Replace(" ", ""))">                    
+                            @Admin_Resources.LabelCharacterFilter
+                            <span class="help-text" data-test-selector="spnHelpCircle">
+                                <em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-html="true" data-original-title="@(Admin_Resources.HelpTextForCharacterFilter)"></em>
+                            </span>
+                        </h4>
+                    </div>
+                    <div class="panel-collapse collapse in" id="Characters-Filter" aria-expanded="true">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-xs-12  switch-aside-panel">
+                                    <div class="control-label">
+                                        <label data-test-selector="lblIgnoreSpecialCharacters">@Admin_Resources.LabelIgnoreSpecialCharacters</label>
+                                    </div>
+                                    <div class="character-filters-area ">
+                                        <textarea id="FeaturesList[i].SearchFeatureValue" name="FeaturesList[@i].SearchFeatureValue" value=@Model.FeaturesList[i].SearchFeatureId data-test-selector="txtCharacterArea" rows="4" cols="50">@Model.FeaturesList[i].SearchFeatureValue</textarea>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="@Model.FeaturesList[i].FeatureName" name="FeaturesList[@i].FeatureName" value="@Model.FeaturesList[i].SearchFeatureId">
+                                <input type="hidden" id="@Model.FeaturesList[i].SearchFeatureId" name="FeaturesList[@i].SearchFeatureId" value="@Model.FeaturesList[i].SearchFeatureId">
+                                <input type="hidden" id="@Model.FeaturesList[i].ControlType" name="FeaturesList[@i].ControlType" value="@Model.FeaturesList[i].ControlType">
+                                <input type="hidden" id="@Model.FeaturesList[i].FeatureCode" name="FeaturesList[@i].FeatureCode" value="@Model.FeaturesList[i].FeatureCode">
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+            <div class="panel panel-default relevance-ranking">
+                <div class="panel-heading">
+                    <h4 class="panel-title panel-title-edit accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#ranking" data-test-selector="hdg@(Admin_Resources.RelevanceBasedRanking.Replace(" ",""))">@Admin_Resources.RelevanceBasedRanking</h4>
+                </div>
+
+                <div id="ranking" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="tab-pane fade in active padding-bottom padding-left padding-right">
+                            <div class="col-xs-12 nopadding padding-rl-5">
+                                <div class="col-xs-12 nopadding">
+                                    <div class="pull-right margin-top-bottom">
+                                        @*<a class="btn-text-icon" onclick="Search.prototype.AddNewRow()"><em class="z-add-circle"></em>@Admin_Resources.Add</a>*@
+                                    </div>
+                                </div>
+                                <div id="dyanamicSearchCatalogField">
+                                    @if (Model.IsIndexExist)
+                                    {
+                                        if (Model.FieldValueFactors?.Count > 0)
+                                        {
+                                            int count = 0;
+                                            <div id="fieldValueList">
+                                                @foreach (var fieldValue in Model.FieldValueFactors)
+                                                {
+                                                    <div class="col-xs-12 nopadding rank-section" id="fieldValueListDiv_@count">
+                                                        <div class="left-section" id="fieldList">
+                                                            <select name="fieldNames">
+                                                                <option value="">Select</option>
+                                                                @foreach (var item in Model.FieldValueList)
+                                                                {
+                                                                    if (item.AttributeName != null)
+                                                                    {
+                                                                    <option value="@item.AttributeCode" @(fieldValue.Key == item.AttributeCode ? "selected=selected" : "") data-test-selector="opt@(item.AttributeName)">@item.AttributeName</option>
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                        <div class="switch-field padding-top">
+                                                            <div class="control-yes-no pull-right">
+                                                                <input name="fieldValues.Index" value="@count" type="hidden">
+                                                                <input @(fieldValue.Value == 1 ? "checked='checked'" : "") id="fieldValue_left_@count" name="fieldValues[@count]" value="1" type="radio"> <label for="fieldValue_left_@count" data-test-selector="txtASC">ASC</label>
+                                                                <input @(fieldValue.Value == 0 ? "checked='checked'" : "") id="fieldValue_right_@count" name="fieldValues[@count]" value="0" type="radio"> <label for="fieldValue_right_@count" data-test-selector="txtDESC">DESC</label>
+                                                            </div>
+                                                            @*<em onclick="Search.prototype.RemoveRow('fieldValueListDiv_@count')" class="z-close-circle" title="Delete"></em>*@
+                                                        </div>
+                                                    </div>
+                                                    count++;
+                                                }
+                                            </div>
+
+                                        }
+                                        else
+                                        {
+                                            <div id="fieldValueList">
+                                                <div class="col-xs-12 nopadding rank-section" id="fieldValueListDiv_0">
+                                                    <div class="left-section" id="fieldList">
+                                                        <select name="fieldNames">
+                                                            <option value="">Select</option>
+                                                            @foreach (var item in Model.FieldValueList)
+                                                            {
+                                                                if (item.AttributeName != null)
+                                                                {
+                                                                <option value="@item.AttributeCode">@item.AttributeName</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="switch-field padding-top">
+                                                        <div class="control-yes-no pull-right">
+                                                            <input name="fieldValues.Index" value="0" type="hidden">
+                                                            <input checked='checked' id="fieldValue_left_1" name="fieldValues[0]" value="1" type="radio"> <label for="fieldValue_left_1">ASC</label>
+                                                            <input id="fieldValue_right_1" name="fieldValues[0]" value="0" type="radio"> <label for="fieldValue_right_1">DESC</label>
+                                                        </div>
+                                                        @*<em onclick="Search.prototype.RemoveRow('fieldValueListDiv_0')" class="z-close-circle" title="Delete"></em>*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else if (Model.PublishCatalogId > 0)
+                                    {
+                                        <span class="error-msg">
+                                            @Html.RenderBlock(Admin_Resources.ErrorSearchIndexNotExistForRelevance)
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            @Admin_Resources.ErrorPleaseSelectCatalog
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title panel-title-edit accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#queryproperty" data-test-selector="hdg@(Admin_Resources.TitleQueryProperties.Replace(" ",""))">@Admin_Resources.TitleQueryProperties</h4>
+                </div>
+                <div id="queryproperty" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="tab-pane fade in active padding-bottom" id="Simple">
+
+                            <div class="col-xs-12 nopadding clearfix query-type">
+                                @if (Model?.QueryTypes != null && Model?.QueryTypes.Count > 0)
+                                {
+                                    <div class="col-xs-12 nopadding padding-left padding-right">
+                                        <h3 class="title">@Admin_Resources.TitleQueryType</h3>
+                                        @for (int i = 0; i < Model.QueryTypes.Count; i++)
+                                        {
+                                            bool ischecked = Model.QueryTypes[i].SearchQueryTypeId == Model.SearchSubQueryTypeId;
+                                            <div class="control-md">
+                                                <div class="col-sm-12 nopadding padding-left padding-bottom">
+                                                    <div class="col-sm-9 nopadding">
+                                                        <label>
+                                                            <input name="SearchSubQueryTypeId" type="radio" value="@Model.QueryTypes[i].SearchQueryTypeId" onchange="Search.prototype.SetQueryType('@Model.QueryTypes[i].ParentSearchQueryTypeId', '@Model.QueryTypes[i].SearchQueryTypeId', '@Model.QueryTypes[i].QueryTypeName',this)" @(ischecked ? "checked=checked" : "") data-test-selector="lbl@(Model.QueryTypes[i].SearchQueryTypeId)" />
+                                                            <span class="lbl padding-8" data-test-selector="spn@(Model.QueryTypes[i].QueryTypeName.Replace(" ",""))">@Model.QueryTypes[i].QueryTypeName</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-3 nopadding">
+                                                        <div class="query-help-text">
+                                                            @Html.Partial("_HelpText", Model.QueryTypes[i].HelpDescription ?? string.Empty)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-xs-12 nopadding features-control">
+                                <div class="form-group" id="divOperator">
+                                    <div class="col-xs-12 nopadding switch-aside-label">
+                                        <div class="control-label">
+                                            <label data-test-selector="lbl@(Admin_Resources.LabelOperator.Replace(" ",""))">@Admin_Resources.LabelOperator</label>
+                                        </div>
+                                        <div class="switch-field control-yes-no">
+                                            <input @(Model.Operator == "OR" ? "checked='checked'" : "") id="Operator_left" name="Operator" value="OR" type="radio"> <label for="Operator_left" data-test-selector="lblOR">OR</label>
+                                            <input @(Model.Operator == "AND" ? "checked='checked'" : "") id="Operator_right" name="Operator" value="AND" type="radio"> <label for="Operator_right" data-test-selector="lblAND">AND</label>
+                                        </div>
+                                        @Html.Partial("_HelpText", @Admin_Resources.HelpDescriptionOperator)
+
+                                    </div>
+                                </div>
+                                <div id="divFeaturesList" class="feature-list-controls">
+                                    @Html.Partial("../Search/_FeatureList", Model.FeaturesList)
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.SearchQueryTypeId, new { id = "SearchQueryTypeId", name = "SearchQueryTypeId" })
+            @Html.HiddenFor(m => m.SearchSubQueryTypeId, new { id = "SearchSubQueryTypeId", name = "SearchSubQueryTypeId" })
+            @Html.HiddenFor(m => m.QueryTypeName, new { id = "QueryTypeName", name = "QueryTypeName" })
+
+        </div>
+    </div>
+
+<script>
+    $(document).ready(function () {
+        var queryName = $("#QueryTypeName").val();
+        Search.prototype.ShowHideDiv(queryName);
+    });
+</script>

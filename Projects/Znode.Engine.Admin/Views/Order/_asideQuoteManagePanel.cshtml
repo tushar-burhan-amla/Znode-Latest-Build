@@ -1,0 +1,64 @@
+﻿<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container dirtyignore">        
+        <ul class="aside-panel orders-aside-panel" id="OrderAsidePannel">
+            <li class="groupPannel tab-selected" id="z-customers">
+                <a onclick="Order.prototype.AddressDivShowHide(this)" id="z-customers" href="javascript:void(0)">
+                    @Admin_Resources.CustomerHeader<div class="pull-right change" style="display:none;">@Admin_Resources.LinkChange</div>
+                </a>
+                <div class="tab-details" style="display:none;">
+                    <p>@Admin_Resources.LabelCustomerName: <span id="spnUserName"></span></p>
+                    <p>@Admin_Resources.LabelStore: <span id="spnStoreName"></span></p>
+                </div>
+            </li>
+            <li class="groupPannel disabled" id="z-address">
+                <a onclick="Order.prototype.AddressDivShowHide(this)" id="z-address" href="javascript:void(0)">
+                    @Admin_Resources.LabelAddress<div class="pull-right change" style="display:none;">@Admin_Resources.LinkChange</div>
+                </a>
+                <div class="tab-details" style="display:none;">
+                    <p>@Admin_Resources.LabelBilling: <span id="spnBillingAddressName"></span></p>
+                    <p>@Admin_Resources.LabelShipping: <span id="spnShippingAddressName"></span></p>
+                </div>
+            </li>
+            <li class="groupPannel disabled" id="z-shopping-cart">
+                <a onclick="Order.prototype.AddressDivShowHide(this)" id="z-shopping-cart" href="javascript:void(0)">
+                    @Admin_Resources.LabelShoppingCart<div class="pull-right change" style="display:none;">@Admin_Resources.LinkChange</div>
+                </a>
+                <div class="tab-details" style="display:none;">
+                    <table aria-describedby="Cart Items Table">
+                        <thead>
+                            <tr>
+                                <th scope="col">@Admin_Resources.LabelSKU</th>
+                                <th scope="col">@Admin_Resources.LabelName</th>
+                                <th scope="col">@Admin_Resources.LabelQty</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyCartItems"></tbody>
+                    </table>
+                </div>
+            </li>
+            <li class="groupPannel disabled" id="z-shipping-methods">
+                <a onclick="Order.prototype.AddressDivShowHide(this)" id="z-shipping-methods" href="javascript:void(0)">
+                    @Admin_Resources.LabelShippingMethods<div class="pull-right change" style="display:none;">@Admin_Resources.LinkChange</div>
+                </a>
+                <div class="tab-details" style="display:none;">
+                    <p>@Admin_Resources.LabelShipping: <span id="spnShippingName"></span></p>
+                </div>
+            </li>
+            <li class="groupPannel disabled" id="z-payment">
+                <a onclick="Order.prototype.AddressDivShowHide(this)" id="z-payment" href="javascript:void(0)">
+                    @Admin_Resources.LabelAdditionalNotes <div class="pull-right change" style="display:none;">@Admin_Resources.LinkChange</div>
+                </a>
+                <div class="tab-details" style="display:none;">
+                    <p>@Admin_Resources.LabelPayment: <span id="spnPaymentName"></span></p>
+                </div>
+            </li>
+            <li class="groupPannel disabled" id="z-review">
+                <a onclick="Order.prototype.AddressDivShowHide(this)" id="z-review" href="javascript:void(0)">
+                    @Admin_Resources.LabelReview
+                </a>
+            </li>
+        </ul>
+    </div>
+</aside>
+

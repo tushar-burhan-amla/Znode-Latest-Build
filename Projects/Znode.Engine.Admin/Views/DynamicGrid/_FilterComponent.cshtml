@@ -1,0 +1,139 @@
+﻿@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@using Znode.Engine.Admin.Extensions
+@using System.Globalization;
+@model FilterColumnListModel
+
+@{
+    var list = new List<BaseDropDownList>();
+
+    foreach (var item in Model.FilterColumnList)
+    {
+        if (item.Id > 0)
+        {
+            list.Add(new BaseDropDownList() { id = item.Id.ToString(), name = item.HeaderText, IsChecked = item.IsSearchable });
+        }
+    }
+    string dateFormat = HelperMethods.GetDateFormat();
+    DropDownOptions _data = new DropDownOptions() { DropDownId = "DropDownId", DropDownList = list, assignable = true, Action = "CreateFilter", Controller = "XMLGenerator", IsAjax = true, SuccessCallBack = "DynamicGrid.prototype.GenerateFilter", IsMultiple = false, IsDraggable = false, IsAllowCheckAll = false, SelectOptionName = "Manage Filters", IsDropDownHidden = true };
+}
+<input type="hidden" id="fastSelectFilterName">
+<input type="hidden" id="fastSelectFilterOperator">
+
+<div class="col-xs-12 nopadding filter-search-content">
+    <div class="col-sm-12 nopadding dirtyignore close-filter">
+        <div class="filter-component dirtyignore">
+            <a href="#" class="filter-close" id="ManageFilterClose"><em class="z-cancel-circle"></em></a>
+            <div class="manage-filter">
+                @Html.Partial("~/Views/DynamicGrid/_FilterPopover.cshtml", Model)
+            </div>
+        </div>
+    </div>
+    <!-- Manage Filters -->
+    <div class="padding-left popup-filter-box dirtyignore">
+        <a href="#!" class="btn-text-icon nomargin popovercontent" data-test-selector="linkFilter" data-toggle="popover"><em class="z-manage-filter" data-placement="right" title="Filter search"><span>Filter</span></em></a>
+    </div>
+    <div id="filter-content-main" class="filter-item-content popup-filter-box">
+        <ul>
+            @if (Model.FilterColumnList.Any(x => x.DataOperatorId != 0))
+            {
+                <li class="filters-label">@Admin_Resources.LabelAppliedFilters:</li>
+            }
+            @foreach (FilterColumnModel column in Model.FilterColumnList.FindAll(x => x.DataOperatorId != 0))
+            {
+                <li class="filter-option dirtyignore" id="filter-control-@column.Id">
+                    @{
+                        string textValue = (column.Value.IndexOf("''") >= 0) ? column.Value.Replace("''", "'") : column.Value;
+                        if ((Equals(column.DataType.ToLower(), "date") || Equals(column.DataType.ToLower(), "datetime")) && !string.IsNullOrEmpty(column.Value))
+                        {
+                            textValue = (column.Value.IndexOf("'") >= 0) ? column.Value.Replace("'", "") : column.Value;
+                            if (textValue.Contains("AND"))
+                            {
+                                textValue = textValue.Split(new string[] { "AND" }, StringSplitOptions.None)[0];
+                            }
+                            textValue = Convert.ToDateTime(textValue).ToDateTimeFormat();
+                        }
+
+                        textValue = textValue.Contains("\"") ? textValue.Replace("\"", "&#34;") : textValue.Contains("'") ? textValue.Replace("'", "&#39;") : textValue;
+                        textValue = textValue.Contains("script") ? textValue.Replace("script", "") : textValue;
+                        if (textValue.ToLower() == "true" || textValue.ToLower() == "false")
+                        {
+                            textValue = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(textValue);
+                        }
+                        string mxlen = Equals(column.DataType, "Int32") ? "maxlength=20" : string.Empty;
+                    <span class="popovercontent" data-text-value="@textValue" data-datype="@column.DataType" data-max-length="@mxlen" data-columnname="@column.ColumnName" data-options-list="@column.SelectListOfDatatype" data-column-datatype="@column.DataType" data-column-dateformat="@dateFormat" data-toggle="popover">
+                        @column.HeaderText &nbsp;<span class="data-val-label"></span><strong style="text-transform:none !important;"> @Html.RenderBlock(textValue)</strong><span class="z-down"></span>
+                    </span>
+
+                        if (!string.IsNullOrEmpty(textValue))
+                        {
+                            <a onclick="DynamicGrid.prototype.RemoveFilterButton(this,'@column.ColumnName')" class="option-close"><em class="z-close-circle" data-placement="top" data-toggle="tooltip" title="Close Filter"></em></a>
+                        }
+
+                    }
+                </li>
+
+            }
+            @if (Model.FilterColumnList.Any(x => x.DataOperatorId != 0))
+            {
+                <li class="clear-option dirtyignore"><a href="#" data-test-selector="linkClearAllFilter" onclick="DynamicGrid.prototype.ClearAllFilter(this)">@Admin_Resources.ClearAllFilter</a></li>
+            }
+
+        </ul>
+
+        @if (!Equals(Model, null) && !Equals(Model.DropdownList, null) && Model.DropdownList.Count > 0)
+        {
+            foreach (var dropdown in Model.DropdownList)
+            {
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <div class="col-sm-12 col-md-10 nopadding">
+                            <label>@dropdown.Label</label>
+                        </div>
+                        <div class="col-sm-12 col-md-10 nopadding">
+                            <select name="@dropdown.Name" id="@dropdown.Name">
+                                @foreach (var option in dropdown.Dropdown)
+                                {
+                                    <option @(option.Selected ? "selected" : "") value="@option.Value">@option.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        <button style="display:none;" type="submit" name="SearchButton" title="Search" id="btnsearch" class="btn-text">@Admin_Resources.TitleSearch</button>
+    </div>
+    <div class="filter-search dirtyignore">
+        @{
+
+            var searchableColumnListModel = GridFilterRazorHelper.GetSearchableColumnList(Model);
+
+            if (!Equals(searchableColumnListModel.SearchableColumn, null) && searchableColumnListModel.SearchableColumn.Count() > 0)
+            {
+                <input id="globalfiltercolumn" class="globalfiltercolumn" name="@searchableColumnListModel.SearchableColumnName" maxlength="130" data-test-selector="txtGlobalSearch" value="@searchableColumnListModel.FilteredValue" data-datype="String" type="text" placeholder="Search..." />
+
+                <div class="pull-left">
+                    @if (!string.IsNullOrEmpty(searchableColumnListModel.FilteredValue))
+                    {
+                        <a onclick="DynamicGrid.prototype.ClearGlobalFilter(this,'@searchableColumnListModel.SearchableColumnName')" class="clear-search" data-test-selector="linkClearSearch"><em class="z-close"></em></a>
+
+                    }
+                    <button onclick="DynamicGrid.prototype.FilterButtonPress(this);return false;" class="btn-search" data-test-selector="btnGlobalSearch" data-value="92"><em class="z-search"></em></button>
+                </div>
+                if (string.IsNullOrEmpty(searchableColumnListModel.FilteredValue))
+                {
+                    <span id="spanRecordFound" class="search-record" style="display:none"> </span>
+                }
+                else
+                {
+                    <span id="spanRecordFound" class="search-record"> </span>
+                }
+
+                <input type="hidden" name="DataOperatorId" value="92" />
+            }
+        }
+
+
+    </div>
+</div>

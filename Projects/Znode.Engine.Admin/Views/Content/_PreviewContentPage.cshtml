@@ -1,0 +1,17 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model CMSWidgetsListViewModel
+<div class="preview-btn-container">
+    <input type="hidden" id="hdnPreviewUrl" value="@Model.PreviewUrl" />
+    <button id="btnPreviewUrl" data-test-selector="btnPreviewUrl" onclick="javascript:window.open('@Model.PreviewUrl/@Model.ParentContentPageSEOUrl','_blank');" class="btn-text-icon"><strong><em class='z-preview'></em>@Admin_Resources.LabelLaunchPreview</strong></button>
+    <button id="btnProductionUrl" data-test-selector="btnProductionUrl" onclick="javascript:window.open('@Model.ProductionUrl/@Model.ParentContentPageSEOUrl','_blank');" class="btn-text-icon"><strong><em class='z-preview'></em>@Admin_Resources.LabelLaunchProduction</strong></button>
+</div>
+<iframe src="@Model.PreviewUrl/@Model.ParentContentPageSEOUrl?preview=preview" id="iframePreview" title="Content Preview Page" width="100%" height="800" style="border:none; overflow:hidden;"></iframe>
+<div id="iframeBlocker" style="position:absolute; top: 12%; left: 0; width:96%; height:95%;background-color:aliceblue;opacity:0.1;"></div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Content.prototype.ShowPreviewNotification();
+    })
+</script>
+

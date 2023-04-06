@@ -1,0 +1,27 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model GlobalAttributeGroupMapperListViewModel
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div id=@Model.GridModel.FrontObjectName data-test-selector="div@(Model.GridModel.FrontObjectName)" tabchild="true">
+    @{
+        <div class="pull-right padding-left action-dropdown">
+            @{Html.RenderAction("GetUnAssignedAttribute", controllerName, new { @globalAttributeGroupId = @Model.GlobalAttributeGroupId });}
+        </div>
+    }
+    <div class="col-sm-12 list-container margin-top assigned-attribute">
+        <div class="attribut-list">
+            @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+        </div>
+    </div>
+
+</div>
+<script>
+    $("#DropDownId1").closest(".dropdown").hide()
+</script>
+<script>
+    $(document).ready(function () { EditableGridEvent.Init(); })
+    $(".input-text").change(function () {
+        validateForm = Products.prototype.ValidateDisplayOrderField(this);
+    });
+</script>

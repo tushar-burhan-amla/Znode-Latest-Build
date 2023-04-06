@@ -1,0 +1,47 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+
+@{
+    string preauthorize = Convert.ToBoolean(Model.PreAuthorize) ? "checked='checked'" : string.Empty;
+    string testMode = Convert.ToBoolean(Model.TestMode) ? "checked='checked'" : string.Empty;
+    string isRmaCompatible = Convert.ToBoolean(Model.IsRmaCompatible) ? "checked='checked'" : string.Empty;
+}
+<h3 class="section-heading-25">@Admin_Resources.LabelPaymentGatewayHeader</h3>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelMerchantLogin, new { @class = "required" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => Model.GatewayUsername, new { required = "required" })
+            @Html.ValidationMessageFor(m => Model.GatewayUsername, @Admin_Resources.MerchantLoginName)
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelMerchantaccountpassword, new { @class = "required" })
+        </div>
+        <div class="control-md">
+            @Html.PasswordFor(m => Model.GatewayPassword, new { required = "required" })
+            @Html.ValidationMessageFor(m => Model.GatewayPassword, @Admin_Resources.MerchantPassword)
+        </div>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelCreditCardAuthorization)
+        </div>
+        <div class="control-md">
+            <label>
+                <input @preauthorize data-val="true" id="PreAuthorize" name="PreAuthorize" type="checkbox" value="true">
+                <span class="lbl padding-8"></span>@Admin_Resources.LabelCreditCardAuthorizationMessage
+                <input name="PreAuthorize" type="hidden" value="false">
+            </label>
+        </div>
+    </div>
+</div>

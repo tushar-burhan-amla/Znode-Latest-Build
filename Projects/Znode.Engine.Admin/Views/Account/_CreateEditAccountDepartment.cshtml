@@ -1,0 +1,55 @@
+﻿@model Znode.Engine.Admin.ViewModels.AccountDepartmentViewModel
+@using Znode.Engine.Admin.ViewModels;
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.TitleMultifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateDepartment", CancelUrl = "/Account/AccountDepartmentList?accountId=" + @Model.AccountId };
+}
+
+<div class="modal-dialog modal-md">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" title="@Admin_Resources.ButtonCancel"><em class="z-close-circle"></em></button>
+            <h4 class="modal-title">@Admin_Resources.HeaderAddDepartment</h4>
+        </div>
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateDepartment" }))
+        {
+            <div class="modal-body">
+                    <div class="col-sm-12 nopadding">
+                        <div class="col-sm-12 nopadding">
+                            <div id="createForm">
+                                <div class="form-group">
+                                    <div class="col-sm-12 nopadding">
+                                        <div class="control-label">
+                                            @Html.LabelFor(m => m.DepartmentName, new { @class = "required", @data_test_selector = "lblDepartmentName" })
+                                        </div>
+                                        <div class="control-md">
+                                            @Html.TextBoxFor(model => model.DepartmentName, new { @data_test_selector = "txtDepartmentName" })
+                                        </div>
+                                        <div class="control-non">
+                                            @Html.ValidationMessageFor(model => model.DepartmentName, "", new { @data_test_selector = "valDepartmentName" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            @Html.HiddenFor(m => m.AccountId)
+            @Html.HiddenFor(m => m.DepartmentId)
+            @Html.HiddenFor(m => m.AccountIdToRedirect)
+            <div class="modal-footer">
+                <div class="col-sm-12 nopadding">
+                    <div class="pull-right">
+                        <button type="button" class="btn-text-icon" data-dismiss="modal" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                        <div class="pull-right">
+                            <button type="submit" class="btn-text btn-text-secondary margin-left-10" data-test-selector="linkSave">@Admin_Resources.ButtonSave</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@Scripts.Render("~/bundles/jqueryval")

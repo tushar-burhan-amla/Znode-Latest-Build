@@ -1,0 +1,41 @@
+﻿@model Znode.Engine.Admin.ViewModels.AccountDataViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Models;
+
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    string accountName = string.IsNullOrEmpty(Model?.CompanyAccount?.Name) ? @Admin_Resources.LabelAccount : Model?.CompanyAccount?.Name;
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.TitleAccount)<em class="z-minus"></em><span>@accountName</span></h1>
+    <div class="pull-right btn-container">
+        @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "List", "Account", null, new { @class = "btn-text-icon", @data_test_selector = "linkBack" })
+        <div class="pull-right padding-left">
+            @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonAdd, "CreateAddress", "Account", new { @class = "btn-text btn-text-secondary", onclick = "ZnodeBase.prototype.BrowseAsidePoupPanel('/Account/CreateAddress?accountId=" + Model.CompanyAccount.AccountId + "&portalId=" + Convert.ToInt32(Model.CompanyAccount.PortalId) + "','divAddCustomerAddress')" })
+        </div>
+    </div>
+</div>
+@Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderDelete,
+                        Description = @Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "DeletePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                         new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk,ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Account.prototype.DeleteAddress(this)" },
+                        }
+                    })
+
+<!--Left Panel-->
+@Html.Partial("~/views/Account/_asideaccountmanagepanel.cshtml")
+<div class="main-wrapper">
+    <section class="main-container">
+        <div id="CompanyAccountDiv">
+            @Html.Partial("_ManagePartial", Model)
+        </div>
+    </section>
+</div>
+<div id="divAddCustomerAddress" class="aside-popup-panel modal-dialog modal-lg"></div>
+<script>
+    Account.prototype.EditAddress();
+</script>

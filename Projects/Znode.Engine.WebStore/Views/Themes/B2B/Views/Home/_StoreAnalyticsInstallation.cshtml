@@ -1,0 +1,15 @@
+﻿@model Znode.Engine.WebStore.ViewModels.PortalViewModel
+
+@{
+    string tagManagerContainerId = Model.ContainerId;
+    bool applyTagManager = Model.IsEnabledTagManager && !string.IsNullOrEmpty(tagManagerContainerId);    
+}
+@if (applyTagManager)
+{
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=@tagManagerContainerId"
+                title="Store Analytics" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+}

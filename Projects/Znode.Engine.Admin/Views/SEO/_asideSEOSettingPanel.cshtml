@@ -1,0 +1,12 @@
+﻿<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">        
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelDefaultSettings, "SEOSetting", "SEO", new { @data_test_selector= "linkDefaultSettings" }, new { title = Admin_Resources.LabelDefaultSettings })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelProducts, "GetPublishedProducts", "SEO", new { @data_test_selector = "linkPublishedProducts" }, new { title = Admin_Resources.LabelProducts })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelCategories, "GetPublishedCategories", "SEO", new { @data_test_selector = "linkCategories" }, new { title = Admin_Resources.LabelCategories })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelContentPages, "GetContentPages", "SEO", new { @data_test_selector = "linkContentPages" }, new { title = Admin_Resources.LabelContentPages })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.Label301UrlRedirect, "UrlRedirectList", "SEO", new { @data_test_selector = "link301UrlRedirect" }, new { title = Admin_Resources.Label301UrlRedirect })</li>
+        </ul>
+    </div>
+</aside>

@@ -1,0 +1,49 @@
+﻿@model AutoComplete
+<div class="quick-order-container quickordercontainer template-quick-order quotebutton" id="template-quick-order-content">
+ 
+    @using (Ajax.BeginForm("AddToTemplate", "User", new AjaxOptions() { UpdateTargetId = "TemplateCartItem", OnSuccess = "QuickOrder.prototype.CloseTemplateQuickOrder" }, new { @id = "addtocart-form" }))
+    {
+        <input type="hidden" id="hdnQuickOrderProductId" name="ProductId" />
+        <input type="hidden" id="hdnQuickOrderProductName" name="ProductName" />
+        <input type="hidden" id="hdnQuickOrderSku" name="SKU" />
+        <input type="hidden" id="hdnQuickOrderProductType" name="ProductType" />
+        <input type="hidden" id="hdnQuickOrderCartQuantity" name="CartQuantity" />
+        <input type="hidden" id="hdnQuickOrderQuantityOnHand" name="QuantityOnHand" />
+        <input type="hidden" id="hdnQuickOrderInStockMessage" name="InStockMessage" />
+        <input type="hidden" id="hdnQuickOrderOutOfStockMessage" name="OutOfStockMessage" />
+        <input type="hidden" id="hdnQuickOrderInventoryMessage" name="InventoryMessage" />
+        <input type="hidden" id="hdnQuickOrderInventoryTracking" name="TrackInventory" />
+        <input type="hidden" id="hdnQuickOrderMinQty" name="MinQty" />
+        <input type="hidden" id="hdnQuickOrderMaxQty" name="MinQty" />
+        <input type="hidden" id="hdnQuickOrderCallForPricing" name="CallForPricing" />
+        <input type="hidden" id="hdnRetailPrice" name="RetailPrice" />
+        <input type="hidden" id="hdnImagePath" name="ImagePath" />
+        <input type="hidden" id="hdnTemplateNameQuickOrder" name="TemplateName" />
+        <div id="b2b-quick-order" class="side-nav nav-right text-left">
+            <div class="col-12 text-right nav-header">
+                <a href="JavaScript:void(0);" class="CloseNav p-0 close-icon" data-test-selector="linkQuickOrder"></a>
+                <div class="nav-label"><div class="cut-text"><span class="clock-icon"></span> @WebStore_Resources.LabelAddProducts</div></div>
+            </div>
+            <div class="col-12 login-container">
+                <div class="row no-gutters">
+                    <div class="col-10 d-flex">
+                        <label for="hdnttxtSKU" class="visuallyhidden">@WebStore_Resources.TextEnterSku</label>
+                        @Html.AutocompleteFor(model => model.Name, model => model.Id, "GetProductListBySKU", "Product", "QuickOrder.prototype.OnItemSelect", false, new { htmlAttributes = new { @placeholder = WebStore_Resources.TextEnterSku, @class = "txtQuickOrderSku", @id = "hdnttxtSKU" } })
+                    </div>
+                    <div class="col-2">
+                        @Html.TextBox("Quantity", 1, new { @id = "txtQuickOrderQuantity", @class = "quantity txtQuickOrderQuantity", @placeholder = WebStore_Resources.ColumnTitleQty, @maxlength = 4 })
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-12 border-bottom">
+                        <button class="btn btn-primary w-100 my-4 quickOrderAddToCart" disabled="disabled">@WebStore_Resources.ButtonAddToTemplate</button>
+                    </div>
+                    <div class="col-12">
+                        @Html.ActionLink(WebStore_Resources.B2BLabelQuickOrderMultiplePartSku, "QuickOrderPadTemplate", "User", null, new { @class = "multiple-sku btn btn-secondary mt-4 d-block", id = "quickOrderPadTemplateLink", @data_test_selector = "linkMultiplePartSku" })
+                    </div>
+                    <p id="inventorymsg" class="error-msg"></p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

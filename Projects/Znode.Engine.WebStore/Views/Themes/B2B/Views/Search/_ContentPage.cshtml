@@ -1,0 +1,64 @@
+﻿@using Znode.Engine.WebStore.ViewModels;
+@model CMSPageListViewModel
+@{
+    string searchTerm = Model?.SearchKeyword;
+    string domainurl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+}
+
+<div class="blog-search-list-container">
+    @if (Model != null)
+    {
+        if (Model.CMSPages?.Count > 0)
+        {
+            <div class="row">
+                <div class="col-md-12 blog-header-results">
+                    <p class="search-result" data-test-selector="lblCMSSearchResult">@Html.RenderBlock(Model.SearchResultCountText)</p>
+                </div>
+            </div>
+
+            <div class="row blog-list">
+
+                @foreach (CMSPageViewModel cmsPage in Model.CMSPages)
+                {
+                    string seoURL = string.Empty;
+
+                    string cmsTitle = !string.IsNullOrEmpty(cmsPage.SeoTitle) ? cmsPage.SeoTitle : cmsPage.PageTitle;
+                    if (cmsPage.BlogNewsId > 0)
+                    {
+                        seoURL = @domainurl + @Url.GetBlogNewsUrl(cmsPage.SeoURL, null, cmsPage.BlogNewsId, cmsPage.BlogNewsType);
+                    }
+                    else
+                    {
+                        seoURL = @domainurl + @Url.GetContentPageUrl(cmsPage.SeoURL, cmsPage.ContentPageId);
+                    }
+
+                    string seoDescription = cmsPage.SeoDescription;
+
+                    <!-- Blog list item starts -->
+                    <div class="col-md-12 border-bottom mb-3 pb-3 py-0">
+                        <h4 class="blog-title"><a href="@seoURL">@cmsTitle</a></h4>
+                        <div class="blog-description">
+                            <p>@seoDescription</p>
+                        </div>
+                        <div class="blog-seo-url">
+                            <a href="@seoURL">@seoURL</a>
+                        </div>
+                    </div>
+                    <!-- Blog list item ends -->
+                }
+            </div>
+
+            <div class="b2b-filters d-flex">
+                <div class="d-flex flex-wrap justify-content-center align-items-center">
+                    @Html.Partial("../Search/_ContentPageSearchBottomPaging", Model)
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-sm-12 nopadding margin-bottom" data-test-selector="divResultFoundMessage">
+                @Html.RenderBlock(WebStore_Resources.NoCMSPageSearchResultFound?.Replace("{0}", searchTerm))
+            </div>
+        }
+    }
+</div>

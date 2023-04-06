@@ -1,0 +1,98 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities;
+    @{
+        string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+        string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+        string areaName = ViewContext.RouteData?.DataTokens["area"]?.ToString();
+        string key = $"{controllerName}/{actionName}";
+        SessionProxyHelper objHelper = new SessionProxyHelper();
+        MenuListViewModel menuList = objHelper.GetMenuListByUserName();
+
+        string globalAttributeEntityType = Request?.QueryString["entityType"];
+        int? menuId = menuList?.Menus.Where(x => x.AreaName?.ToLower() == areaName?.ToLower() && x.ControllerName?.ToLower() == controllerName?.ToLower() && x.ActionName?.ToLower() == actionName?.ToLower()).Select(x => x.MenuId).FirstOrDefault();
+        if (Equals(menuId, 0))
+        {
+            if (!string.IsNullOrEmpty(globalAttributeEntityType))
+            {
+                key = string.Equals(globalAttributeEntityType, Convert.ToString(EntityTypeEnum.User), StringComparison.CurrentCultureIgnoreCase)
+                    ? "Customer/CustomerEdit" : string.Equals(globalAttributeEntityType, Convert.ToString(EntityTypeEnum.Account), StringComparison.CurrentCultureIgnoreCase) ? "Account/EditAccount" : key;
+            }
+            menuId = SessionProxyHelper.GetUserPermission()?.Where(x => x.RequestUrlTemplate?.ToLower() == key?.ToLower())?.Select(x => x.MenuId)?.LastOrDefault();
+        }
+    }
+
+    <nav class="menulist-dropdown">
+        @if (menuList?.Menus?.Count > 0)
+        {
+            if (menuId > 0)
+            {
+                <ul>
+                    @DisplayMenu(menuId, menuList)
+                    @{
+                        MenuViewModel menuDetail = menuList.Menus.FirstOrDefault(x => x.MenuId == menuId);
+                        if (!Equals(menuDetail, null))
+                        {
+                            string url = string.IsNullOrEmpty(menuDetail.AreaName) ? $"/{menuDetail.ControllerName}/{menuDetail.ActionName}" : $"/{menuDetail.AreaName}/{menuDetail.ControllerName}/{menuDetail.ActionName}";
+                            <li>
+                                @if (menuList.Menus.Any(x => x.ParentMenuId == menuId))
+                        {
+                            List<MenuViewModel> ChildMenus = menuList.Menus.FindAll(y => Equals(y.ParentMenuId, menuId) && Equals(y.IsActive, true)).OrderBy(x => x.MenuSequence).ThenBy(x => x.MenuId).ToList();
+                            if (ChildMenus?.Count > 0)
+                            {
+                                        @DisplayChildMenu(menuDetail.MenuName, ChildMenus);
+                            }
+                        }
+                        else
+                        {
+                                <a class="sub-menu" id="@menuId" href="@url" data-test-selector="linkNav@(menuDetail.MenuName.Replace(" ",""))">@menuDetail.MenuName</a>
+                            }
+                        </li>
+                    }
+                }
+            </ul>
+                        }
+                    }
+</nav>
+
+
+    @helper DisplayMenu(int? menuId, MenuListViewModel menuList)
+    {
+MenuViewModel menuDetail = menuList.Menus.FirstOrDefault(x => x.MenuId == menuId);
+if (!Equals(menuDetail, null))
+{
+    string parentMenuName = (menuDetail.ParentMenuId > 0) ? menuList.Menus.Where(x => x.MenuId == menuDetail.ParentMenuId)?.FirstOrDefault()?.MenuName : menuDetail.MenuName;
+    List<MenuViewModel> ChildMenus = (menuDetail.ParentMenuId > 0) ? menuList.Menus.FindAll(y => Equals(y.ParentMenuId, menuDetail.ParentMenuId) && Equals(y.IsActive, true)).OrderBy(x => x.MenuSequence).ThenBy(x => x.MenuId).ToList() : null;
+    if (menuDetail.ParentMenuId > 0)
+    {
+            @DisplayMenu(menuDetail.ParentMenuId, menuList)
+    }
+    if (ChildMenus?.Count > 0)
+    {
+            <li>
+                @DisplayChildMenu(parentMenuName, ChildMenus)
+            </li>
+    }
+}
+}
+
+    @helper DisplayChildMenu(string parentMenuName, List<MenuViewModel> lstChildMenus)
+    {
+        <a href="#" class="sub-menu" id="@lstChildMenus.FirstOrDefault().ParentMenuId" data-test-selector="linkNav@(parentMenuName.Replace(" ",""))">@parentMenuName<em class="z-angle-down"></em></a>
+        <ul class="dropdown-menu">
+            @foreach (MenuViewModel childItem in lstChildMenus)
+            {
+                string childMenuUrl = string.IsNullOrEmpty(childItem.AreaName) ? $"/{childItem.ControllerName}/{childItem.ActionName}" : $"/{childItem.AreaName}/{childItem.ControllerName}/{childItem.ActionName}";
+                string childMenuName = childItem.MenuName;
+                string className = string.IsNullOrEmpty(childItem.CSSClassName) ? "z-info" : childItem.CSSClassName;
+                <li><a data-test-selector="link@(childMenuName.Replace(" ", ""))" href="@childMenuUrl"><em class="@className"></em>@childMenuName</a></li>
+            }
+        </ul>
+}
+ <script>
+    $(document).ready(function () {
+        $('nav.menulist-dropdown ul li').hover(function () {
+            $("#ddlPaymentTypes,#ddlPaymentGetways,#ddlTestMode,#ParentMenuId,#ddlEntityType,#attributeTypeList,#LocaleId,#importTypeList,#templateList,#familyList,#ddlTaxType,#ddlShippingType,#ddlPromotionType,#ddlERPConfiguratorClasses").blur();
+        });       
+    });
+ </script>

@@ -1,0 +1,431 @@
+﻿
+@using Znode.Engine.WebStore.ViewModels
+@model AddressViewModel
+
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string actionName = ViewContext.RouteData.Values["action"].ToString();
+    string _addressType = ViewBag.AddressType != null ? ViewBag.AddressType : Model.AddressType;
+    bool isSameAsBilling = Convert.ToBoolean(ViewBag.IsSameAsBilling);
+    string _shippingBillingDisplay = ((Convert.ToString(Request.QueryString["mode"]) == "guest" || Model.AddressId > 0) && Equals(_addressType, WebStoreConstants.ShippingAddressType)) ? "display:block" : "display:none";
+    int addressCount = Model.AddressCount;
+    string isEnableDisableCheckbox = (addressCount < 1) ? "checkbox-disable" : "";
+    string selectedAddressId = "";
+    if (actionName == "EditAddress")
+    {
+        TempData["SelectedAddressId"] = Model.AddressId.ToString();
+        selectedAddressId = Model.AddressId.ToString();
+    }
+    else
+    {
+        selectedAddressId = TempData["SelectedAddressId"] != null ? Convert.ToString(TempData["SelectedAddressId"]) : "0";
+        TempData["SelectedAddressId"] = selectedAddressId;
+    }
+    Model.IsAddressBook = controllerName.ToLower() == "user" ? true : false;
+}
+@if (!Model.HasError)
+{
+    <div class="col-12 b2b-form">
+        <div id="AddressError" class="text-left mb-3 error-msg"></div>
+        <div id="AddressSuccess" class="text-left mb-3 success-msg"></div>
+        <div class="row">
+            <div class="col-12 col-md-6 p-0 mb-3 mb-mb-0">
+                @Html.ValidationSummary(true)
+                @if (Equals(ViewBag.HideDisplayName, null) || Equals(ViewBag.HideDisplayName, false))
+                {
+                    @* The display name input should be toggled via a parameter per view as needed *@
+                    <div class="col-12 form-group mb-3">
+                        <div class="form-title">
+                            <label for="address_name" class="required">@WebStore_Resources.ColumnDisplayName</label>
+                        </div>
+                        <div class="col-12 p-0">
+                            @Html.TextBoxFor(m => m.DisplayName, new { @id = "address_name", @placeholder = @WebStore_Resources.HintTextDisplayName, @data_test_selector = "txtDisplayName" })
+                            <p class="error-msg">@Html.ValidationMessageFor(m => m.DisplayName,"",new { @data_test_selector = "spnErrorDisplayName" })</p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @* Set default value for model validation *@
+                    <div class="col-12"><input id="address_name" name="Name" type="hidden" value="Default Address"></div>
+                }
+                <div class="col-12 form-group mb-3">
+                    <div class="form-title">
+                        <label for="address_firstname" class="required" data-test-selector="lblfirstname">@WebStore_Resources.ColumnFirstName</label>
+                    </div>
+                    <div class="col-12 p-0">
+                        @Html.TextBoxFor(m => m.FirstName, new { @id = "address_firstname", @data_test_selector = "txtAddressFirstname" })
+                        <p class="error-msg">@Html.ValidationMessageFor(m => m.FirstName, "", new { @data_test_selector = "spnErrorFirstName" })</p>
+                    </div>
+                </div>
+
+                <div class="col-12 form-group mb-3">
+                    <div class="form-title">
+                        <label for="address_lastname" class="required" data-test-selector="lbllastname">@WebStore_Resources.ColumnLastName</label>
+                    </div>
+                    <div class="col-12 p-0">
+                        @Html.TextBoxFor(m => m.LastName, new { @id = "address_lastname", @data_test_selector = "txtAddressLastname" })
+                        <p class="form-error">@Html.ValidationMessageFor(m => m.LastName, "", new { @data_test_selector = "spnErrorLastName" })</p>
+                    </div>
+                </div>
+                <div class="col-12 form-group mb-3">
+                    <div class="form-title">
+                        <label for="address_phonenumber" class="required">
+                            @WebStore_Resources.ColumnPhoneNo
+                        </label>
+                    </div>
+                    <div class="col-12 p-0">
+                        @Html.TextBoxFor(m => m.PhoneNumber, new { @id = "address_phoneno", @class = "form-input-short" , @data_test_selector = "txtPhoneNumber" })
+                        <p class="error-msg">@Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @data_test_selector = "spnErrorPhoneNumber" })</p>
+                    </div>
+                </div>
+                <div class="col-12 form-group mb-3">
+                    <div class="form-title">
+                        <label for="address_name">@WebStore_Resources.ColumnCompanyName</label>
+                    </div>
+                    <div class="col-12 p-0">
+                        @Html.TextBoxFor(m => m.CompanyName,new { @data_test_selector = "txtCompanyName" })
+                        <p class="error-msg">@Html.ValidationMessageFor(m => m.CompanyName, "", new { @data_test_selector = "spnErrorCompanyName" })</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-12 col-md-6 p-0">
+                <div class="col-12 form-group">
+                    <div class="form-title">
+                        <label for="address_street1" class="required">@WebStore_Resources.ColumnStreetAddress</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            @Html.TextBoxFor(m => m.Address1, new { @id = "address_street1", @class = "form-input-long", @data_test_selector = "txtAddressStreet1" })
+                            <p class="error-msg">@Html.ValidationMessageFor(m => m.Address1, "", new { @data_test_selector = "spnErrorAddress1" })</p>
+                        </div>
+                        <div class="col-12 mb-3">
+                            @Html.TextBoxFor(m => m.Address2, new { @id = "address_street2", @class = "form-input-long", @data_test_selector = "txtAddressStreet2" })
+                            <p class="error-msg">@Html.ValidationMessageFor(m => m.Address2, "", new { @data_test_selector = "spnErrorAddress2" })</p>
+                        </div>
+                    </div>
+                </div>
+                @*country dropdown list*@
+                <div class="col-12 form-group mb-3">
+                    <div class="form-title">
+                        <label for="address_country" class="required">@WebStore_Resources.ColumnCountry</label>
+                    </div>
+                    <div class="col-12 p-0">
+                        @Html.DropDownListFor(m => m.CountryName, Model.Countries, new { @id = "ShippingAddressModel_CountryCode", @class = "address_country", @onchange = "User.prototype.BindStates()", @data_test_selector = "txtCountryName" })
+                        <p class="error-msg">@Html.ValidationMessageFor(m => m.CountryName, "", new { @data_test_selector = "spnErrorCountryName" })</p>
+                    </div>
+                </div>
+
+                <div class="col-12 form-group mb-3">
+                    <div class="form-title">
+                        <label for="address_state" class="required">@WebStore_Resources.ColumnState</label>
+                    </div>
+                    <div class="col-12 p-0" id="stateCodeTextBox">
+                        <div id="dev-statecode-textbox">
+                            @Html.TextBoxFor(m => m.StateName, new { @id = "txtStateCode", @class = "txtStateCode", @data_test_selector = "txtStateCode" })
+                        </div>
+                        <div style="display:none;" id="dev-statecode-select">
+                            <select class="valid address_state" id="SelectStateName" name="StateName"></select>
+                        </div>
+                        <p class="error-msg">@Html.ValidationMessageFor(m => m.StateName, null, new { @id = "valtxtStateCode", @data_test_selector = "spnErrorStateCode" })</p>
+                    </div>
+                </div>
+                <div class="col-12 form-group mb-3">
+                    <div class="form-title">
+                        <label for="address_zipcode" class="required">
+                            @WebStore_Resources.LabelPostalCode
+                        </label>
+                    </div>
+                    <div class="col-12 p-0">
+                        @Html.TextBoxFor(m => m.PostalCode, new { @id = "address_postalcode", @class = "form-input-short", @onkeydown = "User.prototype.RemoveValidationMessage('" + @_addressType + "')", @data_test_selector = "txtPostalCode" })
+                        <p class="error-msg">@Html.ValidationMessageFor(m => m.PostalCode, "", new { @data_test_selector = "spnErrorPostalCode" })</p>
+                        <span class="error-msg" id="valid-postalcode" style="display: none;">@WebStore_Resources.ValidationZipCode</span>
+                    </div>
+                </div>
+
+                <div class="col-12 form-group mb-3">
+                    <div class="form-title">
+                        <label for="address_city" class="required">@WebStore_Resources.ColumnCity</label>
+                    </div>
+                    <div class="col-12 p-0">
+                        @Html.TextBoxFor(m => m.CityName, new { @id = "address_city", @data_test_selector = "txtCityName" })
+                        <p class="error-msg">@Html.ValidationMessageFor(m => m.CityName, "", new { @data_test_selector = "spnErrorCityName" })</p>
+                    </div>
+                </div>
+
+                @if (!HttpContext.Current.User.Identity.IsAuthenticated && Equals(_addressType, WebStoreConstants.ShippingAddressType))
+                {
+                    //Guest shipping type
+                    <div class="col-12 form-group mb-3">
+                        <div class="form-title">
+                            <label for="address_email" class="required">
+                                @WebStore_Resources.EmailAddress
+                            </label>
+                        </div>
+                        <div class="col-12 p-0">
+                            @Html.TextBoxFor(m => m.EmailAddress, new { @id = "address_emailaddress", @class = "form-input-short", @data_test_selector = "txtEmailAddress" })
+                            <p class="error-msg">@Html.ValidationMessageFor(m => m.EmailAddress, "", new { @data_test_selector = "spnErrorEmailAddress" })</p>
+                        </div>
+                    </div>
+                }
+                @if (string.Equals(controllerName, "User", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    //User controller
+                    Model.IsDefaultShipping = (addressCount < 1) ? true : Model.IsDefaultShipping;
+                    Model.IsDefaultBilling = (addressCount < 1) ? true : Model.IsDefaultBilling;
+
+                    //This will set the new address as a billing and shipping address, so it will appear in edit address dropdown during checkout.
+                    @Html.Hidden("IsBilling", true)
+                    @Html.Hidden("IsShipping", true)
+                    <div class="col-12 p-0 m-3">
+                        <div class="styled-input input-checkbox_label @(Model.IsDefaultShipping ? "checkbox-disable" : isEnableDisableCheckbox) billingShippingCheckBox">
+                            <input class="input-checkbox" @(Model.IsDefaultShipping ? "checked='checked'" : "") type="checkbox" value="true" name="IsDefaultShipping" id="asdefault_shipping" data-val="true">
+                            <label for="asdefault_shipping" data-test-selector="lblDefaultShipping">@WebStore_Resources.CheckBoxTextShippingAddress</label>
+                        </div>
+                    </div>
+                    <div class="col-12 p-0 m-3">
+                        <div class="styled-input input-checkbox_label @(Model.IsDefaultBilling ? "checkbox-disable" : isEnableDisableCheckbox) billingShippingCheckBox">
+                            <input class="input-checkbox" @(Model.IsDefaultBilling ? "checked='checked'" : "") type="checkbox" value="true" name="IsDefaultBilling" id="asdefault_billing" data-val="true">
+                            <label for="asdefault_billing" data-test-selector="lblDefaultBilling">@WebStore_Resources.CheckBoxTextBillingAddress</label>
+                        </div>
+                    </div>
+                    <div class="col-12 p-0 m-3" style="display:none !important">
+                        <div class="styled-input input-checkbox-IsAddUpdateAddress">
+                            <input type="checkbox" class="input-checkbox" name="DontAddUpdateAddress" id="is_addupdate_address" value="true" text="Add/update my address book">
+                            <label for="is_addupdate_address" data-test-selector="lblAddUpdateAddress">@WebStore_Resources.CheckBoxTextAddToAddressBook</label>
+                        </div>
+                    </div>
+                }
+                else if ((Model.AddressId < 1 || isSameAsBilling || Model.AspNetUserId == null) && Equals(_addressType, WebStoreConstants.ShippingAddressType))
+                {
+                    //Guest_or_Login : Edit mode shipping address
+                    if (Model.DontAddUpdateAddress)
+                    {
+                        //If it's One time address
+                        @Html.Hidden("IsBilling")
+                        @Html.Hidden("IsShipping", true)
+                        @Html.HiddenFor(model => model.IsDefaultBilling)
+                        @Html.HiddenFor(model => model.IsDefaultShipping)
+                    }
+                    else
+                    {
+                        if (HttpContext.Current.User.Identity.IsAuthenticated)
+                        {
+                            //Logged in user
+                            Model.IsDefaultShipping = (addressCount < 1 && Equals(_addressType, WebStoreConstants.ShippingAddressType)) ? true : Model.IsDefaultShipping;
+                            <div class="form-group input-checkbox_container set-as-default-address-IsDefaultShipping m-3">
+                                <div class="col-12 p-0 styled-input input-checkbox_label @(Model.IsDefaultShipping ? "checkbox-disable" : isEnableDisableCheckbox)">
+                                    <input class="input-checkbox billingShippingCheckBox" @(Model.IsDefaultShipping ? "checked='checked'" : "") type="checkbox" value="true" name="IsDefaultShipping" id="asdefault_shipping" data-val="true">
+                                    <label for="asdefault_shipping">@WebStore_Resources.CheckBoxTextDefaultAddress</label>
+                                    @Html.Hidden("IsBilling")
+                                    @Html.Hidden("IsShipping", true)
+                                    @Html.HiddenFor(model => model.IsDefaultBilling)
+                                </div>
+                            </div>
+                        }
+                        if (string.IsNullOrEmpty(Model.FirstName) && Equals(_addressType, WebStoreConstants.ShippingAddressType))
+                        {
+                            <div class="form-group input-checkbox_container m-3">
+                                <div class="col-12 p-0 styled-input input-checkbox-IsBothBillingShipping">
+                                    <input type="checkbox" class="input-checkbox billingShippingCheckBox" name="IsBothBillingShipping" id="is_both_billing_shipping" data-addressType="@_addressType" checked='checked' value="true" text="Both Billing and Shipping address"
+                                           onclick="Checkout.prototype.ShowHideBillingAddressDiv();">
+                                    <label for="is_both_billing_shipping">@string.Format(WebStore_Resources.CheckBoxTextUseSameAsAddress, WebStoreConstants.BillingAddressType.ToProperCase())</label>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group input-checkbox_container m-3">
+                                <div class="col-12 p-0 styled-input input-checkbox-IsBothBillingShipping">
+                                    <input type="checkbox" class="input-checkbox billingShippingCheckBox" name="IsBothBillingShipping" id="is_both_billing_shipping" data-addressType="@_addressType" @((Model.IsShipping && (Model.IsBilling)) ? "checked='checked'" : "") value="true" text="Both Billing and Shipping address"
+                                           onclick="Checkout.prototype.ShowHideBillingAddressDiv();">
+                                    <label for="is_both_billing_shipping">@string.Format(WebStore_Resources.CheckBoxTextUseSameAsAddress, WebStoreConstants.BillingAddressType.ToProperCase())</label>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+                else if (Model.AddressId > 0 && Equals(_addressType, WebStoreConstants.BillingAddressType))
+                {
+                    //Guest_or_Login : Edit mode billing address
+                    if (Model.DontAddUpdateAddress)
+                    {
+                        //If it's One time address
+                        @Html.Hidden("IsBilling", true)
+                        @Html.Hidden("IsShipping")
+                        @Html.HiddenFor(model => model.IsDefaultShipping)
+                        @Html.HiddenFor(model => model.IsDefaultBilling)
+                    }
+                    else
+                    {
+                        if (HttpContext.Current.User.Identity.IsAuthenticated)
+                        {
+                            <div class="form-group input-checkbox_container set-as-default-address-IsDefaultBilling m-3">
+                                <div class="col-12 p-0 styled-input input-checkbox_label @(Model.IsDefaultBilling ? "checkbox-disable" : isEnableDisableCheckbox)">
+                                    <input class="input-checkbox billingShippingCheckBox" @(Model.IsDefaultBilling ? "checked='checked'" : "") type="checkbox" value="true" name="IsDefaultBilling" id="asdefault_billing" data-val="true">
+                                    <label for="asdefault_billing">@WebStore_Resources.CheckBoxTextDefaultAddress</label>
+                                    @Html.Hidden("IsBilling", true)
+                                    @Html.Hidden("IsShipping")
+                                    @Html.HiddenFor(model => model.IsDefaultShipping)
+                                </div>
+                            </div>
+                        }
+                    }
+                    <div class="form-group m-3">
+                        <div class="styled-input input-checkbox-IsBothBillingShipping">
+                            <input type="checkbox" class="input-checkbox billingShippingCheckBox" name="IsBothBillingShipping" id="sameAsShipping" value="true" data-addressType="@_addressType" @((Model.IsShipping && (Model.IsBilling)) ? "checked='checked'" : "") text="Both Billing and Shipping address" onclick="Checkout.prototype.ShowHideShippingAddressDiv();">
+                            <label for="sameAsShipping">@string.Format(WebStore_Resources.CheckBoxTextUseSameAsAddress, WebStoreConstants.ShippingAddressType.ToProperCase())</label>
+                        </div>
+                    </div>
+                }
+                else if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    //Logged in user
+                    Model.IsDefaultBilling = (addressCount < 1 && Equals(_addressType, WebStoreConstants.BillingAddressType)) ? true : Model.IsDefaultBilling;
+                    if (Equals(_addressType, WebStoreConstants.ShippingAddressType))
+                    {
+                        //Shipping
+                        Model.IsDefaultShipping = (addressCount < 1 && Equals(_addressType, WebStoreConstants.ShippingAddressType)) ? true : Model.IsDefaultShipping;
+                        <div class="form-group">
+                            <div class="input-checkbox_container set-as-default-address-IsDefaultShipping m-3">
+                                <div class="col-12 p-0 styled-input input-checkbox_label @(Model.IsDefaultShipping ? "checkbox-disable" : isEnableDisableCheckbox)">
+                                    <input class="input-checkbox billingShippingCheckBox" @(Model.IsDefaultShipping ? "checked='checked'" : "") type="checkbox" value="true" name="IsDefaultShipping" id="asdefault_shipping" data-val="true">
+                                    <label for="asdefault_shipping">@(Equals(_addressType, WebStoreConstants.ShippingAddressType) ? WebStore_Resources.CheckBoxTextDefaultAddress : WebStore_Resources.CheckBoxTextShippingAddress)</label>
+                                </div>
+                            </div>
+                            @Html.Hidden("IsBilling")
+                            @Html.Hidden("IsShipping", true)
+                            @Html.HiddenFor(model => model.IsDefaultBilling)
+                        </div>
+
+
+                        <div class="form-group input-checkbox_container m-3">
+                            <div class="col-12 p-0 styled-input input-checkbox-IsBothBillingShipping">
+                                <input type="checkbox" class="input-checkbox billingShippingCheckBox" name="IsBothBillingShipping" id="is_both_billing_shipping" data-addressType="@_addressType" @((Model.IsShipping && (Model.IsBilling)) ? "checked='checked'" : "") onclick="Checkout.prototype.ShowHideBillingAddressDiv();" value="true" text="Both Billing and Shipping address">
+                                <label for="is_both_billing_shipping">@string.Format(WebStore_Resources.CheckBoxTextUseSameAsAddress, WebStoreConstants.BillingAddressType.ToProperCase())</label>
+                            </div>
+                        </div>
+                    }
+                    else if (Equals(_addressType, WebStoreConstants.BillingAddressType))
+                    {
+                        //Billing
+                        <div class="form-group">
+                            <div class="input-checkbox_container set-as-default-address-IsDefaultBilling m-3">
+                                <div class="col-12 p-0 styled-input input-checkbox_label @(Model.IsDefaultBilling ? "checkbox-disable" : isEnableDisableCheckbox)">
+                                    <input class="input-checkbox billingShippingCheckBox" @(Model.IsDefaultBilling ? "checked='checked'" : "") type="checkbox" value="true" name="IsDefaultBilling" id="asdefault_billing" data-val="true">
+                                    <label for="asdefault_billing">@WebStore_Resources.CheckBoxTextDefaultAddress</label>
+                                </div>
+                            </div>
+                            @Html.Hidden("IsBilling", true)
+                            @Html.Hidden("IsShipping")
+                            @Html.HiddenFor(model => model.IsDefaultShipping)
+                        </div>
+
+
+                        <div class="form-group input-checkbox_container m-3">
+                            <div class="col-12 p-0 styled-input input-checkbox-IsBothBillingShipping">
+                                <input type="checkbox" class="input-checkbox billingShippingCheckBox" name="IsBothBillingShipping" id="sameAsShipping" data-addressType="@_addressType" @((Model.IsShipping && (Model.IsBilling)) ? "checked='checked'" : "") value="true" text="Both Billing and Shipping address">
+                                <label for="sameAsShipping">@string.Format(WebStore_Resources.CheckBoxTextUseSameAsAddress, WebStoreConstants.ShippingAddressType.ToProperCase())</label>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        //Neither shipping nor billing
+                        Model.IsDefaultShipping = (addressCount < 1) ? true : Model.IsDefaultShipping;
+                        Model.IsDefaultBilling = (addressCount < 1) ? true : Model.IsDefaultBilling;
+
+                        <div class="form-group input-checkbox_container m-3">
+                            <div class="col-12 p-0 styled-input input-checkbox_label @(Model.IsDefaultShipping ? "checkbox-disable" : isEnableDisableCheckbox)">
+                                <input class="input-checkbox" @(Model.IsDefaultShipping ? "checked='checked'" : "") type="checkbox" value="true" name="IsDefaultShipping" id="asdefault_shipping" data-val="true">
+                                <label for="asdefault_shipping">@WebStore_Resources.CheckBoxTextShippingAddress</label>
+                            </div>
+                        </div>
+                        <div class="form-group input-checkbox_container m-3">
+                            <div class="col-12 p-0 styled-input @(Model.IsDefaultBilling ? "checkbox-disable" : isEnableDisableCheckbox)">
+                                <input class="input-checkbox" @(Model.IsDefaultBilling ? "checked='checked'" : "") type="checkbox" value="true" name="IsDefaultBilling" id="asdefault_billing" data-val="true">
+                                <label for="asdefault_billing">@WebStore_Resources.CheckBoxTextBillingAddress</label>
+                            </div>
+                        </div>
+                        @Html.Hidden("IsBilling")
+                        @Html.Hidden("IsShipping")
+                    }
+                }
+                else if (Equals(_addressType, WebStoreConstants.BillingAddressType))
+                {
+                    @Html.Hidden("IsAddUpdateAddress", true)
+                }
+
+                @if (HttpContext.Current.User.Identity.IsAuthenticated && Model.AddressId.Equals(0) && String.Equals(controllerName, "Checkout", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    //Checkout controller
+                    <div class="form-group input-checkbox_container m-3">
+                        <div class="col-12 p-0 styled-input input-checkbox-IsAddUpdateAddress">
+                            <input type="checkbox" class="input-checkbox" name="DontAddUpdateAddress" id="is_addupdate_address" value="true" text="Add/update my address book">
+                            <label for="is_addupdate_address">@WebStore_Resources.CheckBoxTextAddToAddressBook</label>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-12 text-right quotebutton pb-3">
+                @if (String.Equals(controllerName, "Checkout", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    @Html.HiddenFor(model => model.OtherAddressId)
+                    if (Model.UserId > 0)
+                    {
+                        <button type="button" class="btn btn-secondary" id="btnCancelAddress" onclick="Checkout.prototype.OnAddressSelectionCancel(@selectedAddressId,'@_addressType', @Model.UserId)" data-dismiss="modal">@Admin_Resources.ButtonCancel</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-secondary" id="btnCancelAddress" onclick="Checkout.prototype.OnAddressSelectionCancel(@selectedAddressId,'@_addressType')" data-dismiss="modal">@Admin_Resources.ButtonCancel</button>
+                    }
+                }
+                else
+                {
+                    <a href="/User/AddressBook" class="d-block d-md-inline-block btn btn-secondary " id="btnCancelAddress" data-test-selector="btnCancle">@WebStore_Resources.ButtonCancel</a>
+                }
+                <button type="submit" class="btn btn-primary ml-md-3 mt-3 mt-md-0" id="btnSaveAddress" onclick="return User.prototype.RecommendedAddress('@_addressType');">@WebStore_Resources.ButtonSaveChanges</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>@Model.ErrorMessage</p>
+}
+@Html.HiddenFor(model => model.IsAddressBook)
+@Html.HiddenFor(ob => ob.StateName, new { @id = "hdn_StateCode" })
+@Html.HiddenFor(ob => ob.ExternalId)
+@Html.HiddenFor(ob => ob.CountryName, new { @Value = "US" })
+
+@Html.HiddenFor(Model => Model.AspNetUserId)
+@Html.HiddenFor(Model => Model.UserId)
+
+@if (Model.AddressId > 0)
+{
+    @Html.HiddenFor(m => m.AddressId, new { @id = "edit_AddressId" })
+    @Html.Hidden("addressType", _addressType, new { @id = "edit_AddressType" })
+}
+@if (Model.AccountId > 0)
+{
+    @Html.HiddenFor(m => m.AccountId)
+    @Html.HiddenFor(m => m.AccountAddressId)
+}
+@Html.Hidden("addressType", _addressType, new { @id = "hnd_addressType", @class = "addressType" })
+@Html.Hidden("formChange", true, new { @id = "formChange" })
+@Html.Hidden("IsSameAsBillingAddress", "False", new { @name = "IsSameAsBillingAddress", @id = "IsSameAsBillingAddress" })
+<script>
+    $(document).ready(function () {
+        Checkout.prototype.DisableFields();
+        var addressType = '@_addressType'
+        if (addressType != '') {
+            User.prototype.BindStates(addressType);
+        }
+
+        Checkout.prototype.BindAddToAddressBookCheckbox();
+        Checkout.prototype.ShowHideBillingAddressDiv();
+        Checkout.prototype.ShowHideShippingAddressDiv();
+    })
+</script>

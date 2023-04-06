@@ -1,0 +1,225 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model QuoteResponseViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@if (Model != null)
+{
+    <div class="row mb-4">
+
+        @*Quote Details Starts*@
+        <div class="col-12 col-lg-6 account-profile-section mb-4 mb-lg-0">
+            <div class="h-100 dashboard-content">
+                <h3 class="b2b-section-header" data-test-selector="hdgtextQuoteDetails">@WebStore_Resources.TextQuoteDetails</h3>
+
+                <div class="row m-0 py-3 text-break">
+                    <div class="col-4 my-2" data-test-selector="divTitleQuoteNumber"><strong>@WebStore_Resources.LabelQuotesNumber: </strong> </div>
+                    <div class="col-8 my-2" data-test-selector="divValueQuoteNumber">@Model.QuoteNumber</div>
+
+                    <div class="col-4 my-2" data-test-selector="divTitleQuoteStatus"><strong>@WebStore_Resources.LabelQuotesStatus: </strong> </div>
+                    <div class="col-8 my-2" data-test-selector="divValueQuoteStatus">@Model.QuoteStatus</div>
+
+                    <div class="col-4 my-2" data-test-selector="divTitleQuoteDate"><strong>@WebStore_Resources.LabelQuotesDate: </strong> </div>
+                    <div class="col-8 my-2" data-test-selector="divValueQuoteDate">@(HelperUtility.IsNotNull(Model.CreatedDate) ? Model.CreatedDate.ToDateTimeFormat() : string.Empty)</div>
+
+                    <div class="col-4 my-2" data-test-selector="divTitleQuoteExpirationDate"><strong>@WebStore_Resources.LabelQuotesExpirationDate:</strong> </div>
+                    <div class="col-8 my-2" data-test-selector="divValueQuoteExpirationDate">@(Model.QuoteExpirationDate.HasValue ? Model.QuoteExpirationDate.Value.ToDateTimeFormat() : string.Empty)</div>
+
+                    <div class="col-4 my-2" data-test-selector="divTitleQuoteAmount"><strong>@WebStore_Resources.LabelQuoteTotal: </strong> </div>
+                    <div class="col-8 my-2" data-test-selector="divValueQuoteAmount">@Helper.FormatPriceWithCurrency(Model.QuoteTotal, Model.CultureCode)</div>
+
+                    <div class="col-4 my-2" data-test-selector="divTitleQuoteCreatedBy"><strong>@WebStore_Resources.LabelQuotesCreatedBy: </strong> </div>
+                    <div class="col-8 my-2" data-test-selector="divValueTitleQuoteCreatedBy">@Model.CreatedByName  (@Model.UserName)</div>
+
+                    @if (!string.IsNullOrEmpty(Model.JobName))
+                    {
+                    <div class="col-4 my-2" data-test-selector="divLabelJobName"><strong> @WebStore_Resources.LabelJobName: </strong> </div>
+                    <div class="col-8 my-2" data-test-selector="divValueJobName">@Model.JobName</div>
+                    }
+                 </div>
+
+            </div>
+        </div>
+        @*Quote Details Ends*@
+
+        @*Customer Information Starts*@
+        <div class="col-12 col-lg-6 account-profile-section mb-4 mb-lg-0">
+            <div class="h-100 dashboard-content">
+                <h3 class="b2b-section-header" data-test-selector="hdgLabelCustomerInformation">@WebStore_Resources.LabelCustomerInformation</h3>
+
+                <div class="row m-0 py-3 text-break">
+                    <div class="col-4 my-2" data-test-selector="divTitleCustomerName"><strong>@WebStore_Resources.TitleCustomerName: </strong> </div>
+                    <div class="col-8 my-2" data-test-selector="divValueCustomerName">@Model.FirstName @Model.LastName</div>
+
+                    <div class="col-4 my-2" data-test-selector="divTitleEmail"><strong>@WebStore_Resources.TitleEmail: </strong> </div>
+                    <div class="col-8 my-2" data-test-selector="divValueEmail"> @Model.Email</div>
+
+                    <div class="col-4 my-2" data-test-selector="divLabelPhoneNumber"><strong>@WebStore_Resources.LabelPhoneNumber: </strong> </div>
+                    <div class="col-8 my-2" data-test-selector="divValuePhoneNumber">@Model.PhoneNumber</div>
+                </div>
+
+            </div>
+        </div>
+        @*Customer Information Ends*@
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="dashboard-content">
+                <h3 class="b2b-section-header">Billing and Shipping</h3>
+                <div class="p-4">
+                    <div class="row m-0">
+                        @*Billing To Starts*@
+                        <div class="col">
+                            <div class="font-weight-bold border-bottom px-0 py-3 mb-2 col-lg-8" data-test-selector="divTitleBillingTo">@WebStore_Resources.TitleBillingTo</div>
+                            <div class="row py-3 text-break">
+                                <div class="col" data-test-selector="divValueBillingTo">
+                                    @Html.RenderBlock(Model.BillingAddressHtml)
+                                </div>
+
+                            </div>
+                        </div>
+                        @*Billing To Starts*@
+                        @*Shipping To Starts*@
+                        <div class="col">
+                            <div class="font-weight-bold border-bottom px-0 py-3 mb-2 col-lg-8" data-test-selector="divTitleShippingTo">@WebStore_Resources.TitleShippingTo</div>
+                            <div class="row py-3 text-break">
+                                <div class="col">
+                                    <div data-test-selector="divValueShippingTo">
+                                        @Html.RenderBlock(Model.ShippingAddressHtml)
+                                    </div>
+
+                                    <div class="border-top pt-2 pb-2"></div>
+                                    @if (HelperUtility.IsNotNull(Model?.InHandDate))
+                                    {
+                                        <div class="p-0 pb-1 d-flex">
+                                            <strong data-test-selector="divInHandsDate" class="pr-2">@WebStore_Resources.InHandsDate:</strong> 
+                                            <div data-test-selector="divValueInHandsDate">
+                                                @Html.RenderBlock((Model?.InHandDate.ToDateTimeFormat()))
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(Model.ShippingConstraintCode))
+                                    {
+                                        <div class="pb-1 d-flex"><strong  data-test-selector="divLabelShippingConstraintsCode" class="pr-2">@WebStore_Resources.LabelShippingConstraintsCode:</strong>
+                                          <div data-test-selector="divValueShippingConstraintsCode">
+                                            @HelperUtility.GetEnumDescriptionValue((ShippingConstraintsEnum)Enum.Parse(typeof(ShippingConstraintsEnum), Model.ShippingConstraintCode))
+                                          </div> 
+                                    </div>
+                                    }
+                                        <div class="d-flex"><strong data-test-selector="divTitleShippingType" class="pr-2">@WebStore_Resources.TitleShippingType:</strong> <div data-test-selector="divValueShippingType">@WebUtility.HtmlDecode(@Model.ShippingType)</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        @*Shipping To Starts*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="dashboard-content quote-main-table">
+                <h3 class="b2b-section-header">@WebStore_Resources.HeadingProductsInQuote</h3>
+                <div class="table-responsive quote-table">
+                    <table class="table table-tr" aria-describedby="Quote Products Details">
+                        <tr class="table-heading" style="border-bottom:1px solid #c3c3c3;">
+                            <th scope="col" class="table-td receipt-column-item  pl-4">@WebStore_Resources.ColumnTitleImage</th>
+                            <th scope="col" class="table-td receipt-column-item">@WebStore_Resources.TitleSKU</th>
+                            <th scope="col" class="table-td receipt-column-item">@WebStore_Resources.LabelProductName</th>
+                            <th scope="col" class="table-td receipt-column-quantity">@WebStore_Resources.ColumnTitleQuantity</th>
+                            <th scope="col" class="table-td receipt-column-price">@WebStore_Resources.ColumnTitleUnitPrice</th>
+                            <th scope="col" class="table-td receipt-column-total">@WebStore_Resources.ColumnTitleTotal</th>
+                        </tr>
+                        @foreach (var items in Model?.ShoppingCartItems?.AsEnumerable()?.Reverse())
+                        {
+
+                            <tr class="receipt-item table-tr">
+                                <td class="table-td receipt-column-item">
+                                    <img src="@items.ImagePath" class="img-responsive" alt="">
+                                </td>
+                                <td class="table-td receipt-column-item">
+                                    @if (items.GroupProducts?.Count > 0)
+                                    {
+                                        foreach (var product in items.GroupProducts)
+                                        {
+                                            @Html.RenderBlock(product.Sku)
+                                        }
+                                    }
+                                    else
+                                    {@Html.RenderBlock(items.SKU)}
+
+                                   
+
+                                </td>
+                                <td class="table-td receipt-column-item">
+
+
+
+                                    @Html.RenderBlock(items.ProductName)
+                                    @if (items.GroupProducts?.Count > 0)
+                                    {
+                                        foreach (var product in items.GroupProducts)
+                                        {
+                                            @Html.RenderBlock(product.ProductName)
+                                        }
+                                    }
+                                    @if (!string.IsNullOrEmpty(items.DownloadableProductKey))
+                                    {
+                                        List<string> keys = items.DownloadableProductKey.Split(',').ToList();
+                                        <h5 style="color:red">Product Keys</h5>
+                                        foreach (string item in keys)
+                                        {
+                                            <div>@Html.RenderBlock(item)</div>
+                                        }
+                                    }
+                                    <br />
+                                    <div class="cart-item-description">
+                                        @if (items.BundleProducts?.Count > 0)
+                                        {
+                                            @Html.RenderBlock(items.CartDescription)
+                                        }
+                                        @if (items?.PersonaliseValuesDetail?.Count > 0)
+                                        {
+                                            foreach (var item in items?.PersonaliseValuesDetail)
+                                            {
+                                                if (!Equals(item.PersonalizeValue, null) && !Equals(item.PersonalizeValue, string.Empty))
+                                                {
+                                                    <p>
+                                                        @item.PersonalizeName: @item.PersonalizeValue
+                                                    </p>
+                                                }
+
+                                            }
+                                        }
+                                    </div>
+                                </td>
+                                <td class="table-td receipt-column-quantity">
+                                    @if ((items.Quantity) % 1 == 0)
+                                    {
+                                        @($"{items.Quantity.ToInventoryRoundOff():n0}")
+                                    }
+                                    else
+                                    {
+                                        var orderedQuantity = double.Parse(Convert.ToString(items.Quantity.ToInventoryRoundOff()));
+                                        @orderedQuantity
+                                    }
+                                </td>
+                                <td class="table-td  receipt-column-price">
+                                    @if (items.IsPriceEdit)
+                                    {
+                                        <s>@Helper.FormatPriceWithCurrency(items.InitialPrice, Model.CultureCode)</s>
+                                    }
+                                    @Helper.FormatPriceWithCurrency(items.UnitPrice, Model.CultureCode, items.UOM)
+                                </td>
+                                <td class="table-td receipt-column-total">
+                                    @Helper.FormatPriceWithCurrency(items.Quantity * items.UnitPrice, Model.CultureCode)
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                @Html.Partial("_QuoteSummary", Model)
+            </div>
+        </div>
+    </div>
+}

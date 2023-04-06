@@ -1,0 +1,49 @@
+﻿
+@{
+    Layout = null;
+    string _fileLocation = $"/Views/Themes/";
+}
+
+<!DOCTYPE html>
+
+<html lang="en" xml:lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PortalSelection</title>
+    <link href="@Helper.GetThemeFilePath(_fileLocation, "/Content/bootstrap-3.3.7/css/bootstrap.min.css")" rel="stylesheet" />
+
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-sm-push-3">
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="well">
+
+                            <div class="form">
+                                @using (Html.BeginForm("PortalSelection", "Dev", FormMethod.Post, new { role = "form" }))
+                                {
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Portal Name.
+                                        </label>
+                                        @Html.DropDownList("PortalId", (List<SelectListItem>)TempData["PortalList"], new { @class = "form-control" })
+                                        @Html.AntiForgeryToken()
+                                    </div>
+
+                                    <button type="submit" class="button btn btn-primary btn-bg-primary">@WebStore_Resources.ButtonSubmit</button>
+
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

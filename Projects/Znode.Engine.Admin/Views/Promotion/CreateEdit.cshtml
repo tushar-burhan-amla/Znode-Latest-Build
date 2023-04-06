@@ -1,0 +1,78 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PromotionViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    bool isActiveGroup = true;
+    string CancelUrl = "/Promotion/List";
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "btnSaveNClose", DataTestSelector = "linkSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = Admin_Resources.ButtonSaveClose, OnClick = "Promotion.prototype.SavePromotion('" + @CancelUrl + "')" });
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "saveDraft", DataTestSelector = "linkSave", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = Admin_Resources.ButtonSave, OnClick = "Promotion.prototype.SavePromotion()" });
+
+}
+
+<div id="Resultpartial">
+    <div class="col-sm-12 title-container">
+        @if (string.Equals(actionName.ToLower(), "create"))
+        {
+            <h1 data-test-selector="hdgPromotionCoupon">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelPromotionCoupon)</h1>
+        }
+        else
+        {
+            <h1 data-test-selector="hdgPromotionCoupon">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelPromotionCoupon)<em class="z-minus"></em><span data-test-selector="spnPromotionName" title="@Html.DisplayFor(model => model.Name)">@Html.DisplayFor(model => model.Name)</span></h1>
+        }
+        <div class="pull-right btn-container">
+            @Html.AuthorizedRawActionLink("<em class='z-back'></em> " + Admin_Resources.ButtonCancel, "List", "Promotion", null, new { @class = "btn-text-icon", @data_test_selector = "linkCancel" })
+            @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+        </div>
+    </div>
+
+    <div class="main-wrapper" id="promotionDetails">
+        @Html.Partial("~/Views/Promotion/_asidePanel.cshtml", Model)
+        <section class="main-container">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateEditPromotion" }))
+            {
+                @Html.HiddenFor(model => model.PromotionId)
+
+                var hidePromohtml = isActiveGroup ? "" : "style=display:none";
+                isActiveGroup = false;
+
+                <div id="PromotionInfo" @hidePromohtml class="promoDiv col-sm-12 nopadding margin-bottom">
+                    <div class="PromotionInfo">
+                        @Html.Partial("~/Views/Promotion/_Promotion.cshtml", Model)
+                    </div>
+                </div>
+
+                var hideDiscounthtml = isActiveGroup ? "" : "style=display:none";
+                isActiveGroup = false;
+
+                <div id="DiscountInfo" @hideDiscounthtml class="promoDiv col-sm-12 nopadding margin-bottom">
+                    <div class="DiscountInfo">
+                        @Html.Partial("~/Views/Promotion/_Discount.cshtml", Model)
+                    </div>
+                </div>
+
+                var hideCouponthtml = isActiveGroup ? "" : "style=display:none";
+                isActiveGroup = false;
+
+                <div id="CouponInfo" @hideDiscounthtml class="promoDiv col-sm-12 nopadding margin-bottom">
+                    <div class="CouponInfo">
+                        @Html.Partial("~/Views/Promotion/_Coupon.cshtml", Model)
+                    </div>
+                </div>
+            }
+            <div id="divAssociatedCatelogs" class="dirtyignore"></div>
+            <div id="divAssociatedCategories" class="dirtyignore"></div>
+            <div id="divAssociatedProducts" class="dirtyignore"></div>
+            <div id="divAssociatedBrands" class="dirtyignore"></div>
+            <div id="divAssociatedShippings" class="dirtyignore"></div>
+        </section>
+    </div>
+</div>
+<div id="PublishedProductPanel" class="aside-popup-panel modal-dialog modal-lg"></div>
+<div id="PublishedCategoryPanel" class="aside-popup-panel modal-dialog modal-lg"></div>
+<div id="PublishedCatelogPanel" class="aside-popup-panel modal-dialog modal-lg"></div>
+<div id="BrandListPanel" class="aside-popup-panel modal-dialog modal-lg"></div>
+<div id="divStoreListAsidePanel" class="aside-popup-panel modal-dialog modal-lg"></div>
+<div id="ShippingListPanel" class="aside-popup-panel modal-dialog modal-lg"></div>

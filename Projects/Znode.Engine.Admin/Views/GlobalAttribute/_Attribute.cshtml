@@ -1,0 +1,271 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.Extensions;
+@model GlobalAttributeViewModel
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<div class="col-sm-12 nopadding">
+
+         <div class="form-group" id="EntityType">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label class="required" data-test-selector="lblEntityType">Entity Type</label>
+                </div>
+                <div class="control-md">
+                    @if (Model.GlobalAttributeId > 0)
+                    {
+                        @Html.DropDownListFor(x => x.GlobalEntityId, Model.GlobalEntityType, new { @id = "ddlEntityType", @data_test_selector = "drpEntityType", @disabled = "disabled" })
+                        @Html.HiddenFor(m => m.GlobalEntityId)
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(x => x.GlobalEntityId, Model.GlobalEntityType, new { @id = "ddlEntityType", @data_test_selector = "drpEntityType" })
+                    }
+                </div>
+            </div>
+        </div>
+ 
+   
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lblAttributeType">@Attributes_Resources.LabelAttributeType</label>
+            </div>
+            <div class="control-md">
+                @using (Ajax.BeginForm("ValidationRule", "GlobalAttribute", new AjaxOptions() { UpdateTargetId = "validation-container" }))
+                {
+                    if (Model.GlobalAttributeId == 0)
+                    {
+                        @Html.DropDownListFor(m => m.AttributeTypeId, new SelectList(Model.AttributeTypes, "AttributeTypeId", "AttributeTypeName", Model.AttributeTypeId), new { id = "attributeTypeList", @onchange = "javascript:var _atrObj=new GlobalAttribute(); _atrObj.ValidationView();", @data_test_selector = "drpAttributeTypeId" })
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(m => m.AttributeTypeId)
+                        @Html.DropDownListFor(m => m.AttributeTypeId, new SelectList(Model.AttributeTypes, "AttributeTypeId", "AttributeTypeName", Model.AttributeTypeId), new { id = "attributeTypeList", @disabled = "disabled", @data_test_selector = "drpAttributeTypeId" })
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    @if (Model.GlobalAttributeId > 0)
+    {
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label class="required" data-test-selector="lblAttributeCode">@Admin_Resources.LabelAttributeCode</label>
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(x => x.AttributeCode, new { @disabled = "disabled", @data_test_selector = "txtAttributeCode" })
+                    @Html.Hidden("AttributeCode", Model.AttributeCode)
+                    @Html.ValidationMessageFor(m => m.AttributeCode, "", new { id = "errorSpanGlobalAttributeCode", @data_test_selector = "valAttributeCode" })
+
+                </div>
+                <div class="help-text"><em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="This is used internally. Only alphanumeric characters allowed and must start with alphabets."></em> </div>
+            </div>
+        </div>
+
+
+    }
+
+    else
+    {
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label class="required" data-test-selector="lblAttributeCode">@Admin_Resources.LabelAttributeCode</label>
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(x => x.AttributeCode, new { @data_test_selector = "txtAttributeCode" })
+                    @Html.ValidationMessageFor(m => m.AttributeCode, "", new { id = "errorSpanGlobalAttributeCode", @data_test_selector = "valAttributeCode" })
+
+                </div>
+                <div class="help-text"><em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="This is used internally. Only alphanumeric characters allowed and must start with alphabets."></em> </div>
+            </div>
+        </div>
+
+
+    }
+    @if (!Equals(Model.AttributeTypeName, AdminConstants.LinkType))
+    {
+        <div class="form-group" id="divIsRequired">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblRequired">@Admin_Resources.LabelRequired</label>
+                </div>
+                <div class="control-md">
+                    <div class="switch-field">
+                        @if (Model.IsRequired.GetValueOrDefault())
+                        {
+                            @Html.RadioButtonFor(x => x.IsRequired, "true", new { @checked = true, @id = "IsRequired_left" }) <label for="IsRequired_left" data-test-selector="lblIsRequiredLeft">Yes</label>
+                            @Html.RadioButtonFor(x => x.IsRequired, "false", new { @id = "IsRequired_right" }) <label for="IsRequired_right" data-test-selector="lblIsRequiredRight">No</label>
+                        }
+                        else
+                        {
+                            @Html.RadioButtonFor(x => x.IsRequired, "true", new { @id = "IsRequired_left" }) <label for="IsRequired_left" data-test-selector="lblIsRequiredLeft">Yes</label>
+                            @Html.RadioButtonFor(x => x.IsRequired, "false", new { @checked = true, @id = "IsRequired_right" }) <label for="IsRequired_right" data-test-selector="lblIsRequiredRight">No</label>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" id="divAttributLocalizable">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblIsLocalizable">@Admin_Resources.LabelAttributeLocalizable</label>
+                </div>
+                <div class="control-md">
+                    <div class="switch-field">
+                        @if (Model.IsLocalizable.GetValueOrDefault())
+                        {
+                            @Html.RadioButtonFor(x => x.IsLocalizable, "true", new { @checked = true, @id = "IsLocalizable_left", @data_test_selector = "chkIsLocalizable_left" }) <label for="IsLocalizable_left" data-test-selector="lblIsLocalizableLeft">Yes</label>
+                            @Html.RadioButtonFor(x => x.IsLocalizable, "false", new { @id = "IsLocalizable_right", @data_test_selector = "chkIsLocalizable_right" }) <label for="IsLocalizable_right" data-test-selector="lblIsLocalizableRight">No</label>
+                        }
+                        else
+                        {
+                            @Html.RadioButtonFor(x => x.IsLocalizable, "true", new { @id = "IsLocalizable_left" }) <label for="IsLocalizable_left" data-test-selector="lblIsLocalizableLeft">Yes</label>
+                            @Html.RadioButtonFor(x => x.IsLocalizable, "false", new { @checked = true, @id = "IsLocalizable_right" }) <label for="IsLocalizable_right" data-test-selector="lblIsLocalizableRight">No</label>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 nopadding" data-test-selector="divValidationContainer" id="validation-container">
+            @{Html.RenderAction("ValidationRule", "GlobalAttribute", new { @AttributeTypeId = Equals(Model.AttributeTypeId, null) ? Model.AttributeTypes.FirstOrDefault().AttributeTypeId : Model.AttributeTypeId, @attributeId = Model.GlobalAttributeId });}
+        </div>
+
+        <div class="form-group" id="divDefaultValueNumber" style="display:none">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblAttributeDefaultValue">@Admin_Resources.TitleAttributeDefaultValue</label>
+                </div>
+                <div class="control-md">
+                    <div class="control-md">
+                        @Html.TextBoxFor(x => x.AttributeDefaultValue, new { onblur = "javascript:var _atrObj=new GlobalAttribute(); _atrObj.ValidateNumberDefaultValue();", maxlength = 12, @data_test_selector = "txtAttributeDefaultValue" })
+                        <span id=@("errorAttributeDefaultValue") class="error-msg"></span>
+                        @Html.HiddenFor(x => x.AttributeDefaultValueId)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" id="divDefaultValueDate">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblDateAttributeDefaultValue">@Admin_Resources.TitleAttributeDefaultValue</label>
+                </div>
+                @{
+                    string value = Model.AttributeTypeName == AdminConstants.DateType ? Model.AttributeDefaultValue.ToDateTimeFormat() : Model.AttributeDefaultValue;
+                }
+                <div class="control-sm right-inner-icon">
+                    <input type="text" id="AttributeDefaultDateValue" value="@value" class="datepicker valid" data-date-format="@HelperMethods.GetDateFormat()" name="AttributeDefaultValue" data-val="true" group="DateGroup">
+                    <em class="z-calendar"></em>
+                    @Html.HiddenFor(x => x.AttributeDefaultValueId)
+                </div>
+                <div class="col-sm-12 nopadding">
+                    <div class="control-non">
+                        <span id=@("errorAttributeDateDefaultValue") class="error-msg"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" id="divDefaultValueYESNO" style="display:none">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblToggleAttributeDefaultValue">@Admin_Resources.TitleAttributeDefaultValue</label>
+                </div>
+                <div class="control-md">
+                    <div class="switch-field">
+                        @if (Equals(Model.AttributeDefaultValue, "true"))
+                        {
+                            @Html.RadioButtonFor(x => x.AttributeDefaultValue, "true", new { @checked = true, @id = "AttributeDefaultValue_left", @data_test_selector = "chkAttributeDefaultValue_left" }) <label for="AttributeDefaultValue_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.AttributeDefaultValue, "false", new { @id = "AttributeDefaultValue_right", @data_test_selector = "chkAttributeDefaultValue_right" }) <label for="AttributeDefaultValue_right">No</label>
+                        }
+                        else
+                        {
+                            @Html.RadioButtonFor(x => x.AttributeDefaultValue, "true", new { @id = "AttributeDefaultValue_left", @data_test_selector = "chkAttributeDefaultValue_left" }) <label for="AttributeDefaultValue_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.AttributeDefaultValue, "false", new { @checked = true, @id = "AttributeDefaultValue_right", @data_test_selector = "chkAttributeDefaultValue_right" }) <label for="AttributeDefaultValue_right">No</label>
+                        }
+                        @Html.HiddenFor(x => x.AttributeDefaultValueId)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" id="divHelpDescription">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblHelpDescription">@Admin_Resources.HelpDescription</label>
+                </div>
+                <div class="control-md">
+                    @Html.TextAreaFor(x => x.HelpDescription, new { @data_test_selector = "txtHelpDescription" })
+                </div>
+                <div class="help-text"><em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpDescriptionGlobalAttribute"></em> </div>
+            </div>
+        </div>
+    }
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(x => x.DisplayOrder, new { @data_test_selector = "lblDisplayOrder" })
+            </div>
+            <div class="control-md">
+                @if (Model.GlobalAttributeId == 0)
+                {@Html.TextBoxFor(model => model.DisplayOrder, new { @Value = "500", @onblur = "return GlobalAttribute.prototype.Validate()", @data_test_selector = "txtDisplayOrder" }) }
+            else
+            { @Html.TextBoxFor(model => model.DisplayOrder, new { @onblur = "return GlobalAttribute.prototype.Validate()", @data_test_selector = "txtDisplayOrder" }) }
+                @Html.ValidationMessageFor(m => m.DisplayOrder, "", new { @data_test_selector = "valDisplayOrder" })
+                <span id="errDisplayOrder" class="error-msg"></span>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.IsSystemDefined)
+    @Html.Hidden("AttributeId", Model.GlobalAttributeId)
+    @if (Model.GlobalAttributeId == 0)
+    {
+        @Html.HiddenFor(m => m.IsSwatchImage)
+    }
+    @if (Model.GlobalAttributeId > 0)
+    {
+        if (!Equals(Model.AttributeTypeName, "Multi Select"))
+        {
+            if (!Equals(Model.AttributeTypeName, "Simple Select"))
+            {
+                @Html.HiddenFor(m => m.IsSwatchImage)
+            }
+        }
+        else if (!Equals(Model.AttributeTypeName, "Simple Select"))
+        {
+            if (!Equals(Model.AttributeTypeName, "Multi Select"))
+            {
+                @Html.HiddenFor(m => m.IsSwatchImage)
+            }
+        }
+    }
+</div>
+
+<script>
+    //for handling default value between min and max date.
+    $(document).ready(function () {
+        jQuery('#AttributeDefaultDateValue').datepicker({
+            weekStart: 1,
+            autoclose: true
+        }).on('show', function (ev) {
+            var srcDate = $('#MinDate').val().replace(/-/g, ' ');
+            var startDate = new Date(srcDate);
+            startDate.setDate(startDate.getDate(new Date(srcDate)));
+            $(this).datepicker('setStartDate', startDate);
+            srcDate = $('#MaxDate').val().replace(/-/g, ' ');
+            var maxdate = new Date(srcDate);
+            $(this).datepicker('setEndDate', maxdate);
+        });
+    })
+</script>

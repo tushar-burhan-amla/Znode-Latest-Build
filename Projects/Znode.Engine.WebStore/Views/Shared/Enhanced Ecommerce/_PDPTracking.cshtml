@@ -1,0 +1,9 @@
+﻿@model Znode.Engine.WebStore.ViewModels.EcommerceDataViewModel
+@if (Helper.IsEnhancedEcommerceTrackingEnabled())
+{
+    <script>
+         $(document).ready(function () {
+            GoogleAnalytics.prototype.SendProductDetailViews(@Html.RenderBlock(Json.Encode(Model)), '@Helper.GetPortalCurrency()');
+        })
+    </script>
+}

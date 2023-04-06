@@ -1,0 +1,114 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+@model ShippingListViewModel
+@{
+    decimal customShippingCost = Convert.ToDecimal(Model?.CustomShippingCost);
+}
+
+<div class="shipping-method-details">
+    <div class="panel panel-default">
+        <div class="panel-heading d-flex align-items-center justify-content-between">
+            <h4 class="panel-title">
+                @Admin_Resources.LabelShippingMethod
+            </h4>
+            <a class="btn-text btn-text-secondary margin-top-8 pull-right margin-right margin-bottom-8" id="GetShippingOption" data-test-selector="btnGetShippingOption" onclick="Order.prototype.GetShippingEstimates();">
+                @Admin_Resources.GetShippingOptions
+            </a>
+        </div>
+        <div class="panel-body">
+            <div id="ShippingDetails">
+                @{Html.RenderPartial("_ShippingOptions", Model, new ViewDataDictionary { TemplateInfo = new System.Web.Mvc.TemplateInfo { HtmlFieldPrefix = "ShippingListViewModel" } });}
+            </div>
+
+            <div id="loader-shippingOptions">@Html.Partial("_Loader")</div>
+
+            @if (Model != null)
+            {
+                <div class="form-group in-hand-block">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.InHandDate, new { @data_test_selector = "lblInHandDate" })
+                        </div>
+                        <div class="date-input">
+                            <div class="right-inner-icon">
+                                @Html.TextBoxFor(model => model.InHandDate, Model?.InHandDate != null ? Model.InHandDate.ToDateTimeFormat() : string.Empty, new { @id="InHandDate", @name= "InHandDate", @mindate = HelperMethods.GetDateTime(), @class = "datepicker", @group = "inhanddate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtInHandDate" })
+                                <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            if (Model?.ShippingConstraints?.Count > 0)
+            {
+            var selectedShippingConstraint = Model.ShippingConstraints.FirstOrDefault(w => w.IsSelected == true);
+
+            <div class="form-group in-hand-block">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label" data-test-selector="divShippingConstraintCode">
+                        @Html.LabelFor(m => m.ShippingConstraintCode, new { @data_test_selector = "lblShippingConstraintsCode" })
+                    </div>
+                    <div class="control-md">
+                        @for (int i = 0; i < Model.ShippingConstraints.Count; i++)
+                        {
+                        <div id="div_@Model.ShippingConstraints[i].ShippingConstraintCode" data-test-selector="div_@Model.ShippingConstraints[i].ShippingConstraintCode">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <label>
+                                        <input type="radio" id="@Model.ShippingConstraints[i].ShippingConstraintCode.Replace(" ", " _")" name="ShippingConstraintCode" value="@Model.ShippingConstraints[i].ShippingConstraintCode" @(((selectedShippingConstraint == null && i == 0) || Model.ShippingConstraints[i].IsSelected) ? "checked=checked" : "" ) data-shipping-name="@WebUtility.HtmlDecode(Model.ShippingConstraints[i].Description)" data-test-selector="chk@(Model.ShippingConstraints[i].ShippingConstraintCode)" />
+                                        <span class="lbl padding-8" for="@Model.ShippingConstraints[i].ShippingConstraintCode.Replace(" ", " _")" data-test-selector="spn@(Model.ShippingConstraints[i].ShippingConstraintCode)">@WebUtility.HtmlDecode(Model.ShippingConstraints[i].Description)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            }
+
+            <div id="message-freeshipping" class="success-msg" style="padding-top: 10px; display: none; float: left;">
+                <span data-test-selector="spnFreeShippingMessage">@Admin_Resources.FreeShippingMessage</span>
+            </div>
+            <div class="col-sm-12 nopadding" id="customerShippingDiv" style="display: none">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.AccountNumber, new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.AccountNumber, new { @id = "ShippingListViewModel_AccountNumber", Name = "ShippingListViewModel.AccountNumber" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.ShippingMethod, new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.ShippingMethod, new { @id = "ShippingListViewModel_ShippingMethod", Name = "ShippingListViewModel.ShippingMethod" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+    <input type="hidden" id="hndShippingclassName" value="" />
+
+    @Html.HiddenFor(m => m.CustomShippingCost, new { @id = "hdnCustomShippingCost" })
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.dev-custom-shipping-value').keypress(function (event) {
+            if (event.which == 8)
+                return true;
+
+            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>

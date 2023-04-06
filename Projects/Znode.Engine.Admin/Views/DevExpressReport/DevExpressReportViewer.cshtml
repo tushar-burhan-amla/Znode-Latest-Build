@@ -1,0 +1,151 @@
+﻿@model Znode.Libraries.DevExpress.Report.ReportModel
+@using DevExpress.Web.Mvc.UI
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Admin_Resources.TitleReport + " | " + Admin_Resources.TitleAdvanced;
+}
+
+@Html.Action("GetPartial", "DevExpressReport", new { @reportCode = Request.QueryString["reportCode"] })
+
+<script type="text/javascript">
+    function OverrideError() {
+        DevExpress.Report.Preview.MessageHandler.processError = function (message) {
+            $('#statusmessage').html(message);
+            $('#AlertPopup').show();
+            for (var i = 0; i < paramvalues.length; i++) {
+                if (message.indexOf(paramvalues[i]) != -1) {
+                    $("div:contains('" + paramvalues[i] + "')").next("div").children(".dx-texteditor-empty").addClass("dx-invalid");
+                    $("div:contains('" + paramvalues[i] + "')").next("div").children(".dx-texteditor-input").addClass("dx-invalid");
+                    $("div:contains('" + paramvalues[i] + "')").next("div").children(".dx-datebox-datetime").addClass("dx-invalid");
+                }
+            }
+
+        }
+    }
+</script>
+
+@Html.DevExpress().GetStyleSheets(
+                    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+                    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+                    new StyleSheet { ExtensionSuite = ExtensionSuite.Report }
+                )
+@Html.DevExpress().GetScripts(
+            new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+            new Script { ExtensionSuite = ExtensionSuite.Editors },
+            new Script { ExtensionSuite = ExtensionSuite.Chart },
+            new Script { ExtensionSuite = ExtensionSuite.Report }
+        )
+<div style="position:absolute; top: 46px; left: 0; bottom: 0; right: 0">
+    @Html.DevExpress().WebDocumentViewer(settings =>
+{
+
+    settings.Name = "WebDocumentViewer";
+    settings.EnableTheming = true;
+    settings.ClientSideEvents.CustomizeParameterEditors = "function(s, e){ validationProcessInit(s,e);}";
+    settings.ClientSideEvents.DocumentReady = "function(s, e) { ZnodeBase.prototype.HideLoader(); DevExpressReport.prototype.DisableFieldIfChecked(s, e); }";
+    settings.ClientSideEvents.ParametersSubmitted = "function(s, e) { ZnodeBase.prototype.ShowLoader(); $('.dx-invalid').removeClass('dx-invalid'); }";
+    settings.ClientSideEvents.Init = "function(s, e){ DevExpressReport.prototype.OnInit(s, e);}";
+    settings.ClientSideEvents.CustomizeMenuActions = "function(s, e){ DevExpressReport.prototype.CustomizeMenuActions(s,e,DevExpress.Report.Preview.ActionId.HightlightEditingFields);}";
+    settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    // Add a new button to the Web Document Viewer Toolbar.
+    //settings.MenuItems.AddRange(Model.CustomButtons);
+
+
+}).Bind(Model.ReportObject).GetHtml() 
+</div>
+
+<div id="SaveReportLayoutPopup" class="modal fade in" role="dialog" style="display: none;">
+    <div class="modal-dialog modal-md" style="width:auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closebuttonSaveLayoutPopup"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">@Admin_Resources.ZnodeReportPopupSaveAs</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        @Admin_Resources.ZnodeReportPopupName
+                    </div>
+                    <input class="dx-texteditor-input" type="text" tabindex="0" id="txtReportLayoutName">
+                </div>
+            </div>
+            <div class="modal-footer right">
+                <div class="pull-right  margin-top-bottom">
+                    <button type="button" class="btn-text" id="Reset">@Admin_Resources.ButtonReset</button>
+                    <button type="button" class="btn-text" id="dvSavebutton">@Admin_Resources.ButtonSave</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="LoadReportLayoutPopup" class="modal fade in" role="dialog" style="display: none;">
+    <div class="modal-dialog modal-md" style="width:auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closebuttonLoadLayoutPopup"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">@Admin_Resources.ZlabelOpen</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding" id="dvFilesHistory">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer right">
+                <div class="pull-right  margin-top-bottom">
+                    <button type="button" class="btn-text" onclick="DevExpressReport.prototype.fnLoadReportcomponents();">@Admin_Resources.ButtonLoad</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="AlertPopup" class="modal fade in" role="dialog" style="display: none;">
+    <div class="modal-dialog modal-md" style="width:auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#AlertPopup').hide();"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">@Admin_Resources.ZlabelAlert</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" id="statusmessage">
+
+                </div>
+            </div>
+            <div class="modal-footer right">
+                <div class="pull-right  margin-top-bottom">
+                    <button type="button" class="btn-text" onclick="$('#AlertPopup').hide();">@Admin_Resources.ButtonOk</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="ConfirmPopup" class="modal fade in" role="dialog" style="display: none;">
+    <div class="modal-dialog modal-md" style="width:auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#ConfirmPopup').hide()"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">@Admin_Resources.ZlabelConfirm</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    @Admin_Resources.ZRecordDeletionConfirmation
+                </div>
+            </div>
+            <div class="modal-footer right">
+                <div class="pull-right  margin-top-bottom">
+                    <button type="button" class="btn-text" onclick="DevExpressReport.prototype.fnDeleteSavedReportLayout();$('#ConfirmPopup').hide();">@Admin_Resources.ButtonOk</button><button type="button" class="btn-text" onclick="$('#ConfirmPopup').hide()">@Admin_Resources.ButtonCancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="AzureCloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
+  <WebRole name="Znode.Engine.Api" vmsize="Small">
+    <Sites>
+      <Site name="znodeWebapi" physicalDirectory="..\..\..\Znode.Engine.Api">
+        <Bindings>
+          <Binding name="Endpoint1" endpointName="Endpoint1" hostHeader="apiazure.znodellc.com" />
+        </Bindings>
+      </Site>
+      <Site name="znodeadmin" physicalDirectory="..\..\..\Znode.Engine.MvcAdmin">
+        <Bindings>
+          <Binding name="Endpoint2" endpointName="Endpoint2" hostHeader="adminazure.znodellc.com" />
+        </Bindings>
+      </Site>
+    </Sites>
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+    </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Endpoint1" protocol="http" port="80" />
+      <InputEndpoint name="Endpoint2" protocol="http" port="8010" />
+    </Endpoints>
+    <Imports>
+      <Import moduleName="RemoteAccess" />
+      <Import moduleName="RemoteForwarder" />
+    </Imports>
+  </WebRole>
+</ServiceDefinition>

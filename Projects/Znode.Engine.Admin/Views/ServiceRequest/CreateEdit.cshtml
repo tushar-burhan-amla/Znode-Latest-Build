@@ -1,0 +1,216 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model CaseRequestViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateServiceRequest", CancelUrl = "/ServiceRequest/List", IsSaveCloseEnable = true, Callback = "Content.prototype.ValidateForStore" };
+}
+<div id="grid-container">
+    <div class="col-sm-12 title-container">
+        @if (string.Equals(actionName.ToLower(), "create"))
+        {
+            <h1 data-test-selector="hdgServiceRequest">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelServiceRequest)</h1>
+        }
+        else
+        {
+            <h1 data-test-selector="hdgServiceRequest">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelServiceRequest)<em class="z-minus"></em><span>@Model.Title</span></h1>
+        }
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+    <div class="main-wrapper">
+        <!--Left Panel-->
+        @if (string.Equals(actionName.ToLower(), "edit"))
+        {
+            @Html.Partial("~/Views/ServiceRequest/_asideServiceRequestManagepanel.cshtml", Model)
+        }
+        <!--Main Container-->
+        <section class="main-container">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateServiceRequest" }))
+            {
+                <div id="loginForm">
+                    <h3 class="section-heading" data-test-selector="hdgContactInformation">@Admin_Resources.SubHeaderContactInformation</h3>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.EmailId, new { @class = "required", @data_test_selector = "lblEmailId" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.EmailId, new { @maxlength = 200, @data_test_selector = "txtEmailId" })
+                                @Html.ValidationMessageFor(model => model.EmailId, "", new { @data_test_selector = "valEmailId" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.FirstName, new { @class = "required", @data_test_selector = "lblFirstName" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.FirstName, new { @maxlength = 100, @data_test_selector = "txtFirstName" })
+                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @data_test_selector = "valFirstName" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.LastName, new { @class = "required", @data_test_selector = "lblLastName" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.LastName, new { @maxlength = 100, @data_test_selector = "txtLastName" })
+                                @Html.ValidationMessageFor(model => model.LastName, "", new { @data_test_selector = "valLastName" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.CompanyName, new { @data_test_selector = "lblCompanyName" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.CompanyName, new { @maxlength = 100, @data_test_selector = "txtCompanyName" })
+                                @Html.ValidationMessageFor(model => model.CompanyName, "", new { @data_test_selector = "valCompanyName" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.PhoneNumber, new { @class = "required", @data_test_selector = "lblPhoneNumber" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.PhoneNumber, new { @maxlength = 20, @data_test_selector = "txtPhoneNumber" })
+                                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @data_test_selector = "valPhoneNumber" })
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="section-heading margin-top-25" data-test-selector="hdgServiceRequestInformation">@Admin_Resources.LabelServiceRequestInformation</h3>
+                    @if (string.Equals(actionName.ToLower(), "create"))
+                {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(m => m.CreatedDate, new { @data_test_selector = "lblCreatedDate" })
+                                </div>
+                                <div class="control-sm">
+                                    <div class="right-inner-icon">
+                                        <input disabled="disabled" data-date-format="dd-MM-yyyy" data-val="true" data-val-date="The field Expiration Date must be a date." data-val-required="Please Enter Expiration Date." group="expirationdate" id="ExpirationDate" mindate="10/10/2016 00:00:00" name="ExpirationDate" value="@Html.RenderBlock(Model.CreatedDate)" readonly="readonly" type="text"  data-test-selector="txtCreatedDate">
+                                        <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(m => m.CreatedDate, new { @data_test_selector = "lblCreatedDate" })
+                                </div>
+                                <div class="control-md">
+                                    <div class="right-inner-icon">
+                                        <input disabled="disabled" data-date-format="dd-MM-yyyy" data-val="true" data-val-date="The field Expiration Date must be a date." data-val-required="Please Enter Expiration Date." group="expirationdate" id="ExpirationDate" mindate="10/10/2016 00:00:00" name="ExpirationDate" value="@Html.RenderBlock(Model.CreatedDate)" readonly="readonly" type="text" data-test-selector="txtCreatedDate">
+                                        <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.CaseOrigin, new { @data_test_selector = "lblCaseOrigin" })
+                            </div>
+                            <div class="control-md">
+                                <input disabled="disabled" type="text" value="@Html.RenderBlock(Model.CaseOrigin)" data-test-selector="txtCaseOrigin" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Admin_Resources.LabelStoreName, new { @class = "required", @data_test_selector = "lblStoreName" })
+                            </div>
+                            <div class="control-md">
+                                @if (string.Equals(actionName.ToLower(), "create"))
+                                {
+                                    @Html.FastSelectFor(model => model.StoreName, model => model.PortalId, "GetSuggestions", "Typeahead", "Content.prototype.OnSelectPortalResult", 1, true,
+                                        new
+                                        {
+                                            htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStoreName" },
+                                            parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                                        })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(model => model.StoreName, new { @placeholder = Admin_Resources.LabelSelectStore, @id = "txtPortalName", @readonly = "readonly", @data_test_selector = "txtStoreName" })
+
+                                }
+                                @Html.HiddenFor(model => model.PortalId, new { @id = "hdnPortalId" })
+                                @Html.ValidationMessageFor(model => model.StoreName, null, new { id = "errorRequiredStore", @data_test_selector = "valStoreName" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Admin_Resources.LabelStatus, new { @data_test_selector = "lblLabelStatus" })
+                            </div>
+                            <div class="control-md">
+                                @Html.DropDownListFor(model => model.CaseStatusId, Model.CaseStatusList, new { @data_test_selector = "drpLabelStatus" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Admin_Resources.LabelPriority, new { @data_test_selector = "lblLabelPriority" })
+                            </div>
+                            <div class="control-md">
+                                @Html.DropDownListFor(model => model.CasePriorityId, Model.CasePriorityList, new { @data_test_selector = "drpLabelPriority" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.Title, new { @class = "required", @data_test_selector = "lblTitle" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.Title, new { @maxlength = 255, @data_test_selector = "txtTitle" })
+                                @Html.ValidationMessageFor(model => model.Title, "", new { @data_test_selector = "valTitle" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.Description, new { @class = "required", @data_test_selector = "lblDescription" })
+                            </div>
+                            <div class="control-md">
+                                @Html.EditorFor(model => model.Description)
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @data_test_selector = "valDescription" })
+                            </div>
+                        </div>
+                    </div>
+                    @Html.HiddenFor(x => x.CaseRequestId)
+                    @Html.HiddenFor(x => x.CaseOrigin)
+                    @Html.HiddenFor(x => x.StoreName)
+                    @Html.HiddenFor(x => x.FilePath)
+                    @Html.HiddenFor(x => x.UserId)
+                    @Html.HiddenFor(x => x.PortalId)
+                </div>
+            }
+        </section>
+    </div>
+</div>
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup">
+</div>
+<div id="divContentStoreList" class="aside-popup-panel modal-dialog modal-xl"></div>

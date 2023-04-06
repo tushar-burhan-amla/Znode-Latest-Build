@@ -1,0 +1,24 @@
+@using Znode.Engine.Api.Areas.HelpPage.ModelDescriptions
+@model EnumTypeModelDescription
+
+<p>Possible enumeration values:</p>
+
+<table class="help-page-table" aria-describedby="Enum Description">
+    <thead>
+        <tr><th scope="col">Name</th><th scope="col">Value</th><th scope="col">Description</th></tr>
+    </thead>
+    <tbody>
+        @foreach (EnumValueDescription value in Model.Values)
+        {
+            <tr>
+                <td class="enum-name"><strong>@value.Name</strong></td>
+                <td class="enum-value">
+                    <p>@value.Value</p>
+                </td>
+                <td class="enum-description">
+                    <p>@value.Documentation</p>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

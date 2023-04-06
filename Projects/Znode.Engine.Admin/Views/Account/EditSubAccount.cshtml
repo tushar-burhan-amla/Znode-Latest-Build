@@ -1,0 +1,82 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@model AccountDataViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formCompanyEdit", CancelUrl = "/Account/SubAccountList?parentAccountId=" + Model.CompanyAccount.ParentAccountId };
+    Model.CompanyAccount.Address.CheckboxPrefix = "CompanyAccount.Address.";
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelChildAccount)<em class="z-minus"></em><span>@Model.CompanyAccount.Name</span></h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "formCompanyEdit" }))
+            {
+        <h3 class="section-heading">@Admin_Resources.ManageAccountInformation</h3>
+        if (Model?.CompanyAccount?.ParentAccountId > 0)
+        {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.CompanyAccount.ParentAccountId, new { @data_test_selector = "lblParentAccountId" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.CompanyAccount.ParentAccountName, new { @readonly = "readonly", @data_test_selector = "txtsParentAccountId" })
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.CompanyAccount.Name, new { @class = "required", @data_test_selector = "lblAccountName" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.CompanyAccount.Name, new { @data_test_selector = "txtAccountName" })
+                    @Html.ValidationMessageFor(model => model.CompanyAccount.Name, "", new { @data_test_selector = "valAccountName" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.CompanyAccount.ExternalId, new { @data_test_selector = "lblExternalId" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.CompanyAccount.ExternalId, new { @data_test_selector = "txtExternalId" })
+                    @Html.ValidationMessageFor(model => model.CompanyAccount.ExternalId, "", new { @data_test_selector = "valExternalId" })
+                </div>
+            </div>
+        </div>
+        if (!DefaultSettingHelper.AllowGlobalLevelUserCreation)
+        {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(Admin_Resources.LabelStoreName, new { @class = "required", @data_test_selector = "lblStoreName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.CompanyAccount.StoreName, new { @placeholder = Admin_Resources.LabelSelectStore, @id = "txtPortalName", @readonly = "readonly", @data_test_selector = "txtStoreName" })
+                        @Html.HiddenFor(x => x.CompanyAccount.PortalId)
+                    </div>
+                </div>
+            </div>
+        }
+        <div>
+            @Html.HiddenFor(m => m.CompanyAccount.ParentAccountId)
+            @Html.HiddenFor(m => m.CompanyAccount.AccountId)
+        </div>
+        <h3 class="section-heading margin-top-25">@Admin_Resources.LabelAddressDetails</h3>
+                @Html.Partial("_Address", Model.CompanyAccount.Address, new ViewDataDictionary()
+           {
+               TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "CompanyAccount.Address" }
+           })
+    }
+</section>

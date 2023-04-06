@@ -1,0 +1,28 @@
+﻿@model Znode.Engine.Admin.ViewModels.PublishDetailsViewModel
+
+<div class="col-sm-12 nopadding">
+    <h3 class="section-heading">Publish Details</h3>
+    @foreach (var attributes in Model.Attributes)
+    {
+        <div class="form-group publish-data">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label for="@attributes.Name">@attributes.ControlLabel</label>
+                </div>                
+                @Html.CreateControl(attributes)
+            </div>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var noImageName = @Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(Znode.Libraries.ECommerce.Utilities.ZnodeAdminSettings.DefaultImagePath));
+        $('img').on("error",function () {
+            if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
+                // image was broken, replace with your new image
+                this.src = noImageName;
+            }
+        });
+        $( ".upload-images-close" ).remove();
+    });
+</script>

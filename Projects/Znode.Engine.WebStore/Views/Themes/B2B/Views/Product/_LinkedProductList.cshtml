@@ -1,0 +1,195 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model ProductViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    string callForPricingMessage = Html.RenderMessage(WebStoreConstants.ProductCallForPricing)?.ToString();
+    bool CallForPricing = Convert.ToBoolean(Model.Attributes?.Value(ZnodeConstant.CallForPricing));
+    ProductPromotionViewModel promotionCallForPricing = Model?.Promotions?.FirstOrDefault(x => x.PromotionType == ZnodeConstant.PromotionCallForPricing);
+    if (HelperUtility.IsNotNull(promotionCallForPricing))
+    {
+        CallForPricing = true;
+        callForPricingMessage = string.IsNullOrEmpty(promotionCallForPricing.PromotionMessage) ? callForPricingMessage : promotionCallForPricing.PromotionMessage;
+    }
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+    string productType = Model?.Attributes?.SelectAttributeList(ZnodeConstant.ProductType)?.FirstOrDefault()?.Code;
+    string salesPrice = Equals(productType, ZnodeConstant.GroupedProduct) && (!Equals(Model.SalesPrice, null) || !Equals(Model.RetailPrice, null)) ? string.Format(WebStore_Resources.GroupProductMessage, Helper.FormatPriceWithCurrency(Model.SalesPrice, Model.CultureCode, string.Empty)) : Helper.FormatPriceWithCurrency(Model.SalesPrice, Model.CultureCode, string.Empty);
+    string retailPrice = (Equals(productType, ZnodeConstant.GroupedProduct) && !Equals(Model.RetailPrice, null)) ? string.Format(WebStore_Resources.GroupProductMessage, Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode, string.Empty)) : Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode, string.Empty);
+    string UOM = Attributes.ValueFromSelectValue(Model?.Attributes, "UOM");
+    string ratingText = Model.Rating > 0 ? string.Format(WebStore_Resources.TextRating, Math.Round(Model.Rating, 1), Model.TotalReviews) : string.Empty;
+    var domainurl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+    bool isObsolete = Convert.ToBoolean(Model?.Attributes?.Value(ZnodeConstant.IsObsolete));
+    string obsoleteClass = isObsolete ? "cut-price" : "";
+    string productUrl = domainurl + Url.GetProductUrl(Model?.SEOUrl, Model?.PublishProductId.ToString());
+    bool isShowPriceAndInventoryToLoggedInCustomersOnly = GlobalAttributeHelper.IsShowPriceAndInventoryToLoggedInUsersOnly();
+    var PersonalizeValues = Model?.Attributes?.Where(x => x.IsPersonalizable && x.AttributeTypeName == "Text").ToList();
+    bool IsConfigurable = Model.IsConfigurable;
+    string disable = isObsolete || CallForPricing || !Model.ShowAddToCart ? "disabled" : "";
+    Model?.CartParameter?.Add("IsRedirectToCart", "False");
+    Model?.CartParameter?.Add("ProductName", Model.Name);
+}
+<div class="item b2b-products">
+    <div class="product-item">
+        <div class="view-item d-flex flex-column h-100">
+            <div class="product-img">
+                <a href="@domainurl@Url.GetProductUrl(Model?.SEOUrl, Model?.PublishProductId.ToString())">
+                    <div class="row no-gutters align-items-center">
+                        <div class="image col-md-12 p-0 text-center">
+                            @if (Convert.ToBoolean(Model.Attributes?.Value("NewProduct")))
+                            {
+                                <img src="@_fileLocation/Images/new-product-tag.png" alt="New Product" class="img-fluid new-product-tag hvr-pulse" />
+                            }
+                            @{
+                                string imageSrc = string.IsNullOrEmpty(Model.ImageSmallPath) ? "/no-image.png" : Model.ImageSmallPath;
+                            }
+                            <img id="@Model.PublishProductId" src="@imageSrc" class="img-fluid" data-src="@imageSrc" alt="Product" data-test-selector="imgProductImage" />
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+            <div class="product-details">
+                @{
+                    if (Model.Name.Length > 52)
+                    {
+                        string ProductName = Model.Name.Substring(0, 52);
+                        ProductName = ProductName + "...";
+                        <a href="@domainurl@Url.GetProductUrl(Model?.SEOUrl, Model?.PublishProductId.ToString())">
+                            <h6 class="title" data-test-selector="hdgProductTitle" title="@Model.Name">@WebUtility.HtmlDecode(ProductName)</h6>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@domainurl@Url.GetProductUrl(Model?.SEOUrl, Model?.PublishProductId.ToString())">
+                            <h6 class="title" data-test-selector="hdgProductTitle" title="@Model.Name">@WebUtility.HtmlDecode(Model.Name)</h6>
+                        </a>
+                    }
+                }
+                <div class="product-sku" data-test-selector="divProductSku">
+                    SKU: @Model.SKU
+                </div>
+                <div class="product-rating">
+                    @Html.Partial("_StarRating", Model.Rating)
+                    @ratingText <a href="@Url.GetProductUrl(Model?.SEOUrl, Model.PublishProductId.ToString())#scrollReview" id="jumpto-readreviews-productTile" data-test-selector="linkReviewText">@WebStore_Resources.LinkTextReadReviews</a>
+                </div>
+                <div class="product_highlight">
+                    @if (Model.HighlightLists.Any())
+                    {
+                        @Html.Partial("_PLPProductHighLights", Model.HighlightLists)
+                    }
+                </div>
+
+                @*if store level flag - 'isShowPriceAndInventoryToLoggedInCustomersOnly' is set to yes and user is logged off then do not show price and inventory to users.*@
+                @if (isShowPriceAndInventoryToLoggedInCustomersOnly && !Request.IsAuthenticated)
+                {
+                    <div class="loged-out-product-details">
+                        <div class="loged-out-product-title">@WebStore_Resources.TitleWhatsThePrice</div>
+                        <div class="loged-out-product-text">
+                            <a href="JavaScript:void(0);" data-target="#sign-in-nav" class="OpenNav" onclick="User.prototype.LoginInPopup()">@WebStore_Resources.LabelSignIn</a>
+                            @WebStore_Resources.TextOR
+                            <a href="/User/Signup/@(!string.IsNullOrEmpty(Request.QueryString["returnUrl"]) ? "?returnUrl=" + Request.QueryString["returnUrl"] : "")"> @WebStore_Resources.LabelRegister</a>
+                            @WebStore_Resources.TextForPricingAndInventory
+                        </div>
+                    </div>
+                    if (isObsolete)
+                    {
+                        <div class="product-inventory pb-2">
+                            <div class="price"><h4 class="error-msg obsolete-msg pt-2 pb-2" data-test-selector="hdgPLPObsoleteMessage">@Html.RenderBlock(string.Format(WebStore_Resources.PLPObsoleteMessage, productUrl))</h4></div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    if (CallForPricing)
+                    {
+                        <div class="price"><label>@callForPricingMessage</label></div>
+                    }
+                    else
+                    {
+                        <div class="price" data-sku="@Model.SKU" data-type="@Model.ProductType">
+                            @if (!Helper.IsAsyncPrice)
+                            {
+                                if (!string.IsNullOrEmpty(Model.GroupProductPriceMessage))
+                                {
+                                    <label>@Model.GroupProductPriceMessage</label>
+                                }
+                                else
+                                {
+                                    if (!Equals(Model.SalesPrice, null))
+                                    {
+                                        <span class="@obsoleteClass" data-test-selector="spnSalesPrice">
+                                            @Helper.FormatPriceWithCurrency(Model.SalesPrice, Model.CultureCode, UOM)
+                                        </span>
+
+                                        if (Model.SalesPrice != @Model.RetailPrice && !Equals(productType, ZnodeConstant.GroupedProduct))
+                                        {
+                                            <span class="cut-price" data-test-selector="spnCutPrice">
+                                                @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode, UOM)
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (Model.PromotionalPrice > 0)
+                                        {
+
+                                            <label class="@obsoleteClass" data-test-selector="lblPromotionalPrice">@Helper.FormatPriceWithCurrency(Model.PromotionalPrice, Model.CultureCode, UOM)</label>
+                                            <span class="cut-price" data-test-selector="spnCutPrice">
+                                                @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode, UOM)
+                                            </span>
+
+                                        }
+                                        else
+                                        {
+                                            <span class="@obsoleteClass" data-test-selector="spnRetailPrice">
+                                                @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode, UOM)
+                                            </span>
+                                        }
+
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <label class="price-span" data-sku="@Model.SKU" data-type="@productType">Loading...</label>
+                            }
+                            @if (isObsolete)
+                            {
+                                <div class="product-inventory pb-2">
+                                    <div class="price"><h4 class="error-msg obsolete-msg pt-2 pb-2" data-test-selector="hdgPLPObsoleteMessage">@Html.RenderBlock(string.Format(WebStore_Resources.PLPObsoleteMessage, productUrl))</h4></div>
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+
+            <div class="button-action  h-100 d-flex justify-content-center align-items-end text-center">
+                @if (HelperUtility.IsNotNull(Model))
+                {
+                    if(Model.IsAddToCartOptionForProductSlidersEnabled && Model.ProductType == ZnodeConstant.SimpleProduct || Model.ProductType == ZnodeConstant.BundleProduct)
+                    {
+                        if ((PersonalizeValues?.Count > 0) || (Model.AddOns?.Count > 0) || IsConfigurable)
+                        {
+
+                            <button type="button" class="btn btn-primary button-view-details mt-2" onclick="javascript: location.href = '@Url.GetProductUrl(Model.SEOUrl, Model.PublishProductId.ToString())'" id="Model.PublishProductId" data-test-selector="btnViewDetails">@WebStore_Resources.ButtonViewDetails</button>
+                        }
+                        else
+                        {
+                            <div class="button-addtocart mt-2">
+                                @Html.AddToCartAjaxRequest(WebStore_Resources.ButtonAddToCart, "/Product/AddToCartProduct", Model.CartParameter, "btn btn-primary button-view-details", string.Format("javascript:$('#Form_{0}').submit()", @Model.PublishProductId), disable, "Product.prototype.DisplayAddToCartMessage(data)")
+                            </div>
+                        }
+                    }
+                    else if (Model.IsAddToCartOptionForProductSlidersEnabled)
+                    {
+
+                        <button type="button" class="btn btn-primary button-view-details mt-2" onclick="javascript: location.href = '@Url.GetProductUrl(Model.SEOUrl, Model.PublishProductId.ToString())'" id="Model.PublishProductId" data-test-selector="btnViewDetails">@WebStore_Resources.ButtonViewDetails</button>
+
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

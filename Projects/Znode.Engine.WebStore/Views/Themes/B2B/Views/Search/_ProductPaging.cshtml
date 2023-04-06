@@ -1,0 +1,27 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+
+@model List<ProductViewModel>
+@{
+    Layout = null;
+}
+@{
+    if (!Equals(Model, null))
+    {
+        foreach (var p in Model)
+        {
+            <li class="b2b-products">
+                <article class="product-item">
+                    @Html.Partial("../Product/_ProductTile", p)
+                </article>
+            </li>
+        }
+    }
+}
+<script>
+    $(document).ready(function () {
+        var async = '@Helper.IsAsyncPrice';
+        if (async == 'True') {
+            Product.prototype.GetPriceAsync();
+        }
+    })
+</script>

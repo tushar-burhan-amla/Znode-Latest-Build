@@ -1,0 +1,34 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(Admin_Resources.DisplayNameMerchantId, new { @class = "required", @data_test_selector = "lblMerchantId" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => Model.GatewayUsername, new { required = "required", @data_test_selector = "txtMerchantId" })
+            @Html.ValidationMessageFor(m => Model.GatewayUsername, @Admin_Resources.CybersourceMerchantID, new { @data_test_selector = "valMerchantId" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(Admin_Resources.DisplayNameMerchantKeyId, new { @class = "required", @data_test_selector = "lblPublicKey" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => Model.GatewayPassword, new { required = "required", @data_test_selector = "txtPublicKey" })
+            @Html.ValidationMessageFor(m => Model.GatewayPassword, @Admin_Resources.CybersourceMerchantKeyId, new { @data_test_selector = "valPublicKey" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(Admin_Resources.DisplayNameMerchantSecretKey, new { @class = "required", @data_test_selector = "lblPrivateKey" })
+        </div>
+        <div class="control-md">
+            @Html.PasswordFor(m => Model.TransactionKey, new { required = "required", @data_test_selector = "txtPrivateKey" })
+            @Html.ValidationMessageFor(m => Model.TransactionKey, @Admin_Resources.CybersourceMerchantSecretKey, new { @data_test_selector = "valPrivateKey" })
+        </div>
+    </div>
+</div>

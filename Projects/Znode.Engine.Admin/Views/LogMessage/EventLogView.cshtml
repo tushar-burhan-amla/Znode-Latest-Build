@@ -1,0 +1,77 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model LogMessageViewModel
+
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgEventLogMessage">@Admin_Resources.EventLogMessage</h1>
+    <div class="pull-right btn-container">
+        <a href="/LogMessage/EventLogList" data-test-selector="linkCancel" class="btn-text-icon"><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+    </div>
+</div>
+<section class="col-sm-12 page-container">
+    <div class="form-group">
+        <div class="col-sm-12 nopadding ">
+            <div class="control-label">
+                @Html.LabelFor(x => x.Component, new { @data_test_selector = "lblComponent" })
+            </div>
+            <div data-test-selector="divComponent" class="control-md ">
+                <span>@Html.RenderBlock(Model.Component)</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding ">
+            <div class="control-label">
+                @Html.LabelFor(x => x.TraceLevel, new { @data_test_selector = "lblTraceLevel" })
+            </div>
+            <div data-test-selector="divTraceLevel" class="control-lg update-order-status dirtyignore">
+                <span>@Html.RenderBlock(Model.TraceLevel)</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding ">
+            <div class="control-label">
+                <span>@Html.LabelFor(x => x.CreatedDate, "Created Date", new { @data_test_selector = "lblCreatedDate" })</span>
+            </div>
+            <div data-test-selector="divCreatedDate" class="control-md ">
+                @Html.RenderBlock(Model.CreatedDate)
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding ">
+            <div class="control-label">
+                @Html.LabelFor(x => x.LogMessage, new { @data_test_selector = "lblLogMessage" })
+            </div>
+            <div class="control-md">
+                @Html.TextAreaFor(m => m.LogMessage, new { @rows = "7", @data_test_selector = "txtLogMessage" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding ">
+            <div class="control-label">
+                @Html.LabelFor(x => x.StackTraceMessage, new { @data_test_selector = "lblStackTraceMessage" })
+            </div>
+            <div class="control-md">
+                @Html.TextAreaFor(m => m.StackTraceMessage, new { @rows = "7", @data_test_selector = "txtStackTraceMessage" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding ">
+            <div class="control-label">
+                @Html.LabelFor(x => x.DomainName, new { @data_test_selector = "lblDomainName" })
+            </div>
+            <div data-test-selector="divDomainName" class="control-md">
+                <span>@Html.RenderBlock(Model.DomainName)</span>
+            </div>
+        </div>
+    </div>
+</section>

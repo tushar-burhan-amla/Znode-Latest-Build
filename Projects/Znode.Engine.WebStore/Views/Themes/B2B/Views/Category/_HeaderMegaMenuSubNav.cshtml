@@ -1,0 +1,20 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@{
+    var domainurl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+}
+@model IEnumerable<CategorySubHeaderViewModel>
+@foreach (var childCategory in Model)
+{
+    string childCategoryName = childCategory.CategoryName?.Replace(" ", "");
+    <div class="row py-4 px-5">
+        <div class="col-12 col-lg-2 p-0">
+            <ul class="sub-menu" data-test-selector="listContainer_@childCategoryName">
+                <li class="head" data-test-selector="list_@childCategoryName">
+                    <a href="@domainurl@Url.GetCategoryUrl(childCategory.SEOPageName, null,childCategory.CategoryId)" data-test-selector="listSubPage_@childCategoryName">@Html.RenderBlock(WebUtility.HtmlDecode(childCategory.CategoryName))</a>
+                    @Html.Partial("_HeaderMegaMenuSubNav", childCategory.ChildCategoryItems)
+                </li>
+            </ul>
+        </div>
+
+    </div>
+}

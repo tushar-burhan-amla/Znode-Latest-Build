@@ -1,0 +1,112 @@
+﻿@using Znode.Engine.WebStore.Agents
+@model Znode.Engine.WebStore.ViewModels.ProductViewModel
+@{
+    int productId = Model.ConfigurableProductId > 0 ? Model.ConfigurableProductId : Model.PublishProductId;
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    string seoTitle = string.IsNullOrEmpty(Model.SEOTitle) ? PortalAgent.CurrentPortal.WebsiteTitle : Model.SEOTitle;
+    bool isPDPRecommendationEnabled = (PortalAgent.CurrentPortal?.RecommendationSetting?.IsPDPRecommendation).GetValueOrDefault();
+}
+<div id="layout-product" class="main-wrapper product-meta small-view-template col" data-id="@productId" data-sku="@Model.SKU">
+    @Html.Partial("../_LearnMore", Model)
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                <div id="breadCrumb" class="col breadcrumb-container"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row b2b-product-view-details">
+        <div class="container">
+            <div class="row product-view-details">
+                <!--Get Product Images-->
+                <div class="col-12 col-lg-5 product-images">
+                    @Html.Partial("_ProductImageZoomEffect", Model)
+                </div>
+                <!--Get Product details like short decription and higlights-->
+                <div class="col-12 col-lg-7 pl-lg-4 product-overview">
+                    @Html.Partial("_ProductOverview", Model)
+                    @Html.Partial("_ProductInfo", Model)
+                </div>
+            </div>
+        </div>
+        <div class="col-12 b2b-product-tabs mt-5">
+            <div class="row">
+                <div class="container">
+                    <div class="row">
+                        <!--Get Product content like features and cutomer reviews-->
+                        @Html.Partial("_ProductContent", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (isPDPRecommendationEnabled == true)
+        {
+            <div class="col-12 carousel-card">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 p-0" data-test-selector="divRecommendedProductList">
+                            <!--Recommended Products Widget, will be displayed on PDP page-->
+                            <z-widget>
+                                @Html.WidgetPartialAjax("PDPRecommendations", "RecommendedProducts", "6611", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())
+                            </z-widget>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 p-0 product-extras">
+                    @Html.Partial("_ProductExtras", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Hidden("categoryIds", string.Join(",", Model.ZnodeProductCategoryIds), new { @id = "categoryIds" })
+    <div id="successMessageDiv" style="display:none">
+    </div>
+    <div id="divSendMail" style="display:none">
+    </div>
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <div class="col offer-banner mt-4 mt-md-0">
+                    <!--Advertisement Banner Widget-->
+                    <z-widget>@Html.WidgetPartial("OfferBanner", "AdvertisementBanner", "110", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId)</z-widget>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="isB2B" value="true" />
+</div>
+<link rel="canonical" href="@Model.CanonicalURL" />
+@Html.Partial("~/Views/Shared/Enhanced Ecommerce/_PDPTracking.cshtml", Model.GetEcommerceDetailsOfProduct())
+<!--Template Level Script-->
+<script src="@Helper.GetThemeFilePath($"/Views/Themes/", "/Scripts/lib/jquery.simpleGallery.js")"></script>
+<script src="@Helper.GetThemeFilePath($"/Views/Themes/", "/Scripts/lib/jquery.simpleLens.js")"></script>
+<script src="@Helper.GetThemeFilePath($"/Views/Themes/", "/Scripts/lib/easyzoom.js")"></script>
+<script>
+    $(document).ready(function () {
+        $('title').html("@seoTitle");
+        $('meta[name="keywords"]').prop("content", "@Html.RenderBlock(Model.SEOKeywords)");
+        $('meta[name="description"]').prop("content", "@Html.RenderBlock(Model.SEODescription)");
+    });
+</script>
+<!--Product Zoom Effect-->
+<script>
+    $('#ImageZoom .simpleLens-thumbnails-container img').simpleGallery();
+    $('#ImageZoom .simpleLens-big-image').simpleLens();
+    // Instantiate EasyZoom instances
+    var $easyzoom = $('.easyzoom').easyZoom();
+    // Setup thumbnails example
+    var api1 = $easyzoom.filter('.easyzoom-with-thumbnails').data('easyZoom');
+
+    $(".Product_Altimages .item").on('click', 'a', function (e) {
+        var $this = $(this);
+        e.preventDefault();
+        // Use EasyZoom's `swap` method
+        api1.swap($this.data('standard'), $this.attr('href'));
+    });
+</script>

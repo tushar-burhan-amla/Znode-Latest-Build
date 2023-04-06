@@ -1,0 +1,53 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalSMSViewModel
+
+<div id="ProviderForm-container">
+    <h3 class="section-heading margin-top-25" data-test-selector="hdgProvidersHeading">@Admin_Resources.LabelHeaderProviderSetting</h3>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelAccountSID, new { @class = "required", @data_test_selector = "lblAccountSID" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => Model.SmsPortalAccountId, new { required = "required", @data_test_selector = "txtAccountSID" })
+                @Html.ValidationMessageFor(m => Model.SmsPortalAccountId, @Admin_Resources.ErrorAccountSID, new { @data_test_selector = "valAccountSID" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelAuthToken, new { @class = "required", @data_test_selector = "lblAuthToken" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => Model.AuthToken, new { required = "required", @data_test_selector = "txtAuthToken" })
+                @Html.ValidationMessageFor(m => Model.AuthToken, @Admin_Resources.ErrorAuthenticationToken, new { @data_test_selector = "valAuthToken" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelFromMobileNumber, new { @class = "required", @data_test_selector = "lblFromMobileNumber" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => Model.FromMobileNumber, new { required = "required", @data_test_selector = "txtFromMobileNumber" })
+                @Html.ValidationMessageFor(m => Model.FromMobileNumber, @Admin_Resources.ErrorSenderPhoneNumber, new { @data_test_selector = "valFromMobileNumber" })
+            </div>
+            @Html.Partial("_HelpText", @Admin_Resources.HelptextFromMobileNumber)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="control-md control-non">
+            <label>
+                <input @(Model.IsSMSSettingEnabled ? "checked='checked'" : "") id="EnableProviderSMS" name="IsSMSSettingEnabled" type="checkbox" value="true" data-test-selector="chkEnableProviderSMS">
+                <span class="lbl padding-8" data-test-selector="spnEnableProviderSMS">@Admin_Resources.LabelEnableSMSSetting</span>
+            </label>
+            @Html.Partial("_HelpText", @Admin_Resources.HelptextEnableSmsSetting)
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.SMSProviderId, new { @id = "hdnsmsProviderId" })
+    @Html.HiddenFor(model => model.PortalSmsSettingId, new { @id = "hdnsmssettingId" })
+</div>

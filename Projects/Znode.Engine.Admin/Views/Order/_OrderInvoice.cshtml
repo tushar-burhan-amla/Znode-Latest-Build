@@ -1,0 +1,254 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model OrderInvoiceViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.Extensions;
+@{
+    Layout = null;
+    if (!String.IsNullOrWhiteSpace(ViewBag.Title))
+    {
+        ViewBag.Title = ViewBag.Title;
+    }
+    else
+    {
+        ViewBag.Title = "TextStoreName";
+    }
+    int shippingId = 0;
+    int count = 1;
+}
+
+
+
+@foreach (var order in Model.Orders)
+{
+    count = 1;
+    <meta charset="UTF-8">
+    <div id="layout-account-receipt">
+
+        <div class="container" style="margin-left: auto; margin-right: auto; padding-left: 15px; padding-right: 15px; width: 980px;">
+            <div class="row">
+                <div class="col-xs-12 nopadding">
+                    <h1 class="page-title" style="font-size: 26px;font-weight: bold; border-bottom: 2px solid #cc0000;">@Html.RenderBlock("Order " + " " + $"{order.OrderNumber.ToString()}") - @order.StoreName &nbsp;<small style="color: #777;font-weight: 400;line-height: 1;"> on @order.OrderDate.ToShortDateString()</small></h1>
+                </div>
+
+                <div class="col-xs-12 account-dashboard nopadding" style="float:left;width:100%;">
+
+                    <div class="col-sm-9 col-lg-10 order-receipt" style="float:left;width:100%;">
+
+                        <div class="col-xs-12 margin-top-bottom nopadding">
+                            <div class="col-xs-12 col-sm-4 nopadding receipt-info" style="float:left;width:49%;">
+                                <h3 class="section-header-color" style="border-bottom: 1px solid #343434;color: #343434;font-size: 14px;font-weight: bold;padding-bottom: 6px;">@Admin_Resources.LabelDetails:</h3>
+                                <div><strong>@Admin_Resources.LabelDate:</strong> @order.OrderDate.ToShortDateString()</div>
+                                <div><strong>@Admin_Resources.LabelName:</strong> @order.FirstName  @order.LastName </div>
+                                <div><strong>@Admin_Resources.OrderHeader:</strong> @order.OrderNumber</div>
+                                <div><strong>@Admin_Resources.LabelPayment:</strong> @order.PaymentDisplayName</div>
+                                @if (order.PaymentType == ZnodeConstant.PurchaseOrder)
+                                {<div><strong>@Admin_Resources.LabelPurchaseOrderNumber</strong> @order.PurchaseOrderNumber</div>}
+                                <div><strong>@Admin_Resources.LabelTrackingNumber:</strong>@order.TrackingNumber </div>
+                                <div><strong>@Admin_Resources.LabelJobName:</strong> @order.JobName</div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 nopadding receipt-info grid-m-4" style="float:left;width:49%;">
+                                <h3 class="section-header-color" style="border-bottom: 1px solid #343434;color: #343434;font-size: 14px;font-weight: bold;padding-bottom: 6px;">@Admin_Resources.TitleBillingTo</h3>
+                                <div class="address-block">
+                                    @Html.RenderBlock(order.BillingAddressHtml)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 margin-top-bottom nopadding receipt-item-list" style="float:left;width:100%;">
+                            <table class="table table-striped table-tr" style="float:left;width:100%;border: 1px solid #dadada;margin:15px 0;" aria-describedby="Order Items List">
+
+
+                                @foreach (var orderLineItems in order.OrderLineItems)
+                                {
+                                    if (!Equals(orderLineItems.OrderLineItemState, ZnodeOrderStatusEnum.RETURNED.ToString()))
+                                    {
+                                        bool headerFlag = false;
+                                        if (!Equals(shippingId, orderLineItems.OmsOrderShipmentId))
+                                        {
+                                            <tr class="shipment-address">
+                                                <td colspan="6" style="background-color: #f9f9f9;padding:5px;">
+                                                    <div class="col-xs-12 nopadding margin-top-bottom recepit-container">
+                                                        <div class="user-receipt">
+                                                            <h3 style="border-bottom: 1px solid #343434;color: #343434;font-size: 14px;font-weight: bold;padding-bottom: 6px;">@Admin_Resources.LabelShipment #@count</h3>
+                                                            <div class="col-xs-12 col-sm-4" style="float:left;width:49%;">
+                                                                @Html.RenderBlock(orderLineItems.ShippingAddressHtml)
+                                                            </div>
+                                                            <div class="col-xs-12 col-sm-4" style="float:left;width:49%;">
+                                                                <div><strong>@Admin_Resources.LabelInHandsDate:</strong> @(order.InHandDate.HasValue ? order.InHandDate.Value.ToDateTimeFormat() : string.Empty)</div>
+                                                                <div><strong>@Admin_Resources.LabelShippingConstraintsCode:</strong> @(string.IsNullOrWhiteSpace(order.ShippingConstraintCode) ? string.Empty : HelperUtility.GetEnumDescriptionValue((ShippingConstraintsEnum)Enum.Parse(typeof(ShippingConstraintsEnum), order.ShippingConstraintCode)))</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            shippingId = orderLineItems.OmsOrderShipmentId;
+                                            count++;
+                                            headerFlag = true;
+                                        }
+                                        if (headerFlag)
+                                        {
+
+                                            <tr>
+                                                <th scope="col" class="table-td receipt-column-item" style="width:30%;text-align:left; padding:5px 0;border-bottom: 1px solid #dadada;">@Admin_Resources.LabelProductItem</th>
+                                                <th scope="col" class="table-td receipt-column-item" style="width:30%;text-align:left; padding:5px 0;border-bottom: 1px solid #dadada;">@Admin_Resources.LabelDescription</th>
+                                                <th scope="col" class="table-td receipt-column-quantity" style="width:5%;text-align:center; padding:5px 0;border-bottom: 1px solid #dadada;">@Admin_Resources.TextQuantity</th>
+                                                <th scope="col" class="table-td receipt-column-price" style="width:10%;text-align:center; padding:5px 0;border-bottom: 1px solid #dadada;">@Admin_Resources.LabelPrice</th>
+                                                <th scope="col" class="table-td receipt-column-total" style="width:10%;text-align:center; padding:5px 0;border-bottom: 1px solid #dadada;">@Admin_Resources.LabelTotal</th>
+                                            </tr>
+
+                                        }
+
+                                        <tr class="receipt-item table-tr">
+                                            <td class="table-td receipt-column-item" style="text-align:left;">
+                                                @Html.RenderBlock(orderLineItems.ProductName)
+                                            </td>
+                                            <td class="table-td" style="text-align:left;">
+                                                <div>@Html.RenderBlock(orderLineItems.Description)</div>
+
+                                                <div>
+                                                    @if (orderLineItems?.PersonaliseValuesDetail?.Count > 0)
+                                                    {
+                                                        foreach (var item in orderLineItems.PersonaliseValuesDetail)
+                                                        {
+                                                            if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                                                            {
+                                                                <p> @item.PersonalizeName : @item.PersonalizeValue </p>
+                                                            }
+                                                        }
+                                                    }
+                                                    else if (orderLineItems?.PersonaliseValueList?.Count > 0)
+                                                    {
+                                                        foreach (var item in orderLineItems?.PersonaliseValueList)
+                                                        {
+                                                            if (!Equals(item.Value, null) && !Equals(item.Value, string.Empty))
+                                                            {
+                                                                <p>
+                                                                    @item.Key: @item.Value
+                                                                </p>
+                                                            }
+
+                                                        }
+                                                    }
+                                                </div>
+                                            </td>
+
+
+
+                                            <td class="table-td receipt-column-quantity" style="text-align: center;">
+                                                @if ((orderLineItems.Quantity) % 1 == 0)
+                                                {
+                                                    @($"{orderLineItems.Quantity:n0}")
+                                                    <div>&nbsp;</div>
+                                                }
+                                                else
+                                                {
+                                                    var orderedQuantity = double.Parse(Convert.ToString(orderLineItems.Quantity));
+                                                    @orderedQuantity
+                                                    <div>&nbsp;</div>
+                                                }
+                                            </td>
+                                            <td class="table-td receipt-column-price" style="text-align: center;">
+                                                @HelperMethods.FormatPriceWithCurrency(orderLineItems.Price, order.CultureCode)
+                                                <div>&nbsp;</div>
+                                            </td>
+                                            <td class="table-td receipt-column-total" style="text-align: center;">
+                                                @HelperMethods.FormatPriceWithCurrency(orderLineItems.Total, order.CultureCode)
+                                                <div>&nbsp;</div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </table>
+                        </div>
+                        <div class="col-xs-12 nopadding margin-top-bottom receipt-totals text-right" style="float:left;width:100%;">
+                            <div class="col-sm-offset-6" style="float:right;width:50%;">
+                                <div class="form-group">
+                                    <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;">@Admin_Resources.LabelSubTotal</span></div>
+                                    <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;">@HelperMethods.FormatPriceWithCurrency(order.SubTotal, order.CultureCode)</span></div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;">@Admin_Resources.LabelShippingCost (@Html.RenderBlock(order.ShippingTypeName))</span></div>
+                                    <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;"> + @HelperMethods.FormatPriceWithCurrency(order.ShippingCost, order.CultureCode)</span></div>
+
+                                </div>
+
+                                @if (order.ShippingHandlingCharges > 0)
+                                {
+                                    <div class="form-group">
+                                        <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;">@Admin_Resources.LabelShippingHandlingCharges</span></div>
+                                        <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;"> + @HelperMethods.FormatPriceWithCurrency(order.ShippingHandlingCharges, order.CultureCode)</span></div>
+
+                                    </div>
+                                }
+
+                                <div class="form-group">
+                                    <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;">@Admin_Resources.LabelTax</span></div>
+                                    <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;"> + @HelperMethods.FormatPriceWithCurrency(order.TaxCost, order.CultureCode)</span></div>
+
+                                </div>
+
+                                @if (order.DiscountAmount != 0)
+                                {
+                                    <div class="form-group">
+                                        <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;">@Admin_Resources.LabelDiscountAmount</span></div>
+                                        <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;"> - @HelperMethods.FormatPriceWithCurrency(order.DiscountAmount, order.CultureCode)</span></div>
+
+                                    </div>
+                                }
+
+                                @if (order.CSRDiscountAmount > 0)
+                                {
+                                    <div class="form-group">
+                                        <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;">@Admin_Resources.LabelCSRDiscount</span></div>
+                                        <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;"> - @HelperMethods.FormatPriceWithCurrency(order.CSRDiscountAmount, order.CultureCode)</span></div>
+                                    </div>
+                                }
+
+                                @if (order.ShippingDiscount > 0)
+                                {
+                                    <div class="form-group">
+                                        <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;">@Admin_Resources.LabelShippingDiscount</span></div>
+                                        <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;"> - @HelperMethods.FormatPriceWithCurrency(order.ShippingDiscount, order.CultureCode)</span></div>
+                                    </div>
+                                }
+
+
+                                @if (order.ReturnCharges > 0)
+                                {
+                                    <div class="form-group">
+                                        <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;">@Admin_Resources.LabelReturnCharges</span></div>
+                                        <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;"> + @HelperMethods.FormatPriceWithCurrency(order.ReturnCharges, order.CultureCode)</span></div>
+                                    </div>
+                                }
+
+
+                                @if (order.GiftCardAmount != 0)
+                                {
+                                    <div class="form-group">
+                                        <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;">@Admin_Resources.LabelVoucherAmount</span></div>
+                                        <div class="col-xs-6 nopadding" style="float:left;width:50%;"><span style="float:right;margin:5px 0;">@HelperMethods.FormatPriceWithCurrency(order.GiftCardAmount, order.CultureCode)</span></div>
+
+                                    </div>
+                                }
+
+                                <div class="form-group receipt-total" style="float:left;width:100%; border-top: 1px solid #343434;">
+                                    <div class="col-xs-6 nopadding" style="float:left;width:50%;"><h2 style="float:right;margin:5px 0;color:#cc0000;">@Admin_Resources.LabelOrderTotal</h2></div>
+                                    <div class="col-xs-6 nopadding" style="float:left;width:50%;"><h2 style="float:right;margin:5px 0;color:#cc0000;">@HelperMethods.FormatPriceWithCurrency(order.Total, order.CultureCode)</h2></div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+}
+

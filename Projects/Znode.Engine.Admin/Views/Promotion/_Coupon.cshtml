@@ -1,0 +1,261 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model PromotionViewModel
+<div class="col-sm-12 nopadding" id="coupon-info">
+    <div class="form-group">
+        <div class="control-md control-non">
+            <label>
+                <input id="IsCouponRequired" name="IsCouponRequired" checked="@Model.IsCouponRequired" type="checkbox" value="true" onclick="Promotion.prototype.ShowHideCouponContainer();" data-test-selector="chkIsCouponRequired">
+                <span class="lbl padding-8" for="IsCouponRequired" data-test-selector="spnIsCouponRequired">@Admin_Resources.LabelIsCouponRequired</span>
+                <input name="IsCouponRequired" type="hidden" value="false">
+            </label>
+        </div>
+    </div>
+    <div id="divCommon"style="display:none" data-test-selector="divCommon">
+        <div class="form-group">
+            <div class="control-md control-non">
+                @if (Model.PromotionId == 0)
+                {
+                    <label>
+                        <input id="IsUnique" name="IsUnique" checked="@Model.IsUnique" type="checkbox" value="true" onclick="Promotion.prototype.EnableMultipleCouponMode();" data-test-selector="chkIsUnique">
+                        <span class="lbl padding-8" for="IsUnique" data-test-selector="spnIsUnique">@Admin_Resources.LabelIsUnique</span>
+                        <input name="IsUnique" type="hidden" value="false">
+                    </label>
+                }
+                else
+                {
+                    <label>
+                        <input id="IsUnique" name="IsUnique" @(Model.IsUnique ? "checked='checked'" : "") type="checkbox" value="true" disabled="disabled" data-test-selector="chkIsUnique">
+                        <span class="lbl padding-8" for="IsUnique" data-test-selector="spnIsUnique">@Admin_Resources.LabelIsUnique</span>
+                        <input name="IsUnique" type="hidden" value="false">
+                    </label>
+                    <input name="hdnIsUnique" type="hidden" value="@Model.IsUnique.ToString()">
+                }
+            </div>
+        </div>
+        <div class="form-group" id="isAllowedWithOtherCouponsSection">
+            <div class="control-md control-non">
+                <label>
+                    <input @(Model.IsAllowedWithOtherCoupons ? "checked='checked'" : "") id="IsAllowedWithOtherCoupons" name="IsAllowedWithOtherCoupons" type="checkbox" value="true" data-test-selector="chkIsAllowedWithOtherCoupons">
+                    <span class="lbl padding-8" data-test-selector="spnIsAllowedWithOtherCoupons">@Admin_Resources.LabelIsAllowedwithOtherCoupon</span>
+                    <input name="IsAllowedWithOtherCoupons" type="hidden" value="false">
+                </label>
+            </div>
+        </div>
+        <div class="form-group" id="promoMessageSection">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblPromotionMessage">@Admin_Resources.LabelPromotionMessage</label>
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.PromotionMessage, new { @data_test_selector = "txtPromotionMessage" })
+                </div>
+                @Html.Partial("_HelpText", @Admin_Resources.HelptextPromotionMessage)
+            </div>
+        </div>
+        <div id="divSingleCupon" style="display:none">
+            <div class="form-group" id="divCouponCode">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+
+                        <label class="required" data-test-selector="lblCouponCode">@Admin_Resources.LabelCouponCode</label>
+                    </div>
+                    <div class="control-md">
+                        <input type='text' id="txtCouponCode" name='CouponCode' value='@(Model?.CouponList?.CouponList?.FirstOrDefault()?.Code)' class='PromotionCode' data-test-selector="txtCouponCode">
+
+                        <span id="valCouponCode" data-test-selector="valCouponCode"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="AvailableQuantitySection">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label class="required" data-test-selector="lblAvailableQuantity">@Admin_Resources.LabelAvailableQuantity</label>
+                    </div>
+                    <div class="control-md">
+                        <input type="text" name="AvailableQuantity" id="txtAvailableQuantity" value="@(Model?.CouponList?.CouponList?.FirstOrDefault()?.AvailableQuantity)" data-test-selector="txtAvailableQuantity" />
+                        <span id="valAvailableQuantity" data-test-selector="valAvailableQuantity"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="divMultipleCupon" style="display:none">
+            <div class="form-group">
+                @if (Model.PromotionId == 0)
+                {
+                    <div class="control-md control-non">
+                        <label>
+                            <input id="IsCustomCoupon" checked="@(Model?.CouponList?.CouponList?.FirstOrDefault()?.IsCustomCoupon)" name="IsCustomCoupon" type="checkbox" value="true" onclick="Promotion.prototype.ShowHideCustomCouponContainer();" data-test-selector="chkIsCustomCoupon">
+                            <span class="lbl padding-8" for="IsCustomCoupon" data-test-selector="spnIsCustomCoupon">@Admin_Resources.LabelCustomCoupon</span>
+                            <input name="IsCustomCoupon" type="hidden" value="false">
+                        </label>
+                    </div>
+                }
+                else
+                {
+                    <div class="control-md control-non">
+                        <label>
+                            <input id="IsCustomCoupon" checked="@(Model?.CouponList?.CouponList?.FirstOrDefault()?.IsCustomCoupon)" disabled="disabled" name="IsCustomCoupon" type="checkbox" value="true" onclick="Promotion.prototype.ShowHideCustomCouponContainer();" data-test-selector="chkIsCustomCoupon">
+                            <span class="lbl padding-8" for="IsCustomCoupon" data-test-selector="spnIsCustomCoupon">@Admin_Resources.LabelCustomCoupon</span>
+                            <input name="IsCustomCoupon" type="hidden" value="false">
+                        </label>
+                    </div>
+                }
+            </div>
+            @if (Model?.CouponList?.CouponList?.FirstOrDefault()?.IsCustomCoupon == true)
+            {
+                <div class="form-group" id="divCustomCouponContainer" data-test-selector="divCustomCouponContainer">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label class="required" data-test-selector="lblCustomCoupon">@Admin_Resources.LabelCustomCouponText</label>
+                        </div>
+                        <div class="control-md">
+                            <div class="col-sm-6 nopadding">
+                                <select id="CustomCouponPreTextPostText" data-test-selector="drpCustomCouponPreTextPostText">
+                                    <option value="PreText">@Admin_Resources.SelectPreText</option>
+                                    <option value="PostText">@Admin_Resources.SelectPostText</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 nopadding" style="padding-left:5px;">
+                                <input type='text' id="CustomCouponCode" name='CustomCouponCode' value='@(Model?.CouponList?.CouponList?.FirstOrDefault()?.CustomCouponCode)'>
+                            </div>
+                            <span id="valCustomCouponCode" data-test-selector="valCustomCouponCode"></span>
+                        </div>
+                        @Html.Partial("_HelpText", @Admin_Resources.HelptextPromotionCustomCouponCode)
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group" id="divCustomCouponContainer" style="display:none" data-test-selector="divCustomCouponContainer">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label class="required" data-test-selector="lblCustomCoupon">@Admin_Resources.LabelCustomCouponText</label>
+                        </div>
+                        <div class="control-md">
+                            <div class="col-sm-6 nopadding">
+                                <select id="CustomCouponPreTextPostText" data-test-selector="drpCustomCouponPreTextPostText">
+                                    <option value="PreText">@Admin_Resources.SelectPreText</option>
+                                    <option value="PostText">@Admin_Resources.SelectPostText</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 nopadding" style="padding-left:5px;">
+                                <input type='text' id="CustomCouponCode" name='CustomCouponCode' value='@(Model?.CouponList?.CouponList?.FirstOrDefault()?.CustomCouponCode)' data-test-selector="txtCustomCouponCode">
+                            </div>
+                            <span id="valCustomCouponCode" data-test-selector="valCustomCouponCode"></span>
+                        </div>
+                        @Html.Partial("_HelpText", @Admin_Resources.HelptextPromotionCustomCouponCode)
+                    </div>
+                </div>
+            }
+            <div class="form-group" id="divCouponCodeFormat">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label class="required" data-test-selector="lblCouponCodeFormat">@Admin_Resources.LabelCouponCodeFormat</label>
+                    </div>
+                    <div class="control-md">
+                        <select id="CouponCodeFormat" data-test-selector="drpCouponCodeFormat">
+                            <option value="Alphabets">@Admin_Resources.LabelAlphabets</option>
+                            <option value="Numeric">@Admin_Resources.LabelNumeric</option>
+                            <option value="Alphanumeric">@Admin_Resources.LabelAlphanumeric</option>
+                        </select>
+                        <span id="valCouponCodeFormat" data-test-selector="valCouponCodeFormat"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="divCouponCodeLength">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label class="required" data-test-selector="lblCouponCodeLength">@Admin_Resources.LabelCouponCodeLength</label>
+                    </div>
+                    <div class="control-md">
+                        <input type="text" name="CouponCodeLength" id="txtCouponCodeLength" value="12" data-test-selector="txtCouponCodeLength" />
+                        <span id="valCouponCodeLength" data-test-selector="valCouponCodeLength"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="InitialQuantitySection">
+                <div class="col-sm-12 nopadding">
+                    <div id="InitialQuantitySection">
+                        <div class="control-label">
+                            <label class="required" data-test-selector="lblInitialQuantity">@Admin_Resources.LabelInitialQuantity</label>
+                        </div>
+                        <div class="control-md">
+                            <input type="text" name="InitialQuantity" id="txtInitialQuantity" value="" data-test-selector="txtInitialQuantity" />
+                            <span id="valInitialQuantity" data-test-selector="valInitialQuantity"></span>
+                        </div>
+                        <div class="control-sm dirtyignore" id="btnspanAddButton" style="display:none" data-test-selector="divGenerate">
+                            @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonGenerate, "List", "Promotion", "btn-text btn-text-secondary margin-left-10", "Promotion.prototype.GenerateBox()")
+                            @if (Model.PromotionId > 0)
+                            {
+                                @Html.AuthorizedRawActionLink("<em class='z-export'></em>" + Admin_Resources.LabelExport, "ExportPromotionCouponData/?promotionId=" + Model.PromotionId, "Promotion", null, new { @class = "btn-text-icon btn-text-color-icon margin-top", @id = "exportPromotionCouponDataId", @data_test_selector = "linkPromotionId" })
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.PromotionId > 0)
+            {
+                <div class="pull-right">
+                    @Admin_Resources.LabelTotalCoupon : <label>@Model.CouponList.CouponList.Count</label>
+                    @Admin_Resources.LabelUsedCoupon : <label>@Model.CouponList.CouponList.Where(x => x.AvailableQuantity < 1).Count()</label>
+                    @Admin_Resources.LabelUnusedCoupon : <label>@Model.CouponList.CouponList.Where(x => x.AvailableQuantity >= 1).Count()</label>
+                </div>
+            }
+            <div class="col-sm-12 nopadding coupon-list-table" id="divCouponList" tyle="display:none">
+                <div class="col-sm-12 nopadding margin-top coupon-list">
+                    <table id="tblData" class="table table-striped" data-test-selector="tblData" aria-describedby="Coupon List" style="border:1px;">
+                        <thead>
+                            <tr>
+                                <th scope="col">@Admin_Resources.LabelCouponCode</th>
+                                @if (Model.PromotionId > 0)
+                                {
+                                    <th scope="col">@Admin_Resources.LabelUsed</th>
+                                }
+                                <th scope="col">@Admin_Resources.IsActive</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model?.CouponList?.CouponList)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type='text' name='MultipleCouponCode' value='@item.Code' class='PromotionCode' readonly>
+                                    </td>
+                                    <td>
+                                        @if (item.AvailableQuantity < 1)
+                                        {
+                                            <i class="z-active"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="z-inactive"></i>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.IsActive && item.AvailableQuantity > 0)
+                                        {
+                                            <input type="checkbox" class="grid-row-checkbox" name="isActiveCoupon_@item.Code" checked="checked">  <span class="lbl padding-8 "></span>
+                                        }
+                                        else if (item.AvailableQuantity == 0)
+                                        {
+                                            <input type="checkbox" class="grid-row-checkbox" disabled="disabled" name="isActiveCoupon_@item.Code" checked="checked"><span class="lbl padding-8 "></span>
+                                        }
+                                        else
+                                        {
+                                            <input type = "checkbox" class="grid-row-checkbox" name="isActiveCoupon_@item.Code">  <span class="lbl padding-8 "></span>
+                                        }
+                                        </td>
+                                    </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <input type="hidden" id="hdnInitialQuantityFormatErrorMessage" value="@HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorInitialQuantityRoundoffFormat,Admin_Resources.ErrorInitialQuantityFormat)">
+                                <input type="hidden" id="hdnAvailableQuantityFormatErrorMessage" value="@HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorAvailableQuantityRoundoffFormat,Admin_Resources.ErrorAvailableQuantityFormat)">

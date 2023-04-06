@@ -1,0 +1,10 @@
+﻿@model WidgetParameter
+@if (!Equals(Model, null) && Model.CMSMode)
+{
+    <div class="widget-cms-overlay">
+    </div>
+    <div class="widget-cms-button-container">
+        <button class='btn btn-secondary btn-text-secondary-custom cms-configure-btn' type='button' onclick='enableOverlays(@Model.CMSMappingId,@Model.WidgetKey,@Model.WidgetCode);' style="display:none;">CONFIGURE</button>
+    </div>
+}
+

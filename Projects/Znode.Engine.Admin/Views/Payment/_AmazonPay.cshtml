@@ -1,0 +1,78 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+@{
+    string preauthorize = Convert.ToBoolean(Model.PreAuthorize) ? "checked='checked'" : string.Empty;
+    string isRmaCompatible = Convert.ToBoolean(Model.IsRmaCompatible) ? "checked='checked'" : string.Empty;    
+}
+@Html.Partial("_EnableOAB", Model)
+<div id="PaymentGetwayForm-container">
+    <h3 class="section-heading margin-top-25" data-test-selector="hdgMerchantGatewaySettings">@Admin_Resources.LabelPaymentGatewayHeader</h3>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelGatewayTestMode, new { @data_test_selector = "lblGatewayTestMode" })
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(m => Model.TestMode, new List<SelectListItem>()
+                                                {
+                                                    new SelectListItem {Text = @Admin_Resources.LabelTestMode,Value="true"},
+                                                    new SelectListItem {Text = @Admin_Resources.LabelLiveMode ,Value="false"}
+                                                }, new { @id = "ddlTestMode", @data_test_selector = "drpGatewayTestMode" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelCreditCardAuthorization, new { @data_test_selector = "lblCreditCardAuthorization" })
+            </div>
+            <div class="control-md">
+                <label>
+                    <input @preauthorize data-val="true" data-test-selector="chkCreditCardAuthorization" id="PreAuthorize" name="PreAuthorize" type="checkbox" value="true">
+                    <span class="lbl padding-8" data-test-selector="spnCreditCardAuthorization"></span>@Admin_Resources.LabelCreditCardAuthorizationMessage
+                    <input name="PreAuthorize" type="hidden" value="false">
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelAmazonMerchantId, new { @class = "required", @data_test_selector = "lblMerchantId" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => Model.GatewayUsername, new { required = "required", @data_test_selector = "txtMerchantId" })
+                @Html.ValidationMessageFor(m => Model.GatewayUsername, @Admin_Resources.ErrorMerchantIdRequired, new { @data_test_selector = "valMerchantId" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelAmazonAccessKey, new { @class = "required", @data_test_selector = "lblAccessKey" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => Model.GatewayPassword, new { required = "required", @data_test_selector = "txtAccessKey" })
+                @Html.ValidationMessageFor(m => Model.GatewayPassword, @Admin_Resources.MerchantPassword, new { @data_test_selector = "valAccessKey" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelAmazonClientId, new { @class = "required", @data_test_selector = "lblClientId" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => Model.TransactionKey, new { required = "required", @data_test_selector = "txtClientId" })
+                @Html.ValidationMessageFor(m => Model.TransactionKey, @Admin_Resources.ErrorMessageClientId, new { @data_test_selector = "valClientId" })
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        Payment.prototype.ShowBillingAddressOptional();
+    });
+</script>

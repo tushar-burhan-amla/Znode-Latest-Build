@@ -1,0 +1,30 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model PaymentTokenViewModel
+
+
+
+<div id="loadingMessage">
+    <h6 class="pl-5 pt-5 text-center">@WebStore_Resources.AuthorizeLoadingMessage</h6>
+</div>
+<!--  Modal -->
+<div id="iframe_holder" class="center-block" style="visibility:hidden">
+    <iframe id="AuthNetIFrame" class="embed-responsive-item authorizenetIframe panel m-sm-auto d-sm-block" name="AuthNetIFrame" frameborder="0"></iframe>
+</div>
+
+<form id="send_token" action="" method="post" target="AuthNetIFrame">
+    <input type="hidden" name="token" value='@Model.PaymentGatewayToken' />
+</form>
+<div id="TokenForm"></div>
+@if (string.IsNullOrEmpty(Model.CustomerProfileId) && Model.UserId > 0)
+{
+    <div class="form-group saveCreditCard float-left pt-3 mb-0" id="Save-credit-card">
+        <div class="col-12 p-0">
+            <div class="control-md control-non styled-input mb-0">
+                <input id="AuthNetSaveCreditCard" name="SaveCreditCard" type="checkbox">
+                <label for="AuthNetSaveCreditCard">@WebStore_Resources.SaveCreditCardForFutureUse</label>
+            </div>
+        </div>
+    </div>
+}
+
+

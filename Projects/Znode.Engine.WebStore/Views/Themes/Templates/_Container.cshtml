@@ -1,0 +1,31 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ContentContainerDataViewModel
+@{
+    string containerKey = Model?.ContainerKey;
+    string largeImageUrl = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "PromoLargeImage" && x.AttributeValue != null)?.AttributeValue;
+    string smallImageUrl = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "PromoSmallImage" && x.AttributeValue != null)?.AttributeValue;
+    string homePageTitle = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "PromoTitle1" && x.AttributeValue != null)?.AttributeValue;
+    string CTALinkUrl = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "PromoCTALinkURL" && x.AttributeValue != null)?.AttributeValue;
+    string CTAText = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "PromoCTAText" && x.AttributeValue != null)?.AttributeValue;
+    var domainurl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+}
+@if (!string.IsNullOrEmpty(containerKey) && containerKey.Equals("HomePagePromo", StringComparison.InvariantCultureIgnoreCase))
+{
+    <div class="container-fluid container-bannerwithtext">
+        <div class="row">
+            <div class="col-12 p-0">
+                <div class="container-banner">
+                    <picture>
+                        <source srcset="@HttpUtility.UrlPathEncode(largeImageUrl)" media="(min-width: 768px)">
+                        <source srcset="@HttpUtility.UrlPathEncode(smallImageUrl)" media="(max-width: 767px)">
+                        <img src="@largeImageUrl" alt="Homepage Promo Image">
+                    </picture>
+                </div>
+                <div class="container-content">
+                    <div class="container-text my-3 mt-md-0">@Html.RenderBlock(homePageTitle)</div>
+                    <a class="btn btn-primary" type="submit" href="@domainurl@CTALinkUrl">@CTAText</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

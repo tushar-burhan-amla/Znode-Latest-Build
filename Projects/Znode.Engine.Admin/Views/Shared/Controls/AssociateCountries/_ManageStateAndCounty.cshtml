@@ -1,0 +1,93 @@
+﻿@model CityAndStateViewModel
+@using Znode.Engine.Admin.ViewModels;
+
+<div id="divStateandCityPopUp" class="modal-dialog modal-lg">
+
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" title="@Admin_Resources.ButtonCancel"><em class="z-close-circle"></em></button>
+           @if (Model.IsCity == "true")
+           {
+            <h4 class="modal-title">@Admin_Resources.LabelAssociateCity (@Model.CountryCode)</h4>
+           }
+           else
+           {
+            <h4 class="modal-title">@Admin_Resources.LabelAssociateState (@Model.CountryCode)</h4>
+           }
+           
+        </div>
+       
+            @if (Model.IsCity=="true")
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label >@Admin_Resources.LabelCityName</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.CityName, null, new { @id = "txtCityName" })
+                        </div>
+                        <div>
+                            <button type="button" id="btnaddCity" class="btn-text margin-top-bottom" onclick="Shippings.prototype.AddCity()">@Admin_Resources.AddNew</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label >@Admin_Resources.LabelCityList</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.TextAreaFor(model => model.CityList)
+
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group" id="productunassociatedcatalog">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label >@Admin_Resources.LabelStateName</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.StateName, null, new { @id = "txtStateName" , @OnInput = "Shippings.prototype.GetAutoCompleteStateList()" })
+                            <ul class="unassocated-list"></ul>
+                             </div>
+                        <div>
+                            <button type="button" id="btnaddState" class="btn-text margin-top-bottom" onclick="Shippings.prototype.AddState()">@Admin_Resources.AddNew</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label>@Admin_Resources.LabelStateList</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.TextAreaFor(model => model.StateList)
+
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+                
+                <input type="hidden" id="hdnIsCity" value="@Model.IsCity" />
+                <input type="hidden" id="hdnCountryCode" value="@Model.CountryCode" />
+          
+            <div class="modal-footer">
+                <div class="col-sm-12 nopadding">
+                    <div class="pull-right">
+                        <button id="btnaddStateandCity" type="button" class="btn-text-icon" onclick="Shippings.prototype.AssociateCityAndState()"><em class="z-save"></em>@Admin_Resources.ButtonSave</button>
+                        <button id="btnStateandCityCancel" type="button" class="btn-text-icon" data-dismiss="modal"><em class="z-cancel"></em>@Admin_Resources.ButtonCancel</button>
+                    </div>
+                </div>
+            </div>
+      
+    </div>
+</div>

@@ -1,0 +1,127 @@
+﻿@model Znode.Engine.Admin.ViewModels.AccountQuoteViewModel
+@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities;
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string cancelUrl = string.Empty;
+    string cultureCode = string.IsNullOrEmpty(Model.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    int shippingId = 0;
+    if (Model.UpdatePageType == AdminConstants.Quotes)
+    {
+        cancelUrl = "/Quote/PendingPaymentList";
+    }
+    else
+    {
+        cancelUrl = "javascript: history.go(-1)";
+    }
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formUpdateQuote", CancelUrl = cancelUrl };
+    string _displayPODocument = !string.IsNullOrEmpty(Model.PODocumentName) ? "display:block" : "display:none";
+    string PODocument = !string.IsNullOrEmpty(Model.PODocumentName) ? HelperUtility.GetFilePath(Model.PODocumentName.Replace("~", string.Empty)) : "#";
+}
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelManage<em class="z-minus"></em><span>@Model.OmsQuoteId</span></h1>
+    <div class="pull-right btn-container">
+        <a href="@cancelUrl" class="btn-text-icon pull-left"><em class="z-back"></em>@Admin_Resources.ButtonBack</a>
+        @if (Model.OrderStatus.ToLower() != "rejected")
+        {
+            @Html.AuthorizedPrototypeRawActionLink("" + "Decline", "UpdateQuoteStatus", "Account", new { @id = "btnDecline", @class = "btn-text margin-left-10", onclick = "Order.prototype.DeclinePendingPayment()" })
+            @Html.AuthorizedPrototypeRawActionLink("" + "Accept", "UpdateBillingNumber", "User", new { @id = "btnAccept", @class = "btn-text btn-text-secondary margin-left-10", onclick = "Order.prototype.AcceptPendingPayment()" })
+        }
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    <div id="divBillingAccountNumber" class="modal fade" role="dialog">
+        @*Don't delete this div, mainly due to Test Email Popup will display in this div*@
+    </div>
+    <div class="col-sm-12 nopadding order-manage-container order-page-details">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "formUpdateQuote" }))
+        {
+            <div class="col-sm-12 nopadding d-flex flex-wrap">
+
+
+                <div class="order-information">
+                    <div id="orderInformation" data-test-selector="divOrderInformation" class="col-sm-12 nopadding d-flex h-100">
+                        @Html.Partial("_ManagePendingOrderInfo", Model)
+                    </div>
+                </div>
+
+                <div class="customer-information">
+                    <div id="customerInformation" data-test-selector="divCustomerInformation" class="d-flex h-100">
+                        @Html.Partial("_ManagePendingOrderCustomerInfo", Model)
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 nopadding panel panel-default productInfoPage">
+                <div id="orderLineItems" data-test-selector="divOrderLineItems">
+                    @Html.Partial("_PendingOrderLineItemList", Model.ShoppingCart)
+                </div>
+            </div>
+            <div class="col-sm-12 nopadding panel panel-default productInfoPage margin-top-20">
+                <div class="panel-heading">
+                    <h4 class="panel-title panel-title-edit">@Admin_Resources.LabelQuoteNotes</h4>
+                </div>
+                <div class="col-sm-12 list-container">
+                    <div>
+                        @if ((Model?.OrderNotes?.Count > 0))
+                        {
+                            <table class="table table-striped" id="QuoteItems" aria-describedby="Quote History And Notes Table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">@Admin_Resources.LabelDate</th>
+                                        <th scope="col">@Admin_Resources.LabelUpdatedBy</th>
+                                        <th scope="col">@Admin_Resources.LabelNotes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (OrderNotesViewModel note in Model.OrderNotes)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.RenderBlock("<label>" + note.CreatedDate + " </label>")
+                                            </td>
+                                            <td>
+                                                @Html.RenderBlock("<label>" + note.UserName + " </label>")
+                                            </td>
+                                            <td>
+                                                @Html.RenderBlock("<label>" + note.Notes + " </label>")
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="col-sm-12 no-record nopadding">
+                                <p>@Admin_Resources.NoRecordFoundText</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            @Html.HiddenFor(m => m.AccountId)
+            @Html.HiddenFor(m => m.UserId)
+            @Html.HiddenFor(m => m.PortalId)
+            @Html.HiddenFor(m => m.OmsQuoteId)
+            @Html.HiddenFor(m => m.ShippingId)
+            @Html.HiddenFor(m => m.QuoteOrderTotal)
+            @Html.HiddenFor(m => m.ShippingAddressId)
+            @Html.HiddenFor(m => m.BillingAddressId)
+            @Html.HiddenFor(m => m.ApproverUserId)
+            @Html.HiddenFor(m => m.AdditionalInstruction)
+            @Html.HiddenFor(m => m.CreatedDate)
+            @Html.HiddenFor(m => m.UpdatePageType)
+            @Html.HiddenFor(m => m.OmsQuoteId)
+            @Html.HiddenFor(m => m.AdditionalNotes)
+            @Html.HiddenFor(m => m.BillingAccountNumber)
+            @Html.HiddenFor(m => m.OrderStatus)
+        }
+    </div>
+</section>

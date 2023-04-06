@@ -1,0 +1,112 @@
+﻿<style>
+    .not-active {
+        pointer-events: none;
+        cursor: default;
+    }
+</style>
+<div id="listBoxView" class="sorting-container">
+    <div class="col-sm-12 nopadding">
+        <ul>
+            <li>
+                <div>
+                    <h3 class="section-heading-sub" data-test-selector="hdg@(Admin_Resources.HeaderUnassociatedWarehouse.Replace(" ", ""))">@Admin_Resources.HeaderUnassociatedWarehouse</h3>
+                    <div class="col-sm-12 nopadding">
+                        <ul id="SelectedCities" class="sort-box scroll-default" data-test-selector="list@(Admin_Resources.HeaderUnassociatedWarehouse.Replace(" ", ""))">
+                            @{
+                                int counter = 0;
+                            }
+
+                            @if (Model?.UnassociatedWarehouseList?.Count > 0)
+                            {
+                                foreach (var item in Model.UnassociatedWarehouseList)
+                                {
+                                    <li data-id="available_@counter" data-value="@item.Value">@item.Text</li>
+                                    counter++;
+                                }
+                            }
+                        </ul>
+
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="add-remove">
+                        <div id="btnAllMoveLeft" data-test-selector="divRightAll">
+                            <div class="nav-option">
+                                <em class="z-right-all" data-toggle="tooltip" data-placement="right" type="button" title="Right All"></em>
+                            </div>
+                        </div>
+                        <div id="btnAllMoveRight" data-test-selector="divLeftAll">
+                            <div class="nav-option">
+                                <em class="z-left-all" data-toggle="tooltip" data-placement="left" type="button" title="Left All"></em>
+                            </div>
+                        </div>
+                        <div id="btnMoveLeft" class="not-active" data-test-selector="divRight">
+                            <div class="nav-option">
+                                <em class="z-right" data-toggle="tooltip" data-placement="right" type="button" title="Right"></em>
+                            </div>
+                        </div>
+                        <div id="btnMoveRight" class="not-active" data-test-selector="divLeft">
+                            <div class="nav-option">
+                                <em class="z-left" data-toggle="tooltip" data-placement="left" type="button" title="Left"></em>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <h3 class="section-heading-sub" data-test-selector="hdg@(Admin_Resources.HeaderAssociatedWarehouse.Replace(" ", ""))">@Admin_Resources.HeaderAssociatedWarehouse</h3>
+                    <div class="col-sm-12 nopadding">
+                        <ul id="UnAssignedListBox" name="UnAssignedListBox" class="sort-box scroll-default" data-test-selector="list@(Admin_Resources.HeaderAssociatedWarehouse.Replace(" ", ""))">
+                            @{
+                                counter = 0;
+                            }
+
+                            @if (Model?.AssociatedWarehouseList?.Count > 0)
+                            {
+                                foreach (var item in Model.AssociatedWarehouseList)
+                                {
+                                    <li data-id="unassign_@counter" data-value="@item.Value">@item.Text</li>
+                                    counter++;
+                                }
+                            }
+
+                        </ul>
+
+                    </div>
+                </div>
+
+            </li>
+            <li>
+                <div>
+                    <div class="add-remove">
+                        <div id="btnAllUp" class="not-active" data-test-selector="divUpAll">
+                            <div class="nav-option">
+                                <em class="z-up-all" data-toggle="tooltip" data-placement="top" title="" type="button" data-original-title="Up All"></em>
+                            </div>
+                        </div>
+                        <div id="btnMoveUp" class="not-active" data-test-selector="divUp">
+                            <div class="nav-option">
+                                <em class="z-angle-up" data-toggle="tooltip" data-placement="top" title="" type="button" data-original-title="Up"></em>
+                            </div>
+                        </div>
+                        <div id="btnMoveDown" class="not-active" data-test-selector="divDown">
+                            <div class="nav-option">
+                                <em class="z-angle-down" data-toggle="tooltip" data-placement="bottom" title="" type="button" data-original-title="Down"></em>
+                            </div>
+                        </div>
+                        <div id="btnAllDown" class="not-active" data-test-selector="divDownAll">
+                            <div class="nav-option">
+                                <em class="z-down-all" data-toggle="tooltip" data-placement="bottom" title="" type="button" data-original-title="Down All"></em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div id="messagebox" class="error-msg"></div>
+    </div>
+</div>

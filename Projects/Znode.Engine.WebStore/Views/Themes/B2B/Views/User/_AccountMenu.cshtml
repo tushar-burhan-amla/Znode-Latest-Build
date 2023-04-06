@@ -1,0 +1,61 @@
+﻿@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Agents;
+@model UserViewModel
+@{
+    var accountType = Model?.RoleName;
+    string enableECert = PortalAgent.CurrentPortal?.GlobalAttributes?.Attributes?.FirstOrDefault(x => x.AttributeCode == WebStoreConstants.EnableECertificate)?.AttributeValue;
+    string enablePowerBIReportOnWebStore = Model.UserGlobalAttributes?.FirstOrDefault(o => o.AttributeCode == WebStoreConstants.EnablePowerBIReportOnWebStore)?.AttributeValue;
+    bool isQuoteRequestEnabled = GlobalAttributeHelper.IsQuoteRequestEnabled();
+    bool isEnableReturnRequest = GlobalAttributeHelper.EnableReturnRequest();
+}
+<div class="my-accounts-nav dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <ul class="account-menu nav nav-tabs tabs-left">
+        <li class="dropdown-item"><a href="@Url.Action("Dashboard", "User",null)">@WebStore_Resources.LabelAccountDashboard</a></li>
+        @if (string.Equals(accountType, ZnodeRoleEnum.Administrator.ToString(), StringComparison.CurrentCultureIgnoreCase))
+        {
+            <li class="dropdown-item"><a href="@Url.Action("AccountInformation", "User",null)">@WebStore_Resources.LinkTextAccountInformation</a></li>
+            <li class="dropdown-item"><a href="@Url.Action("AccountUsers", "User", new { accountId = Model.AccountId})">@WebStore_Resources.LinkTextAccountUsers</a></li>
+            <li class="dropdown-item"><a href="@Url.Action("AccountOrders", "User", new { accountId = Model.AccountId})">@WebStore_Resources.LinkTextAccountOrders</a></li>
+        }
+        <li class="dropdown-item"><a href="@Url.Action("Wishlist", "User",null)" data-test-selector="linkWishlist">@WebStore_Resources.LinkTextWishlist</a></li>
+        @if (isQuoteRequestEnabled)
+         {
+            <li class="dropdown-item"><a href="@Url.Action("QuoteHistory", "Quote", null)" add-value="/Quote/QuoteHistory" data-test-selector="linkQuoteHistory">@WebStore_Resources.LabelQuoteHistory</a></li>
+         }
+        <li class="dropdown-item"><a href="@Url.Action("History", "User",null)" add-value="/User/OrderReceipt" data-test-selector="linkOrderHistory">@WebStore_Resources.LinkTextOrderHistory</a></li>
+        @if (isEnableReturnRequest)
+        {
+            <li class="dropdown-item"><a href="@Url.Action("GetReturnList", "RMAReturn",null)" add-value="/RMAReturn/GetReturnList" data-test-selector="linkReturnHistory">@WebStore_Resources.LinkTextReturns</a></li>
+        }
+        <li class="dropdown-item"><a href="@Url.Action("TemplateList", "User",null)" add-value="/User/CreateTemplate,/User/EditTemplate,/User/ViewTemplate">@WebStore_Resources.LinkTextOrderTemplate</a></li>
+        <li class="dropdown-item"><a href="@Url.Action("AddressBook", "User",null)" add-value="/User/Address" data-test-selector="linkAddressBook">@WebStore_Resources.LinkTextAddressBook</a></li>
+
+        @if (Model.PendingOrdersCount > 0)
+        {
+            <li class="dropdown-item"><a href="@Url.Action("UserQuoteHistory", "User", null)" add-value="/User/QuoteView"><i class="zf-caret-right"></i> @WebStore_Resources.LinkTextPendingOrderHistory</a></li>
+        }
+
+        @if (Model.PendingPaymentCount > 0)
+        {
+            <li class="dropdown-item"><a href="@Url.Action("PaymentQuoteHistory", "User", null)" add-value="/User/PaymentQuoteHistory"><i class="zf-caret-right"></i> @WebStore_Resources.LinkTextPendingPaymentHistory</a></li>
+        }
+
+        <li class="dropdown-item"><a href="@Url.Action("Reviews", "User",null)" data-test-selector="linkReviews">@WebStore_Resources.LinkTextReview</a></li>
+        <li class="dropdown-item"><a href="@Url.Action("Vouchers", "User",null)" data-test-selector="linkGiftCardHistory">@WebStore_Resources.LinkTextVouchers</a></li>
+        <li class="dropdown-item"><a href="@Url.Action("EditProfile", "User",null)" add-value="/User/ChangePassword" data-test-selector="linkEditProfile">@WebStore_Resources.LabelMyProfile</a></li>
+        <li class="dropdown-item"><a href="@Url.Action("GetSavedCreditCards", "User",null)" add-value="/User/GetSavedCreditCard" data-test-selector="linkSavedCreditCards">@WebStore_Resources.LinkSavedCreditCard</a></li>
+        <li class="dropdown-item"><a href="@Url.Action("AffiliateInformation", "User",null)">@WebStore_Resources.LinkAffiliateInformation</a></li>
+        <li class="dropdown-item"><a href="@Url.Action("SavedCartList", "SavedCart",null)">@WebStore_Resources.SavedCarts</a></li>
+        @if (!string.IsNullOrEmpty(enablePowerBIReportOnWebStore) && string.Equals(enablePowerBIReportOnWebStore, ZnodeConstant.True, StringComparison.InvariantCultureIgnoreCase))
+        {
+            <li class="dropdown-item"><a href="@Url.Action("PowerBIReport", "User", null)" data-test-selector="linkBIReports"><i class="zf-caret-right"></i> @WebStore_Resources.LinkPowerBIReports</a></li>
+        }
+        @if (!string.IsNullOrEmpty(enableECert) && Convert.ToBoolean(enableECert))
+        {
+            <li class="dropdown-item"><a href="@Url.Action("eCertificateBalance", "User", null)" add-value="/User/eCertificateBalance"><i class="zf-caret-right"></i> @WebStore_Resources.ECertManageECertificateButtonLabel</a></li>
+        }
+
+    </ul>
+    <a onclick="User.prototype.LogOffUser()" class="btn btn-secondary log-off ml-3" id="log-off">@WebStore_Resources.LabelLogOff</a>
+</div>

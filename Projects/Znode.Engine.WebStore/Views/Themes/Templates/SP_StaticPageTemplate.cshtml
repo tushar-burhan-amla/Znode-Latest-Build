@@ -1,0 +1,25 @@
+@using Znode.Engine.WebStore.Agents
+@model Int32
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    Layout = null;
+}
+<div class="main-wrapper sp-static-page">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 nopadding col-12 p-0 brand-banner">
+                <div class="container-fluid">
+                    <z-widget>@Html.WidgetPartial("BannerSlider", "StaticPageSlider", "5589", "ContentPageMapping", (int)Model)</z-widget>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-12 sp-template">
+            <z-widget>@Html.WidgetPartial("TextEditor", "StaticContentPage", "97956", "ContentPageMapping", (int)Model)</z-widget>
+            </div>
+        </div>
+    </div>
+</div>

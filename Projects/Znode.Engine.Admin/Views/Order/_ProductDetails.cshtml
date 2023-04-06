@@ -1,0 +1,16 @@
+﻿@model Znode.Engine.Admin.ViewModels.PublishProductsViewModel
+
+<div class="col-sm-12 title-container product-detail-header">
+    <h1 data-test-selector="hdgProduct">@Admin_Resources.LabelProductDetail</h1>
+    <div class="pull-right">
+        <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('getProductDetail')" data-test-selector="linkBack"><em class="z-back"></em>@Admin_Resources.ButtonBack</button>
+    </div>
+</div>
+<div id="layout-product" class="product-meta" data-id="@Model.PublishProductId">
+    <div id="asidepopover" class="page-container">
+        <br /><br />
+        <div class="row product-details">
+            @Html.Partial("_ProductInfo", Model)
+        </div>
+    </div>
+</div>

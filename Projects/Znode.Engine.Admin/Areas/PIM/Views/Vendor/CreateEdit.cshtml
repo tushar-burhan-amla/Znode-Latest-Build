@@ -1,0 +1,117 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.Extensions;
+@model VendorViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = "/PIM/Vendor/List", FormId = "frmCreateUpdateVendor", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.ToLower().Equals("edit"))
+    {
+        <h1 data-test-selector="hdgVendor">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelVendor)<em class="z-minus"></em><span>@Model.VendorName</span></h1>
+    }
+    else
+    {
+        <h1 data-test-selector="hdgVendor">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelVendor)</h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @if (actionName.ToLower().Equals("edit"))
+    {
+        <aside>
+            <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+            <div class="slide-container">
+                <ul class="aside-panel">
+                    <li>@Html.AuthorizedRawActionLink(@PIM_Resources.TitleVendor, "Edit", "Vendor", new { PimVendorId = Model.PimVendorId }, new { @data_test_selector = "linkVendor" })</li>
+                    <li>@Html.AuthorizedRawActionLink(@PIM_Resources.TitleAssociatedProducts, "AssociatedProductList", "Vendor", new { area = "PIM", PimVendorId = Model.PimVendorId, vendorCode = Model.VendorCode, vendorName = Model.VendorName }, new { @data_test_selector = "linkAssociatedProducts" })</li>
+                </ul>
+            </div>
+        </aside>
+    }
+
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateUpdateVendor", enctype = "multipart/form-data" }))
+            {
+            <div class="col-sm-12 nopadding">
+                <h3 class="section-heading" data-test-selector="hdgGeneralSettings">@Admin_Resources.GeneralSettings</h3>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label class="required" data-test-selector="lblVendorName">@PIM_Resources.LabelVendorName</label>
+                        </div>
+                        <div class="control-md">
+                            @if (string.Equals(actionName.ToLower(), "create"))
+                            {
+                                @Html.DropDownListFor(model => model.VendorCode, Model?.VendorCodeList, new { @id = "ddlVendorCodeList", @data_test_selector = "drpVendorName" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => model.VendorName, new { @readonly = "readonly", @data_test_selector = "txtVendorName" })
+                            }
+                            @Html.ValidationMessageFor(model => model.VendorCode, "", new { @data_test_selector = "valVendorName" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.Email, new { @class = "required", @data_test_selector = "lblEmail" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.Email, new { @data_test_selector = "txtEmail" })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @data_test_selector = "valEmail" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.CompanyName, new { @data_test_selector = "lblCompanyName" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.CompanyName, new { @data_test_selector = "txtCompanyName" })
+                            @Html.ValidationMessageFor(model => model.CompanyName, "", new { @data_test_selector = "valCompanyName" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 nopadding">
+                <h3 class="section-heading margin-top-25" data-test-selector="hdgAddressDetails">@Admin_Resources.LabelAddressDetails</h3>
+                @Html.Partial("~/Areas/PIM/Views/Vendor/_VendorAddress.cshtml", Model.Address, new ViewDataDictionary()
+           {
+               TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "Address" }
+           })
+                <div class="form-group" id="isactive-content">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblIsActive">@PIM_Resources.LabelIsActive</label>
+                        </div>
+                        <div class="control-md">
+                            <label>
+                                <input @(Model.IsActive ? "checked='checked'" : "") id="IsActive" name="IsActive" type="checkbox" value="true" data-test-selector="chkIsActive">
+                                <span class="lbl padding-8" for="IsActive" data-test-selector="spnIsActive"></span>
+                                <input name="IsActive" type="hidden" value="false">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                @Html.HiddenFor(model => model.PimVendorId)
+                @Html.HiddenFor(model => model.VendorCode)
+                @Html.HiddenFor(model => model.VendorName)
+                @Html.HiddenFor(model => model.AddressId)
+                @Html.HiddenFor(model => model.Address.AddressId)
+            </div>
+        }
+    </section>
+</div>

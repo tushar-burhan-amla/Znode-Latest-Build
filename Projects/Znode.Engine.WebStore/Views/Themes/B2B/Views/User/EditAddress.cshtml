@@ -1,0 +1,102 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Agents;
+@{
+    ViewBag.HideEmail = true;
+    ViewBag.IsAddAddress = true;
+    if (Model != null)
+    {
+        Model.AddressType = String.IsNullOrEmpty(Model.AddressType) ? WebStore_Resources.BillingAddressType : Model.AddressType;
+    }
+}
+@model AddressViewModel
+
+<div id="layout-account-editaddress" class="main-wrapper col">
+    <div class="row">
+        <div class="container-fluid profile-dashboard">
+            <div class="row">
+                <div class="container">
+                    @Html.Partial("_AccountMenuDashboard")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a><a href="/User/Dashboard">@WebStore_Resources.TitleMyAccount</a> / @WebStore_Resources.B2BTitleEditAddress</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container">
+            <div class="row user-account">
+                <div class="col-12 account-dashboard">
+                    <div class="row mb-5">
+                        <div class="col-12 col-lg-9 address-book edit-address right-container">
+                            <div class="col-12 p-0">
+                                <h1 class="page-title" data-test-selector="hdgTitleAddress">
+                                    @if (!Equals(Model.AddressId, 0))
+                                    {
+                                        @WebStore_Resources.TitleEditAddress
+                                    }
+                                    else
+                                    {
+                                        @WebStore_Resources.B2BTitleAddAddress
+                                    }
+                                </h1>
+                            </div>
+                            <form class="form" method="POST" action="/User/Address" id="frmEditAddress_billing">
+                                @Html.AntiForgeryToken()
+                                <div class="col-12 p-0 edit-address-form">
+                                    <div class="col-12 dashboard-content p-0 mb-4">
+                                        <h3 class="b2b-section-header">
+                                            @if (!Equals(Model.AddressId, 0))
+                                            {
+                                                @WebStore_Resources.B2BTitleEditAddress
+                                            }
+                                            else
+                                            {
+                                                @WebStore_Resources.B2BTitleAddAddress
+                                            }
+                                        </h3>
+                                        <div class="col-12 p-4">
+                                            <div class="row">
+                                                @Html.Partial("_EditAddress", Model)
+                                                @if (Model != null && Model.AddressId > 0)
+                                                {
+                                                    <div class="col-12 mt-3">
+                                                        <div class="text-right quotebutton">
+                                                            <button type="button" data-url="/User/DeleteCurrentAddress" id="deleteCurrentAddress" onclick="User.prototype.DeleteCurrentAddress()" class="btn btn-secondary">@WebStore_Resources.LinkTextDeleteAddress</button>
+                                                            <input type="hidden" name="addressId" value="@Model.AddressId" />
+                                                            @if (Model.AccountAddressId > 0)
+                                                            {
+                                                                <input type="hidden" name="addressId" value="@Model.AccountAddressId" />
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-12 col-lg-3 p-0 mt-4 pt-3">
+                            <div class="col-12">
+                                <p class="key-PromoSpot">@Html.RenderMessage("PromoSpot")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("_ModalPopUp", new ViewDataDictionary { { "modal-title", WebStore_Resources.LabelConfirmAddress } })
+<script>
+    $(document).ready(function () {
+        $('#IsDefaultShipping').length > 0 ? $('#IsDefaultShipping').rules('remove') : "";
+        $('#IsDefaultBilling').length > 0 ? $('#IsDefaultBilling').rules('remove'): "";
+    })
+</script>

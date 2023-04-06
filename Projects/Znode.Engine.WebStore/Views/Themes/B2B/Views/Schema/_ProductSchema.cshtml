@@ -1,0 +1,46 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using System.Web.Configuration;
+@using Znode.Engine.WebStore.Agents;
+@using Znode.Libraries.ECommerce.Utilities
+@model ProductViewModel
+@{
+    /**/
+
+    var _portal = PortalAgent.CurrentPortal;
+    string sch_name = Model?.Name;
+    string sch_image = Model?.ImageMediumPath;
+    string sch_url = @ZnodeWebstoreSettings.ZnodeWebStoreUri + "/" + Url.GetProductUrl(Model?.SEOUrl, Model?.PublishProductId.ToString());
+    string sch_desc = Model?.SEODescription;
+    string @sch_currencycode = Model?.CurrencyCode;
+    string sch_price = Convert.ToString(Model?.ProductPrice);
+}
+@*Schema Volcabulary tags*@
+<script type="application/ld+json">
+    {
+    "@@context": "http://schema.org/",
+    "@@type": "Product",
+    "name": "@sch_name",
+    "image": "@sch_image",
+    "url": "@sch_url",
+    "description": "@sch_desc",
+    "sku": "@Model.SKU",
+    "brand": {
+    "@@type": "Thing",
+    "name": "@_portal.Name"
+    },
+    "offers": {
+    "@@type": "AggregateOffer",
+    "priceCurrency":  "@sch_currencycode",
+    "lowprice":  "@sch_price",
+    "highprice": "@sch_price" ,
+    "price":"@sch_price",
+    "itemCondition": "http://schema.org/NewCondition",
+    "availability": "http://schema.org/InStock",
+    "seller": {
+    "@@type": "Organization",
+    "name": "@_portal.Name"
+    }
+
+    }
+    }
+</script>

@@ -1,0 +1,43 @@
+﻿@model Znode.Engine.Admin.ViewModels.ContentPageViewModel
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string publishStatusVal = HttpContext.Current.Request.QueryString["publishStatus"];
+}
+
+<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink("Page Info", "EditContentPage", "Content", new { cmsContentPagesId = Model.CMSContentPagesId, publishStatus= publishStatusVal }, new { @data_test_selector = "linkPageInfo" , @id = "pageInfo" })</li>
+            @if (Model.Widgets?.CMSWidgetsList?.Count > 0)
+            {
+                <li>
+                    @Ajax.AuthorizedRawActionLink("Content",
+          "GetTemplateWidgets", "Content", new { cmsMappingId = Model?.CMSContentPagesId, typeOfMapping = Model.Widgets.TypeOFMapping, templatePath = Model.TemplatePath, displayName = HttpUtility.UrlEncode(Model.Widgets.DisplayName), fileName = HttpUtility.UrlEncode("Widgets"), IsStorePublish = Model.StorePublished },
+          new AjaxOptions { UpdateTargetId = "divContentContainer", InsertionMode = InsertionMode.Replace, OnBegin = "Content.prototype.OnTabChange(this);", OnSuccess = "Content.prototype.SetSaveButton(this);" }, new { @id = "Widgets", @data_test_selector = "linkContent" })
+                </li>
+                if (!string.IsNullOrEmpty(Model?.PreviewUrl))
+                {
+                    <li>
+                        @Ajax.AuthorizedRawActionLink("Preview",
+                                      "GetPreviewContentPage", "Content", new { cmsMappingId = Model?.CMSContentPagesId },
+                                        new AjaxOptions { UpdateTargetId = "divContentContainer", InsertionMode = InsertionMode.Replace, OnBegin = "Content.prototype.OnTabChange(this);", OnSuccess = "Content.prototype.SetSaveButton(this);" }, new { @id = "WidgetPreview", @data_test_selector = "linkContentPreview" })
+                    </li>
+                }
+            }
+        </ul>
+
+    </div>
+</aside>
+<script type="text/javascript">
+    $(window).on("load",function (){
+        var fileName = @Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(Model?.FileName));
+        if (fileName == "") {
+            $("#divMainContainer").show();
+        }
+        else {
+            $("#divMainContainer").hide();
+        }
+        fileName ? $("#"+fileName+"").click() : "";
+    });
+</script>

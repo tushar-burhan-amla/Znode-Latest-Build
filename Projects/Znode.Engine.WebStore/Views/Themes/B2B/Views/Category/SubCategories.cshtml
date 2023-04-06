@@ -1,0 +1,19 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model CategoryListViewModel
+@{
+    ViewBag.Title = "SubCategories";
+}
+<div class="main-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-9 category-landing-container">
+                <div class="col-xs-12 product-grid nopadding">
+                    <h1>@WebStore_Resources.LabelCategory</h1>
+                    <div class="col-xs-12 product-view nopadding">
+                        @Html.Partial("_CategoryGrid", Model.Categories)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

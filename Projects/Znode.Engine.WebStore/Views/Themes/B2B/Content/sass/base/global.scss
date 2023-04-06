@@ -1,0 +1,158 @@
+﻿@import "_fonts.scss";
+
+html, body{
+  font:{family:$base-font-family;size:$base-font-size;}
+  color:$text-default;-ms-overflow-style:scrollbar;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;
+}
+
+html{background-color:$base-tertiary-light;}
+body{padding-top:40px;background-color:$white;}
+
+.font-16{font-size:$base-font-size + 2;}
+.no-shadow{box-shadow:0px 0px 0px 0px transparent !important;}
+.required:after {content: ' * '; color:$required-star;}
+
+a{outline:medium none;text-decoration:none;color:$anchor-tag; 
+    &:hover,&:active{outline:medium none;text-decoration:none;color:$anchor-tag-hover;}
+    &:focus{
+        outline: 1px dotted $base-secondary-light;
+    }
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {color:$text-default;font-family:$base-font-family-bold;}
+
+.box-shadow{
+    box-shadow:$box-shadow;
+    &:hover{box-shadow:$box-shadow-hover;}
+}
+
+//  to apply ellipsis property to div and hide additional text
+.cut-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+p,ul{margin:0;}
+z-widget{display:block;}
+
+.field-validation-error, .error-msg { color:$red; }
+.success-msg { color:$green; }
+
+.row > z-widget{width:100%;}
+
+// Notification Messages
+.notification-msg{z-index:999;min-height:0;position:absolute;width:100%;top:0;
+    .alert{position:relative;padding:5px;line-height:21px;margin-bottom:0;border-radius:0;min-height:36px;top:5px;display:flex;
+        p{width:100%;}
+           .close{opacity:1;font-size:$base-font-size;font-weight:600;line-height:1;height:24px;padding:5px;cursor:pointer;}
+    }
+    .alert-danger{border:1px solid $alert-msg-danger;
+        .close{color:$alert-msg-danger;}
+    }
+    .alert-success{border:1px solid $alert-msg-success;
+        .close{color:$alert-msg-success;}
+    }
+    .alert-info{border:1px solid $alert-msg-info;
+        .close{color:$alert-msg-info;}
+    }
+}
+.suggestion-msg{color:$base-tertiary-light;} 
+
+// File Upload
+.file-upload {position:relative;
+    .file-upload-name{float:left;margin-left:15px;line-height:26px;}
+    input[type="file"]{margin:0;opacity:0;width:126px;min-height:39px;}
+    .po-document-details{
+        a{cursor:pointer;color:$base-primary;padding-right:3px;display:none;float:left;line-height:24px;padding-right:5px;}
+        span{float:left;line-height:26px;}
+    }
+}
+.file-upload-btn{position:absolute;overflow:hidden;margin-left:0;background:$btn-primary;}
+
+// Back to top
+.back-to-top{position:fixed;bottom:0;right:30px;border-top-left-radius:4px;border-top-right-radius:4px;background-color:$base-primary;padding:5px 14px;font-size:18px;color:$white !important;opacity:0;transition:opacity .3s 0s, visibility 0s .3s;-webkit-transition:opacity .3s 0s, visibility 0s .3s;-moz-transition:opacity .3s 0s, visibility 0s .3s;
+    &:hover{color:$white;opacity:1 !important;}
+}
+
+// Error Page
+.error-page{padding:20px 15px; min-height:450px;}
+
+//checkbox disable
+.checkbox-disable{pointer-events:none !important;cursor:not-allowed !important;}
+.disabled {opacity:0.5;cursor:not-allowed;}
+
+// General CSS
+.star-rating{
+    .star-full-icon,.star-half-icon{margin-bottom:0;cursor:pointer;color:$base-secondary-light;}
+    .star-empty-icon{color:$base-tertiary;}
+    .full:before{content:$star-full-icon;color:$base-secondary-light;}
+    .empty:before{content:$star-empty-icon;color:$base-tertiary;}
+}
+.new-product-tag{position:absolute;top:5px;left:5px;z-index:101;width:35px;height:35px;}
+.review-title .star-rating{color:$base-secondary-light;}
+.padding-left-50{padding-left:50px;}
+.padding-right-50{padding-right:50px;}
+.pr-20 {
+    padding-right: 20px;
+}
+.margin-top-30{margin-top:30px;}
+.margin-bottom-30{margin-bottom:30px;}
+.margin-top-20{margin-top:10px;}
+.font-15{font-size:15px;}
+.padding-left-50{padding-left:50px !important}
+.margin-right-20{margin-right:20px;}
+.mw-350 {
+    max-width: 350px;
+}
+.cursor-pointer {
+    cursor: pointer
+}
+.nicescroll-rails{z-index:999999 !important;}
+img[class*="b-lazy"] {
+    min-height: 1px;
+    min-width: 50px;
+}
+.text-break, .text-break * {
+    word-break: break-word !important; // IE & < Edge 18
+    overflow-wrap: break-word !important;
+}
+//modal open
+.modal-open{
+    overflow-y: hidden;
+}
+@include screensize(x-small){
+    h1, .h1{font-size:28px;}
+    h2, .h2{font-size:25px;}
+    h3, .h3{font-size:24px;}
+    h4, .h4{font-size:21px;}
+    h5, .h5{font-size:18px;}
+    h6, .h6{font-size:16px;}
+    .page-title{padding:20px 0;margin:0;}
+}
+
+@include screensize(medium){
+    h1, .h1{font-size:36px;}
+    h2, .h2{font-size:34px;}
+    h3, .h3{font-size:32px;}
+    h4, .h4{font-size:30px;}
+    h5, .h5{font-size:28px;}
+    h6, .h6{font-size:24px;}
+    body{padding-top:120px;}
+}
+
+@include screensize(large) {
+    .container{max-width:1300px;}   
+}
+.layout-min-height {min-height:60vh;}
+@include screensize(x-large) {
+    .layout-min-height { min-height:70vh;}
+    
+}
+.visuallyhidden {
+    &:not(:focus):not(:active) {
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+    }
+}

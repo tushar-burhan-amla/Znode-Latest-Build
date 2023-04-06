@@ -1,0 +1,19 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model AddonGroupViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+}
+
+@if (actionName != "CreateAddonGroup")
+{
+    <aside>
+        <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            <ul class="aside-panel">
+
+                <li>@Html.AuthorizedRawActionLink("Add-on group info", "EditAddonGroup", "AddonGroup", new { pimAddOnGroupId = Model?.PimAddonGroupId }, "linkHighlights")</li>
+                <li>@Html.AuthorizedRawActionLink("Associate Products", "GetAssociatedProducts", "AddonGroup", new { addonGroupId = Model?.PimAddonGroupId, addonGroupName = Server.UrlEncode(Model?.AddonGroupName), localeId = Model?.LocaleId }, "linkAssociatedProducts")</li>
+            </ul>
+        </div>
+    </aside>
+}

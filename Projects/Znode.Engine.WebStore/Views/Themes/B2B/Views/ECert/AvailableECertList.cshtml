@@ -1,0 +1,34 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ECertificateListViewModel
+@using Znode.Engine.WebStore.Models;
+
+@{
+    Layout = null;
+    var msg = TempData[WebStoreConstants.Notifications];
+    MessageBoxModel notification = Json.Decode<MessageBoxModel>((msg ?? Json.Encode(new MessageBoxModel()))?.ToString());
+}
+
+<label class="text-@(notification?.Type?.ToLower()) eCertNotification">@notification.Message</label>
+<h1 class="page-title ecert-title">@Ajax.ECertUserProfileBalanceAjaxControl("_ECertUserProfileDashboardTotal", null, Model?.List?.Sum(o => o.Balance) ?? 0)</h1>
+<div class="col-xs-12 nopadding">
+    <p class="pull-left"> @WebStore_Resources.ECertAvailableListLabel</p>
+</div>
+
+@if (Model?.List?.Count > 0)
+{
+    <div class="col-xs-12 nopadding">
+        @Html.Partial("_DynamicGrid", Model.GridModel)
+    </div>
+}
+else
+{
+    <div class="col-xs-12 nopadding">
+        <p class="error-msg">@WebStore_Resources.ECertNoAssociationMessage</p>
+    </div>
+}
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#eCertTotalBalanceHeader").html($("#eCertTotalBalanceAmount").html());
+    });
+</script>

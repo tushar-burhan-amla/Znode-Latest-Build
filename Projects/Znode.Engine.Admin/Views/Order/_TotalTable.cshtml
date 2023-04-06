@@ -1,0 +1,252 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model CartViewModel
+
+@{
+    Model.CultureCode = string.IsNullOrEmpty(Model.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    bool isTaxSummaryAvailable = Model?.TaxSummaryList?.Count > 0;
+}
+<div class="col-md-12 cart-summary">
+    <div id="loader-divTotal">@Html.Partial("_Loader")</div>
+    <div class="row margin-bottom-15 padding-rl-5">
+        <div class="col-sm-6 label-text">
+            @Html.LabelFor(model => model.SubTotal, new { @data_test_selector = "lblSubTotal" })
+        </div>
+        <div class="col-sm-6 text-right amount-text">
+            <label data-test-selector="lblSubTotalValue">@HelperMethods.FormatPriceWithCurrency(Model.SubTotal, Model.CultureCode)</label>
+            @Html.HiddenFor(model => model.ErrorMessage, new { @id = "hdnShippingErrorMessage" })
+            @Html.HiddenFor(model => model.HasError, new { @id = "hdnShippingHasError" })
+        </div>
+    </div>
+
+    <div class="row margin-bottom-15 padding-rl-5">
+        <div class="col-sm-6 label-text">
+            <label data-test-selector="lblColumnShipping">@WebStore_Resources.ColumnShipping</label>
+        </div>
+        <div class="col-sm-6 text-right amount-text">
+            <label id="dynamic-shipping-cost" data-test-selector="lblColumnShippingValue"> + @HelperMethods.FormatPriceWithCurrency(Model.ShippingCost, Model.CultureCode)</label>
+        </div>
+    </div>
+
+    @if (Model.ShippingHandlingCharges > 0)
+    {
+        if (!(Model.TaxCost > 0))
+        {
+            <div class="row margin-bottom-15 padding-rl-5">
+                <div class="col-sm-6 label-text">
+                    <label data-test-selector="lblColumnShippingHandlingCharge">@WebStore_Resources.LabelShippingHandlingCharge</label>
+                </div>
+                <div class="col-sm-6 text-right amount-text">
+                    <label id="dynamic-ShippingHandlingCharge-cost" data-test-selector="lblColumnShippingHandlingChargeValue"> + @HelperMethods.FormatPriceWithCurrency(Model.ShippingHandlingCharges, Model.CultureCode)</label>
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <div class="row margin-bottom-15 padding-rl-5">
+                <div class="col-sm-6 label-text">
+                    <label data-test-selector="lblColumnShippingHandlingCharge">@WebStore_Resources.LabelShippingHandlingCharge</label>
+                </div>
+                <div class="col-sm-6 text-right amount-text">
+                    <label id="dynamic-ShippingHandlingCharge-cost" data-test-selector="lblColumnShippingHandlingChargeValue"> + @HelperMethods.FormatPriceWithCurrency(Model.ShippingHandlingCharges, Model.CultureCode)</label>
+                </div>
+            </div>
+        }
+    }
+    @if (Model.ImportDuty > 0)
+    {
+        <div class="row margin-bottom-15 padding-rl-5">
+            <div class="col-sm-6 label-text">
+                <label data-test-selector="lblColumnTax">Import Duty</label>
+            </div>
+            <div class="col-sm-6 text-right amount-text">
+                <label data-test-selector="lblColumnTaxValue"> + @HelperMethods.FormatPriceWithCurrency(Model.ImportDuty, Model.CultureCode)</label>
+            </div>
+        </div>
+    }
+
+    <div id="taxTotalDiv">
+        <div class="row margin-bottom-15 padding-rl-5">
+            <div class="col-sm-6 label-text">
+                <label data-test-selector="lblColumnTax">@WebStore_Resources.ColumnTax</label>
+                @if (isTaxSummaryAvailable == true)
+                {
+                    <span class="down-arrow padding-left" onclick="Order.prototype.ShowTaxDetails(this)">&#x25BC;</span>
+                }
+            </div>
+            <div class="col-sm-6 text-right amount-text">
+                <label data-test-selector="lblColumnTaxValue"> + @HelperMethods.FormatPriceWithCurrency(Model.TaxCost, Model.CultureCode)</label>
+            </div>
+        </div>
+        @if (isTaxSummaryAvailable == true)
+        {
+            <div class="col-xs-12 tax-summary margin-bottom-15 nopadding">
+                <table class="table" id="TaxSummary" style="display:none" aria-describedby="Tax Summary Table">
+                    <thead>
+                        <tr>
+                            <th scope="col" data-test-selector="lblTaxName">@Admin_Resources.ColumnTitleTaxName</th>
+                            <th scope="col" data-test-selector="lblRate">@Admin_Resources.ColumnTitleRate</th>
+                            <th scope="col" class="text-right" data-test-selector="lblTaxes">@Admin_Resources.ColumnTitleTaxesFees</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (TaxSummaryViewModel taxSummary in Model.TaxSummaryList)
+                        {
+                            <tr>
+                                <td>@taxSummary.TaxName</td>
+                                <td>@taxSummary.Rate</td>
+                                <td class="text-right">@taxSummary.Tax</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+    @if (Model.IsQuote == false)
+    {
+        if (Model?.Discount > 0)
+        {
+            if (Model.CSRDiscountAmount > 0 || Model.ShippingDiscount > 0)
+            {
+                <div class="row margin-bottom-15 padding-rl-5">
+                    <div class="col-sm-6 label-text">
+                        @Html.LabelFor(model => model.Discount, @Admin_Resources.LabelDiscountAmount, new { @data_test_selector = "lblDiscount" })
+                    </div>
+                    <div class="col-sm-6 text-right amount-text">
+                        <label id="dynamic-discount-amount" data-test-selector="lblDiscountValue"> - @HelperMethods.FormatPriceWithCurrency(Model.Discount, Model.CultureCode).Replace(')', ' ').Replace('(', '-')</label>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row margin-bottom-15 padding-rl-5">
+                    <div class="col-sm-6 label-text">
+                        @Html.LabelFor(model => model.Discount, @Admin_Resources.LabelDiscountAmount, new { @data_test_selector = "lblDiscount" })
+                    </div>
+                    <div class="col-sm-6 text-right amount-text">
+                        <label id="dynamic-discount-amount" data-test-selector="lblDiscountValue"> - @HelperMethods.FormatPriceWithCurrency(Model.Discount, Model.CultureCode).Replace(')', ' ').Replace('(', '-')</label>
+                    </div>
+                </div>
+            }
+
+        }
+        if (Model.CSRDiscountAmount > 0 && (Model.CSRDiscountAmount + Model.Discount) <= Model.SubTotal)
+        {
+            if (Model.ShippingDiscount > 0)
+            {
+                <div class="row margin-bottom-15 padding-rl-5">
+                    <div class="col-sm-6 label-text">
+                        @Html.LabelFor(model => model.CSRDiscountAmount, new { @data_test_selector = "lblCSRDiscountAmount" })
+                    </div>
+                    <div class="col-sm-6 text-right amount-text">
+                        <label id="dynamic-csr-discount-amount" data-test-selector="lblCSRDiscountAmountValue"> - @HelperMethods.FormatPriceWithCurrency(Model.CSRDiscountAmount, Model.CultureCode).Replace(')', ' ').Replace('(', '-')</label>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row margin-bottom-15 padding-rl-5">
+                    <div class="col-sm-6 label-text">
+                        @Html.LabelFor(model => model.CSRDiscountAmount, new { @data_test_selector = "lblCSRDiscountAmount" })
+                    </div>
+                    <div class="col-sm-6 text-right amount-text">
+                        <label id="dynamic-csr-discount-amount" data-test-selector="lblCSRDiscountAmountValue"> - @HelperMethods.FormatPriceWithCurrency(Model.CSRDiscountAmount, Model.CultureCode).Replace(')', ' ').Replace('(', '-')</label>
+                    </div>
+                </div>
+            }
+
+
+        }
+
+        if (Model.ShippingCost > 0 && Model.ShippingDiscount > 0)
+            {
+        <div class="row margin-bottom-15 padding-rl-5">
+            <div class="col-sm-6 label-text">
+                <label data-test-selector="lblColumnShippingDiscount">@WebStore_Resources.LabelShippingDiscount</label>
+            </div>
+            <div class="col-sm-6 text-right amount-text">
+                <label id="dynamic-shipping-discount-amount" data-test-selector="lblShippingDiscountValue"> - @HelperMethods.FormatPriceWithCurrency(Model.ShippingDiscount, Model.CultureCode).Replace(')', ' ').Replace('(', '-')</label>
+            </div>
+        </div>
+         }
+    }
+    <div class="row margin-bottom-15 grand-total padding-rl-5">
+        <div class="col-sm-6 label-text">
+
+            @if (Model.IsQuote)
+            {
+                <label data-test-selector="lblTotal">
+                    @Admin_Resources.LabelQuoteTotal
+                </label>
+            }
+            else
+            {
+                <label data-test-selector="lblTotal">
+                    @Admin_Resources.LabelOrderTotal
+                </label>
+            }
+        </div>
+        <div class="col-sm-6 text-right amount-text">
+            <label id="dynamic-order-total" class="order-total">@HelperMethods.FormatPriceWithCurrency(Model.OrderTotalWithoutVoucher, Model.CultureCode)</label>
+            @Html.Hidden("hdnTotalOrderAmount", Model.Total)
+        </div>
+    </div>
+
+    @if (Model.IsQuote == false)
+    {
+        if (Model.GiftCardAmount > 0)
+        {
+            <div class="row margin-bottom-15 padding-rl-5">
+                <div class="col-sm-6 label-text">
+                    @Html.LabelFor(model => model.GiftCardAmount, new { @data_test_selector = "lblGiftCardAmount" })
+                </div>
+                <div class="col-sm-6 text-right amount-text">
+                    <label id="dynamic-giftcard-amount" data-test-selector="lblGiftCardAmountValue">@HelperMethods.FormatPriceWithCurrency(Model.GiftCardAmount, Model.CultureCode).Replace(')', ' ').Replace('(', '-')</label>
+                </div>
+            </div>
+
+
+            <div class="row margin-bottom-15 padding-rl-5">
+                <div class="col-sm-6 label-text">
+                    @Html.LabelFor(model => model.Total, "(" + @Admin_Resources.LabelAmountToBePaid, new { @data_test_selector = "lblAmountToBePaid" })
+                </div>
+                <div class="col-sm-6 text-right amount-text">
+                    <label id="dynamic-AmountToBePaid" data-test-selector="lblAmountToBePaid">@HelperMethods.FormatPriceWithCurrency(Model.Total, Model.CultureCode).Replace(')', ' ').Replace('(', '-'))</label>
+                </div>
+            </div>
+            @Html.Hidden("hdnOrderTotalWithoutVoucher", Model.Total)
+        }
+    }
+
+    @if (!Equals(Model.OverDueAmount, null) && Model.OverDueAmount != 0)
+    {
+        <div class="row margin-bottom-15 padding-rl-5">
+            <div class="col-sm-6 label-text">
+                @Html.LabelFor(model => model.OverDueAmount, new { @data_test_selector = "lblOverDueAmount" })
+            </div>
+            <div class="col-sm-6 text-right amount-text">
+                <label id="dynamic-overdue-amount" data-test-selector="lblOverDueAmountValue">@HelperMethods.FormatPriceWithCurrency(Model.OverDueAmount, Model.CultureCode)</label>
+            </div>
+        </div>
+    }
+</div>
+
+@Html.HiddenFor(model => model.GiftCardApplied, new { @id = "hdnGiftCardApplied" })
+@Html.HiddenFor(model => model.GiftCardMessage, new { @id = "hdnGiftCardMessage" })
+@Html.HiddenFor(model => model.ErrorMessage, new { @id = "hdnCouponErrorMessage" })
+@Html.HiddenFor(model => model.CSRDiscountApplied, new { @id = "hdnCSRDiscountApplied" })
+@Html.HiddenFor(model => model.CSRDiscountMessage, new { @id = "hdnCsrSuccessMessage" })
+@Html.HiddenFor(model => model.CSRDiscountAmount, new { @id = "hdnCSRDiscountAmount" })
+@Html.HiddenFor(model => model.SubTotal, new { @id = "hdnSubTotal" })
+@Html.HiddenFor(model => model.Discount, new { @id = "hdnDiscount" })
+
+<script>
+    var vouchers = @Html.Raw(Json.Encode(Model.Vouchers));
+    var cartFreeShipping = '@Model.FreeShipping' == "True" ? true : false ;
+    $("#cartFreeShipping").val(cartFreeShipping);
+    $(document).ready(function () {
+        if (vouchers.length > 0) { Order.prototype.BindVoucherHtml(vouchers) };
+    })
+</script>

@@ -1,0 +1,19 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model CMSTextWidgetConfigurationViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS;    
+}
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgManage"><span>@Model.DisplayName</span></h1>
+    <div class="pull-right">
+      <a class="btn-text-icon pull-left" data-test-selector="linkBack" onclick="ZnodeBase.prototype.CancelUpload('associatedPanel')"><em class="z-back"></em>@Admin_Resources.ButtonBack</a>
+    </div>
+</div>
+<!--Main Container-->
+<div id="TextWidgetConfigurationDiv">
+  <section class="col-sm-12 page-container">
+    <p>This widget's mapping is not available in database.</p>
+  </section>
+</div>

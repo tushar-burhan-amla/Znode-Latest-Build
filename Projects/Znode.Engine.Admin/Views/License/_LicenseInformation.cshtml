@@ -1,0 +1,35 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model LicenceInfoViewModel
+
+
+<div class="col-sm-12 nopadding license-details-container">
+    <div class="about-license">
+        <h3>About Znode License </h3>
+    </div>
+    <div class="license-details">
+        @if (!Equals(Model, null))
+        {
+            <ul>
+                @if (!string.IsNullOrEmpty(Model.LicenseType))
+                {
+                    <li class="list-unstyled">
+                        <span>License Type: </span>
+                        <label>@Model.LicenseType</label>
+                    </li>
+                }
+                <li class="list-unstyled">
+                    <span>Serial Key: </span>
+                    <label>@Model.SerialKey</label>
+                </li>
+                <li class="list-unstyled">
+                    <span>Installation Date: </span>
+                    <label>@Model.InstallationDate.ToString("dd MMM yyyy")</label>
+                </li>
+                <li class="list-unstyled">
+                    <span>Expiration Date: </span>
+                    <label>@Model.ExpirationDate.ToString("dd MMM yyyy")</label>
+                </li>
+            </ul>
+        }
+    </div>
+</div>

@@ -1,0 +1,70 @@
+﻿@model Znode.Engine.Admin.ViewModels.ContentPageListViewModel
+@using Znode.Engine.Admin.Models
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+}
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.TitleContentPagesList<span class="total-count"><p>@Model.GridModel.TotalRecordCount</p></span></h1>
+    <div class="pull-right btn-container">
+        @Html.Partial("~/Views/Shared/_CultureDropdown.cshtml", Model.Locale)
+        <div class="pull-right">
+            @Html.AuthorizedRawActionLink(Admin_Resources.ButtonAdd, "AddContentPage", "Content", null, new { @class = " btn-text btn-text-secondary", @data_test_selector="linkAddNew", @id = "AddContentPagebtn" })
+        </div>
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    <aside>
+        <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            @Html.Partial("~/Views/Content/_ContentPageTree.cshtml")
+        </div>
+    </aside>
+    <!--Main Container-->
+    <div id="ContentPageDiv">
+        @* Don't delete it*@
+        <div id="delete-popup-btn" style="display:none"></div>
+        <section class="main-container">
+            <div id="@Model.GridModel.FrontObjectName" data-id="@Model.GridModel.FrontObjectName">
+                @Html.Partial("_ContentPageList", Model)
+            </div>
+        </section>
+        <div>
+            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                 new PopupModel()
+                 {
+                     Title = @Admin_Resources.HeaderConfirmDelete,
+                     Description = @Admin_Resources.TextFolderConfirmDelete,
+                     ModalPopUpId = "ContentPageFolderDeletePopup",
+                     Buttons = new List<PopUpButtonModel>() {
+                    new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk,ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Content.prototype.DeleteFolderPerment()" },
+                     }
+                 })
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(m => m.FolderId, new { @id = "hdnContentPageFolderId" })
+@Html.HiddenFor(m => m.IsRootFolder, new { @id = "IsRootFolder" })
+
+<div class="modal fade" id="TreeViewModelPopup" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" data-test-selector="divTreeViewModelPopup">
+            <div class="modal-header">
+                <button type="button" data-test-selector="btnClose" class="close" data-dismiss="modal" title="@Admin_Resources.ButtonCancel"><em class="z-close-circle"></em></button>
+                <h4 class="modal-title" data-test-selector="hdgTitle">@MediaManager_Resources.TitleContentPageFolder</h4>
+            </div>
+            <div class="modal-body">
+                <div id="TreePopupError" class="col-sm-12 nopadding">
+                    <p class="text-center error-msg">@MediaManager_Resources.ErrorSelectFolder</p>
+                </div>
+                <div id="Popup_Tree" data-test-selector="divPopupTree" data-tree="@Model.Tree"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-right">
+                    @Html.AuthorizedPrototypeRawActionLink("<em class='z-ok' data-test-selector='linkContinue'></em>" + "Continue", "MovePageToFolder", "Content", "btn-text-icon", "Content.prototype.MoveCopyPages()")
+                    <button type="button" class="btn-text-icon" data-dismiss="modal" data-test-selector="linkTreePopupCancel" id="TreePopupCancel"><em class='z-cancel'></em>@Admin_Resources.ButtonCancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

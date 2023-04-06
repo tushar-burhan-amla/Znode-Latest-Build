@@ -1,0 +1,160 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model PriceSKUDataViewModel
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.TitleMultifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    Model.ListName = !Equals(Model.ListName, null) ? Model.ListName : Model.PriceSKU.ListName;
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmAssociateItemPrice", CancelUrl = "/Price/PriceSKUList?priceListId=" + Model.PriceSKU.PriceListId + "&listName=" + HttpUtility.UrlEncode(Model.ListName), Callback = "Inventory.prototype.ValidateSKU" , IsSaveCloseEnable = true };
+    Model.PriceId = Model?.PriceSKU?.PriceId;
+    if (string.Equals(actionName.ToLower(), "editskuprice"))
+    {
+        Model.TierPriceListId = Model.PriceTier.PriceListId.Value;
+        Model.SKUTierPrice = Model.PriceSKU.SKU;
+    }
+}
+<div class="col-sm-12 title-container">
+    @if (string.Equals(actionName.ToLower(), "addskuprice"))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleAssociateSKU)</h1>
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.TitleAssociateSKU)<em class="z-minus"></em><span>@Model.PriceSKU.SKU</span></h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+
+<div id="skuList" class="aside-popup-panel modal-dialog modal-lg"></div>
+
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmAssociateItemPrice" }))
+            {
+        <div id="createForm">
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.PriceSKU.SKU, new { @class = "required", @data_test_selector = "lblPriceSKU" })
+                    </div>
+                    <div class="control-md">
+                        @if (Model.PriceId > 0)
+                        {
+                            @Html.TextBoxFor(model => model.PriceSKU.SKU, new { @placeholder = Admin_Resources.TextEnterProductSKU, @id = "txtSKU", @disabled = "disabled", @data_test_selector = "txtPriceSKU" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.PriceSKU.SKU, new { @placeholder = Admin_Resources.TextEnterProductSKU, @id = "txtSKU", @data_test_selector = "txtPriceSKU" })
+                        }
+                        @Html.ValidationMessageFor(model => model.PriceSKU.SKU, "", new { @id = "valSKU", @data_test_selector = "valPriceSKU" })
+                    </div>
+                    @if (string.Equals(actionName.ToLower(), "addskuprice"))
+                    {
+                        <div class="control-sm dirtyignore">
+                            @Html.AuthorizedPrototypeRawActionLink(@Admin_Resources.BrowseButton, "GetProductSKUList", "Price", new { @id = "GetProductSKUList", @class = "btn-text btn-text-secondary margin-left-10", @value = "Create XML", @data_test_selector = "btnBrowse", onclick = "ZnodeBase.prototype.BrowseAsidePoupPanel('/Price/GetProductSKUList?priceListId=" + @Model.PriceSKU.PriceListId + "','skuList')" })
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.PriceSKU.RetailPrice, new { @class = "required", @data_test_selector = "lblRetailPrice" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.PriceSKU.RetailPrice, new { @validationrule = "RoundOff", @data_test_selector = "txtRetailPrice", @id = "valRetailPrice", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidPriceForRoundOff, Admin_Resources.ErrorValidPrice) })
+                        @Html.ValidationMessageFor(model => model.PriceSKU.RetailPrice, "", new { @data_test_selector = "valRetailPrice" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.PriceSKU.SalesPrice, new { @data_test_selector = "lblSalesPrice" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.PriceSKU.SalesPrice, new { @validationrule = "RoundOff", @id = "valSalesPrice", @data_test_selector = "txtSalesPrice", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidPriceForRoundOff, Admin_Resources.ErrorValidPrice) })
+                        @Html.ValidationMessageFor(model => model.PriceSKU.SalesPrice, "", new { @data_test_selector = "valSalesPrice" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.PriceSKU.CostPrice, new { @data_test_selector = "lblCostPrice" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.PriceSKU.CostPrice, new { @validationrule = "RoundOff", @data_test_selector = "txtCostPrice", @id = "valCostPrice", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidPriceForRoundOff, Admin_Resources.ErrorValidPrice) })
+                        @Html.ValidationMessageFor(model => model.PriceSKU.CostPrice, "", new { @data_test_selector = "valCostPrice" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(Admin_Resources.LabelActivationDate, new { @data_test_selector = "lblActivationDate" })
+                    </div>
+                    <div class="control-sm">
+                        <div class="right-inner-icon">
+                            @Html.TextBox("PriceSKU.ActivationDate", Model.PriceSKU.ActivationDate != null ? Model.PriceSKU.ActivationDate.ToDateTimeFormat() : string.Empty, new { @id = "PriceSKU_ActivationDate", @mindate = "", @data_test_selector = "txtActivationDate", @class = "datepicker", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat() })
+                            <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                        </div>
+                        <span class="text-danger field-validation-error" id="spamDate"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(Admin_Resources.LabelExpirationDate, new { @data_test_selector = "lblExpirationDate" })
+                    </div>
+                    <div class="control-sm">
+                        <div class="right-inner-icon">
+                            @Html.TextBox("PriceSKU.ExpirationDate", Model.PriceSKU.ExpirationDate != null ? Model.PriceSKU.ExpirationDate.ToDateTimeFormat() : string.Empty, new { @id = "PriceSKU_ExpirationDate", @class = "datepicker", @data_test_selector = "txtExpirationDate", @maxdate = "", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat() })
+                            <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group dirtyignore">
+                <div class="col-sm-12 nopadding">
+                    @if (!Equals(actionName, "EditSKUPrice"))
+                    {
+                        <h3 class="section-heading margin-top-25">@Admin_Resources.HeaderTierPrice</h3>
+                        @Html.Partial("~/Views/Price/AddTierPrice.cshtml", Model)
+                    }
+                    else
+                    {
+                        <div id="divDefaultAtrributeValue" class="col-sm-12 nopadding">
+                            <h3 class="section-heading margin-top-25">@Admin_Resources.HeaderTierPrice</h3>
+                            <div id="tierPriceList">
+                                @{Html.RenderAction("PriceTierList", "Price", new { @priceListId = Model.PriceTier.PriceListId, @sku = Model.PriceSKU.SKU });}
+                            </div>
+                        </div>
+                                    }
+
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.PriceSKU.PriceListId)
+            @Html.HiddenFor(m => m.PriceTier.PriceListId)
+            @Html.HiddenFor(m => m.PriceSKU.SKU)
+            @Html.HiddenFor(m => m.PriceSKU.PriceId)
+            @Html.HiddenFor(m => m.PriceListId)
+            @Html.HiddenFor(m => m.ListName)
+            @Html.HiddenFor(m => m.PriceSKU.ListName)
+            @Html.HiddenFor(m => m.PriceId)
+            @Html.HiddenFor(m => m.PriceSKU.ProductId, new { id = "hdnProductId" })
+            @Html.HiddenFor(m => m.PriceTierListData)
+        </div>
+
+    }
+    @Html.HiddenFor(m => m.ListName)
+</section>

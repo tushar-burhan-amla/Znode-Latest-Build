@@ -1,0 +1,62 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model SearchBoostAndBuryRuleListViewModel
+@using Znode.Libraries.Resources
+@using Znode.Engine.Admin.Models
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<div id="Resultpartial">
+    <div id="searchSettings">
+        <div class="title-container">
+            <h1>@Admin_Resources.LabelSearchSettings</h1>
+        </div>
+        <div class="main-wrapper">
+            <!--Left Panel-->
+            @Html.Partial("~/Views/SearchConfiguration/_asidePanel.cshtml")
+            <!--Main Container-->
+            <section class="main-container clearfix">
+                <div id="createIndexSection">
+                    <div id="@Model.GridModel.FrontObjectName" class="search-boost-bury">
+                        <div id="searchSettings">
+                            <div id="searchRulesListGrid">
+                                @Html.Partial("~/Areas/Search/Views/Search/_GetBoostAndBuryRules.cshtml", Model)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="BoostSetting"></div>
+
+                @Html.Hidden("hdnEnableDisableActionURL")
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                       new PopupModel()
+                       {
+                           Title = @Admin_Resources.TitlePaused,
+
+                           Description = @Admin_Resources.PauseRuleConfirmationMessage,
+                           ModalPopUpId = "PopUpConfirmDisable",
+                           Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes = "data-dismiss=modal", OnClickFunctionName = "Search.prototype.PauseSearchRule(this)" } }
+                       })
+
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                           new PopupModel()
+                           {
+                               Title = @Admin_Resources.TitleRestart,
+                               Description = @Admin_Resources.RestartRuleConfirmationMessage,
+                               ModalPopUpId = "PopUpConfirmEnable",
+                               Buttons = new List<PopUpButtonModel>
+                               () { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes = "data-dismiss=modal", OnClickFunctionName = "Search.prototype.PauseSearchRule(this)" } }
+                           })
+            </section>
+        </div>
+    </div>
+</div>
+<div id="divCataloglistPopup" class="aside-popup-panel modal-dialog modal-lg">
+</div>
+
+<div id="divCreateRulePopup" class="aside-popup-panel modal-dialog modal-xl">
+</div>
+

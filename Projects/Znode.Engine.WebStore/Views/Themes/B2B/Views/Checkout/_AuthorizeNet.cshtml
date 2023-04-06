@@ -1,0 +1,123 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model PaymentTokenViewModel
+
+<head>
+
+</head>
+@Html.Hidden("IsIframeRenderInPopup", Model.IsIframeRenderInPopup)
+@Html.Hidden("OrderNumber", Model.OrderNumber)
+@Html.Hidden("CustomerProfileId")
+
+@if (Model.IsIframeRenderInPopup)
+{
+
+    <!--  Modal -->
+    <div class="modal fade AuthorizeNetModal" id="AuthorizeNetModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg rounded-0">
+            <div class="modal-content">
+
+                <div class="modal-header AuthorizeNetHeader">
+                    <h4 class="modal-title pl-3 text-uppercase">@WebStore_Resources.PayAndSubmit</h4>
+                    <button type="button" class="close close-circle-icon" data-test-selector="btnAuthorizeNetClose" data-dismiss="modal"></button>
+                </div>
+                <div id="loadingMessage">
+                    <h6 class="pl-5 pt-5 text-center">@WebStore_Resources.AuthorizeLoadingMessage</h6>
+                </div>
+                <div class="modal-body">
+                    <div id="iframe_holder" class="center-block" style="visibility:hidden">
+                        <iframe id="AuthNetIFrame" class="embed-responsive-item authorizenetIframe panel m-sm-auto d-sm-block" name="AuthNetIFrame" frameborder="0"></iframe>
+                    </div>
+
+                    <form id="send_token" action="" method="post" target="AuthNetIFrame">
+                        <input type="hidden" name="token" value='@Model.PaymentGatewayToken' />
+                    </form>
+                    <div id="TokenForm"></div>
+                    @if (string.IsNullOrEmpty(Model.CustomerProfileId) && Model.UserId > 0)
+                    {
+                        <div class="form-group saveCreditCard float-left pt-3 mb-0" id="Save-credit-card">
+                            <div class="col-12 p-0">
+                                <div class="control-md control-non styled-input mb-0" id="saveforfuturecheckbox">
+                                    <input id="AuthNetSaveCreditCard" name="SaveCreditCard" type="checkbox">
+                                    <label for="AuthNetSaveCreditCard">@WebStore_Resources.SaveCreditCardForFutureUse</label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    { Html.RenderPartial("_AuthorizedNetIframeHtml", Model); }
+}
+
+<input id="ValidateTokenDiv" style="display:none" value="false" />
+<script type="text/javascript">
+    $(function () {
+            var delayInMilliseconds = 2000;
+            var delaySubmit = 10000;
+            setTimeout(function () {
+                $("#send_token").attr({ "action": '@Model.PaymentGatewayTokenUrl', "target": "AuthNetIFrame" }).submit();
+            }, delayInMilliseconds);
+
+            setTimeout(function () {
+                var isvalidPayment = window.parent.parent.document.getElementById("ValidateTokenDiv").value;
+                if (isvalidPayment != "true") {
+                    $("#AuthNetIFrame").html("");
+                    $("#AuthorizeNetModal").modal('hide');
+                    $("#submitandpaybutton").hide();
+                    Checkout.prototype.ClearPaymentAndDisplayMessage("This payment option is currently unavailable. Please try again in a few minutes.");
+               }
+            }, delaySubmit);
+        });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (!window.AuthorizeNetIFrame) window.AuthorizeNetIFrame = {};
+        AuthorizeNetIFrame.onReceiveCommunication = function (querystr) {
+            var params = parseQueryString(querystr);
+            switch (params["action"]) {
+                case "successfulSave":
+                    break;
+                case "cancel":
+                    var IsIframeRenderInPopup = document.getElementById('IsIframeRenderInPopup').value;
+                    Checkout.prototype.HideAuthorizeIframe(IsIframeRenderInPopup);
+                    break;
+                case "Ok":
+                    break;
+                case "transactResponse":
+                    var response = params["response"];
+                    if ($("#QuoteId").val() > 0) {
+                        Quote.prototype.SubmitAuthorizeNetPayment(response);
+                    }
+                    else if ($("#IsFromInvoice").val() == 'True') {
+                        User.prototype.SubmitAuthorizeNetPayment(response);
+                    }
+                    else {
+                        Checkout.prototype.SubmitAuthorizePayment(response);
+                    }
+                    var ifrm = document.getElementById("AuthNetIFrame");
+                    ifrm.style.display = 'none';
+            }
+        };
+
+        function parseQueryString(str) {
+            var vars = [];
+            var arr = str.split('&');
+            var pair;
+            for (var i = 0; i < arr.length; i++) {
+                pair = arr[i].split('=');
+                vars.push(pair[0]);
+                vars[pair[0]] = unescape(pair[1]);
+            }
+            return vars;
+        }
+    }());
+</script>

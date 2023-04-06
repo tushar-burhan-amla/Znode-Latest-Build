@@ -1,0 +1,26 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@model PIMFamilyDetailsViewModel
+
+@if (Model != null)
+{
+    foreach (var attributes in Model?.Attributes)
+    {
+        if (attributes.AttributeCode == "DiscountAmount")
+        {
+            attributes.ControlProperty.htmlAttributes.Add("validationrule", "RoundOff");
+            attributes.ControlProperty.htmlAttributes.Add("RegularExpression", HelperMethods.GetRegexForDefaultRoundOffValForPrice());
+            attributes.ControlProperty.htmlAttributes.Add("Message", HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidDiscount, ""));
+            attributes.ControlProperty.htmlAttributes.Add("data-test-selector", "txtDiscountAmount");
+        }
+        if (attributes.AttributeCode == "MinimumOrderAmount")
+        {
+            attributes.ControlProperty.htmlAttributes.Add("validationrule", "RoundOff");
+            attributes.ControlProperty.htmlAttributes.Add("RegularExpression", HelperMethods.GetRegexForDefaultRoundOffValForPrice());
+            attributes.ControlProperty.htmlAttributes.Add("Message", HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidMinimumOrderAmount, ""));
+            attributes.ControlProperty.htmlAttributes.Add("data-test-selector", "txtMinimumOrderAmount");
+        }
+        @Html.Partial("~/Areas/PIM/Views/Shared/_createControl.cshtml", attributes)
+    }
+}
+@Scripts.Render("~/bundles/jqueryval")

@@ -1,0 +1,285 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+@using System.Globalization;
+@using Znode.Libraries.ECommerce.Utilities;
+@model GiftCardViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    actionName = actionName.ToLower() == "issuegiftcard" ? "Create" : actionName;
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    var isRmaFromController = controllerName.ToLower() == "rmamanager" ? true : false;
+    var cancelUrl = isRmaFromController ? "/RMAManager/RMAList" : "/GiftCard/List";
+    controllerName = controllerName.ToLower() == "rmamanager" ? "GiftCard" : controllerName;
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmEditGiftCard", CancelUrl = cancelUrl, Callback = "GiftCard.prototype.ValidateUserId", IsSaveCloseEnable = true };
+    string hideHtml = isRmaFromController ? "" : (actionName.ToLower().Equals("edit") && Model.UserId > 0) ? "" : "display:none";
+    CultureInfo ci = new CultureInfo(DefaultSettingHelper.DefaultCulture);
+    string symbol = ci.NumberFormat.CurrencySymbol;
+}
+
+<div class="voucher-container">
+    <div class="col-sm-12 title-container">
+        <h1 data-test-selector="hdgGiftCard">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelVoucher)<em class="z-minus"></em><span>@Model.CardNumber</span></h1>
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+    <!--Main Container-->
+    <section class="page-container">
+      
+            <div class="tab-content">
+
+                <div class="tab-pane fade in active">
+                    <div class="row">
+                        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmEditGiftCard", @class = "d-flex flex-wrap" }))
+                        {
+                            <div class="col-lg-6 col-md-6 store-fields">
+                                <!-- Select Customer Starts -->
+                                <div class="panel panel-default">
+
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title panel-title-edit" style="display: inline-block;">@Model.StoreName @Admin_Resources.LabelStore</h4>
+                                    </div>
+                                    <div class="panel-body voucher-fields">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="row d-flex align-items-center">
+                                                        <div class="col-xs-4">
+                                                            @Html.LabelFor(m => m.CardNumber, new { @data_test_selector = "lblCardNumber" })
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                           
+                                                            @Html.RenderBlock(Model.CardNumber)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row d-flex align-items-center">
+                                                        <div class="col-xs-4">
+                                                            @Html.LabelFor(m => m.Name, new { @data_test_selector = "lblCardName" })
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            @Html.TextBoxFor(m => m.Name, new { @class = "lblCardName" })
+                                                            @Html.ValidationMessageFor(model => model.Name, "", new { @data_test_selector = "valCardName"})
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row d-flex align-items-center">
+                                                        <div class="col-xs-4">
+                                                            @Html.LabelFor(m => m.StartDate, new { @data_test_selector = "lblStartDate" })
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            @Html.RenderBlock(Model?.StartDate?.ToDateTimeFormat())
+                                                        </div>
+                                                        @Html.Partial("_HelpText", @Admin_Resources.TimeZoneHelpText)
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="row d-flex align-items-center">
+                                                        <div class="col-xs-4">
+                                                            @Html.LabelFor(m => m.ExpirationDate, new { @data_test_selector = "lblExpirationDate" })
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <div class="right-inner-icon">
+                                                                @Html.TextBox("ExpirationDate", Model?.ExpirationDate != null ? Model.ExpirationDate.ToDateTimeFormat() : HelperMethods.GetDateTime().Date.AddYears(1).ToDateTimeFormat(), new { @id = "ExpirationDate", @mindate = HelperMethods.GetDateTime().Date, @class = "datepicker", @group = "expirationdate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtExpirationDate", @onchange = "GiftCard.prototype.ValidateStartDate();" })
+                                                       <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                                                            </div>
+                                                            <span class="text-danger field-validation-error" id="spamDate"></span>
+                                                            @Html.ValidationMessageFor(model => model.ExpirationDate, "", new { @data_test_selector = "valExpirationDate" })
+                                                        </div>
+                                                        @Html.Partial("_HelpText", @Admin_Resources.TimeZoneHelpText)
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="row d-flex align-items-center">
+                                                        <div class="col-xs-4">
+                                                            @Html.LabelFor(m => m.GiftCardAmount, new { @data_test_selector = "lblGiftCardAmount" })
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            @symbol@Html.RenderBlock(Convert.ToString(Model.GiftCardAmount))
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="row d-flex align-items-center">
+                                                        <div class="col-xs-4">
+                                                            @Html.LabelFor(m => m.RemainingAmount, new { @data_test_selector = "lblRemainingAmount" })
+                                                        </div>
+                                                        <div class="col-xs-6 left-inner-icon">
+                                                            <em class="unit"><span for="CurrencySymbol"></span></em>
+                                                            @Html.TextBoxFor(m => m.RemainingAmount, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidPriceForRoundOff, Admin_Resources.ErrorValidPrice), @data_test_selector = "txtGiftCardAmount" })
+                                                            <div>
+                                                                @Html.ValidationMessageFor(model => model.RemainingAmount, "", new { @data_test_selector = "valGiftCardAmount".Length,@id = "RemainingAmount"})
+                                                                <p id="ErrorRemainingAmount"> </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="row d-flex align-items-center">
+                                                        <div class="col-xs-4">
+                                                            <label data-test-selector="lblIsActive">@Admin_Resources.LabelIsActive</label>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <label>
+                                                                <input id="isActive" name="IsActive" checked="@Model.IsActive" type="checkbox" value="true" data-test-selector="chkIsActive">
+                                                                <span class="lbl padding-8" for="isActive" data-test-selector="spnIsActive"></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Select Customer Ends -->
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 customer-fields">
+                                <!-- Customer Information Starts -->
+                                <div id="AddressDiv" class="panel panel-default customer-info-section">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title panel-title-edit ">@Admin_Resources.LabelCustomerInformation</h4>
+                                    </div>
+
+                                    <div class="panel-body">
+
+                                        @if (Model.UserId > 0)
+                                        {
+                                            <div class="selected-customer voucher-fields" id="selected-customer">
+                                                <div class="form-group">
+                                                    <div class="row d-flex align-items-center">
+                                                        <div class="col-xs-4">
+                                                            <label data-test-selector="lblAccountName">@Admin_Resources.LabelAccountName</label>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            @Html.RenderBlock(string.IsNullOrEmpty(Model.AccountCode) ? Model.AccountName : Model.AccountName + " | " + Model.AccountCode)
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="row d-flex align-items-center">
+                                                        <div class="col-xs-4">
+                                                            <label data-test-selector="lblCustomerName">@Admin_Resources.LabelCustomerName</label>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            @Html.RenderBlock(Model.CustomerName)
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <hr />
+                                            </div>
+                                        }
+
+
+                                        <div class="row form-group" id="ShowUserId">
+                                            <div class="col-sm-12 margin-bottom">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label>@Admin_Resources.RestrictVoucherToCustomer</label>
+                                                    </div>
+
+                                                    <div class="col-sm-6 nopadding">
+                                                        <label>
+                                                            <input id="RestrictToCustomerAccount" name="RestrictToCustomerAccount" checked="@Model.RestrictToCustomerAccount" type="checkbox" value="true" data-test-selector="chkRestrictToCustomerAccount">
+                                                            <span class="lbl padding-8" for="restrictToCustomer" data-test-selector="spnRestrictToCustomer"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if (HelperUtility.IsNull(Model.UserId))
+                                            {
+
+                                                <div class="col-sm-12 margin-bottom">
+                                                    <div class="control-md">
+                                                        @Html.TextBoxFor(model => model.CustomerName, new { @readonly = "readonly", @data_test_selector = "txtCustomerName" })
+                                                        @Html.ValidationMessageFor(model => model.CustomerName, null, new { id = "valCustomerName", @data_test_selector = "valCustomerName" })
+                                                    </div>
+                                                    <div class="pull-left dirtyignore">
+                                                        <a id="serachCustomer" onclick="GiftCard.prototype.GetCustomerList();" class="btn-narrow-icon" data-toggle="tooltip" data-placement="top" data-original-title="@Admin_Resources.SearchExistingCustomerButton" data-test-selector="btnSearchCustomer"><em class='z-search'></em></a>
+                                                        @if (SessionProxyHelper.IsSalesRepUser() == false)
+                                                        {
+                                                        <div class="pull-right btn-container ">
+                                                            <a class="btn-text btn-text-secondary" onclick="GiftCard.prototype.AddNewUser()" data-test-selector="btnAddNewCustomer"> @Admin_Resources.AddNewCustomerButton</a>
+                                                        </div>
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                            }
+
+
+                                            <div class="col-sm-12 margin-bottom">
+                                                <div class="row">
+                                                    <div class="col-sm-6 mt-3">
+                                                        <label>@Admin_Resources.CustomerMailConfirmationText</label>
+                                                    </div>
+
+                                                    <div class="col-sm-6 nopadding">
+                                                        <label>
+                                                            <input id="SendMail" name="SendMail" checked="@Model.SendMail" type="checkbox" value="true" data-test-selector="chkSendMail">
+                                                            <span class="lbl padding-8" for="SendMail" data-test-selector="spnCustomerMailConfirmation"></span>
+                                                           
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Customer Information Ends -->
+                            </div>
+                            @Html.HiddenFor(model => model.GiftCardId)
+                            @Html.HiddenFor(model => model.CardNumber)
+                            @Html.HiddenFor(model => model.Name)
+                            @Html.HiddenFor(model => model.StartDate)
+                            @Html.HiddenFor(model => model.GiftCardAmount)
+                            @Html.HiddenFor(model => model.PortalId)
+                            @Html.HiddenFor(model => model.CultureCode)
+                            @Html.HiddenFor(model => model.UserId, new { @maxlength = 8, @data_test_selector = "txtUserId" })
+                        }
+                        <div class="col-lg-12">
+                            <!-- Order Information Starts -->
+                            <div id="VoucherOrderList" class="panel panel-default voucher-order-section">
+                                <div class="panel-body" id="DivVoucherHistory">
+                                </div>
+                            </div>
+                            <!-- Order Information Ends -->
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+    </section>
+
+</div>
+ @* Here Customer Details will display *@
+<div id = "customerDetails" class="aside-popup-panel modal-dialog modal-xl"> </div>
+
+ @* Here Store List will display *@
+<div id="divStoreListAsidePanel" class="aside-popup-panel modal-dialog modal-xl"> </div>
+
+<script type="text/javascript">    
+     $(document).ready(function () {
+         GiftCard.prototype.GetVoucherHistoryList('@Model.GiftCardId');
+         $('#customerMailConfirmation').change(function () {
+             if ($("#customerMailConfirmation").is(":checked") == true) 
+                 $('#SendMail').prop('checked', true);
+             else 
+                 $('#SendMail').prop('checked', false);
+         });
+    });
+</script>
+

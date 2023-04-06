@@ -1,0 +1,61 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model AddressListViewModel
+@{
+    List<SelectListItem> _model = new List<SelectListItem>();
+    int _selectedId = 0;
+    string onchange = string.Empty;
+    string addressType = ViewBag.AddressType;
+    string _id = string.Empty;
+
+    string _optionType = Convert.ToString(ViewData["addressType"]);
+
+    if (Model?.AddressList?.Count > 0)
+        {
+        _model = Helper.GetAddressListDropDown(_optionType, Model);
+        }
+}
+@if (_model?.Count > 0)
+{
+    if (_optionType == "shipping")
+    {
+        _selectedId = Model.ShippingAddress.AddressId;
+        onchange = "Checkout.prototype.OnShippingAddressSelectionChange();";
+        _id = "ShippingAddress";
+
+    }
+    else
+    {
+        _selectedId = Model.BillingAddress.AddressId;
+        onchange = "Checkout.prototype.OnBillingAddressSelectionChange();";
+        _id = "BillingAddress";
+    }
+
+    <div class="col-12 p-0">
+        @if (_selectedId > 0 && (_optionType == "shipping" || _optionType == "billing"))
+        {
+            foreach (SelectListItem item in _model)
+            {
+                if (Convert.ToInt32(item.Value) == _selectedId)
+                {
+                    item.Selected = true;
+                    break;
+                }
+            }
+        }
+
+        @Html.DropDownListFor(m => _selectedId, _model, new { @id = _id, @onchange = onchange })
+    </div>
+
+
+}
+
+<script>
+    $('#shipping-content-selectoptions option, #billing-content-selectoptions option').each(function () {
+         var optionText = this.text;
+         if (optionText.length > 32) {
+             var newOption = optionText.substring(0, 32);
+             $(this).text(newOption + '...');
+         }   
+        });
+</script>
+

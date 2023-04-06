@@ -1,0 +1,53 @@
+﻿.quote-manage-container {
+    .productInfoPage .list-container .cart-products {
+        .table-head {
+            .imageicon, .sp-sku, .table-unitprice, .table-quantity, .table-total, .sp-shipping, .sp-actions {
+                flex: 0.5 0 0;
+            }
+
+            .sp-product-name {
+                flex: 1.5 0 0 !important;
+            }
+        }
+
+        .table-body {
+            .sp-image, .sp-sku, .sp-unit-price, .sp-quantity, .sp-total, .sp-shipping, .sp-actions {
+                flex: 0.5 0 0;
+            }
+
+            .sp-product-name {
+                flex: 1.5 0 0;
+            }
+        }
+    }
+
+    .customer-information .dashboard-panel .cust-info .limit-text-chars {
+        width: 55% !important;
+    }
+
+    .list-container {
+        .quote-manage-total {
+            .cart-summary {
+                .quote-charges-border-bottom {
+                    border-bottom: 1px solid #ddd;
+                }
+            }
+        }
+    }
+}
+.quote-filters-container .store-selector {
+    .fstToggleBtn {
+        width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 100px;
+    }
+
+    .fstToggleBtn:after {
+        right: 0.5em;
+    }
+}
+.quote-getquotedetails .btn-text-group .dropdown-menu {
+    min-width: 135px;
+}

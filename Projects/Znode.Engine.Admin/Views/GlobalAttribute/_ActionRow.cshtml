@@ -1,0 +1,27 @@
+﻿@model List<Znode.Engine.Admin.AttributeValidationHelpers.DefaultValueModel>
+<td class="action-col" style="width:100px">
+    @{
+        int _rowIndex = 0;
+        if (!Equals(Model, null) && Model.Count > 0)
+        {
+            foreach (var _item in Model)
+            {
+    <div id="action_@_rowIndex" class="dirtyignore">
+        <a href="#" id="save_@_rowIndex" class="action-save btn-narrow-icon" title="Edit" onclick="GlobalAttribute.prototype.SaveEditButtonClick(this);"><em class="z-edit"></em></a> 
+        <a href="#" id="delete_@_rowIndex" data-toggle="modal" data-target="#GlobalAttributeDeleteDefaultValuePopup" class="action-delete btn-narrow-icon" title="Delete" onclick="GlobalAttribute.prototype.DeleteAttributeButtonClick(this);"><em class="z-close"></em></a>
+    </div>
+                _rowIndex++;
+            }
+        }
+        else
+        {
+            <div id="action_0" class="dirtyignore">
+
+                <a href="#" id="save_0" class="action-save btn-narrow-icon" title="Save" onclick="GlobalAttribute.prototype.SaveEditButtonClick(this);"><em class="z-ok"></em></a>
+                <a href="#" id="delete_0" data-toggle="modal" data-target="#GlobalAttributeDeleteDefaultValuePopup" class="action-delete btn-narrow-icon" title="Delete" onclick="GlobalAttribute.prototype.DeleteAttributeButtonClick(this);"><em class="z-close"></em></a>
+
+            </div>
+        }
+    }
+</td>
+

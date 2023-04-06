@@ -1,0 +1,81 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model CartViewModel
+@{
+    bool IsShoppingCartHasItems = Model?.ShoppingCartItems?.Any() ?? false;
+}
+<div class="panel-heading">
+    <h4 class="panel-title panel-title-edit">
+        <span> @Admin_Resources.LabelQuoteSection </span>
+        @if (IsShoppingCartHasItems)
+        {
+            <span class="pull-right remove-all-items" onclick="Order.prototype.DeleteAllCartItem();">
+                <em class="z-close-circle"></em>
+                @Admin_Resources.LabelRemoveAll
+            </span>
+        }
+    </h4>
+</div>
+<div id="layout-cart" class="panel-body">
+    @if (IsShoppingCartHasItems)
+    {
+
+        <div class="cart-products margin-bottom">
+            <div class="cart-product-table" data-test-selector="tblItemsOrdered">
+                <ul class="product-list product-list-header">                  
+                    <li class="product-label" data-test-selector="tblHdProduct">@Admin_Resources.LabelProduct</li>
+                    <li class="product-sku" data-test-selector="tblHdSku">@Admin_Resources.LabelSKU</li>
+                    <li class="product-unit-price" data-test-selector="tblHdUnitPrice">@Admin_Resources.LabelPrice</li>
+                    <li class="product-quantity" data-test-selector="tblHdQuantity">@Admin_Resources.LabelQuantity</li>
+                    <li class="product-total" data-test-selector="tblHdTotal">@Admin_Resources.LabelSubTotal</li>
+                </ul>
+                @* do not remove class="product-list-items" used in TS file *@
+                @*To show the recently added product on the top of cart.*@
+                <div class="cart-scroll-section">
+                    @foreach (CartItemViewModel cartItem in Model.ShoppingCartItems?.AsEnumerable().Reverse())
+                    {
+                        <ul id="cart-row-div" class="product-list product-list-items">
+                            @Html.Partial("~/views/Quote/_QuoteCartRow.cshtml", cartItem)
+                        </ul>
+                    }
+                </div>
+            </div>
+
+
+        </div>
+        <div id="loader-cart-content">@Html.Partial("_Loader")</div>
+        <div class="d-flex margin-bottom-15">
+            <div class="col-sm-6 label-text px-4">
+                @Html.LabelFor(model => model.SubTotal, new { @data_test_selector = "lblSubTotal" })
+            </div>
+            <div class="col-sm-6 text-right amount-text px-4">
+                <label id= "lblSubTotal"  data-test-selector="lblSubTotalValue">@HelperMethods.FormatPriceWithCurrency(Model.SubTotal, Model.CultureCode)</label>
+            </div>
+        </div>
+        if (Model.IsQuote)
+        {
+            <div class="d-flex margin-bottom-15">
+                @Html.Partial("~/views/Quote/_TaxExempt.cshtml")
+            </div>
+        }
+
+
+        @Html.Hidden("hdnTotalAmt", Model.Total)
+        @Html.Hidden("hdnCurrencyCode", Model.CurrencyCode)
+        @Html.Hidden("isGiftcardValid", Model.GiftCardValid)
+        @Html.Hidden("hdnShoppingCartCount", Model.ShoppingCartItems.Count)
+        @Html.Hidden("hdnIsAnyProductOutOfStock", Model.ShoppingCartItems.Any(b => b.InsufficientQuantity))
+        @Html.HiddenFor(m => m.FreeShipping, new { @id = "cartFreeShipping" })
+        @Html.Hidden("hdnHasError", Model.HasError)
+        @Html.Hidden("hdnShippiingErrorMessage", Model.ShippingErrorMessage)
+        @Html.Hidden("hdnOverDueAmount", Model.OverDueAmount)
+    }
+    else
+    {
+        <div class="col-sm-12 nopadding cart-summary">
+            <p class="text-center margin-top-bottom no-record" data-test-selector="paraNoItemsInCart">@Admin_Resources.TextNoOrderedItems</p>
+        </div>
+    }
+
+</div>
+@Html.HiddenFor(model => model.LocaleId)

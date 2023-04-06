@@ -1,0 +1,45 @@
+﻿@using Znode.Libraries.ECommerce.Utilities
+
+@{
+    ViewBag.Title = Admin_Resources.LabelHangfireDashboard + " | " + Admin_Resources.Multifront;
+
+    string hangfireDashboardUrl = $"{ZnodeAdminSettings.ZnodeApiRootUri}{ZnodeConstant.HangfireDashboardEndpoint}";
+}
+
+<style>
+    iframe#hangfiredashboard {
+        height: calc(100vh - 228px);
+        width: 100%;
+    }
+</style>
+
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgDiagnosticsMaintenance">@Admin_Resources.TitleDiagnosticsMaintenance</h1>
+</div>
+
+<div class="main-wrapper">
+    @Html.Partial("~/Areas/Diagnostics/Views/Shared/_asideDiagnosticsMaintenancePanel.cshtml")
+    <section class="main-container">
+        <div class="d-flex justify-content-between align-items-center margin-bottom-5">
+            <div class="col-md-9 nopadding">
+                <b>Warning:</b> @Admin_Resources.HangfireDashboardCautionMessage
+            </div>
+            <div class="col-md-3 text-right">
+                <button onclick="javascript:window.open('@hangfireDashboardUrl','_blank');" class="btn-text-icon">
+                    <strong>
+                        <i class="z-preview"></i> Launch Dashboard
+                    </strong>
+                </button>
+            </div>
+        </div>
+
+        <iframe src="@hangfireDashboardUrl" id="hangfiredashboard" title="Hangfire Dashboard"
+                style="border: 0; overflow: auto; margin: 0;"></iframe>
+    </section>
+</div>
+
+<script>
+    $(function () {
+        $('#hangfiredashboard').attr("src", "@hangfireDashboardUrl");
+    });
+</script>

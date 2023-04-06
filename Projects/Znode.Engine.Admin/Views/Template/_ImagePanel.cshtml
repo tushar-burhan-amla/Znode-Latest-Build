@@ -1,0 +1,33 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@model TemplateViewModel
+@{
+    string mediapath = string.IsNullOrEmpty(Model?.MediaPath) ? ZnodeAdminSettings.DefaultImagePath : Model?.MediaPath;
+    int? mediaId = Model?.MediaId > 0 ? Model?.MediaId : null;
+}
+
+ <div class="form-group">
+<div class="col-sm-12 nopadding">
+    <div class="control-label">
+        @Html.LabelFor(model => model.MediaPath, new { @data_test_selector = "lblMediaPath" })
+    </div>
+    <div class="control-md">
+        <div class="upload-images" id="divMediaId">
+            <img id="MediaId" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')" src="@mediapath" alt="Upload Template Preview Image" class="img-responsive" data-test-selector="imgBrandLogo">
+            <span class="change-image" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')" data-test-selector="linkChange">@Admin_Resources.LinkChange</span>
+            <input type="hidden" id="MediaId" name="MediaId" value="@mediaId">
+            <input type='hidden' value=@AdminConstants.ImageExtensions Id='hdnMediaId' />
+            @if (!Equals(mediapath, null) && !Equals(mediapath, ZnodeAdminSettings.DefaultImagePath))
+            {
+                <a class="upload-images-close" data-toggle="tooltip" data-placement="top" title="Remove" onclick="EditableText.prototype.RemoveImage('MediaId')" data-test-selector="linkRemove"><em class="z-close-circle"></em></a>
+            }
+        </div>
+    </div>
+    <div id="UploadMediaId" class="appendMediaModel">
+    </div>
+</div>
+@*To do:Keeping this code to test some functionality. Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup">
+</div>
+</div>

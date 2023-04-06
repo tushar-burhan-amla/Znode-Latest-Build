@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "Znode Activation";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Znode.Multifront.PaymentApplication.Models.ActivateLicenceModel
+
+<section id="Display">
+    @using (Html.BeginForm("Create", "Activate", FormMethod.Post))
+    {
+        <div id="body">
+            <h2>Activate your License</h2>
+            <b>Please Note:</b>
+            <ul>
+                <li>You are activating your license to this server. Be sure this is what you want to do!</li>
+                <li>Once your key is registered you will not be able to change the URL.</li>
+                <li>Choosing the 30 Day Free Trial will not count toward your license activation.</li>
+                <li>You must have Read+Write+Modify permissions for the Network Service account on the folder before activating.</li>
+            </ul>
+
+            <table style="width: 100%; border: 1px" border="1">
+                <tr>
+                    <td width="30%"><b>Select License</b></td>
+                    <td></td>
+                </tr>
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <tr>
+                        <td width="30%" style="color: green; font: bold" colspan="2">@Model.Message @Html.ActionLink("Click Here", "Index", "Home", new { area = "" }, null) to redirect to Homepage.</td>
+                    </tr>
+                }
+                <tr>
+                    <td width="30%" style="color: red; font: bold" colspan="2">@Model.ErrorMessage</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>@Html.RadioButtonFor(m => m.LicenseType, "API", new { @class = "radio-btn" })<label>API</label></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>@Html.RadioButtonFor(m => m.LicenseType, "FreeTrial", new { @class="radio-btn" })<label>30 Day Free Trial</label></td>
+                </tr>
+            </table>
+
+            <table style="width: 100%;">
+                <tr id="serialNumberRow" style="display: none;">
+                    <td width="30%"><b>Serial Number</b></td>
+                    <td>
+                        @Html.TextBoxFor(m => m.SerialNumber)
+                        @Html.ValidationMessageFor(m => m.SerialNumber)
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%"><b>Full Name</b></td>
+                    <td>
+                        @Html.TextBoxFor(m => m.FullName)
+                        @Html.ValidationMessageFor(m => m.FullName)
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Email Address</b></td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Email)
+                        @Html.ValidationMessageFor(m => m.Email)
+                    </td>
+                </tr>
+            </table>
+
+            @Html.TextAreaFor(m => m.Eula, new { cols = "100", rows = "30" })
+            <br />
+
+            @Html.CheckBoxFor(m => m.CheckEula)
+            <label>I have read and agreed to the software license agreement (EULA) above</label>
+            @Html.ValidationMessageFor(m => m.CheckEula)
+            <br />
+
+            <input id="ActivateLicense" type="submit" value="Click to Activate License" />
+        </div>
+    }
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        showSerialNumber();
+
+        $('input:radio').change(function () {
+            var value = $(this).val();
+            if (value == 'FreeTrial') {
+                $("#serialNumberRow").hide();
+            } else {
+                $("#serialNumberRow").show();
+            }
+        });
+
+        function showSerialNumber() {
+            var selected = $("input[type='radio'][name='LicenseType']:checked");
+
+            if (selected.length > 0) {
+                var selectedValue = selected.val();
+                if (selectedValue == 'FreeTrial') {
+                    $("#serialNumberRow").hide();
+                } else {
+                    $("#serialNumberRow").show();
+                }
+            }
+        }
+    });
+</script>

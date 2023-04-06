@@ -1,0 +1,44 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ContentContainerDataViewModel
+@{
+    string containerKey = Model?.ContainerKey;
+    string adSpaceImage1 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "AdSpaceImage1" && x.AttributeValue != null)?.AttributeValue;
+    string adSpaceImage2 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "AdSpaceImage2" && x.AttributeValue != null)?.AttributeValue;
+    string titleForImage1 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "TitleForImage1" && x.AttributeValue != null)?.AttributeValue;
+    string textForImage1 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "TextForImage1" && x.AttributeValue != null)?.AttributeValue;
+    string titleForImage2 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "TitleForImage2" && x.AttributeValue != null)?.AttributeValue;
+    string textForImage2 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "TextorImage2" && x.AttributeValue != null)?.AttributeValue;
+    string cTALinkURL1 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "CTALinkURL1" && x.AttributeValue != null)?.AttributeValue;
+    string cTALinkURL2 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "CTALinkURL2" && x.AttributeValue != null)?.AttributeValue;
+    var domainurl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+}
+
+@if (!string.IsNullOrEmpty(containerKey) && containerKey.Equals("AdSpace", StringComparison.InvariantCultureIgnoreCase))
+{
+    <div class="container-fluid container-twobannerwithtext">
+        <div class="row">
+            <div class="col-md-6 p-0 pr-md-1">
+                <a href="@domainurl@cTALinkURL1">
+                    <div>
+                        <img src="@adSpaceImage1" class="img-fluid" alt="Home Page Ad" />
+                    </div>
+                    <div class="adtext-wrapper">
+                        <div class="adtitle">@titleForImage1 <span class="right-icon"></span></div>
+                        <div class="adtext">@textForImage1</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 p-0 pt-2 pt-md-0 pl-md-1">
+                <a href="@domainurl@cTALinkURL2">
+                    <div>
+                        <img src="@adSpaceImage2" class="img-fluid" alt="Home Page Ad" />
+                    </div>
+                    <div class="adtext-wrapper">
+                        <div class="adtitle">@titleForImage2 <span class="right-icon"></span></div>
+                        <div class="adtext">@textForImage2</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+}

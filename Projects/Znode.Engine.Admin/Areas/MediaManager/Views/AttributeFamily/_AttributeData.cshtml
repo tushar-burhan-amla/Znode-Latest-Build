@@ -1,0 +1,30 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model AttributeGroupMapperListViewModel
+
+@foreach (var attr in Model.AttributeGroupMappers)
+{
+    <tr>
+
+        <td>@attr.Code</td>
+
+        <td>@attr.AttributeType</td>
+        @{
+            if (attr.IsRequired)
+            {
+                <td><i class="z-ok"></i></td>
+            }
+            else
+            {
+                <td><i class="z-close"></i></td>
+            }
+            if (attr.IsLocalizable.Value)
+            {
+                <td><i class="z-ok"></i></td>
+            }
+            else
+            {
+                <td><i class="z-close"></i></td>
+            }
+        }
+    </tr>
+            }

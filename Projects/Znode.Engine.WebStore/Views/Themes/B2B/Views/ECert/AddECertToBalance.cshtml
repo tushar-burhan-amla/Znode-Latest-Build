@@ -1,0 +1,25 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ECertificateViewModel
+@{ 
+    Layout = null;
+}
+@using (Ajax.BeginForm("AddECertToBalance", new AjaxOptions() { UpdateTargetId = "eCertList" }))
+{
+    @Html.AntiForgeryToken()
+<div class="col-xs-12 nopadding ecert-control ">
+    <h4>@WebStore_Resources.ECertAddToBalancePageTitle</h4>
+    <p class="margin-bottom">@WebStore_Resources.ECertAddToBalancePageHeading</p>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <div class="col-xs-12 nopadding">
+            @Html.LabelFor(model => model.CertificateKey, WebStore_Resources.ECertKeyDisplayText, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-xs-12 nopadding">
+            @Html.EditorFor(model => model.CertificateKey, new { htmlAttributes = new { @class = "text-ecert" } })
+            @Html.ValidationMessageFor(model => model.CertificateKey, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-xs-12 nopadding margin-top">
+            <input type="submit" value="@WebStore_Resources.ECertAddToBalanceSubmitButtonLabel" class="btn-text btn-bg-primary" />
+        </div>
+    </div>
+</div>
+ }

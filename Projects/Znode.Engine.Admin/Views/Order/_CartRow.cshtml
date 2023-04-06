@@ -1,0 +1,203 @@
+﻿@model Znode.Engine.Admin.ViewModels.CartItemViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@{
+    string imagePath = string.IsNullOrEmpty(Model?.ImagePath) ? ZnodeAdminSettings.DefaultImagePath : Model?.ImagePath;
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    string showHideAnchor = Model.IsReviewPage ? "style=display:none" : string.Empty;
+    string collapse = Model.IsReviewPage ? string.Empty : "collapse in";
+    bool isQuote = ViewData["isQuote"] != null && Convert.ToBoolean(ViewData["isQuote"]) ? true : false;
+}
+
+@if (!Model.IsReviewPage)
+{
+    <li class="product-remove">
+        <a href="#" class="z-close-circle" onclick="Order.prototype.DeleteCartItem(this)" Value=@Model.Quantity , data_cart_productid=@Model.PublishProductId , data_cart_externalid=@Model.ExternalId data-test-selector="btnDeleteSingle"></a>
+        <div id="quantity_error_msg_@Model.PublishProductId" style="color: #cc0000"></div>
+    </li>
+}
+@if (Model.GroupProducts?.Count > 0)
+{
+    foreach (var product in Model.GroupProducts)
+    {
+        <li class="product-image">
+            <img src="@Model.ImagePath" alt="@Html.RenderBlock(Model.ProductName) Image" class="img-responsive" />
+        </li>
+
+        <li class="product-label">
+            <div class="selected-product-name" data-test-selector ="divGroupProductHeading">@Html.RenderBlock(Model.ProductName)</div>
+            <div class="selected-product-description" data-test-selector ="divGroupProductDescription"><em class="zf-caret-right"></em>@Html.RenderBlock(product.ProductName)</div>
+            @if (Model?.PersonaliseValuesDetail?.Count > 0)
+            {
+                <div>
+                    <a role="button" data-toggle="collapse" href="#show-hide-details-@Model.ExternalId" aria-expanded="false" aria-controls="show-hide-details" @showHideAnchor data-show-details="@Admin_Resources.ShowDetails" data-hide-details="@Admin_Resources.HideDetails" onclick="Order.prototype.ToggleShowHideDetails(this)">
+                        <span>@Admin_Resources.HideDetails</span><em class="z-up"></em>
+                    </a>
+                    <div class="@collapse" id="show-hide-details-@Model.ExternalId">
+                        <div class="cart-item-description">
+                            @foreach (var item in Model.PersonaliseValuesDetail)
+                            {
+                                if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                                {
+                                    <p> @item.PersonalizeName : @item.PersonalizeValue </p>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="cart-item-description">@Html.RenderBlock(Model.CartDescription)</div>
+            @if (!Model.IsAllowedTerritories)
+            {
+                <div id="dynamic-allowesterritories" class="status-outofstock hvr-pulse error-msg">@WebStore_Resources.AllowedTerritoriesProductError</div>
+            }
+        </li>
+
+        <li class="product-sku">
+            @Html.DisplayTextFor(model => product.Sku)
+        </li>
+
+        <li class="product-unit-price">
+            @if (isQuote && Model.IsPriceEdit)
+            {
+                <s>@HelperMethods.FormatPriceWithCurrency(Model.InitialPrice, cultureCode)</s>
+            }
+            @HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode)
+        </li>
+
+        <li class="product-quantity">
+            @if (Model.IsReviewPage)
+            {
+                @Html.TextBoxFor(model => product.Quantity, new { @readonly = "readonly", @class = "quantity" })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => product.Quantity, new { @id = "CartQuantity", @class = "cartquantity", @data_inventoryRoundOff = inventoryRoundOff, @Onchange = "Order.prototype.UpdateCartQuantity(this)", @Value = product.Quantity, @data_cart_productid = product.ProductId, @data_cart_sku = product.Sku, @data_cart_externalid = Model.ExternalId, @data_cart_minquantity = product.MinimumQuantity, @data_cart_maxquantity = product.MaximumQuantity, @data_cart_productName = product.ProductName })
+                <div id="quantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+            }
+
+            @if (Model.InsufficientQuantity)
+            {
+                <span class="error-msg">@Admin_Resources.ErrorOutOfStockMessage</span>
+            }
+        </li>
+    }
+}
+else
+{
+    <li class="product-image">
+        <img src="@Model.ImagePath" alt="@Html.RenderBlock(Model.ProductName) Image" class="img-responsive" />
+    </li>
+
+    <li class="product-label">
+
+        <div class="selected-product-name">@Html.RenderBlock(Model.ProductName)</div>
+
+        @if (Model?.PersonaliseValuesDetail?.Count > 0)
+        {
+            <div>
+                @if ((Model?.PersonaliseValuesDetail?.Any(x => !string.IsNullOrEmpty(x.PersonalizeValue))).GetValueOrDefault())
+                {
+                    <a role="button" data-toggle="collapse" href="#show-hide-details-@Model.ExternalId" aria-expanded="false" aria-controls="show-hide-details" @showHideAnchor data-show-details="@Admin_Resources.ShowDetails" data-hide-details="@Admin_Resources.HideDetails" onclick="Order.prototype.ToggleShowHideDetails(this)">
+                        <span>@Admin_Resources.HideDetails</span><em class="z-up"></em>
+                    </a>
+                }
+                <div class="@collapse" id="show-hide-details-@Model.ExternalId">
+                    <div class="cart-item-description">
+                        @foreach (var item in Model.PersonaliseValuesDetail)
+                        {
+                            if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                            {
+                                <p> @item.PersonalizeName : @item.PersonalizeValue </p>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+
+        <div class="selected-product-description">@Html.RenderBlock(Model.CartDescription) </div>
+
+        @if (!Model.IsAllowedTerritories)
+        {
+            <div id="dynamic-allowesterritories" class="status-outofstock hvr-pulse error-msg">@Admin_Resources.AllowedTerritoriesProductError</div>
+        }
+    </li>
+    <li class="product-sku">
+        @Html.DisplayTextFor(model => model.SKU)
+    </li>
+    <li class="product-unit-price">
+        @if (isQuote && Model.IsPriceEdit)
+        {
+            <s>@HelperMethods.FormatPriceWithCurrency(Model.InitialPrice, cultureCode)</s>
+        }
+        @HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode)
+    </li>
+    if (!string.IsNullOrEmpty(Model.ConfigurableProductSKUs))
+    {
+        <li class="product-quantity">
+            @if (Model.IsReviewPage)
+            {
+                @Html.TextBoxFor(model => model.Quantity, new { @readonly = "readonly", @class = "quantity" })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => model.Quantity, new
+                {
+                @id = "CartQuantity",
+                @class = "quantity",
+                name = "Quantity",
+                @data_inventoryRoundOff = inventoryRoundOff,
+                @Onchange = "Order.prototype.UpdateCartQuantity(this)",
+                @Value = Model.Quantity,
+                @data_cart_sku = Model.ConfigurableProductSKUs,
+                @data_cart_externalid = Model.ExternalId,
+                @data_cart_productName = Model.ProductName,
+                @data_cart_minquantity = Model.MinQuantity,
+                @data_cart_maxquantity = Model.MaxQuantity
+                })
+                <div id="quantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+                if (Model.InsufficientQuantity)
+                {
+                    <span class="error-msg">@Admin_Resources.ErrorOutOfStockMessage</span>
+                }
+            }
+        </li>
+    }
+    else
+    {
+        <li class="product-quantity">
+            @if (Model.IsReviewPage)
+            {
+                @Html.TextBoxFor(model => model.Quantity, new { @readonly = "readonly", @class = "quantity" })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => model.Quantity, new { @id = "CartQuantity", @class = "quantity", type = "number", name = "Quantity", @Onchange = "Order.prototype.UpdateCartQuantity(this)", @Value = Model.Quantity, @data_cart_sku = Model.SKU, @data_cart_externalid = Model.ExternalId, @data_cart_minquantity = Model.MinQuantity, @data_cart_maxquantity = Model.MaxQuantity, @data_cart_productName = Model.ProductName, @data_inventoryRoundOff = inventoryRoundOff })
+                <div id="quantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+                if (Model.InsufficientQuantity)
+                {
+                    if (Model.ProductType != ZnodeConstant.BundleProduct)
+                    {
+                        <span class="error-msg">@Admin_Resources.ErrorOutOfStockMessage</span>
+                    }
+                    else
+                    {
+                        <span class="error-msg">@Admin_Resources.ExceedingAvailableWithoutQuantity</span>                        
+                    }
+                }
+            }
+        </li>
+    }
+}
+<li class="product-total">
+    @HelperMethods.FormatPriceWithCurrency(Model.ExtendedPrice, cultureCode)
+</li>
+<script>
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>

@@ -1,0 +1,4 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model WidgetFormConfigurationViewModel
+
+@Html.Action("Get", "FormBuilder", new { @formBuilderId = Model.FormBuilderId, @localeId = Model.LocaleId, @mappingId = Model.CMSMappingId })

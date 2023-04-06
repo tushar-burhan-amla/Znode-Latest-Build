@@ -1,0 +1,22 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model QuoteInfoViewModel
+@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("UpdateShippingMethod", "Quote"
+    , new AjaxOptions
+    {
+        UpdateTargetId = "labelShippingMethod",
+        HttpMethod = "POST",
+        OnSuccess = "Quote.prototype.ChangeShippingMethodSuccessCallback"
+    }, new { @class = "dirtylisten dirty", @id = "ShippingMethod" }))
+
+
+{
+    <div class="col-sm-12 nopadding">
+        @Html.TextBoxFor(model => model.ShippingMethod, new { @maxlength = "100", @Onchange = "Quote.prototype.SubmitForm(this)", @id = "txtShippingMethod", @data_test_selector = "txtShippingMethod" })
+        <span style="display:none" id="spnShippingMethod" class="field-validation-error" data-valmsg-replace="true">@Admin_Resources.ErrorShippingMethod</span>
+        @Html.HiddenFor(model => model.OmsQuoteId)
+    </div>
+
+}

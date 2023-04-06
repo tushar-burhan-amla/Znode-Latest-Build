@@ -1,0 +1,26 @@
+﻿@using Znode.Libraries.ECommerce.Utilities
+@model Znode.Engine.Admin.ViewModels.WebSiteLogoViewModel
+
+<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">        
+        <ul class="aside-panel">
+            <li>
+                @Ajax.AuthorizedRawActionLink(@Admin_Resources.LabelGeneralSettings,
+                "StoreSetting", "StoreExperience", new { portalId = Model?.PortalId },
+                new AjaxOptions { UpdateTargetId = "WebSiteConfigurationDiv", InsertionMode = InsertionMode.Replace, OnSuccess = "ZnodeBase.prototype.activeAsidePannelAjax(this);"}, new { @data_test_selector = "linkWebsiteLogo" })
+            </li>
+            <li>
+                @Ajax.AuthorizedRawActionLink(@Admin_Resources.LabelProductPage,
+                "GetPortalProductPage", "WebSite", new { portalId = Model?.PortalId, portalName = Model.PortalName },
+               new AjaxOptions { UpdateTargetId = "WebSiteConfigurationDiv", InsertionMode = InsertionMode.Replace, OnSuccess = "ZnodeBase.prototype.activeAsidePannelAjax(this);" }, new { @data_test_selector = "linkProductPage" })
+            </li>
+            <li>
+                @Ajax.AuthorizedRawActionLink(@Admin_Resources.LabelProductRecommendations,
+                "GetRecommendationSetting", "Recommendation", new { portalId = Model?.PortalId },
+               new AjaxOptions { UpdateTargetId = "WebSiteConfigurationDiv", InsertionMode = InsertionMode.Replace, OnSuccess = "ZnodeBase.prototype.activeAsidePannelAjax(this);" }, new { @data_test_selector = "linkProductRecommendations" })
+            </li>
+            @Html.Partial("~/Views/WebSite/_WebSiteWidgetsPanel.cshtml", Model)
+        </ul>
+    </div>
+</aside>

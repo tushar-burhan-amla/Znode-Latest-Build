@@ -1,0 +1,123 @@
+﻿@using Znode.Libraries.Resources
+
+@{
+    ViewBag.Title = "Znode Activation";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Znode.Engine.Api.Areas.Activate.Models.ActivatePageApiModel
+<script src="@Url.Content("~/Scripts/jquery-3.3.1.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        showSerialNumber();
+
+        $('input:radio').change(function () {
+            var value = $(this).val();
+            if (value == 'FreeTrial') {
+                $("#serialNumberRow").hide();
+            } else {
+                $("#serialNumberRow").show();
+            }
+        });
+
+        function showSerialNumber() {
+            var selected = $("input[type='radio'][name='LicenseType']:checked");
+
+            if (selected.length > 0) {
+                var selectedValue = selected.val();
+                if (selectedValue == 'FreeTrial') {
+                    $("#serialNumberRow").hide();
+                } else {
+                    $("#serialNumberRow").show();
+                }
+            }
+        }
+    });
+</script>
+<section id="Display">
+    @using (Html.BeginForm("Create", "Activate", FormMethod.Post))
+    {
+        <div id="body">
+            <h2>@Api_Resources.ActivateyourLicense</h2>
+            <strong>Please Note:</strong>
+            <ul>
+                <li>You are activating your license to this server. Be sure this is what you want to do!</li>
+                <li>Once your key is registered you will not be able to change the URL.</li>
+                <li>Choosing the 30 Day Free Trial will not count toward your license activation.</li>
+                <li>You must have Read+Write+Modify permissions for the Network Service account on the folder before activating.</li>
+            </ul>
+
+            <table style="width: 100%; border: 1px" border="1" aria-describedby="License Information">
+                <tr>
+                    <th scope="col" style="width:30%;"><strong>Select License</strong></th>
+                    <th scope="col"></th>
+                </tr>
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <tr>
+                        <td style="width: 30%; color: green; font: bold" colspan="2">@Model.Message @Html.ActionLink("Click Here", "Index", "Home", new { area = "" }, null) to redirect to Homepage.</td>
+                    </tr>
+                }
+                <tr>
+                    <td style="width: 30%; color: red; font: bold" colspan="2">@Model.ErrorMessage</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>@Html.RadioButtonFor(m => m.LicenseType, "SingleFront")<label>Single Front</label></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>@Html.RadioButtonFor(m => m.LicenseType, "MallAdmin")<label>Mall Admin</label></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>@Html.RadioButtonFor(m => m.LicenseType, "Multifront")<label>Multifront</label></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>@Html.RadioButtonFor(m => m.LicenseType, "Marketplace")<label>Marketplace</label></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>@Html.RadioButtonFor(m => m.LicenseType, "FreeTrial")<label>30 Day Free Trial</label></td>
+                </tr>
+            </table>
+
+            <table style="width: 100%;" aria-describedby="Serial Number">
+                <tr id="serialNumberRow" style="display: none;">
+                    <th scope="col" style="width: 30%; "><strong>Serial Number</strong></th>
+                    <th scope="col">
+                        @Html.TextBoxFor(m => m.SerialNumber)
+                        @Html.ValidationMessageFor(m => m.SerialNumber)
+                    </th>
+                </tr>
+                <tr>
+                    <td style="width: 30%; "><strong>Full Name</strong></td>
+                    <td>
+                        @Html.TextBoxFor(m => m.FullName)
+                        @Html.ValidationMessageFor(m => m.FullName)
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Email Address</strong></td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Email)
+                        @Html.ValidationMessageFor(m => m.Email)
+                    </td>
+                </tr>
+            </table>
+
+            @Html.TextAreaFor(m => m.Eula, new { cols = "100", rows = "30" })
+            <br />
+
+            @Html.CheckBoxFor(m => m.CheckEula)
+            <label>@Api_Resources.ReadAndAgreed</label>
+            @Html.ValidationMessageFor(m => m.CheckEula)
+            <br />
+
+            <input id="ActivateLicense" type="submit" value="Click to Activate License" />
+        </div>
+    }
+</section>

@@ -1,0 +1,28 @@
+﻿@model List<Znode.Engine.Admin.AttributeValidationHelpers.DefaultValueModel>
+<td style="width:100px">
+    @{
+        int _rowIndex = 0;
+        if (!Equals(Model, null) && Model.Count > 0)
+        {
+            foreach (var _item in Model)
+            {
+                <div id="action_@_rowIndex">
+                    <a href="#" class="action-save btn-narrow-icon" title="Edit"><i class="z-edit"></i></a>
+                    <a href="#" id="delete_@_rowIndex" data-toggle="modal" data-target="#MediaDefaultValueDeletePopup" class="action-delete btn-narrow-icon" title="Delete"><i class="z-close"></i></a>
+                </div>
+                _rowIndex++;
+            }
+        }
+        else
+        {
+            <div id="action_0">
+
+                <a href="#" class="action-save btn-narrow-icon" title="Save"><i class="z-ok"></i></a>
+                <a href="#" id="delete_0" data-toggle="modal" data-target="#MediaDefaultValueDeletePopup" class="action-delete btn-narrow-icon" title="Delete"><i class="z-close"></i></a>
+
+            </div>
+        }
+    }
+</td>
+
+

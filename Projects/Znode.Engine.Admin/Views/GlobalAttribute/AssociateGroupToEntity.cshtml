@@ -1,0 +1,85 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model GlobalAttributeEntityViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel();
+}
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelAssociateGroupEntity</h1>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmAssociateGroupAttributeEntity" }))
+    {
+
+        <div id="loginForm" class="box-container dirtyignore">
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelEntityName, new { @data_test_selector = "lblEntityName" })
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.GlobalEntityId, new SelectList(Model.AttributeEntityList, "Value", "Text"), new { id = "entityList", @data_test_selector = "drpEntityName", @onchange = "GlobalAttributeEntity.prototype.GetAttributeGroupEntity()" })
+                            @Html.HiddenFor(model => model.GlobalEntityId, new { id = "hdnEntityId" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*Div for creating tabs*@
+        <div class="col-sm-12 nopadding padding-top" id="divEntityToGroup">
+    
+        </div>
+
+                }
+
+    <!-- Display order popup Modal -->
+    <div id="divEditDisplayOrderPopup" class="modal fade" style="display:none" role="dialog">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Attribute Group - Edit Display order</h4>
+                </div>
+                <div class="modal-body">
+                    <span id="spanError-DisplayOrder" class="text-danger field-validation-error" data-valmsg-replace="true" style="display:none"></span><br />
+                    <div id="divEditModelBody">
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    <label for="GroupCode" aria-required="true">@Admin_Resources.GroupCode</label>
+                                </div>
+                                <div class="control-md">
+                                    <input type="text" id="txtGroupCode" value="" disabled="disabled" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    <label class="required">@PIM_Resources.LabelDisplayOrder</label>
+                                </div>
+                                <div class="control-md">
+                                    <input type="text" value="" id="txtDisplayOrder" name="txtDisplayOrder">
+                                    <span class="error-msg field-validation-valid" data-valmsg-for="txtDisplayOrder" id="errorSpamtxtDisplayOrder"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type='hidden' id="hdnGroupCodeId" name='hdnGroupCodeId' value='' />
+                    </div>
+                </div>
+                <div class="modal-footer right">
+                    <div class="pull-right">
+                        <button type="button" id="btn-cancel-popup" class="btn-text-icon pull-left" data-dismiss="modal"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                        <button type="button" id="btnSubmitModel" class="btn-text btn-text-secondary margin-left-10" onclick="GlobalAttributeEntity.prototype.UpdateDisplayOrder()">@Admin_Resources.ButtonSave</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

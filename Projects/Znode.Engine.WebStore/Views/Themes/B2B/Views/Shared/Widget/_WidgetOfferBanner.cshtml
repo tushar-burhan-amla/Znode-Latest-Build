@@ -1,0 +1,7 @@
+﻿@model WidgetParameter
+@{
+    string divId = $"home-offer-slider-area_{Model.WidgetKey}";
+}
+<div id="@divId" class="home-offer-slider-area">
+    @Html.OfferBannerControl("_OfferBanner", Model)
+</div>

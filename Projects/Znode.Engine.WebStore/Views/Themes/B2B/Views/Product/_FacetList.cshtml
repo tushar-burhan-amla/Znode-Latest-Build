@@ -1,0 +1,30 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model SearchResultViewModel
+
+<div class="facets-content-area">
+    <div class="panel-group">
+        <div class="product-grid">
+            @if (Model?.AssociatedCategoryList?.Count > 0)
+            {
+                @Html.Partial("../Search/_SearchResultCategoryList", Model)
+            }
+            @if (Model?.Categories?.Count > 0)
+            {
+                @Html.Partial("../Search/_SearchCategoryList", Model)
+            }
+            <div id="filteraddedList" style="display:none;">
+                @if (Model?.FacetFilters?.Count > 0)
+                {
+                    @Html.Partial("../Search/_FilterAddedList", Model)
+                }
+            </div>
+            @Html.Partial("../Search/_Facet", Model)
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#facetFilters").html($("#filteraddedList").html());
+    })
+</script>

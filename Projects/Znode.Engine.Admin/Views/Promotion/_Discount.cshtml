@@ -1,0 +1,149 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Libraries.ECommerce.Utilities;
+@model PromotionViewModel
+@{
+    string displaySetting = Model.ShowAllStoreCheckbox ? "" : "display:none;";
+}
+
+<div class="col-sm-12 nopadding margin-bottom-25" id="discount">
+
+    <div class="form-group" id="promotiontype-content">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.PromotionTypeId, new { @class = "required", @data_test_selector = "lblPromotionType" })
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(model => model.PromotionTypeId, Model.PromotionTypeList, "Select Discount Type", new { @id = "ddlPromotionType", @onchange = "Promotion.prototype.SetPromotionDiscountType();", @data_test_selector = "drpPromotionType" })
+                @Html.ValidationMessageFor(model => model.PromotionTypeId, "", new { @id = "valPromotioType", @data_test_selector = "valPromotionType" })
+                @Html.HiddenFor(model => model.PromotionTypeName, new { @id = "hdnPromotionTypeName" })
+            </div>
+        </div>
+    </div>
+
+    <div id="store-content">
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.PortalId, new { @class = "required" , @data_test_selector = "lblPortalId" })
+                </div>
+                @if (Model.PortalId <= 0)
+                {
+                    <div class="control-md">
+                        <label>
+                            @if (Model.PromotionId > 0)
+                            {
+                                <input id="AllStoreId" name="AllStoreId" checked="checked" type="checkbox" value="true" disabled="disabled" onchange="Promotion.prototype.ShowStoreTextBox()" data-test-selector="chkAllStoreId">
+                            }
+                            else
+                            {
+                                <input id="AllStoreId" name="AllStoreId" type="checkbox" value="true" onchange="Promotion.prototype.ShowStoreTextBox()" data-test-selector="chkAllStoreId">
+                            }
+                            <span class="lbl padding-8" for="AllStoreId" data-test-selector="spnAllStoreId">@Admin_Resources.SelectAllStoreDescription</span>
+                            <input name="IsActive" type="hidden" value="false">
+                        </label>
+                    </div>
+                }
+
+                @if (Model.PromotionId == 0)
+                {
+                    <div class="col-sm-12 nopadding" id="divSingleStore">
+                        <div class="control-md control-non">
+                            @Html.FastSelectFor(m => m.StoreName, m => m.PortalId, "GetSuggestions", "Typeahead", "Promotion.prototype.OnSelectStoreDataBind", 1, true,
+                                     new {
+                                         htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStoreName" },
+                                         parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString()}
+                                     })
+
+                            @Html.ValidationMessageFor(model => model.StoreName, null, new { id = "errorRequiredStore", @data_test_selector = "valStoreName" })
+                        </div>
+                        <div>
+                            @Html.Partial("_HelpText", @Admin_Resources.HelptextPromotionStore)
+                        </div>
+                    </div>
+                }
+                else if (Model.PromotionId > 0 && Model.PortalId > 0)
+                {
+                    <div id="storeId" class="control-md">
+                        @Html.TextBoxFor(m => m.StoreName, new { @disabled = "disabled", @class = "readonly", @placeholder = Admin_Resources.LabelSelectStore, @id = "txtPortalName" , @data_test_selector = "txtStoreName" })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group" id="profile-content">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.ProfileIds, new { @class = "required", @data_test_selector = "lblProfileId" })
+            </div>
+            <div class="all-profiles" data-test-selector="divAllProfiles">
+                <label>
+                    <input data-test-selector="chk@(Admin_Resources.LabelAllProfiles.Replace(" ", ""))" id="AllProfilesCheck" @((Model.ProfileIds.Count > 0 && Model.ProfileIds[0].Value == 0) ? "checked" : "")  name="ProfileIds" value="0" type="checkbox" onchange="Promotion.prototype.ShowHideProfileList(this);">
+                    <span class="lbl padding-8">@Admin_Resources.LabelAllProfiles</span>
+                    <input name="IsActive" type="hidden" value="false">
+                </label>
+            </div>
+            <div class="profilelist" data-test-selector="divProfileList">
+                <div class="control-md control-non">
+                    @Html.ListBoxFor(model => model.ProfileIds, Model.ProfileList, new { @id = "ddlProfile", @placeholder = Admin_Resources.SelectProfile, @data_test_selector = "drpProfileId", @Value = ((Model.ProfileIds?.Count > 0) ? Model.ProfileList : null) })
+                    @Html.ValidationMessageFor(model => model.ProfileIds, "", new { @Id = "valProfile", @data_test_selector = "valProfileId" })
+                </div>
+                @Html.Partial("_HelpText", @Admin_Resources.HelptextPromotionProfile)
+            </div>
+        </div>
+    </div>
+
+    <div id="Promotion-attribute">
+    </div>
+
+    <input type="hidden" id="hdnPriceRoundOffRegex" value="@HelperMethods.GetRegexForDefaultRoundOffValForPrice()" data-test-selector="txtPriceRoundOffRegex">
+    <input type="hidden" id="hdnInventoryRoundOffRegex" value="@HelperMethods.GetRegexForDefaultRoundOffValForInventory()" data-test-selector="txtInventoryRoundOffRegex">
+    <input type="hidden" id="hdnIsReferalProduct" data-test-selector="txtIsReferalProduct" />
+    <input type="hidden" id="hdnDiscountFormatErrorMessage" value="@HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorDiscountAmountRoundOffFormat,Admin_Resources.ErrorDiscountAmountFormat)" data-test-selector="txtDiscountFormatErrorMessage"/>
+    <input type="hidden" id="hdnMinimumQuantityFormatErrorMessage" value="@HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorMinimumQuantityRoundoffFormat,Admin_Resources.ErrorMinimumQuantityFormat)" data-test-selector="txtMinimumQuantityFormatErrorMessage"/>
+    <input type="hidden" id="hdnOrderMinimumFormatErrorMessage" value="@HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorMinimumOrderAmountRoundoffFormat,Admin_Resources.ErrorMinimumOrderAmountFormat)" data-test-selector="txtOrderMinimumFormatErrorMessage"/>
+
+    @Html.Partial("~/Views/Promotion/_PromotionAttributeValues.cshtml", Model)
+</div>
+<div id="appendDiv" class="media-upload-panel">
+</div>
+<div id="divProductListPopup" class="media-upload-panel">
+</div>
+
+<div id="btn-find-product" style="display:none">
+    <button type="button" class="btn-text btn-text-secondary browse btn-margin-left" onclick="Promotion.prototype.FindProductsForPromotion(@Model.PromotionId);" data-test-selector="btnFindProductsForPromotion">@Admin_Resources.ButtonFindProduct</button>
+    @Html.Partial("_HelpText", @Admin_Resources.HelptextPromotionProduct)
+</div>
+
+<div id="btn-required-product" style="display:none">
+    <button type="button" class="btn-text browse btn-text-secondary btn-margin-left" onclick="Promotion.prototype.FindRequiredProductsForPromotion(@Model.PromotionId);" data-test-selector="btnFindRequiredProductsForPromotion">@Admin_Resources.ButtonFindProduct</button>
+    @Html.Partial("_HelpText", @Admin_Resources.HelptextPromotionRequiredProduct)
+</div>
+
+<div id="btn-find-category" style="display:none">
+    <button type="button" class="btn-text btn-text-secondary browse btn-margin-left" onclick="Promotion.prototype.FindCategoryForPromotion(@Model.PromotionId);" data-test-selector="btnFindCategoryForPromotion">@Admin_Resources.LabelFindCategories</button>
+    @Html.Partial("_HelpText", @Admin_Resources.HelptextPromotionCategory)
+</div>
+
+<div id="btn-find-catelog" style="display:none">
+    <button type="button" class="btn-text btn-text-secondary browse btn-margin-left" onclick="Promotion.prototype.FindCatalogForPromotion(@Model.PromotionId);" data-test-selector="btnFindCatalogForPromotion">@Admin_Resources.LabelFindCatalogs</button>
+    @Html.Partial("_HelpText", @Admin_Resources.HelptextPromotionCatelog)
+</div>
+
+<div id="btn-find-brand" style="display:none">
+    <button type="button" class="btn-text btn-text-secondary browse btn-margin-left" onclick="Promotion.prototype.FindBrandForPromotion(@Model.PromotionId);" data-test-selector="btnFindBrandForPromotion">@Admin_Resources.LabelFindBrands</button>
+    @Html.Partial("_HelpText", @Admin_Resources.HelptextPromotionBrand)
+</div>
+
+<div id="btn-find-shipping" style="display:none">
+    <button type="button" class="btn-text btn-text-secondary browse btn-margin-left" onclick="Promotion.prototype.FindShippingForPromotion(@Model.PromotionId);" data-test-selector="btnFindShippingForPromotion">@Admin_Resources.LabelShipping</button>
+    @Html.Partial("_HelpText", @Admin_Resources.HelptextPromotionShipping)
+</div>
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#ddlProfile').fastselect();
+        Promotion.prototype.ShowHideProfileList(document.getElementById('AllProfilesCheck'));
+    });
+</script>

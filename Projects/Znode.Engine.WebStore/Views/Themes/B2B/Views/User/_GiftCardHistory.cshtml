@@ -1,0 +1,37 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model IEnumerable<GiftCardHistoryViewModel>
+@if (Model.Any())
+{
+    foreach (var items in Model)
+    {
+        <div class="col-12 account-recent-orders">
+            <div class="row">
+                <div class="col-12 col-lg-6 col-xl-3 p-0 recent-order-date">
+                    <div class="b2b-recent-order-title" data-test-selector="divTitleOrderNumber">@WebStore_Resources.TitleOrderNumber</div>
+                    <div class="b2b-recent-order-detail" data-test-selector="divOrderNumber">@items.OrderNumber</div>
+                </div>
+                <div class="col-12 col-lg-6 col-xl-3 p-0 recent-order-date">
+                    <div class="b2b-recent-order-title" data-test-selector="divTitleGiftCardNumber">@WebStore_Resources.TitleGiftCardNumber</div>
+                    <div class="b2b-recent-order-detail" data-test-selector="divGiftCardNumber">@items.GiftCardNumber</div>
+                </div>
+                <div class="col-12 col-lg-6 col-xl-3 p-0 recent-order-date">
+                    <div class="b2b-recent-order-title" data-test-selector="divTitleTransactionDate">@WebStore_Resources.TitleTransactionDate</div>
+                    <div class="b2b-recent-order-detail" data-test-selector="divTransactionDate">@items.TransactionDate.ToDateTimeFormat()</div>
+                </div>
+                <div class="col-12 col-lg-6 col-xl-3 p-0 recent-order-date">
+                    <div class="b2b-recent-order-title" data-test-selector="divTitleTransactionAmount">@WebStore_Resources.TitleTransactionAmount</div>
+                    <div class="b2b-recent-order-detail" data-test-selector="divTransactionAmount">@Helper.FormatPriceWithCurrency(items.TransactionAmount, items.CultureCode)</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 text-right d-block b2b-order-history">
+            <a href="/User/OrderReceipt?OmsOrderId=@items.OrderId" class="btn btn-primary" data-test-selector="linkGiftCardView">@WebStore_Resources.TextView</a>
+        </div>
+    }
+}
+else
+{
+    <div class="col-12 p-4">
+        <p>@WebStore_Resources.MessageNoItem</p>
+    </div>
+}

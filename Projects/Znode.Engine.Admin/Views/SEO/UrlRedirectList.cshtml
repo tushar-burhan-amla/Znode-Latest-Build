@@ -1,0 +1,42 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@model UrlRedirectListViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<!--Main Container-->
+<div id="urlRedirect">
+    <div class="col-sm-12 title-container">
+        <h1>@Admin_Resources.Label301UrlRedirect</h1>
+        <div class="pull-right btn-container">
+            @Html.AuthorizedPrototypeRawActionLink("<em data-test-selector='linkAddNew'></em>" + Admin_Resources.ButtonAdd, "CreateUrlRedirect", @controllerName, "btn-text btn-text-secondary", "SEO.prototype.CreateUrlRedirect()")
+        </div>
+    </div>
+    <section class="col-sm-12 page-container">
+        <div class="margin-bottom">
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.PortalId,new { @data_test_selector="lblStore"})
+                    </div>
+                    <div class="control-md">
+                        @Html.FastSelectFor(model => model.StoreName, model => model.PortalId, "GetSuggestions", "Typeahead", "SEO.prototype.OnSelectPortalResult", 1, true,
+                       new
+                       {
+                           htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStoreName" },
+                           parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                       })                    
+                        @CustomHtmlHelper.HiddenField(Convert.ToString(Model.StoreName), "hdnPortalId", "hidden", Convert.ToString(Model.PortalId))
+                    </div>                  
+                </div>
+            </div>
+        </div>
+        <div id="urlRedirectList">
+            @Html.Partial("_urlRedirectList", Model)
+        </div>
+    </section>
+</div>
+<div id="divStoreListAsidePanel" class="aside-popup-panel modal-dialog modal-lg"></div>

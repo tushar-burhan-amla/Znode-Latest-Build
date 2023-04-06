@@ -1,0 +1,12 @@
+﻿<aside>
+    <button id="slide-menu" class="slide-menu-btn" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">        
+        <ul class="aside-panel">
+            <li>
+                @Ajax.AuthorizedRawActionLink(@Admin_Resources.LabelGeneral,
+                "ManageUser", "User", new { userId = Model.UserId },
+               new AjaxOptions { UpdateTargetId = "UserData", InsertionMode = InsertionMode.Replace, OnSuccess = "ZnodeBase.prototype.activeAsidePannelAjax(this);" })
+            </li>          
+        </ul>
+    </div>
+</aside>

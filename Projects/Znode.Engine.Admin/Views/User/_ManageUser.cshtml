@@ -1,0 +1,88 @@
+﻿@model Znode.Engine.Admin.ViewModels.UsersViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront; ;
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+
+<div class="col-sm-12 box-container nopadding">
+    <h3 class="section-heading">@Admin_Resources.ManageGeneralInformation</h3>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.UserName)
+            </div>
+            <div class="control-md">
+                <input type="text" value="@Model.UserName" disabled="disabled" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.UserId)
+            </div>
+            <div class="control-md">
+                <input type="text" value="@Model.UserId" disabled="disabled" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.RoleList)
+            </div>
+            <div class="control-md">
+                @Html.HiddenFor(x => x.RoleName)
+                @Html.DropDownListFor(model => model.RoleId, Model.RoleList, new { @id = "rolelist", disabled = "disabled" })
+            </div>
+        </div>
+    </div>
+
+    <h3 class="section-heading">@Admin_Resources.ManageContactInformation</h3>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.Email)
+            </div>
+            <div class="control-md">
+                <input type="text" value="@Model.Email" disabled="disabled" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.FirstName)
+            </div>
+            <div class="control-md">
+                <input type="text" value="@Model.FirstName" disabled="disabled" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.LastName)
+            </div>
+            <div class="control-md">
+                <input type="text" value="@Model.LastName" disabled="disabled" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.PhoneNumber)
+            </div>
+            <div class="control-md">
+                <input type="text" value="@Model.PhoneNumber" disabled="disabled" />
+            </div>
+        </div>
+    </div>
+</div>

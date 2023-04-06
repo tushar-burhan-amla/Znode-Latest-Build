@@ -1,0 +1,102 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CartViewModel
+<div class="col-sm-12 nopadding cart-promocode margin-bottom">
+    <div class="form-group">
+        <div class="control-label"><label data-test-selector="lblCouponCode">@Admin_Resources.LabelEnterCouponCode</label></div>
+        @if (!Equals(Model.Coupons, null) && Model.Coupons.Count > 0)
+        {
+            <div class="control-sm"><input type="text" id="promocode" name="Coupon" class="form-input" size="40" value="" maxlength="100" data-test-selector="txtCouponCode" /></div>
+            <div class="pull-left"><button type="button" class="btn-text btn-text-secondary margin-left-10 btn-apply" id="btnApplyCoupon" onclick="Order.prototype.ApplyPromoCode(true);" data-test-selector="btnApplyCouponCode"><em class="z-ok"></em></button></div>
+            <div id="couponContainer" class="control-non control-lg success-msg" data-test-selector="divCouponCodeStatus">
+                @foreach (var item in Model.Coupons)
+                {
+                    if (item.IsExistInOrder)
+                    {
+                        <p class="green-color"><strong>@item.Code</strong> - @item.PromotionMessage</p>
+                    }
+                    else
+                    {
+                        <div><p class="green-color"><a href="#" class="z-close dirtyignore" onclick="Order.prototype.RemoveCoupon('@item.Code')"></a><strong>  @item.Code</strong>  - @item.PromotionMessage</p></div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <div class="control-sm">
+                <input type="text" id="promocode" name="Coupon" class="form-input" size="40" maxlength="100" data-test-selector="txtCouponCode" />
+            </div>
+            <div class="pull-left">
+                <button type="button" class="btn-text btn-text-secondary margin-left-10 btn-apply" id="btnApplyCoupon" onclick="Order.prototype.ApplyPromoCode(true);" data-test-selector="btnApplyCouponCode">
+                    <em class="z-ok"></em>
+                </button>
+            </div>
+            <div id="couponContainer" class="control-non control-lg success-msg" data-test-selector="divCouponCodeStatus"></div>
+        }
+    </div>
+</div>
+
+<div class="col-sm-12 nopadding giftcard-applyagain form">
+    <div class="form-group">
+        <div class="control-label"><label data-test-selector="lblGiftCardNumber">@Admin_Resources.LabelVoucher</label></div>
+        <div class="control-sm"><input type="text" id="txtgiftcard" name="giftcard" class="form-input" maxlength="100" data-test-selector="txtGiftCardNumber" /></div>
+        <div class="pull-left"><button type="button" class="btn-text btn-text-secondary margin-left-10 btn-apply" id="giftcard-apply" onclick="Order.prototype.ApplyVoucher();" data-test-selector="btnApplyGiftCard"> <em class="z-ok"></em></button></div>
+        <span id="RequiredgiftCardErrorMessage" class="control-non control-lg success-msg"></span>
+        <div id="giftCardMessageContainer" class="col-xs-12 nopadding padding-top">
+            @if (Model.Vouchers?.Count > 0)
+            {
+                foreach (var item in Model.Vouchers)
+                {
+                    <div id="voucherContainer" class="control-non" data-test-selector="divVoucherCodeStatus">
+                        @if (item.IsVoucherApplied)
+                        {
+                        <p style="font-size: 11px;">
+                            @if (item.IsExistInOrder == false)
+                            {
+                                <a class='z-close dirtyignore' onclick="Order.prototype.RemoveVoucher('@item.VoucherNumber');"></a>
+                            }
+                                <strong class="success-msg">
+                                    @if (item.IsExistInOrder == false)
+                                    {
+                                        @item.VoucherAmountUsed
+                                    }
+                                    else
+                                    {
+                                        @item.OrderVoucherAmount
+                                    }
+                                </strong>
+                            @item.VoucherName (Expires: @item.ExpirationDate) <strong>@item.VoucherNumber</strong>
+                        </p>
+                        }
+                        else
+                        {
+                        <p class="error-msg">
+                            @if (item.IsExistInOrder == false)
+                            {
+                                <a class='zf-close' onclick="Order.prototype.RemoveVoucher('@item.VoucherNumber');"></a>
+                            }
+                            @item.VoucherMessage
+                        </p>
+                        }
+
+                    </div>
+
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div id="divTaxExemptContainer" class="col-sm-12 nopadding cart-promocode" style="display:none;">
+    <div class="form-group">
+        <div>
+            <div id="containerTaxExempt" style="">
+                <label>
+                    <input data-val="true" id="chkTaxExempt" onclick="Order.prototype.OnTaxExemptChecked();" value="true" type="checkbox" data-test-selector="chkApplyTaxExempt">
+                    <span id="messageTaxExcempt" class="lbl padding-8" data-test-selector="spnApplyTaxExempt">Tax Exempt</span>
+                    <input name="chkTaxExempt" value="false" type="hidden">
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

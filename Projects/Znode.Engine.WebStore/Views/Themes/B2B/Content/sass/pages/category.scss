@@ -1,0 +1,53 @@
+﻿//  Used on Category List page, Product list page and PDP page.
+.b2b-instore-pickup{background-color:$base-primary-light;color:$white;font-size:$base-font-size + 6;
+    a{padding-left:25px;font-size:$base-font-size;color:$white;}
+}
+//  Used on Category List page, Product list page and PDP page.
+.b2b-breadcrumbs{padding:10px 0;color:$base-tertiary-light;text-transform:uppercase;letter-spacing:1.25px;border:1px solid $border-primary;font-size:12px;
+    a{color:$base-tertiary-light;
+        &.home-icon{font-size:$base-font-size;}
+        &:hover{color:$base-primary-light;}
+    }
+}
+.b2b-category-list .category-img-list a .img-container {
+    height: 180px;
+    min-width:180px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    box-shadow: $box-shadow;
+    border-radius: $primary-radius;
+
+
+    &:hover {
+        box-shadow: $box-shadow;
+    }
+
+    img {
+        padding: 0px;
+        box-shadow: none;
+        
+    }
+}
+
+ .b2b-brand-list, .b2b-checkout-page, .b2b-product-view-details, .b2b-thanks-page, .b2b-quote-page {
+    box-shadow:$dividing-shadow;-moz-box-shadow:$dividing-shadow;-webkit-box-shadow:$dividing-shadow;}
+.b2b-products-list{border:1px solid $border-primary;}
+//Used on Catelogy list page for displaying inventory details of each product.
+.product-inventory{background-color: #FAFAFA;padding-left:5px;
+         .error-msg{font-size:12px;}
+}
+.product-inventory-title{color: $inventory-product-title;font-family: Roboto-Medium;font-size: 12px;font-weight: 500;letter-spacing: 0.11px;line-height: 24px;}
+.product-inventory-count{display:inline-block;float:left;color: $inventory-product-count;font-family: Roboto-Medium;font-size: 12px;letter-spacing: 0.11px;line-height: 24px;margin-right:7px;}
+.product-inventory-location{display:inline-block;color:$inventory-product-count;font-family: Roboto-Medium;font-size: 12px;letter-spacing: 0.11px;line-height: 24px;}
+
+@include screensize(x-small){
+    #layout-category .offer-banner .owl-item{padding:35px 10px;}
+}
+
+@include screensize(xl-small){
+}
+
+@include screensize(small){
+    #layout-category .offer-banner .owl-item{padding:10px;}
+}

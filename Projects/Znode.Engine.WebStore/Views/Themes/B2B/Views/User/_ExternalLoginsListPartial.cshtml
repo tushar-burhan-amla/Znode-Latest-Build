@@ -1,0 +1,27 @@
+﻿@using Microsoft.Owin.Security
+
+@{
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+    if (loginProviders.Count() > 0)
+    {
+        using (Html.BeginForm("ExternalLogin", "User", new { ReturnUrl = "/checkout" }))
+        {
+            <div class="col-12 social p-0">
+                <div class="oval-seprator img-circle text-center mb-2 font-weight-bold">@WebStore_Resources.TextOR</div>      
+                <section id="socialLoginForm">
+                    @Html.AntiForgeryToken()
+                    <div id="socialLoginList">
+                        <div class="col-12 p-0">
+                            <div class="text-center">
+                                @foreach (AuthenticationDescription p in loginProviders)
+                                {
+                                <button type="submit" class="btn btn-primary social-login @p.AuthenticationType-btn" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account"><i class="zf-@p.AuthenticationType"></i>@WebStore_Resources.TextLoginInWith @p.AuthenticationType</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        }
+    }
+}

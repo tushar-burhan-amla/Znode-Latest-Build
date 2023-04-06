@@ -1,0 +1,73 @@
+﻿@model  Znode.Engine.WebStore.Models.GridModel
+@using Znode.Engine.WebStore.Helpers
+
+
+@if (Model.FilterColumn.ToolMenuList?.Count > 0)
+{
+    <div class="pull-right">
+        <div class="dropdown-tool padding-left" id="poptreeview">
+            <a href="#" class="btn-dropdown dropdown-toggle" data-toggle="dropdown">
+                <i class="z-setting"></i>&nbsp;<span>@Admin_Resources.LabelTool</span><i class="zf-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-right dropdown-list-ul">
+                @foreach (var item in Model.FilterColumn.ToolMenuList)
+                {
+                    <li>
+                        <a @(string.IsNullOrEmpty(item.ControlId) ? "" : "id=" + item.ControlId ) href="@(string.IsNullOrEmpty(item.Url) ? "#" : item.Url)" @(string.IsNullOrEmpty(item.DataToggleModel) ? "" : "data-toggle=" + item.DataToggleModel ) @(string.IsNullOrEmpty(item.DataTarget) ? "" : "data-target=" + item.DataTarget ) @(string.IsNullOrEmpty(item.JSFunctionName) ? "" : "onclick=" + item.JSFunctionName ) @(!Equals(item.DataDisable, null) ? (item.DataDisable == true ? "data-enable=" + item.DataDisable : "data-disable=" + item.DataDisable) : "" )>@item.DisplayText</a>
+                    </li>
+                }
+
+            </ul>
+        </div>
+    </div>
+}
+<div class="pull-right">
+    @Html.Partial("~/Views/DynamicGrid/_GridViewType.cshtml")
+</div>
+<div>
+    @if (Model?.DataTableToList?.Count > 0)
+    {
+        if (!string.IsNullOrEmpty(Model.SubRecordFilterKeyName) && !string.IsNullOrEmpty(Model.DelegateTypeName) && !string.IsNullOrEmpty(Model.DelegateTypeMethodName))
+        {
+            Model.WebGridColumn.Add(new WebGridColumn()
+            {
+                Format = (item) =>
+                {
+                    WebGrid subGrid = new WebGrid(source: FilterHelpers.GetSubRecords(item, Model.SubRecordFilterKeyName, Model.DelegateTypeName, Model.DelegateTypeMethodName), canSort: false);
+                    return subGrid.GetHtml(
+                        htmlAttributes: new { id = "subT", @style = "width:50%;" },
+                        columns: subGrid.Columns(
+                        subGrid.Column("Text", header: "", format: (item1) => new HtmlString(item1.Text))
+                        ));
+                }
+            });
+        }
+
+        WebGrid grid = new WebGrid(rowsPerPage: Model.RowPerPageCount, ajaxUpdateContainerId: "grid-container",
+            ajaxUpdateCallback: "DynamicGrid.prototype.SetSortOrder");
+        grid.Bind(source: Model.DataTableToList,
+            rowCount: Model.TotalRecordCount, autoSortAndPage: false);
+        grid.SortDirection = Model.GridSortDirection;
+        grid.SortColumn = Model.GridSortColumn;
+
+        <div class="col-xs-12 nopadding">
+            <div class="table-responsive tile-view nopadding">
+                @Html.RenderBlock(HttpUtility.HtmlDecode(grid.Table(
+                     htmlAttributes: new { id = "grid", @class = "table123" },
+                     headerStyle: "grid-header",
+                     columns: Model.WebGridColumn).ToHtmlString()))
+            </div>
+        </div>
+            <div class="col-xs-12 nopadding">
+                @grid.CustomPager(Html)
+                @Html.Hidden("dir", grid.SortDirection) @Html.Hidden("col", grid.SortColumn)
+            </div>
+    }
+    else
+    {
+        <div class="col-xs-12 no-record nopadding">
+            <p>@Admin_Resources.NoRecordFoundText</p>
+        </div>
+    }
+    @Html.HiddenFor(m=>m.ViewMode)
+</div>

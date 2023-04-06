@@ -1,0 +1,105 @@
+﻿@model Znode.Engine.Admin.ViewModels.RMAConfigurationViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmRMAConfiguration" };
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+}
+<div id="grid-container">
+    <div class="col-sm-12  title-container">
+        <h1>@Admin_Resources.HeaderRMAConfiguration</h1>
+        <div class="pull-right btn-container">
+            <button id="dvSave" type="button" data-test-selector="btnSave" class=" btn-text btn-text-secondary" onclick="SaveCancel.prototype.SubmitForm('frmRMAConfiguration')">@Admin_Resources.ButtonSave</button>
+        </div>
+    </div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmRMAConfiguration" }))
+        {
+            <div id="loginForm">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.MaxDays, new { @class = "required", @data_test_selector = "lblMaxDays" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.MaxDays, new { maxlength = 5, @data_test_selector = "txtMaxDays" })
+                            @Html.ValidationMessageFor(model => model.MaxDays, "", new { @data_test_selector = "valMaxDays" })
+                        </div>
+                        @Html.Partial("_HelpText", Admin_Resources.HelpTextRMAMaxDays)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.IsEmailNotification, new { @data_test_selector = "lblEmailNotification" })
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.IsEmailNotification, new List<SelectListItem>
+                                            {
+                                                new SelectListItem{Text = Admin_Resources.TextYes,Value = AdminConstants.True},
+                                                new SelectListItem{Text = Admin_Resources.TextNo,Value = AdminConstants.False}
+                                            }, new { @data_test_selector = "drpEmailNotification" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.DisplayName, new { @data_test_selector = "lblDisplayName" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.DisplayName, new { @data_test_selector = "txtDisplayName" })
+                            @Html.ValidationMessageFor(model => model.DisplayName, "", new { @data_test_selector = "valDisplayName" })
+                        </div>
+                        <div></div>
+                        @Html.Partial("_HelpText", Admin_Resources.PopUpRMAReturnsDepartment)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.Email, new { @data_test_selector = "lblEmail" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.Email, new { @data_test_selector = "txtEmail" })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @data_test_selector = "valEmail" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.Address, new { @data_test_selector = "lblAddress" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.Address, new { @data_test_selector = "txtAddress" })
+                            @Html.ValidationMessageFor(model => model.Address, "", new { @data_test_selector = "valAddress" })
+                        </div>
+                        @Html.Partial("_HelpText", Admin_Resources.PopUpRMAMailingAddress)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.ShippingDirections, new { @data_test_selector = "lblShippingDirections" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextAreaFor(model => model.ShippingDirections, new { @rows = "5", @data_test_selector = "txtShippingDirections" })
+                        </div>
+                        @Html.Partial("_HelpText", Admin_Resources.PopUpRMAShippingInstructions)
+                    </div>
+                </div>
+                @Html.HiddenFor(model => model.RmaConfigurationId)
+                @Html.HiddenFor(model => model.GcExpirationPeriod)
+                @Html.HiddenFor(model => model.GcNotification)
+            </div>
+        }
+    </section>
+</div>

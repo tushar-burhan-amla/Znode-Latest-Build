@@ -1,0 +1,68 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model SEODetailsViewModel
+@using Znode.Engine.Admin.Helpers
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(Admin_Resources.LabelName, Admin_Resources.LabelName, new {@data_test_selector = "lblName" })
+        </div>
+        <div class="control-md">
+            @Html.TextBox("name", Model.ItemName, new { @readonly = "readonly", @data_test_selector = "txtName"  })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(model => model.SEOTitle, new { @data_test_selector = "lblSEOTitle" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.SEOTitle, new { @data_test_selector = "txtSEOTitle" })
+            @Html.ValidationMessageFor(model => model.SEOTitle, "", new { @data_test_selector = "valSEOTitle" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(model => model.SEODescription, new { @data_test_selector = "lblSEODescription" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.SEODescription, new { @data_test_selector = "txtSEODescription" })
+            @Html.ValidationMessageFor(model => model.SEODescription, "", new { @data_test_selector = "valSEODescription" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(model => model.SEOKeywords, new { @data_test_selector = "lblSEOKeywords" })
+        </div>
+        <div class="control-md">
+            @Html.EditorFor(model => model.SEOKeywords, new { @data_test_selector = "txtSEOKeywords" })
+            @Html.ValidationMessageFor(model => model.SEOKeywords, "", new { @data_test_selector = "valSEOKeywords" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(model => model.SEOUrl, new { @data_test_selector = "lblSEOUrl" })
+        </div>
+        <div class="control-md">
+            @if (string.IsNullOrEmpty(Model.SEOUrl) || Model.LocaleId == (Convert.ToInt32(DefaultSettingHelper.DefaultLocale)))
+            {
+                @Html.TextBoxFor(model => model.SEOUrl, new { @id = "currentSeoUrl", @data_test_selector = "txtSEOUrl" })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => model.SEOUrl, new { @id = "currentSeoUrl", @readonly = "readonly", disabled = "disabled", @data_test_selector = "txtSEOUrl" })
+            }
+            @Html.ValidationMessageFor(model => model.SEOUrl, "", new { @data_test_selector = "lblSEOUrl" })
+        </div>
+        @Html.Partial("_HelpText", Admin_Resources.HelptextForSEOUrl)
+    </div>
+</div>
+@Html.HiddenFor(model => model.SEOUrl)
+@Html.HiddenFor(model => model.ItemName)
+@Html.HiddenFor(model => model.PortalId, new { @id = "hdnPortalId" })

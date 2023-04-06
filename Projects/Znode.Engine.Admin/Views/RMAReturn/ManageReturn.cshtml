@@ -1,0 +1,81 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@model RMAReturnViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { ControlId = "btnUpdateReturn", DataTestSelector = "linkSave", LinkType = LinkType.OnClick, LinkDisplayName = "Save Return", OnClick = "RMAReturn.prototype.OnConfirmSubmitReturn()" });
+    primaryPageAction.PageActions.Add(new PageAction { DataTestSelector = "linkPrint", HrefLink = "#", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.LabelPrint, OnClick = "RMAReturn.prototype.PrintReturnReceipt('" + @Model.ReturnNumber + "');" });
+}
+<div class="col-sm-12 title-container order-manage-title">
+    <h1>Return Order NO. @Model.ReturnNumber</h1>
+    <div class="pull-right btn-container d-flex">
+        <a href="javascript:void(0)" class="btn-text-icon dirtyignore" id="btnCancelReturn" onclick="RMAReturn.prototype.ConfirmCancelReturnPopUp();" data-test-selector="linkCancel"><em class='z-back'></em>@Admin_Resources.ButtonCancel</a>
+        @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    <div id="printContentDiv" class="order-manage-container order-page-details ">
+        <div class="col-sm-12 nopadding d-flex flex-wrap">
+            <div class="order-information">
+                <div id="returnInformation" data-test-selector="divReturnInformation" class="col-sm-12 nopadding d-flex h-100">
+                    @Html.Partial("_ManageReturnInformation", Model)
+                </div>
+            </div>
+            <div class="customer-information">
+                <div id="customerInformation" data-test-selector="divCustomerInformation" class="d-flex h-100">
+                    @Html.Partial("_ManageReturnCustomerInformation", Model)
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 nopadding panel panel-default productInfoPage margin-top-20">
+            <div id="returnLineItems" data-test-selector="divReturnLineItems">
+                @Html.Partial("ManageReturnLineItemList", Model)
+            </div>
+        </div>
+        <div class="col-sm-12 nopadding">
+            <div class="col-sm-12 nopadding panel panel-default productInfoPage margin-top-20">
+                <div id="returnHistory" data-test-selector="divOrderHistory">
+                    @Html.Partial("_ManageReturnHistory", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.ConfirmText,
+                        Description = @Admin_Resources.TextConfirmCancelReturn,
+                        ModalPopUpId = "PopUpConfirmCancelReturn",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "RMAReturn.prototype.ConfirmCancelReturn()" },
+                           }
+                    })
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                   new PopupModel()
+                                   {
+                                       Title = @Admin_Resources.ConfirmText,
+                                       Description = @Admin_Resources.TextConfirmSubmitReturn,
+                                       ModalPopUpId = "PopUpConfirmSubmitReturn",
+                                       Buttons = new List<PopUpButtonModel>() {
+                new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "RMAReturn.prototype.SaveOrderReturn()" },
+                                          }
+                                   })
+    </div>
+
+</section>
+<div id="AdditionalReturnNotes" class="aside-popup-panel modal-dialog modal-md">
+</div>
+@Html.HiddenFor(model => model.AdditionalReturnNotes)
+@Html.HiddenFor(model => model.ReturnNumber, new { @id = "hdnReturnNumber" })
+@Html.HiddenFor(model => model.OrderNumber, new { @id = "hdnOrderNumber" })
+@Html.HiddenFor(model => model.UserId, new { @id = "hdnUserId" })
+@Html.HiddenFor(model => model.PortalId, new { @id = "hdnPortalId" })
+@Html.HiddenFor(model => model.RMAOrderModel.PaymentType, new { @id = "hdnPaymentType" })
+@Html.HiddenFor(model => model.RMAOrderModel.PaymentStatus, new { @id = "hdnPaymentStatus" })
+@Html.HiddenFor(model => model.DiscountAmount, new { @id = "hdnDiscountAmount" })
+@Html.HiddenFor(model => model.CSRDiscount, new { @id = "hdnCSRDiscount" })

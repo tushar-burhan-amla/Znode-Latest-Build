@@ -1,0 +1,111 @@
+﻿@model Znode.Engine.Admin.ViewModels.CustomerListViewModel
+@using Znode.Engine.Admin.Models
+@using Znode.Libraries.Resources
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string accountName = string.IsNullOrEmpty(Model?.AccountName) ? @Admin_Resources.LabelAccount : Model?.AccountName;
+}
+
+<div id="@Model.GridModel.FrontObjectName">
+    <div class="col-sm-12 title-container">
+        <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.TitleAccount)<em class="z-minus"></em><span>@Model.AccountName</span></h1>
+        <div class="pull-right btn-container">
+            @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "List", "Account", null, new { @class = "btn-text-icon", @data_test_selector = "linkBack" })
+            <div class="pull-right padding-left">
+              @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonAssociateUser, "GetUnAssociatedCustomerList", "Account", new { @class = "btn-text btn-text-secondary", onclick = "ZnodeBase.prototype.BrowseAsidePoupPanel('/Account/GetUnAssociatedCustomerList?portalId=" + Model.PortalId + "&accountId=" + Model.AccountId + "','divAddCustomerAsidePanel')", @data_test_selector = "linkAssociateUser" })
+              @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonAdd, "CustomerCreate", "Account", new { @class = "btn-text btn-text-secondary margin-left-10", onclick = "ZnodeBase.prototype.BrowseAsidePoupPanel('/Account/CustomerCreate?accountId=" + Model.AccountId + "','divAddCustomerAsidePanel')", @data_test_selector = "linkAddNew" })
+            </div>
+        </div>
+    </div>
+    <div class="main-wrapper">
+        <!--Left Panel-->
+        @Html.Partial("~/views/Account/_asideaccountmanagepanel.cshtml")
+        <!--Main Container-->
+        <section class="main-container">
+            @using (Ajax.BeginForm(actionName, controllerName, new { accountId = Model.AccountId }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+            {
+                <div id="filterComponent">
+                    @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                </div>
+            }
+            <div class="col-sm-12 list-container">
+                @Html.HiddenFor(m => m.AccountId)
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderDelete,
+                        Description = @Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "DeleteCustomersPopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                         new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk,ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Account.prototype.DeleteMultipleAccountCustomer(this)" },
+                        }
+                    })
+
+                @Html.Hidden("hdnEnableDisableActionURL")
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.ConfirmText,
+
+                        Description = @Admin_Resources.LockMultipleAccountConfirmationMessage,
+                        ModalPopUpId = "PopUpConfirmDisable",
+                        Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "DynamicGrid.prototype.RedirectToEnableDisable()" } }
+                    })
+
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                        new PopupModel()
+                        {
+                            Title = @Admin_Resources.ConfirmText,
+                            Description = @Admin_Resources.UnlockMultipleAccountConfirmationMessage,
+                            ModalPopUpId = "PopUpConfirmEnable",
+                            Buttons = new List<PopUpButtonModel>
+                            () { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "DynamicGrid.prototype.RedirectToEnableDisable()" } }
+                        })
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                            new PopupModel()
+                            {
+                                Title = @Admin_Resources.ConfirmText,
+                                Description = @Admin_Resources.UnlockMultipleAccountConfirmationMessage,
+                                ModalPopUpId = "accountEnable",
+                                Buttons = new List<PopUpButtonModel>
+                                () {
+                                new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Account.prototype.EnableCustomerAccount()"}
+                                }
+                            })
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                new PopupModel()
+                                {
+                                    Title = @Admin_Resources.ConfirmText,
+                                    Description = @Admin_Resources.LockMultipleAccountConfirmationMessage,
+                                    ModalPopUpId = "accountdisable",
+                                    Buttons = new List<PopUpButtonModel>
+                                    () {
+                                    new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Account.prototype.DisableCustomerAccount()"}
+                                    }
+                                })
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                new PopupModel()
+                                {
+                                    Title = @Admin_Resources.ResetPasswordButtonText,
+                                    Description = @Admin_Resources.TextConformResetPassword,
+                                    ModalPopUpId = "accountresetpassword",
+                                    Buttons = new List<PopUpButtonModel>() {
+                                    new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Account.prototype.CustomerResetPassword()"}
+                                    }
+                                })
+                @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+            </div>
+        </section>
+    </div>
+    <div></div>
+</div>
+<div id="divAddCustomerAsidePanel" class="aside-popup-panel modal-dialog modal-lg"></div>
+<script>
+    $(document).ready(function () {
+        $('.z-enable').attr('title', 'Enable');
+    });
+    Account.prototype.EditAccountCustomerList();
+</script>
+

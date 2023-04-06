@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A001D843-7AC0-456E-BBCA-23737091F804}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Znode.Libraries.ECommerce.ShoppingCart</RootNamespace>
+    <AssemblyName>Znode.Libraries.ECommerce.ShoppingCart</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Int|AnyCPU'">
+    <OutputPath>bin\Int\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'loadtest|AnyCPU'">
+    <OutputPath>bin\loadtest\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'automation|AnyCPU'">
+    <OutputPath>bin\automation\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'B2B|AnyCPU'">
+    <OutputPath>bin\B2B\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LB|AnyCPU'">
+    <OutputPath>bin\LB\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Znode.Libraries.Framework.Business.9.7.5\lib\net48\Znode.Libraries.Framework.Business.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Helpers\OrderInventoryManageHelper.cs" />
+    <Compile Include="IHelpers\IOrderInventoryManageHelper.cs" />
+    <Compile Include="Interface\IZnodePortalCart.cs" />
+    <Compile Include="Interface\IZnodeShoppingCart.cs" />
+    <Compile Include="Interface\IZnodeCheckout.cs" />
+    <Compile Include="Interface\IZnodeMultipleAddressCart.cs" />
+    <Compile Include="Interface\IZnodeOrderReceipt.cs" />
+    <Compile Include="Interface\IZnodeProductBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="V2\ZnodeShoppingCartV2.cs" />
+    <Compile Include="ZnodeCheckout.cs" />
+    <Compile Include="ZnodeMultipleAddressCart.cs" />
+    <Compile Include="ZnodeOrderReceipt.cs" />
+    <Compile Include="ZnodePortalCart.cs" />
+    <Compile Include="ZnodeProduct.cs" />
+    <Compile Include="ZnodeProductBase.cs" />
+    <Compile Include="ZnodeShoppingCart.cs" />
+    <Compile Include="ZnodeShoppingCartItem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.Api.Models\Znode.Engine.Api.Models.csproj">
+      <Project>{05a4b1d5-82d1-4e47-afd9-4b01ac5917bd}</Project>
+      <Name>Znode.Engine.Api.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.Exceptions\Znode.Engine.Exceptions.csproj">
+      <Project>{5DD35FD8-FEEB-46B2-87C5-97F05E80AA6B}</Project>
+      <Name>Znode.Engine.Exceptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.Promotions\Znode.Engine.Promotions.csproj">
+      <Project>{0b46a894-d427-4372-a4c3-c47cc2c7e036}</Project>
+      <Name>Znode.Engine.Promotions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.Shipping\Znode.Engine.Shipping.csproj">
+      <Project>{83a5062c-7698-4c4d-ae2f-df238b3da6ad}</Project>
+      <Name>Znode.Engine.Shipping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.Taxes\Znode.Engine.Taxes.csproj">
+      <Project>{90a36c0e-c961-4f6b-bb22-d6d11332c9f1}</Project>
+      <Name>Znode.Engine.Taxes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Libraries.Admin\Znode.Libraries.Admin.csproj">
+      <Project>{d24b86b3-2ca1-431d-afb5-e59c313283eb}</Project>
+      <Name>Znode.Libraries.Admin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Libraries.Data\Znode.Libraries.Data.csproj">
+      <Project>{786f7274-2f78-4282-b91c-978cb79fb2f3}</Project>
+      <Name>Znode.Libraries.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Libraries.ECommerce.Entities\Znode.Libraries.ECommerce.Entities.csproj">
+      <Project>{c0e80bd4-5d88-4b0b-9f2f-23d51c2f973a}</Project>
+      <Name>Znode.Libraries.ECommerce.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Libraries.ECommerce.Fulfillment\Znode.Libraries.ECommerce.Fulfillment.csproj">
+      <Project>{fd431f30-0aaa-41d6-ae55-bef6f2fea620}</Project>
+      <Name>Znode.Libraries.ECommerce.Fulfillment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Libraries.ECommerce.Utilities\Znode.Libraries.ECommerce.Utilities.csproj">
+      <Project>{f3703cce-eec4-46b0-a54f-83857d4014df}</Project>
+      <Name>Znode.Libraries.ECommerce.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZNode.Libraries.MongoDB.Data\Znode.Libraries.MongoDB.Data.csproj">
+      <Project>{5b6482f4-7b81-4d7c-a099-78237c8a55b3}</Project>
+      <Name>Znode.Libraries.MongoDB.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Libraries.Resources\Znode.Libraries.Resources.csproj">
+      <Project>{0461ba0d-6141-47d7-a78e-c166ff5a75f0}</Project>
+      <Name>Znode.Libraries.Resources</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

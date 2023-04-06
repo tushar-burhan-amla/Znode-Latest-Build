@@ -1,0 +1,32 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    ViewBag.Title = "Error";
+}
+@if (!(Model.Exception.Message == WebStoreConstants.ThemeMissing))
+{
+    <div class="container error-page">
+        <div class="col-sm-12 nopadding col-12 p-0 list-header clearfix">
+            <h1 class="text-center">Oops!</h1>
+            <h3 class="text-center">Something went wrong.</h3>
+        </div>
+        <div class="col-sm-12 nopadding col-12 p-0 list-sfs-holder">
+            <p class="text-center padding-top-bottom">An unexpected error has occurred. Please contact the system administrator.</p>
+            @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+            {
+                <div>
+                    <p>
+                        <b>Exception:</b> @Model.Exception.Message<br />
+                        <b>Controller:</b> @Model.ControllerName<br />
+                        <b>Action:</b> @Model.ActionName
+                    </p>
+                    @*<div style="overflow:scroll">
+                            <pre>
+                                 @Model.Exception.StackTrace
+                            </pre>
+                        </div>*@
+                </div>
+            }
+        </div>
+    </div>
+}
+

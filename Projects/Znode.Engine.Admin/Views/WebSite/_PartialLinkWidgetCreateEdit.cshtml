@@ -1,0 +1,87 @@
+﻿@model Znode.Engine.Admin.ViewModels.LinkWidgetConfigurationViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Libraries.ECommerce.Utilities;
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmLinkWidget" + Model.CMSWidgetTitleConfigurationId };
+    if (Equals(Model.CMSWidgetTitleConfigurationId, null))
+    {
+        Model.CMSWidgetTitleConfigurationId = 0;
+    }
+    string mediaPath = string.IsNullOrEmpty(Model?.Image) ? ZnodeAdminSettings.DefaultImagePath : Model?.Image;
+    int? mediaId = Model?.MediaId > 0 ? Model?.MediaId : 0;
+}
+
+@using (Ajax.BeginForm("CreateUpdateLinkWidgetConfiguration", controllerName, new AjaxOptions()
+{
+    HttpMethod = "post",
+    OnSuccess = "WebSite.prototype.LinkWidgetAddResult(data,this)",
+    InsertionMode = InsertionMode.Replace,
+
+}, new { id = "frmLinkWidget_" + Model.CMSWidgetTitleConfigurationId, @data_test_selector = "frmLinkWidget" }))
+{
+<div class="tr-div linkwidget-panel" data-test-selector="divPartialPage" id="PartialPage">
+    <div class="col-1">
+        <div class="upload-images" id="divMedia_@Model.CMSWidgetTitleConfigurationId">
+            <img data-test-selector="imgMedia" id="Media_@Model.CMSWidgetTitleConfigurationId" onclick="EditableText.prototype.BrowseMedia('Media_@Model.CMSWidgetTitleConfigurationId', 'False', 'True', 'True')" src="@mediaPath" alt="Upload Image" class="img-responsive disable-image">
+            <span class="change-image" id="spanChangeImage_@Model.CMSWidgetTitleConfigurationId" style="display : none" onclick="EditableText.prototype.BrowseMedia('Media_@Model.CMSWidgetTitleConfigurationId', 'False', 'True', 'True')">@Admin_Resources.LinkChange</span>
+            <input type="hidden" id="Media_@Model.CMSWidgetTitleConfigurationId" name="MediaId" value="@mediaId">
+            <input type='hidden' value=@AdminConstants.ImageExtensions Id='hdnMedia_@Model.CMSWidgetTitleConfigurationId' />
+            <a class="upload-images-close" id="uploadImageCloseId_@Model.CMSWidgetTitleConfigurationId" style="display : none" data-toggle="tooltip" data-placement="top" title="Remove" onclick="EditableText.prototype.RemoveImage('Media_@Model.CMSWidgetTitleConfigurationId')"></a>
+        </div>
+        <div id="UploadMediaId" class="appendMediaModel">
+        </div>
+    </div>
+    <div class="col-4">
+        @Html.TextBoxFor(m => m.Title, new { @id = "mediaTitle_" + Model.CMSWidgetTitleConfigurationId + "", @data_test_selector = "txtMediaTitle", disabled = "disabled" })
+        @Html.ValidationMessageFor(model => model.Title, "", new { @data_test_selector = "valMediaTitle" })
+    </div>
+    <div class="col-2">
+        @Html.TextBoxFor(m => m.URL, new { @id = "mediaUrl_" + Model.CMSWidgetTitleConfigurationId + "", @data_test_selector = "txtMediaUrl", disabled = "disabled" })
+        <div class="help-text"><em class="z-help-circle" data-toggle="tooltip" data-placement="right" data-original-title="@Admin_Resources.EmailValidationMessage"></em> </div>
+        @Html.ValidationMessageFor(model => model.URL, "", new { @data_test_selector = "valMediaURL" })
+    </div>
+    <div class="col-2">
+        @Html.TextBoxFor(m => m.DisplayOrder, new { @id = "mediaDisplayOrder_" + Model.CMSWidgetTitleConfigurationId + "", @val = "999", @maxlength = "999", @data_test_selector = "txtMediaDisplayOrder", disabled = "disabled" })
+        @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @data_test_selector = "valMediaDisplayOrder" })
+    </div>
+    <div class="col-3">
+        <label>
+            <input id="mediaIsNewTab_@Model.CMSWidgetTitleConfigurationId" data-test-selector="chkMediaIsNewTab" name="IsNewTab" checked="@Model.IsNewTab" type="checkbox" value="true" disabled="disabled">
+            <span class="lbl padding-8" for="IsNewTab"></span>
+            <input name="IsNewTab" type="hidden" value="false">
+        </label>
+    </div>
+    <div class="col-4">
+        <button type="submit" id="saveMedia_@Model.CMSWidgetTitleConfigurationId" data-test-selector="btnSaveMedia" class="btn-narrow-icon" title="Save" style="display:none !important;"><em class="z-ok"></em></button>
+        <button type="button" id="CancelMedia_@Model.CMSWidgetTitleConfigurationId" data-test-selector="btnCancelMedia" class="btn-narrow-icon" title="Cancel" style="display:none !important" onclick="WebSite.prototype.CancelNewAddLinkWidget('CancelMedia_@Model.CMSWidgetTitleConfigurationId',this)"><em class="z-close"></em></button>
+        <button type="button" id="EditMedia_@Model.CMSWidgetTitleConfigurationId" data-test-selector="btnEditMedia" onclick="WebSite.prototype.EditLinkWidget(@Model.CMSWidgetTitleConfigurationId)" class="img-icon-edit btn-narrow-icon" title="@Admin_Resources.ButtonEdit"><em class="z-edit"></em></button>
+        <button type="button" id="deleteMedia_@Model.CMSWidgetTitleConfigurationId" data-test-selector="btnDeleteMedia" onclick="WebSite.prototype.DeleteLinkWidget(@Model.CMSWidgetTitleConfigurationId,@Model.LocaleId, this)" class="img-icon-delete btn-narrow-icon" title="@Admin_Resources.ButtonDelete"><em class="z-delete"></em></button>
+    </div>
+
+
+    @Html.HiddenFor(x => x.CMSWidgetsId)
+    @Html.HiddenFor(x => x.CMSMappingId)
+    @Html.HiddenFor(x => x.TypeOfMapping)
+    @Html.HiddenFor(x => x.WidgetsKey)
+    @Html.HiddenFor(x => x.DisplayName)
+    @Html.HiddenFor(x => x.WidgetName)
+    @Html.HiddenFor(x => x.MediaPath)
+    @Html.HiddenFor(x => x.MediaId)
+    @Html.HiddenFor(x => x.FileName)
+    @Html.HiddenFor(x => x.LocaleId)
+    @Html.HiddenFor(x => x.TitleCode)
+
+
+    <input id="CMSWidgetTitleConfigurationId" name="CMSWidgetTitleConfigurationId" type="hidden" value="@Model.CMSWidgetTitleConfigurationId">
+    <input id="CMSWidgetTitleConfigurationLocaleId" name="CMSWidgetTitleConfigurationLocaleId" type="hidden" value="@Model.CMSWidgetTitleConfigurationLocaleId">
+</div>
+
+}
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    //Bootstrap ToolTip Call
+    $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover', html: true });
+</script>

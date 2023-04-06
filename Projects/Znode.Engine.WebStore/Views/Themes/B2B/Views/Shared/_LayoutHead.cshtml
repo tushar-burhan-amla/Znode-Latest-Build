@@ -1,0 +1,60 @@
+﻿@using Znode.Engine.WebStore.Agents
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+@{
+    string _title = Convert.ToString(ViewBag.Title);
+    string _description = Convert.ToString(ViewBag.Description);
+    string _keyword = Convert.ToString(ViewBag.Keywords);
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/";
+    string faviconimage = !string.IsNullOrEmpty(_portal.FaviconImage) ? MediaPaths.MediaPath + _portal.FaviconImage : $"favicon.ico";
+
+    var currentURL = HttpContext.Current.Request.Url.AbsoluteUri;
+    string canonicalURL = Convert.ToString(ViewBag.CanonicalURL);
+    string robotTag = Convert.ToString(ViewBag.RobotTag);
+    robotTag = string.IsNullOrEmpty(robotTag) ? _portal?.DefaultRobotTag : robotTag;
+    string contentSecurityPolicy = _portal?.GlobalAttributes?.Attributes?.FirstOrDefault(x => x.AttributeCode == WebStoreConstants.ContentSecurityPolicy)?.AttributeValue;
+
+    if (string.IsNullOrEmpty(canonicalURL))
+    {
+
+        if (currentURL.Contains("?"))
+        {
+            canonicalURL = currentURL.Substring(0, currentURL.IndexOf('?'));
+        }
+        else
+        {
+            canonicalURL = currentURL;
+        }
+    }
+}
+@Html.Partial(Helper.GetThemeFilePath(_fileLocation, "/Views/Home/_StoreAnalytics.cshtml"), PortalAgent.CurrentPortal)
+@Html.Partial(Helper.GetThemeFilePath(_fileLocation, "/Views/Home/_TrackingPixel.cshtml"), PortalAgent.CurrentPortal)
+<title>@Html.RenderBlock(_title)</title>
+<link href="@faviconimage" rel="shortcut icon" type="image/x-icon" onerror="this.onerror = null; this.src = 'favicon.ico'">
+<meta name="description" content="@Html.RenderBlock(_description)" />
+@Html.RenderBlock(contentSecurityPolicy)
+<meta name="keywords" content="@Html.RenderBlock(_keyword)">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="@Html.RenderBlock(robotTag)" />
+
+<link rel="canonical" href="@canonicalURL" />
+<link href="@Helper.GetThemeFilePath(_fileLocation, "/Content/bootstrap-4.1.0/bootstrap.css")" rel="stylesheet" async />
+<link href="@Helper.GetThemeFilePath(_fileLocation, "/Content/css/" + _portal.Css + ".css")" rel="stylesheet" />
+@Scripts.Render("~/bundles/jquery")
+<style>
+    @Html.RenderBlock(@PortalAgent.CurrentPortal.DynamicStyle)
+</style>
+<script src="@Helper.GetThemeFilePath(_fileLocation, "/Content/bootstrap-4.1.0/js/popper.min.js")" async></script>
+<script src="@Helper.GetThemeFilePath(_fileLocation, "/Content/bootstrap-4.1.0/js/bootstrap.min.js")" async></script>
+<script src="@Helper.GetThemeFilePath(_fileLocation, "/Scripts/lib/event.min.js")"></script>
+<script language="JavaScript">
+    window.addEventListener('message', function (event) {
+        if (event != undefined && event.data != undefined &&  event.data.toString().indexOf("framebus") === -1) { // To avoid console error related to framebus when we do Payment against Braintree
+            var token = JSON.parse(event.data);
+            Checkout.prototype.CardConnectPayment(token);
+        }
+    }, false);
+</script>
+

@@ -1,0 +1,84 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model RMAReturnOrderDetailViewModel
+
+@{
+    int cartCount = Model.ReturnCartViewModel.ShoppingCartItems.Count;
+}
+<div id="divShoppingCart">
+
+    <div id="layout-cart">
+        <div class="panel-heading">
+          
+        </div>
+        @if (Model?.ReturnCartViewModel.ShoppingCartItems?.Any() ?? false)
+        {
+        <div class="col-xs-12 cart-products nopadding margin-bottom">
+            <table class="table" id="returnOrderTable" aria-describedby="Return Items List Table">
+                <thead>
+                    <tr class="table-heading" style="background-color: #FAFAFA;">
+                        <th scope="col" data-test-selector="tblHdImage" class="table-td receipt-column-item mw-100 text-center">
+                            <span data-test-selector="spnImage">@Admin_Resources.LabelImage</span>
+                        </th>
+                        <th scope="col" data-test-selector="tblHdSKU" class="table-td receipt-column-item mw-100 text-center">
+                            <span data-test-selector="spnSKU">@Admin_Resources.LabelSKU</span>
+                        </th>
+                        <th scope="col" data-test-selector="tblHdProduct" class="table-td receipt-column-item mw-200 text-center">
+                            <span data-test-selector="spnProduct">@Admin_Resources.LabelProductName</span>
+                        </th>
+                        <th scope="col" data-test-selector="tblHdReturnReason" class="table-td receipt-column-item mw-100 text-center">
+                            <span data-test-selector="spnReason">@Admin_Resources.LabelReason</span>
+                        </th>
+                        <th scope="col" data-test-selector="tblHdUnitPrice" class="table-td receipt-column-item mw-100 text-center">
+                            <span data-test-selector="spnUnitPrice">@Admin_Resources.LabelUnitPrice</span>
+                        </th>
+                        <th scope="col" data-test-selector="tblHdUnitPrice" class="table-td receipt-column-item mw-100 text-center">
+                            <span data-test-selector="spnUnitPrice">Available Qty</span>
+                        </th>
+                        <th scope="col" data-test-selector="tblHdUnitPrice" class="table-td receipt-column-item mw-100 text-center">
+                            <span data-test-selector="spnUnitPrice">Return Qty</span>
+                        </th>
+                        <th scope="col" data-test-selector="tblHdTotal" class="table-td receipt-column-item mw-100">
+                            <span data-test-selector="spnTotal">Total Price</span>
+                        </th>
+                    </tr>
+                </thead>
+                
+                <tbody class="table-body">
+                    @if (Model?.ReturnCartViewModel?.ShoppingCartItems != null && Model?.ReturnCartViewModel?.ShoppingCartItems?.Count > 0)
+                    {
+
+                        foreach (var items in Model?.ReturnCartViewModel?.ShoppingCartItems?.AsEnumerable()?.Reverse())
+                        {
+                            if (items?.Quantity > 0)
+                            {
+                                string guid = items?.ExternalId;
+                                <tr class="cartItem" data-return-lineitem="@guid">
+                                @Html.Partial("_ReturnCartItemsList", items)
+                               </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+            <div class="cart-total col-sm-12 nopadding pull-right margin-bottom" id="divReturnCalculation">
+                @Html.Partial("_ReturnCalculation", Model?.ReturnCalculateViewModel)
+            </div>
+
+            @Html.Hidden("hdnTotalAmt", Model.Total)
+            @Html.Hidden("hdnShoppingCartCount", Model.ReturnCartViewModel.ShoppingCartItems.Count)
+            @Html.Hidden("hdnHasError", Model.HasError)
+        }
+        else
+        {
+            <div class="col-sm-12 nopadding cart-summary">
+                <p class="text-center margin-top-bottom no-record">@Admin_Resources.TextNoOrderedItems</p>
+            </div>
+        }
+    </div>
+</div>
+@Html.HiddenFor(m => m.OrderNumber, new { @id = "hdnOrderNumber" })
+@Html.HiddenFor(m => m.OmsOrderId, new { @id = "hdnOmsOrderId" })
+@Html.HiddenFor(m => m.CultureCode, new { @id = "hdnCultureCode" })
+@Html.HiddenFor(m => m.ReturnNumber, new { @id = "hdnReturnNumber" })

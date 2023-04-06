@@ -1,0 +1,23 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@model CartViewModel
+@{
+    Layout = null;
+    int priceRoundOff = Convert.ToInt32(DefaultSettingHelper.DefaultPriceRoundOff);
+
+}
+@using (Ajax.BeginForm("UpdateShippingHandling", "order"
+                                    , new AjaxOptions
+                                    {
+                                        UpdateTargetId = "divShoppingCart",
+                                        OnBegin = "return Order.prototype.UpdateOrderTextDetails(this)",
+                                        OnSuccess = "Order.prototype.UpdatePriceSuccessCallback(this)"
+                                    }, new { @class = "dirtylisten dirty", @id = "ShippingView" }))
+{
+<div class="col-sm-12">
+    <div class="row">
+        @Html.HiddenFor(model => model.OmsOrderId, new {@id= "hdnShippingViewOrderId"})
+       + @Html.TextBoxFor(model => model.ShippingCost, new { @data_test_selector = "txtShippingCost", @Onchange = "Order.prototype.SaveFields(this)", @data_priceRoundOff = priceRoundOff })
+    </div>
+</div>
+}

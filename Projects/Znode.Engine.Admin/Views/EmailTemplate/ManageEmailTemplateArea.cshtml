@@ -1,0 +1,37 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model EmailTemplateAreaDataViewModel
+@{
+    ViewBag.Title = Admin_Resources.LabelCMS + " | " + Admin_Resources.Multifront;
+}
+
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgManage">@Admin_Resources.LabelManage<em class="z-minus"></em><span>@Admin_Resources.TitleEmailTemplate</span></h1>
+    <div class="pull-right dirtyignore">
+        @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "List", "EmailTemplate", null, new { @class = "btn-text-icon", @data_test_selector = "linkBack" })
+        <div class="pull-right padding-left">
+            @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonAdd, "SaveEmailTemplateAreaConfiguration", "EmailTemplate", new { id = "defaultValue -add-new-row", @class = "btn-text btn-text-secondary ", onclick = "EmailTemplate.prototype.AddNewArea()", @data_test_selector = "linkAddNew" })
+        </div>        
+    </div>
+</div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">        
+            
+        @if (Model?.Portals?.Count > 0)
+        {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(x => x.PortalId,new { @data_test_selector = "lblPortalId" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(m => m.PortalId, Model.Portals, new { @id = "ddl_portal_list_for_email_template", @onchange = "EmailTemplate.prototype.PortalDropDownChange();", @data_test_selector = "drpPortalId" })
+
+                    </div>
+                </div>
+            </div>
+        }
+            <div id="content-to-dispaly-in-table" class="margin-top">
+                @Html.Partial("~/Views/EmailTemplate/_manageEmailTemplateArea.cshtml", Model)
+            </div>        
+    </section>
+

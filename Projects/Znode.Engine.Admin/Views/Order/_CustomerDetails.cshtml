@@ -1,0 +1,31 @@
+﻿@model Znode.Engine.Admin.ViewModels.UserAddressDataViewModel
+
+
+@if (!Equals(Model.ShippingAddress,null))
+{
+
+    <div id="divShippingAddress" class="col-sm-12 col-md-6 address-container">
+        <h4>@Admin_Resources.TitleShippingAddress</h4>
+        <div class="form-group">
+            @{
+                Html.RenderPartial("_DisplayCustomer", Model.ShippingAddress);
+            }
+        </div>
+
+    </div>
+                }
+
+@if (!Equals(Model.BillingAddress, null))
+{
+
+    <div id="divBillingAddress" class="col-sm-12 col-md-6 nopadding">
+        <h4>@Admin_Resources.TitleBillingAddress</h4>
+        <div class="form-group">
+            @{
+                Html.RenderPartial("_DisplayCustomer", Model.BillingAddress);
+            }
+        </div>
+
+    </div>
+                }
+

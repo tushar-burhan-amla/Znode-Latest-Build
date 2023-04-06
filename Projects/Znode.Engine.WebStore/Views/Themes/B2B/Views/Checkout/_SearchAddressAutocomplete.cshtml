@@ -1,0 +1,28 @@
+﻿@model AutoComplete
+@{
+    string addressType = ViewBag.addressType;
+    ViewData["AddressType"] = addressType;
+}
+<div class="form-group">
+    <label>@Html.RenderBlock(string.Format(WebStore_Resources.SearchForAddressLabel.ToString(), addressType?.ToProperCase()))</label>
+    <form action="/Checkout" method="GET">
+        <div class="row">
+            <div class="col-12 col-sm-8" style="display:grid;">
+                @switch (addressType)
+                {
+                    case WebStoreConstants.ShippingAddressType:
+                        {
+                            @Html.AutocompleteFor(model => model.Name, model => model.Id, "GetSearchShippingLocation", "Checkout", "Checkout.prototype.OnShippingAddressSelect", false, new { AddressType = addressType, htmlAttributes = new { @placeholder = "Location Name, City, Zip, etc.", @class = "hdnAddressName", @Name = "ShippingAddressTerm", @id = "SearchShippingLocation" } })
+                            break;
+                        }
+                    case WebStoreConstants.BillingAddressType:
+                        {
+                            @Html.AutocompleteFor(model => model.Name, model => model.Id, "GetSearchBillingLocation", "Checkout", "Checkout.prototype.OnBillingAddressSelect", false, new { AddressType = addressType, htmlAttributes = new { @placeholder = "Location Name, City, Zip, etc.", @class = "hdnAddressName", @Name = "BillingAddressTerm", @id = "SearchBillingLocation" } })
+                            break;
+                        }
+                }
+            </div>
+        </div> 
+        <div id="typeahead-results" class="ui-autocomplete-home"></div>
+    </form>
+</div>

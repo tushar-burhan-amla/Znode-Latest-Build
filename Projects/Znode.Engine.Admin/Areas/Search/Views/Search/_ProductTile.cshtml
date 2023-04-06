@@ -1,0 +1,42 @@
+﻿@using Znode.Admin.Core.Areas.Search.ViewModels
+@model SearchProfileProductViewModel
+<div class="view-item">
+    <div class="product-img">
+        <a>
+            <div class="image">
+                @{
+                    string imageSrc = string.IsNullOrEmpty(Model.ImageSmallPath) ? "/Content/Images/maxwell.png" : Model.ImageSmallPath;
+                }
+                <img id="@Model.ZnodeProductId" src="@imageSrc" class="img-responsive" data-src="@imageSrc" alt="Product" />
+            </div>
+        </a>
+    </div>
+    <div class="product-details">
+        <div class="search-cat-name">
+            <label>@Html.RenderBlock(Model.CategoryName)</label>
+        </div>
+        <div class="search-prod-name">
+            <a href="#">
+                <div class="search-product-label" data-toggle="popover" data-placement="bottom" data-content="@Html.RenderBlock(Model.Name)">@Html.RenderBlock(Model.Name)</div>
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+
+    $('.search-product-label').popover({ trigger: "manual", html: true, truedelay: { show: 100, hide: 0 } })
+ .on("mouseenter", function () {
+     var _this = this;
+     $(this).popover("show");
+     $(".popover").on("mouseleave", function () {
+         $(_this).popover('hide');
+     });
+ }).on("mouseleave", function () {
+     var _this = this;
+     setTimeout(function () {
+         if (!$(".popover:hover").length) {
+             $(_this).popover("hide");
+         }
+     }, 300);
+ });
+</script>

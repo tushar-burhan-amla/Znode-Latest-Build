@@ -1,0 +1,111 @@
+﻿.footer {
+    background: $footer-color;
+
+    .footer-block {
+        .footer-header {
+            font-size: $base-font-size + 4;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            color: $footer-txt;
+            background-color: transparent;
+        }
+
+        .footer-text {
+            margin-bottom: 15px;
+            font-size: $base-font-size + 1;
+            color: $footer-txt;
+        }
+
+        .footer-store-number {
+            color: $footer-txt;
+            font-size: $base-font-size + 3;
+            background-color: transparent;
+        }
+
+        a {
+            text-decoration: underline;
+            color: $btn-primary;
+        }
+
+        .footer-copyright {
+            font-size: $base-font-size - 2;
+            color: $footer-txt;
+        }
+
+        img {
+            max-width: 220px;
+            width: 100%;
+        }
+
+        ul.link-panel-widget {
+            padding: 0;
+            list-style: none;
+
+            li {
+                font-size: $base-font-size;
+                font-family: $base-font-family-bold;
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    .news-letter {
+        border-bottom: 4px solid $base-secondary-light;
+        .news-letter-container .newsletter-container {
+            label {
+                font-size: $base-font-size + 4px;
+                text-transform: uppercase;
+                margin-bottom: 0px;
+                color: $white;
+            }
+
+            input {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+
+            .btn-newsletter {
+                margin-left: 6px;
+
+                button {
+                    border-radius: 2px;
+                }
+            }
+        }
+
+        .social-media .social-media-links {
+            .link-panel-widget {
+                list-style-type: none;
+                display: flex;
+                align-items: center;
+                padding-left: 0px;
+
+                li {
+                    padding: 2px;
+
+                    a img {
+                        min-width: 30px;
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include screensize(x-small) {
+    .social-media .social-media-links {
+        .link-panel-widget {
+            justify-content: center;
+        }
+    }
+}
+
+@include screensize(medium) {
+    .social-media .social-media-links {
+        .link-panel-widget {
+            justify-content: flex-end;
+        }
+    }
+}

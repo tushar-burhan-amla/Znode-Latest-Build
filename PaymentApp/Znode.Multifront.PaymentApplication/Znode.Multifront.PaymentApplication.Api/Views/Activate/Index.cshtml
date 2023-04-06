@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Znode Activation";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/jquery-3.3.1.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+	    $("#Checkbox1").click(function () {
+			$('#ActivateButton').attr("disabled", !this.checked);
+		});
+
+		$("input[name$='LicenseType']").click(function () {
+			var value = $(this).val();
+			if (value == 'FreeTrial') {
+				$("#serialNumberRow").hide();
+			} else {
+				$("#serialNumberRow").show();
+			}
+		});
+	});
+</script>
+
+@using (Html.BeginForm("LicenseInformation", "Activate"))
+{
+    <div id="body">
+        <h2>Activate your License</h2>
+
+        <section id="Display">
+            <p>
+                You are about to activate your license.<br>
+                If you are activating a Free Trial then proceed with the activation. You will have the option of creating an activation without using a license key.
+                <br />
+                If you are using a purchased license, then you should be aware that this activation can only be used on one CPU.
+                <br />
+                <br />
+                @Html.ActionLink("Click here", "Updatelicense", "Activate", null, null) to check for update of your existing license.
+                <br />
+            </p>
+
+            <input id="Checkbox1" type="checkbox" /> Yes I wish to activate my license for this CPU. I also understand that once activated, my key can only be used on this CPU.<br>
+
+            <br />
+
+            <input id="ActivateButton" type="submit" value="Proceed With Activation" disabled="disabled" />
+        </section>
+    </div>
+}

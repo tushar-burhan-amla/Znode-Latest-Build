@@ -1,0 +1,53 @@
+﻿@model Znode.Engine.Admin.ViewModels.NoteViewModel
+
+@using Znode.Engine.Admin.ViewModels;
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.TitleMultifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateAccountNote", CancelUrl = "/ServiceRequest/GetNoteList?caseRequestId=" + @Model.CaseRequestId ,IsSaveCloseIsShow=false};
+}
+<div id="CompanyAccountDiv">
+    <div class="col-sm-12 title-container">
+        <h1 data-test-selector="hdgNote">@string.Format(@Admin_Resources.TitleAdd, "Note")</h1>
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateAccountNote" }))
+            {
+            <div id="createForm">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.NoteTitle, new { @class = "required", @data_test_selector = "lblNoteTitle" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.NoteTitle, new { @data_test_selector = "txtNoteTitle" })
+                            @Html.ValidationMessageFor(model => model.NoteTitle, "", new { @data_test_selector = "valNoteTitle" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.NoteBody, new { @data_test_selector = "lblNoteBody" })
+                        </div>
+                        <div class="control-md">
+                            @Html.EditorFor(model => model.NoteBody)
+                            @Html.ValidationMessageFor(model => model.NoteBody, "", new { @data_test_selector = "valNoteBody" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.UserId)
+            @Html.HiddenFor(m => m.NoteId)
+            @Html.HiddenFor(m => m.AccountId)
+            @Html.HiddenFor(m => m.CaseRequestId)
+            }
+    </section>
+</div>
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup"></div>

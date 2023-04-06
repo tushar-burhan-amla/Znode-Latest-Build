@@ -1,0 +1,104 @@
+﻿@model Znode.Engine.WebStore.ViewModels.CustomerListViewModel
+@using Znode.Engine.WebStore.Models
+@using Znode.Libraries.Resources
+
+@{
+    ViewBag.Title = WebStore_Resources.TitleCustomers + " | " + WebStore_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string accountName = string.IsNullOrEmpty(Model?.AccountName) ? @WebStore_Resources.LabelAccount : Model?.AccountName;
+}
+
+<div id=@Model.GridModel.FrontObjectName class="main-wrapper col">
+    <div class="container">
+        <div class="row user-account">
+            <div class="col-12 account-dashboard">
+                <div class="row mb-5">
+                    <div class="col-12 col-lg-12 order-history right-container">
+                        <div class="col-xs-12 nopadding">
+                            <h1 class="page-title">@string.Format(WebStore_Resources.LinkTextAccountUsers)</h1>
+                        </div>
+                        <div class="col-12 p-0 mb-4 dashboard-content">
+                            <div class="col-12 p-0">
+                                <div class="col-xs-12 product-search nopadding">
+                                    <div class="col-xs-12 filter-component">
+                                        @using (Ajax.BeginForm(actionName, controllerName, new { accountId = Model.AccountId }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+                                        {
+                                            <div id="filterComponent">
+                                                @Html.Partial("_FilterComponent", Model.GridModel.FilterColumn)
+                                            </div>
+                                        }
+                                        @Html.Hidden("hdnEnableDisableActionURL")
+                                        @Html.Partial("../Controls/_PopUp",
+                                        new PopupModel()
+                                        {
+                                            Title = @WebStore_Resources.DeActivate,
+
+                                            Description = @WebStore_Resources.DisableAccountConfirmationMessage,
+                                            ModalPopUpId = "PopUpConfirmDisable",
+                                            Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @WebStore_Resources.TextOk, OnClickFunctionName = "DynamicGrid.prototype.RedirectToEnableDisable()" } }
+                                        })
+
+                                        @Html.Partial("../Controls/_PopUp",
+                                        new PopupModel()
+                                        {
+                                            Title = @WebStore_Resources.Activate,
+                                            Description = @WebStore_Resources.EnableAccountConfirmationMessage,
+                                            ModalPopUpId = "PopUpConfirmEnable",
+                                            Buttons = new List<PopUpButtonModel>
+                                            () { new PopUpButtonModel { ButtonText = @WebStore_Resources.TextOk, OnClickFunctionName = "DynamicGrid.prototype.RedirectToEnableDisable()" } }
+                                        })
+                                        @Html.Partial("../Controls/_PopUp",
+                                        new PopupModel()
+                                {
+                                    Title = @WebStore_Resources.Activate,
+                                    Description = @WebStore_Resources.EnableAccountConfirmationMessage,
+                                    ModalPopUpId = "accountEnable",
+                                    Buttons = new List<PopUpButtonModel>
+                                    () {
+                                    new PopUpButtonModel { ButtonText = @WebStore_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "User.prototype.EnableCustomerAccount()"}
+                                    }
+                                })
+                                        @Html.Partial("../Controls/_PopUp",
+                                        new PopupModel()
+                                        {
+                                            Title = @WebStore_Resources.DeActivate,
+                                            Description = @WebStore_Resources.DisableAccountConfirmationMessage,
+                                            ModalPopUpId = "accountdisable",
+                                            Buttons = new List<PopUpButtonModel>
+                                            () {
+                                            new PopUpButtonModel { ButtonText = @WebStore_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "User.prototype.DisableCustomerAccount()"}
+                                            }
+                                        })
+
+                                        @Html.Hidden("hdnResetPasswordURL")
+                                        @Html.Partial("../Controls/_PopUp",
+                                        new PopupModel()
+                                        {
+                                            Title = @WebStore_Resources.ResetPasswordButtonText,
+                                            Description = @WebStore_Resources.TextConfirmResetPassword,
+                                            ModalPopUpId = "PopUpConfirmResetPassword",
+                                            Buttons = new List<PopUpButtonModel>
+                                                () {
+                                                new PopUpButtonModel { ButtonText = @WebStore_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "User.prototype.ResetPasswordUsers()"}
+                                            }
+                                        })
+                                    </div>
+
+                                    <div class="col-xs-12 list-container margin-top nopadding">
+                                        <div class="col-xs-12 nopadding">
+                                            @Html.Partial("_DynamicGrid", Model.GridModel)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="divAddCustomerAsidePanel" class="aside-popup-panel"></div>
+
+

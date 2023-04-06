@@ -1,0 +1,10 @@
+﻿<div id="recent-view-products" class="recent-view-items" data-test-selector="divRecentlyViewProduct">
+</div>
+<script type="text/javascript">
+    var ProductId = $("div[id='layout-product']").attr("data-id");
+    $.ajax({ url: "/Product/GetRecentViewProducts?productId=" + ProductId, type: "get" }).done(function (t) {
+        $(".recent-view-items").html(t)
+        ZnodeBase.prototype.onImageError();
+        InitbLazy();
+    });
+</script>

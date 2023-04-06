@@ -1,0 +1,74 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model FormBuilderAttributeGroupViewModel
+@{
+    Layout = null;
+    int prevGroupId = 0;
+    int sequence = 1;
+}
+<div id="layout-formtemplate" class="row no-gutters">
+    <h1 class="w-100">@Model.FormTitle</h1>
+    <div class="col-12 form-builder">
+        @if (Model?.Attributes?.Count > 0)
+        {
+            using (Ajax.BeginForm("Create", "FormBuilder", new AjaxOptions() { HttpMethod = "POST", OnBegin = "FormBuilder.prototype.SaveFormBuilder", OnComplete = "FormBuilder.prototype.FormTemplateOnSuccess" }, new { @id = "frmFormBuilder" }))
+            {
+                if (HelperUtility.IsNotNull(Model.Attributes))
+                {
+                    <div class="row">
+                        @foreach (var ctrl in Model.Attributes)
+                        {
+                            int? groupId = ctrl.GlobalAttributeGroupId;
+                            if (groupId == null)
+                            {
+                                @Html.Partial("FormBuilder/_createControl", ctrl)
+                                sequence++;
+                            }
+                            else
+                            {
+                                if (prevGroupId != groupId.Value)
+                                {
+                                    var attributesAssociatedWithGroup = Model.Attributes.Where(x => x.GlobalAttributeGroupId == groupId).ToList();
+                                    var groupName = Model.Groups.Where(x => x.GlobalAttributeGroupId == groupId).FirstOrDefault().AttributeGroupName;
+
+                                    <div class="col-12 pb-3 form-group-container">
+                                        <div class="pb-3">
+                                            <h3 class="form-group-name">@groupName</h3>
+                                        </div>
+                                        @foreach (var attributes in attributesAssociatedWithGroup)
+                                        {
+                                            @Html.Partial("FormBuilder/_createControl", attributes)
+                                            sequence++;
+                                        }
+                                    </div>
+                                    prevGroupId = groupId.Value;
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="row">
+                        @Html.HiddenFor(x => x.IsTextMessage)
+                        @Html.HiddenFor(x => x.TextMessage)
+                        @Html.HiddenFor(x => x.RedirectURL)
+                        @Html.HiddenFor(model => model.FormBuilderId)
+                        @Html.HiddenFor(model => model.FormCode)
+                        <div class="col-12 text-right quotebutton">
+                            <button class="btn btn-primary">@Model.ButtonText</button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div style='text-align:center;'> @WebStore_Resources.TextAttributesNotAvailable </div>
+                }
+            }
+        }
+    </div>
+</div>
+<script src="~/Scripts/lib/datepicker.js"></script>
+<script src="~/Scripts/lib/DynamicValidation.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#frmFormBuilder")[0].reset();
+    });
+</script>

@@ -1,0 +1,60 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PowerBIEmbedViewModel
+@using Znode.Libraries.Resources
+@{
+    ViewBag.Title = Admin_Resources.LabelReport + " | " + Admin_Resources.LabelPowerBI;
+}
+<script src="~/Scripts/PowerBI/powerbi.min.js"></script>
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelPowerBIOverview</h1>
+</div>
+
+<div class="main-wrapper">
+    <!--Left Panel-->
+    <aside>
+        @Html.Partial("~/Views/PowerBI/_asidePowerBIPanel.cshtml")
+    </aside>
+    <!--Main Container-->
+    <section class="main-container portal-approval-block">
+        @if (string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div id="reportContainer" style="height:100vh"></div>
+        }
+        else
+        {
+            <div class="col-xs-12">
+                <h2>@Model.ErrorMessage </h2>
+            </div>
+        }
+    </section>
+</div>
+@if (string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <script>
+    // Read embed application token from Model
+    var accessToken = "@Model.EmbedToken.Token";
+    // Read embed URL from Model
+    var embedUrl = "@Html.Raw(Model.EmbedUrl)";
+    // Read report Id from Model
+    var embedReportId = "@Model.ReportId";
+    // Get models. models contains enums that can be used.
+    var models = window['powerbi-client'].models;
+    var config = {
+        type: 'report',
+        tokenType: models.TokenType.Embed,
+        accessToken: accessToken,
+        embedUrl: embedUrl,
+        id: embedReportId,
+        permissions: models.Permissions.All,
+        settings: {
+            filterPaneEnabled: true,
+            navContentPaneEnabled: true
+        }
+
+    };
+    // Get a reference to the embedded report HTML element
+    var reportContainer = $('#reportContainer')[0];
+    // Embed the report and display it within the div container.
+    var report = powerbi.embed(reportContainer, config);
+    </script>
+}

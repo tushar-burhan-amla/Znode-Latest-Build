@@ -1,0 +1,51 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model EmailAFriendViewModel
+@{
+    Layout = null;
+}
+<div id="modelEmailToFriend" class="modal fade compare-product-popup email-to-friend" role="dialog">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 data-test-selector="hdgEmailHeading" class="modal-title">@Admin_Resources.EmailAFriend</h4>
+                <button type="button" class="close" data-dismiss="modal"><span class="close-circle-icon"></span></button>
+            </div>
+            @using (Ajax.BeginForm("SendMailToFriend", "Product", new AjaxOptions { OnBegin = "Product.prototype.EmailToFriendBegin();", OnSuccess = "Product.prototype.EmailToFriendSuccess();", OnFailure = "Product.prototype.EmailToFriendFailure();", HttpMethod = "Post" }))
+            {
+                <div class="modal-body">
+                    <div class="col-12 p-0">
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                @Html.Label(@WebStore_Resources.LabelSenderMailId, new { @class = "required" })
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.HiddenFor(model => model.ProductName)
+                                @Html.TextBoxFor(model => model.YourMailId, new { @class = "" })
+                                @Html.ValidationMessageFor(model => model.YourMailId)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                @Html.Label(@WebStore_Resources.LabelReceiverMailId, new { @class = "required" })
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextBoxFor(model => model.FriendMailId, new { @class = "" })
+                                @Html.ValidationMessageFor(model => model.FriendMailId)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="text-right">
+                        <button id="btnSendMail" class="btn btn-primary" type="submit">Send Mail</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {        
+        $.validator.unobtrusive.parse($("#btnSendMail").closest("form"));
+    });
+</script>

@@ -1,0 +1,97 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model CMSFormWidgetConfigurationViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    bool isSaveCloseShow = Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString()) ? true : false;
+    string cancelUrl = Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())
+       ? string.IsNullOrEmpty(Model?.FileName) ? $"/Store/StoreSetting?portalId={Model.CMSMappingId}" : $"/Store/StoreSetting?portalId={Model.CMSMappingId}&fileName={Model.FileName}"
+       : string.IsNullOrEmpty(Model?.FileName) ? $"/Content/EditContentPage?cmsContentPagesId={Model.CMSMappingId}" : $"/Content/EditContentPage?cmsContentPagesId={Model.CMSMappingId}&fileName={Model.FileName}";
+    ActionModel actionModel = new ActionModel { Action = "SaveFormWidgetConfiguration", Controller = "WebSite", CancelUrl = cancelUrl, FormId = "formCmsFormWidgetConfiguration", IsSaveCloseEnable = false, IsSaveCloseIsShow = isSaveCloseShow };
+}
+<div id="divFormTemplate" >
+    <div class="col-sm-12 title-container">
+        <h1>@Admin_Resources.LabelManage<em class="z-minus"></em><span>@Model.DisplayName</span></h1>
+        @if (Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.ContentPageMapping.ToString()))
+        {
+            <div class="pull-right btn-container">
+                <button type="button" class="btn-text-icon pull-left" data-test-selector="linkBack" onclick="ZnodeBase.prototype.CancelUpload('associatedPanel')"><em class="z-back"></em>@Admin_Resources.ButtonBack</button>
+                <div class="pull-right padding-left">
+                    @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, actionModel.Action, actionModel.Controller, new { @id = "dvSave", @class = "btn-text btn-text-secondary", onclick = "SaveCancel.prototype.SubmitForm('" + @actionModel.FormId + "', '" + @actionModel.Callback + "')" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="pull-right">
+                @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+            </div>
+        }
+    </div>
+<!--Main Container-->
+<div id="TextWidgetConfigurationDiv" class="cms-form-widget">
+    @Html.Partial("~/views/WebSite/_ManageFormWidgetPanel.cshtml")
+    <section class="main-container">
+        <div class="notification-msg cms-notification">
+            <div id="divFormWidgetError" class="alert-danger" style="display:none;"></div>
+        </div>
+       @using (Ajax.BeginForm("SaveFormWidgetConfiguration", "WebSite", new AjaxOptions() { HttpMethod = "post", OnBegin = "WebSite.prototype.ValidateFormWidget", OnSuccess = "WebSite.prototype.SaveFormWidget(data,this)", InsertionMode = InsertionMode.Replace }, new { id = "formCmsFormWidgetConfiguration" }
+            ))
+          { 
+            if (Model?.Locales?.Count > 0)
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(x => x.FormBuilderId, new { @data_test_selector = "lblFormCode" })
+                        </div>
+                        <div class="control-md">
+                            @if (Model.CMSFormWidgetConfigurationId <= 0)
+                            {
+                                @Html.DropDownListFor(m => m.FormBuilderId, new SelectList(Model.FormBuilder, "FormBuilderId", "FormCode"), new { @id = "ddl_formBuilder_list", @data_test_selector = "drpFormCode" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(m => m.FormBuilderId, new SelectList(Model.FormBuilder, "FormBuilderId", "FormCode"), new { @id = "ddl_formBuilder_list", @readonly = "readonly", disabled = "disabled", @data_test_selector = "drpFormCode" })
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(x => x.LocaleId, new { @data_test_selector = "lblLocaleId" })
+                        </div>
+                        <div class="control-md">
+                            @if (Model.CMSFormWidgetConfigurationId > 0)
+                            {
+                                @Html.DropDownListFor(m => m.LocaleId, Model.Locales, new { @id = "ddl_locale", @data_test_selector = "drpLocaleId" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(m => m.LocaleId, Model.Locales, new { @id = "ddl_locale", @readonly = "readonly", disabled = "disabled", @data_test_selector = "drpLocaleId" })
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div id="div_form_widget">
+                    @{ Html.RenderPartial("_FormWidget", Model); }
+                </div>
+                            }
+
+                        @Html.HiddenFor(model => model.CMSMappingId)
+                        @Html.HiddenFor(model => model.CMSFormWidgetConfigurationId)
+                        @Html.HiddenFor(model => model.CMSWidgetsIdLocaleId)
+                        @Html.HiddenFor(model => model.TypeOFMapping)
+                        @Html.HiddenFor(model => model.WidgetsKey)
+                        @Html.HiddenFor(model => model.DisplayName)
+                        @Html.HiddenFor(model => model.WidgetName)
+                        @Html.HiddenFor(model => model.CMSWidgetsId)
+                        @Html.HiddenFor(model => model.FileName)
+                        @Html.HiddenFor(model => model.FormBuilderId)
+                        }
+    </section>
+      
+</div>
+    </div>

@@ -1,0 +1,49 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@model ParentAttributeFamilyViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleDAM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmEditAttributeFamily", CancelUrl = "/MediaManager/AttributeFamily/List", Callback = "CommonHelper.prototype.Validate", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelAttributeFamily)<i class="z-minus"></i><span>@Html.DisplayFor(model => model.AttributeFamily.FamilyCode)</span></h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @if (Request.IsAjaxRequest())
+    {
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_Navigator.cshtml", Model.navigationModel)
+        </div>
+    }
+    @using (Html.BeginForm("Edit", "AttributeFamily", FormMethod.Post, new { @id = "frmEditAttributeFamily" }))
+            {
+        <div id="loginForm">
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Attributes_Resources.LabelFamilyCode)
+                        </div>
+                        <div class="control-md">
+                            <input type="text" value="@Model.AttributeFamily.FamilyCode" disabled="disabled" />
+                            @Html.Hidden("FamilyCode", Model.AttributeFamily.FamilyCode)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*Div for creating tabs*@
+        <div class="col-sm-12 nopadding padding-top">
+            @Html.Hidden("MediaAttributeFamilyId", Convert.ToInt32(Request.QueryString["MediaAttributeFamilyId"]))
+            @Html.Partial("~/Views/Shared/Controls/_TabStructure.cshtml", Model.TabViewModel)
+        </div>
+    }
+</section>

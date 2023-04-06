@@ -1,0 +1,49 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@model ThemeListViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.LabelCMS + " | " + Admin_Resources.Multifront;
+}
+
+<div id="@Model.GridModel.FrontObjectName">
+    <div class="col-sm-12 title-container">
+        <h1>@Admin_Resources.TitleRevisionThemesList</h1>
+        <div class="pull-right">
+            @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "List", "Theme", null, new { @class = "btn-text-icon" })
+        </div>
+    </div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @*@using (Ajax.BeginForm("GetThemeRevisionList", "CMS", new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+            {
+            <div id="filterComponent">
+                @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+            </div>
+        }*@
+        <div class="col-sm-12 list-container margin-top-25">
+            @{
+                @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+            }
+        </div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderDelete,
+                        Description = @Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "DeleteRevisedThemePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk,ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Theme.prototype.DeleteRevisedTheme(this,'Name')" },
+                           }
+                    })
+        @Html.HiddenFor(m => m.CMSThemeId)
+    </section>
+</div>
+
+<script type="text/javascript">
+    $(".pagination").hide();
+    $(".filter-component").remove();
+    $(".manage-column").remove();
+    $(".ManageFilter").remove();
+    $("#menu1").remove();
+</script>

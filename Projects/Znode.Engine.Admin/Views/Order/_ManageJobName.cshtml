@@ -1,0 +1,17 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model OrderInfoViewModel
+@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("UpdateJobName", "Order", new AjaxOptions
+{
+    UpdateTargetId = "labelJobName",
+    HttpMethod = "POST",
+    OnSuccess = "Order.prototype.ChangeJobNameSuccessCallback"
+}, new { @class = "dirtylisten dirty", @id = "JobNameView" }))
+{
+    <div class="col-sm-12 nopadding">
+        @Html.TextBoxFor(model => model.JobName, new { @maxlength = "100", @data_test_selector = "txtJobName", @Onchange = "Order.prototype.SaveFields(this)" })
+        @Html.HiddenFor(model => model.OmsOrderId, new { @id = "hdnJobNameOrderId" })
+    </div>
+}

@@ -1,0 +1,125 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Libraries.ECommerce.Utilities;
+@model CacheListViewModel
+@{
+                ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront; ;
+                string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+                string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+                ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCacheManagement" };
+}
+<div class="col-sm-12 title-container">
+    <h1>@GlobalSetting_Resources.TitleGlobalSetting</h1>
+    <div class="pull-right btn-container">
+        <a id="dvSave" data-test-selector="linkSave" class="btn-text btn-text-secondary dirtyignore" onclick="SaveCancel.prototype.SubmitForm('frmCacheManagement')">Save</a>
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/Views/Shared/_asideGlobalSettingPanel.cshtml")
+    <section class="main-container">
+        @using (Html.BeginForm("UpdateCacheStatus", controllerName, FormMethod.Post, new { id = "frmCacheManagement" }))
+        {
+            <h3 class="section-heading" data-test-selector="hdgCacheManagement">@GlobalSetting_Resources.LabelCacheManagement</h3>
+            <div class="col-sm-12 nopadding">
+                @if (Model?.CacheList?.Count > 0)
+                {
+                    for (var i = 0; i < Model.CacheList.Count; i++)
+                    {
+                        string applicationType = Model.CacheList[i].ApplicationType.Replace(" ", "");
+                        if (applicationType == Convert.ToString(ApplicationCacheTypeEnum.CloudflareCache))
+                        {
+                            @Html.Partial("_CloudflareCacheManagement", Model)
+                            break;
+                        }
+                        string displayStyle = string.Equals(applicationType, ApplicationCacheTypeEnum.ApplicationPool.ToString()) ? "display:none" : "";
+                        bool isFullPageCache = string.Equals(applicationType, ApplicationCacheTypeEnum.FullPageCache.ToString());
+                        string isActiveText = isFullPageCache ? Admin_Resources.LabelWebstoreFullPageCacheActive : Html.DisplayNameFor(m => Model.CacheList[i].IsActive).ToString();
+                        string refreshCacheText = isFullPageCache ? Admin_Resources.LabelRefreshWebstoreCache : Admin_Resources.LabelRefreshCache;
+
+                        <div class="col-sm-12 nopadding cache-management-block" id="div-@Model.CacheList[i].ApplicationType" style=@displayStyle>
+                            <h3 class="section-heading margin-top-25" data-test-selector="hdg@(HelperMethods.GetResourceNameByValue(Model.CacheList[i].ApplicationType).Replace(" ", ""))">@Html.Label(HelperMethods.GetResourceNameByValue(Model.CacheList[i].ApplicationType))</h3>
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.Label(isActiveText, new { @data_test_selector = "lblIsActive" })
+                                    </div>
+                                    <div class="control-md">
+                                        <label>
+                                            <input data-test-selector="chkIsActive" @(Model.CacheList[i].IsActive ? "checked='checked'" : "" ) id="cacheid-@Model.CacheList[i].ApplicationCacheId" name="CacheList[@i].IsActive" type="checkbox" value="true">
+                                            <span class="lbl padding-8"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (isFullPageCache)
+                            {
+                                <div class="form-group">
+                                    <div class="col-sm-12 nopadding">
+                                        <div class="control-label">
+                                            @Html.Label(Admin_Resources.LabelWebstoreFullPageCacheDuration, new { @class = "required", @data_test_selector = "lblDuration" })
+                                        </div>
+                                        <div class="control-sm">
+                                            <div class="right-inner-icon">
+                                                @Html.TextBoxFor(m => m.CacheList[i].Duration, new { @data_test_selector = "txtDuration" })
+                                                <em class="unit-text" data-test-selector="lblUnit">@Admin_Resources.LabeUnitSec</em>
+                                                @Html.ValidationMessageFor(m => m.CacheList[i].Duration, "", new { @data_test_selector = "lblDuration" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="control-label">
+                                        @Html.Label(Admin_Resources.LabelWebstoreCacheActive, new { @data_test_selector = "lblWebstoreCacheActive" })
+                                    </div>
+                                    <div class="control-md">
+                                        <label>
+                                            <input data-test-selector="chkWebstoreCacheActive" type="checkbox" value="true" checked="checked" disabled="disabled">
+                                            <span class="lbl padding-8"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.Label(refreshCacheText, new { @data_test_selector = "lblRefreshCache" })
+                                    </div>
+                                    <div class="control-md">
+                                        @if (string.Equals(applicationType, ApplicationCacheTypeEnum.FullPageCache.ToString()))
+                                        {
+                                            <input type="button" data-test-selector="txtRefreshCache" id="refresh-@Model.CacheList[i].ApplicationCacheId" name="@applicationType" class="btn-text btn-text-secondary" value="Refresh" onclick="GlobalConfiguration.prototype.GetDomains(this)" />
+                                        }
+                                        else
+                                        {
+                                            <input type="button" data-test-selector="txtRefreshCache" id="refresh-@Model.CacheList[i].ApplicationCacheId" name="@applicationType" class="btn-text btn-text-secondary" value="Refresh" onclick="GlobalConfiguration.prototype.RefreshCacheData(this)" />
+                                        }
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(m => m.CacheList[i].ApplicationCacheId)
+                                @Html.HiddenFor(m => m.CacheList[i].ApplicationType)
+                                @Html.HiddenFor(m => m.CacheList[i].StartDate, new { @id = "hdnstartDate_" + Model.CacheList[i].ApplicationCacheId })
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(m => m.CacheList[i].StartDate, new { @data_test_selector = "lblStartDate" })
+                                    </div>
+                                    <div class="control-md" data-test-selector="divStartDate" id="startDate_@Model.CacheList[i].ApplicationCacheId">
+                                        <label>@Html.DisplayFor(m => m.CacheList[i].StartDate)</label>
+                                    </div>
+                                    @Html.Partial("_HelpText", Admin_Resources.TimeZoneHelpText)
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <input type="hidden" id="hdnApplicationCacheId" />
+            <input type="hidden" id="hdnApplicationType" />
+        }
+    </section>
+</div>
+
+@* Here domain list will display *@
+<div id="domainList" class="aside-popup-panel modal-dialog modal-lg"> </div>

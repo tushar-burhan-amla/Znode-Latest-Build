@@ -1,0 +1,2 @@
+﻿truncate table ZnodePublishCatalogProductDetail
+truncate table ZnodePublishProductAttributeXML

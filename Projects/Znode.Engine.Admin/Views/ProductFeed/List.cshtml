@@ -1,0 +1,45 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@model ProductFeedListViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+}
+
+<div id=@Model.GridModel.FrontObjectName>
+    <div class="col-sm-12 title-container">
+        <h1 data-test-selector="hdgProductFeed">Product Feed</h1>
+        <div class="pull-right btn-container">
+            @Html.AuthorizedRawActionLink(Admin_Resources.ButtonCreateProductFeed, "CreateProductFeed", "ProductFeed", null, new { @class = "btn-text btn-text-secondary", @data_test_selector = "linkCreateProductFeed" })
+        </div>
+    </div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container" >
+        @using (Ajax.BeginForm("List", "ProductFeed", new AjaxOptions() { UpdateTargetId = @Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+        {
+            <div id="filterComponent">
+                @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+            </div>
+        }
+        <div class="col-sm-12 list-container" id="listcontainerId">
+            @{
+                @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+            }
+        </div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderConfirmDelete,
+                        Description = @Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "ProductFeedDeletePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk,ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "ProductFeed.prototype.DeleteProductFeed(this)" },
+                           }
+                    })
+    </section>
+</div>
+<script>
+    $(document).ready(function () {         
+        $(".z-download").removeAttr("onclick");      
+    });
+</script>

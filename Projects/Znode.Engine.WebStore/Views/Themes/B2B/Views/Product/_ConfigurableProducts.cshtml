@@ -1,0 +1,233 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.WebStore.Agents;
+
+@model  List<ConfigurableProductViewModel>
+@{
+    var _portal = PortalAgent.CurrentPortal;
+    Layout = null;
+    List<AttributesViewModel> variants = Model?.FirstOrDefault()?.ProductAttributes?.Where(x => x.IsConfigurable)?.ToList();
+    List<string> configurableAttributeCodeList = Model?.FirstOrDefault()?.ConfigurableAttributeCodeList ?? new List<string>();
+    variants = variants?.Where(x => configurableAttributeCodeList.Contains(x.AttributeCode))?.ToList();
+    string thumbnailUrl = Convert.ToString(PortalAgent.CurrentPortal?.ImageThumbnailUrl);
+    string mediaThumbnailUrl = Convert.ToString(PortalAgent.CurrentPortal?.ImageSmallThumbnailUrl);
+    List<decimal?> priceList = Model?.Where(x => x.RetailPrice != null)?.Select(y => y.RetailPrice)?.ToList();
+    decimal? price = priceList.OrderBy(x => x.Value).FirstOrDefault();
+    string currencyCode = Model.Select(x => x.CurrencyCode).FirstOrDefault();
+    bool isParentProductObsolete = Convert.ToBoolean(ViewBag.IsObsolete);
+    string message = string.Format(WebStore_Resources.GroupProductMessage, Helper.FormatPriceWithCurrency(price, currencyCode));
+    string obsoleteClass = isParentProductObsolete ? "cut-price" : "";
+    bool isEnableInventoryStockNotification = GlobalAttributeHelper.IsEnableInventoryStockNotification();
+    bool isQuickView = Convert.ToBoolean(ViewBag.isQuickView);
+    string backOrderMessage = string.IsNullOrEmpty(_portal.BackOrderMessage) ? WebStore_Resources.TextBackOrderMessage : _portal.BackOrderMessage ;
+    string inStockMessage = string.IsNullOrEmpty(_portal.InStockMessage) ? WebStore_Resources.TextInstock : _portal.InStockMessage ;
+    string outOfStockMessage = string.IsNullOrEmpty(_portal.OutOfStockMessage) ? WebStore_Resources.TextOutofStock : _portal.OutOfStockMessage;
+
+}
+
+@if (Model?.Count > 0 && variants?.Count > 0)
+{
+    <div id="ConfigVariants" class="col-12 px-0 b2b-configurable-product" data-test-selector="divConfigurableProduct">
+        <div class=" my-4 b2b-dynamic-addons">
+            <div class="table-responsive">
+                <table class="table border" id="TblConfigVariants" data-test-selector="tblConfigurableVariants">
+                    <thead>
+                        <tr data-test-selector="rowConfigHeading">
+                            <th class=" text-uppercase">@WebStore_Resources.LabelProduct</th>
+                            @foreach (AttributesViewModel item in variants?.OrderBy(x => x.DisplayOrder))
+                            {
+                                <th class="text-uppercase cursor-pointer pr-3" data-variant="@item.AttributeCode" onclick="ConfigurableProduct.prototype.SortColumn(this)">
+                                    <div class=" d-flex align-items-center justify-content-center">
+                                        @item.AttributeName
+                                        <div class="sort-icons d-flex flex-column">
+                                            <span class="arrow-drop-up"></span>
+                                            <span class="arrow-drop-down"></span>
+                                        </div>
+                                    </div>
+                                </th>
+
+
+                            }
+                            <th class="text-uppercase">@WebStore_Resources.ColumnTitlePrice</th>
+                            <th class="text-uppercase">@WebStore_Resources.ColumnTitleQuantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ConfigurableProductViewModel item in Model.OrderBy(x => x.AssociatedProductDisplayOrder))
+                        {
+                            bool showDefaultAndAllLocationsInventory = GlobalAttributeHelper.IsShowAllLocationsInventory();
+                            string maxQuantity = item.ProductAttributes?.Value(ZnodeConstant.MaximumQuantity);
+                            string minQuantity = item.ProductAttributes?.Value(ZnodeConstant.MinimumQuantity);
+                            bool isDontTrackInventory = Convert.ToBoolean(item.ProductAttributes.FirstOrDefault(y => y.AttributeCode == ZnodeConstant.OutOfStockOptions)?.SelectValues.Where(x => x.Code == ZnodeConstant.DontTrackInventory).Any());
+                            string disable = !item.ShowAddToCart || !(item.RetailPrice > 0) || isParentProductObsolete ? "disabled" : "";
+                            bool isAllowBackOrdering = Convert.ToBoolean(item.ProductAttributes.FirstOrDefault(y => y.AttributeCode == ZnodeConstant.OutOfStockOptions)?.SelectValues.Where(x => x.Code == ZnodeConstant.AllowBackOrdering).Any());
+                            string imageUrl = $"{thumbnailUrl}{item.ImageName}";
+                            string typicalLeadTime = Convert.ToString(item.ProductAttributes?.FirstOrDefault(x => x.AttributeCode.Equals(ZnodeConstant.TypicalLeadTime, StringComparison.InvariantCultureIgnoreCase))?.AttributeValues);
+                            List<AttributesViewModel> productVariants = item?.ProductAttributes?.Where(x => x.IsConfigurable)?.ToList();
+                            productVariants = productVariants?.Where(x => configurableAttributeCodeList.Contains(x.AttributeCode))?.ToList();
+                            bool isShowPriceAndInventoryToLoggedInCustomersOnly = GlobalAttributeHelper.IsShowPriceAndInventoryToLoggedInUsersOnly();
+                            <tr id="@item.SKU" data-productId="@item.PublishProductId" data-productName="@item.Name" data-test-selector="rowConfigProductDetails">
+                                <td class="image d-flex align-items-center" data-test-selector="colProductVariant_@item.SKU">
+                                    <div class="configurable-item-image cursor-pointer">
+                                        <img src="@imageUrl" data-sku="@item.SKU" data-productId="@item.PublishProductId" alt="@Html.RenderBlock(item.Name) Image" class="img-fluid" onclick="ConfigurableProduct.prototype.GetProductImage(this)" data-test-selector="imgProductImage_@item.SKU" />
+
+                                    </div>
+                                    <div class="pl-3 flex-grow-1 Configurable-item-details" data-test-selector="divConfigurableItemDetails_@item.SKU">
+                                        <div class="col-12 pl-0" data-test-selector="divProductName_@item.SKU"> @item.Name</div>
+                                        <div class="row configurable-item-sku">
+                                            <div class="col-12 col-sm-4 lable-sku pr-0" data-test-selector="divSKUName_@item.SKU"> SKU : </div>
+                                            <div class="col-sm-8 child-item-sku" data-test-selector="divProductSKU_@item.SKU">
+                                                @item.SKU
+                                            </div>
+                                        </div>
+
+                                        @if (!isShowPriceAndInventoryToLoggedInCustomersOnly || Request.IsAuthenticated)
+                                        {
+                                            if (isDontTrackInventory)
+                                            {
+                                                <div class="row configurable-item-inventory">
+                                                    <div class="col-12 col-sm-4 pr-0" data-test-selector="divInventoryLabel_@item.SKU">@WebStore_Resources.TitleInventory: </div>
+                                                    <div class="col-sm-8 success-msg">
+                                                        @Html.Label(item.InventoryMessage, new { @class = "label-locations", @data_test_selector = "divInventorySuccessMessage" + @item.SKU })
+                                                    </div>
+                                                </div>
+                                            }
+                                            else if (isAllowBackOrdering)
+                                            {
+                                                <div class="row configurable-item-inventory">
+                                                    <div class="col-12 col-sm-4 pr-0" data-test-selector="divInventoryLabel_@item.SKU">@WebStore_Resources.TitleInventory: </div>
+                                                    <div class="col-sm-8 success-msg">
+                                                        @Html.Label(backOrderMessage, new { @class = "label-locations", @data_test_selector = "divInventorySuccessMessage" + @item.SKU })
+                                                    </div>
+                                                </div>
+                                            }
+                                            else if (showDefaultAndAllLocationsInventory)
+                                            {
+                                                if (HelperUtility.IsNotNull(item.Quantity) && item.Quantity.GetValueOrDefault() > 0)
+                                                {
+                                                    <div class="row configurable-item-inventory">
+                                                        <div class="col-12 col-sm-4 pr-0" data-test-selector="divInventoryLabel_@item.SKU">@WebStore_Resources.TitleInventory: </div>
+                                                        <div class="col-sm-8">
+                                                            <label id="lblDefaultInventoryCount" class="success-msg m-0" data-test-selector="lblInventoryCount_@item.SKU">@Helper.GetRoundOffQuantity(item.DefaultInventoryCount)</label>
+                                                            @Html.Label(Convert.ToString(item.WarehouseName), new { @id = "lblDefaultLocationName", @class = "default-name  m-0", data_test_selector = "lblWarehouseName" + @item.SKU })
+                                                            (@Html.Label(Convert.ToString(item.Quantity), new { @id = "lblAllInventoryCount", @class = "label-locations success-msg m-0", data_test_selector = "lblInventoryQunatity" + @item.SKU })
+                                                            <span class="default-name cursor-pointer "><u><a onclick="Product.prototype.DisplayChildAllLocationInventory(@item.PublishProductId)" class="read-reviews" data-test-selector="linkInventoryDetail_@item.SKU">@WebStore_Resources.LabelAllLocations</a></u></span>)
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="row configurable-item-inventory">
+                                                        <div class="col-12 col-sm-4 pr-0" data-test-selector="divInventoryLabel_@item.SKU">@WebStore_Resources.TitleInventory: </div>
+                                                        <div class="col-sm-8 error-msg" data-test-selector="divInventoryMessage_@item.SKU">
+                                                            @item.InventoryMessage
+                                                        </div>
+                                                    </div>
+                                                    if (isEnableInventoryStockNotification && !item.ShowAddToCart && !isQuickView)
+                                                    {
+                                                        <div class="offset-sm-4">
+                                                            <a href="javascript:void(0);" class="stock-notice-link" onclick="Product.prototype.BindStockSKU(this)" data-sku="@item.SKU" data-toggle="modal" data-test-selector="linkStockNotice" data-target="#StockNoticeModal">@WebStore_Resources.StockNotification</a>
+                                                        </div>
+                                                    }
+                                                    <input type="hidden" id="selectedSKU" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (HelperUtility.IsNotNull(item.Quantity) && item.Quantity.GetValueOrDefault() > 0)
+                                                {
+                                                    <div class="row configurable-item-inventory">
+                                                        <div class="col-12 col-sm-4 pr-0" data-test-selector="divInventoryLabel_@item.SKU">@WebStore_Resources.TitleInventory: </div>
+                                                        <div class="col-sm-8 success-msg">
+                                                            @Html.Label(inStockMessage, new { @class = "label-locations", data_test_selector = "lblInventoryMessage" + @item.SKU })
+                                                            <span>
+                                                                (@Html.Label(Convert.ToString(item.Quantity), new { @id = "lblAllInventoryCount", @class = "label-locations", data_test_selector = "lblInventoryLocation" + @item.SKU }))
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="row configurable-item-inventory">
+                                                        <div class="col-12 col-sm-4 pr-0" data-test-selector="divInventoryLabel_@item.SKU">@WebStore_Resources.TitleInventory: </div>
+                                                        <div class="col-sm-8 error-msg" data-test-selector="divInventoryMessage_@item.SKU">
+                                                            @outOfStockMessage
+                                                        </div>
+                                                    </div>
+                                                    if (isEnableInventoryStockNotification && !item.ShowAddToCart && !isQuickView)
+                                                    {
+                                                        <div class="offset-sm-4">
+                                                            <a href="javascript:void(0);" class="stock-notice-link" onclick="Product.prototype.BindStockSKU(this)" data-sku="@item.SKU" data-toggle="modal" data-test-selector="linkStockNotice" data-target="#StockNoticeModal">@WebStore_Resources.StockNotification</a>
+                                                        </div>
+                                                    }
+                                                    <input type="hidden" id="selectedSKU" />
+                                                }
+                                            }
+                                            if (!string.IsNullOrEmpty(typicalLeadTime) && !isParentProductObsolete)
+                                            {
+                                                <div class="row configurable-item-leadtime mt-3 mt-sm-0" data-test-selector="hdgProductLead_@item.SKU">
+                                                    <div class="col-12 col-sm-4 leadtime-label pr-0" data-test-selector="divLeadTimeLabel_@item.SKU">@WebStore_Resources.LabelTypicalLeadTime:</div>
+                                                    <div class="col-12 col-sm-8 typical-leadtime" data-test-selector="divTypicalLeadTimeDays_@item.SKU">@typicalLeadTime @WebStore_Resources.LabelDays</div>
+                                                </div>
+                                            }
+                                        }
+                                        <input type="hidden" name="image" id="image_@item.PublishProductId" value="@item.ImageName" />
+                                        <input type="hidden" name="Alternateimage" id="Alternateimage_@item.PublishProductId" value="@item.AlternateImageName" />
+                                    </div>
+                                </td>
+
+                                @foreach (AttributesViewModel variant in productVariants?.OrderBy(x => x.DisplayOrder))
+                                {
+                                    AttributesSelectValuesViewModel attributesSelectValuesViewModel = variant.SelectValues.FirstOrDefault();
+                                    string variantClass = variant.IsSwatch == "true" || variant.IsSwatch == "false" ? "swatch" : "text";
+                                    string imageSwatchUrl = $"{mediaThumbnailUrl}{attributesSelectValuesViewModel.Path}";
+                                    <td class="@variant.AttributeCode @variantClass text-center configurable-attributes-info " data-test-selector="colConfigurableAttributesVariant">
+                                        @switch (variant.IsSwatch)
+                                        {
+                                            case "true":
+                                                <label data-test-selector="lblSwatchImage_@attributesSelectValuesViewModel.Code"><img src="@imageSwatchUrl" class="SwatchImage img-responsive" title="@variant.AttributeValues" alt="@variant.AttributeValues" /></label>
+                                                <input type="hidden" name="@attributesSelectValuesViewModel.Code" id="@attributesSelectValuesViewModel.Code" value="@attributesSelectValuesViewModel.Value" />
+                                                break;
+                                            case "false":
+                                                <label data-test-selector="lblSwatchIcon_@attributesSelectValuesViewModel.Code"> <span class="swatch-icon stop-icon" style="color:@attributesSelectValuesViewModel.SwatchText !important;" title="@attributesSelectValuesViewModel.Value"></span> </label>
+                                                <input type="hidden" name="@attributesSelectValuesViewModel.Code" id="@attributesSelectValuesViewModel.Code" value="@attributesSelectValuesViewModel.Value" />
+                                                break;
+                                            default:
+                                                <label class="scratch-text"  data-test-selector="lblScrathText_@attributesSelectValuesViewModel.Code">@attributesSelectValuesViewModel.Value</label>
+                                                break;
+                                        }
+                                    </td>
+                                }
+                                <td class="text-center configurable-attributes-info pt-3 @obsoleteClass" id="price_@item.PublishProductId" data-test-selector="colProductPrice_@item.SKU">
+                                    @if (!isShowPriceAndInventoryToLoggedInCustomersOnly || Request.IsAuthenticated)
+                                    {
+                                        @Helper.FormatPriceWithCurrency(item.RetailPrice > 0 ? item.RetailPrice : item.SalesPrice, item.CultureCode)
+                                        if (!(item.RetailPrice > 0))
+                                        {
+                                            <span class="error-msg d-block" id="valPrice_@item.PublishProductId" data-test-selector="spnErrorMessagePrice_@item.SKU">@WebStore_Resources.ErrorPriceNotAssociate</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @WebStoreConstants.DashSymbol
+
+                                    }
+                                </td>
+                                <td class="text-center configurable-attributes-info " data-test-selector="colQuantityBox_@item.SKU">
+                                    <input type="number" class="text-center configquantity" id="item_@item.PublishProductId"  data-test-selector="txtQuantityBox_@item.SKU"  data-productId="@item.PublishProductId" data-sku="@item.SKU" data-min-quantity="@minQuantity" data-max-quantity="@maxQuantity" @disable onchange="ConfigurableProduct.prototype.OnConfigurableProductQuantityChange(this)" />
+                                    <span class="error-msg d-block" id="val_@item.PublishProductId" data-test-selector="spnErrorMessage_@item.SKU"></span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $("#configurableproductmessage").ready(function () {
+        $("#configurableproductmessage").html('@message');
+    });
+</script>
+

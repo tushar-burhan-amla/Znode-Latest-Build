@@ -1,0 +1,43 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model CartViewModel
+
+<div id="div-coupons-promotions">
+    <div class="coupons-promotions">
+        <div class="col-sm-7 nopadding margin-bottom">
+            <div class="col-sm-12 nopadding cart-promocode">
+                <div class="form-group">
+                    <div class="control-label"><label>@Admin_Resources.LabelEnterCouponCode</label></div>
+
+                    @if (!Equals(Model.Coupons, null) && Model.Coupons.Count > 1)
+                    {
+                        <div class="control-sm"><input type="text" id="promocode" name="Coupon" class="form-input" size="40" maxlength="100" value="@Model.Coupons[@Model.Coupons.Count - 1].Code" /></div>
+                    }
+                    else
+                    {
+                        <div class="control-sm"><input type="text" id="promocode" name="Coupon" class="form-input" size="40" maxlength="100" /></div>
+                    }
+
+                    <div class="pull-left"><button type="button" class="btn-text btn-text-secondary margin-left-10" id="btnApplyCoupon" onclick="Order.prototype.ApplyPromoCode(true);">@Admin_Resources.ButtonApply</button></div>
+                    <div id="couponContainer" style="display:none;" class="control-non control-lg success-msg"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 nopadding giftcard-applyagain form">
+                <div class="form-group">
+                    <div class="control-label"><label>@Admin_Resources.LabelGiftCardNumber</label></div>
+                    <div class="control-sm"><input type="text" id="txtgiftcard" name="giftcard" class="form-input" value="" maxlength="100"/></div>
+                    <div class="pull-left"><button type="button" class="btn-text margin-left-10" id="giftcard-apply" onclick="Order.prototype.ApplyGiftCard();">@Admin_Resources.ButtonApply</button></div>
+                    <div id="cart-giftcard-status" class="control-non success-msg control-lg"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 nopadding CSR-discount form">
+                <div class="form-group">
+                    <div class="control-label"><label>@Admin_Resources.LabelCSRDiscount</label></div>
+                    <div class="control-sm"><input type="number" id="txtcsrDiscount" name="csrDiscount" class="form-input" value="" /></div>
+                    <div class="pull-left"><button type="button" class="btn-text margin-left-10" id="csrDiscount-apply" onclick="Order.prototype.ApplyCSRDiscount();">@Admin_Resources.ButtonApply</button></div>
+                    <div id="csr-discount-status" class="control-non success-msg control-lg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

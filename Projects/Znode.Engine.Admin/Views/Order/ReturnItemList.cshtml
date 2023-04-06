@@ -1,0 +1,223 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model ReturnOrderLineItemListViewModel
+@{
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+}
+
+<div class="d-flex justify-content-between align-items-center">
+    <div class="panel-heading">
+        <h4 data-test-selector="hdgReturnItemList" class="dashboard-panel-title">Return Item List</h4>
+    </div>
+    <div id="productListDiv" class="padding-right">
+        <button type="button" id="sendReturnedOrderMail" data-test-selector="linkSendReturnedOrderMail" class="btn-text-icon" onclick="Order.prototype.SendReturnedOrderMail()">
+            <em class='z-resend-email'></em>@Admin_Resources.SendReturnedOrderMail
+        </button>
+    </div>
+</div>
+
+<div>
+    @if (Model?.ReturnItemList?.Any() ?? false)
+    {
+        <div class="col-xs-12 cart-products nopadding margin-bottom">
+            <div class="table" data-test-selector="tblReturnItem">
+                <div class="col-xs-12 nopadding table-head">
+                    <ul class="col-xs-12 nopadding">
+                        <li class="sp-return-number">
+                            <span>@Admin_Resources.LabelReturnNumber</span>
+                        </li>
+                        <li class="sp-image imageicon">
+                            <span>@Admin_Resources.LabelImage</span>
+                        </li>
+                        <li class="sp-sku">
+                            <span>@Admin_Resources.LabelSKU</span>
+                        </li>
+                        <li class="sp-product-name">
+                            <span>@Admin_Resources.LabelProduct</span>
+                        </li>
+                        <li class="sp-status">
+                            <span>@Admin_Resources.LabelStatus</span>
+                        </li>
+                        <li class="sp-returned-reason">
+                            <span>@Admin_Resources.LabelReason</span>
+                        </li>
+                        <li class="sp-tracking-number">
+                            <span>@Admin_Resources.LabelTrackingNumber</span>
+                        </li>
+                        <li class="table-unitprice sp-unit-price">
+                            <span>@Admin_Resources.LabelUnitPrice</span>
+                        </li>
+                        <li class="table-quantity sp-quantity">
+                            <span>@Admin_Resources.LabelQuantity</span>
+                        </li>
+                        <li class="sp-shipping">
+                            <span>@Admin_Resources.LabelShipping</span>
+                        </li>
+                        <li class="sp-shipping">
+                            <span>@Admin_Resources.LabelReturnShipping</span>
+                        </li>
+                        <li class="table-total sp-total">
+                            <span>@Admin_Resources.LabelTotal</span>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="col-xs-12 table-body">
+                    @foreach (ReturnOrderLineItemViewModel returnItem in Model.ReturnItemList)
+                    {
+                        <li class="cartItem">
+                            <ul class="line-items">
+                                @Html.Partial("_ReturnLineItem", returnItem)
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-12 cart-total nopadding">
+            <div class="col-sm-6 col-md-6 col-lg-4 cart-summary pull-right">
+                @if (Model.ShippingCost > 0 || Model.TaxCost > 0)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-6 nopadding">
+                            <label data-test-selector="lblReturnSubTotal">@Admin_Resources.LabelSubTotal</label>
+                        </div>
+                        <div class="col-sm-6 nopadding order-value">
+                            <label data-test-selector="lblSpanReturnSubTotal">@HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.SubTotal), cultureCode)</label>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <div class="col-sm-6 nopadding">
+                            <label data-test-selector="lblReturnSubTotal">@Admin_Resources.LabelSubTotal</label>
+                        </div>
+                        <div class="col-sm-6 nopadding order-value">
+                            <label data-test-selector="lblSpanReturnSubTotal">@HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.SubTotal), cultureCode)</label>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.ImportDuty > 0)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-6 nopadding">
+                            @Html.Label(@Admin_Resources.LabelImportDuty, new { @data_test_selector = "lblReturnColumnImportDuty" })
+                        </div>
+                        <div class="col-sm-6 nopadding">
+                            <label data-test-selector="lblSpanReturnColumnImportDuty">@HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.ImportDuty), cultureCode)</label>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.TaxCost > 0)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-6 nopadding">
+                            @Html.Label(@Admin_Resources.LabelShipping, new { @data_test_selector = "lblReturnShippingCost" })
+                        </div>
+                        <div class="col-sm-6 nopadding order-value">
+                            <label data-test-selector="lblSpanReturnShippingCost"> + @HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.ShippingCost), cultureCode)</label>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <div class="col-sm-6 nopadding">
+                            @Html.Label(@Admin_Resources.LabelShipping, new { @data_test_selector = "lblReturnShippingCost" })
+                        </div>
+                        <div class="col-sm-6 nopadding order-value">
+                            <label data-test-selector="lblSpanReturnShippingCost"> + @HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.ShippingCost), cultureCode)</label>
+                        </div>
+                    </div>
+                }
+                <div class="form-group">
+                    <div class="col-sm-6 nopadding">
+                        @Html.Label(@Admin_Resources.LabelTax, new { @data_test_selector = "lblReturnColumnTax" })
+                    </div>
+                    <div class="col-sm-6 nopadding order-value">
+                        <label data-test-selector="lblSpanReturnColumnTax"> + @HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.TaxCost), cultureCode)</label>
+                    </div>
+                </div>
+
+                @if (Model.DiscountAmount > 0)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-6 nopadding">
+                            @Html.Label(@Admin_Resources.LabelDiscountAmount, new { @data_test_selector = "lblreturnDiscount" })
+                        </div>
+                        <div class="col-sm-6 nopadding order-value">
+                            <label data-test-selector="lblSpanDiscount"> - @HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.DiscountAmount), cultureCode)</label>
+                        </div>
+                    </div>
+                }
+                @if (Model.CSRDiscount > 0)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-6 nopadding">
+                            @Html.Label(@Admin_Resources.LabelCSRDiscount, new { @data_test_selector = "lblreturnCSRDiscount" })
+                        </div>
+                        <div class="col-sm-6 nopadding order-value">
+                            <label data-test-selector="lblSpanCSRDiscount"> - @HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.CSRDiscount), cultureCode)</label>
+                        </div>
+                    </div>
+                }
+
+                @if ((Model.ShippingDiscount > 0))
+                {
+                    <div class="form-group">
+                        <div class="col-sm-6 nopadding">
+                            @Html.Label(@Admin_Resources.LabelShippingDiscount, new { @data_test_selector = "lblreturnShippingDiscount" })
+                        </div>
+                        <div class="col-sm-6 nopadding order-value">
+                            <label data-test-selector="lblSpanReturnShippingDiscount"> - @HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.ShippingDiscount), cultureCode)</label>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.ReturnCharges > 0)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-6 nopadding">
+                            @Html.Label(@Admin_Resources.LabelReturnCharges, new { @data_test_selector = "lblreturnReturnCharges" })
+                        </div>
+                        <div class="col-sm-6 nopadding order-value">
+                            <label data-test-selector="lblSpanReturnCharges">
+                                - @HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.ReturnCharges), cultureCode)
+                                <span class="help-text">
+                                    <em class="z-help-circle" data-toggle="tooltip" data-placement="left" title="" data-original-title="@Admin_Resources.TitleReturnChargesTooltip"></em>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                }
+                <div class="form-group border-line">
+                    <div class="col-sm-6 nopadding">
+                        @Html.LabelFor(model => model.Total, Admin_Resources.LabelReturnTotal, new { @data_test_selector = "lblReturnTotal" })
+                    </div>
+                    <div class="col-sm-6 nopadding order-value">
+                        <label id="dynamic-order-total" data-test-selector="lblSpanReturnTotal">@HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.Total), cultureCode)</label>
+                    </div>
+                </div>
+                @if (Model.ReturnVoucherAmount > 0)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-6 nopadding">
+                            @Html.LabelFor(model => model.ReturnVoucherAmount, Admin_Resources.LabelVoucherAmount, new { @data_test_selector = "lblReturnVoucherAmount" })
+                        </div>
+                        <div class="col-sm-6 nopadding order-value">
+                            <label id="dynamic-order-total" data-test-selector="lblSpanReturnVoucherAmount">@HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.ReturnVoucherAmount), cultureCode)</label>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-sm-12 no-record nopadding">
+            <p data-test-selector="lblSpanReturnTotal">@Admin_Resources.TextNoOrderedItems</p>
+        </div>
+    }
+</div>

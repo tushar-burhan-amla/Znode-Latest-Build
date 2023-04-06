@@ -1,0 +1,23 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model  List<BrandViewModel>
+@{
+    Layout = null;
+}
+<div class="col-12 p-0">
+    <ul class="brand-list">
+        @if (Model?.Count > 0)
+        {
+            foreach (BrandViewModel brand in Model)
+            {
+
+                <li class="b2b-brand-popup b2b-brands" onclick="Brand.prototype.GetSelectedBrand(@brand.BrandId)">
+                    @brand.BrandName
+                </li>
+            }
+        }
+        else
+        {
+            <div>@WebStore_Resources.TextBrandNotAvailable</div>
+        }
+    </ul>
+</div>

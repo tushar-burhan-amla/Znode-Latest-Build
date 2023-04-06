@@ -1,0 +1,28 @@
+﻿@model Znode.Engine.Admin.ViewModels.SearchReportViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleSearch + " | " + Admin_Resources.Multifront;
+}
+<div id="Resultpartial">
+    <div id="searchSettings">
+        <div class="title-container">
+            <h1>@Admin_Resources.LabelSearchSettings</h1>
+        </div>
+        <div class="main-wrapper">
+            @Html.Partial("~/Views/SearchConfiguration/_asidePanel.cshtml")
+            <section class="main-container clearfix">
+                <div class="col-sm-12 nopadding search-profile">
+                    @Html.Partial("~/Views/Shared/Controls/_TabStructure.cshtml", Model.Tabs)
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+        //check the browser refresh event and reset the tabs for search report.
+        if (!performance.navigation.type == 1) {
+            localStorage['activetab'] = 0;
+            localStorage['CurrentUrl'] = "";
+        }
+</script>

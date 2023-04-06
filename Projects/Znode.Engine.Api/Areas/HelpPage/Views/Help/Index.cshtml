@@ -1,0 +1,59 @@
+@using System.Web.Http
+@using System.Web.Http.Controllers
+@using System.Web.Http.Description
+@using System.Collections.ObjectModel
+@using Znode.Engine.Api.Areas.HelpPage.Models
+@using System.Web.Optimization
+@model Collection<ApiDescription>
+
+@{
+    // Group APIs by controller
+    ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
+    int endpointsCount = apiGroups.Sum(@group => @group.Count());
+}
+
+<link type="text/css" href="~/Areas/HelpPage/HelpPage.css" rel="stylesheet" />
+@Scripts.Render("~/Scripts/jquery-3.3.1.js")
+
+@*Script to move on location for selected group.*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#api-groups").change(function () {
+            window.location = "#" + $("#api-groups").val();
+        });
+    });
+</script>
+
+<div id="body" class="help-page">
+   
+    <section class="api-groups-meta clear-fix">
+        <table aria-describedby="Help Page">
+            <tr>
+                <th scope="col" align="center">Groups</th>
+                <th scope="col" align="center">Endpoints</th>
+                <th scope="col">Jump to...</th>
+            </tr>
+            <tr>
+                <td align="center">@apiGroups.Count</td>
+                <td align="center">@endpointsCount</td>
+                <td>
+                    <select id="api-groups">
+                        <option value=""></option>
+                        @foreach (var group in apiGroups)
+                        {
+                        <option value="@group.Key.ControllerName">@group.Key.ControllerName</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </section>
+
+    @*<section class="content-wrapper main-content clear-fix">*@
+    <section class="clear-fix">
+        @foreach (var group in apiGroups)
+        {
+            @Html.DisplayFor(m => group, "ApiGroup")
+        }
+    </section>
+</div>

@@ -1,0 +1,74 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+@{
+    string preauthorize = Convert.ToBoolean(Model.PreAuthorize) ? "checked='checked'" : string.Empty;
+    string isRmaCompatible = Convert.ToBoolean(Model.IsRmaCompatible) ? "checked='checked'" : string.Empty;
+}
+
+<div id="PaymentGetwayForm-container">
+    <h3 class="section-heading margin-top-25">@Admin_Resources.LabelPaymentGatewayHeader</h3>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelGatewayTestMode)
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(m => Model.TestMode, new List<SelectListItem>()
+                                                {
+                                                    new SelectListItem {Text = @Admin_Resources.LabelTestMode,Value="true"},
+                                                    new SelectListItem {Text = @Admin_Resources.LabelLiveMode ,Value="false"}
+                                                }, new { @id = "ddlTestMode" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelClientSystemId, new { @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => Model.GatewayPassword, new { required = "required" })
+                @Html.ValidationMessageFor(m => Model.GatewayPassword, @Admin_Resources.ErrorMessageClientId)
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelHighRadiusMerchantId, new { @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => Model.GatewayUsername, new { required = "required" })
+                @Html.ValidationMessageFor(m => Model.GatewayUsername, @Admin_Resources.MerchantLoginName)
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelSecurityKey, new { @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => Model.TransactionKey, new { required = "required" })
+                @Html.ValidationMessageFor(m => Model.TransactionKey, @Admin_Resources.ErrorMessageClientId)
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+
+                @Html.Label(@Admin_Resources.LabelRequestId, new { @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(m => Model.Partner, new { required = "required" })
+                @Html.ValidationMessageFor(m => Model.Partner, @Admin_Resources.ErrorMessageClientId)
+            </div>
+        </div>
+    </div>
+
+</div>

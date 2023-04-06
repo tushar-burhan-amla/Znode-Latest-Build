@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Files>
+  <Controller>
+    <File TemplateName="controller.tm" TargetFolderPath="Libraries\Znode.Admin.Core\Controllers\{FolderName}" FileName="{FileName}Controller.cs" ProjectName="Znode.Admin.Core"/>
+  </Controller>
+  <Agent>
+    <File TemplateName="agent.tm" TargetFolderPath="Libraries\Znode.Admin.Core\Agents\Agents\{FolderName}" FileName="{FileName}Agent.cs" ProjectName="Znode.Admin.Core"/>
+    <File TemplateName="iagent.tm" TargetFolderPath="Libraries\Znode.Admin.Core\Agents\IAgents\I{FolderName}" FileName="I{FileName}Agent.cs" ProjectName="Znode.Admin.Core"/>
+  </Agent>
+  <Client>
+    <File TemplateName="client.tm" TargetFolderPath="Engines\Znode.Engine.Api.Client\Clients\Clients\{FolderName}" FileName="{FileName}Client.cs" ProjectName="Znode.Engine.Api.Client"/>
+    <File TemplateName="iclient.tm" TargetFolderPath="Engines\Znode.Engine.Api.Client\Clients\IClients\I{FolderName}" FileName="I{FileName}Client.cs" ProjectName="Znode.Engine.Api.Client"/>
+  </Client>
+  <JS>
+    <File TemplateName="js.tm" TargetFolderPath="Znode.Engine.Admin\Scripts\{JSFolderName}" FileName="{FileName}.ts" ProjectName="Znode.Engine.Admin"/>
+  </JS>
+</Files>

@@ -1,0 +1,56 @@
+﻿@using Znode.Engine.WebStore.Agents
+@model Int32
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    Layout = null;
+    string homePageTickerContainerPartialViewPath = "~/Views/Themes/Templates/_HomePageTicker.cshtml";
+}
+
+<div class="container">
+    <div class="col contain-pages landing-form">
+        <div class="row">
+            <div class="col-12 p-0">
+                <z-widget>@Html.WidgetPartial("ContentContainer", "Content Container", "67878898", "ContentPageMapping", homePageTickerContainerPartialViewPath, (int)ViewBag.contentPageId)</z-widget>
+            </div>
+            <div class="col-12 p-0">
+                <z-widget>@Html.WidgetPartial("ImageWidget", "Image Widget", "6787889", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+            </div>
+            <div class="col-12 p-0">
+                <z-widget>@Html.WidgetPartial("TemplateTextEditor", "Text Widget", "565767", "ContentPageMapping", (int)Model)</z-widget>
+            </div>
+        </div>
+        <div class="row py-5">
+            <div class="col-12 col-lg-6 d-flex flex-wrap align-content-center">
+                <z-widget>@Html.WidgetPartial("TemplateTextEditor", "Text Widget", "9897878", "ContentPageMapping", (int)Model)</z-widget>
+            </div>
+            <div class="col-12 col-lg-6 p-0">
+                <z-widget>@Html.WidgetPartial("ImageWidget", "Image Widget", "98988999", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+            </div>
+        </div>
+        <div class="row py-5 content-text">
+            <div class="col-6 col-lg-6 p-0 px-4">
+                <z-widget>@Html.WidgetPartial("ImageWidget", "Image Widget", "56778899", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+            </div>
+            <div class="col-12 col-lg-6 d-flex flex-wrap align-content-center">
+                <z-widget>@Html.WidgetPartial("TemplateTextEditor", "Text Widget", "24445556", "ContentPageMapping", (int)Model)</z-widget>
+            </div>
+        </div>
+        <div class="row py-5">
+            <div class="col-12 col-lg-6 d-flex flex-wrap align-content-center">
+                <z-widget>@Html.WidgetPartial("TemplateTextEditor", "Text Widget", "2333445", "ContentPageMapping", (int)Model)</z-widget>
+            </div>
+            <div class="col-12 col-lg-6 p-0">
+                <z-widget>@Html.WidgetPartial("ImageWidget", "Image Widget", "809898", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 p-0">
+                <z-widget>@Html.WidgetPartial("TemplateTextEditor", "Text Widget", "8787878", "ContentPageMapping", (int)Model)</z-widget>
+            </div>
+            <div class="col-12 p-0">              
+                <z-widget>@Html.WidgetPartial("ProductList", "Featured Product List", "9794455", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+            </div>
+        </div>
+    </div>
+</div>

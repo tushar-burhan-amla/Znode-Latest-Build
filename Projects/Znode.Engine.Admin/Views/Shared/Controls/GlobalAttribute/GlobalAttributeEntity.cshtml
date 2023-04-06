@@ -1,0 +1,110 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities;
+@model GlobalAttributeEntityDetailsViewModel
+
+@{
+    ViewBag.Title = (string.Equals(Model.EntityType, Convert.ToString(EntityTypeEnum.Store), StringComparison.CurrentCultureIgnoreCase)) ? Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront
+        : Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    string entityName = Model.Attributes?.Select(x => x.EntityValue)?.FirstOrDefault();
+    if (String.IsNullOrEmpty(entityName?.Trim()))
+    {
+        entityName = Convert.ToString(TempData["CustomerDisplayName" + @Model.EntityId]);
+    }
+
+    int attributeGroupCount = Model?.Groups?.Count ?? 0;
+    string returnurl = string.Equals(Model.EntityType, Convert.ToString(EntityTypeEnum.Store), StringComparison.CurrentCultureIgnoreCase) ? "/Store/List"
+        : (string.Equals(Model.EntityType, Convert.ToString(EntityTypeEnum.User), StringComparison.CurrentCultureIgnoreCase)) ? "/Customer/CustomersList"
+        : "/Account/List";
+    string title = string.Equals(Model.EntityType, Convert.ToString(EntityTypeEnum.User), StringComparison.CurrentCultureIgnoreCase) ||
+        (string.Equals(Model.EntityType, Convert.ToString(EntityTypeEnum.Account), StringComparison.CurrentCultureIgnoreCase)) ||
+        (string.Equals(Model.EntityType, Convert.ToString(EntityTypeEnum.Store), StringComparison.CurrentCultureIgnoreCase)) ? @Admin_Resources.TitleManage
+       : @Admin_Resources.TitleEdit;
+
+    bool IsUpdatePendingPaymentQuote = (Request.UrlReferrer != null) ? Convert.ToString(Request.UrlReferrer).Contains("UpdatePendingPaymentQuote") : false;
+    returnurl = IsUpdatePendingPaymentQuote ? "/Quote/PendingPaymentList" : returnurl;
+
+    if (IsUpdatePendingPaymentQuote)
+        TempData["prevPageURL"] = returnurl;
+
+    if (TempData["prevPageURL"] != null)
+        returnurl = Convert.ToString(TempData["prevPageURL"]);
+}
+
+<div class="col-sm-12 title-container">
+
+    <h1>@string.Format(title, Model.EntityType)<em class="z-minus"></em><span>@entityName</span></h1>
+    @if (attributeGroupCount > 0)
+    {
+        <div class="pull-right dirtyignore">
+            <a href="@returnurl" class="btn-text-icon" data-test-selector='linkCancel'><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+            <div class="btn-text-group padding-left btn-container">
+                @Html.AuthorizedPrototypeRawActionLink("<em data-test-selector='linkSaveNClose'></em>" + Admin_Resources.ButtonSaveClose, "SaveEntityDetails", "GlobalAttribute", new { @id = "btnSaveNClose", @class = "btn-text btn-text-secondary", onclick = "GlobalAttribute.prototype.SaveEntityAttribute('" + @returnurl + "')" })
+
+                <button type="button"  data-test-selector="btnToggle" class="btn-text-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret caret-color"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    @if (IsUpdatePendingPaymentQuote)
+                    {
+                        //@Html.PrototypeRawActionLink("<em class='z-save'></em>" + Admin_Resources.ButtonSave, "SaveEntityDetails", "GlobalAttribute", "btn-text-icon", "GlobalAttribute.prototype.SaveEntityAttribute('" + @returnurl + "')")
+                        <li>  @Html.AuthorizedPrototypeRawActionLink("<em data-test-selector='linkSave'></em>" + Admin_Resources.ButtonSave, "SaveEntityDetails", "GlobalAttribute", new { @id = "btnSave", @class = "btn-dropdwn-lst", onclick = "GlobalAttribute.prototype.SaveEntityAttribute('" + @returnurl + "')" })</li>
+                    }
+                    else
+                    {
+                        <li> @Html.PrototypeRawActionLink("<em data-test-selector='linkSave'></em>" + Admin_Resources.ButtonSave, "SaveEntityDetails", "GlobalAttribute", "btn-dropdwn-lst", "GlobalAttribute.prototype.SaveEntityAttribute()")</li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="pull-right btn-container">
+            <a href="@returnurl" class="btn-text-icon" data-test-selector='linkCancel'><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+        </div>
+    }
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/views/shared/controls/globalattribute/_entityasidepanel.cshtml", Model)
+    <!--Main Container-->
+    <section class="main-container">
+        @Html.Partial(AdminConstants.GlobalAttributeEntityAsidePanelPartialView, Model)
+        @using (Html.BeginForm("SaveEntityDetails", "GlobalAttribute", FormMethod.Post, new { @id = "frmGlobalAttribute" }))
+        {
+            <div class="col-xs-10">
+                @{bool isActiveGroup = true;}
+                <div class="tab-content">
+                    @foreach (var group in Model.Groups)
+                    {
+                        var htmlClass = isActiveGroup ? "active" : "";
+                        isActiveGroup = false;
+
+                        <div class="tab-pane @htmlClass" id="groupId_@group.GlobalAttributeGroupId">
+                            <h3 class="section-heading" data-test-selector="hdg@(group.AttributeGroupName)">@group.AttributeGroupName</h3>
+                            @{
+                                var attributesAssociatedWithGroup = Model.Attributes.Where(x => x.GlobalAttributeGroupId == group.GlobalAttributeGroupId/* && x.PimAttributeFamilyId == group.PimAttributeFamilyId*/).ToList();
+
+
+                                foreach (var attributes in attributesAssociatedWithGroup)
+                                {
+                                    if (Equals(attributes.ControlProperty.ControlType, "File"))
+                                    { attributes.ControlProperty.htmlAttributes.Add("IsGlobalAttributeFileControl", "True"); }
+                                    @Html.Partial("~/Views/Shared/Controls/GlobalAttribute/_createControl.cshtml", attributes)
+                                }
+                            }
+                        </div>
+
+                    }
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.EntityId)
+            @Html.HiddenFor(model => model.EntityType)
+            @Html.HiddenFor(model => model.FamilyCode)
+        }
+    </section>
+</div>
+<div id="divMediaUploaderPopup"></div>

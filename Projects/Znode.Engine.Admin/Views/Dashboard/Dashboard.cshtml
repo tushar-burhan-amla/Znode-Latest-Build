@@ -1,0 +1,127 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@model DashboardViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleDashboard + " | " + Admin_Resources.Multifront;
+}
+<div class="col-sm-12 nopadding dashboard-title">
+    <div class="title-container d-flex flex-wrap justify-content-between align-items-center">
+        <h1>DASHBOARD</h1>
+        <div class="dashboard-select">
+            <div class="row">
+                <div class="col-sm-6">
+                    @{ List<string> additionalOptionList = new List<string>();
+                        additionalOptionList.Add(ZnodeTypeAheadListGenericOptions.All.ToString());
+                        additionalOptionList.Add(ZnodeTypeAheadListGenericOptions.No.ToString());}
+                    @Html.FastSelectFor(model => model.AccountName, model => model.AccountId, "GetSuggestions", "Typeahead", "Dashboard.prototype.GetSelectedDashboardAccount", 1, true,
+                        new
+                         {
+                            htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectAccount, @class = "", @id = "ddlAccount", @data_test_selector = "ddlAccount" },
+                            parameters = new { @type = ZnodeTypeAheadEnum.AccountList.ToString(), @fieldname = "", @query = "", @additionalOptions = String.Join(",", additionalOptionList), @mappingId = Model.PortalId, @pageSize = ZnodeConstant.DefaultTypeAheadPageSize }
+                         })
+                    <input type="hidden" id="hdnAccount" value="0" />
+                </div>
+                <div class="col-sm-6">
+                    @Html.FastSelectFor(model => model.PortalName, model => model.PortalId, "GetSuggestions", "Typeahead", "Dashboard.prototype.GetSelectedDashboardPortal", 1, true,
+                        new {
+                            htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @Name = "SearchTerm", @id = "ddlPortal", @data_test_selector = "ddlPortal" },
+                            parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString(), additionalOptions = ZnodeTypeAheadListGenericOptions.All.ToString() }
+                        })
+                    <input type="hidden" id="hdnPortal" value="0" />
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<h2 class="dashboard-panel-title">Overview</h2>*@
+</div>
+<div class="col-sm-12 nopadding dashboard-container dashboard-main-container">
+    <div class="row nopadding dashboard-quicklinks">
+        <div class="col-sm-12 dashboard-quicklinks-content">
+            <ul class="d-flex flex-wrap justify-content-around dashboard-quicklinks-list">
+                @if (Html.IsAuthorized("List", "Account"))
+                {
+                    <li class="list-unstyled">
+                        @Html.AuthorizedRawActionLink("<div class='quicklinks'><em class='z-account'></em></div>" + "Accounts", "List", "Account", null, null)
+                    </li>
+                }
+                @if (Html.IsAuthorized("CustomersList", "Customer"))
+                {
+                    <li class="list-unstyled">
+                        @Html.AuthorizedRawActionLink("<div class='quicklinks'><em class='z-customers'></em></div>" + "Users", "CustomersList", "Customer", null, null)
+                    </li>
+                }
+                @if (Html.IsAuthorized("List", "Order"))
+                {
+                    <li class="list-unstyled">
+                        @Html.AuthorizedRawActionLink("<div class='quicklinks'><em class='z-oms'></em></div>" + "Orders", "List", "Order", null, null)
+                    </li>
+                }
+                @if (Html.IsAuthorized("QuoteList", "Quote"))
+                {
+                    <li class="list-unstyled">
+                        @Html.AuthorizedRawActionLink("<div class='quicklinks'><em class='z-quote'></em></div>" + "Quotes", "QuoteList", "Quote", null, null)
+                    </li>
+                }
+                @if (Html.IsAuthorized("List", "RMAReturn"))
+                {
+                    <li class="list-unstyled">
+                        @Html.AuthorizedRawActionLink("<div class='quicklinks'><em class='z-return'></em></div>" + "Returns", "List", "RMAReturn", null, null)
+                    </li>
+                }               
+            </ul>
+        </div>
+
+    </div>
+    <div class="row nopadding">
+        <div class="col-sm-7 nopadding dashboard-panel padding-top-15">
+
+            <div class="col-sm-12 nopadding dashboard-search" id="QuotesView">
+                @{
+                    Html.RenderAction("GetDashboardQuotes", new { portalId = Model.PortalId, accountId = Model.AccountId });
+                }
+            </div>
+            <div class="col-sm-12 nopadding dashboard-search" id="OrdersView">
+                @{
+                    Html.RenderAction("GetDashboardOrders", new { portalId = Model.PortalId, accountId = Model.AccountId });
+                }
+            </div>
+            <div class="col-sm-12 nopadding dashboard-search" id="ReturnsView">
+                @{
+                    Html.RenderAction("GetDashboardReturns", new { portalId = Model.PortalId, accountId = Model.AccountId });
+                }
+            </div>
+        </div>
+        <div class="col-sm-5 nopadding padding-top-15 padding-left-15">
+            <div class="col-sm-12 nopadding dashboard-sales" id="SalesView">
+                @{
+                    Html.RenderAction("GetDashboardSaleDetails", new { portalId = Model.PortalId, accountId = Model.AccountId });
+                }
+            </div>
+            <div class="col-sm-12 nopadding dashboard-inventory" id="TopAccountView">
+                @{
+                    Html.RenderAction("GetDashboardTopAccounts", new { portalId = Model.PortalId, accountId = Model.AccountId });
+                }
+            </div>
+            <div class="col-sm-12 nopadding dashboard-license">
+                @{
+                    Html.RenderAction("GetLicenseInformation", "License");
+                }
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<script>
+    window.addEventListener("pageshow", function (event) {
+        var historyTraversal = event.persisted ||
+            (typeof window.performance != "undefined" &&
+                window.performance.navigation.type === 2);
+        if (historyTraversal) {
+            // Handle page restore.
+            $("#ddlAccount").parent().parent().find(".fstToggleBtn").html('').html('@Model.AccountName');
+            $("#ddlPortal").parent().parent().find(".fstToggleBtn").html('').html('@Model.PortalName');
+        }
+    });
+</script>

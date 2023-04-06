@@ -1,0 +1,42 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalProductPageViewModel
+@{
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? string.Empty : Model?.PortalName;
+}
+
+@using (Ajax.BeginForm("UpdatePortalProductPage", "WebSite", new AjaxOptions { InsertionMode = InsertionMode.Replace, OnSuccess = "Theme.prototype.SaveThemeAsset" }, new { @id = "frmThemeAsset" }))
+{
+    <div class="col-sm-12 title-container">
+        <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelExperience)<em class="z-minus"></em><span>@portalName</span></h1>
+        <div class="pull-right btn-container">
+            @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "List", "StoreExperience", null, new { @class = "btn-text-icon", @data_test_selector = "linkCancel" })
+            <div class="pull-right padding-left">
+                <button type="submit" onclick="WebSite.prototype.GetPDPTemplates()" class=" btn-text btn-text-secondary" data-test-selector="linkSave">@Admin_Resources.ButtonSave</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 manage-website-container nopadding">
+        @for (int index = 0; index < Model.ProductTypes.Count; index++)
+        {
+            <div class="form-group pdptemplates">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label id="templates" data-productType="@Model.ProductTypes.Keys.ToList()[index]" data-test-selector="lbl@(Model.ProductTypes.Keys.ToList()[index])">@Model.ProductTypes.Values.ToList()[index]</label>
+                    </div><div class="control-md">
+                        @if (@Model.PortalProductPageList?.Count > 0)
+                        {
+                            @Html.DropDownListFor(model => model.PortalProductPageList[index].TemplateName, Model.PortalProductPageList[index].TemplateNames, new { @class = "PDPTemplateNameId", @id = "TemplateNameId", @data_productType = @Model.ProductTypes.Keys.ToList()[index], @data_test_selector = "drp" + @Model.ProductTypes.Keys.ToList()[index] })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(model => model.TemplateName, Model.TemplateNames, new { @class = "PDPTemplateNameId", @id = "TemplateNameId", @data_productType = @Model.ProductTypes.Keys.ToList()[index], @data_test_selector = "drp" + @Model.ProductTypes.Keys.ToList()[index] })
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+    @Html.HiddenFor(model => model.PortalId)
+    @Html.HiddenFor(model => model.PortalName)
+    @Html.HiddenFor(model => model.Templates)
+}

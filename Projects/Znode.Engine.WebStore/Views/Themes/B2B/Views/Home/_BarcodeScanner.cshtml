@@ -1,0 +1,14 @@
+﻿@model Znode.Engine.WebStore.ViewModels.BarcodeReaderViewModel
+@{
+    Layout = null;
+}
+<div class="scan-dialog">
+    <div id="div-video-container" class="scan-video-container">
+        <video class="dbrScanner-video w-100" id="videoCamera" playsinline="true"></video>
+    </div>
+    <div class="scan-code-msg">@WebStore_Resources.BarcodeResult<span id="lblScannerCode"></span></div>
+</div>
+@Html.HiddenFor(model => model.LicenseKey)
+@Html.HiddenFor(model => model.BarcodeFormates)
+@Html.HiddenFor(model => model.EnableSpecificSearch)
+

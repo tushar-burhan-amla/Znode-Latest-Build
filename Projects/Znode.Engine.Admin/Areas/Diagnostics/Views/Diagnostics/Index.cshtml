@@ -1,0 +1,105 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@model DiagnosticListViewModel
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+}
+
+<style>
+    .diagnose-page {
+        padding: 30px 20px;
+    }
+
+        .diagnose-page .table tbody tr td {
+            height: auto;
+        }
+
+        .diagnose-page .table {
+            width: 50%;
+        }
+
+    .section-heading {
+        width: 25%;
+        float: left;
+    }
+</style>
+
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgDiagnosticsMaintenance">@Admin_Resources.TitleDiagnosticsMaintenance</h1>
+</div>
+
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/Areas/Diagnostics/Views/Shared/_asideDiagnosticsMaintenancePanel.cshtml")
+
+    <!--Main Container-->
+    <section class="main-container">
+        <div class="col-sm-12 page-container diagnose-page" id="body">
+            <div class="col-sm-12 nopadding">
+
+                <h3 class="section-heading">
+                    @Admin_Resources.TitleDiagnosticsDetails
+                </h3>
+
+                <h5 style="width: 25%; float: left;">@HelperMethods.ToTimeZoneDateTimeFormat(DateTime.Now)  <a href="@Url.Action("Index", "Diagnostics",new { Area = "Diagnostics" })">Refresh<em class="z-new-refresh" data-test-selector="linkRefreshGrid" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"></em></a></h5>
+                @if (Model?.DiagnosticsList?.Count > 0)
+                {
+                    <div class="table-responsive col-sm-12 nopadding gridcontrol-table dirtyignore">
+                        <table class="table" aria-describedby="Diagnostics Table">
+                    
+                            <thead class="grid-header">
+                                <tr>
+                                    <th scope="col">@Admin_Resources.LabelCategory</th>
+                                    <th scope="col">@Admin_Resources.LabelDescription</th>
+                                    <th scope="col">@Admin_Resources.LabelStatus</th>
+                                </tr>
+                            </thead>
+
+                            @foreach (var item in Model.DiagnosticsList)
+                            {
+                                <tr>
+                                    <td>@item.Category</td>
+                                    <td>@item.Item</td>
+                                    @if (item.Status)
+                                    {
+                                        <td>
+                                            <span class="pulse" style="background:green"></span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <span class="pulse" style="background:red"></span>
+                                        </td>
+                                    }
+
+                                </tr>
+
+                            }
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        var menuDiv = $("#nav-menu");
+
+        if (menuDiv.length == 0) {
+            $('.top-user-details').hide();
+            $('.z-nav-menu').hide();
+        }
+
+        Endpoint.prototype.showDiagnosticsTrace(function (response) {
+            $("#trace").html(response);
+        });
+    });
+
+    function onEmailDiagnosticsComplete(response) {
+        ZnodeNotification.prototype.DisplayNotificationMessagesHelper(response.Log, response.Result ? "success" : "error", isFadeOut, fadeOutTime);
+    }
+</script>

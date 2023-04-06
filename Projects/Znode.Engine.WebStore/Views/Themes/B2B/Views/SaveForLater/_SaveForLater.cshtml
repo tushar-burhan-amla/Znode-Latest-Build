@@ -1,0 +1,34 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model TemplateViewModel
+
+@{
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    int inventoryRoundOffValue = string.IsNullOrEmpty(inventoryRoundOff) ? 0 : Convert.ToInt32(inventoryRoundOff);
+    Layout = null;
+    bool showPriceToLoggedInCustomersOnly = GlobalAttributeHelper.IsShowPriceAndInventoryToLoggedInUsersOnly();
+    int saveForLaterLineItemCount = Model?.TemplateCartItems?.Count(x => x.IsActive != false) ?? 0;
+
+}
+
+@if (saveForLaterLineItemCount > 0)
+{
+    <div class="cart-products" data-test-selector="divSavedItems">
+        <div class="col-12 cart-total-title d-flex flex-wrap">
+            @if (!showPriceToLoggedInCustomersOnly || Request.IsAuthenticated)
+            {
+                <h2 data-test-selector="hdgSavedItems">@WebStoreConstants.LabelSavedForLater <span data-test-selector="spanSavedItemsCount">(@saveForLaterLineItemCount)</span></h2>
+            }
+                <div class="col-12 col-md d-md-flex justify-content-md-end p-0"  data-test-selector="divRemoveItems">
+                    @using (Html.BeginForm("RemoveAllTemplateCartItem", "SaveForLater", new { omsTemplateId = Model.OmsTemplateId }, FormMethod.Post, new { id = "FormRemoveAllTemplateCartItem" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <a href="JavaScript:void(0);" data-test-selector="linkRemoveItems" class="cart-item-remove-all cart-item-remove mt-3 mt-md-0 mr-4" onclick="javascript: $($(this).closest('form').submit());" ><span class="close-circle-icon"></span>@WebStore_Resources.LabelRemoveAllItems</a>
+                    }
+                </div>
+        </div>
+        <div class="col-12 b2b-save-for-later mb-4" data-test-selector="divSaveForLaterCartRow">
+            @*To show the recently added product on the top of cart.*@
+                @Html.Partial("_SaveForLaterCartRow", Model)
+        </div>
+    </div>
+}

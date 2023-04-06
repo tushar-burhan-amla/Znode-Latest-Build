@@ -1,0 +1,22 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalIndexViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+}
+<div id="Resultpartial">
+    <div id="searchSettings">
+        <div class="title-container">
+            <h1>@Admin_Resources.LabelSearchSettings</h1>
+        </div>
+        <div class="main-wrapper">
+            <!--Left Panel-->
+            @Html.Partial("~/Views/SearchConfiguration/_asidePanel.cshtml")
+            <!--Main Container-->
+            <section class="main-container clearfix">
+                <div id="createIndexSection">
+                    @Html.Partial("_CreateIndex", Model)
+                </div>
+                <div id="BoostSetting"></div>
+            </section>
+        </div>
+    </div>
+</div>

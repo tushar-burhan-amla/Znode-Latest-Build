@@ -1,0 +1,189 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model SEODetailsViewModel
+@using Znode.Engine.Admin.Helpers
+@using Znode.Engine.Admin.Models
+@{
+
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    if(actionName=="GetDefaultSEODetails")
+    {
+        actionName = "CategorySEODetails";
+    }
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+@using (Ajax.BeginForm(actionName, controllerName, new AjaxOptions()
+{
+    HttpMethod = "Post",
+    OnSuccess = "Category.prototype.SuccessErrorCategorySeoNotification",
+    InsertionMode = InsertionMode.Replace
+}, new { @id = "frmCategorySEO" }))
+{
+<div id="categorySeoDetails">
+    <div class="panel-container">
+        <div class="pull-right">
+            <button type="submit" class="btn-text btn-text-secondary" data-test-selector="btnSaveSeo">@Admin_Resources.ButtonSave</button>
+        </div>
+    </div>
+    <div class="panel-container">
+        <div class="pull-right">
+            <button type="button" class="btn-text btn-text-tertiary" onclick="Category.prototype.GetCategoryDefaultSEODetails()" style="margin-right: 15px;">@Admin_Resources.GetDefaultButton</button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lblAssociatedStore">@PIM_Resources.LabelAssociatedStore </label>
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(model => model.PortalId, Model.Portals.OrderBy(a => Convert.ToInt32(a.Value)),
+                                                                                new { @OnChange = "Category.prototype.GetCategorySEODetails()",@data_test_selector= "drpAssociatedStore" })
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lblLocale"> @Admin_Resources.TitleLocale </label>
+            </div>
+            <div class="control-md">
+                @if (Model.CMSSEODetailId > 0)
+                {
+                    @Html.DropDownListFor(model => model.LocaleId, new SelectList(Model?.Locales, "Value", "Text"),
+                                                                                        new { @OnChange = "Category.prototype.GetCategorySEODetails()", @data_test_selector = "drpLocale" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.LocaleId, new SelectList(Model?.Locales, "Value", "Text"),
+                                                                                        new { @OnChange = "Category.prototype.GetCategorySEODetails()", @readonly = "readonly", disabled = "disabled", @data_test_selector = "drpLocale" })
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.SEOTitle, new { @data_test_selector = "lblSEOTitle" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.SEOTitle, new { @data_test_selector = "txtSEOTitle" })
+                @Html.ValidationMessageFor(model => model.SEOTitle, "", new { @data_test_selector = "valSEOTitle" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.SEODescription, new { @data_test_selector = "lblSEODescription" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.SEODescription, new { @data_test_selector = "txtSEODescription" })
+                @Html.ValidationMessageFor(model => model.SEODescription, "", new { @data_test_selector = "valSEODescription" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.SEOKeywords, new { @data_test_selector = "lblSEOKeywords" })
+            </div>
+            <div class="control-md">
+                @Html.EditorFor(model => model.SEOKeywords, new { @data_test_selector = "txtSEOKeywords" })
+                @Html.ValidationMessageFor(model => model.SEOKeywords, "", new { @data_test_selector = "valSEOKeywords" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.SEOUrl, new { @data_test_selector = "lblSEOUrl" })
+            </div>
+            <div class="control-md">
+                @if (string.IsNullOrEmpty(Model.SEOUrl) || Model.LocaleId == (Convert.ToInt32(DefaultSettingHelper.DefaultLocale)))
+                {
+                    @Html.TextBoxFor(model => model.SEOUrl, new { @id = "currentSeoUrl", @data_test_selector = "txtSEOUrl" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.SEOUrl, new { @id = "currentSeoUrl", @readonly = "readonly", disabled = "disabled", @data_test_selector = "txtSEOUrl" })
+                }
+                @Html.ValidationMessageFor(model => model.SEOUrl, "", new { @data_test_selector = "valSEOUrl" })
+            </div>
+            @Html.Partial("_HelpText", Admin_Resources.HelptextForSEOUrl)
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="control-md control-non">
+            <label>
+                <input id="IsRedirect" name="IsRedirect" checked="@Model.IsRedirect" type="checkbox" value="true" data-test-selector="txtIsRedirect">
+                <span class="lbl padding-8" for="IsRedirect" data-test-selector="lblIsRedirect">@Admin_Resources.LabelIsRedirect</span>
+                <input name="IsCouponRequired" type="hidden" value="false">
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.CanonicalURL, new { @data_test_selector = "lblCanonicalURL" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.CanonicalURL, new { @data_test_selector = "txtCanonicalURL" })
+                @Html.ValidationMessageFor(model => model.CanonicalURL, "", new { @data_test_selector = "valCanonicalURL" })
+            </div>
+            @Html.Partial("_HelpText", Admin_Resources.CanonicalURLHelpTextCategory)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.RobotTag, new { @data_test_selector = "lblRobotTagValue" })
+            </div>
+            <div class="control-md">
+                @Html.EnumDropDownListFor(model => model.RobotTag, new { @data_test_selector = "" })
+                @Html.ValidationMessageFor(model => model.RobotTag, "", new { @id = "errorRequiredType", @data_test_selector = "valRobotTagValue" })
+            </div>
+            @Html.Partial("_HelpText", Admin_Resources.RobotTagHelpTextCategory)
+        </div>
+    </div>
+</div>
+
+    @Html.HiddenFor(model => model.SEOUrl)
+    @Html.HiddenFor(model => model.SEOCode)
+    @Html.HiddenFor(model => model.OldSEOURL)
+    @Html.HiddenFor(model => model.SEOId)
+    @Html.HiddenFor(model => model.ItemName)
+    @Html.HiddenFor(model => model.CMSSEODetailId)
+    @Html.HiddenFor(model => model.CMSSEOTypeId)
+    @Html.HiddenFor(model => model.SEOTypeName)
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                   new PopupModel()
+                   {
+                       Title = @Admin_Resources.TitlePublishConfirm,
+                       Description = @Admin_Resources.PublishConfirmationMessage,
+                       ModalPopUpId = "UpdateAndPublishSeo",
+                       Buttons = new List<PopUpButtonModel>() {
+new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "SEO.prototype.UpdateAndPublishSeo()"}
+                     }
+                   })
+}
+
+<script>
+    $(document).ready(function () {
+        $(".z-publish").off("click").on("click", function () { SEO.prototype.PublishSeoPopupEdit($(this)); });
+    });
+    //Bootstrap ToolTip Call
+    $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover', html: true });
+</script>
+
+@Scripts.Render("~/bundles/jqueryval")

@@ -1,0 +1,143 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Models;
+@using Znode.Engine.Admin.Helpers
+@model ContainerVariantDataViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formContainerVariants", CancelUrl = "/ContentContainer/Edit?containerKey=" + Model.ContainerKey, IsSaveCloseEnable = true, Callback = "" };
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "linkSave", ControlId = "dvSave", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "ContentContainer.prototype.SubmitManageVariantsForm(this)" });
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "btnSaveNClose", ControlId = "btnSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "ContentContainer.prototype.SubmitManageVariantsForm(this)" });
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "btnPublish", ControlId = "PublishProductLink", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.ButtonPublish, OnClick = "$('#PublishContainerVariant').modal('show');" });
+
+    PopupModel publishPopupModel = new PopupModel()
+    {
+        Title = @Admin_Resources.TitlePublishConfirm,
+        Description = @Admin_Resources.PublishVariantConfirmationMessage,
+        NoChoiceDescription = string.Format(@Admin_Resources.PublishConfirmationMessageNoChoice, "content container"),
+        ModalPopUpId = "PublishContainerVariant",
+        ModalSizeClass = "model-smd dirtyignore",
+        AdditionalNote = @Admin_Resources.PublishVariantDisclaimerMessage,
+        InputFields = new List<PopupInputField>
+{
+new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = HelperMethods.GetAvailablePublishStates(), RequiredNumberOfItemsToDisplay = 2 }
+},
+        Buttons = new List<PopUpButtonModel>() {
+new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal", OnClickFunctionName = "ContentContainer.prototype.UpdateAndPublishContainerVariant()" }
+}
+    };
+    string disabled = Model.IsDataAddedForDefaultLocale ? "" : "disabled";
+}
+
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelEditVariant<em class="z-minus"></em><span>@Model.StoreName, @Model.ProfileName | @Model.ContainerName</span></h1>
+    <div class="pull-right">
+        <div id="dvSubmitCancel" class="btn-container">
+            <a href="/ContentContainer/Edit?containerKey=@Model.ContainerKey" id="linkBack" class="btn-text-icon" data-test-selector="linkBack"><em class="z-back"></em>@Admin_Resources.ButtonBack</a>
+            @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+        </div>
+    </div>
+</div>
+@Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml", publishPopupModel)
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm("SaveAssociatedVariantData", "ContentContainer", FormMethod.Post, new { id = "formContainerVariants", @class = "dirtyListen" }))
+    {
+        <div id="containerVariantSaveStatus" class="success-msg text-center" data-test-selector="containerVariantSaveStatus"></div>
+        <div id="containerVarianterrorMessage" class="cms-error-msg text-center" data-test-selector="containerVariantvalidationMessage"></div>
+        <div class="form-group">
+            <div class="col-sm-12 padding-left-20 nopadding" id="variantContainerTemplate">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.ContainerTemplate, new { @data_test_selector = "lblContainerTemplate" })
+                </div>
+                <div class="control-md">
+                    <div id="areaList">
+                        @Html.DropDownListFor(model => model.ContainerTemplateId, Model.ContainerTemplates, Admin_Resources.LabelSelectOptionalTemplate, new { @id = "drpContainerTemplate", @data_test_selector = "drpContainerTemplate" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 padding-left-20 nopadding">
+                <div class="control-label">
+                    @Html.Label("Locale", new { @data_test_selector = "lblLocale" })
+                </div>
+                <div class="control-md">
+                    @if (Model.IsDataAddedForDefaultLocale)
+                    {
+                        @Html.DropDownListFor(model => model.LocaleId, Model.Locales, new { @id = "ddl_locale_list_containers", @data_test_selector = "drpLocale", onChange = "ContentContainer.prototype.GetAssociatedVariantData();" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.LocaleId, Model.Locales, new { @id = "ddl_locale_list_containers", @data_test_selector = "drpLocale", onChange = "ContentContainer.prototype.GetAssociatedVariantData();", disabled })
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+           <div class="control-md padding-left-20 control-non">
+               @if (Model.StoreName == @Admin_Resources.LabelAnyStore && Model.ProfileName == @Admin_Resources.LabelAnyUserProfile)
+                {
+                   <label>
+                       <input id="IsActive" name="IsActive" checked="@Model.IsActive" type="checkbox" value="true" data-test-selector="chkIsActive" onclick="ContentContainer.prototype.ValidateVariant()">
+                       <span class="lbl padding-8" for="IsActive" data-test-selector="spnIsActive">@Admin_Resources.LabelIsActive</span>
+                   </label>
+                }
+               else
+               {
+                   <label>
+                       <input id="IsActive" name="IsActive" checked="@Model.IsActive" type="checkbox" value="true" data-test-selector="chkIsActive">
+                       <span class="lbl padding-8" for="IsActive" data-test-selector="spnIsActive">@Admin_Resources.LabelIsActive</span>
+                   </label>
+               }
+           </div>
+        </div>
+        <div id="AssociatedGroups">
+            <div class="tab-content">
+                @foreach (var group in Model.Groups)
+                 {
+                    <div class="panel panel-default " id="@group.GroupCode@Model.FamilyCode">
+                        <div class="panel-heading">
+                            <h4 class="panel-title panel-title-edit accordion-toggle collapsed" id="Title" data-toggle="collapse" data-parent="#accordion" onclick="ContentContainer.prototype.fnShowHide(this,'@group.GroupCode');"><span>@group.AttributeGroupName </span></h4>
+                        </div>
+                        <div id="@group.GroupCode" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="col-sm-12 nopadding">
+                                    @{
+                                        List<GlobalAttributeValuesViewModel> attributesAssociatedWithGroup = Model.Attributes.Where(x => x.GlobalAttributeGroupId == group.GlobalAttributeGroupId).ToList();
+
+                                        foreach (var attributes in attributesAssociatedWithGroup)
+                                        {
+                                            if (Equals(attributes.ControlProperty.ControlType, "File"))
+                                            { attributes.ControlProperty.htmlAttributes.Add("IsGlobalAttributeFileControl", "True"); }
+                                            @Html.Partial("~/Views/Shared/Controls/GlobalAttribute/_createControl.cshtml", attributes)
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 }
+            </div>
+            @Html.HiddenFor(model => model.EntityId)
+            @Html.HiddenFor(model => model.EntityType)
+            @Html.HiddenFor(model => model.FamilyCode)
+            @Html.HiddenFor(model => model.ProfileVariantId)
+            @Html.Hidden(AdminConstants.IsRedirectToEditScreen, false)
+        </div>
+        @Html.HiddenFor(model => model.ContainerKey)
+        @Html.HiddenFor(model => model.TargetPublishState)
+    }
+    @Html.Hidden("IsClosePopup", false)
+    @Html.Hidden("backUrl", actionModel.CancelUrl)
+
+</section>
+
+<div id="divMediaUploaderPopup"></div>
+<script src="~/Scripts/References/DynamicValidation.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#formContainerVariants").find('.panel-collapse').first().attr("style", "display:block");
+    });
+</script>

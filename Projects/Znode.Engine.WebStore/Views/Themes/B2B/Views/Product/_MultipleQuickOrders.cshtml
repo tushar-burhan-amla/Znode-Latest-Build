@@ -1,0 +1,24 @@
+﻿@model AutoComplete
+@using Znode.Libraries.ECommerce.Utilities
+@{   
+    int index = SessionHelper.GetDataFromSession<int>("AutoIndex");
+}
+<div id="quickorderdiv">
+    <div class="form-group" id="form-group-@index">
+        <div class="row no-gutters align-items-start">
+            <div class="col-8">
+                @Html.AutocompleteFor(model => model.Name, model => model.Id, "GetProductListBySKU", "Product", "QuickOrderPad.prototype.OnItemSelect", false, new { htmlAttributes = new { @placeholder = WebStore_Resources.TextEnterSku, @id = "txtQuickOrderPadSku_" + index, @class = "quick-order-pad-autocomplete", @data_qo_sku = "", @data_qo_product_id = "", data_qo_product_name = "", data_qo_cart_quantity = "", data_qo_quantity_on_hand = "", data_qo_in_stock_message = "", data_qo_out_stock_message = "", data_qo_min_quantity = "", data_qo_max_quantity = "", data_qo_call_for_pricing = "", data_is_first = "true", data_qo_track_inventory = "", data_qo_inventorycode = "", data_qo_product_type = "", data_qo_retail_price = "", data_qo_autoAddOnSKUs = "", data_qo_isobsolete = "", data_qo_isactive = "", data_qo_child_track_inventory = "" , onchange = "QuickOrderPad.prototype.IsValidProductSKUQuick(this)", onKeyPress = "QuickOrderPad.prototype.CheckUpdateSKU(this,event)", onblur = "QuickOrderPad.prototype.CheckUpdateSKU(this,event)" } })
+            </div>
+            <div class="col-3 px-2 px-md-3">
+                @Html.TextBox("txtQuickOrderPadQuantity_" + index, 0, null, new { @placeholder = WebStore_Resources.ColumnTitleQty, type = "number", @class = "quantity quick-order-pad-quantity text-right", @parentcontrol = "txtQuickOrderPadSku_" + index, onchange = "QuickOrderPad.prototype.OnQuantityChange(this)" })
+                <p id="inventoryquickorderMessage_@index" for="txtQuickOrderPadQuantity_@index" class="col-xs-12 nopadding error-msg"></p>
+            </div>
+            <div class="col-1">
+                <div id="removeRow_@index" class="remove_row remove-item" title="@WebStore_Resources.ButtonClear"><i class="close-icon"></i></div>
+            </div>
+            <p id="inventoryMessage_@index" for="txtQuickOrderPadSku_@index" class="col-xs-12 nopadding error-msg"></p>
+            @Html.Hidden("index", index, new { id = "indexId" })
+        </div>     
+    </div>
+</div>
+

@@ -1,0 +1,31 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model AddressViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.TitleMultifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateAccountAddress" };
+    Model.CheckboxPrefix = string.Empty;
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.ToLower().Contains("edit"))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelAddress)<em class="z-minus"></em><span>@Model.FirstName @Model.LastName</span></h1>
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelAddress)</h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateAccountAddress" }))
+    {
+        <div class="col-sm-12 nopadding">
+            @Html.Partial("_Address", Model)
+        </div>
+    }
+</section>    

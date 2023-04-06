@@ -1,0 +1,101 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Libraries.ECommerce.Utilities;
+@model PowerBISettingsViewModel
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront; ;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmPowerBiDetailsManagement" };
+}
+<div class="col-sm-12 title-container">
+    <h1>@GlobalSetting_Resources.TitleGlobalSetting</h1>
+    <div class="pull-right btn-container">
+        <a id="dvSave" data-test-selector="linkSave" class="btn-text btn-text-secondary" onclick="SaveCancel.prototype.SubmitForm('frmPowerBiDetailsManagement')">Save</a>
+    </div>
+</div>
+<div class="main-wrapper dirtyignore">
+    <!--Left Panel-->
+    @Html.Partial("~/Views/Shared/_asideGlobalSettingPanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm("UpdatePowerBISettings", controllerName, FormMethod.Post, new { id = "frmPowerBiDetailsManagement" }))
+        {
+            <h3 class="section-heading" data-test-selector="hdgPowerBIDetails">@GlobalSetting_Resources.SubTitlePowerBI</h3>
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.PowerBIApplicationId, "ApplicationId", new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.PowerBIApplicationId, new { @id = "txtApplicationId" })
+                            @Html.ValidationMessageFor(model => model.PowerBIApplicationId)
+                        </div>
+                        @Html.Partial("_HelpText", GlobalSetting_Resources.HelpTextApplicationId)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.PowerBITenantId, "TenantId", new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.PowerBITenantId, new { @id = "txtTenantId" })
+                            @Html.ValidationMessageFor(model => model.PowerBITenantId)
+                        </div>
+                        @Html.Partial("_HelpText", GlobalSetting_Resources.HelpTextTenantId)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.PowerBIGroupId, "GroupId", new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.PowerBIGroupId, new { @id = "txtGroupId" })
+                            @Html.ValidationMessageFor(model => model.PowerBIGroupId)
+                        </div>
+                        @Html.Partial("_HelpText", GlobalSetting_Resources.HelpTextGroupId)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.PowerBIReportId, "ReportId", new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.PowerBIReportId, new { @id = "txtReportId" })
+                            @Html.ValidationMessageFor(model => model.PowerBIReportId)
+                        </div>
+                        @Html.Partial("_HelpText", GlobalSetting_Resources.HelpTextReportId)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.PowerBIUserName, "Username", new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.PowerBIUserName, new { @id = "txtUserName" })
+                            @Html.ValidationMessageFor(model => model.PowerBIUserName)
+                        </div>
+                        @Html.Partial("_HelpText", GlobalSetting_Resources.HelpTextUsername)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.PowerBIPassword, "Password", new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.PowerBIPassword, new { @type = "password", @id = "btnPassword" })
+                            @Html.ValidationMessageFor(model => model.PowerBIPassword, "", new { @id = "valPassword" })
+                        </div>
+                        @Html.Partial("_HelpText", GlobalSetting_Resources.HelpTextPassword)
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+</div>

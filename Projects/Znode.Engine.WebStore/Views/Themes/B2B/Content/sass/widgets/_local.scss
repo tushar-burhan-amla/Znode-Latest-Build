@@ -1,0 +1,341 @@
+﻿
+header .header .header-locale-container {
+    .locale-widget {
+        text-align: right;
+
+        button {
+            background: transparent none repeat scroll 0 0;
+            border: 0;
+            color: $white;
+            font-size: $base-font-size - 1px;
+            vertical-align: middle;
+            cursor: pointer;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .dropdown-menu {
+            position: absolute !important;
+            text-align: left;
+            background-color: $account-menu-background;
+            box-shadow: $box-shadow-locale;
+
+            &:before {
+                content: none;
+            }
+
+            ul {
+                max-height: 255px;
+                overflow-y: auto;
+
+                &::-webkit-scrollbar {
+                    width: 7px;
+                }
+
+                &::-webkit-scrollbar-track {
+                    background: $shipping-progress-bar;
+                    border-radius: 5px;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background: $ticker-bgcolor;
+                    border-radius: 5px;
+                }
+
+                &::-webkit-scrollbar-thumb:hover {
+                    background: $base-secondary-light;
+                }
+            }
+        }
+
+        ul {
+            margin: 0;
+            min-width: 200px;
+            padding: 10px;
+            /*&:after{border-color: transparent transparent $white;border-style: solid;border-width: 5px;content: "";display: block;height: 0;position: absolute;right: 4px;top: -10px;width: 0;}*/
+            li {
+                h5 {
+                    font-size: $base-font-size - 1px;
+                    border-bottom: 1px solid $base-secondary-light;
+                    padding: 3px 5px 6px 0px;
+                    width: 100%;
+                }
+
+                ul {
+                    margin: 0;
+                    padding: 0;
+
+                    li {
+                        margin: 0;
+                        display: block;
+
+                        a {
+                            padding: 3px 0px;
+                            display: block;
+                            font-size: $base-font-size - 1px;
+                            color: $text-default;
+
+                            &:active, &.selected {
+                                color: $base-secondary-light;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Flags (Referred from github.com).
+.flag{display:inline-block;height:16px;width:16px;vertical-align:text-top;line-height:16px;background:url('../../Images/flags.png') no-repeat !important;margin-right:5px;}
+
+._African_Union{background-position:0 -16px;}
+._Arab_League{background-position:0 -32px;}
+._ASEAN{background-position:0 -48px;}
+._CARICOM{background-position:0 -64px;}
+._CIS{background-position:0 -80px;}
+._Commonwealth{background-position:0 -96px;}
+._England{background-position:0 -112px;}
+._European_Union, .eu{background-position:0 -128px;}
+._Islamic_Conference{background-position:0 -144px;}
+._Kosovo{background-position:0 -160px;}
+._NATO{background-position:0 -176px;}
+._Northern_Cyprus{background-position:0 -192px;}
+._Northern_Ireland{background-position:0 -208px;}
+._Olimpic_Movement{background-position:0 -224px;}
+._OPEC{background-position:0 -240px;}
+._Red_Cross{background-position:0 -256px;}
+._Scotland{background-position:0 -272px;}
+._Somaliland{background-position:0 -288px;}
+._Tibet{background-position:0 -304px;}
+._United_Nations{background-position:0 -320px;}
+._Wales{background-position:0 -336px;}
+.ad{background-position:0 -352px !important;}
+.ae{background-position:0 -368px !important;}
+.af{background-position:0 -384px !important;}
+.ag{background-position:0 -400px !important;}
+.ai{background-position:0 -416px !important;}
+.al{background-position:0 -432px !important;}
+.am{background-position:0 -448px !important;}
+.ao{background-position:0 -464px !important;}
+.aq{background-position:0 -480px !important;}
+.ar{background-position:0 -496px !important;}
+.as{background-position:0 -512px !important;}
+.at{background-position:0 -528px !important;}
+.au{background-position:0 -544px !important;}
+.aw{background-position:0 -560px !important;}
+.ax{background-position:0 -576px !important;}
+.az{background-position:0 -592px !important;}
+.ba{background-position:0 -608px !important;}
+.bb{background-position:0 -624px !important;}
+.bd{background-position:0 -640px !important;}
+.be{background-position:0 -656px !important;}
+.bf{background-position:0 -672px !important;}
+.bg{background-position:0 -688px !important;}
+.bh{background-position:0 -704px !important;}
+.bi{background-position:0 -720px !important;}
+.bj{background-position:0 -736px !important;}
+.bm{background-position:0 -752px !important;}
+.bn{background-position:0 -768px !important;}
+.bo{background-position:0 -784px !important;}
+.br{background-position:0 -800px !important;}
+.bs{background-position:0 -816px !important;}
+.bt{background-position:0 -832px !important;}
+.bw{background-position:0 -848px !important;}
+.by{background-position:0 -864px !important;}
+.bz{background-position:0 -880px !important;}
+.ca{background-position:0 -896px !important;}
+.cg{background-position:0 -912px !important;}
+.cf{background-position:0 -928px !important;}
+.cd{background-position:0 -944px !important;}
+.ch{background-position:0 -960px !important;}
+.ci{background-position:0 -976px !important;}
+.ck{background-position:0 -992px !important;}
+.cl{background-position:0 -1008px !important;}
+.cm{background-position:0 -1024px !important;}
+.cn{background-position:0 -1040px !important;}
+.co{background-position:0 -1056px !important;}
+.cr{background-position:0 -1072px !important;}
+.cu{background-position:0 -1088px !important;}
+.cv{background-position:0 -1104px !important;}
+.cy{background-position:0 -1120px !important;}
+.cz{background-position:0 -1136px !important;}
+.de{background-position:0 -1152px !important;}
+.dj{background-position:0 -1168px !important;}
+.dk{background-position:0 -1184px !important;}
+.dm{background-position:0 -1200px !important;}
+.do{background-position:0 -1216px !important;}
+.dz{background-position:0 -1232px !important;}
+.ec{background-position:0 -1248px !important;}
+.ee{background-position:0 -1264px !important;}
+.eg{background-position:0 -1280px !important;}
+.eh{background-position:0 -1296px !important;}
+.er{background-position:0 -1312px !important;}
+.es{background-position:0 -1328px !important;}
+.et{background-position:0 -1344px !important;}
+.fi{background-position:0 -1360px !important;}
+.fj{background-position:0 -1376px !important;}
+.fm{background-position:0 -1392px !important;}
+.fo{background-position:0 -1408px !important;}
+.fr{background-position:0 -1424px !important;}  .bl, .cp, .mf, .yt{background-position:0 -1424px;}
+.ga{background-position:0 -1440px !important;}
+.gb{background-position:0 -1456px !important;}  .sh{background-position:0 -1456px;}
+.gd{background-position:0 -1472px !important;}
+.ge{background-position:0 -1488px !important;}
+.gg{background-position:0 -1504px !important;}
+.gh{background-position:0 -1520px !important;}
+.gi{background-position:0 -1536px !important;}
+.gl{background-position:0 -1552px !important;}
+.gm{background-position:0 -1568px !important;}
+.gn{background-position:0 -1584px !important;}
+.gp{background-position:0 -1600px !important;}
+.gq{background-position:0 -1616px !important;}
+.gr{background-position:0 -1632px !important;}
+.gt{background-position:0 -1648px !important;}
+.gu{background-position:0 -1664px !important;}
+.gw{background-position:0 -1680px !important;}
+.gy{background-position:0 -1696px !important;}
+.hk{background-position:0 -1712px !important;}
+.hn{background-position:0 -1728px !important;}
+.hr{background-position:0 -1744px !important;}
+.ht{background-position:0 -1760px !important;}
+.hu{background-position:0 -1776px !important;}
+.id{background-position:0 -1792px !important;}
+.mc{background-position:0 -1792px !important;}
+.ie{background-position:0 -1808px !important;}
+.il{background-position:0 -1824px !important;}
+.im{background-position:0 -1840px !important;}
+.in{background-position:0 -1856px !important;}
+.iq{background-position:0 -1872px !important;}
+.ir{background-position:0 -1888px !important;}
+.is{background-position:0 -1904px !important;}
+.it{background-position:0 -1920px !important;}
+.je{background-position:0 -1936px !important;}
+.jm{background-position:0 -1952px !important;}
+.jo{background-position:0 -1968px !important;}
+.jp{background-position:0 -1984px !important;}
+.ke{background-position:0 -2000px !important;}
+.kg{background-position:0 -2016px !important;}
+.kh{background-position:0 -2032px !important;}
+.ki{background-position:0 -2048px !important;}
+.km{background-position:0 -2064px !important;}
+.kn{background-position:0 -2080px !important;}
+.kp{background-position:0 -2096px !important;}
+.kr{background-position:0 -2112px !important;}
+.kw{background-position:0 -2128px !important;}
+.ky{background-position:0 -2144px !important;}
+.kz{background-position:0 -2160px !important;}
+.la{background-position:0 -2176px !important;}
+.lb{background-position:0 -2192px !important;}
+.lc{background-position:0 -2208px !important;}
+.li{background-position:0 -2224px !important;}
+.lk{background-position:0 -2240px !important;}
+.lr{background-position:0 -2256px !important;}
+.ls{background-position:0 -2272px !important;}
+.lt{background-position:0 -2288px !important;}
+.lu{background-position:0 -2304px !important;}
+.lv{background-position:0 -2320px !important;}
+.ly{background-position:0 -2336px !important;}
+.ma{background-position:0 -2352px !important;}
+.md{background-position:0 -2368px !important;}
+.me{background-position:0 -2384px !important;}
+.mg{background-position:0 -2400px !important;}
+.mh{background-position:0 -2416px !important;}
+.mk{background-position:0 -2432px !important;}
+.ml{background-position:0 -2448px !important;}
+.mm{background-position:0 -2464px !important;}
+.mn{background-position:0 -2480px !important;}
+.mo{background-position:0 -2496px !important;}
+.mq{background-position:0 -2512px !important;}
+.mr{background-position:0 -2528px !important;}
+.ms{background-position:0 -2544px !important;}
+.mt{background-position:0 -2560px !important;}
+.mu{background-position:0 -2576px !important;}
+.mv{background-position:0 -2592px !important;}
+.mw{background-position:0 -2608px !important;}
+.mx{background-position:0 -2624px !important;}
+.my{background-position:0 -2640px !important;}
+.mz{background-position:0 -2656px !important;}
+.na{background-position:0 -2672px !important;}
+.nc{background-position:0 -2688px !important;}
+.ne{background-position:0 -2704px !important;}
+.ng{background-position:0 -2720px !important;}
+.ni{background-position:0 -2736px !important;}
+.nl{background-position:0 -2752px !important;}  .bq{background-position:0 -2752px !important;}
+.no{background-position:0 -2768px !important;}  .bv, .nq, .sj{background-position:0 -2768px !important;}
+.np{background-position:0 -2784px !important;}
+.nr{background-position:0 -2800px !important;}
+.nz{background-position:0 -2816px !important;}
+.om{background-position:0 -2832px !important;}
+.pa{background-position:0 -2848px !important;}
+.pe{background-position:0 -2864px !important;}
+.pf{background-position:0 -2880px !important;}
+.pg{background-position:0 -2896px !important;}
+.ph{background-position:0 -2912px !important;}
+.pk{background-position:0 -2928px !important;}
+.pl{background-position:0 -2944px !important;}
+.pr{background-position:0 -2960px !important;}
+.ps{background-position:0 -2976px !important;}
+.pt{background-position:0 -2992px !important;}
+.pw{background-position:0 -3008px !important;}
+.py{background-position:0 -3024px !important;}
+.qa{background-position:0 -3040px !important;}
+.re{background-position:0 -3056px !important;}
+.ro{background-position:0 -3072px !important;}
+.rs{background-position:0 -3088px !important;}
+.ru{background-position:0 -3104px !important;}
+.rw{background-position:0 -3120px !important;}
+.sa{background-position:0 -3136px !important;}
+.sb{background-position:0 -3152px !important;}
+.sc{background-position:0 -3168px !important;}
+.sd{background-position:0 -3184px !important;}
+.se{background-position:0 -3200px !important;}
+.sg{background-position:0 -3216px !important;}
+.si{background-position:0 -3232px !important;}
+.sk{background-position:0 -3248px !important;}
+.sl{background-position:0 -3264px !important;}
+.sm{background-position:0 -3280px !important;}
+.sn{background-position:0 -3296px !important;}
+.so{background-position:0 -3312px !important;}
+.sr{background-position:0 -3328px !important;}
+.st{background-position:0 -3344px !important;}
+.sv{background-position:0 -3360px !important;}
+.sy{background-position:0 -3376px !important;}
+.sz{background-position:0 -3392px !important;}
+.tc{background-position:0 -3408px !important;}
+.td{background-position:0 -3424px !important;}
+.tg{background-position:0 -3440px !important;}
+.th{background-position:0 -3456px !important;}
+.tj{background-position:0 -3472px !important;}
+.tl{background-position:0 -3488px !important;}
+.tm{background-position:0 -3504px !important;}
+.tn{background-position:0 -3520px !important;}
+.to{background-position:0 -3536px !important;}
+.tr{background-position:0 -3552px !important;}
+.tt{background-position:0 -3568px !important;}
+.tv{background-position:0 -3584px !important;}
+.tw{background-position:0 -3600px !important;}
+.tz{background-position:0 -3616px !important;}
+.ua{background-position:0 -3632px !important;}
+.ug{background-position:0 -3648px !important;}
+.us{background-position:0 -3664px !important;}
+.uy{background-position:0 -3680px !important;}
+.uz{background-position:0 -3696px !important;}
+.va{background-position:0 -3712px !important;}
+.vc{background-position:0 -3728px !important;}
+.ve{background-position:0 -3744px !important;}
+.vg{background-position:0 -3760px !important;}
+.vi{background-position:0 -3776px !important;}
+.vn{background-position:0 -3792px !important;}
+.vu{background-position:0 -3808px !important;}
+.ws{background-position:0 -3824px !important;}
+.ye{background-position:0 -3840px !important;}
+.za{background-position:0 -3856px !important;}
+.zm{background-position:0 -3872px !important;}
+.zw{background-position:0 -3888px !important;}
+.sx{background-position:0 -3904px !important;}
+.cw{background-position:0 -3920px !important;}
+.ss{background-position:0 -3936px !important;}
+.nu{background-position:0 -3952px !important;}

@@ -1,0 +1,282 @@
+﻿@model Znode.Engine.Admin.ViewModels.WebGridViewModel
+@using Znode.Engine.Api.Models
+
+@{
+    WebGrid grid = new WebGrid(ajaxUpdateContainerId: "grid", canPage: false, canSort: false);
+    if (Model != null)
+    {
+        if (Model.WebGridColumnModelList.Count > 0)
+        {
+            grid.Bind(source: Model.WebGridColumnModelList);
+        }
+    }
+    var dateformat = new CustomDateTimeConverter()?.DateTimeFormat;
+}
+
+@if (Model != null)
+{
+    if (Model.WebGridColumnModelList.Count > 0)
+    {
+
+        <div class="col-sm-12 filter-component">
+            <h3>@Admin_Resources.LabelDisplayOptions</h3>
+            <div class="pull-left">
+                <div class="form-group">
+                    <div class="col-md-11 nopadding">
+                        <label class="field-lbl required">@Admin_Resources.LabelDisplayOptions:</label>
+                    </div>
+                    <div class="col-md-11 nopadding">
+                        @Html.TextBoxFor(model => Model.ViewOption, new { @id = "txtViewOptions", @maxlength = "50", @value = Model.ViewOption })
+                        <span id="viewOprionErrMsg" class="field-validation-error"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pull-left">
+                <div class="form-group">
+                    <div class="col-md-11 nopadding">
+                        <label class="field-lbl required">@Admin_Resources.LabelFrontEndPageName:</label>
+                    </div>
+                    <div class="col-md-11 nopadding">
+                        @Html.TextBoxFor(model => model.FrontPageName, new { @id = "txtPageName", @maxlength = "50", @value = Model.FrontPageName })
+                        <span id="viewPageErrMsg" class="field-validation-error"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pull-left">
+                <div class="form-group">
+                    <div class="col-md-11 nopadding">
+                        <label class="field-lbl required">@Admin_Resources.LabelFrontEndObjectName:</label>
+                    </div>
+                    <div class="col-md-11 nopadding">
+                        @Html.TextBoxFor(model => model.FrontObjectName, new { @id = "txtObjectName", @maxlength = "50", @value = Model.FrontObjectName, @class = "field-space-grid" })
+                        <span id="viewobjectErrMsg" class="field-validation-error"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-12 xml-grid list-container">
+            <div class="table-responsive col-sm-12 nopadding scroll-default">
+                <div class="gridPartialDiv flip-scroll" id="flip-scroll">
+                    @grid.GetHtml(htmlAttributes: new { id = "gridXML" },
+                        tableStyle: "table",
+                        headerStyle: "gridheader",
+                        footerStyle: "gridFooter",
+                        mode: WebGridPagerModes.All,
+                        alternatingRowStyle: "alternate",
+                        columns: grid.Columns(
+                        grid.Column("Name", format: @<text><div class="table-heading"><label id="lblName" value="@item.Name">@item.Name</label></div></text>),
+                         grid.Column("HeaderText", format: (item) => Html.TextBox("Headertext", (string)item.Headertext, new { @class = "spinnertxt", @id = "headerText", @maxlength = "100", @Value = (string)item.HeaderText }), header: "HeaderText"),
+                         grid.Column("ColumnType",
+                         format: (item) => Html.DropDownList("ColumnType", new List<SelectListItem>
+                                      {
+                                    new SelectListItem{ Text="String", Value ="string" ,Selected= item.Columntype =="String"},
+                                    new SelectListItem{ Text="Single", Value ="Single" ,Selected= item.Columntype =="Single"},
+                                    new SelectListItem{ Text="Double", Value ="Double" ,Selected= item.Columntype =="Double"},
+                                    new SelectListItem{ Text="Decimal", Value ="Decimal" ,Selected= item.Columntype =="Decimal"},
+                                    new SelectListItem{ Text="DateTime", Value ="DateTime" ,Selected= item.Columntype =="DateTime"},
+                                    new SelectListItem{ Text="Boolean", Value ="Boolean" ,Selected= item.Columntype =="Boolean"},
+                                    new SelectListItem{ Text="Int64", Value ="Int64" ,Selected= item.Columntype =="Int64"},
+                                    new SelectListItem{ Text="Int32", Value ="Int32" ,Selected= item.Columntype =="Int32"},
+                                    new SelectListItem{ Text="Int16", Value ="Int16" ,Selected= item.Columntype =="Int16"}
+                             }, new { @id = "columnType", @class = "dropdownlist" })),
+         grid.Column("Width", format: @<text><div class=""><input name="Width" maxlength="5" type="text" value="@item.Width" onkeypress="return isNumberWithDotKey(event)" id="widthText" /></div></text>),
+         grid.Column("AllowSorting", format: @<text><div><input id="chkallowsorting" name="" title="" value="@item.Allowsorting" type="checkbox" checked="@item.Allowsorting"><span class="lbl padding-8"></span></div></text>),
+         grid.Column("AllowPaging", format: @<text><div><input id="chkAllowpaging" name="" title="" value="@item.Allowpaging" type="checkbox" checked="@item.Allowpaging"><span class="lbl padding-8"></span></div></text>),
+         grid.Column("Format ", format: @<text><div class=""><input name="Format" id="formatText" type="text" value="@item.Format" maxlength="500" /></div></text>),
+         grid.Column("IsVisible", format: (item) => Html.DropDownList("n", new List<SelectListItem> {
+                                     new SelectListItem{ Text="y", Value ="y" , Selected= (char)item.Isvisible =='y'},
+                                     new SelectListItem{ Text="n", Value ="n", Selected= (char)item.Isvisible =='n'}
+                             }, new { @id = "chkVisible", @Value = (char)item.Isvisible, @Selected = (char)item.Isvisible })),
+
+         grid.Column("MustShow", format: (item) => Html.DropDownList("MustShow", new List<SelectListItem>
+                                      {
+                                    new SelectListItem{ Text="n", Value ="n" , Selected= (char)item.Mustshow =='n'},
+                                    new SelectListItem{ Text="y", Value ="y" , Selected= (char)item.Mustshow =='y'}
+
+                             }, new { @id = "chkMustshow" })),
+        grid.Column("Musthide", format: (item) => Html.DropDownList("Musthide", new List<SelectListItem>
+                                      {
+                                    new SelectListItem{ Text="n", Value ="n" ,Selected= (char)item.Musthide =='n'},
+                                    new SelectListItem{ Text="y", Value ="y" ,Selected= (char)item.Musthide =='y'}
+
+                             }, new { @id = "chkMustHide" })),
+        grid.Column("Datatype", format: (item) => Html.DropDownList("Datatype", new List<SelectListItem>
+                                      {
+                                    new SelectListItem{ Text="String", Value ="string" ,Selected= item.Datatype =="String"},
+                                    new SelectListItem{ Text="Single", Value ="Single" ,Selected= item.Datatype =="Single"},
+                                    new SelectListItem{ Text="Double", Value ="Double" ,Selected= item.Datatype =="Double"},
+                                    new SelectListItem{ Text="Decimal", Value ="Decimal" ,Selected= item.Datatype =="Decimal"},
+                                    new SelectListItem{ Text="Date", Value ="Date" ,Selected= item.Datatype =="Date"},
+                                    new SelectListItem{ Text="DateTime", Value ="DateTime" ,Selected= item.Datatype =="DateTime"},
+                                    new SelectListItem{ Text="Boolean", Value ="Boolean" ,Selected= item.Datatype =="Boolean"},
+                                    new SelectListItem{ Text="Int64", Value ="Int64" ,Selected= item.Datatype =="Int64"},
+                                    new SelectListItem{ Text="Int32", Value ="Int32" ,Selected= item.Datatype =="Int32"},
+                                    new SelectListItem{ Text="Int16", Value ="Int16" ,Selected= item.Datatype =="Int16"}
+                             }, new { @id = "dataTypeText" })),
+                      grid.Column("MaxLength", format: @<text><div class=""><input name="Maxlength" id="maxLength" maxlength="5" onkeypress="return isNumberKey(event)" type="text" value="@item.Maxlength" /></div> </text>),
+       grid.Column("IsAllowSearch", format: (item) => Html.DropDownList("IsAllowSearch", new List<SelectListItem>
+                                     {
+                                   new SelectListItem{ Text="n", Value ="n" ,Selected= (char)item.Isallowsearch  =='n'},
+                                   new SelectListItem{ Text="y", Value ="y" , Selected= (char)item.Isallowsearch  =='y'}
+
+                            }, new { @id = "chkIsallowsearch" })),
+       grid.Column("IsConditional", format: (item) => Html.DropDownList("IsConditional", new List<SelectListItem>
+                                      {
+                                   new SelectListItem{ Text="n", Value ="n" ,Selected= (char)item.Isconditional  =='n'},
+                                   new SelectListItem{ Text="y", Value ="y" , Selected= (char)item.Isconditional  =='y'}
+
+                            }, new { @id = "chkIsconditional" })),
+       grid.Column("IsAllowLink", format: (item) => Html.DropDownList("IsAllowLink", new List<SelectListItem>
+                                     {
+                                   new SelectListItem{ Text="n", Value ="n" ,Selected= (char)item.Isallowlink  =='n'},
+                                   new SelectListItem{ Text="y", Value ="y" ,Selected= (char)item.Isallowlink  =='y'}
+
+                            }, new { @id = "chkIsallowlink" })),
+      grid.Column("DisplayText", format: (item) => Html.TextBox("DisplayText", (string)item.Displaytext, new { @class = "spinnertxt", @id = "displayText", @maxlength = "100", @Value = (string)item.Displaytext }), header: "DisplayText"),
+      grid.Column("IsLinkActionUrl", format: @<text><div class=""><input name="" id="chkIslinkactionurl" type="text" maxlength="255" value="@item.Islinkactionurl" /></div> </text>),
+     grid.Column("IsLinkParamField", format: @<text><div><input id="chkIslinkparamfield" name="" title="IsLinkParamField" maxlength="255" value="@item.Islinkparamfield" type="text"></div></text>),
+     grid.Column("EditActionUrl", format: @<text><div class=""><input name="" id="editActionUrl" type="text" maxlength="200" value="@item.Editactionurl" /></div></text>),
+     grid.Column("EditParamField", format: @<text><div class=""><input name="" id="editParamField" type="text" maxlength="200" value="@item.Editparamfield" /></div></text>),
+     grid.Column("DeleteActionUrl", format: @<text><div class=""><input name="" id="deleteActionUrl" type="text" maxlength="200" value="@item.Deleteactionurl" /></div></text>),
+     grid.Column("DeleteParamField", format: @<text><div class=""><input name="" id="deleteParamField" type="text" maxlength="200" value="@item.Deleteparamfield" /></div></text>),
+     grid.Column("ManageActionUrl", format: @<text><div class=""><input name="" id="manageActionUrl" type="text" maxlength="200" value="@item.Manageactionurl" /></div></text>),
+     grid.Column("Manageparamfield", format: @<text><div class=""><input name="" id="manageParamField" type="text" maxlength="200" value="@item.Manageparamfield" /></div></text>),
+     grid.Column("ViewActionUrl", format: @<text><div class=""><input name="" id="viewActionUrl" type="text" maxlength="200" value="@item.Viewactionurl" /></div></text>),
+     grid.Column("ViewParamField", format: @<text><div class=""><input name="" id="viewParamField" type="text" maxlength="200" value="@item.Viewparamfield" /></div></text>),
+     grid.Column("ImageActionUrl", format: @<text><div class=""><input name="" id="imageActionUrl" type="text" maxlength="200" value="@item.Imageactionurl" /></div></text>),
+     grid.Column("ImageParamField", format: @<text><div class=""><input name="" id="imageParamField" type="text" maxlength="200" value="@item.Imageparamfield" /></div></text>),
+     grid.Column("CopyActionUrl ", format: @<text><div class=""><input name="" id="copyActionUrl" type="text" maxlength="200" value="@item.Copyactionurl" /></div></text>),
+     grid.Column("CopyParamField ", format: @<text><div class=""><input name="" id="copyParamField" type="text" maxlength="200" value="@item.Copyparamfield" /></div></text>),
+     grid.Column("Ischeckbox", format: (item) => Html.DropDownList("Ischeckbox", new List<SelectListItem>
+                                    {
+                                  new SelectListItem{ Text="n", Value ="n",Selected= (char)item.Ischeckbox =='n' },
+                                  new SelectListItem{ Text="y", Value ="y" , Selected= (char)item.Ischeckbox =='y'}
+
+                           }, new { @id = "chkIscheckbox" })),
+    grid.Column("CheckboxParamField", format: @<text><div><input id="chkCheckboxparamfield" name="" maxlength="50" title="CheckboxParamField" value="@item.Checkboxparamfield" type="text"></div></text>),
+     grid.Column("IsControl", format: (item) => Html.DropDownList("IsControl", new List<SelectListItem>
+                                     {
+                                   new SelectListItem{ Text="n", Value ="n" ,Selected= (char)item.Iscontrol =='n'},
+                                   new SelectListItem{ Text="y", Value ="y" , Selected= (char)item.Iscontrol =='y'}
+
+                            }, new { @id = "chkIsControl" })),
+     grid.Column("ControlType", format: (item) => Html.DropDownList("IsControl", new List<SelectListItem>
+                                      {
+                                   new SelectListItem{ Text="--Select--", Value ="" , Selected= item.Controltype =="--Select--"},
+                                   new SelectListItem{ Text="Text", Value ="Text" , Selected= item.Controltype =="Text"},
+                                   new SelectListItem{ Text="Radio", Value ="Radio" , Selected= item.Controltype =="RadioButton"},
+                                   new SelectListItem{ Text="RowRadio", Value ="RowRadio" , Selected= item.Controltype =="RowRadio"},
+                                   new SelectListItem{ Text="Button", Value ="Button" , Selected= item.Controltype =="Button"},
+                                   new SelectListItem{ Text="DropDown", Value ="DropDown" , Selected= item.Controltype =="DropDown"},
+                                   new SelectListItem{ Text="Label", Value ="Label" , Selected= item.Controltype =="Label"},
+                                   new SelectListItem{ Text="HiddenField", Value ="HiddenField" , Selected= item.Controltype =="HiddenField"},
+                                   new SelectListItem{ Text="MultiCheckboxList", Value ="MultiCheckboxList" , Selected= item.Controltype =="MultiCheckboxList"},
+                                   new SelectListItem{ Text="DynamicHtml", Value ="DynamicHtml" , Selected= item.Controltype =="DynamicHtml"},
+                                   new SelectListItem{ Text="RuntimeHtml", Value ="RuntimeHtml" , Selected= item.Controltype =="RuntimeHtml"},
+                                   new SelectListItem{ Text="RuntimeCode", Value ="RuntimeCode" , Selected= item.Controltype =="RuntimeCode"}
+                                      }, new { @id = "controlType" })),
+     grid.Column("ControlParamField", format: @<text><div class=""><input name="ControlParamField" id="controlParamField" type="text" maxlength="50" value="@item.Controlparamfield" /></div></text>),
+     grid.Column("XAxis", format: (item) => Html.DropDownList("XAxis", new List<SelectListItem>
+                                     {
+                                   new SelectListItem{ Text="n", Value ="n" ,Selected= (char)item.XAxis =='n'},
+                                   new SelectListItem{ Text="y", Value ="y" , Selected= (char)item.XAxis =='y'}
+
+                            }, new { @id = "xAxis" })),
+    grid.Column("YAxis", format: (item) => Html.DropDownList("YAxis", new List<SelectListItem>
+                                     {
+                                   new SelectListItem{ Text="n", Value ="n" ,Selected= (char)item.YAxis =='n'},
+                                   new SelectListItem{ Text="y", Value ="y" , Selected= (char)item.YAxis =='y'}
+
+                            }, new { @id = "yAxis" })),
+   grid.Column("IsAdvanceSearch", format: (item) => Html.DropDownList("n", new List<SelectListItem> {
+                                    new SelectListItem{ Text="y", Value ="y" , Selected= (char)item.IsAdvanceSearch =='y'},
+                                    new SelectListItem{ Text="n", Value ="n", Selected= (char)item.IsAdvanceSearch =='n'}
+                            }, new { @id = "IsAdvanceSearch", @Value = (char)item.Isvisible, @Selected = (char)item.Isvisible })),
+
+   grid.Column("Class", format: @<text><div class=""><input name="Class" id="ClassText" type="text" value="@item.Class" maxlength="100" /></div></text>),
+  grid.Column("SearchControlType", format: (item) => Html.DropDownList("IsSearchControl", new List<SelectListItem>
+      {
+     new SelectListItem{ Text="--Select--", Value ="" , Selected= item.SearchControlType =="--Select--"},
+     new SelectListItem{ Text="Text", Value ="Text" , Selected= item.SearchControlType =="Text"},
+     new SelectListItem{ Text="AutoFillText", Value ="AutoFillText", Selected= item.SearchControlType =="AutoFillText"},
+     new SelectListItem{ Text="DateTextKey", Value ="DateTextKey" , Selected= item.SearchControlType =="DateTextKey"},
+     new SelectListItem{ Text="NoText", Value ="NoText" , Selected= item.SearchControlType =="NoText"},
+     new SelectListItem{ Text="StringText", Value ="StringText" , Selected= item.SearchControlType =="StringText"},
+     new SelectListItem{ Text="EmailText", Value ="EmailText" , Selected= item.SearchControlType =="EmailText"},
+     new SelectListItem{ Text="ColorText", Value ="ColorText" , Selected= item.SearchControlType =="ColorText"},
+     new SelectListItem{ Text="DropDown", Value ="DropDown" , Selected= item.SearchControlType =="DropDown"},
+     new SelectListItem{ Text="MultiCheckboxList", Value ="MultiCheckboxList" , Selected= item.SearchControlType =="MultiCheckboxList"}
+      }, new { @id = "SearchControlType" })),
+
+     grid.Column("SearchControlParameters", format: (item) => Html.TextBox("SearchControlParameters", (string)item.SearchControlParameters, new { @class = "spinnertxt", @id = "SearchControlParameters", @Value = (string)item.SearchControlParameters }), header: "Search Param"),
+     grid.Column("DbParamField", format: @<text><div><input id="dbParamField" name="" title="IsLinkParamField" maxlength="255" value="@item.DbParamField" type="text"></div></text>),
+      grid.Column("IsGraph", format: (item) => Html.DropDownList("IsGraph", new List<SelectListItem>
+                                   {
+                                 new SelectListItem{ Text="n", Value ="n" ,Selected= item.IsGraph =="n"},
+                                  new SelectListItem{ Text="x", Value ="x" , Selected= item.IsGraph =="x"},
+                                   new SelectListItem{ Text="y", Value ="y" , Selected= item.IsGraph =="y"},
+                                    new SelectListItem{ Text="xy", Value ="xy" , Selected= item.IsGraph =="xy"},
+                                     new SelectListItem{ Text="dx", Value ="dx" , Selected= item.IsGraph =="dx"},
+                                      new SelectListItem{ Text="dy", Value ="dy" ,Selected= item.IsGraph =="dy"},
+                                       new SelectListItem{ Text="dxny", Value ="dxny" , Selected= item.IsGraph =="dxny"},
+                                 new SelectListItem{ Text="dynx", Value ="dynx" , Selected= item.IsGraph =="dynx"}
+
+                          }, new { @id = "ddlIsGraph" })),
+grid.Column("UseMode", format: (item) => Html.DropDownList("IsControl", new List<SelectListItem>
+                                    {
+                                 new SelectListItem{ Text="DataBase", Value ="DataBase" , Selected= item.UseMode =="DataBase"},
+                                 new SelectListItem{ Text="Custom", Value ="Custom" , Selected= item.UseMode =="Custom"},
+                                    }, new { @id = "useMode" })),
+grid.Column("AllowDetailView", format: (item) => Html.DropDownList("AllowDetailView", new List<SelectListItem>
+                                   {
+                                 new SelectListItem{ Text="n", Value ="n" ,Selected= (char)item.Allowdetailview  =='n'},
+                                 new SelectListItem{ Text="y", Value ="y" , Selected= (char)item.Allowdetailview  =='y'}
+
+                          }, new { @id = "chkIsallowDetailView" }))
+))
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 nopadding margin-bottom">
+            <div class="pull-right">
+                @if (Model.ViewMode == "Edit")
+                {
+                    <button id="btnEditXml" class="btn-text">@Admin_Resources.ButtonUpdate</button>
+                    <button id="btnCancel" class="btn-text" onclick="window.location.href='/XMLGenerator/List';">@Admin_Resources.ButtonCancel</button>
+                }
+                else
+                {
+                    <button id="btnSaveXml" class="btn-text">@Admin_Resources.ButtonSave</button>
+                    <button id="btnCancel" class="btn-text" onclick="window.location.href='/XMLGenerator/List';">@Admin_Resources.ButtonCancel</button>
+                }
+            </div>
+        </div>
+    }
+}
+@Scripts.Render("~/bundles/XmlGenerator")
+<script type="text/javascript">
+    var id = @Model.Id;
+    $('#btnEditXml').click(function (e) {
+        var url = '@Url.Action("EditApplicationSetting")';
+        XmlGenerator.SaveXML(url);
+    });
+    $('#btnSaveXml').click(function (e) {
+        var url = '@Url.Action("SaveColumnXML")';
+        XmlGenerator.SaveXML(url);
+    });
+
+    $('#gridXML').find("select.dropdownlist").on("change", function () {
+        var dataType = $(this).val();
+        if (dataType == 'DateTime') {
+            var dateformat = '@dateformat';
+            $(this).parents('tr').find('#formatText').val(dateformat);
+        }
+        else {
+            $(this).parents('tr').find('#formatText').val('');
+        }
+    });
+
+</script>

@@ -1,0 +1,68 @@
+﻿@model Znode.Engine.Admin.ViewModels.KlaviyoViewModel
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.Resources
+
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelManage<i class="z-minus"></i><span>@Model.PortalName</span></h1>
+    <div class="pull-right">
+        @Html.AuthorizedRawActionLink("<i class='z-back'></i>" + Admin_Resources.ButtonBack, "List", "Store", null, new { @class = "btn-text-icon" })
+        @Html.AuthorizedRawActionLink("<i class='z-edit'></i>" + Admin_Resources.ButtonEdit, "EditStoreKlaviyo", "Store", new { @portalId = Model.PortalId }, new { @class = "btn-text-icon" })
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        <h3 class="section-heading" data-test-selector="hdgKlaviyoAccountConfiguration">Klaviyo Account Configuration</h3>
+         <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.KlaviyoUserName)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.KlaviyoUserName" disabled="disabled" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.KlaviyoPassword)
+                    @{
+                        string klaviyoPassword = (String.IsNullOrEmpty(Model.KlaviyoPassword) || Model.KlaviyoPassword.Trim().Length <= 0) ? string.Empty : new string('*', Model.KlaviyoPassword.Length);
+                    }
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Html.RenderBlock(klaviyoPassword)" disabled="disabled" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.PublicApiKey)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.PublicApiKey" disabled="disabled" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.IsActive)
+                </div>
+                <div class="control-md">
+                    <i class="@HelperMethods.GetCheckMark(@Model.IsActive)"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

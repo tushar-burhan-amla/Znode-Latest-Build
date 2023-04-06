@@ -1,0 +1,7 @@
+﻿@using Znode.Engine.WebStore
+@using Znode.Engine.WebStore.Agents
+@{
+    int? pageID = ViewBag.contentPageId;
+    string template = ViewBag.TemplateName;
+    Html.RenderAction("ContentPageContent", "ContentPage", new { template = template, pageId = pageID, publishState = PortalAgent.CurrentPortal.PublishState, localeId = Helper.GetLocaleId(), profileId = Helper.GetProfileId(), accountId = Helper.GetUserAccountId(), catalogId = Helper.GetUserProfileCatalogId() });
+}

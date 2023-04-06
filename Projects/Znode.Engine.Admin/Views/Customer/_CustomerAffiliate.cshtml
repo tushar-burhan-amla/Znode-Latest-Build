@@ -1,0 +1,111 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CustomerAffiliateViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formCustomerAffiliate", CancelUrl = "/Customer/CustomersList", Callback = "Customer.prototype.SetCommisionValidation", IsSaveCloseEnable = true };
+    string selectedDoaminIds = Equals(Model.DomainIds, null) ? string.Empty : string.Join(",", Model.DomainIds);
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleManage, "User")<em class="z-minus"></em><span>@TempData["CustomerDisplayName" + @Model.UserId]</span></h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/views/User/_asidecustomermanagepanel.cshtml")
+    <section class="main-container">
+        @using (Html.BeginForm("SaveAffiliateData", controllerName, FormMethod.Post, new { @id = "formCustomerAffiliate" }))
+            {
+            <h3 data-test-selector="hdgTrackingInfo" class="section-heading">@Admin_Resources.TextTrackingInformation</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ReferralStatus, new { @data_test_selector = "lblApprovalStatus" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.ReferralStatus, Model.ApprovalStatusList, new { onchange = "Customer.prototype.ReferralStatusChange()", @data_test_selector = "drpApprovalStatusList" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.DescriptionApprovalStatus)
+                </div>
+            </div>
+            <div id="show_domains">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.PortalId, new { @data_test_selector = "lblStore" })
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.PortalId, Model.AvailablePortals, new { @id = "ddl_portal_list", @data_test_selector = "drpStoreList" })
+                            <span class="error-msg" id="errorRequiredddl_portal_list" data-test-selector="valStore"></span>
+                        </div>
+                    </div>
+                </div>
+                @* Do not delete: Domains appear here. *@
+                <div id="domains_to_show">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.DomainIds)
+                            </div>
+                            <div class="control-md">
+                                <div id="areaList">
+                                    @Html.ListBoxFor(model => model.DomainIds, Model.Domains, new { @id = "domains", @multiple = "multiple" })
+                                    @Html.ValidationMessageFor(model => model.DomainIds)
+                                    <span class="error-msg" id="errorRequire_domains"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ReferralCommissionTypeId, new { @data_test_selector = "lblCommissionType" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.ReferralCommissionTypeId, Model.ReferralCommissionTypes, new { id = "ddlReferralCommisionType", @data_test_selector = "drpCommissionTypeList" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.ReferralCommission, new { @data_test_selector = "lblCommission" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ReferralCommission, new { @data_test_selector = "txtCommission", @data_val_number = @Admin_Resources.ReferralCommissionInputValidationText })
+                        @Html.ValidationMessageFor(model => model.ReferralCommission, @Admin_Resources.ReferralCommissionInputValidationText, new { id = "valReferralCommission", @data_test_selector = "valCommission" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.DescriptionCommission)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.OwedAmount, new { @data_test_selector = "lblOwedAmount" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.OwedAmount, new { @readonly = "readonly", @data_test_selector = "txtOwedAmount" })
+                        @Html.ValidationMessageFor(model => model.OwedAmount, "", new { @data_test_selector = "valOwedAmount" })
+                    </div>
+                </div>
+            </div>
+                    @Html.HiddenFor(x => x.UserId, new { @id = "hdn_affiliate_user_id" })
+                    @Html.Hidden("hdnDomainIds", selectedDoaminIds)
+        }
+        @*Div for creating tabs*@
+        <div class="col-sm-12 nopadding margin-top-25">
+            @Html.Hidden("UserId", Convert.ToInt32(Request.QueryString["userId"]))
+            @{Html.RenderAction("GetTabStructure", controllerName, new { @userId = @Model.UserId });}
+        </div>
+    </section>
+</div>
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"> </script>
+<script>
+    $("#AreaId").multiselect({ includeSelectAllOption: false, enableCaseInsensitiveFiltering: false });
+    $("#domains").multiselect({ includeSelectAllOption: true, enableCaseInsensitiveFiltering: false });
+</script>

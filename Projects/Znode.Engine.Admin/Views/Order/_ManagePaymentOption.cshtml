@@ -1,0 +1,245 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<script src="https://flex.cybersource.com/cybersource/assets/microform/0.11/flex-microform.min.js"></script>
+<script src="https://js.braintreegateway.com/web/dropin/1.33.2/js/dropin.min.js"></script>
+<div id="aside-popup-panel">
+    <div class="order-payment">
+        <div class="col-sm-12 title-container">
+            <h1 data-test-selector="hdgPayment">@Admin_Resources.LabelPayment</h1>
+            <div class="pull-right btn-container">
+                <button type="button" class="btn-text-icon pull-left" onclick="ZnodeBase.prototype.CancelUpload('paymentStatusPanel')" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                <button onclick="Order.prototype.PlaceOrder();" class="btn-text btn-text-secondary" data-test-selector="linkSave" id="manageOrderPayButton">@Admin_Resources.ButtonSave</button>
+            </div>
+        </div>
+        <div class="col-sm-12 page-container">
+            <div id="div_payment_option">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelPayment, new { @data_test_selector = "lblPayment" })
+                        </div>
+                        <div class="control-md order-details">
+                            <select id="ddlPaymentTypes" name="ddlPaymentTypes" onchange="Order.prototype.ShowPaymentHtml(this);" data-test-selector="drpPaymentTypes">
+                                <option>@Admin_Resources.LabelSelectPaymentType</option>
+                                @foreach (var item in Model.PaymentTypeList)
+                                {
+                                    <option value="@item.Value" id="@item.Id" data-payment-type="@item.Type">@item.Text</option>
+                                }
+                            </select>
+                            @Html.ValidationMessage("PaymentTypeId", null, new { id = "valPaymentTypes", @data_test_selector = "valPaymentType" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*COD*@
+            <div class="col-sm-12 top-shift nopadding HidePaymentTypeDiv" id="div-COD" style="display:none;"></div>
+            @*PayPal Express *@
+            <div id="div-PaypalExpress" class="col-sm-12 nopadding HidePaymentTypeDiv" style="display:none;">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-lg control-non">
+                            <button id="paypal-express-checkout" type="button" onclick="Order.prototype.PaypalExpressCheckout();"><img src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/gold-rect-paypalcheckout-26px.png" alt="PayPal Checkout"></button>
+                            <p class="tinyfade margin-top">@Admin_Resources.LabelPaypalDescription</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*Purchase Order *@
+            <div class="col-sm-12 top-shift nopadding HidePaymentTypeDiv" id="div-PurchaseOrder" style="display:none;">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label required">@Html.Label(Admin_Resources.LabelPurchaseOrderNumber)</div>
+                        <div class="control-md" id="divPurchaseOrderNumber">
+                            <input type="text" id="PurchaseOrderNumber" name="PurchaseOrderNumber" class="form-input" size="40" maxlength="200" value="" onblur="OrderTabs.prototype.OnBlurPurchaseOrderNumber()" />
+                            <div id="cart-ponumber-status" class="red-color field-validation-error" style="display:none;">@Admin_Resources.rfvPurchaseOrderNumber</div>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.IsPoDocUploadEnable)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Admin_Resources.LabelSelectFileToImport, new { @id = "lblSelectFile" })
+                            </div>
+                            <div class="control-md">
+                                <div class="col-sm-7 nopadding" id="poUploader">
+                                    <span title="@Admin_Resources.ButtonUpload" class="btn-text-icon file-upload">@Admin_Resources.ButtonUpload</span>
+                                    <div>
+                                        <label title="@Admin_Resources.ButtonUpload" class="">
+                                            <input type="file" value="" name="PODocument" id="PODocument">
+                                        </label>
+                                        <span data-valmsg-replace="true" data-valmsg-for="PODocument" class="field-validation-valid"></span>
+                                        <output data-selector="PODocument" class="output-image" id="thumbnailList"></output>
+                                    </div>
+                                    <span id="PODocumentError" class="field-validation-error"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @*Credit Card *@
+        <div id="div-CreditCard" class="add-new-container HidePaymentTypeDiv" style="display:none;">
+            <div class="col-xs-12 nopadding">
+                <div class="Tab-container dynamic-tabs margin-top">
+                    <ul id="creditCardTab" class="nav nav-tabs">
+                        <li class="active"><a href="#savedCreditCard-panel" data-toggle="tab" class="tabs">@Admin_Resources.LabelSavedCC</a></li>
+                        <li><a href="#addNewCreditCard-panel" data-toggle="tab" class="tabs">@Admin_Resources.LabelAddCC</a></li>
+                    </ul>
+                    <div id="creditCardPanel" class="tab-content">
+                        <!--Panels 1-->
+                        <div class="tab-pane fade in active margin-top savedCreditCard" id="savedCreditCard-panel">
+                            <div id="radioCCList">
+                            </div>
+                        </div>
+                        <!--Panels 2-->
+
+                        <div class="tab-pane fade margin-top" id="addNewCreditCard-panel">
+                            <h3 class="section-heading" data-test-selector="hdgCreditCardDetails">@Admin_Resources.LabelCreditCardDetails</h3>
+                            <div class="col-sm-12 save-cart nopadding margin-bottom">
+                                <div class="col-sm-12 col-md-6 nopadding" id="paymentProviders" data-test-selector="divPaymentProviders">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 nopadding " id="divCyberSource" style="display:none;">
+                                <div class="control-label">
+                                    <div id="divCreditCardCyberSource">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="credit-card-div" class="col-sm-12 nopadding">
+                                <div id="creditCard" style="display:none;">
+                                    <div class="form-group">
+                                        <div class="col-sm-12 nopadding">
+                                            <div class="control-label">
+                                                <label class="required" data-test-selector="lblCreditCardNumber">@Admin_Resources.LabelCreditCardNumber</label>
+                                            </div>
+                                            <div class="control-md">
+                                                <input type="text" data-payment="number" data-test-selector="txtCreditCardNumber" id="CreditCardNumber" />
+                                                <div id="errornumber" class="field-validation-error" style="display: none" data-test-selector="valCreditCardNumber">@Admin_Resources.ErrorCardNumberMsg</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-12 nopadding">
+                                            <div class="control-label">
+                                                <label class="required" data-test-selector="lblCardCreditExpirationDate">@Admin_Resources.CardCreditExpirationDate</label>
+                                            </div>
+                                            <div class="control-md">
+                                                <div class="col-sm-2 col-md-2 nopadding"><input type="text" maxlength="2" data-payment="exp-month" data-test-selector="txtExpirationMonth" /><span class="sub">(MM)</span></div>
+                                                <div class="col-sm-3 col-md-4 "><input type="text" maxlength="4" data-payment="exp-year" data-test-selector="txtExpirationYear" /><span class="sub">(YYYY)</span></div>
+                                                <div class="col-sm-12 nopadding">
+                                                    <div id="errormonth" class="field-validation-error" style="display: none" data-test-selector="valExpirationMonth">@Admin_Resources.ValidationEnterValidDate</div>
+                                                    <div id="erroryear" class="field-validation-error" style="display: none" data-test-selector="valExpirationYear">@Admin_Resources.ErrorValidYear</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-12 nopadding">
+                                            <div class="control-label">
+                                                <label class="required" data-test-selector="lblCardSecurityNumber">@Admin_Resources.CardSecurityNumber</label>
+                                            </div>
+                                            <div class="control-sm">
+                                                <input type="password" data-payment="cvc" id="CreditCardCVCNumber" maxlength="4" data-test-selector="txtCardSecurityNumber" />
+                                                <span class="sub" data-test-selector="spnCardPaymentNote">@Admin_Resources.CardPaymentNote</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="Save-credit-cardholder-name">
+                                        <div class="col-sm-12 nopadding">
+                                            <div class="control-label">
+                                                <label class="required" data-test-selector="lblCardHolderName">@Admin_Resources.CardHolderName</label>
+                                            </div>
+                                            <div class="control-md">
+                                                <input type="text" data-payment="cardholderName" id="CardHolderName" class="form-input-long" data-test-selector="txtCardHolderName" />
+                                                <div id="errorcardholderName" class="field-validation-error" style="display: none" data-test-selector="valCardHolderName">@Admin_Resources.ErrorCardHolderName</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="divCardconnect" style="display:none;">
+                                    <iframe src="" style="border:0; overflow:hidden;" id="iframebody" class="cardconnectIframe" title="Cardconnect Payment"></iframe>
+                                    <div class="col-sm-12 nopadding cardconnectcardholder">
+                                        <div class="control-label">
+                                            <label>@WebStore_Resources.CreditCardHolderName</label>
+                                        </div>
+                                        <div class="control-md">
+                                            <input type="text" id="cardconnectCardHolderName" data-payment="cardconnectCardholderName" maxlength="100" class="form-input-long" data-test-selector="txCardconnectCardHolderName" />
+                                            <div id="errorcardconnectcardholderName" class="field-validation-error" style="display: none">@WebStore_Resources.ErrorCardHolderName</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if (!Model.IsGuest)
+                                {
+                                    <div class="form-group savecreditcard" id="Save-credit-card">
+                                        <div class="col-sm-12 nopadding">
+                                            <div class="control-md">
+                                                <label>
+                                                    <input id="SaveCreditCard" name="SaveCreditCard" type="checkbox" data-test-selector="chkSaveCreditCard">
+                                                    <span class="lbl padding-8" for="SaveCreditCard" data-test-selector="spnSaveCreditCard">@Admin_Resources.SaveCreditCardDetails</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div id="divAuthorizeNetIFrame" class="dirtyignore">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*Gateway Information*@
+            @Html.Hidden("GatewayCurrencyCode", "USD")
+            @Html.Hidden("paymentProfileId")
+            @Html.Hidden("hdnGatewayCode")
+            @Html.Hidden("hdnPaymentCode")
+            @Html.Hidden("hdnEncryptedTotalAmount")
+            @Html.Hidden("hdnIsCreditCardEnabled", 1)
+            @Html.Hidden("CardDataToken")
+            @Html.Hidden("CardExpirationDate")
+            @Html.Hidden("ErrorMessage")
+            @Html.Hidden("hdnPaymentGUID")
+            @Html.Hidden("hdnAction", "AdminOrderManage")
+            @Html.Hidden("hdnBraintreecode")
+            @Html.Hidden("hdnBraintreecardNumber")
+            @Html.Hidden("hdnBraintreeCardExpirationMonth")
+            @Html.Hidden("hdnBraintreeCardExpirationYear")
+            @Html.Hidden("hdnBraintreeCardHolderName")
+            @Html.Hidden("hdnBraintreeCardType")
+            @Html.Hidden("hdnBraintreeNonce")
+            @Html.Hidden("hdnBraintreeIsVault")
+        </div>
+            <div id="divAdditionalInfo" class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelAdditionalNotes, new { @data_test_selector = "lblAdditionalNotes" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextArea("additionalInstructions", new { maxlength = 500, @data_test_selector = "txtAdditionalNotes" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.Hidden("additionalInstructions")
+        @Html.Hidden("PaymentSettingId")
+    </div>
+</div>
+<div id="ReviewOrderPopup" class="aside-popup-panel"></div>
+<script>
+    $("#CreditCardNumber").keypress(function () {
+        $('#CreditCardNumber').payment('formatCardNumber');
+    });
+
+    if ($("#OmsOrderId").val() > 0)
+        $("#divAdditionalInfo").hide();
+</script>

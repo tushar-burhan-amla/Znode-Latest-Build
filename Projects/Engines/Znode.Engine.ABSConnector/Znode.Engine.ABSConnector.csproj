@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{78B2154A-AA94-4F6A-827B-CC8434E59A63}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Znode.Engine.ABSConnector</RootNamespace>
+    <AssemblyName>Znode.Engine.ABSConnector</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Int|AnyCPU'">
+    <OutputPath>bin\Int\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'loadtest|AnyCPU'">
+    <OutputPath>bin\loadtest\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'automation|AnyCPU'">
+    <OutputPath>bin\automation\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'B2B|AnyCPU'">
+    <OutputPath>bin\B2B\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LB|AnyCPU'">
+    <OutputPath>bin\LB\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Znode.Libraries.Framework.Business.9.7.5\lib\net48\Znode.Libraries.Framework.Business.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ABSConnector.cs" />
+    <Compile Include="ABSCSVNames.cs" />
+    <Compile Include="Models\ABSARPaymentResponseModel.cs" />
+    <Compile Include="Models\ABSBillToChangeRequestModel.cs" />
+    <Compile Include="Models\ABSChangeShipToRequestModel.cs" />
+    <Compile Include="Models\ABSEmailResponseModel.cs" />
+    <Compile Include="Models\ABSInventoryResponseModel.cs" />
+    <Compile Include="Models\ABSOrderCommentsModel.cs" />
+    <Compile Include="Models\ABSOrderDetailLineModel.cs" />
+    <Compile Include="Models\ABSOrderHeaderModel.cs" />
+    <Compile Include="Models\ABSOrderInfoRequestModel.cs" />
+    <Compile Include="Models\ABSOrderResponseDetailsModel.cs" />
+    <Compile Include="Models\ABSOrderNumberRequestModel.cs" />
+    <Compile Include="Models\ABSOrderNumberResponseModel.cs" />
+    <Compile Include="Models\ABSOrderResponseTop5Model.cs" />
+    <Compile Include="Models\ABSPriceRequestModel.cs" />
+    <Compile Include="Models\ABSPriceResponseModel.cs" />
+    <Compile Include="Models\ABSPrintInfoResponseModel.cs" />
+    <Compile Include="Models\ABSRequestBaseModel.cs" />
+    <Compile Include="ABSRequestTypes.cs" />
+    <Compile Include="Helpers\ABSResponseHelper.cs" />
+    <Compile Include="Models\ABSARListRequestModel.cs" />
+    <Compile Include="Models\ABSARListResponseModel.cs" />
+    <Compile Include="Models\ABSARPaymentRequestModel.cs" />
+    <Compile Include="Models\ABSEmailRequestModel.cs" />
+    <Compile Include="Models\ABSInventoryRequestModel.cs" />
+    <Compile Include="Models\ABSShipToInformationModel.cs" />
+    <Compile Include="Models\ABSSoldOutRequestModel.cs" />
+    <Compile Include="Models\ABSSoldOutResponseModel.cs" />
+    <Compile Include="Models\ABSSoldToInformationModel.cs" />
+    <Compile Include="Models\ABSTierPriceRequestModel.cs" />
+    <Compile Include="Models\ABSPrintInfoRequestModel.cs" />
+    <Compile Include="Models\ABSTrackingInformationModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Helpers\ABSRequestHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config"/>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

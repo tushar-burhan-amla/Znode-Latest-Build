@@ -1,0 +1,44 @@
+﻿@model Znode.Engine.Admin.ViewModels.MediaConfigurationViewModel
+<div class="col-sm-12 nopadding">
+    <div class="form-group">
+        @if (Model.BucketName != null)
+        {
+            <div class="col-sm-12 nopadding">
+                <div class="control-md control-non">
+                    <button type="button" onclick="javascript: var serverConfig = new MediaConfiguration(); serverConfig.startSyncProcess('@Model.BucketName');" class="btn-text pull-right margin-bottom">@MediaManager_Resources.LabelSyncExistingData</button>
+                </div>
+            </div>
+        }
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(MediaManager_Resources.LabelAmazonBucketName, new { @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.BucketName)
+                <span id="valDisplayBucketNameErr" class="field-validation-error"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(MediaManager_Resources.LabelAccessKey, new { @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.AccessKey)
+                <span id="valDisplayAccessKeyErr" class="field-validation-error"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(MediaManager_Resources.LabelSecretKey, new { @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.SecretKey)
+                <span id="valDisplaySecretKeyErr" class="field-validation-error"></span>
+            </div>
+        </div>
+    </div>
+</div>

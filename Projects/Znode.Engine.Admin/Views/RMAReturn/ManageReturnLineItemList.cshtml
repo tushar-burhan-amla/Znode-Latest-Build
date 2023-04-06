@@ -1,0 +1,85 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model RMAReturnViewModel
+@{
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    string _displayPartialRefund = (Model?.ReturnLineItems?.Any(x => x.RefundAmount > 0)).GetValueOrDefault() ? "display:block;" : "display:none;";
+}
+<div id="divReturnCart">
+    <div id="layout-cart">
+        <div class="panel-heading">
+            <h4 class="panel-title panel-title-edit" data-test-selector="hdgItemsOrdered">@Admin_Resources.LabelProductsReturned</h4>
+        </div>
+        @if (Model?.ReturnLineItems?.Any() ?? false)
+        {
+            <div class="cart-products margin-bottom">
+                <div class="table return-tbl" data-test-selector="tblItemsOrdered">
+                    <div class="table-head">
+                        <ul class="head-ul">
+                            <li class="imageicon sp-image" data-test-selector="tblHdImage">
+                                <span data-test-selector="spnImage">@Admin_Resources.LabelImage</span>
+                            </li>
+                            <li class="sp-sku" data-test-selector="tblHdSKU">
+                                <span data-test-selector="spnSKU">@Admin_Resources.LabelSKU</span>
+                            </li>
+                            <li class="sp-product-name" data-test-selector="tblHdProduct">
+                                <span data-test-selector="spnProduct">@Admin_Resources.LabelProduct</span>
+                            </li>
+                            <li class="sp-status" data-test-selector="tblHdStatus">
+                                <span data-test-selector="spnStatus">@Admin_Resources.LabelStatus</span>
+                            </li>
+                            <li data-test-selector="tblHdReason" class="sp-returned-reason">
+                                <span data-test-selector="spnReason">@Admin_Resources.LabelReason</span>
+                            </li>
+                            <li data-test-selector="tblHdReason" class="sp-returned-reason">
+                                <span data-test-selector="spnReason">@Admin_Resources.LabelUnitPrice</span>
+                            </li>
+                            <li data-test-selector="tblHdExpectedQty " class="table-quantity exp-quantity">
+                                <span data-test-selector="spnExpectedQty">@Admin_Resources.LabelExpectedQty</span>
+                            </li>
+                            <li data-test-selector="tblHdConfirmedQty " class="table-quantity sp-quantity">
+                                <span data-test-selector="spnConfirmedQty">@Admin_Resources.LabelConfirmedQty</span>
+                            </li>
+                            <li data-test-selector="tblHdShipping" class="sp-shipping">
+                                <span data-test-selector="spnShipping">@Admin_Resources.LabelShipping</span>
+                            </li>
+                            <li data-test-selector="tblHdReturnShipping" class="sp-shipping-status">
+                                <span data-test-selector="spnReturnShipping">@Admin_Resources.LabelReturnShipping</span>
+                            </li>
+                            <li data-test-selector="tblHdPartialRefund"  class="table-quantity sp-quantity" id="partialRefund" style="@_displayPartialRefund">
+                                <span data-test-selector="spnPartialRefund">@Admin_Resources.LabelPartialRefund</span>
+                            </li>
+                            <li data-test-selector="tblHdTotal" class="table-total sp-total">
+                                <span data-test-selector="spnTotal">@Admin_Resources.LabelTotal</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <ul class="col-xs-12 table-body">
+                        @if (Model.ReturnLineItems != null)
+                        {
+                            foreach (RMAReturnLineItemViewModel returnLineItem in Model.ReturnLineItems)
+                            {
+                                <li class="cartItem" onchange="RMAReturn.prototype.UpdateOrderReturnLineItem('@returnLineItem.ExternalId')" data-return-lineitem="@returnLineItem.ExternalId" >
+                                    <ul class="line-items">
+                                        @Html.Partial("_ManageReturnLineItemRow", returnLineItem)
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cart-total col-sm-6 col-md-6 col-lg-4 nopadding pull-right margin-bottom" id="divTotal">
+                @Html.Partial("_ManageReturnTotalTable", Model.ReturnTotalModel)
+            </div>
+        }
+        else
+        {
+            <div class="col-sm-12 nopadding cart-summary">
+                <p class="text-center margin-top-bottom no-record">@Admin_Resources.TextNoOrderedItems</p>
+            </div>
+        }
+    </div>
+</div>

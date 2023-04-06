@@ -1,0 +1,21 @@
+﻿@using Znode.Engine.WebStore.Agents;
+@using Znode.Engine.WebStore.Controllers;
+
+@{
+    string customerServiceEmail = PortalAgent.CurrentPortal?.CustomerServiceEmail;
+    string customerServicePhoneNumber = PortalAgent.CurrentPortal?.CustomerServicePhoneNumber;
+}
+<h2 class="footer-header" data-test-selector="lblFooterContactSupport">@WebStore_Resources.TextCustomerSupport</h2>
+@{
+    string customerServiceEmailValue = customerServiceEmail;
+    if (!string.IsNullOrEmpty(customerServiceEmailValue))
+    {
+        char[] seperator = new char[] { ',' };
+        string[] customerServiceEmails = customerServiceEmailValue.Split(seperator, StringSplitOptions.RemoveEmptyEntries);
+        foreach (string email in customerServiceEmails)
+        {
+            <div class="footer-text" data-test-selector="divFooterText">If you have any questions<br /><a href="@(" mailto:" + email)" data-test-selector="linkMailTo">email</a> us or give us a call.</div>
+        }
+    }
+}
+<h3 data-test-selector="lblCustomerPhone" class="footer-store-number">@customerServicePhoneNumber</h3>

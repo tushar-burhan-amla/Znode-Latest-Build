@@ -1,0 +1,24 @@
+﻿@using Znode.Engine.Admin.Models
+@model Znode.Engine.Admin.ViewModels.GlobalAttributeGroupListViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div id="grid-container dirtyignore">
+
+    <div class="col-sm-12 list-container">
+        <div class="pull-right margin-bottom">
+            @{Html.RenderAction("GetUnassignedAttributeGroups", controllerName, new { @id = @Model.FamilyCode });}
+        </div>
+        @if (Model?.AttributeGroupList?.Count > 0)
+        {
+            @Html.Partial("~/Views/GlobalAttributeFamily/_AssignedGroupsCollapsibleGrid.cshtml", Model)
+        }
+        else
+        {
+            <div class="col-sm-12 no-record nopadding">
+                <p>@Admin_Resources.NoRecordFoundText</p>
+            </div>
+        }
+    </div>
+</div>

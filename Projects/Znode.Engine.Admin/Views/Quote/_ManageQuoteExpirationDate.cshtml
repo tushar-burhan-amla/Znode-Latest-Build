@@ -1,0 +1,24 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+@model QuoteInfoViewModel
+@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("UpdateQuoteExpirationDate", "quote"
+                                              , new AjaxOptions
+                                              {
+                                                  UpdateTargetId = "labelQuoteExpirationDate",
+                                                  HttpMethod = "POST",
+                                                  OnSuccess = "Quote.prototype.ChangeQuoteExpirationDateSuccessCallback"
+                                              }, new { @class = "dirtylisten dirty", @id = "QuoteExpirationdateView" }))
+{
+
+<div class="control-lg">
+    <div class="right-inner-icon">
+        @Html.TextBox("QuoteExpirationDate", Model.InHandDate != null ? Model.QuoteExpirationDate.ToDateTimeFormat() : string.Empty, new { @id = "QuoteExpirationDate", @mindate = HelperMethods.GetDateTime().Date, @class = "datepicker", @Onchange = "Quote.prototype.SubmitForm(this)", @group = "promotiondate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtStartDate" })
+        <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+    </div>
+    @Html.HiddenFor(model => Model.OmsQuoteId, new { @id = "hdnQuoteExpirationDateQuoteId" })
+</div>
+}

@@ -1,0 +1,19 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+
+@model List<StoreLocatorViewModel>
+
+<div id="layout-content" class="col-12 p-0">
+    <div class="col-12 p-0 table-responsive store-locator-view">
+        @foreach (StoreLocatorViewModel store in Model)
+        {
+            string DisplayAddress = (string.IsNullOrEmpty(store.Address1) ? "" : $"{store.Address1},") + (string.IsNullOrEmpty(store.Address2) ? "" : $" {store.Address2},") + (string.IsNullOrEmpty(store.Address3) ? "" : $",{store.Address3} ,") + $" {store.CityName}, {store.StateName}";
+            <div data-distance="0" data-lng="@store.Longitude" data-lat="@store.Latitude" data-title="@store.StoreName" data-address="@DisplayAddress" class="storeLocationCoordinate pb-3 mb-3 border-bottom">
+                <div class="recent-order-title"><strong class="recent-order-product">@WebUtility.HtmlDecode(store.StoreName)</strong></div>
+                <div class="recent-order-date">@DisplayAddress</div>
+                <div class="recent-order-id"> @store.PostalCode</div>
+                <div class="recent-order-reorder"><a href="#map" onclick="showDirectionToStore(this)">@WebStore_Resources.TitleMapLink</a></div>
+                <div class="recent-order-total"><strong>Phone:</strong> @store.PhoneNumber</div>
+            </div>
+        }
+    </div>
+</div>

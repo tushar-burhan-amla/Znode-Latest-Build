@@ -1,0 +1,24 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+@model QuoteInfoViewModel
+@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("UpdateInHandDate", "quote"
+                               , new AjaxOptions
+                               {
+                                   UpdateTargetId = "labelInHandDate",
+                                   HttpMethod = "POST",
+                                   OnSuccess = "Quote.prototype.ChangeInHandDateSuccessCallback"
+                               }, new { @class = "dirtylisten dirty", @id = "InHanddateView" }))
+{
+
+    <div class="control-lg update-order-status dirtyignore">
+        <div class="right-inner-icon ">
+            @Html.TextBox("InHandDate", Model.InHandDate != null ? Model.InHandDate.ToDateTimeFormat() : string.Empty, new { @id = "InHandDate", @mindate = HelperMethods.GetDateTime().Date, @class = "datepicker", @Onchange = "Quote.prototype.SubmitForm(this)", @group = "promotiondate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtStartDate" })
+            <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+        </div>
+        @Html.HiddenFor(model => Model.OmsQuoteId, new { @id = "hdnInHandDateQuoteId" })
+    </div>
+}

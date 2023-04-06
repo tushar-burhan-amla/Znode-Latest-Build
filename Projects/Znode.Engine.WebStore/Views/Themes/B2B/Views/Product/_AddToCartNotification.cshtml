@@ -1,0 +1,27 @@
+﻿@model Znode.Engine.WebStore.ViewModels.AddToCartNotificationViewModel
+@using Znode.Libraries.ECommerce.Utilities
+<div class="cart-notify-bar" data-stick="product-sticky" id="CartStaticBar" style="display: block;">
+    <div class="row  flex-wrap align-items-center p-4 cart-notify-section">
+        <div class="col-12 col-lg-3 col-md-6">
+            <h3 class="d-flex align-items-center justify-content-center justify-content-md-start add-to-heading pl-4"><i class="icon-check-circle pr-2"></i>@WebStore_Resources.LabelAddedToCart</h3>
+        </div>
+        <div class="col-12 col-lg-5 col-md-6 z-tab tab-panel-heading d-flex align-items-center justify-content-center justify-content-lg-start my-" id="myTab">
+            <img class="img-responsive" src="@Model.ProductImage" alt="@Model.ProductName Image">
+            <div class="product-number pl-4">
+               <span data-test-selector="spnProductItemLabel"> @WebStore_Resources.LabelSKU: </span> @Model.SKU
+               @if (!Equals(Model.ProductType, ZnodeConstant.GroupedProduct))
+               {
+                  <span data-test-selector="spnProductQuantityLabel" class="product-quantity"> - @WebStore_Resources.LabelQTY: </span>@Model.Quantity
+               }
+
+            </div>
+        </div>
+        <div class="col-12 col-lg-4 col-md-12 mt-3 mt-lg-0 z-mini-cart d-flex justify-content-center">
+            <a href='/cart' class="btn btn-cart">@WebStore_Resources.ButtonViewCartAndCheckout</a>
+        </div>
+        <div class="z-cart-close">
+            <i class="close-circle-icon pl-5" onclick="ZnodeNotification.prototype.CloseMessageNotificationContainer(this);"></i>
+        </div>
+    </div>
+</div>
+

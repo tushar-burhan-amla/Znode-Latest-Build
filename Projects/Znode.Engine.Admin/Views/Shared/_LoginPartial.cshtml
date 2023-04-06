@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNet.Identity
+@using Znode.Engine.Admin.Helpers
+@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@{
+    UserViewModel userviewModel = SessionProxyHelper.GetUserDetails();
+    //string mediaPath = userviewModel?.MediaPath;
+    string mediaPath = string.IsNullOrEmpty(userviewModel?.MediaPath) ? ZnodeAdminSettings.DefaultUserImagePath : userviewModel?.MediaPath;
+}
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("Logout", "User", new { area = "" }, FormMethod.Post, new { id = "logoutForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="user-profile">
+            <div class="d-flex align-items-center">
+                <div class="user-profile-thumbnail d-flex align-items-center">
+                    <img src="@mediaPath" alt="Profile Image" class="img-responsive" />
+                </div>
+                <div class="profile-details">
+                    <h4 title="@User.Identity.GetUserName()">@User.Identity.GetUserName()</h4>
+                </div>
+            </div>
+            <div class="col-sm-12 action-container">
+                @Html.ActionLink("Change Password", "ChangePassword", "User", new { area = "" }, new { @class = "btn-text pull-left" })
+                <a href="javascript:document.getElementById('logoutForm').submit()" class="btn-text btn-text-secondary pull-right" id="log-off">@Admin_Resources.LabelLogOff</a>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="user-profile-details">
+        <div class="col-sm-12 nopadding">
+            <h4 class="title">@Admin_Resources.HeaderAdministratorDetails</h4>
+        </div>
+        <div class="col-sm-12 margin-top-bottom">
+            @Html.ActionLink("Log in", "Login", "User", new { area = "" }, htmlAttributes: new { id = "loginLink", @class = "btn-text pull-right" })
+        </div>
+    </div>
+}

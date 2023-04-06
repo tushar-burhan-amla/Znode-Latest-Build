@@ -1,0 +1,156 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.Agents
+@model QuoteResponseViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    bool isCancelled = string.Equals(Model.QuoteStatus.ToString(), ZnodeOrderStatusEnum.CANCELED.ToString(), StringComparison.InvariantCultureIgnoreCase);
+    string paymentApiRequestHeader = ViewBag.PaymentApiRequestHeader;
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { ControlId = "btnUpdateQuote", DataTestSelector = "linkSave", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.ButtonSaveQuote, OnClick = "Quote.prototype.OnConfirmSubmitQuote()" });
+    primaryPageAction.PageActions.Add(new PageAction { DataTestSelector = "linkPrint", HrefLink = "#", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.LabelPrint, OnClick = "Quote.prototype.PrintManangeQuote();" });
+}
+<div class="col-sm-12 title-container order-manage-title">
+    <h1>@Admin_Resources.LabelManageQuote<em class="z-minus"></em><span class="order-tag-no">@Model.QuoteNumber</span></h1>
+    <div class="pull-right btn-container d-flex">
+
+        <a href="javascript:void(0)" class="btn-text-icon dirtyignore" id="btnCancelQuoteId" onclick="OrderSidePanel.prototype.ConfirmCancelQuotePopUp(PopUpConfirmCancelQuote);" data-test-selector="linkCancel"><em class='z-back'></em>@Admin_Resources.ButtonCancel</a>
+
+        @if (isCancelled)
+        {
+            <button type="button" class="btn-text btn-text-primary margin-left-10" disabled="disabled" id="cancelQuote" data-test-selector="btnCancelQuote">@Admin_Resources.LabelCancelQuote</button>
+        }
+        else
+        {
+            <button type="button" class="btn-text btn-text-primary margin-left-10" id="cancelQuote" onclick="Quote.prototype.CancelQuote()" data-test-selector="btnCancelQuote">@Admin_Resources.LabelCancelQuote</button>
+        }
+
+        @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+    </div>
+</div>
+
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    <div id="printContentDiv" class="quote-manage-container quote-page-details ">
+        <div class="col-sm-12 nopadding d-flex flex-wrap">
+            <div class="order-information">
+                <div id="quoteInformation" data-test-selector="divQuoteInformation" class="col-sm-12 nopadding d-flex h-100">
+                    @Html.Partial("_ManageQuoteInformation", Model.QuoteInformation)
+                </div>
+            </div>
+            <div class="customer-information">
+                <div id="customerInformation" data-test-selector="divCustomerInformation" class="d-flex h-100">
+                    @Html.Partial("_ManageCustomerInformation", Model.CustomerInformation)
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 nopadding panel panel-default productInfoPage margin-top-20">
+            <div id="quoteLineItems" data-test-selector="divQuoteLineItems">
+                @Html.Partial("_QuoteLineItemList", Model.CartInformation)
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 nopadding">
+        <div class="col-sm-12 nopadding panel panel-default productInfoPage margin-top-20">
+            <div id="quoteHistory" data-test-selector="divquoteHistory">
+                @Html.Partial("_ManangeQuoteHistory", Model)
+            </div>
+        </div>
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.ConfirmText,
+                        Description = @Admin_Resources.TextConfirmCancelOrderNew,
+                        ModalPopUpId = "PopUpConfirmCancelQuote",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "OrderSidePanel.prototype.ConfirmCancelQuote()" },
+                           }
+                    })
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                   new PopupModel()
+                                   {
+                                       Title = @Admin_Resources.ConfirmText,
+                                       Description = @Admin_Resources.TextConfirmSubmitQuote,
+                                       ModalPopUpId = "PopUpConfirmSubmitQuote",
+                                       Buttons = new List<PopUpButtonModel>() {
+                new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "Quote.prototype.SubmitEditQuote()" },
+                                          }
+                                   })
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                   new PopupModel()
+                                   {
+                                       Title = @Admin_Resources.ConfirmText,
+                                       Description = @Admin_Resources.QuoteTaxExemptConfirm,
+                                       ModalPopUpId = "PopUpTaxExemptSubmitQuote",
+                                       Buttons = new List<PopUpButtonModel>() {
+                new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "Quote.prototype.ConfirmTaxExemptQuote()" },
+                                          }
+                                   })
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                                   new PopupModel()
+                                   {
+                                       Title = @Admin_Resources.ConfirmText,
+                                       Description = @Admin_Resources.QuoteConvertToOrderConfirm,
+                                       ModalPopUpId = "PopUpConvertToOrder",
+                                       Buttons = new List<PopUpButtonModel>() {
+                new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "Quote.prototype.GetPaymentOptions()" },
+                                       }
+                                   })
+    </div>
+</section>
+<div id="additionalNotes" class="aside-popup-panel modal-dialog modal-md">
+</div>
+<div id="addressDetails" class="aside-popup-panel modal-dialog modal-lg">
+</div>
+<div id="paymentStatusPanel" class="aside-popup-panel payment-status-panel modal-dialog modal-lg">
+</div>
+<div class="modal fade" id="ErrorPaymentModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+                <h4 class="modal-title">@Admin_Resources.LabelPaymentApplication</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" class="btn-text-icon" data-dismiss="modal"><em class="z-ok"></em>Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("hdnPortalId", StoreAgent.CurrentStore.PortalId)
+@Html.HiddenFor(model => model.QuoteNumber, new { @id = "hdnQuoteNumber" })
+@Html.HiddenFor(model => model.PortalId)
+@Html.HiddenFor(model => model.OmsQuoteId, new { @id = "hdnManageOmsQuoteId" })
+@Html.HiddenFor(model => model.OmsQuoteStateId, new { @id = "hdnOmsQuoteStateId" })
+@Html.HiddenFor(model => model.IsConvertedToOrder, new { @id = "hdnIsConvertedToOrder" })
+@Html.HiddenFor(model => model.QuoteStatus, new { @id = "hdnOmsQuoteStatus" })
+@Html.HiddenFor(model => model.CustomerInformation.CustomerGUID, new { @id = "hdnCustomerGUID" })
+@Html.Hidden("hdnIsShipping")
+
+@Html.Hidden("hdnIsShippingChange")
+@Html.Hidden("hdnIsSaveQuote")
+@Html.Hidden("hdnIsOldQuote", Model.IsOldQuote)
+@Html.Hidden("hdnPaymentApiRequestHeader", paymentApiRequestHeader)
+
+@Scripts.Render("~/Scripts/References/jquery.payment.min.js");
+<script>
+    $(document).ready(function () {
+        Quote.prototype.BindQuoteData();
+        Quote.prototype.ShowOldQuoteNotification('@Model.IsOldQuote');
+    });
+</script>

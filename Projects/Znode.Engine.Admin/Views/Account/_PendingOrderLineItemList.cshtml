@@ -1,0 +1,170 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@model CartViewModel
+@{
+    string cultureCode = string.IsNullOrEmpty(Model.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+}
+<div class="panel-heading">
+    <h4 class="panel-title panel-title-edit">@Admin_Resources.LabelProductsOrdered</h4>
+    <div class="col-sm-12 list-container">
+        <div class="col-xs-12 cart-products nopadding margin-bottom">
+            <div class="table" data-test-selector="tblItemsOrdered">
+                <div class="col-xs-12 nopadding">
+
+                    @if ((Model?.ShoppingCartItems?.Count > 0))
+                    {
+                        <div class="table-head">
+                            <ul class="col-xs-12 nopadding">
+                                <li class="sp-product-name" data-test-selector="tblHdProduct">
+                                    <span data-test-selector="spnProduct">@Admin_Resources.LabelProductName</span>
+                                </li>
+                                <li class="sp-sku" data-test-selector="tblHdSKU">
+                                    <span data-test-selector="spnSKU">@Admin_Resources.LabelSKU</span>
+                                </li>
+                                <li class="sp-product-description" data-test-selector="tblHdDescription">
+                                    <span data-test-selector="spnDescription">@Admin_Resources.LabelDescription</span>
+                                </li>
+                                <li data-test-selector="tblHdQuantity" class="table-quantity sp-quantity">
+                                    <span data-test-selector="spnQuantity">@Admin_Resources.TextQuantity</span>
+                                </li>
+                                <li data-test-selector="tblHdShipping" class="table-shipping sp-shipping">
+                                    <span data-test-selector="spnShipping">@Admin_Resources.LabelShippingCost</span>
+                                </li>
+                                <li data-test-selector="tblHdUnitPrice" class="table-unitprice sp-unit-price">
+                                    <span data-test-selector="spnUnitPrice">@Admin_Resources.LabelUnitPrice</span>
+                                </li>
+                                <li data-test-selector="tblHdTotalPrice" class="table-total sp-total">
+                                    <span data-test-selector="spnTotalPrice">@Admin_Resources.LabelTotal</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            @foreach (CartItemViewModel item in Model?.ShoppingCartItems)
+                            {
+                                <ul class="col-xs-12 table-body">
+                                    <li class="cartItem">
+                                        <ul class="line-items">
+
+                                            @if (item?.GroupProducts?.Count > 0)
+                                            {
+
+                                                foreach (var groupProduct in item.GroupProducts)
+                                                {
+                                                    <li class="sp-product-name">
+                                                        <label>@Html.RenderBlock(item.ProductName)</label>
+                                                        <label>@Html.RenderBlock(groupProduct.ProductName)</label>
+                                                        <div class="cart-item-description">
+                                                            @if (item?.PersonaliseValuesDetail?.Count > 0)
+                                                            {
+                                                                foreach (var items in item.PersonaliseValuesDetail)
+                                                                {
+                                                                    if (!Equals(items.PersonalizeName, null) && !Equals(items.PersonalizeValue, string.Empty))
+                                                                    {
+                                                                        <p> @items.PersonalizeName : @items.PersonalizeValue </p>
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            else if (item?.PersonaliseValuesList?.Count > 0)
+                                                            {
+                                                                foreach (var items in item.PersonaliseValuesList)
+                                                                {
+                                                                    if (!Equals(items.Value, null) && !Equals(items.Value, string.Empty))
+                                                                    {
+                                                                        <p> @items.Key : @items.Value </p>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </li>
+                                                    <li class="sp-sku">
+                                                        @Html.RenderBlock("<label>" + groupProduct.Sku + " </label>")
+                                                    </li>
+                                                    <li class="sp-product-description">
+                                                        @Html.RenderBlock("<label>" + item.CartDescription + " </label>")
+
+                                                    </li>
+                                                    <li class="table-quantity sp-quantity">
+                                                        @Html.RenderBlock("<span>" + groupProduct.Quantity + " </label>")
+                                                    </li>
+                                                    <li class="table-shipping sp-shipping">
+                                                        @Html.RenderBlock("<span>" + item.ShippingCost + " </label>")
+                                                    </li>                         
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                <li class="sp-product-name"><label>@Html.RenderBlock(item.ProductName)</label>
+                                                @if (item?.PersonaliseValuesDetail?.Count > 0)
+                                                {
+                                                    foreach (var items in item.PersonaliseValuesDetail)
+                                                    {
+                                                        if (!Equals(items.PersonalizeName, null) && !Equals(items.PersonalizeValue, string.Empty))
+                                                        {
+                                                            <p> @items.PersonalizeName : @items.PersonalizeValue</p>
+                                                        }
+                                                    }
+                                                }
+
+                                                else if (item?.PersonaliseValuesList?.Count > 0)
+                                                {
+                                                    foreach (var items in item.PersonaliseValuesList)
+                                                    {
+                                                        if (!Equals(items.Value, null) && !Equals(items.Value, string.Empty))
+                                                        {
+                                                            <p> @items.Key : @items.Value </p>
+                                                        }
+                                                    }
+                                                }
+                                            </li>
+
+                                                <li class="sp-sku">
+                                                    @if (!string.IsNullOrEmpty(item.ConfigurableProductSKUs))
+                                                    {
+                                                        @Html.RenderBlock("<label>" + item.ConfigurableProductSKUs + " </label>")
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.RenderBlock("<label>" + item.SKU + " </label>")
+                                                    }
+                                                </li>
+                                                <li class="sp-product-description">
+                                                    @Html.RenderBlock("<label>" + item.CartDescription + " </label>")
+                                                </li>
+                                                <li class="table-quantity sp-quantity">
+                                                    @Html.RenderBlock("<span>" + item.Quantity + " </span>")
+                                                </li>
+                                                <li class="table-shipping sp-shipping">
+                                                    @Html.RenderBlock("<span>" + item.ShippingCost + " </span>")
+                                                </li>
+                                            }
+                                            <li class="sp-unit-price">
+                                                @Html.RenderBlock("<span>" + @HelperMethods.FormatPriceWithCurrency(item.UnitPrice, cultureCode) + " </span>")
+                                            </li>
+                                            <li class="table-total sp-total">
+                                                @Html.RenderBlock("<span>" + @HelperMethods.FormatPriceWithCurrency(item.ExtendedPrice, cultureCode) + " </span>")
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-12 no-record nopadding">
+                            @Admin_Resources.NoRecordFoundText
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+        <div class="cart-total col-sm-6 col-md-6 col-lg-4 nopadding pull-right margin-bottom manage-order-total" id="divTotal">
+            @Html.Partial("_ManageTotalTable", Model)
+        </div>
+    </div>
+</div>

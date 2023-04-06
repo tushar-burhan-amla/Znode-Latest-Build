@@ -1,0 +1,35 @@
+﻿@model Znode.Engine.Admin.ViewModels.AddressViewModel
+@using Znode.Engine.Admin.ViewModels;
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.TitleMultifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateUserAddress", CancelUrl = "/Customer/GetAddressList?userId=" + @Model.UserId };
+    Model.CheckboxPrefix = string.Empty;
+}
+<div id="aside-popup-panel">
+    <div class="col-sm-12 title-container d-flex justify-content-between">
+        @if (actionName.ToLower().Contains("edit"))
+        {
+            <h1 class="width-75">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelAddress)<em class="z-minus"></em>@Model.FirstName @Model.LastName</h1>
+        }
+        else
+        {
+            <h1 class="width-75">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelAddress)</h1>
+        }
+        <div class="pull-right btn-container">
+            <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('divCustomerAddressPopup')" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+            <div class="pull-right padding-left">
+                @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, actionModel.Action, actionModel.Controller, new { @class = " btn-text btn-text-secondary", @id = "dvSave", @onclick = "SaveCancel.prototype.SubmitForm('" + actionModel.FormId + "')", @data_test_selector = "linkSave" })
+            </div>
+        </div>
+    </div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateUserAddress" }))
+        {
+            @Html.Partial("~/Views/Account/_Address.cshtml", Model)
+        }
+    </section>
+</div>
+    @Scripts.Render("~/bundles/jqueryval")

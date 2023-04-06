@@ -1,0 +1,91 @@
+﻿@model Znode.Engine.WebStore.ViewModels.WidgetProductListViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+}
+
+@if (!Equals(Model, null) && Model.CMSMode)
+{
+    if (Model.IsEmpty)
+    {
+        <div class="col-xs-12 nopadding cms-icon-container">
+            <img src="@_fileLocation/Images/product-list.png" alt="New Product" class="img-responsive cms-img-icon" />
+        </div>
+    }
+}
+<div class="product-list-widget">
+    @if (!Equals(Model?.Products, null))
+    {
+        string _id = string.Empty;
+        if (Model.Products.Count > 0 && Model.DisplayName == "NewArrival")
+        {
+            <h3 class="product-list-title" data-test-selector="lblNewArrivalHeading">@Html.RenderMessage(WebStoreConstants.NewArrival)</h3>
+            _id = $"Product_List_Widget{1}";
+        }
+        else if (Model.Products.Count > 0 && Model.DisplayName == "HomePageSpecial")
+        {
+            <h3 class="product-list-title" data-test-selector="lblBestSellerTitle">@Html.RenderMessage("test2")</h3>
+            <h3 class="product-list-title" data-test-selector="lblBestSellerTitle">@Html.RenderMessage(WebStoreConstants.BestSellersTitle)</h3>
+            _id = $"Product_List_Widget{2}";
+        }
+        if (Model.Products.Count > 0 && Model.DisplayName == "Featured Products")
+        {
+            <h3 class="product-list-title key-FeaturedProductTitle" data-test-selector="lblFeaturedProductsHeading">@Html.RenderMessage("FeaturedProductTitle")</h3>
+            _id = $"Product_List_Widget{3}";
+        }
+        if (Model.Products.Count > 0 && Model.DisplayName == "Featured Product List")
+        {
+            <h3 class="product-list-title key-FeaturedProductTitle" data-test-selector="lblFeaturedProductsHeading">@Html.RenderMessage("FeaturedProductTitle")</h3>
+            _id = $"Product_List_Widget{3}";
+        }
+        _id = string.IsNullOrEmpty(_id) ? "Product_List_Widget" : _id;
+        bool navigationFlag = Model.Products.Count > 4 ? true : false;
+        <div class="owl-carousel Product_List_Widget" id="@_id">
+            @{
+                if (Model.Products.Count > 0)
+                {
+                    foreach (var p in Model.Products)
+                    {
+                        if (!string.IsNullOrEmpty(p.ProductViewModel?.Name))
+                        {
+                            @Html.Partial("_ProductTitleHome", p)
+                        }
+                    }
+                }
+            }
+        </div>
+        <script>
+                $("#@_id").owlCarousel({
+                    autoPlay: false,
+                    navigation: @navigationFlag.ToString().ToLower(),
+                    items: 4,
+                    itemsCustom: [
+                      [0, 1],
+                      [320, 1],
+                      [480, 2],
+                      [600, 2],
+                      [768, 2],
+                      [992, 3],
+                      [1200, 4]
+                    ],
+                    navigationText: [
+                        "<span class='left-icon'></span>",
+                        "<span class='right-icon'></span>"
+                    ]
+                });
+        </script>
+    }
+
+    <script>
+    $(document).ready(function () {
+        var async = '@Helper.IsAsyncPrice';
+        if (async == 'True') {
+            Product.prototype.GetPriceAsync();
+        }
+        })
+        ; (function () {
+            InitbLazy();
+        })();
+    </script>
+</div>

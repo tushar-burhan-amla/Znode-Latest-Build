@@ -1,0 +1,409 @@
+﻿// |
+// | BASE SASS
+// | Global variables and mixins
+// | 2015-16; Znode, Inc.
+// | 
+
+// Font Variable.
+$base-font-family: 'Roboto-Regular',segoeui,HelveticaNeueLTStd Lt, Arial, sans-serif;
+$base-font-family-light: 'Roboto-light',segoeui,HelveticaNeueLTStd Lt, Arial, sans-serif;
+$base-font-family-bold: 'Roboto-Medium',segoeui-bold,HelveticaNeueLTStd Lt, Arial, sans-serif;
+$base-font-family-condensed: 'RobotoCondensed-Regular',segoeui-bold,HelveticaNeueLTStd Lt, Arial, sans-serif;
+$base-font-family-condensed-light: 'RobotoCondensed-Light',segoeui-bold,HelveticaNeueLTStd Lt, Arial, sans-serif;
+$base-font-family-condensed-bold: 'RobotoCondensed-Bold',segoeui-bold,HelveticaNeueLTStd Lt, Arial, sans-serif;
+$base-font-size: 12px;
+$base-font-normal: 400;
+$base-font-bold: 700;
+$base-font-light: 300;
+
+// Color Variable.
+$base-color-primary: #3c4145; //grey
+$base-color-secondary: #5db043; //green
+$base-color-tertiary: rgba(242,245,245,0.8);
+$base-color-quaternary: #2A2C2E;
+
+$base-color-button-secondary:#498b35;
+$base-bgcolor-button: #5db043;
+$base-bgcolor-button-hover: #3c4145;
+$base-fgcolor-input: #2A2C2E;
+$base-bgcolor-header: #f5f5f5;
+$button-icon-color: #3c4145;
+$button-bg-color:#EEEEEE;
+$base-color-white: #fff;
+$text-fgcolor-default: #2A2C2E;
+$base-bglogin-color: #fff;
+$btn-border-color: #677681;
+
+
+// General Variable.
+$required-star: #ea2f25;
+$error-msg-fgcolor:#FC5961;
+$success-msg-fgcolor: #36882F;
+$border-bgcolor-default: #EFEFEf;
+$border-bgcolor-primary: #969EA4;
+$border-bgcolor-secondary: #e9e9e9;
+$border-bottom-color: #ddd;
+$switch-button-color: #cccccc;
+$box-border-shadow: #cccccc;
+$popup-bg-color:#EEEEEE;
+$aside-tab-selected-bg: #FFFFFF;
+$aside-tab-text-fg: #3c4145;
+$filter-bg-color: #f8f3f3;
+$aside-panel-bgcolor:  rgba(242,245,245,0.8);
+$form-group-label-color: #2A2C2E;
+$section-heading-color: #323230;
+$section-sub-heading-color: #828280;
+$total-count-color: #5b6770;
+$grid-border-color: #DBDDDD;
+$tile-border-color:#f1f1f1;
+$grid-column-heading:#2a2c2e;
+$header-font-color: #ffffff;
+$sms-border: #c3c3c3;
+$sms-headerbg: #6074a6;
+
+// Znode SVG Icon Variable.
+$znode-icon-font:'znode-icons';
+
+$z-swatch-box:"\ea1e";
+$z-first: "\e912";
+$z-last: "\e913";
+$z-hamburger: "\e900";
+$z-backward: "\f04a";
+$z-forward: "\f04e";
+$z-delete: "\e901";
+$z-detail-view: "\e902";
+$z-edit: "\e903";
+$z-export: "\e904";
+$z-folder-close: "\e905";
+$z-folder-open: "\e906";
+$z-info: "\e907";
+$z-left-navigation: "\e908";
+$z-list-view: "\e909";
+$z-menu-hamburger: "\e90a";
+$z-refresh: "\e90b";
+$z-search: "\e90c";
+$z-setting: "\e90d";
+$z-tile-view: "\e90e";
+$z-user: "\e90f";
+$z-left-all: "\f100";
+$z-right-all: "\f101";
+$z-up-all: "\f102";
+$z-down-all: "\f103";
+$z-left: "\f104";
+$z-right: "\f105";
+$z-up: "\e914";
+$z-down: "\e911";
+$z-close-circle: "\f057";
+$z-add: "\f067";
+$z-close: "\f00d";
+$z-calendar: "\f073";
+$z-back: "\f060";
+$z-minus: "\f068";
+$z-view: "\e910";
+$z-ok: "\f00e";
+$z-disable: "\e915";
+$z-enable: "\e916";
+$z-sortable:"\f0dc";
+$z-admin:"\e917";
+$z-cms:"\e918";
+$z-media-manager:"\e919";
+$z-oms:"\e91a";
+$z-customers:"\e91b";
+$z-dashboard:"\e91c";
+$z-promotinons-and-coupons:"\e91d";
+$z-provider-engine:"\e91e";
+$z-roles:"\e91f";
+$z-supplier:"\e920";
+$z-taxes:"\e921";
+$z-pim:"\e922";
+$z-attribute:"\e923";
+$z-attribute-family:"\e924";
+$z-attribute-group:"\e925";
+$z-clear-cache:"\e926";
+$z-upload:"\f093";
+$z-copy: "\e927";
+$z-preview: "\e928";
+$z-audio: "\e929";
+$z-video: "\e92a";
+$z-file-text: "\f0f6";
+$z-reports: "\e92c";
+$z-download: "\f019";
+$z-angle-up: "\f106";
+$z-angle-down: "\f107";
+$z-check-circle: "\f058";
+$z-question-circle: "\e92b";
+$z-inventory: "\e930";
+$z-payment: "\e931";
+$z-price: "\e932";
+$z-profiles: "\e933";
+$z-shipping: "\e934";
+$z-stores: "\e935";
+$z-tax: "\e936";
+$z-warehouse: "\e937";
+$z-account: "\e938";
+$z-attribute-configuration: "\e939";
+$z-media-list: "\e93a";
+$z-contents: "\e93b";
+$z-customer-configuration: "\e93c";
+$z-customer-review: "\e93d";
+$z-email-templates: "\e93e";
+$z-slider-configuration: "\e93f";
+$z-theme-configuration: "\e940";
+$z-website-configuration: "\e941";
+$z-menu-list: "\e92d";
+$z-role-access-right: "\e92e";
+$z-store-admin: "\e92f";
+$z-tree-view: "\e942";
+$z-catalog:"\e943";
+$z-categories:"\e944";
+$z-products:"\e945";
+$z-location:"\e99a";
+$z-global-setting:"\e999";
+$z-countries:"\e946";
+$z-display:"\e947";
+$z-price-management:"\e949";
+$z-product-info:"\e94a";
+$z-smtp:"\e94b";
+$z-store-locator:"\e94c";
+$z-units:"\e94d";
+$z-url:"\e94e";
+$z-add-on-group:"\e94f";
+$z-bundle-product:"\e950";
+$z-custom-fields:"\e951";
+$z-gallery-images:"\e952";
+$z-grouped-product:"\e953";
+$z-image:"\e954";
+$z-personalization:"\e955";
+$z-simple-product:"\e957";
+$z-manage-message:"\f003";
+$z-publish:"\e959";
+$z-seo:"\e95a";
+$z-template:"\e956";
+$z-url-redirects:"\e958";
+$z-address:"\e95b";
+$z-associated-accounts:"\e95c";
+$z-associated-customers:"\e95d";
+$z-associated-inventory: "\e95e";
+$z-associated-profiles:"\e95f";
+$z-associated-sku:"\e960";
+$z-associated-stores:"\e961";
+$z-associated-warehouse:"\e962";
+$z-coupon-information:"\e963";
+$z-departments:"\e964";
+$z-discount-information:"\e965";
+$z-erp-configurator:"\e966";
+$z-notes:"\e967";
+$z-orders:"\e968";
+$z-permission:"\e969";
+$z-quotes:"\e96a";
+$z-suppliers:"\e96b";
+$z-widgets-default:"\e96c";
+$z-affiliate:"\e96d";
+$z-associated-items:"\e96e";
+$z-associate-products:"\e96f";
+$z-association-category:"\e970";
+$z-cshtml-file:"\e971";
+$z-currencies:"\e972";
+$z-general-info:"\e973";
+$z-promotion-information:"\e974";
+$z-scheduler-list:"\e975";
+$z-touch-points-configuration:"\e976";
+$z-website-logo:"\e977";
+$z-product-page:"\e978";
+$z-time-picker:"\e979";
+$z-trigger:"\e97a";
+$z-widget-cart:"\e97b";
+$z-you-may-also-like:"\e97c";
+$z-service-request:"\e97d";
+$z-frequently-bought:"\e97e";
+$z-backward-arrow:"\f04b";
+$z-forward-arrow:"\f04f";
+$z-category-boost-setting:"\e97f";
+$z-create-index:"\e980";
+$z-fedex:"\e981";
+$z-field-boost-setting:"\e982";
+$z-gift-cards:"\e983";
+$z-issue-gift-card:"\e984";
+$z-product-boost-setting:"\e985";
+$z-reason-for-return:"\e986";
+$z-reply-to-customer:"\e987";
+$z-request-status:"\e988";
+$z-review-order:"\e989";
+$z-rma-configuration:"\e98a";
+$z-search-settings:"\e98b";
+$z-shipping-methods:"\e98c";
+$z-shopping-cart:"\e98d";
+$z-ups:"\e98e";
+$z-add-circle:"\e98f";
+$z-alert:"\e990";
+$z-cancel:"\e991";
+$z-columns:"\e992";
+$z-help:"\e993";
+$z-help-circle: "\e92b";
+$z-manage-filter:"\e995";
+$z-nav-menu:"\e996";
+$z-save:"\e997";
+$z-locale:"\e998";
+$z-brand:"\e948";
+$z-capture-payment:"\e99b";
+$z-history:"\e99c";
+$z-order-quotes:"\e99e";
+$z-page-view:"\e99f";
+$z-resend-email:"\e9a0";
+$z-vendors:"\e9a1";
+$z-void-payment:"\e9a2";
+$z-active:"\e99d";
+$z-inactive:"\e9a3";
+$z-left-collaps-arrow:"\e9a4";
+$z-right-collaps-arrow:"\e9a5";
+$z-append:"\e9a6";
+$z-customer-trust:"\e9a7";
+$z-import:"\e9a8";
+$z-intelligent-integration:"\e9a9";
+$z-print:"\e9aa";
+$z-smart-automation:"\e9ab";
+$z-void:"\e9ac";
+$z-marketing:"\e9ad";
+$z-refund-order:"\e9ae";
+$z-default-view:"\f06e";
+$z-rma-manager:"\e9af";
+$z-product-feed:"\e9b0";
+$z-continue:"\e9b1";
+$z-display-settings:"\e9b2";
+$z-import-export: "\e9b3";
+$z-plus-circle: "\f055";
+$z-minus-circle:"\f056";
+$z-save-and-close:"\e9b4";
+$z-blog-and-news: "\e9b5";
+$z-associated-facet:"\e9b6";
+$z-entity-attributes:"\e9b7";
+$z-global-attributes:"\e9b8";
+$z-manage-forms:"\e9b9";
+$z-form-submission: "\e9ba";
+$z-log-message:"\e9bb";
+$z-pin: "\e9bc";
+$z-lock:"\e9bd";
+$z-unlock: "\e9be";
+$z-application-logs:"\e9bf";
+$z-pause:"\e9c0";
+$z-resume: "\e9c1";
+$z-account_circle:"\e9c2";
+$z-new-refresh:"\e9c3";
+$z-cancel-circle: "\e9c4";
+$z-cloud-upload: "\e9c5";
+$z-pending-payment: "\e9c6";
+$z-accept:"\e9c7";
+$z-decline:"\e9c8";
+$z-pending-orders:"\e9c9";
+$z-advanced-report: "\e9cb";
+$z-is-star: "\e9cc";
+$z-diagnostics-status:"\e9cd";
+$z-analytics: "\e9ce";
+$z-power-bi: "\e9cf";
+$z-quote: "\e9d0";
+$z-return: "\e9d1";
+$z-quote:"\e9d2";
+$z-content-widgets: "\e9d3";
+$z-widget-templates: "\e9d4";
+$z-external-link: "\e9d5";
+$z-container-widget: "\e9e0";
+$z-banner-widget: "\e9df";
+$z-categorylist-widget: "\e9de";
+$z-form-widget: "\e9dd";
+$z-image-widget: "\e9dc";
+$z-link-widget: "\e9db";
+$z-productlist-widget: "\e9da";
+$z-richtext-widget: "\e9d9";
+$z-search-widget: "\e9d8";
+$z-text-widget: "\e9d7";
+$z-video-widget: "\e9d6";
+
+
+
+// Mixins.
+@mixin -webkit-text-size-adjust {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+    @mixin btn-text {
+        display: inline-block;
+        min-width: 90px;
+        text-align: center;
+
+        font: {
+            family: $base-font-family;
+        }
+
+        border: none;
+        color: $base-color-white;
+        border-radius: 3px;
+        outline: none !important;
+    }
+
+    @mixin input-field {
+        color: $base-fgcolor-input;
+        padding: 0 5px;
+
+        font: {
+            family: $base-font-family;
+            size: $base-font-size;
+        }
+
+        width: 100%;
+        border: 1px solid $border-bgcolor-primary;
+        box-shadow: none;
+        outline: medium none;
+        border-radius: 3px;
+    }
+
+    @mixin icon($content) {
+        font-family: $znode-icon-font;
+        content: $content;
+    }
+    // Responsive Screen Sizes.
+    $base-screen-medium: 992px;
+    $base-screen-max-desktop: 1299px;
+    $base-screen-max-large: 1399px;
+    $base-screen-max-desktop: 1199px;
+    $base-screen-desktop: 1200px;
+    $base-screen-large: 1300px;
+    $base-screen-xlarge: 1500px;
+
+@mixin screensize($size) {
+    @if $size == medium {
+        @media all and (min-width: $base-screen-medium) {
+            @content;
+        }
+    }
+    @else if $size == max-desktop {
+        @media all and (max-width: $base-screen-max-desktop) {
+            @content;
+        }
+    }
+    @else if $size == max-large {
+        @media all and (max-width: $base-screen-max-large) {
+            @content;
+        }
+    }
+    @else if $size == desktop {
+        @media all and (min-width: $base-screen-desktop) {
+            @content;
+        }
+    }
+    @else if $size == large {
+        @media all and (min-width: $base-screen-large) {
+            @content;
+        }
+    }
+    @else if $size == xlarge {
+        @media all and (min-width: $base-screen-xlarge) {
+            @content;
+        }
+    }
+}

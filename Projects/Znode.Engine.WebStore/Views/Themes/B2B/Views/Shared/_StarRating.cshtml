@@ -1,0 +1,23 @@
+﻿@model decimal
+
+<span class="star-rating" data-test-selector="spanStarRating">
+    @{
+        int totalStar = 5;
+        int integral = (int)decimal.Truncate(Model);
+        int fraction = (int)((Model - decimal.Truncate(Model))*10);
+        for (int item = 1; item <= integral; item++)
+        {
+            <span data-test-selector="spanStarFullRating" class="star-full-icon"></span>
+            totalStar = totalStar - 1;
+        }
+        if (fraction >= 5)
+        {
+            <span  data-test-selector="spanStarHalfRating" class="star-half-icon"></span>
+            totalStar = totalStar - 1;
+        }
+        for (int item1 = 1; item1 <= totalStar; item1++)
+        {
+            <span data-test-selector="spanStarEmptyRating" class="star-empty-icon"></span>
+        }
+    }
+</span>

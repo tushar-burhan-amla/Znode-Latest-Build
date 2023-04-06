@@ -1,0 +1,46 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@model ContentPageViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    if (actionName == "GetDefaultCMSSEODetails")
+    {
+        actionName = "editcontentpage";
+    }
+}
+
+   
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.SEOTitle, new { @data_test_selector = "lblSEOTitle" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => m.SEOTitle, new { @data_test_selector = "txtSEOTitle" })
+            @Html.ValidationMessageFor(m => m.SEOTitle, "", new { @data_test_selector = "valSEOTitle" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.SEOKeywords, new { @data_test_selector = "lblSEOKeywords" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => m.SEOKeywords, new { @data_test_selector = "txtSEOKeywords" })
+            @Html.ValidationMessageFor(m => m.SEOKeywords, "", new { @data_test_selector = "valSEOKeywords" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.SEODescription, new { @data_test_selector = "lblSEODescription" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => m.SEODescription, new { @data_test_selector = "txtSEODescription" })
+            @Html.ValidationMessageFor(m => m.SEODescription, "", new { @data_test_selector = "valSEODescription" })
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,55 @@
+﻿<div class="nopadding">
+    <label>What is a Cron Expression?</label>
+    <p>
+        A cron expression is a definition of the schedule onto which the recurring jobs will be 
+        executed. It’s a combination of a string that has 5 fields, separated by white space, 
+        that represents a schedule. It consists of the following format, 
+        &lt;minutes&gt; &lt;hours&gt; &lt;days of month&gt; &lt;months&gt; &lt;days of week&gt;, 
+        use the specified format to enter the cron expression for scheduling a recurring Job.
+    </p>
+</div>
+
+<div class="col-sm-12 nopadding">
+    <label>
+        Commonly Used Cron Expressions
+        <span class="z-angle-down" title="Show/Hide" id="toggleCronTable"></span>
+        @*<span class="z-angle-up" title="Show/Hide" id="toggleCronTableClose"></span>*@
+    </label>
+    <div class="hide" id="tableCronExpression">
+        <div class="row">
+            <div class="col-sm-4">Every minute</div>
+            <div class="col-sm-2">* * * * *</div>
+            <div class="col-sm-4">Every 5th minute</div>
+            <div class="col-sm-2">*/5 * * * *</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">Every 15th minute</div>
+            <div class="col-sm-2">*/15 * * * *</div>
+            <div class="col-sm-4">Every hour, on the hour</div>
+            <div class="col-sm-2">0 * * * *</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">Every 8 hours</div>
+            <div class="col-sm-2">0 */8 * * *</div>
+            <div class="col-sm-4">Every day at 1:00 AM</div>
+            <div class="col-sm-2">0 1 * * *</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">Every 15 minutes between 1:00 AM and 3:00 AM every day</div>
+            <div class="col-sm-2">*/15 1-3 * * *</div>
+            <div class="col-sm-4">Every Saturday at 2:30 AM</div>
+            <div class="col-sm-2">30 2 * * 6</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">Every month on the 1st at 12:15 AM</div>
+            <div class="col-sm-2">15 0 1 * *</div>
+            <div class="col-sm-4">Every year on January 1st at 12:15 AM</div>
+            <div class="col-sm-2">15 0 1 1 *</div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#toggleCronTable").on("click", function () {
+        $("#tableCronExpression").toggleClass("hide");
+    });
+</script>

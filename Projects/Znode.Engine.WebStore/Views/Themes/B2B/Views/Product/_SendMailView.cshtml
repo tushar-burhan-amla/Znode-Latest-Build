@@ -1,0 +1,68 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductCompareViewModel
+
+@{
+    Layout = null;
+    bool? compare = ViewBag.IsCompare;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 data-test-selector="hdgPopUPEmail" class="modal-title">@WebStore_Resources.HeaderProductCompare</h4>
+                <button type="button" class="close" data-dismiss="modal" title="@WebStore_Resources.ButtonCancel"><span class="close-circle-icon"></span></button>
+            </div>
+            @using (Ajax.BeginForm(actionName, controllerName, new AjaxOptions()
+            {
+                OnBegin = "Product.prototype.OnClickSendMail",
+                HttpMethod = "post",
+                OnSuccess = "Product.prototype.SendMailResult",
+            }, new { @id = "editAssociatedPriceListPrecedenceForm" }))
+            {
+                @Html.AntiForgeryToken();
+                <div id="customFieldModel">
+                    <div class="modal-body">
+                        <div class="col-12 p-0">
+                            <div class="form-group">
+                                <div class="col-12 p-0">
+                                    @Html.Label(@WebStore_Resources.LabelSenderMailId, new { @class = "required" })
+                                </div>
+                                <div class="col-12 p-0">
+                                    @Html.TextBoxFor(model => model.SenderEmailAddress, new { @id = "txtSenderEmail" })
+                                    @Html.ValidationMessageFor(model => model.SenderEmailAddress, null, new { @id = "valSenderEmail" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-12 p-0">
+                                    @Html.Label(@WebStore_Resources.LabelReceiverMailId, new { @class = "required" })
+                                </div>
+                                <div class="col-12 p-0">
+                                    @Html.TextBoxFor(model => model.ReceiverEmailAddress, new { @id = "txtReceiverEmail" })
+                                    @Html.ValidationMessageFor(model => model.ReceiverEmailAddress, null, new { @id = "valReceiverEmail" })
+                                </div>
+                            </div>
+                            @Html.Hidden("dynamic-iscompare", compare)
+                            @Html.HiddenFor(model => model.ProductId)
+                            @Html.HiddenFor(model => model.ProductName)
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-12 p-0">
+                            <div class="text-right">
+                                <button data-test-selector="btnSendMail" id="btnSendMail" class="btn btn-primary" type="submit">@WebStore_Resources.LabelSendMail</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>
+
+

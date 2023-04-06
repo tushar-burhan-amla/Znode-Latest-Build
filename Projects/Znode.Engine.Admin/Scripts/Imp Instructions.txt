@@ -1,0 +1,35 @@
+
+1. All the tabs on page was not validate with 'jquery.validate.unobtrusive.js' so that we need to add 
+
+ $.validator.setDefaults({ ignore: "" });
+
+ on $(document).ready(function ()), so that it will override actual value "ignore: ":hidden"" present in 'jquery.validate.js' file and validation works fine for all the tabs.
+
+Reference: _SaveCancelButtons.cshtml, Line No. 09
+------------------------------------------------------------------------------------------------------------------
+
+2. While creating new anchor tag in typescript file 'download' property was not define in 'HTMLAnchorElement' in lib.d.ts defination file, so we need to manually override this into our typescript file, which will be done as fallows:\
+
+interface HTMLAnchorElement {
+    download: string;
+}
+
+Reference: MediaManagerTools.ts, Line No. 02
+------------------------------------------------------------------------------------------------------------------
+
+3. Edit Method of node in 'jstree.d.ts' was not proveded with the overload which will return response or Even handel method which will trigger for event, So that we need to add that overloaded method to 'jstree.d.ts' file as fallows:
+
+ edit: (obj: any, default_text?: string, handler?: (eventObject: JQueryEventObject) => any) => void;
+
+Reference: jstree.d.ts, 
+Used into: TreeView.ts  ref.edit(createdNode, "New Folder", this.editCurrentNode.bind(this)); Line No. 24
+
+------------------------------------------------------------------------------------------------------------------
+
+4. Overload for off function with event is not present in jquery.d.ts, so we need to add this overload\
+
+off(events: { [key: string]: any; }, data?: any): JQuery;   Line No. 2303
+
+Reference: jquery.d.ts, 
+Used into: GridPager.ts  $('#previousPage').off('click', false); Line No. 121
+------------------------------------------------------------------------------------------------------------------

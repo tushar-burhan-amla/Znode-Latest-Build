@@ -1,0 +1,218 @@
+﻿@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@model Znode.Engine.Api.Models.ShoppingCartItemModel
+
+@{
+    string imagePath = string.IsNullOrEmpty(Model?.ImagePath) ? ZnodeAdminSettings.DefaultImagePath : Model?.ImagePath;
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    string priceRoundOff = DefaultSettingHelper.DefaultPriceRoundOff;
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    string sku = string.IsNullOrEmpty(Model.ConfigurableProductSKUs) ? Model.SKU : Model.ConfigurableProductSKUs;
+    int isActiveProductCount = 0;
+}
+<li class="imageicon sp-image">
+    <img src="@imagePath" alt="@Html.RenderBlock(Model.ProductName) Image" class="grid-img" />
+    @Html.Hidden("hdnCurrencySymbol_" + Model.ExternalId, (HelperMethods.FormatPriceWithCurrency(0.00M, cultureCode)).Replace("0.00", ""))
+</li>
+@if (Model.GroupProducts?.Count > 0)
+{
+    string mainProductName = Model.ProductName;
+    foreach (var product in Model.GroupProducts)
+    {
+        <li class="sp-sku">
+            @Html.DisplayTextFor(model => product.Sku)
+        </li>
+        <li class="sp-product-name">
+            <div class="">@Html.RenderBlock(mainProductName)</div>
+            @if (string.IsNullOrEmpty(Model.CartDescription))
+            {
+                <div><em class="zf-caret-right"></em>@Html.RenderBlock(product.ProductName)</div>
+            }
+            else
+            { <div class="cart-item-description">@Html.RenderBlock(Model.CartDescription)</div>
+        }
+            @if (!Model.IsActive)
+            {
+                isActiveProductCount++;
+                <span style="color: #cc0000">@Admin_Resources.ErrorMessageInactiveProduct</span>
+            }
+            @if (!Model.IsAllowedTerritories)
+            {
+                <div id="dynamic-allowesterritories" class="status-outofstock hvr-pulse error-msg">@Admin_Resources.AllowedTerritoriesProductError</div>
+            }
+        </li>
+        <li class="sp-unit-price">
+            @if (!Model.IsActive)
+            {
+                <span id="initialunitprice_@Model.ExternalId"> @HelperMethods.FormatPriceWithCurrency(Model.InitialPrice, cultureCode)</span>
+                @Html.TextBox("UnitPrice", @HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode), new { @id = "unitprice-" + Model.ExternalId, @disabled = "disabled", @class = "price-input" })
+            }
+            else
+            {
+                <span id="initialunitprice_@Model.ExternalId"> @HelperMethods.FormatPriceWithCurrency(Model.InitialPrice, cultureCode)</span>
+                @Html.TextBox("UnitPrice", @HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode), new { @id = "unitprice-" + Model.ExternalId, @class = "price-input" })
+            }
+            <div id="unit_price_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+        </li>
+        <li class="sp-quantity">
+            <span id="quantity-@Model.ExternalId" data-isactive="@Model.IsActive">@product.Quantity</span>
+            @if (!Model.IsActive)
+            {
+                @Html.TextBoxFor(model => product.Quantity, new { @id = "cartQuantity-" + Model.ExternalId, @data_inventoryRoundOff = inventoryRoundOff, @disabled = "disabled", @class = "price-input", @Value = product.Quantity, @data_cart_productid = product.ProductId, @data_cart_sku = product.Sku, @data_cart_externalid = Model.ExternalId, @data_cart_minquantity = Model.MinQuantity, @data_cart_maxquantity = Model.MaxQuantity, @data_cart_productName = product.ProductName })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => product.Quantity, new { @id = "cartQuantity-" + Model.ExternalId, @data_inventoryRoundOff = inventoryRoundOff, @class = "price-input", @Value = product.Quantity, @data_cart_productid = product.ProductId, @data_cart_sku = product.Sku, @data_cart_externalid = Model.ExternalId, @data_cart_minquantity = Model.MinQuantity, @data_cart_maxquantity = Model.MaxQuantity, @data_cart_productName = product.ProductName })
+            }
+            <div id="quantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+
+            @if (Model.InsufficientQuantity)
+            {
+                <span class="error-msg">@Admin_Resources.ErrorOutOfStockMessage</span>
+            }
+            <div id="quantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+
+        </li>
+    }
+}
+else
+{
+    <li class="sp-sku">
+        <label>@sku</label>
+    </li>
+    <li class="sp-product-name">
+        <p>@Html.RenderBlock(Model.ProductName)</p>
+
+        @if (Model?.PersonaliseValuesDetail?.Count > 0)
+        {
+            foreach (var item in Model.PersonaliseValuesDetail)
+            {
+                if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                {
+                    <div class="cart-item-description">
+                        <p> @item.PersonalizeName : @item.PersonalizeValue </p>
+                    </div>
+                }
+            }
+        }
+        else if (Model?.PersonaliseValuesList?.Count > 0)
+        {
+            foreach (var item in Model.PersonaliseValuesList)
+            {
+                if (!Equals(item.Key, null) && !Equals(item.Value, string.Empty))
+                {
+                    <p> @item.Key : @item.Value </p>
+                }
+            }
+        }
+
+        @Html.RenderBlock(Model.CartDescription)
+
+        @if (Model.InsufficientQuantity)
+        {
+            <span class="error-msg">@Admin_Resources.ErrorOutOfStockMessage</span>
+        }
+        @if (!Model.IsActive)
+        {
+            isActiveProductCount++;
+            <span style="color: #cc0000">@Admin_Resources.ErrorMessageInactiveProduct</span>
+        }
+        @if (!Model.IsAllowedTerritories)
+        {
+            <div id="dynamic-allowesterritories" class="status-outofstock hvr-pulse error-msg">@Admin_Resources.AllowedTerritoriesProductError</div>
+        }
+    </li>
+
+    <li class="sp-unit-price">
+        @if (!Model.IsActive)
+        {
+            <span id="initialunitprice_@Model.ExternalId"> @HelperMethods.FormatPriceWithCurrency(Model.InitialPrice, cultureCode)</span>
+            @Html.TextBox("UnitPrice", @HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode), new { @id = "unitprice-" + Model.ExternalId, @disabled = "disabled", @class = "price-input" })
+        }
+        else
+        {
+            <span id="initialunitprice_@Model.ExternalId"> @HelperMethods.FormatPriceWithCurrency(Model.InitialPrice, cultureCode)</span>
+            @Html.TextBox("UnitPrice", @HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode), new { @id = "unitprice-" + Model.ExternalId, @class = "price-input" })
+        }
+        <div id="unit_price_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+    </li>
+
+    if (!string.IsNullOrEmpty(Model.ConfigurableProductSKUs))
+    {
+        <li class="sp-quantity">
+            <span id="quantity-@Model.ExternalId" data-isactive="@Model.IsActive">Model.Quantity</span>
+            @if (!Model.IsActive)
+            {
+                @Html.TextBoxFor(model => model.Quantity, new { @id = "cartQuantity-" + Model.ExternalId, @data_inventoryRoundOff = inventoryRoundOff, @disabled = "disabled", @class = "price-input", @Value = Model.Quantity, @data_cart_sku = Model.SKU, @data_cart_externalid = Model.ExternalId, @data_cart_minquantity = Model.MinQuantity, @data_cart_maxquantity = Model.MaxQuantity, @data_cart_productName = Model.ProductName })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => model.Quantity, new { @id = "cartQuantity-" + Model.ExternalId, @data_inventoryRoundOff = inventoryRoundOff, @class = "price-input", @Value = Model.Quantity, @data_cart_sku = Model.SKU, @data_cart_externalid = Model.ExternalId, @data_cart_minquantity = Model.MinQuantity, @data_cart_maxquantity = Model.MaxQuantity, @data_cart_productName = Model.ProductName })
+            }
+
+            <div id="quantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+
+            @if (Model.InsufficientQuantity)
+            {
+                <span class="error-msg">@Admin_Resources.ErrorOutOfStockMessage</span>
+            }
+            <div id="quantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+        </li>
+    }
+    else
+    {
+        <li class="sp-quantity">
+            @if (!Model.IsActive)
+            {
+                @Html.TextBoxFor(model => model.Quantity, new { @id = "cartQuantity-" + Model.ExternalId, @data_inventoryRoundOff = inventoryRoundOff, @disabled = "disabled", @class = "price-input", @Value = Model.Quantity, @data_cart_sku = Model.SKU, @data_cart_externalid = Model.ExternalId, @data_cart_minquantity = Model.MinQuantity, @data_cart_maxquantity = Model.MaxQuantity, @data_cart_productName = Model.ProductName })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => model.Quantity, new { @id = "cartQuantity-" + Model.ExternalId, @data_inventoryRoundOff = inventoryRoundOff, @class = "price-input", @Value = Model.Quantity, @data_cart_sku = Model.SKU, @data_cart_externalid = Model.ExternalId, @data_cart_minquantity = Model.MinQuantity, @data_cart_maxquantity = Model.MaxQuantity, @data_cart_productName = Model.ProductName })
+            }
+            @if (Model.InsufficientQuantity)
+            {
+                <span class="error-msg">@Admin_Resources.ErrorOutOfStockMessage</span>
+            }
+            <div id="quantity_error_msg_@Model.ExternalId" data-test-selector="valOutOfStockMessage" style="color: #cc0000"></div>
+        </li>
+    }
+}
+
+<li class="sp-shipping">
+    <span>@HelperMethods.FormatPriceWithCurrency(Model.InitialShippingCost, cultureCode)</span>
+    @Html.TextBox("ShippingCost", @HelperMethods.FormatPriceWithCurrency(Model.ShippingCost, cultureCode), new { @id = "shippingcost_" + Model.ExternalId, @class = "price-input", @Onchange = "return Quote.prototype.SaveOrderLineItemShipping(event)" })
+    
+    @Html.HiddenFor(model => model.ShippingCost, new { @id = "hdnQuoteLineItemShipping_" + @Model.ExternalId, @name = "hdnShippingCost", @data_priceRoundOff = priceRoundOff })
+    
+    <input id="hdnExternalId" name="ExternalId" type="hidden" value="@Model.ExternalId">
+    
+    @Html.Hidden("IsQuoteLineShippingUpdated_" + @Model.ExternalId)
+</li>
+
+<li class="sp-total">
+    <span id="extendedPrice_@Model.ExternalId"> @HelperMethods.FormatPriceWithCurrency(Model.ExtendedPrice, cultureCode)</span>
+</li>
+
+<li class="sp-actions">
+    <div id="actionLinks_@Model.ExternalId" style="">
+        <a href="#" class="action-link dirtyignore"><em class="dg-manage font-20 light-grey-text-color" data-toggle="tooltip" data-placement="top" title="" data-original-title="Manage"></em></a>
+        <ul class="action-ui">
+
+            <li>
+                <a class="z-delete dirtyignore" onclick="Quote.prototype.DeleteQuoteCartItem(this)" Value=@Model.Quantity data_cart_productid=@Model.ProductId data_cart_externalid=@Model.ExternalId title="Delete"></a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+@Html.HiddenFor(model => model.ProductType)
+@if(isActiveProductCount > 0)
+{
+    @Html.Hidden("hdnActiveProductCount", isActiveProductCount);
+}
+<script>
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>

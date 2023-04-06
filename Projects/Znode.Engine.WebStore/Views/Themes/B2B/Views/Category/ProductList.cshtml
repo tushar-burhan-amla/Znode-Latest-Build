@@ -1,0 +1,29 @@
+﻿@using Znode.Engine.WebStore
+@using Znode.Engine.WebStore.Agents
+
+@{
+
+    string _category = ViewBag.category;
+    int _categoryId = ViewBag.categoryId;
+    bool _viewAll = ViewBag.viewAll;
+    bool _fromSearch = ViewBag.fromSearch;
+    bool _bindBreadcrumb = false;
+    string _FacetGroup = HttpUtility.UrlEncode(ViewBag.facetGroup);
+    string _listSort = ViewBag.sortList;
+    int pageSize = Convert.ToInt32(Request.QueryString["pagesize"]);
+    int pageNumber = Convert.ToInt32(Request.QueryString["pagenumber"]);
+    int _portalId = PortalAgent.CurrentPortal.PortalId;
+
+    Html.RenderAction("CategoryContent", "Category", new { category = _category, categoryId = _categoryId, viewAll = _viewAll, fromSearch = _fromSearch, publishState = PortalAgent.CurrentPortal.PublishState, bindBreadcrumb = _bindBreadcrumb, facetGroup = _FacetGroup, sort = _listSort, pageSize = pageSize, pageNumber = pageNumber, localeId = Helper.GetLocaleId(), profileId = Helper.GetProfileId(), accountId = Helper.GetUserAccountId(), catalogId = Helper.GetUserProfileCatalogId(), portalId = _portalId });
+
+    ViewBag.Title = TempData["Title"];
+    ViewBag.Keywords = TempData["Keywords"];
+    ViewBag.Description = TempData["Description"];
+    ViewBag.CanonicalURL = TempData["CanonicalURL"];
+    ViewBag.RobotTag = TempData["RobotTag"];
+
+}
+
+@section scripts{
+    <script src="~/Scripts/lib/infiniteScroll.js" async></script>
+}

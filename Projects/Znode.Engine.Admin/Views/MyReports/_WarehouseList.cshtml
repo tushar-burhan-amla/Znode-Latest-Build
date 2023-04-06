@@ -1,0 +1,14 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model DynamicReportViewModel
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            <label>@Admin_Resources.LabelSelectWarehouse</label>
+        </div>
+        <div class="control-md">
+            @Html.DropDownListFor(model => model.WarehouseId, Model.WarehouseList, Admin_Resources.LabelAll, new { id = "ddlWarehouse" })
+        </div>
+    </div>
+</div>
+
+

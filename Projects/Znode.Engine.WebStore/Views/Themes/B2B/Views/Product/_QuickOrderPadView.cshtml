@@ -1,0 +1,35 @@
+﻿@model AutoComplete
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    bool isTemplate = string.Equals(controllerName, "User", StringComparison.InvariantCultureIgnoreCase) && (string.Equals(actionName, "CreateTemplate", StringComparison.InvariantCultureIgnoreCase) || string.Equals(actionName, "EditTemplate", StringComparison.InvariantCultureIgnoreCase));
+    bool isQuickOrder = actionName == "QuickOrderPad";
+    if (isTemplate) { Layout = null; }
+}
+
+
+@if (Request.IsAuthenticated && !isTemplate)
+{
+    <div class="container-fluid profile-dashboard">
+        <div class="container">
+            @Html.Partial("_AccountMenuDashboard")
+        </div>
+    </div>
+}
+
+@if (!isTemplate && !isQuickOrder)
+{
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a>@WebStore_Resources.HeaderQuickOrder</div>
+            </div>
+        </div>
+    </div>
+}
+<div class="col quick-add-products">
+    <Widget>@Html.WidgetPartial("QuickOrderPad", "QuickOrderPad", "123", "PortalMapping", 4)</Widget>
+</div>
+
+

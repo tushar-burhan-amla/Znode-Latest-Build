@@ -1,0 +1,15 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CartViewModel
+
+<div id="@Model.GridModel.FrontObjectName">
+    <div class="col-sm-12 list-container">
+        @Html.Partial("ManageShoppingCart", Model)
+        @if (Model?.ShoppingCartItems?.Any() ?? false)
+        {
+            <div id="order-discount" class="col-sm-6 col-lg-6 pull-left nopadding margin-left-30">
+                @Html.Partial("_Discounts", Model)
+            </div>
+        }
+    </div>
+</div>
+

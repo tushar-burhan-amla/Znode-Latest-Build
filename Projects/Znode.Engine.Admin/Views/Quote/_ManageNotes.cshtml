@@ -1,0 +1,33 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model QuoteResponseViewModel
+@{
+    Layout = null;
+}
+
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgaddionalnote">@Admin_Resources.LabelQuoteNote</h1>
+    <div class="pull-right">
+        <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('additionalNotes')" data-test-selector="linkBack"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+    </div>
+</div>
+
+<div class="col-sm-12">
+
+    <div class="form-group order-notes-padding">
+        <div class="col-sm-12 nopadding margin-bottom margin-top-25 d-flex align-items-start order-note-popup">
+            <div class="label">
+                @Html.Label(Admin_Resources.LabelAdditionalNotes, new { @data_test_selector = "lblAdditionalNotes" })
+            </div>
+
+            <div id="areaList" class="col-xs-12 nopadding textbox">
+                @Html.TextAreaFor(m => m.AdditionalNotes, new { maxlength = 500, @data_test_selector = "txtAdditionalNotes", @id = "notes" })
+                @Html.ValidationMessageFor(model => model.AdditionalNotes, "", new { @data_test_selector = "valAdditionalNotes" })
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="col-xs-12 modal-footer">
+    <button type="button" class="btn-text btn-text-secondary pull-right" id="Addnote" onclick="Quote.prototype.SaveAddedNote()" data-test-selector="btnAddNote">@Admin_Resources.LabelAddNote</button>
+</div>

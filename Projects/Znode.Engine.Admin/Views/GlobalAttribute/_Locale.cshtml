@@ -1,0 +1,23 @@
+﻿@model List<Znode.Engine.Admin.AttributeValidationHelpers.LocaleDataModel>
+
+@{
+    System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("[^a-zA-Z0-9_.]+");
+}
+
+@foreach (var _item in Model)
+{
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lbl@(_item.Name)" value=@_item.Name>@_item.Name</label>
+            </div>
+            
+            <div class="control-md">
+                @Html.TextBox("LocaleLabel", _item.Value, new { @id = @"Locale" + regex.Replace(_item.Name, string.Empty), @data_test_selector = "txt" + _item.Name, @class = "LocaleLabel", @LocaleName = regex.Replace(_item.Name, string.Empty), @onblur = "return GlobalAttribute.prototype.ValidationLocale('" + regex.Replace(_item.Name, string.Empty) + "')" })
+                @Html.ValidationMessageFor(m => _item.Value, "", new { @data_test_selector = "val" + _item.Name })
+                @Html.Hidden("LocaleLabel", _item.LocaleId)
+                <span data-test-selector="error@(_item.Name)" id=@("error"+regex.Replace(_item.Name, string.Empty)) class="error-msg"></span>
+            </div>
+        </div>
+    </div>
+}

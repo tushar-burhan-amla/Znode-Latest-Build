@@ -1,0 +1,136 @@
+﻿@model Znode.Engine.Admin.ViewModels.MediaManagerViewModel
+@using Znode.Engine.Admin.Models
+@{
+    ViewBag.Title = Admin_Resources.TitleDAM + " | " + Admin_Resources.Multifront;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string _display = Request.QueryString["mode"] != "add" ? "display:block" : "display:none";
+}
+
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelMediaExplorer<span class="total-count"><p>@Model.GridModel.TotalRecordCount</p></span></h1>
+    <div id="MainPage" style="@_display">
+        @Html.Partial("~/Areas/MediaManager/Views/MediaManager/_MainContent.cshtml")
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    <aside>
+        <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            @Html.Partial("~/Views/Shared/Controls/_TreeView.cshtml", Model.TreeView)
+        </div>
+    </aside>
+    <!--Main Container-->
+    @* Don't delete it*@
+    <div id="share-btn" style="display:none"></div>
+    <div id="useraccountlist" class="modal fade" role="dialog">
+        @*user list will display in this div*@
+    </div>
+    <section class="main-container">
+        @Html.Partial("~/Areas/MediaManager/Views/MediaManager/FileUploader.cshtml", Model.PopupViewModel)
+        <div class="col-sm-12 nopadding">
+            <div id="@Model.GridModel.FrontObjectName" data-id="@Model.GridModel.FrontObjectName">
+                @Html.Partial("_MediaGrid", Model.GridModel)
+            </div>
+        </div>
+
+        <div id="fileuploadstatus" class="file-upload-status" style="display:none;">
+            <div class="header">
+                <h4>Uploading Status</h4>
+                <div class="pull-right">
+                    <a href="#" onclick="MediaManagerTools.prototype.HideStatusGrid();" class="close"><em class="z-close-circle"></em></a>
+                </div>
+            </div>
+            <div class="status-container">
+                <table class="table" aria-describedby="File Upload Status">
+                    <thead>
+                        <tr>
+                            <th scope="col">@Admin_Resources.LabelFileName</th>
+                            <th scope="col">@Admin_Resources.LabelSize</th>
+                            <th scope="col">@Admin_Resources.LabelStatus</th>
+                            <th scope="col">@Admin_Resources.TextCancel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*<tr>
+                                <td colspan="4"><a href="#" id="btncancel" class="pull-right" title="Cancel All">Cancel All</a></td>
+                            </tr>*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.FolderId, new { @id = "hdnMediaFolderId" })
+        @Html.Hidden("IsRootFolder")
+        @Html.HiddenFor(m => m.GridModel.FrontObjectName, new { id = "hdnFrontObjectName" })
+    </section>
+</div>
+
+<div>
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderDelete,
+                        Description = @Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "MediaDeletePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk,ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "MediaManagerTools.prototype.Delete(false)" },
+                           }
+                    })
+</div>
+
+<div>
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderConfirmDelete,
+                        Description = @MediaManager_Resources.TextFolderConfirmDelete,
+                        ModalPopUpId = "MediaFolderDeletePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk,ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "MediaManagerTools.prototype.DeleteFolder(true)" },
+                        }
+                    })
+</div>
+
+<div>
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @MediaManager_Resources.TextFileAlreadyExists,
+                        Description = @MediaManager_Resources.DescriptionFileAlreadyExists,
+                        ModalPopUpId = "MediaFileAlreadyExistPopup",
+                    })
+</div>
+<div>
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                        new PopupModel()
+                        {
+                            Title = @MediaManager_Resources.TitleInvalidFileName,
+                            ModalPopUpId = "MediaInvalidFileName",
+                        })
+</div>
+<div class="modal fade" id="TreeViewModelPopup" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" title="@Admin_Resources.ButtonCancel"><em class="z-close-circle"></em></button>
+                <h4 class="modal-title">@MediaManager_Resources.TitleMediaFolders</h4>
+            </div>
+            <div class="modal-body">
+                <div id="TreePopupError" class="col-sm-12 nopadding">
+                    <p class="text-center error-msg">@MediaManager_Resources.ErrorSelectFolder</p>
+                </div>
+                <div id="Popup_Tree" data-tree="@Model.TreeView.Tree"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-right">
+                    @Html.AuthorizedPrototypeRawActionLink("<em class='z-ok'></em>" + "Continue", "MoveMediaToFolder", "MediaManager", "btn-text-icon", "MediaManagerTools.prototype.MoveCopyMedia()")
+                    <button type="button" class="btn-text-icon" data-dismiss="modal" id="TreePopupCancel"><em class='z-cancel'></em>@Admin_Resources.ButtonCancel</button>
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<script>
+        $(document).ready(function () { EditableGridEvent.Init(); })
+    </script>*@

@@ -1,0 +1,39 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PortalApprovalViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+}
+<div id="_PartialPortalPaymentApproverPanel_@Model.PaymentDivCount" class="portal-payment">
+    <div class="col-xs-12 padding-top-bottom tr-div approver-rows nopadding seperate-payment-panel" id="PartialPage">
+        <div class="form-group">
+            <div class="control-label">
+                @Html.LabelFor(m => m.PaymentTypeIds)
+            </div>
+            <div id="paymentList_@Model.PaymentDivCount">
+                @Html.ListBoxFor(model => model.PaymentTypeIds, Model.PaymentTypes, new { @id = "paymenttypes_" + Model.PaymentDivCount, @multiple = "multiple" })
+                @Html.ValidationMessageFor(model => model.PaymentTypeIds, "", new { @class = "text-danger" })
+
+            </div>
+            @Html.Partial("_PartialPortalPaymentApproval", Model)
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(x => x.ApproverUser)
+@Html.Hidden("ApproverUserId")
+@Html.Hidden("approverOrder_")
+@Html.HiddenFor(x => x.UserApproverId)
+@Html.HiddenFor(x => x.UserId, new { id = "userId" })
+<input id="UserApproverId" name="UserApproverId" type="hidden" value="@Model.UserApproverId">
+@Html.HiddenFor(x => x.ApproverUserId, new { id = "ApproverUserId" })
+@Html.HiddenFor(x => x.PaymentDivCount)
+
+
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"></script>
+<script>
+    
+    $("#paymenttypes_" + @Model.PaymentDivCount).multiselect({ includeSelectAllOption: true, enableCaseInsensitiveFiltering: false });
+    $(document).ready(function () {
+        Store.prototype.GetApproverUsersByPortalId();
+    });
+</script>

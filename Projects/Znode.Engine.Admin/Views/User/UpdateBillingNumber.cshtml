@@ -1,0 +1,65 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities;
+@model GlobalAttributeEntityDetailsViewModel
+
+@{
+    string entityName = Model.Attributes?.Select(x => x.EntityValue)?.FirstOrDefault();
+    int attributeGroupCount = Model?.Groups?.Count ?? 0;
+}
+<script src="~/Scripts/References/DynamicValidation.js"></script>
+<div class="main-wrapper">
+    <!--Main Container-->
+    <section class="main-container">
+        <div id="divMediaUploaderPopup" class="modal fade in" role="dialog" style="display: block;">
+            <div class="modal-dialog modal-dialog-centered ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+                        @{
+                            var group = Model.Groups.FirstOrDefault(x => x.GroupCode == "OpenAccountBillingDetails");
+                        }
+                        <h4 class="modal-title">@group.AttributeGroupName</h4>
+                    </div>
+                    @using (Html.BeginForm("UpdateBillingNumber", "User", FormMethod.Post, new { @id = "frmGlobalAttribute" }))
+                    {
+                        <div class="modal-body">
+                            <div class="col-xs-12">
+                                <div id="groupId_@group.GlobalAttributeGroupId">
+                                    @{
+                                        var attributesAssociatedWithGroup = Model.Attributes.Where(x => x.GlobalAttributeGroupId == group.GlobalAttributeGroupId/* && x.PimAttributeFamilyId == group.PimAttributeFamilyId*/).ToList();
+
+
+                                        foreach (var attributes in attributesAssociatedWithGroup)
+                                        {
+                                            if (Equals(attributes.ControlProperty.ControlType, "File"))
+                                            { attributes.ControlProperty.htmlAttributes.Add("IsGlobalAttributeFileControl", "True"); }
+                                            @Html.Partial("~/Views/Shared/Controls/GlobalAttribute/_createControl.cshtml", attributes)
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            @if (attributeGroupCount > 0)
+                            {
+                            <div class="pull-right dirtyignore">
+                                <button type="button" class="btn-text-icon" data-dismiss="modal"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                                <div class="pull-right">
+                                    @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, "SaveEntityDetails", "GlobalAttribute", new { @id = "btnSave", @class = "btn-text btn-text-secondary", onclick = "GlobalAttribute.prototype.SaveEntityAttribute()" })
+                                </div>
+
+                            </div>
+                            }
+                        </div>
+
+                        @Html.HiddenFor(model => model.EntityId)
+                        @Html.HiddenFor(model => model.EntityType)
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<div id="divMediaUploaderPopup"></div>

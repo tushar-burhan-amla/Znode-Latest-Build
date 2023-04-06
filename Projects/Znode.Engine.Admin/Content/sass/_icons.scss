@@ -1,0 +1,280 @@
+﻿// Znode SVG Icon Font.
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../../fonts/glyphicons-halflings-regular.eot');
+  src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+.glyphicon {position: relative;top: 1px;display: inline-block;font-family: 'Glyphicons Halflings';font-style: normal;font-weight: normal;line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+@font-face {
+	font-family:$znode-icon-font;	
+    src:    url('../../fonts/znode-icons.eot?wvnuw4');
+    src:    url('../../fonts/znode-icons.eot?wvnuw4#iefix') format('embedded-opentype'),
+        url('../../fonts/znode-icons.ttf?wvnuw4') format('truetype'),
+        url('../../fonts/znode-icons.woff?wvnuw4') format('woff'),
+        url('../../fonts/znode-icons.svg?wvnuw4#znode-icons') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="z-"], [class*=" z-"] {    
+	font-family: 'znode-icons' !important;speak: none;font-style: normal;font-weight: normal;font-variant: normal;text-transform: none;line-height: 1;	
+	-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;
+}
+.z-hamburger:before {@include icon($z-hamburger);}
+.z-backward:before {@include icon($z-backward);}
+.z-forward:before {@include icon($z-forward);}
+.z-delete:before,.z-Delete:before {@include icon($z-delete);}
+.z-detail-view:before {@include icon($z-detail-view);}
+.z-edit:before,.z-Edit:before {@include icon($z-edit);}
+.z-export:before {@include icon($z-export);}
+.z-folder-close:before {@include icon($z-folder-close);}
+.z-folder-open:before {@include icon($z-folder-open);}
+.z-info:before {@include icon($z-info);}
+.z-left-navigation:before {@include icon($z-left-navigation);}
+.z-list-view:before {@include icon($z-list-view);}
+.z-menu-hamburger:before {@include icon($z-menu-hamburger);}
+.z-refresh:before {@include icon($z-refresh);}
+.z-search:before {@include icon($z-search);}
+.z-setting:before,.z-manage:before,.z-Setup:before{@include icon($z-setting);}
+.z-tile-view:before {@include icon($z-tile-view);}
+.z-user:before {@include icon($z-user);}
+.z-first:before {@include icon($z-first);}
+.z-last:before {@include icon($z-last);}
+.z-left-all:before {@include icon($z-left-all);}
+.z-right-all:before {@include icon($z-right-all);}
+.z-up-all:before {@include icon($z-up-all);}
+.z-down-all:before {@include icon($z-down-all);}
+.z-left:before {@include icon($z-left);}
+.z-right:before {@include icon($z-right);}
+.z-up:before {@include icon($z-up);}
+.z-down:before {@include icon($z-down);}
+.z-close-circle:before{@include icon($z-close-circle);}
+.z-add:before{@include icon($z-add);}
+.z-close:before{@include icon($z-close);}
+.z-back:before {@include icon($z-back);}
+.z-calendar:before {@include icon($z-calendar);}
+.z-minus:before {@include icon($z-minus);}
+.z-view:before,.z-View:before {@include icon($z-view);}
+.z-ok:before {@include icon($z-ok);}
+.z-disable:before {@include icon($z-disable);}
+.z-enable:before {@include icon($z-enable);}
+.z-sortable:before {@include icon($z-sortable);}
+.z-admin:before,.z-Admin:before {@include icon($z-admin);}
+.z-cms:before,.z-CMS:before {@include icon($z-cms);}
+.z-media-manager:before,.z-Media:before {@include icon($z-media-manager);}
+.z-oms:before,.z-OMS:before {@include icon($z-oms);}
+.z-pim:before,.z-PIM:before {@include icon($z-pim);}
+.z-customers:before {@include icon($z-customers);}
+.z-dashboard:before,.z-Dashboard:before {@include icon($z-dashboard);}
+.z-promotinons-and-coupons:before {@include icon($z-promotinons-and-coupons);}
+.z-provider-engine:before {@include icon($z-provider-engine);}
+.z-roles:before {@include icon($z-roles);}
+.z-supplier:before {@include icon($z-supplier);}
+.z-taxes:before {@include icon($z-taxes);}
+.z-attribute:before {@include icon($z-attribute);}
+.z-attribute-family:before {@include icon($z-attribute-family);}
+.z-attribute-group:before {@include icon($z-attribute-group);}
+.z-clear-cache:before {@include icon($z-clear-cache);}
+.z-upload:before {@include icon($z-upload);}
+.z-copy:before {@include icon($z-copy);}
+.z-preview:before {@include icon($z-preview);}
+.z-audio:before {@include icon($z-audio);}
+.z-video:before {@include icon($z-video);}
+.z-file-text:before {@include icon($z-file-text);}
+.z-reports:before,.z-Reports:before {@include icon($z-reports);}
+.z-download:before {@include icon($z-download);}
+.z-angle-up:before {@include icon($z-angle-up);}
+.z-angle-down:before {@include icon($z-angle-down);}
+.z-check-circle:before {@include icon($z-check-circle);}
+.z-question-circle:before {@include icon($z-question-circle);}
+.z-inventory:before {@include icon($z-inventory);}
+.z-payment:before {@include icon($z-payment);}
+.z-price:before {@include icon($z-price);}
+.z-profiles:before {@include icon($z-profiles);}
+.z-shipping:before {@include icon($z-shipping);}
+.z-stores:before {@include icon($z-stores);}
+.z-tax:before {@include icon($z-tax);}
+.z-warehouse:before {@include icon($z-warehouse);}
+.z-account:before {@include icon($z-account);}
+.z-attribute-configuration:before {@include icon($z-attribute-configuration);}
+.z-media-list:before {@include icon($z-media-list);}
+.z-contents:before {@include icon($z-contents);}
+.z-customer-configuration:before {@include icon($z-customer-configuration);}
+.z-customer-review:before {@include icon($z-customer-review);}
+.z-email-templates:before {@include icon($z-email-templates);}
+.z-slider-configuration:before {@include icon($z-slider-configuration);}
+.z-theme-configuration:before {@include icon($z-theme-configuration);}
+.z-website-configuration:before {@include icon($z-website-configuration);}
+.z-menu-list:before {@include icon($z-menu-list);}
+.z-role-access-right:before {@include icon($z-role-access-right);}
+.z-store-admin:before {@include icon($z-store-admin);}
+.z-tree-view:before {@include icon($z-tree-view);}
+.z-catalog:before {@include icon($z-catalog);}
+.z-categories:before {@include icon($z-categories);}
+.z-products:before {@include icon($z-products);}
+.z-global-setting:before {@include icon($z-global-setting);}
+.z-location:before {@include icon($z-location);}
+.z-countries:before {@include icon($z-countries);}
+.z-display:before {@include icon($z-display);}
+.z-price-management:before {@include icon($z-price-management);}
+.z-product-info:before,.z-ProductInfo:before {@include icon($z-product-info);}
+.z-smtp:before {@include icon($z-smtp);}
+.z-store-locator:before {@include icon($z-store-locator);}
+.z-units:before {@include icon($z-units);}
+.z-url:before {@include icon($z-url);}
+.z-add-on-group:before,.z-Add-Ons:before {@include icon($z-add-on-group);}
+.z-bundle-product:before {@include icon($z-bundle-product);}
+.z-custom-fields:before,.z-CustomFields:before {@include icon($z-custom-fields);}
+.z-gallery-images:before,.z-GalleryImages:before {@include icon($z-gallery-images);}
+.z-grouped-product:before {@include icon($z-grouped-product);}
+.z-image:before,.z-Image:before {@include icon($z-image);}
+.z-personalization:before,.z-Personalization:before {@include icon($z-personalization);}
+.z-simple-product:before {@include icon($z-simple-product);}
+.z-manage-message:before {@include icon($z-manage-message);}
+.z-publish:before {@include icon($z-publish);}
+.z-seo:before {@include icon($z-seo);}
+.z-template:before {@include icon($z-template);}
+.z-url-redirects:before {@include icon($z-url-redirects);}
+.z-address:before {@include icon($z-address);}
+.z-associated-accounts:before {@include icon($z-associated-accounts);}
+.z-associated-customers:before {@include icon($z-associated-customers);}
+.z-associated-inventory:before {@include icon($z-associated-inventory);}
+.z-associated-profiles:before {@include icon($z-associated-profiles);}
+.z-associated-sku:before {@include icon($z-associated-sku);}
+.z-associated-stores:before {@include icon($z-associated-stores);}
+.z-associated-warehouse:before {@include icon($z-associated-warehouse);}
+.z-associated-facet:before {@include icon($z-associated-facet);}
+.z-coupon-information:before {@include icon($z-coupon-information);}
+.z-departments:before {@include icon($z-departments);}
+.z-discount-information:before {@include icon($z-discount-information);}
+.z-erp-configurator:before {@include icon($z-erp-configurator);}
+.z-notes:before {@include icon($z-notes);}
+.z-orders:before {@include icon($z-orders);}
+.z-permission:before {@include icon($z-permission);}
+.z-quotes:before {@include icon($z-quotes);}
+.z-suppliers:before {@include icon($z-suppliers);}
+.z-widgets-default:before {@include icon($z-widgets-default);}
+.z-affiliate:before {@include icon($z-affiliate);}
+.z-associated-items:before {@include icon($z-associated-items);}
+.z-associate-products:before,.z-AssociatedProducts:before {@include icon($z-associate-products);}
+.z-association-category:before {@include icon($z-association-category);}
+.z-cshtml-file:before {@include icon($z-cshtml-file);}
+.z-currencies:before {@include icon($z-currencies);}
+.z-general-info:before {@include icon($z-general-info);}
+.z-promotion-information:before {@include icon($z-promotion-information);}
+.z-scheduler-list:before {@include icon($z-scheduler-list);}
+.z-touch-points-configuration:before {@include icon($z-touch-points-configuration);}
+.z-website-logo:before {@include icon($z-website-logo);}
+.z-product-page:before {@include icon($z-product-page);}
+.z-time-picker:before {@include icon($z-time-picker);}
+.z-trigger:before {@include icon($z-trigger);}
+.z-widget-cart:before {@include icon($z-widget-cart);}
+.z-you-may-also-like:before {@include icon($z-trigger);}
+.z-service-request:before {@include icon($z-service-request);}
+.z-frequently-bought:before {@include icon($z-frequently-bought);}
+.z-backward-arrow:before {@include icon($z-backward-arrow);}
+.z-forward-arrow:before {@include icon($z-forward-arrow);}
+.z-category-boost-setting:before {@include icon($z-category-boost-setting);}
+.z-create-index:before {@include icon($z-create-index);}
+.z-fedex:before {@include icon($z-fedex);}
+.z-field-boost-setting:before {@include icon($z-field-boost-setting);}
+.z-gift-cards:before {@include icon($z-gift-cards);}
+.z-issue-gift-card:before {@include icon($z-issue-gift-card);}
+.z-product-boost-setting:before {@include icon($z-product-boost-setting);}
+.z-reason-for-return:before {@include icon($z-request-status);}
+.z-reply-to-customer:before {@include icon($z-reply-to-customer);}
+.z-request-status:before {@include icon($z-request-status);}
+.z-review-order:before {@include icon($z-review-order);}
+.z-rma-configuration:before {@include icon($z-rma-configuration);}
+.z-search-settings:before {@include icon($z-search-settings);}
+.z-shipping-methods:before {@include icon($z-shipping-methods);}
+.z-shopping-cart:before {@include icon($z-shopping-cart);}
+.z-ups:before {@include icon($z-ups);}
+.z-add-circle:before,.z-addattributegroups:before,.z-addattributes:before {@include icon($z-add-circle);}
+.z-alert:before {@include icon($z-alert);}
+.z-cancel:before {@include icon($z-cancel);}
+.z-columns:before,.z-managecolumns:before {@include icon($z-columns);}
+.z-help:before {@include icon($z-help);}
+.z-help-circle:before {@include icon($z-help-circle);}
+.z-manage-filter:before {@include icon($z-manage-filter);}
+.z-nav-menu:before {@include icon($z-nav-menu);}
+.z-save:before {@include icon($z-save);}
+.z-locale:before {@include icon($z-locale);}
+.z-brand:before {@include icon($z-brand);}
+.z-capture-payment:before {@include icon($z-capture-payment);}
+.z-history:before {@include icon($z-history);}
+.z-order-quotes:before {@include icon($z-order-quotes);}
+.z-page-view:before {@include icon($z-page-view);}
+.z-resend-email:before {@include icon($z-resend-email);}
+.z-vendors:before {@include icon($z-vendors);}
+.z-void-payment:before {@include icon($z-void-payment);}
+.z-active:before {@include icon($z-active);}
+.z-inactive:before {@include icon($z-inactive);}
+.z-left-collaps-arrow:before {@include icon($z-left-collaps-arrow);}
+.z-right-collaps-arrow:before {@include icon($z-right-collaps-arrow);}
+.z-append:before {@include icon($z-append);}
+.z-customer-trust:before {@include icon($z-customer-trust);}
+.z-import:before {@include icon($z-import);}
+.z-intelligent-integration:before {@include icon($z-intelligent-integration);}
+.z-print:before {@include icon($z-print);}
+.z-smart-automation:before {@include icon($z-smart-automation);}
+.z-void:before {@include icon($z-void);}
+.z-marketing:before {@include icon($z-marketing);}
+.z-refund-order:before {@include icon($z-refund-order);}
+.z-default-view:before {@include icon($z-default-view);}
+.z-rma-manager:before {@include icon($z-rma-manager);}
+.z-product-feed:before {@include icon($z-product-feed);}
+.z-continue:before {@include icon($z-continue);}
+.z-display-settings:before,.z-displaysettings:before {@include icon($z-display-settings);}
+.z-import-export:before {@include icon($z-import-export);}
+.z-plus-circle:before {@include icon($z-plus-circle);}
+.z-minus-circle:before {@include icon($z-minus-circle);}
+.z-save-and-close:before {@include icon($z-save-and-close);}
+.z-swatch-box:before {@include icon($z-swatch-box);}
+.z-blog-and-news:before {@include icon($z-blog-and-news);}
+.z-entity-attributes:before {@include icon($z-entity-attributes);}
+.z-global-attributes:before {@include icon($z-global-attributes);}
+.z-manage-forms:before {@include icon($z-manage-forms);}
+.z-form-submission:before {@include icon($z-form-submission);}
+.z-log-message:before {@include icon($z-log-message);}
+.z-pin:before {@include icon($z-pin);}
+.z-lock:before {@include icon($z-lock);}
+.z-unlock:before {@include icon($z-unlock);}
+.z-application-logs:before{@include icon($z-application-logs)}
+.z-pause:before{@include icon($z-pause)}
+.z-resume:before{@include icon($z-resume)}
+.z-account_circle:before{@include icon($z-account_circle)}
+.z-new-refresh:before{@include icon($z-new-refresh)}
+.z-cancel-circle:before{ @include icon($z-cancel-circle)}
+.z-cloud-upload:before{ @include icon($z-cloud-upload)}
+.z-pending-payment:before{ @include icon($z-pending-payment)}
+.z-accept:before{@include icon($z-accept)}
+.z-decline:before{@include icon($z-decline)}
+.z-pending-orders:before{@include icon($z-pending-orders)}
+.z-advanced-report:before{@include icon($z-advanced-report)}
+.is-star:before{@include icon($z-is-star)}
+.z-diagnostics-status:before{@include icon($z-diagnostics-status)}
+.z-analytics:before{@include icon($z-analytics)}
+.z-power-bi:before{@include icon($z-power-bi)}
+.z-quote:before{@include icon($z-quote)}
+.z-return:before{@include icon($z-return)}
+.z-quote:before{@include icon($z-quote)}
+.z-content-widgets:before {@include icon($z-content-widgets)}
+.z-widget-templates:before {@include icon($z-widget-templates)}
+.z-external-link:before {
+    @include icon($z-external-link)
+}
+.z-container-widget:before{@include icon($z-container-widget)}
+.z-banner-widget:before{@include icon($z-banner-widget)}
+.z-categorylist-widget:before{@include icon($z-categorylist-widget)}
+.z-form-widget:before{@include icon($z-form-widget)}
+.z-image-widget:before{@include icon($z-image-widget)}
+.z-link-widget:before{@include icon($z-link-widget)}
+.z-productlist-widget:before{@include icon($z-productlist-widget)}
+.z-richtext-widget:before{@include icon($z-richtext-widget)}
+.z-search-widget:before{@include icon($z-search-widget)}
+.z-text-widget:before{@include icon($z-text-widget)}
+.z-video-widget:before{@include icon($z-video-widget)}

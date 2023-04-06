@@ -1,0 +1,84 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model TaxClassSKUViewModel
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+@using (Ajax.BeginForm(actionName, controllerName, new AjaxOptions()
+{
+    HttpMethod = "post",
+    OnSuccess = "TaxClass.prototype.TaxClassSKUAddResult",
+    UpdateTargetId = "divAddSKU",
+    InsertionMode = InsertionMode.Replace,
+},
+                                                new { @id = "addTaxClassSKUForm" }))
+{
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" title="@Admin_Resources.ButtonCancel"><em class="z-close-circle"></em></button>
+                @if (actionName.ToLower().Contains("edittaxclasssku"))
+                { <h4 class="modal-title">@Admin_Resources.EditSKU</h4>}
+                else
+                { <h4 class="modal-title">@Admin_Resources.AddSKU</h4>}
+            </div>
+
+            <div class="modal-body">
+                <div class="col-sm-12 page-container">
+                    <div id="createFormSKU" class="col-sm-12 nopadding">
+                        @if (string.Equals(actionName.ToLower(), "addtaxclasssku"))
+                        {
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(m => m.SKU, new { @class = "required" })
+                                    </div>
+                                    <div class="control-lg">
+                                        @Html.TextBoxFor(model => model.SKU, new { @placeholder = Admin_Resources.TextEnterProductSKU, @id = "txtSKU" })
+                                        @Html.ValidationMessageFor(model => model.SKU, "", new { @id = "valSKU" })
+                                    </div>                                    
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.SKU)
+                                    </div>
+                                    <div class="control-lg">
+                                        @Html.TextBoxFor(model => model.SKU, new { @placeholder = Admin_Resources.TextEnterProductSKU, @id = "txtSKU", @disabled = "disabled" })
+                                        @Html.ValidationMessageFor(model => model.SKU, "", new { @id = "valSKU" })
+                                    </div>                                    
+                                </div>
+                            </div>
+                        }
+                        @Html.HiddenFor(m => m.SKU)
+                        @Html.HiddenFor(m => m.TaxClassId)
+                        @Html.HiddenFor(m => m.Name)
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 nopadding">
+                    <div class="pull-right margin-top-bottom">
+                        <button type="submit" class="btn-text-icon" id="addTaxClassSKU" onclick="javascript: return !(Products.prototype.isSKUValid != undefined && !Products.prototype.isSKUValid)"><em class="z-save"></em>@Admin_Resources.ButtonSave</button>
+                        <button type="button" class="btn-text-icon" data-dismiss="modal"><em class="z-cancel"></em>@Admin_Resources.ButtonCancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@Scripts.Render("~/bundles/jqueryval")
+
+
+
+

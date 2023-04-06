@@ -1,0 +1,38 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PublishProductsViewModel
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities
+
+@{
+    decimal quantity = string.IsNullOrEmpty(Model.Attributes?.Value(ZnodeConstant.MinimumQuantity)) ? 1 : Convert.ToDecimal(Model.Attributes?.Value(ZnodeConstant.MinimumQuantity));
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    string sku = string.IsNullOrEmpty(Model.ConfigurableProductSKU) ? Model.SKU : Model.ConfigurableProductSKU;
+}
+
+@if (Model.IsConfigurable)
+{
+    @Html.Partial("_ConfigurableAttribute", Model.ConfigurableData)
+}
+@{
+    <div class="col-sm-12 nopadding">
+        <div class="form-group">
+            <div class="control-label">
+                <label for="Quantity" data-test-selector="lblQuantity">@Admin_Resources.TextQuantity</label>
+            </div>
+            <div id="product-details-quantity" class="col-sm-2 nopadding">
+                <input type="text" name='Quantity' value="@quantity" data-sku="@sku" data-change="false" data-parentsku="@Model.SKU" data-parentProductId="@Model.ParentProductId" data-inventoryRoundOff="@inventoryRoundOff" class="quantity" id="Quantity" onchange="Order.prototype.OnQuantityChange(this);" data-test-selector="txtQuantity">
+            </div>
+            <div class="col-sm-12 nopadding">
+                <div id="quantity-error-msg" class="status-outofstock hvr-pulse error-msg" data-test-selector="valQuantity"></div>
+                @if (Model.ShowAddToCart)
+            {
+                    <div id="dynamic-inventory" class="status-outofstock hvr-pulse dynamic-inventory error-msg" data-test-selector="divDynamicInventory"></div>
+                }
+                else
+                {
+                    <div id="dynamic-inventory" class="status-outofstock hvr-pulse error-msg" data-test-selector="divDynamicInventory">@Model.InventoryMessage</div>
+                }
+            </div>
+        </div>
+    </div>
+}

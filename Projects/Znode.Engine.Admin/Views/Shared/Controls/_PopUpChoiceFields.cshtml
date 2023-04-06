@@ -1,0 +1,46 @@
+﻿@using Znode.Engine.Admin.Models
+@model List<PopupInputField>
+
+@if (!Equals(Model, null) && Model.Count > 0)
+{
+    foreach (PopupInputField inputField in Model)
+    {
+        bool formVisible = (!inputField.RequiredNumberOfItemsToDisplay.HasValue || inputField.InputFieldData.Count >= inputField.RequiredNumberOfItemsToDisplay) ? true : false;
+
+        if (formVisible)
+        {
+<form class="popup-form" name="@inputField.ControlGroupClientSideId" id="@inputField.ControlGroupClientSideId">
+    @if (!string.IsNullOrEmpty(inputField.InputFieldLabel))
+    {
+        <p>@inputField.InputFieldLabel</p>
+    }
+
+    @foreach (PopupInputFieldDataItem dataItem in inputField.InputFieldData)
+    {
+        string controlType = inputField.InputFieldType == PopupInputFieldTypeEnum.RadioButtonGroup ? "radio" : "checkbox";
+        if (!dataItem.IsHidden)
+        {
+            <div class="popup-input-field @(inputField.ControlGroupClientSideId=="chkBxPublishStatesChoice"?(!string.IsNullOrEmpty(dataItem.ApplicationType)&& dataItem.ApplicationType.Equals(Znode.Libraries.ECommerce.Utilities.ZnodeConstant.Store,StringComparison.InvariantCultureIgnoreCase))?"text-right d-block":"text-left d-block":"")">
+                <label>
+                    <input @(dataItem.IsChecked ? "checked='checked'" : "") @(dataItem.Disabled ? "disabled='disabled'" : "") data-test-selector="chkPopupInput" name="choice" type="@controlType" value="@dataItem.Value" />
+                    <span class="lbl padding-8">@dataItem.DisplayName</span>
+                </label>
+                @if (dataItem.Disabled)
+                {
+                    <input name="choice" type="hidden" value="@dataItem.Value" />
+                }
+                @if (!string.IsNullOrEmpty(dataItem.HelpText))
+                {
+                    @Html.Partial("_HelpText", dataItem.HelpText)
+                }
+            </div>
+        }
+        else
+        {
+            <input name="choice" type="hidden" value="@dataItem.Value" />
+        }
+    }
+</form>
+        }
+    }
+}

@@ -1,0 +1,149 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model  List<SearchFeatureViewModel>
+
+    @for (int i = 0; i < Model.Count; i++)
+    {
+    if (Model[i].ControlType == "Yes/No" && !string.Equals(Model[i].FeatureCode, ZnodeConstant.MinGram) && !string.Equals(Model[i].FeatureCode, ZnodeConstant.MaxGram)&& !string.Equals(Model[i].FeatureCode, ZnodeConstant.CharacterFilter))
+    {
+
+    <div class="feature-list-loop padding-left padding-bottom">
+        @{
+        List<SearchFeatureViewModel> subfeatures = Model.Where(x => x.ParentSearchFeatureId == Model[i].SearchFeatureId).ToList();
+            <div class="form-group">
+                <div class="col-xs-12 nopadding switch-aside-panel">
+                    <div class="control-label">
+                        <label data-test-selector="lbl@(Model[i].FeatureName)">@Model[i].FeatureName</label>
+                    </div>
+                    <div class="switch-field control-yes-no">
+                        <input @(Model[i].SearchFeatureValue == "True" ? "checked='checked'" : "" ) id="@(Model[i].FeatureName + "_Left")" name="FeaturesList[@i].SearchFeatureValue" value="True" type="radio"> <label for="@(@Model[i].FeatureName + "_Left")" data-test-selector="lblYes">Yes</label>
+                        <input @(Model[i].SearchFeatureValue == null || Model[i].SearchFeatureValue == "False" ? "checked='checked'" : "" ) id="@(Model[i].FeatureName + "_Right")" name="FeaturesList[@i].SearchFeatureValue" value="False" type="radio"> <label for="@(@Model[i].FeatureName + "_Right")" data-test-selector="lblNo">No</label>
+                    </div>
+                    @Html.Partial("_HelpText", Model[i].HelpDescription ?? string.Empty)
+                    <input type="hidden" id="FeaturesList[@i].FeatureName" name="FeaturesList[@i].FeatureName" value="@Model[i].SearchFeatureValue">
+                    <input type="hidden" id="FeaturesList[@i].SearchFeatureId" name="FeaturesList[@i].SearchFeatureId" value="@Model[i].SearchFeatureId">
+                    <input type="hidden" id="FeaturesList[@i].ControlType" name="FeaturesList[@i].ControlType" value="@Model[i].ControlType">
+                    <input type="hidden" id="FeaturesList[@i].FeatureCode" name="FeaturesList[@i].FeatureCode" value="@Model[i].FeatureCode">
+                </div>
+            </div>
+            if (subfeatures.Count > 0)
+            {
+            foreach (SearchFeatureViewModel sub in subfeatures)
+            {
+            i++;
+            if (sub.ControlType == "Yes/No")
+            {
+            <div class="form-group">
+                <div class="col-xs-12 nopadding switch-aside-panel">
+                    <div class="control-label">
+                        <label>@Model[i].FeatureName</label>
+                    </div>
+                    <div class="switch-field control-yes-no">
+                        <input @(Model[i].SearchFeatureValue == "True" ? "checked='checked'" : "" ) id="@(Model[i].FeatureName + "_Left")" name="FeaturesList[@i].SearchFeatureValue" value="True" type="radio"> <label for="@(@Model[i].FeatureName + "_Left")" data-test-selector="lblYes">Yes</label>
+                        <input @(Model[i].SearchFeatureValue == null || Model[i].SearchFeatureValue == "False" ? "checked='checked'" : "" ) id="@(Model[i].FeatureName + "_Right")" name="FeaturesList[@i].SearchFeatureValue" value="False" type="radio"> <label for="@(@Model[i].FeatureName + "_Right")" data-test-selector="lblNo">No</label>
+                    </div>
+                    @Html.Partial("_HelpText", Model[i].HelpDescription ?? string.Empty)
+                    <input type="hidden" id="FeaturesList[@i].FeatureName" name="FeaturesList[@i].FeatureName" value="@Model[i].SearchFeatureValue">
+                    <input type="hidden" id="FeaturesList[@i].SearchFeatureId" name="FeaturesList[@i].SearchFeatureId" value="@Model[i].SearchFeatureId">
+                    <input type="hidden" id="FeaturesList[@i].ControlType" name="FeaturesList[@i].ControlType" value="@Model[i].ControlType">
+                    <input type="hidden" id="FeaturesList[@i].FeatureCode" name="FeaturesList[@i].FeatureCode" value="@Model[i].FeatureCode">
+                </div>
+            </div>
+            }
+            else
+            {  <div class="form-group">
+                <div class="col-xs-12 nopadding switch-aside-panel">
+                    <div class="control-label">
+                        <label data-test-selector="lbl@(Model[i].FeatureName.Replace(" ",""))">@Model[i].FeatureName</label>
+                    </div>
+                    <div class="control-lg">
+                        <input type="text" id="@Model[i].FeatureName" name="FeaturesList[@i].SearchFeatureValue" value="@Model[i].SearchFeatureValue" data-test-selector="txt@(Model[i].FeatureName.Replace(" ",""))">
+                    </div>
+                    @Html.Partial("_HelpText", Model[i].HelpDescription ?? string.Empty)
+                </div>
+                <input type="hidden" id="FeaturesList[@i].FeatureName" name="FeaturesList[@i].FeatureName" value="@Model[i].FeatureName">
+                <input type="hidden" id="FeaturesList[@i].SearchFeatureId" name="FeaturesList[@i].SearchFeatureId" value="@Model[i].SearchFeatureId">
+                <input type="hidden" id="FeaturesList[@i].ControlType" name="FeaturesList[@i].ControlType" value="@Model[i].ControlType">
+                <input type="hidden" id="FeaturesList[@i].FeatureCode" name="FeaturesList[@i].FeatureCode" value="@Model[i].FeatureCode">
+            </div>
+            }
+            }
+            }
+            }
+    </div>
+    }
+    else
+    if (!string.Equals(Model[i].FeatureCode, ZnodeConstant.MinGram) && !string.Equals(Model[i].FeatureCode, ZnodeConstant.MaxGram) && !string.Equals(Model[i].FeatureCode, ZnodeConstant.CharacterFilter))
+    {
+    <div class="feature-list-one padding-left padding-bottom">
+        @{
+        List<SearchFeatureViewModel> subfeatures = Model.Where(x => x.ParentSearchFeatureId == Model[i].SearchFeatureId).ToList();
+            <div class="form-group">
+                <div class="col-xs-12 nopadding switch-aside-panel">
+                    <div class="control-label">
+                        <label>@Model[i].FeatureName</label>
+                    </div>
+                    <div class="control-lg">
+                        <input type="text" id="@Model[i].FeatureCode" name="FeaturesList[@i].SearchFeatureValue" value="@Model[i].SearchFeatureValue">
+                        <span class="field-validation-valid" data-valmsg-for="@Model[i].FeatureCode" data-valmsg-replace="true" id="errorNotANumber"></span>
+                    </div>
+                    @Html.Partial("_HelpText", Model[i].HelpDescription ?? string.Empty)
+                </div>
+                <input type="hidden" id="FeaturesList[@i].FeatureName" name="FeaturesList[@i].FeatureName" value="@Model[i].FeatureName">
+                <input type="hidden" id="FeaturesList[@i].SearchFeatureId" name="FeaturesList[@i].SearchFeatureId" value="@Model[i].SearchFeatureId">
+                <input type="hidden" id="FeaturesList[@i].ControlType" name="FeaturesList[@i].ControlType" value="@Model[i].ControlType">
+                <input type="hidden" id="FeaturesList[@i].FeatureCode" name="FeaturesList[@i].FeatureCode" value="@Model[i].FeatureCode">
+            </div>
+
+            if (subfeatures.Count > 0)
+            {
+            foreach (SearchFeatureViewModel sub in subfeatures)
+            {
+            i++;
+            if (sub.ControlType == "Yes/No")
+            {
+            <div class="form-group">
+                <div class="col-xs-12 nopadding switch-aside-panel">
+                    <div class="control-label">
+                        <label>@Model[i].FeatureName</label>
+                    </div>
+                    <div class="switch-field control-yes-no">
+                        <input @(Model[i].SearchFeatureValue == "True" ? "checked='checked'" : "" ) id="@(Model[i].FeatureName + "_Left")" name="FeaturesList[@i].SearchFeatureValue" value="True" type="radio"> <label for="@(@Model[i].FeatureName + "_Left")">Yes</label>
+                        <input @(Model[i].SearchFeatureValue == null || Model[i].SearchFeatureValue == "False" ? "checked='checked'" : "" ) id="@(Model[i].FeatureName + "_Right")" name="FeaturesList[@i].SearchFeatureValue" value="False" type="radio"> <label for="@(@Model[i].FeatureName + "_Right")">No</label>
+                    </div>
+                    @Html.Partial("_HelpText", Model[i].HelpDescription ?? string.Empty)
+                    <input type="hidden" id="FeaturesList[@i].FeatureName" name="FeaturesList[@i].FeatureName" value="@Model[i].SearchFeatureValue">
+                    <input type="hidden" id="FeaturesList[@i].SearchFeatureId" name="FeaturesList[@i].SearchFeatureId" value="@Model[i].SearchFeatureId">
+                    <input type="hidden" id="FeaturesList[@i].ControlType" name="FeaturesList[@i].ControlType" value="@Model[i].ControlType">
+                    <input type="hidden" id="FeaturesList[@i].FeatureCode" name="FeaturesList[@i].FeatureCode" value="@Model[i].FeatureCode">
+                </div>
+            </div>
+            }
+            else
+            {  <div class="form-group">
+                <div class="col-xs-12 nopadding switch-aside-panel">
+                    <div class="control-label">
+                        <label data-test-selector="lbl@(Model[i].FeatureName.Replace(" ",""))">@Model[i].FeatureName</label>
+                    </div>
+                    <div class="control-lg">
+                        <input type="text" id="@Model[i].FeatureName" name="FeaturesList[@i].SearchFeatureValue" value="@Model[i].SearchFeatureValue" data-test-selector="txt@(Model[i].FeatureName.Replace(" ",""))">
+                    </div>
+                    @Html.Partial("_HelpText", Model[i].HelpDescription ?? string.Empty)
+                </div>
+                <input type="hidden" id="FeaturesList[@i].FeatureName" name="FeaturesList[@i].FeatureName" value="@Model[i].FeatureName">
+                <input type="hidden" id="FeaturesList[@i].SearchFeatureId" name="FeaturesList[@i].SearchFeatureId" value="@Model[i].SearchFeatureId">
+                <input type="hidden" id="FeaturesList[@i].ControlType" name="FeaturesList[@i].ControlType" value="@Model[i].ControlType">
+                <input type="hidden" id="FeaturesList[@i].FeatureCode" name="FeaturesList[@i].FeatureCode" value="@Model[i].FeatureCode">
+            </div>
+            }
+            }
+            }
+            }
+    </div>
+    }
+    }
+    <script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover', html: true });
+    });
+    </script>

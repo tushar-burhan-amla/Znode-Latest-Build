@@ -1,0 +1,1367 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7CD4C022-8014-4CD8-AF01-C9B840940B49}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Znode.Admin.Core</RootNamespace>
+    <AssemblyName>Znode.Admin.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <WebGreaseLibPath>..\..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0618</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Int|AnyCPU'">
+    <OutputPath>bin\Int\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'loadtest|AnyCPU'">
+    <OutputPath>bin\loadtest\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'automation|AnyCPU'">
+    <OutputPath>bin\automation\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'B2B|AnyCPU'">
+    <OutputPath>bin\B2B\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LB|AnyCPU'">
+    <OutputPath>bin\LB\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac, Version=4.0.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.4.0.1\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.Mvc5.4.0.1\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Azure.Core, Version=1.19.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Azure.Core.1.19.0\lib\net461\Azure.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Azure.Storage.Blobs, Version=12.10.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Azure.Storage.Blobs.12.10.0\lib\netstandard2.0\Azure.Storage.Blobs.dll</HintPath>
+    </Reference>
+    <Reference Include="Azure.Storage.Common, Version=12.9.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Azure.Storage.Common.12.9.0\lib\netstandard2.0\Azure.Storage.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Elasticsearch.Net, Version=7.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Elasticsearch.Net.7.16.0\lib\net461\Elasticsearch.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="GenericParsing, Version=1.1.5.29274, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GenericParser.1.1.5\lib\net20\GenericParsing.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageProcessor, Version=2.9.1.225, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ImageProcessor.2.9.1\lib\net452\ImageProcessor.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageProcessor.Plugins.WebP, Version=1.3.0.152, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ImageProcessor.Plugins.WebP.1.3.0\lib\net452\ImageProcessor.Plugins.WebP.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.3\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.Owin.2.2.3\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.AsyncInterfaces.1.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.5.0.5\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.4.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.4.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.Cookies.4.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.OAuth.4.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.PowerBI.Api, Version=2.0.12.18114, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.PowerBI.Api.2.0.12\lib\portable-net45+win+wpa81+MonoAndroid10+MonoTouch10+xamarinios10+xamarinmac20\Microsoft.PowerBI.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Rest.ClientRuntime, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Rest.ClientRuntime.2.0.1\lib\net45\Microsoft.Rest.ClientRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Mvc, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Mvc2Futures.2.0.50217.0\lib\Microsoft.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MongoDB.Bson.2.10.2\lib\net452\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Libmongocrypt, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MongoDB.Libmongocrypt.1.0.0\lib\net452\MongoDB.Libmongocrypt.dll</HintPath>
+    </Reference>
+    <Reference Include="MvcCheckBoxList, Version=1.4.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvcCheckBoxList.1.4.5\lib\net45\MvcCheckBoxList.dll</HintPath>
+    </Reference>
+    <Reference Include="MvcReportViewer, Version=0.8.5816.27247, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvcReportViewer.0.8.3\lib\net45\MvcReportViewer.dll</HintPath>
+    </Reference>
+    <Reference Include="MvcSiteMapProvider, Version=4.6.22.0, Culture=neutral, PublicKeyToken=1923abe4657913cc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvcSiteMapProvider.MVC5.Core.4.6.22\lib\net45\MvcSiteMapProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="NCrontab, Version=3.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NCrontab.3.3.1\lib\net35\NCrontab.dll</HintPath>
+    </Reference>
+    <Reference Include="Nest, Version=7.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NEST.7.16.0\lib\net461\Nest.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NReco.PdfGenerator, Version=1.1.15.0, Culture=neutral, PublicKeyToken=231663d50a41b451, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NReco.PdfGenerator.1.1.15\lib\net20\NReco.PdfGenerator.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.NonGeneric, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.NonGeneric.4.0.0\lib\net46\System.Collections.NonGeneric.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Specialized, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Specialized.4.0.0\lib\net46\System.Collections.Specialized.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.ComponentModel.Primitives, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ComponentModel.Primitives.4.0.0\lib\net46\System.ComponentModel.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.TypeConverter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ComponentModel.TypeConverter.4.0.0\lib\net46\System.ComponentModel.TypeConverter.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Diagnostics.DiagnosticSource.5.0.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Common, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Drawing.Common.7.0.0\lib\net462\System.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Globalization.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Globalization.Extensions.4.0.0\lib\net46\System.Globalization.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory.Data, Version=1.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Memory.Data.1.0.2\lib\net461\System.Memory.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.TypeExtensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reflection.TypeExtensions.4.0.0\lib\net46\System.Reflection.TypeExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Text.Json.4.6.0\lib\net461\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc.Extensions, Version=1.0.9.0, Culture=neutral, PublicKeyToken=17e35335fc9f8fc8, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Web.Mvc.Extensions.Mvc.4.1.0.9\lib\net40\System.Web.Mvc.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Znode.Libraries.Framework.Business.9.7.5\lib\net48\Znode.Libraries.Framework.Business.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Agents\Agents\Account\AccessPermissionAgent.cs" />
+    <Compile Include="Agents\Agents\Account\AccountAgent.cs" />
+    <Compile Include="Agents\Agents\Account\AccountQuoteAgent.cs" />
+    <Compile Include="Agents\Agents\Account\ProfileAgent.cs" />
+    <Compile Include="Agents\Agents\BaseAgent.cs" />
+    <Compile Include="Agents\Agents\CaseRequest\CaseRequestAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\BlogNewsAgent\BlogNewsAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\ContentAgent\ContentAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\CustomerReviewAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\EmailTemplateAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\ManageMessageAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\RecommendationAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\SEOSettingAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\SliderAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\TemplateAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\ThemeAgent\ThemeAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\UrlRedirectAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\WebSiteAgent\WebSiteAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\Container\ContentContainerAgent.cs" />
+    <Compile Include="Agents\Agents\CMS\Container\ContainerTemplateAgent.cs" />
+    <Compile Include="Agents\Agents\Customer\CustomerAgent.cs" />
+    <Compile Include="Agents\Agents\Dashboard\DashboardAgent.cs" />
+    <Compile Include="Agents\Agents\DemoAgent.cs" />
+    <Compile Include="Agents\Agents\Diagnostics\DiagnosticsAgent.cs" />
+    <Compile Include="Agents\Agents\DomainAgent.cs" />
+    <Compile Include="Agents\Agents\DynamicContent\DynamicContentAgent.cs" />
+    <Compile Include="Agents\Agents\Ecommerce\EcommerceCatalogAgent.cs" />
+    <Compile Include="Agents\Agents\ERPConfigurator\ERPConfiguratorAgent.cs" />
+    <Compile Include="Agents\Agents\ERPConfigurator\ERPConnectorAgent.cs" />
+    <Compile Include="Agents\Agents\ERPConfigurator\ERPTaskSchedulerAgent.cs" />
+    <Compile Include="Agents\Agents\ERPConfigurator\TouchPointConfigurationAgent.cs" />
+    <Compile Include="Agents\Agents\Export\ExportAgent.cs" />
+    <Compile Include="Agents\Agents\FormBuilder\FormBuilderAgent.cs" />
+    <Compile Include="Agents\Agents\FormSubmission\FormSubmissionAgent.cs" />
+    <Compile Include="Agents\Agents\GiftCard\GiftCardAgent.cs" />
+    <Compile Include="Agents\Agents\GlobalAttribute\GlobalAttributeAgent.cs" />
+    <Compile Include="Agents\Agents\GlobalAttribute\GlobalAttributeEntityAgent.cs" />
+    <Compile Include="Agents\Agents\GlobalAttribute\GlobalAttributeFamilyAgent.cs" />
+    <Compile Include="Agents\Agents\GlobalAttribute\GlobalAttributeGroupAgent.cs" />
+    <Compile Include="Agents\Agents\GlobalSetting\CityAgent.cs" />
+    <Compile Include="Agents\Agents\GlobalSetting\CountryAgent.cs" />
+    <Compile Include="Agents\Agents\GlobalSetting\CurrencyAgent.cs" />
+    <Compile Include="Agents\Agents\GlobalSetting\GeneralSettingAgent.cs" />
+    <Compile Include="Agents\Agents\GlobalSetting\LocaleAgent.cs" />
+    <Compile Include="Agents\Agents\GlobalSetting\StateAgent.cs" />
+    <Compile Include="Agents\Agents\GlobalSetting\UrlManagementAgent.cs" />
+    <Compile Include="Agents\Agents\Helper\HelperAgent.cs" />
+    <Compile Include="Agents\Agents\Highlight\HighlightAgent.cs" />
+    <Compile Include="Agents\Agents\Import\ImportAgent.cs" />
+    <Compile Include="Agents\Agents\Inventory\InventoryAgent.cs" />
+    <Compile Include="Agents\Agents\LicenseAgent.cs" />
+    <Compile Include="Agents\Agents\LogMessage\LogMessageAgent.cs" />
+    <Compile Include="Agents\Agents\Maintenance\MaintenanceAgent.cs" />
+    <Compile Include="Agents\Agents\MediaManager\AttributesAgent\AttributeFamilyAgent.cs" />
+    <Compile Include="Agents\Agents\MediaManager\AttributesAgent\AttributeGroupAgent.cs" />
+    <Compile Include="Agents\Agents\MediaManager\AttributesAgent\AttributesAgent.cs" />
+    <Compile Include="Agents\Agents\MediaManager\MediaManagerAgent\MediaConfigurationAgent.cs" />
+    <Compile Include="Agents\Agents\MediaManager\MediaManagerAgent\MediaManagerAgent.cs" />
+    <Compile Include="Agents\Agents\NavigationAgent.cs" />
+    <Compile Include="Agents\Agents\OMS\CartAgent.cs" />
+    <Compile Include="Agents\Agents\OMS\OrderAgent.cs" />
+    <Compile Include="Agents\Agents\OMS\QuoteAgent.cs" />
+    <Compile Include="Agents\Agents\OMS\RMAConfigurationAgent.cs" />
+    <Compile Include="Agents\Agents\OMS\RMARequestAgent.cs" />
+    <Compile Include="Agents\Agents\Payment\PaymentAgent.cs" />
+    <Compile Include="Agents\Agents\PIM\AddonGroupAgent\AddonGroupAgent.cs" />
+    <Compile Include="Agents\Agents\PIM\BrandAgent\BrandAgent.cs" />
+    <Compile Include="Agents\Agents\PIM\CatalogAgent\CatalogAgent.cs" />
+    <Compile Include="Agents\Agents\PIM\CategoryAgent\CategoryAgent.cs" />
+    <Compile Include="Agents\Agents\PIM\PIMAttributesAgent\PIMAttributeAgent.cs" />
+    <Compile Include="Agents\Agents\PIM\PIMAttributesAgent\PIMAttributeFamilyAgent.cs" />
+    <Compile Include="Agents\Agents\PIM\PIMAttributesAgent\PIMAttributeGroupAgent.cs" />
+    <Compile Include="Agents\Agents\PIM\ProductAgent\ProductAgent.cs" />
+    <Compile Include="Agents\Agents\PIM\VendorAgent\VendorAgent.cs" />
+    <Compile Include="Agents\Agents\PowerBI\PowerBIAgent.cs" />
+    <Compile Include="Agents\Agents\Price\PriceAgent.cs" />
+    <Compile Include="Agents\Agents\ProductFeed\ProductFeedAgent.cs" />
+    <Compile Include="Agents\Agents\Promotion\PromotionAgent.cs" />
+    <Compile Include="Agents\Agents\ProviderEngineAgent.cs" />
+    <Compile Include="Agents\Agents\PublishHistory\PublishHistoryAgent.cs" />
+    <Compile Include="Agents\Agents\Reports\DevExpressReportAgent.cs" />
+    <Compile Include="Agents\Agents\Reports\ReportAgent.cs" />
+    <Compile Include="Agents\Agents\RMA\RMAReturnAgent.cs" />
+    <Compile Include="Agents\Agents\RolesAndPermissions\MenuAgent.cs" />
+    <Compile Include="Agents\Agents\RolesAndPermissions\RoleAgent.cs" />
+    <Compile Include="Agents\Agents\SearchConfigurationAgent.cs" />
+    <Compile Include="Agents\Agents\Search\SearchBoostAndBuryAgent.cs" />
+    <Compile Include="Agents\Agents\Search\SearchProfileAgent.cs" />
+    <Compile Include="Agents\Agents\Search\SearchReportAgent.cs" />
+    <Compile Include="Agents\Agents\ServerValidation\ServerValidationAgent.cs" />
+    <Compile Include="Agents\Agents\Shipping\ShippingAgent.cs" />
+    <Compile Include="Agents\Agents\StoreExperience\StoreExperienceAgent.cs" />
+    <Compile Include="Agents\Agents\Store\KlaviyoAgent.cs" />
+    <Compile Include="Agents\Agents\Store\PortalCountryAgent.cs" />
+    <Compile Include="Agents\Agents\Store\PortalProfileAgent.cs" />
+    <Compile Include="Agents\Agents\Store\SalesRepAgent.cs" />
+    <Compile Include="Agents\Agents\Store\SMSAgent.cs" />
+    <Compile Include="Agents\Agents\Store\SMTPAgent.cs" />
+    <Compile Include="Agents\Agents\Store\StoreAgent.cs" />
+    <Compile Include="Agents\Agents\Store\StoreLocatorAgent.cs" />
+    <Compile Include="Agents\Agents\Store\StoreUnitAgent.cs" />
+    <Compile Include="Agents\Agents\Taxes\TaxClassAgent.cs" />
+    <Compile Include="Agents\Agents\Typeahead\TypeaheadAgent.cs" />
+    <Compile Include="Agents\Agents\User\UserAgent.cs" />
+    <Compile Include="Agents\Agents\Warehouse\WarehouseAgent.cs" />
+    <Compile Include="Agents\Agents\WebGrid\ApplicationSettingsAgent.cs" />
+    <Compile Include="Agents\IAgents\IAccount\IAccessPermissionAgent.cs" />
+    <Compile Include="Agents\IAgents\IAccount\IAccountAgent.cs" />
+    <Compile Include="Agents\IAgents\IAccount\IAccountQuoteAgent.cs" />
+    <Compile Include="Agents\IAgents\IAccount\IProfileAgent.cs" />
+    <Compile Include="Agents\IAgents\ICaseRequest\ICaseRequestAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\IBlogNewsAgent\IBlogNewsAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\IContentAgent\IContentAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\ICustomerReviewAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\IEmailTemplateAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\IManageMessageAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\IRecommendationAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\ISEOSettingAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\ISliderAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\ITemplateAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\IThemeAgent\IThemeAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\IUrlRedirectAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\IWebsiteAgent\IWebSiteAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\IContainer\IContentContainerAgent.cs" />
+    <Compile Include="Agents\IAgents\ICMS\IContainer\IContainerTemplateAgent.cs" />
+    <Compile Include="Agents\IAgents\ICustomer\ICustomerAgent.cs" />
+    <Compile Include="Agents\IAgents\ICustomHeaders.cs" />
+    <Compile Include="Agents\IAgents\IDashboard\IDashboardAgent.cs" />
+    <Compile Include="Agents\IAgents\IDemoAgent.cs" />
+    <Compile Include="Agents\IAgents\IDiagnostics\IDiagnosticsAgent.cs" />
+    <Compile Include="Agents\IAgents\IDomainAgent.cs" />
+    <Compile Include="Agents\IAgents\IDynamicContent\IDynamicContentAgent.cs" />
+    <Compile Include="Agents\IAgents\IEcommerce\IEcommerceCatalogAgent.cs" />
+    <Compile Include="Agents\IAgents\IERPConfigurator\IERPConfiguratorAgent.cs" />
+    <Compile Include="Agents\IAgents\IERPConfigurator\IERPConnectorAgent.cs" />
+    <Compile Include="Agents\IAgents\IERPConfigurator\IERPTaskSchedulerAgent.cs" />
+    <Compile Include="Agents\IAgents\IERPConfigurator\ITouchPointConfigurationAgent.cs" />
+    <Compile Include="Agents\IAgents\IExport\IExportAgent.cs" />
+    <Compile Include="Agents\IAgents\IFormBuilder\IFormBuilderAgent.cs" />
+    <Compile Include="Agents\IAgents\IFormSubmission\IFormSubmissionAgent.cs" />
+    <Compile Include="Agents\IAgents\IGiftCard\IGiftCardAgent.cs" />
+    <Compile Include="Agents\IAgents\IGlobalAttribute\IGlobalAttributeAgent.cs" />
+    <Compile Include="Agents\IAgents\IGlobalAttribute\IGlobalAttributeEntityAgent.cs" />
+    <Compile Include="Agents\IAgents\IGlobalAttribute\IGlobalAttributeFamilyAgent.cs" />
+    <Compile Include="Agents\IAgents\IGlobalAttribute\IGlobalAttributeGroupAgent.cs" />
+    <Compile Include="Agents\IAgents\IGlobalSetting\ICityAgent.cs" />
+    <Compile Include="Agents\IAgents\IGlobalSetting\ICountryAgent.cs" />
+    <Compile Include="Agents\IAgents\IGlobalSetting\ICurrencyAgent.cs" />
+    <Compile Include="Agents\IAgents\IGlobalSetting\IGeneralSettingAgent.cs" />
+    <Compile Include="Agents\IAgents\IGlobalSetting\ILocaleAgent.cs" />
+    <Compile Include="Agents\IAgents\IGlobalSetting\IStateAgent.cs" />
+    <Compile Include="Agents\IAgents\IGlobalSetting\IUrlManagementAgent.cs" />
+    <Compile Include="Agents\IAgents\IHelper\IHelperAgent.cs" />
+    <Compile Include="Agents\IAgents\IHighlight\IHighlightAgent.cs" />
+    <Compile Include="Agents\IAgents\IImport\IImportAgent.cs" />
+    <Compile Include="Agents\IAgents\IInventory\IInventoryAgent.cs" />
+    <Compile Include="Agents\IAgents\ILicenseAgent.cs" />
+    <Compile Include="Agents\IAgents\ILogMessage\ILogMessageAgent.cs" />
+    <Compile Include="Agents\IAgents\IMaintenance\IMaintenanceAgent.cs" />
+    <Compile Include="Agents\IAgents\IMediaManager\IAttributesAgent\IAttributeFamilyAgent.cs" />
+    <Compile Include="Agents\IAgents\IMediaManager\IAttributesAgent\IAttributeGroupAgent.cs" />
+    <Compile Include="Agents\IAgents\IMediaManager\IAttributesAgent\IAttributesAgent.cs" />
+    <Compile Include="Agents\IAgents\IMediaManager\IMediaManagerAgent\IMediaConfigurationAgent.cs" />
+    <Compile Include="Agents\IAgents\IMediaManager\IMediaManagerAgent\IMediaManagerAgent.cs" />
+    <Compile Include="Agents\IAgents\INavigationAgent.cs" />
+    <Compile Include="Agents\IAgents\IOMS\ICartAgent.cs" />
+    <Compile Include="Agents\IAgents\IOMS\IOrderAgent.cs" />
+    <Compile Include="Agents\IAgents\IOMS\IQuoteAgent.cs" />
+    <Compile Include="Agents\IAgents\IOMS\IRMAConfigurationAgent.cs" />
+    <Compile Include="Agents\IAgents\IOMS\IRMARequestAgent.cs" />
+    <Compile Include="Agents\IAgents\IPayment\IPaymentAgent.cs" />
+    <Compile Include="Agents\IAgents\IPIM\IAddonGroupAgent\IAddonGroupAgent.cs" />
+    <Compile Include="Agents\IAgents\IPIM\IBrandAgent\IBrandAgent.cs" />
+    <Compile Include="Agents\IAgents\IPIM\ICatalogAgent\ICatalogAgent.cs" />
+    <Compile Include="Agents\IAgents\IPIM\ICategoryAgent\ICategoryAgent.cs" />
+    <Compile Include="Agents\IAgents\IPIM\IPIMAttributesAgents\IPIMAttributeAgent.cs" />
+    <Compile Include="Agents\IAgents\IPIM\IPIMAttributesAgents\IPIMAttributeFamilyAgent.cs" />
+    <Compile Include="Agents\IAgents\IPIM\IPIMAttributesAgents\IPIMAttributeGroupAgent.cs" />
+    <Compile Include="Agents\IAgents\IPIM\IProductAgent\IProductAgent.cs" />
+    <Compile Include="Agents\IAgents\IPIM\IVendorAgent\IVendorAgent.cs" />
+    <Compile Include="Agents\IAgents\IPowerBI\IPowerBIAgent.cs" />
+    <Compile Include="Agents\IAgents\IPrice\IPriceAgent.cs" />
+    <Compile Include="Agents\IAgents\IProductFeed\IProductFeedAgent.cs" />
+    <Compile Include="Agents\IAgents\IPromotion\IPromotionAgent.cs" />
+    <Compile Include="Agents\IAgents\IProviderEngineAgent.cs" />
+    <Compile Include="Agents\IAgents\IPublishHistory\IPublishHistoryAgent.cs" />
+    <Compile Include="Agents\IAgents\IReports\IDevExpressReportAgent.cs" />
+    <Compile Include="Agents\IAgents\IReports\IReportAgent.cs" />
+    <Compile Include="Agents\IAgents\IRMA\IRMAReturnAgent.cs" />
+    <Compile Include="Agents\IAgents\IRolesAndPermissions\IMenuAgent.cs" />
+    <Compile Include="Agents\IAgents\IRolesAndPermissions\IRoleAgent.cs" />
+    <Compile Include="Agents\IAgents\ISearchConfigurationAgent.cs" />
+    <Compile Include="Agents\IAgents\ISearch\ISearchBoostAndBuryAgent.cs" />
+    <Compile Include="Agents\IAgents\ISearch\ISearchProfileAgent.cs" />
+    <Compile Include="Agents\IAgents\ISearch\ISearchReportAgent.cs" />
+    <Compile Include="Agents\IAgents\IServerValidation\IServerValidationAgent.cs" />
+    <Compile Include="Agents\IAgents\IShipping\IShippingAgent.cs" />
+    <Compile Include="Agents\IAgents\IStoreExperience\IStoreExperienceAgent.cs" />
+    <Compile Include="Agents\IAgents\IStore\IKlaviyoAgent.cs" />
+    <Compile Include="Agents\IAgents\IStore\IPortalCountryAgent.cs" />
+    <Compile Include="Agents\IAgents\IStore\IPortalProfileAgent.cs" />
+    <Compile Include="Agents\IAgents\IStore\ISalesRepAgent.cs" />
+    <Compile Include="Agents\IAgents\IStore\ISMSAgent.cs" />
+    <Compile Include="Agents\IAgents\IStore\ISMTPAgent.cs" />
+    <Compile Include="Agents\IAgents\IStore\IStoreAgent.cs" />
+    <Compile Include="Agents\IAgents\IStore\IStoreLocatorAgent.cs" />
+    <Compile Include="Agents\IAgents\IStore\IStoreUnitAgent.cs" />
+    <Compile Include="Agents\IAgents\ITaxes\ITaxClassAgent.cs" />
+    <Compile Include="Agents\IAgents\ITypeahead\ITypeaheadAgent.cs" />
+    <Compile Include="Agents\IAgents\IUser\IUserAgent.cs" />
+    <Compile Include="Agents\IAgents\IWarehouse\IWarehouseAgent.cs" />
+    <Compile Include="Agents\IAgents\IWebGrid\IApplicationSettingsAgent.cs" />
+    <Compile Include="App_Start\AutoMapperConfig.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\StartUpTasks.cs" />
+    <Compile Include="Areas\Diagnostics\Controllers\DiagnosticsController.cs" />
+    <Compile Include="Areas\Diagnostics\Controllers\HangfireController.cs" />
+    <Compile Include="Areas\Diagnostics\Controllers\MaintenanceController.cs" />
+    <Compile Include="Areas\Diagnostics\DiagnosticsAreaRegistration.cs" />
+    <Compile Include="Areas\Diagnostics\Models\DiagnosticsViewModel.cs" />
+    <Compile Include="Areas\Helpers\AttributeValidationHelpers\CreateControlHelper.cs" />
+    <Compile Include="Areas\Helpers\HelperModel\AttributeInputValidationModel.cs" />
+    <Compile Include="Areas\Helpers\HelperModel\AttributeTypeModel.cs" />
+    <Compile Include="Areas\Helpers\HelperModel\AttributeValidationRuleModel.cs" />
+    <Compile Include="Areas\Helpers\HelperModel\DefaultValueListModel.cs" />
+    <Compile Include="Areas\Helpers\HelperModel\DefaultValueModel.cs" />
+    <Compile Include="Areas\Helpers\HelperModel\LocaleModel.cs" />
+    <Compile Include="Areas\Helpers\HelperModel\ValidationControlModel.cs" />
+    <Compile Include="Areas\MediaManager\Controllers\Attributes\AttributeFamilyController.cs" />
+    <Compile Include="Areas\MediaManager\Controllers\Attributes\AttributeGroupController.cs" />
+    <Compile Include="Areas\MediaManager\Controllers\Attributes\AttributesController.cs" />
+    <Compile Include="Areas\MediaManager\Controllers\MediaConfigurationController.cs" />
+    <Compile Include="Areas\MediaManager\Controllers\MediaManagerController.cs" />
+    <Compile Include="Areas\MediaManager\MediaAreaRegistration.cs" />
+    <Compile Include="Areas\MediaManager\Models\BaseAttributeValidationControlModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeFamily\AttributeFamilyListViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeFamily\AttributeFamilyViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeFamily\EditFamilyLocaleViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeFamily\FamilyGroupAttributeListViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeFamily\FamilyGroupAttributeViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeFamily\FamilyLocaleListViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeFamily\FamilyLocaleViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeFamily\ParentAttributeFamilyViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeGroupListViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeGroupLocaleViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeGroupMapperListViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeGroupMapperViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributeGroupViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributesListViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\AttributesViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\LocaleListViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\LocaleViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\MediaAttributeValuesListViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\MediaAttributeValuesViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\MediaConfigurationViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\ExportViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\MediaExportViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\MediaManagerFolderViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\MediaManagerListViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\MediaManagerTreeViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\MediaManagerViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\PopupViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\TreeResponseMessage.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\TreeViewModel.cs" />
+    <Compile Include="Areas\MediaManager\ViewModels\ValidationDetailsModel.cs" />
+    <Compile Include="Areas\PIM\Controllers\AddonGroup\AddonGroupController.cs" />
+    <Compile Include="Areas\PIM\Controllers\Attributes\CategoryAttributeController.cs" />
+    <Compile Include="Areas\PIM\Controllers\Attributes\CategoryAttributeFamilyController.cs" />
+    <Compile Include="Areas\PIM\Controllers\Attributes\CategoryAttributeGroupController.cs" />
+    <Compile Include="Areas\PIM\Controllers\Attributes\ProductAttributeController.cs" />
+    <Compile Include="Areas\PIM\Controllers\Attributes\ProductAttributeFamilyController.cs" />
+    <Compile Include="Areas\PIM\Controllers\Attributes\ProductAttributeGroupController.cs" />
+    <Compile Include="Areas\PIM\Controllers\Brand\BrandController.cs" />
+    <Compile Include="Areas\PIM\Controllers\Catalog\CatalogController.cs" />
+    <Compile Include="Areas\PIM\Controllers\Category\CategoryController.cs" />
+    <Compile Include="Areas\PIM\Controllers\Product\ProductController.cs" />
+    <Compile Include="Areas\PIM\Controllers\Vendor\VendorController.cs" />
+    <Compile Include="Areas\PIM\PIMAreaRegistration.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AddonDetailViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AddonGroupListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AddonGroupLocaleListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AddonGroupLocaleViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AddonGroupProductListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AddonGroupProductViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AddonGroupViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AddOnProductDetailListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AddonProductDetailViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AddonProductListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AddOnProductViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AssignedLinkProductsModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AssociateAddonModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\AssociatedProductViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\Brand\BrandListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\Brand\BrandViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\Brand\PortalBrandDetailViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\Brand\StoreDetailsViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\Catalog\CatalogAssociateCategoryListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\Catalog\CatalogAssociateCategoryViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\Catalog\CatalogAssociationViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\Catalog\CatalogListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\Catalog\CatalogViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\Catalog\CategoryTreeViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\CategoryListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\CategoryProductsListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\CategoryProductViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\CategoryViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\CustomFieldListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\CustomFieldLocaleListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\CustomFieldLocaleViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\CustomFieldViewModel.cs" />
+    <Compile Include="Areas\Search\Controllers\SearchReportController.cs" />
+    <Compile Include="Areas\Search\ViewModels\FieldValueViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchBoostAndBuryRuleListViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchBoostAndBuryRuleViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchReportViewModel\SearchReportListViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchReportViewModel\SearchReportViewModel.cs" />
+    <Compile Include="Controllers\CMSSearchConfigurationController.cs" />
+    <Compile Include="Controllers\CMS\ContentContainerController.cs" />
+    <Compile Include="Controllers\CMS\RecommendationController.cs" />
+    <Compile Include="Controllers\CMS\StoreExperienceController.cs" />
+    <Compile Include="Controllers\CMS\ContainerTemplateController.cs" />
+    <Compile Include="Controllers\DevExpressReport\DevExpressReportController.cs" />
+    <Compile Include="Controllers\DynamicContent\DynamicContentController.cs" />
+    <Compile Include="Controllers\Export\ExportController.cs" />
+    <Compile Include="Controllers\GlobalAttribute\GlobalAttributeFamilyController.cs" />
+    <Compile Include="Controllers\GlobalSetting\UrlManagementController.cs" />
+    <Compile Include="Controllers\LogMessage\LogMessageController.cs" />
+    <Compile Include="Controllers\RMA\RMAReturnController.cs" />
+    <Compile Include="Controllers\PowerBI\PowerBIController.cs" />
+    <Compile Include="Controllers\Store\SalesRepController.cs" />
+    <Compile Include="Controllers\Typeahead\TypeaheadController.cs" />
+    <Compile Include="Helpers\AdminViewEngine.cs" />
+    <Compile Include="Helpers\AdminHelper.cs" />
+    <Compile Include="Helpers\DateRangePickerHelper.cs" />
+    <Compile Include="Helpers\ERPTaskSchedulerHelper.cs" />
+    <Compile Include="IHelpers\IAuthenticationHelper.cs" />
+    <Compile Include="IHelpers\IDependencyHelper.cs" />
+    <Compile Include="IHelpers\IAdminHelper.cs" />
+    <Compile Include="IHelpers\IERPTaskSchedulerHelper.cs" />
+    <Compile Include="IHelpers\IPublishPopupHelper.cs" />
+    <Compile Include="Maps\DevExpressReportViewModelMap.cs" />
+    <Compile Include="Maps\GlobalAttributeFamilyViewModelMap.cs" />
+    <Compile Include="Models\ExportResponseMessageModel.cs" />
+    <Compile Include="ViewModels\Account\ParentAccountListViewModel.cs" />
+    <Compile Include="ViewModels\Account\ParentAccountViewModel.cs" />
+    <Compile Include="ViewModels\Account\SubmitQuoteViewModel.cs" />
+    <Compile Include="Models\BaseDropDownOptionsModel.cs" />
+    <Compile Include="Models\PrimaryPageActionModel.cs" />
+    <Compile Include="ViewModels\ApproverLevel\UserApproverListViewModel.cs" />
+    <Compile Include="ViewModels\ApproverLevel\UserApproverViewModel.cs" />
+    <Compile Include="Controllers\PublishHistory\PublishHistoryController.cs" />
+    <Compile Include="Helpers\PublishPopupHelper.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CmsContainerWidgetConfigurationViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSMediaWidgetConfigurationViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSSearchWidgetConfigurationViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\FormWidgetEmailConfigurationViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\RecommendationDataGenerateViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\RecommendationGeneratedDataViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\RecommendationSettingViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\Containers\ContainerVariantDataViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\Containers\ContentContainerListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\Containers\ContentContainerViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\Containers\ContainerTemplateListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\Containers\ContainerTemplateViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\Containers\ContainerVariantListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\Containers\ContainerVariantViewModel.cs" />
+    <Compile Include="ViewModels\Dashboard\DashboardItemsListViewModel.cs" />
+    <Compile Include="ViewModels\Dashboard\DashboardItemsViewModel.cs" />
+    <Compile Include="ViewModels\Diagnostics\DiagnosticListViewModel.cs" />
+    <Compile Include="ViewModels\Diagnostics\DiagnosticViewModel.cs" />
+    <Compile Include="ViewModels\DynamicContentViewModel\DynamicContentViewModel.cs" />
+    <Compile Include="ViewModels\DynamicContentViewModel\EditorFormatListViewModel.cs" />
+    <Compile Include="ViewModels\DynamicContentViewModel\EditorFormatViewModel.cs" />
+    <Compile Include="ViewModels\Export\ExportProcessLogsListViewModel.cs" />
+    <Compile Include="ViewModels\Export\ExportProcessLogsViewModel.cs" />
+    <Compile Include="ViewModels\GiftCardViewModel\VoucherHistoryListViewModel.cs" />
+    <Compile Include="ViewModels\GiftCardViewModel\VoucherHistoryViewModel.cs" />
+    <Compile Include="ViewModels\GiftCardViewModel\VouchersViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\AssociatedGroupListViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeEntity\AssignedEntityGroupListViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeEntity\AssignedEntityGroupViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeFamilyListViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeFamilyViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\CloudflareErrorViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\GlobalMediaDisplaySettingViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\PowerBISettingsViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\PublishStateMappingListViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\PublishStateMappingViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\StockNoticeSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportLogsDownloadListViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportLogsDownloadViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportManageTemplateMappingListViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportManageTemplateMappingViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel\DownloadableProductKeyListViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel\DownloadableProductKeyViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\LinkProductDetailListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\LinkProductDetailViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMAttributeDataViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMAttributeFamilyListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMAttributeFamilyViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMAttributeGroupListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMAttributeGroupMapperListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMAttributeGroupMapperViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMAttributeGroupViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMAttributeInputValidationViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMAttributeListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMAttributeValueListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMAttributeValueViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMAttributeViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMFamilyDetailsViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMFamilyGroupAttributeListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMFamilyGroupAttributeViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMFamilyLocaleListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMFamilyLocaleViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMFrontEndViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMProductAttributeValuesListModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\PIMProductAttributeValuesViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\ProductAttributeViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\ProductDetailsListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\ProductDetailsViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\ProductImageListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\ProductImageViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\ProductTypeAssociationListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\ProductTypeAssociationViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\ProductViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\UploadImageViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\Vendor\VendorListViewModel.cs" />
+    <Compile Include="Areas\PIM\ViewModels\Vendor\VendorViewModel.cs" />
+    <Compile Include="Areas\Search\Controllers\SearchController.cs" />
+    <Compile Include="Areas\Search\SearchAreaRegistration.cs" />
+    <Compile Include="Areas\Search\ViewModels\PortalSearchProfileViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchAttributesListViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchAttributesViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchFeatureViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchPortalListViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchProfileListViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchProfilePoratalViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchProfileProductViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchProfileViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchQueryTypeViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchTriggersListViewModel.cs" />
+    <Compile Include="Areas\Search\ViewModels\SearchTriggersViewModel.cs" />
+    <Compile Include="Controllers\Account\AccountController.cs" />
+    <Compile Include="Controllers\Account\QuoteController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CMS\BlogNewsController.cs" />
+    <Compile Include="Controllers\CMS\ContentController.cs" />
+    <Compile Include="Controllers\CMS\EmailTemplateController.cs" />
+    <Compile Include="Controllers\CMS\ReviewController.cs" />
+    <Compile Include="Controllers\CMS\SEOController.cs" />
+    <Compile Include="Controllers\CMS\TemplateController.cs" />
+    <Compile Include="Controllers\CMS\ThemeController.cs" />
+    <Compile Include="Controllers\CMS\WebSiteController.cs" />
+    <Compile Include="Controllers\Customer\CustomerController.cs" />
+    <Compile Include="Controllers\Dashboard\DashboardController.cs" />
+    <Compile Include="Controllers\DemoController.cs" />
+    <Compile Include="Controllers\ERPConfigurator\TouchPointConfigurationController.cs" />
+    <Compile Include="Controllers\ERPConnector\ERPConnectorController.cs" />
+    <Compile Include="Controllers\ErrorPageController.cs" />
+    <Compile Include="Controllers\FormBuilder\FormBuilderController.cs" />
+    <Compile Include="Controllers\FormSubmission\FormSubmissionController.cs" />
+    <Compile Include="Controllers\GiftCard\GiftCardController.cs" />
+    <Compile Include="Controllers\GlobalAttribute\GlobalAttributeController.cs" />
+    <Compile Include="Controllers\GlobalAttribute\GlobalAttributeGroupController.cs" />
+    <Compile Include="Controllers\GlobalSetting\CountryController.cs" />
+    <Compile Include="Controllers\GlobalSetting\CurrencyController.cs" />
+    <Compile Include="Controllers\GlobalSetting\GeneralSettingController.cs" />
+    <Compile Include="Controllers\GlobalSetting\LocaleController.cs" />
+    <Compile Include="Controllers\Highlight\HighlightController.cs" />
+    <Compile Include="Controllers\Import\ImportController.cs" />
+    <Compile Include="Controllers\Inventory\InventoryController.cs" />
+    <Compile Include="Controllers\LicenseController.cs" />
+    <Compile Include="Controllers\MyReports\MyReportsController.cs" />
+    <Compile Include="Controllers\OMS\OrderController.cs" />
+    <Compile Include="Controllers\OMS\RMAConfigurationController.cs" />
+    <Compile Include="Controllers\OMS\RMAManagerController.cs" />
+    <Compile Include="Controllers\Payment\PaymentController.cs" />
+    <Compile Include="Controllers\Price\PriceController.cs" />
+    <Compile Include="Controllers\ProductFeed\ProductFeedController.cs" />
+    <Compile Include="Controllers\Profiles\ProfilesController.cs" />
+    <Compile Include="Controllers\Promotion\PromotionController.cs" />
+    <Compile Include="Controllers\ProviderEngine\ProviderEngineController.cs" />
+    <Compile Include="Controllers\RolesAndPermissions\RoleAndAccessRightController.cs" />
+    <Compile Include="Controllers\SearchConfigurationController.cs" />
+    <Compile Include="Controllers\ServiceRequest\ServiceRequestController.cs" />
+    <Compile Include="Controllers\Shippings\ShippingsController.cs" />
+    <Compile Include="Controllers\Store\StoreController.cs" />
+    <Compile Include="Controllers\Store\StoreLocatorController.cs" />
+    <Compile Include="Controllers\TaxClass\TaxClassController.cs" />
+    <Compile Include="Controllers\User\UserController.cs" />
+    <Compile Include="Controllers\Warehouse\WarehouseController.cs" />
+    <Compile Include="Controllers\XMLGenerator\XMLGeneratorController.cs" />
+    <Compile Include="Extensions\AttributeExtention.cs" />
+    <Compile Include="Extensions\Typeahead.cs" />
+    <Compile Include="Extensions\DateFormatExtension.cs" />
+    <Compile Include="Extensions\HtmlHelpersExtension.cs" />
+    <Compile Include="Extensions\ModelStateExtension.cs" />
+    <Compile Include="Extensions\ObjectExtension.cs" />
+    <Compile Include="Extensions\TranslatorExtension.cs" />
+    <Compile Include="Helpers\AdminConstants.cs" />
+    <Compile Include="Helpers\AdminEnum.cs" />
+    <Compile Include="Helpers\AuthenticationHelper.cs" />
+    <Compile Include="Helpers\ChildMenuHelper.cs" />
+    <Compile Include="Helpers\ControlsModelBinder.cs" />
+    <Compile Include="Helpers\DefaultSettingHelper.cs" />
+    <Compile Include="Helpers\DependencyHelper.cs" />
+    <Compile Include="Helpers\DependencyRegistration.cs" />
+    <Compile Include="Helpers\DownloadHelper.cs" />
+    <Compile Include="Helpers\Encryption.cs" />
+    <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\HelperMethods.cs" />
+    <Compile Include="Helpers\PermissionManagerHelper.cs" />
+    <Compile Include="Helpers\SessionProxyHelper.cs" />
+    <Compile Include="Helpers\WebGridHelpers\DynamicGridConstants.cs" />
+    <Compile Include="Helpers\WebGridHelpers\FilterHelpers.cs" />
+    <Compile Include="Helpers\WebGridHelpers\PageDataBinder.cs" />
+    <Compile Include="Helpers\WebGridHelpers\PagingHelper.cs" />
+    <Compile Include="Helpers\WidgetHelper.cs" />
+    <Compile Include="Maps\AccountViewModelMap.cs" />
+    <Compile Include="Maps\AddMediaToFolderModelMap.cs" />
+    <Compile Include="Maps\AddPageToFolderModelMap.cs" />
+    <Compile Include="Maps\GlobalAttributeEntityViewModelMap.cs" />
+    <Compile Include="Maps\AttributeFamilyViewModelMap.cs" />
+    <Compile Include="Maps\AttributeGroupMapperViewModelMap.cs" />
+    <Compile Include="Maps\AttributeGroupViewModelMap.cs" />
+    <Compile Include="Maps\AttributesModelMap.cs" />
+    <Compile Include="Maps\AtttributeGroupLocaleModelMap.cs" />
+    <Compile Include="Maps\CategoryViewModelMap.cs" />
+    <Compile Include="Maps\ContentPageViewModelMap.cs" />
+    <Compile Include="Maps\CustomerReviewViewModelMap.cs" />
+    <Compile Include="Maps\CustomerViewModelMap.cs" />
+    <Compile Include="Maps\DefaultGlobalConfigViewModelMap.cs" />
+    <Compile Include="Maps\DynamicReportViewModelMap.cs" />
+    <Compile Include="Maps\EcommerceCatalogMap.cs" />
+    <Compile Include="Maps\ERPConfiguratorViewModelMap.cs" />
+    <Compile Include="Maps\GeneralSettingMap.cs" />
+    <Compile Include="Maps\GlobalAttributeGroupViewModelMap.cs" />
+    <Compile Include="Maps\GlobalAttributeModelMap.cs" />
+    <Compile Include="Maps\GlobalAttributeViewModelMap.cs" />
+    <Compile Include="Maps\ImportViewModelMap.cs" />
+    <Compile Include="Maps\InventoryViewModelMap.cs" />
+    <Compile Include="Maps\IssuedGiftCardViewModelMap.cs" />
+    <Compile Include="Maps\LocaleModelMap.cs" />
+    <Compile Include="Maps\MediaAttributeValuesViewModelMap.cs" />
+    <Compile Include="Maps\MediaManagerModelMap.cs" />
+    <Compile Include="Maps\MenuViewModelMap.cs" />
+    <Compile Include="Maps\NavigationViewModelMap.cs" />
+    <Compile Include="Maps\OrderViewModelMap.cs" />
+    <Compile Include="Maps\PaymentViewModelMap.cs" />
+    <Compile Include="Maps\PIMAttributeFamilyViewModelMap.cs" />
+    <Compile Include="Maps\PIMAttributeGroupViewModelMap.cs" />
+    <Compile Include="Maps\PIMAttributeViewModelMap.cs" />
+    <Compile Include="Maps\PIMCategoryViewModelMap.cs" />
+    <Compile Include="Maps\PortalProfileViewModelMap.cs" />
+    <Compile Include="Maps\PortalUnitViewModelMap.cs" />
+    <Compile Include="Maps\PriceViewModelMap.cs" />
+    <Compile Include="Maps\ProductFeedViewModelMap.cs" />
+    <Compile Include="Maps\ProductViewModelMap.cs" />
+    <Compile Include="Maps\ProviderEngineViewModelMap.cs" />
+    <Compile Include="Maps\RMARequestViewModelMap.cs" />
+    <Compile Include="Maps\RoleViewModelMap.cs" />
+    <Compile Include="Maps\ServerValidateViewModelMap.cs" />
+    <Compile Include="Maps\StoreViewModelMap.cs" />
+    <Compile Include="Maps\ThemeViewModelMap.cs" />
+    <Compile Include="Maps\UserViewModelMap.cs" />
+    <Compile Include="Maps\XmlGeneratorModelMap.cs" />
+    <Compile Include="Models\AjaxHeadersModel.cs" />
+    <Compile Include="Models\ApplicationSettingModel.cs" />
+    <Compile Include="Models\AutoComplete.cs" />
+    <Compile Include="Models\BaseDropDownList.cs" />
+    <Compile Include="Models\BaseDropDownOptions.cs" />
+    <Compile Include="Models\BaseTree.cs" />
+    <Compile Include="Models\ControlListModel.cs" />
+    <Compile Include="Models\DropDownOptions.cs" />
+    <Compile Include="Models\ExternalLoginConfirmationViewModel.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ListViewModel.cs" />
+    <Compile Include="Models\ManageDataModel.cs" />
+    <Compile Include="Models\ManageOrderDataModel.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MessageBoxModel.cs" />
+    <Compile Include="Models\PopUpButtonModel.cs" />
+    <Compile Include="Models\PopupModel.cs" />
+    <Compile Include="Models\ProductParameterModel.cs" />
+    <Compile Include="Models\TabViewListModel.cs" />
+    <Compile Include="Models\TabViewModel.cs" />
+    <Compile Include="Models\TextBoxEditorForModel.cs" />
+    <Compile Include="Models\TreeViewModel.cs" />
+    <Compile Include="Models\WebGridModels\DropdownListModel.cs" />
+    <Compile Include="Models\WebGridModels\DropdownModel.cs" />
+    <Compile Include="Models\WebGridModels\FilterColumnListModel.cs" />
+    <Compile Include="Models\WebGridModels\FIlterColumnModel.cs" />
+    <Compile Include="Models\WebGridModels\GridModel.cs" />
+    <Compile Include="Models\WebGridModels\GridPagerModel.cs" />
+    <Compile Include="Models\WebGridModels\GridSettingModel.cs" />
+    <Compile Include="Models\WebGridModels\ToolMenuModel.cs" />
+    <Compile Include="Models\WebGridModels\ViewListModel.cs" />
+    <Compile Include="Models\WebGridModels\ViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\AccountDataViewModel.cs" />
+    <Compile Include="ViewModels\AccountListViewModel.cs" />
+    <Compile Include="ViewModels\AccountViewModel.cs" />
+    <Compile Include="ViewModels\Account\AccountDepartmentListViewModel.cs" />
+    <Compile Include="ViewModels\Account\AccountDepartmentViewModel.cs" />
+    <Compile Include="ViewModels\Account\AccountPermissionListViewModel.cs" />
+    <Compile Include="ViewModels\Account\AccountPermissionViewModel.cs" />
+    <Compile Include="ViewModels\Account\AccountQuoteLineItemListViewModel.cs" />
+    <Compile Include="ViewModels\Account\AccountQuoteLineItemViewModel.cs" />
+    <Compile Include="ViewModels\Account\AccountQuoteListViewModel.cs" />
+    <Compile Include="ViewModels\Account\AccountQuoteViewModel.cs" />
+    <Compile Include="ViewModels\Account\CustomerAccountViewModel.cs" />
+    <Compile Include="ViewModels\Account\NoteListViewModel.cs" />
+    <Compile Include="ViewModels\Account\NoteViewModel.cs" />
+    <Compile Include="ViewModels\AddressListViewModel.cs" />
+    <Compile Include="ViewModels\AddressViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\FormBuilder\FormBuilderAttributeGroupViewModel.cs" />
+    <Compile Include="ViewModels\FormBuilder\FormBuilderListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSFormWidgetConfigurationViewModel.cs" />
+    <Compile Include="ViewModels\FormBuilder\FormBuilderViewModel.cs" />
+    <Compile Include="ViewModels\FormSubmissionViewModel\FormSubmissionListViewModel.cs" />
+    <Compile Include="ViewModels\FormSubmissionViewModel\FormSubmissionViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\EntityAttributeDetailsViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\EntityAttributeViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeEntity\GlobalAttributeEntityViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeEntityDetailsViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeGroupListViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeGroupMapperListViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeGroupMapperViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeGroupViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeListViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeValuesViewModel.cs" />
+    <Compile Include="ViewModels\GlobalAttribute\GlobalAttributeViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\CacheListViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\CacheViewModel.cs" />
+    <Compile Include="ViewModels\CaseRequest\CaseRequestListViewModel.cs" />
+    <Compile Include="ViewModels\CaseRequest\CaseRequestViewModel.cs" />
+    <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\BannerListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\BannerViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\BlogNewsCommentListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\BlogNewsCommentViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\BlogNewsListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\BlogNewsViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSAreaListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSAreaViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSAreaWidgetDataListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSAreaWidgetsDataViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSDataViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSTextWidgetConfigurationViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSThemeWidgetsViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSWidgetConfigurationViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSWidgetProductListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSWidgetProductViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSWidgetsListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CMSWidgetsViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\ContentPageListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\ContentPageTreeViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\ContentPageViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CSSListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CSSViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CustomerReviewListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\CustomerReviewViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\EmailTemplateAreaDataViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\EmailTemplateAreaMapperViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\EmailTemplateListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\EmailTemplateViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\LinkWidgetConfigurationListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\LinkWidgetConfigurationLocaleListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\LinkWidgetConfigurationLocaleViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\LinkWidgetConfigurationViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\LinkWidgetDataViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\ManageMessageKeyViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\ManageMessageListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\ManageMessageViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\PDPAssetViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\PortalMessageViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\PortalProductPageViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\PortalSEOSettingViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\SEODetailsViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\SliderListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\SliderViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\TemplateListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\TemplateViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\ThemeAssetViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\ThemeListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\ThemeViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\UrlRedirectListViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\UrlRedirectViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\WebSiteLogoViewModel.cs" />
+    <Compile Include="ViewModels\CMSViewModel\WebSiteThemeWidgetViewModel.cs" />
+    <Compile Include="ViewModels\CurrencyInfoViewModel.cs" />
+    <Compile Include="ViewModels\CustomerListViewModel.cs" />
+    <Compile Include="ViewModels\CustomerViewModel.cs" />
+    <Compile Include="ViewModels\DashboardViewModel.cs" />
+    <Compile Include="ViewModels\Dashboard\DashboardListViewModel.cs" />
+    <Compile Include="ViewModels\Dashboard\DashboardTopItemsViewModel.cs" />
+    <Compile Include="ViewModels\DefaultGlobalConfigListViewModel.cs" />
+    <Compile Include="ViewModels\DefaultGlobalConfigViewModel.cs" />
+    <Compile Include="ViewModels\DomainListViewModel.cs" />
+    <Compile Include="ViewModels\DomainViewModel.cs" />
+    <Compile Include="ViewModels\Ecommerce\AttributesSelectValuesViewModel.cs" />
+    <Compile Include="ViewModels\Ecommerce\PortalCatalogListViewModel.cs" />
+    <Compile Include="ViewModels\Ecommerce\PortalCatalogViewModel.cs" />
+    <Compile Include="ViewModels\Ecommerce\PublishCatalogLogListViewModel.cs" />
+    <Compile Include="ViewModels\Ecommerce\PublishCatalogLogViewModel.cs" />
+    <Compile Include="ViewModels\Ecommerce\PublishCatalogViewModel.cs" />
+    <Compile Include="ViewModels\Ecommerce\PublishDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ERPConfigurator\ERPConfiguratorListViewModel.cs" />
+    <Compile Include="ViewModels\ERPConfigurator\ERPConfiguratorViewModel.cs" />
+    <Compile Include="ViewModels\ERPConfigurator\ERPConnectorViewModel.cs" />
+    <Compile Include="ViewModels\ERPConfigurator\ERPConnectorListViewModel.cs" />
+    <Compile Include="ViewModels\ERPConfigurator\ERPEnum.cs" />
+    <Compile Include="ViewModels\ERPConfigurator\ERPTaskSchedulerListViewModel.cs" />
+    <Compile Include="ViewModels\ERPConfigurator\ERPTaskSchedulerViewModel.cs" />
+    <Compile Include="ViewModels\ERPConfigurator\TouchPointConfigurationListViewModel.cs" />
+    <Compile Include="ViewModels\ERPConfigurator\TouchPointConfigurationViewModel.cs" />
+    <Compile Include="ViewModels\GatewaysListViewModel.cs" />
+    <Compile Include="ViewModels\GatewaysViewModel.cs" />
+    <Compile Include="ViewModels\GiftCardViewModel\GiftCardListViewModel.cs" />
+    <Compile Include="ViewModels\GiftCardViewModel\GiftCardViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\CityListViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\CityViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\CountryListViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\CountryViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\CurrencyListViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\CurrencyViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\GlobalSettingViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\StateListViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSetting\StateViewModel.cs" />
+    <Compile Include="ViewModels\Highlight\HighlightListViewModel.cs" />
+    <Compile Include="ViewModels\Highlight\HighlightProductListViewModel.cs" />
+    <Compile Include="ViewModels\Highlight\HighlightProductViewModel.cs" />
+    <Compile Include="ViewModels\Highlight\HighlightViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportLogsListViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportLogsViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportMappingsViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportProcessLogsListViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportProcessLogsViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportTemplateListViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportTemplateMappingListViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportTypeListViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel\AssociatedInventoryWarehouseViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel\ExportInventoryViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel\ImportInventoryViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel\InventoryListViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel\InventorySKUListViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel\InventorySKUViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel\InventoryViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel\InventoryWarehouseMapperListViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel\InventoryWarehouseMapperViewModel.cs" />
+    <Compile Include="ViewModels\LicenceInfoViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\LogMessage\ImpersonationLogListViewModel.cs" />
+    <Compile Include="ViewModels\LogMessage\ImpersonationLogViewModel.cs" />
+    <Compile Include="ViewModels\LogMessage\LogConfigurationViewModel.cs" />
+    <Compile Include="ViewModels\LogMessage\LogMessageListViewModel.cs" />
+    <Compile Include="ViewModels\LogMessage\LogMessageViewModel.cs" />
+    <Compile Include="ViewModels\NavigationViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\AddOnValuesViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\AddOnViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\AddToCartViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\BundleProductViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\CartItemGroupListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\CartItemListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\CartItemViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\CartViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\ConfigurableAttributeViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\PaymentTokenViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\CreateOrderViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\CreateRequestViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\CyberSourceViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\EditCartItemViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\GroupProductViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\IssuedGiftCardListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\IssuedGiftCardViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\CustomerInfoViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrderHistoryListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrderHistoryViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrderInfoViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrderInvoiceViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrderLineItemViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrderNotesListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrderNotesViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\FailedOrderTransactionViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\FailedOrderTransactionListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrdersListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrderStateParameterViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrderStatusList.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrderTotalViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrderViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\OrderWarehouseViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\PaymentDetailsViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\PaymentHistoryListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\PaymentHistoryViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\ProductAttributesViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\RefundPaymentListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\RefundPaymentViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\RequestStatusListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\RequestStatusViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\ReturnOrderLineItemListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\ReturnOrderLineItemViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\ReviewOrderViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\RMAConfigurationViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\RMARequestItemListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\RMARequestItemViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\RMARequestListViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\RMARequestParameterViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\RMARequestViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\SendInvoiceViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\SubmitOrderViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\SubmitPaymentViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\SwatchImageViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\TaxSummaryViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\TierPriceViewModel.cs" />
+    <Compile Include="ViewModels\OMSViewModel\UserAddressDataViewModel.cs" />
+    <Compile Include="ViewModels\OrdersViewModel.cs" />
+    <Compile Include="ViewModels\ParameterViewModel.cs" />
+    <Compile Include="ViewModels\PaymentGatewayViewModel.cs" />
+    <Compile Include="ViewModels\PaymentSettingListViewModel.cs" />
+    <Compile Include="ViewModels\PaymentSettingValidationViewModel.cs" />
+    <Compile Include="ViewModels\PaymentSettingViewModel.cs" />
+    <Compile Include="ViewModels\PaymentTypeViewModel.cs" />
+    <Compile Include="ViewModels\PermissionCodeViewModel.cs" />
+    <Compile Include="ViewModels\PortalPageSettingListViewModel.cs" />
+    <Compile Include="ViewModels\PortalPageSettingViewModel.cs" />
+    <Compile Include="ViewModels\PortalSortSettingListViewModel.cs" />
+    <Compile Include="ViewModels\PortalSortSettingViewModel.cs" />
+    <Compile Include="ViewModels\PowerBIViewModel\PowerBIEmbedViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\ExportPriceViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\ImportPriceViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceAccountListViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceAccountViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceListViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PricePortalListViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PricePortalViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceProfileListViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceProfileViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceSKUDataViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceSKUListViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceSKUViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceTierListViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceTierViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceUserListViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceUserViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\PriceViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\ProductPriceListSKUDataViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\ProductPriceSKUDataViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\UomListViewModel.cs" />
+    <Compile Include="ViewModels\PriceViewModel\UomViewModel.cs" />
+    <Compile Include="ViewModels\ProductFeedViewModel\ProductFeedListViewModel.cs" />
+    <Compile Include="ViewModels\ProductFeedViewModel\ProductFeedViewModel.cs" />
+    <Compile Include="ViewModels\ProfilesViewModel\ProfileCatalogCategoryViewModel.cs" />
+    <Compile Include="ViewModels\ProfilesViewModel\ProfileCatalogListViewModel.cs" />
+    <Compile Include="ViewModels\ProfilesViewModel\ProfileCatalogViewModel.cs" />
+    <Compile Include="ViewModels\ProfilesViewModel\ProfileListViewModel.cs" />
+    <Compile Include="ViewModels\ProfilesViewModel\ProfileViewModel.cs" />
+    <Compile Include="ViewModels\PromotionViewModel\CouponExportViewModel.cs" />
+    <Compile Include="ViewModels\PromotionViewModel\CouponListViewModel.cs" />
+    <Compile Include="ViewModels\PromotionViewModel\CouponViewModel.cs" />
+    <Compile Include="ViewModels\PromotionViewModel\ProductPromotionViewModel.cs" />
+    <Compile Include="ViewModels\PromotionViewModel\PromotionExportViewModel.cs" />
+    <Compile Include="ViewModels\PromotionViewModel\PromotionListViewModel.cs" />
+    <Compile Include="ViewModels\PromotionViewModel\PromotionViewModel.cs" />
+    <Compile Include="ViewModels\ProviderEngineListViewModel.cs" />
+    <Compile Include="ViewModels\ProviderEngineViewModel.cs" />
+    <Compile Include="ViewModels\PublishHistory\PublishHistoryListViewModel.cs" />
+    <Compile Include="ViewModels\PublishHistory\PublishHistoryViewModel.cs" />
+    <Compile Include="ViewModels\PublishProductsViewModel\PublishAttributeViewModel.cs" />
+    <Compile Include="ViewModels\PublishProductsViewModel\AssociatedPublishedBundleProductViewModel.cs" />
+    <Compile Include="ViewModels\PublishProductsViewModel\PublishProductsListViewModel.cs" />
+    <Compile Include="ViewModels\PublishProductsViewModel\PublishProductsViewModel.cs" />
+    <Compile Include="ViewModels\QuoteViewModel\ConvertQuoteToOrderViewModel.cs" />
+    <Compile Include="ViewModels\QuoteViewModel\QuoteCreateViewModel.cs" />
+    <Compile Include="ViewModels\QuoteViewModel\ManageAddressModel.cs" />
+    <Compile Include="ViewModels\QuoteViewModel\QuoteCartViewModel.cs" />
+    <Compile Include="ViewModels\QuoteViewModel\QuoteInfoViewModel.cs" />
+    <Compile Include="ViewModels\QuoteViewModel\QuoteLineItemHistoryModel.cs" />
+    <Compile Include="ViewModels\QuoteViewModel\QuoteListViewModel.cs" />
+    <Compile Include="ViewModels\QuoteViewModel\QuoteResponseViewModel.cs" />
+    <Compile Include="ViewModels\QuoteViewModel\QuoteSessionModel.cs" />
+    <Compile Include="ViewModels\QuoteViewModel\QuoteViewModel.cs" />
+    <Compile Include="ViewModels\QuoteViewModel\SubmitPaymentDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel\DynamicReportViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel\ReportCategoryListViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel\ReportCategoryViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel\ReportColumnsListViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel\ReportColumnViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel\ReportDetailViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel\ReportListViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel\ReportParameterListViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel\ReportParameterViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel\ReportViewModel.cs" />
+    <Compile Include="ViewModels\RMA\RMAReturnCalculateLineItemViewModel.cs" />
+    <Compile Include="ViewModels\RMA\RMAReturnCalculateViewModel.cs" />
+    <Compile Include="ViewModels\RMA\RMAReturnCartItemViewModel.cs" />
+    <Compile Include="ViewModels\RMA\RMAReturnCartViewModel.cs" />
+    <Compile Include="ViewModels\RMA\RMAReturnHistoryViewModel.cs" />
+    <Compile Include="ViewModels\RMA\RMAReturnLineItemViewModel.cs" />
+    <Compile Include="ViewModels\RMA\RMAReturnListViewModel.cs" />
+    <Compile Include="ViewModels\RMA\RMAReturnNotesViewModel.cs" />
+    <Compile Include="ViewModels\RMA\RMAReturnOrderDetailViewModel.cs" />
+    <Compile Include="ViewModels\RMA\RMAReturnTotalViewModel.cs" />
+    <Compile Include="ViewModels\RMA\RMAReturnViewModel.cs" />
+    <Compile Include="ViewModels\RMA\RMAReturnStatusList.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\ActionModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\ActionPermissionMapperViewModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\ActionViewModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\DataObjectViewModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\MenuActionsPermissionViewModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\MenuListViewModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\MenuViewModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\PermissionsViewModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\RoleListViewModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\RoleMenuAccessMapperViewModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\RoleMenuListViewModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\RoleMenuViewModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\RolePermissionViewModel.cs" />
+    <Compile Include="ViewModels\RolesAndPermissions\RoleViewModel.cs" />
+    <Compile Include="ViewModels\Search\BoostDataViewModel.cs" />
+    <Compile Include="ViewModels\Search\CMSPortalContentPageIndexViewModel.cs" />
+    <Compile Include="ViewModels\Search\CMSSearchIndexMonitorListViewModel.cs" />
+    <Compile Include="ViewModels\Search\CMSSearchIndexMonitorViewModel.cs" />
+    <Compile Include="ViewModels\Search\PortalIndexViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchDocumentMappingListViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchDocumentMappingViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchGlobalProductBoostListViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchGlobalProductBoostViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchGlobalProductCategoryBoostListViewModel .cs" />
+    <Compile Include="ViewModels\Search\SearchGlobalProductCategoryBoostViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchIndexMonitorListViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchIndexMonitorViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchIndexServerStatusListViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchIndexServerStatusViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchItemRuleViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchKeywordsRedirectListViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchKeywordsRedirectViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchSynonymsListViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchSynonymsViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchTriggerRuleViewModel.cs" />
+    <Compile Include="ViewModels\ShippingViewModel\CityAndStateViewModel.cs" />
+    <Compile Include="ViewModels\ShippingViewModel\PortalProfileShippingListViewModel.cs" />
+    <Compile Include="ViewModels\ShippingViewModel\PortalProfileShippingViewModel.cs" />
+    <Compile Include="ViewModels\ShippingViewModel\ShippingConstraintsViewModel.cs" />
+    <Compile Include="ViewModels\ShippingViewModel\ShippingListViewModel.cs" />
+    <Compile Include="ViewModels\ShippingViewModel\ShippingPortalListViewModel.cs" />
+    <Compile Include="ViewModels\ShippingViewModel\ShippingPortalViewModel.cs" />
+    <Compile Include="ViewModels\ShippingViewModel\ShippingRuleListViewModel.cs" />
+    <Compile Include="ViewModels\ShippingViewModel\ShippingRuleViewModel.cs" />
+    <Compile Include="ViewModels\ShippingViewModel\ShippingSKUListViewModel.cs" />
+    <Compile Include="ViewModels\ShippingViewModel\ShippingSKUViewModel.cs" />
+    <Compile Include="ViewModels\ShippingViewModel\ShippingViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\AnalyticsViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\AssociatedPortalShippingViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\ConfigurationSettingViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\DomainListViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\DomainViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\EmailViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\KlaviyoViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalAlternateWarehouseViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalApproverViewModel\PortalApprovalViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalApproverViewModel\PortalApproverListViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalApproverViewModel\PortalPaymentApproverViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalApproverViewModel\PortalPaymentGroupViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalProfileListViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalProfileViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalShippingViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalSMSViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalTrackingPixelViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalUnitViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PortalWarehouseViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PublishPortalLogListViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\PublishPortalLogViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\RobotsTxtViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\SMTPViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\StoreFeatureViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\StoreListViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\StoreLocatorDataViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\StoreLocatorListViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\StoreViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\TagManagerViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel\TaxPortalViewModel.cs" />
+    <Compile Include="ViewModels\TaxViewModel\TaxClassListViewModel.cs" />
+    <Compile Include="ViewModels\TaxViewModel\TaxClassPortalListViewModel.cs" />
+    <Compile Include="ViewModels\TaxViewModel\TaxClassPortalViewModel.cs" />
+    <Compile Include="ViewModels\TaxViewModel\TaxClassSKUListViewModel.cs" />
+    <Compile Include="ViewModels\TaxViewModel\TaxClassSKUViewModel.cs" />
+    <Compile Include="ViewModels\TaxViewModel\TaxClassViewModel.cs" />
+    <Compile Include="ViewModels\TaxViewModel\TaxRuleListViewModel.cs" />
+    <Compile Include="ViewModels\TaxViewModel\TaxRuleViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel\CustomerAffiliateViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel\ImpersonationViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel\ReferralCommissionListViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel\ReferralCommissionViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel\UserDetailsViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel\UserPortalViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel\SalesRepUsersListViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel\UsersListViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel\SalesRepUsersViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel\UsersViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel\UserAccountViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel\UserViewModel.cs" />
+    <Compile Include="ViewModels\WarehouseViewModel\WarehouseAddressViewModel.cs" />
+    <Compile Include="ViewModels\WarehouseViewModel\WarehouseListViewModel.cs" />
+    <Compile Include="ViewModels\WarehouseViewModel\WarehouseViewModel.cs" />
+    <Compile Include="ViewModels\WebGridViewModels\ApplicationSettingListViewModel.cs" />
+    <Compile Include="ViewModels\WebGridViewModels\CustomColumnViewModel.cs" />
+    <Compile Include="ViewModels\WebGridViewModels\FilterCollectionDataModel.cs" />
+    <Compile Include="ViewModels\WebGridViewModels\WebGridColumnSettingViewModel.cs" />
+    <Compile Include="ViewModels\WebGridViewModels\WebGridColumnViewModel.cs" />
+    <Compile Include="ViewModels\WebGridViewModels\WebGridViewModel.cs" />
+    <Compile Include="ViewModels\WishListItemViewModel.cs" />
+    <Compile Include="ViewModels\WishListViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Abstract\Znode.Libraries.Client.Abstract\Znode.Libraries.Client.Abstract.csproj">
+      <Project>{68154d84-d7d9-433c-a675-2bb8de281ece}</Project>
+      <Name>Znode.Libraries.Client.Abstract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.Api.Client\Znode.Engine.Api.Client.csproj">
+      <Project>{4ff2a227-f7eb-41ee-ada9-f46a297e7be8}</Project>
+      <Name>Znode.Engine.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.Api.Models\Znode.Engine.Api.Models.csproj">
+      <Project>{05a4b1d5-82d1-4e47-afd9-4b01ac5917bd}</Project>
+      <Name>Znode.Engine.Api.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engines\Znode.Engine.Exceptions\Znode.Engine.Exceptions.csproj">
+      <Project>{5dd35fd8-feeb-46b2-87c5-97f05e80aa6b}</Project>
+      <Name>Znode.Engine.Exceptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Klaviyo\Znode.Engine.Klaviyo.Client\Znode.Engine.Klaviyo.Client.csproj">
+      <Project>{632c5973-a002-4cdd-825e-fc500b67eb10}</Project>
+      <Name>Znode.Engine.Klaviyo.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Klaviyo\Znode.Engine.Klaviyo.Models\Znode.Engine.Klaviyo.Models.csproj">
+      <Project>{11ceb081-202f-428e-81ed-f2325eb9fbed}</Project>
+      <Name>Znode.Engine.Klaviyo.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Libraries.DevExpress.Report\Znode.Libraries.DevExpress.Report.csproj">
+      <Project>{B9D1C07F-6137-414E-95F2-B58F3F8CE4ED}</Project>
+      <Name>Znode.Libraries.DevExpress.Report</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZNode.Libraries.ECommerce.Utilities\Znode.Libraries.ECommerce.Utilities.csproj">
+      <Project>{f3703cce-eec4-46b0-a54f-83857d4014df}</Project>
+      <Name>Znode.Libraries.ECommerce.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Znode.Libraries.MediaStorage\Znode.Libraries.MediaStorage.csproj">
+      <Project>{7395f84c-8c0e-4b9a-b1fd-72f27aaa1422}</Project>
+      <Name>Znode.Libraries.MediaStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Libraries.MongoDB.Data\Znode.Libraries.MongoDB.Data.csproj">
+      <Project>{5b6482f4-7b81-4d7c-a099-78237c8a55b3}</Project>
+      <Name>Znode.Libraries.MongoDB.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZNode.Libraries.Resources\Znode.Libraries.Resources.csproj">
+      <Project>{0461ba0d-6141-47d7-a78e-c166ff5a75f0}</Project>
+      <Name>Znode.Libraries.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZNode.Libraries.Data\Znode.Libraries.Data.csproj">
+      <Project>{786F7274-2F78-4282-B91C-978CB79FB2F3}</Project>
+      <Name>Znode.Libraries.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

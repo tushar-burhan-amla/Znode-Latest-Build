@@ -1,0 +1,88 @@
+@using Znode.Engine.WebStore.Agents
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    Layout = null;
+}
+<style>
+    /*--Default CSS--*/
+    .default-template{min-height:600px;background:#f8f3f3;}     
+    .background-color-red{background-color: #cc0000;}
+    .background-color-white{background-color: #fff;}
+    .margin-bottom {margin-bottom:15px;} 
+    .margin-top-bottom {margin:15px 0;}
+    .padding-top-bottom{padding:10px;}  
+    .template-title{padding:30px 20px 80px;text-align:center;color:#fff;font-weight:600;}
+    .container-slider{padding:0 100px;}
+    .category-links{padding:10px;}
+    .category-links .link-panel-widget {text-align:center;width:100%;}
+    .category-links .link-panel-widget li{padding:15px 0;margin:10px 15px;}
+    .category-links .link-panel-widget li img{width:250px;height:auto;max-height:200px;padding:6px;display:inline-block;}
+    .category-links .link-panel-widget li .title{display:block;font-size:14px;font-weight:600;}
+    .newsletter{min-height:40px;padding:10px;text-align:center;background:#fff;color:#474747 !important; }
+    .newsletter label,.newsletter button,.newsletter input[type="text"]{color:#474747 !important;}    
+</style>
+<div class="container-fluid">
+    <div class="row default-template">
+        <div class="container-fluid">
+            <div class="row background-color-red">
+                <!--Template Title-->
+                <div class="col-sm-12 template-title border-bottom nopadding col-12 p-0">                    
+                    <z-widget>@Html.WidgetPartial("TemplateTextEditor", "TemplateTitle", "976670", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>                    
+                </div>
+            </div>            
+            <!--Banner-->
+            <div class="row container-slider">
+                  <div class="col-sm-12 nopadding col-12 p-0" @*style="margin-top:-55px;"*@>
+                      <z-widget>@Html.WidgetPartial("BannerSlider", "Slider", "976671", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                  </div>
+            </div>
+        </div>
+        <div class="container">
+            <!--Category Links-->
+            <div class="row">
+                <div class="col-sm-12 nopadding col-12 p-0 background-color-white margin-top-bottom category-links">
+                    <z-widget>@Html.WidgetPartial("TemplateTextEditor", "CategoryTitle", "976673", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                    <z-widget>@Html.WidgetPartial("TemplateLinkPanel", "CMS Page Links", "976672", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+            </div>                                 
+        </div>
+        <div class="container">
+            <!--Brand Links-->
+            <div class="row">
+                <div class="col-sm-12 nopadding col-12 p-0 background-color-white margin-top-bottom category-links">
+                    <z-widget>@Html.WidgetPartial("TemplateTextEditor", "BrandTitle", "976674", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                    <z-widget>@Html.WidgetPartial("TemplateLinkPanel", "CMS Page Links", "976675", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <!--Product List-->
+            <div class="row">
+                <div class="col-sm-12 nopadding col-12 p-0 background-color-white margin-top-bottom category-links">
+                    <z-widget>@Html.WidgetPartial("TemplateTextEditor", "ProductTitle", "976676", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                    <z-widget>@Html.WidgetPartial("ProductList", "DealsProductList", "976677", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <!--Terms & Conditions-->
+            <div class="row">
+                <div class="col-sm-12 col-12 background-color-white padding-top-bottom margin-top-bottom">
+                    <z-widget>@Html.WidgetPartial("TemplateTextEditor", "TermsAndConditions", "976678", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>                    
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <!--News Letter & Social Media-->
+            <div class="row">
+                <div class="col-sm-6 background-color-white nopadding col-6 p-0 padding-top-bottom margin-bottom newsletter">                    
+                    <z-widget>@Html.WidgetPartial("NewsLetter", "NewsLetter", "996074", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId)</z-widget>
+                </div>
+                <div class="col-sm-6 background-color-white nopadding col-6 p-0 padding-top-bottom margin-bottom">                    
+                    <z-widget>@Html.WidgetPartial("LinkPanel", "SocialMedia", "976680", "ContentPageMapping", (int)ViewBag.contentPageId)</z-widget>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

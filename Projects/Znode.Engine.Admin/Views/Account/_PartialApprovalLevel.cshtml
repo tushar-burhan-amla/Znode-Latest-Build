@@ -1,0 +1,106 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model UserApproverViewModel
+@{
+    string fromBudget = "spanFromBudgetAmount" + Model.UserApproverId;
+    string toBudget = "spanToBudgetAmount" + Model.UserApproverId;
+}
+
+@using (Ajax.BeginForm("CreateApproverLevel", "Account", new AjaxOptions()
+{
+    HttpMethod = "post",
+    OnSuccess = "Account.prototype.AreaMapperAddResult(data,this)",
+    InsertionMode = InsertionMode.Replace,
+
+}, new { id = "frmApprovalArea_" + (Model.UserId ?? 0) }))
+{
+    <div class="col-xs-12 padding-top-bottom tr-div approver-rows nopadding" id="PartialPage">
+
+        <div class="col-xs-2 nopadding">
+            @if (Model.IsAddMode && Model?.ApproverOrders.Count > 0)
+            {
+                @Html.DropDownListFor(m => Model.ApproverOrder, Model.ApproverOrders, new { @id = "approverOrder_" + Model.UserApproverId + "", @onChange = "Account.prototype.SelectAndApplyLevelData(this);" })
+                @Html.ValidationMessageFor(model => Model.ApproverOrder)
+            }
+            else
+            {
+                @Html.TextBoxFor(m => Model.ApproverOrder, new { @id = "approverOrder_" + Model.UserApproverId + "", disabled = "disabled", @class = "txtApproverOrder" })
+                @Html.ValidationMessageFor(model => Model.ApproverOrder)
+            }
+        </div>
+
+        <div class="col-xs-3 nopadding">
+            @if (Model.IsAddMode)
+            {
+                @Html.TextBoxFor(m => Model.ApproverName, new { @placeholder = "Enter Approver User", @id = "approverUser_" + Model.UserApproverId + "", @class = "txtApproverUser" })
+                @Html.ValidationMessageFor(model => Model.ApproverName)
+            }
+            else
+            {
+                @Html.TextBoxFor(m => Model.ApproverName, new { @placeholder = "Enter Approver User", @id = "approverUser_" + Model.UserApproverId + "", disabled = "disabled", @class = "txtApproverUser" })
+                @Html.ValidationMessageFor(model => Model.ApproverName)
+            }
+        </div>
+
+        <div class="col-xs-2 nopadding">
+            @if (Model.IsAddMode)
+            {
+                @Html.TextBoxFor(m => Model.FromBudgetAmount, new { @id = "fromBudgetAmount" + Model.UserApproverId + "", @class = "txtFromBudgetAmount", @onchange = "Account.prototype.OnFormAmountChange();" })
+                @Html.ValidationMessageFor(model => Model.FromBudgetAmount)
+                <span id="@fromBudget"></span>
+            }
+            else
+            {
+                @Html.TextBoxFor(m => Model.FromBudgetAmount, new { @id = "fromBudgetAmount" + Model.UserApproverId + "", disabled = "disabled", @class = "txtFromBudgetAmount" })
+                @Html.ValidationMessageFor(model => Model.FromBudgetAmount)
+            }
+        </div>
+
+        <div class="col-xs-2 nopadding">
+            @if (Model.IsAddMode)
+            {
+                @Html.TextBoxFor(m => Model.ToBudgetAmount, new { @id = "toBudgetAmount" + Model.UserApproverId + "", @class = "txtToBudgetAmount", @onchange = "Account.prototype.OnFormAmountChange();" })
+                @Html.ValidationMessageFor(model => Model.ToBudgetAmount)
+                <span id="@toBudget"></span>
+            }
+            else
+            {
+                @Html.TextBoxFor(m => Model.ToBudgetAmount, new { @id = "toBudgetAmount" + Model.UserApproverId + "", disabled = "disabled", @class = "txtToBudgetAmount" })
+                @Html.ValidationMessageFor(model => Model.ToBudgetAmount)
+            }
+        </div>
+
+        <div class="col-xs-1 nopadding">
+            <label>
+                <input id="areaIsNoLimit_@Model.UserApproverId" name="IsNoLimitSelected" checked="@Model.IsNoLimit" type="checkbox" data-user-approverid="@Model.UserApproverId" disabled="disabled" onclick="Account.prototype.IsLimitSelected(this);">
+                <span class="lbl padding-8" for="IsNoLimit"></span>
+                <input name="IsNoLimit" type="hidden" id="hdnIsNoLimit_@Model.UserApproverId" value="false">
+            </label>
+        </div>
+
+        <div class="col-xs-2 nopadding">
+            <button type="submit" id="saveAreaMapping_@Model.UserApproverId" class="btn-narrow-icon btnSaveTemplateMapping" onclick="return Account.prototype.CheckApproverOrderValue();" title="Save" style="display:none !important;"><em class="z-ok"></em></button>
+            <button type="button" id="CancelAreaMapping_@Model.UserApproverId" class="btn-narrow-icon" title="Cancel" style="display:none !important" onclick="Account.prototype.CancelNewAddAreaMapping('CancelAreaMapping_@Model.UserApproverId',this)"><em class="z-close"></em></button>
+            @Html.AuthorizedPrototypeRawActionLink(" ", "CreateApproverLevel", "Account", new { id = "EditAreaMapping_" + Model.UserApproverId + "", @class = "img-icon-edit btn-narrow-icon z-edit", title = Admin_Resources.ButtonEdit, onclick = "Account.prototype.EditAreaMapping(" + Model.UserApproverId + ")" })
+            @Html.AuthorizedPrototypeRawActionLink(" ", "DeleteApproverLevel", "Account", new { id = "deleteAreaMapping_" + Model.UserApproverId + "", @class = "img-icon-delete btn-narrow-icon z-delete", title = Admin_Resources.ButtonDelete, onclick = "Account.prototype.DeleteAreaMapping(" + Model.UserApproverId + "," + "this" + ")" })
+        </div>
+    </div>
+    @Html.HiddenFor(x => x.ApproverLevelId)
+    @Html.HiddenFor(x => x.ApproverOrder)
+    @Html.HiddenFor(x => x.ApproverUser)
+    @Html.Hidden("ApproverUserId")
+    @Html.Hidden("approverOrder_")
+    @Html.Hidden("toBudgetAmount")
+    @Html.Hidden("fromBudgetAmount")
+    @Html.Hidden("levelName_")
+    @Html.HiddenFor(x => x.IsNoLimit)
+    @Html.HiddenFor(x => x.UserApproverId)
+    @Html.HiddenFor(x => x.UserId, new { id = "userId" })
+    <input id="UserApproverId" name="UserApproverId" type="hidden" value="@Model.UserApproverId">
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    $(document).ready(function () {
+        Account.prototype.AutoCompleteApprovalUsers();
+    });
+</script>

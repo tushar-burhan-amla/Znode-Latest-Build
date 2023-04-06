@@ -1,0 +1,113 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+
+@model CaseRequestViewModel
+@{
+    ViewBag.Title = "Contact Us";
+}
+<div id="layout-contactus" class="col">
+    <div class="row">
+        <div class="container">
+            <div class="row contain-pages">
+                <div class="col-12 p-0">
+                    <h1 class="page-title">@WebStore_Resources.LinkTextContactus</h1>
+                </div>
+
+                <div class="col-12 col-lg-7 col-xl-6 p-0">
+                    @using (Html.BeginForm("contactus", "CaseRequest", FormMethod.Post, new { @id = "frmCreateCaseRequest" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <p class="margin-bottom">@WebStore_Resources.HeaderTextContactUs</p>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                @Html.Label(WebStore_Resources.LabelFirstName, new { @class = "required" })
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextBoxFor(model => model.FirstName, new { @maxlength = 100, @id = "valFirstName" })
+                                <span id="valFirstNameErr" class="field-validation-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                @Html.Label(WebStore_Resources.LabelLastName, new { @class = "required" })
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextBoxFor(model => model.LastName, new { @maxlength = 100, @id = "valLastName" })
+                                <span id="valLastNameErr" class="field-validation-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                @Html.Label(WebStore_Resources.ColumnCompanyName)
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextBoxFor(model => model.CompanyName, new { @maxlength = 100 })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                @Html.Label(WebStore_Resources.LabelEmailAddress, new { @class = "required" })
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextBoxFor(model => model.EmailID, new { @maxlength = 200, @id = "valEmail" })
+                                <span id="valEmailErr" class="field-validation-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                @Html.Label(WebStore_Resources.LabelPhoneNumber, new { @class = "required" })
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextBoxFor(model => model.PhoneNumber, new { @maxlength = 20, @id = "valPhoneNum" })
+                                <span id="valPhoneNumErr" class="field-validation-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                @Html.LabelFor(x => x.Description, new { @class = "required" })
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextAreaFor(model => model.Description, new { @id = "valComment" })
+                                <span id="valCommentErr" class="field-validation-error"></span>
+                            </div>
+                        </div>
+                        <div id="div-captcha">
+                            @Html.ZnodeCaptcha()
+                            @if (Model != null)
+                            {
+                                <span id="valueCaptchaError" class="field-validation-error">@Model.ErrorMessage</span>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <div class="text-right mb-5 quotebutton">
+                                <button type="submit" class="d-block d-md-inline-block btn btn-primary" id="contact-us">@WebStore_Resources.ButtonSubmit</button>
+                                <a href="/Home/Index" class="d-block d-md-inline-block btn btn-secondary ml-md-3 mt-3">@WebStore_Resources.ButtonCancel</a>
+                            </div>
+                        </div>
+                        if (Model?.HasError ?? false && Model?.CaseRequestID > 0)
+                        {
+                            <div class="col-12 p-0">
+                                @Html.Label("", WebStore_Resources.SuccessMessageContactUs)
+                            </div>
+                        }
+                        else if (Model?.HasError ?? false)
+                        {
+                            <div class="col-12 p-0">
+                                @Html.Label("", WebStore_Resources.MessageFailedToSendRequest)
+                            </div>
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#frmCreateCaseRequest").submit(function (event) {
+        var captcha = $("#CaptchaInputText").val();
+        if (typeof captcha != undefined && captcha != null && captcha != "") {
+            $("#contact-us").prop("disabled", true).addClass("disabled");
+        }
+        $("#contact-captcha").html("");
+    });
+</script>

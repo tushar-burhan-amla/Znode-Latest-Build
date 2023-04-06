@@ -1,0 +1,75 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model RMAReturnOrderDetailViewModel
+@{
+    string title = string.IsNullOrEmpty(Model.ReturnNumber) ? @WebStore_Resources.TitleCreateReturn : @WebStore_Resources.TitleEditReturn;
+    string displayDivReturnNotesAndButtons = (!string.IsNullOrEmpty(Model?.OrderNumber) && Model?.ReturnCartViewModel != null && Model?.ReturnCartViewModel?.ShoppingCartItems?.Count > 0) ? "" : "none";
+}
+<div class="main-wrapper col" id="divSelectReturnId">
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a>/@WebStore_Resources.LabelCreateReturn</div>
+            </div>
+        </div>
+    </div>
+    <div id="layout-account-orderhistory" class="row">
+        <div class="container">
+            <div class="row user-account">
+                <div class="col-12 account-dashboard">
+                    <div class="row mb-5">
+                        <div class="col-12 col-lg-12 order-history right-container">
+                            <div class="row no-gutters">
+                                <div class="col-12 p-0">
+                                    <h1 class="page-title"> @title</h1>
+                                </div>
+                                <div class="col-12 p-0 mb-4 dashboard-content">
+                                    <div class="col-12 product-search p-0">
+                                        <div class="col-12 filter-component border-bottom d-flex justify-content-between align-items-center">
+                                            <div class="select-return-order d-flex align-items-center">
+                                                <label class="mr-3 mb-0 text-uppercase">@WebStore_Resources.LabelTextSelectYourOrderNumber</label>
+
+                                                <select id="drpOrderNumber" disabled="disabled" data-test-selector="drpReturnNumber">
+                                                    <option value="@Model.OrderNumber" selected="selected">@Model.OrderNumber</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <a href="/User/GetOrderDetails" class="btn btn-secondary mr-2 mb-2 mb-sm-0 px-4" data-test-selector="linkReturnListCancel">@WebStore_Resources.ButtonCancel</a>
+                                            </div>
+                                        </div>
+                                        <div class="return-order-detail">
+                                            @if (!string.IsNullOrEmpty(Model?.OrderNumber) && Model?.ReturnCartViewModel != null && Model?.ReturnCartViewModel?.ShoppingCartItems?.Count > 0)
+                                            {
+                                                @Html.Partial("ReturnItemsList", Model)
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 p-0 mb-4">
+                                    <div id="divReturnNotesAndButtons" style="display:@displayDivReturnNotesAndButtons">
+                                        <div><span style="font-size: 22px;">@WebStore_Resources.LabelNotes</span></div>
+                                        <div class="col-12 p-0">
+                                            @Html.TextAreaFor(Model => Model.ReturnNote, new { rows = "5" })
+                                            <input type="hidden" id="hdnOldReturnNote" value="@Model.ReturnNote" />
+                                        </div>
+                                        <div class="col-12 p-0 d-flex flex-wrap justify-content-end">
+
+                                            <button type="button" onclick="RMAReturn.prototype.SaveOrderReturn(true,true)" id="btnSubmitReturn" name="btnSubmitReturn" class="btn btn-primary btn-margin-left btnSubmitReturn" style="display:none">
+                                                @WebStore_Resources.ButtonSubmitReturn
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link href="~/Views/Themes/B2B/Content/css/fastselect.min.css" rel="stylesheet" />
+<script src="~/Scripts/Core/Controls/Fastselect.standalone.js"></script>
+<script src="~/Scripts/References/fastselect.mvc.model.js"></script>
+

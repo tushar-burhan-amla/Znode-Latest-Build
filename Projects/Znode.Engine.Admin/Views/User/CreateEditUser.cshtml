@@ -1,0 +1,319 @@
+﻿@model UsersViewModel
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@using Microsoft.AspNet.Identity
+@using Znode.Libraries.ECommerce.Utilities;
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    bool isSalesRep = Equals(controllerName, "SalesRep");
+    ViewBag.Title = (isSalesRep ? Admin_Resources.TitleStoreAndReps : Admin_Resources.LabelAdmin) + " | " + Admin_Resources.Multifront;
+    string cancelUrl = isSalesRep? "/SalesRep/List" : "/User/UsersList";
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    string Title = actionName.ToLower().Equals("edituser") ? "Edit" : "Add";
+    string mainWrapperClass = !actionName.ToLower().Contains("createuser") ? "main-wrapper" : "";
+    string mainContainer = !actionName.ToLower().Contains("createuser") ? "main-container" : "col-sm-12 page-container";
+    if (isSalesRep)
+    {
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "btnSaveNClose", DataTestSelector = "linkSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "User.prototype.ValidateSalesRepUser('" + cancelUrl + "')" });
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "btnSaveNDraft" , LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "User.prototype.ValidateSalesRepUser()", DataTestSelector = "linkSave" });
+    }
+    else
+    {
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "btnSaveNClose", DataTestSelector = "linkSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "User.prototype.ValidateUser('" + cancelUrl + "')" });
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "btnSaveNDraft", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "User.prototype.ValidateUser()", DataTestSelector = "linkSave" });
+    }
+    string btnDisplay = Model.IsLock ? Admin_Resources.Unlock.ToUpper() : Admin_Resources.Lock.ToLower();
+    string popUpDisplay = Model.IsLock ? Admin_Resources.UnlockAccountConfirmationMessage : Admin_Resources.LockAccountConfirmationMessage;
+    string mediapath = string.IsNullOrEmpty(Model?.MediaPath) ? ZnodeAdminSettings.DefaultImagePath : Model?.MediaPath;
+    int? mediaId = Model?.MediaId > 0 ? Model?.MediaId : null;
+}
+<div class="col-sm-12 title-container">
+    @if (string.Equals(actionName.ToLower(), "createuser"))
+    {
+        <h1 data-test-selector="hdgAdminUsers">@string.Format(@Admin_Resources.TitleAdd, isSalesRep ? Admin_Resources.TitleSalesRep : Admin_Resources.TitleAdminUser)</h1>
+    }
+    else
+    {
+        if (isSalesRep)
+        {
+            <h1 data-test-selector="hdgAdminUsers">@string.Format(@Admin_Resources.TitleManage, Admin_Resources.TitleSalesRep)<em class="z-minus"></em><span>@Model.FullName</span></h1>
+        }
+        else
+        {
+            <h1 data-test-selector="hdgAdminUsers">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.TitleAdminUser)<em class="z-minus"></em><span data-test-selector="spnUserName">@Model.UserName</span></h1>
+        }
+    }
+    <div class="pull-right btn-container">
+        <div class="pull-right">
+            <a id="btnCancelForProduct" href=@cancelUrl class="btn-text-icon" data-test-selector="linkCancel"><em class='z-back'></em>BACK</a>
+            @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+        </div>
+    </div>
+</div>
+<!--Main Container-->
+<div class="@mainWrapperClass">
+    @if (!actionName.ToLower().Contains("createuser"))
+    {
+        @Html.Partial("~/views/User/_asideAdminuserPanel.cshtml")
+    }
+    <section class="@mainContainer">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmcreateeditstoreadmin" }))
+        {
+            <h3 class="section-heading" data-test-selector="hdgLoginInformation">@Admin_Resources.HeaderGeneralInformation</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.Portals, new { @class = "required", @data_test_selector = "lblPortals" })
+                    </div>
+                    <div class="control-md">
+                        <div id="areaList">
+                            @if (User.Identity.GetUserName() == Model.UserName && !Model.HasError)
+                            {
+                                string result = string.Join(",", Model.Portals.Select(p => p.Text).ToArray());
+                                @Html.TextBox("txtPortalIds", result, new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalIds", @data_test_selector = "txtStoreName", disabled = "disabled" })
+                                @Html.HiddenFor(model => model.PortalIds, new { @Value = string.Join(",", Model.Portals.Select(p => p.Value).ToArray()) })
+                                @Html.ValidationMessageFor(model => model.PortalIds, "", new { @class = "text-danger", @data_test_selector = "valPortals" })
+                            }
+                            else
+                            {
+                                <div class="chkAllStores">
+                                    <label>
+                                        <input data-test-selector="chk@(Admin_Resources.DefaultAllStores.Replace(" ", ""))" id="AllStoresCheck" name="PortalId" value="0" type="checkbox" onchange="User.prototype.ShowHideStoreListinput(this);">
+                                        <span class="lbl padding-8">@Admin_Resources.DefaultAllStores</span>
+                                    </label>
+                                </div>
+                                <div class="storediv" style="display:none;">
+                                    @Html.FastSelectFor(model => model.PortalIds, model => model.PortalId, "GetSuggestions", "Typeahead", "", 1, true,
+                                       new
+                                       {
+                                           htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalIds", @data_test_selector = "txtStoreName", @OnChange = "User.prototype.OnMultiSelectUserPortalResult();" },
+                                           parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                                       }, true)
+                                    @Html.HiddenFor(model => model.PortalIds, new { @id = "PortalIds" })
+                                    @Html.ValidationMessageFor(model => model.PortalIds, "", new { id = "errorRequiredStore", @class = "text-danger", @data_test_selector = "valPortals" })
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-heading margin-top-25" data-test-selector="hdgContactInformation">@Admin_Resources.LabelLoginInformation</h3>
+
+            if (actionName.ToLower().Equals("edituser"))
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblLockUnlock">@Admin_Resources.LabelLockUnlock</label>
+                        </div>                     
+                        <div class="control-md">
+                            <button type="button" id="EnableDisable" class="btn-text btn-text-secondary btn-margin-left" data-toggle='modal' data-target='#PopUpConfirmDisableEnable' data-enablediasble="@Model.IsLock.ToString().ToLower()" data-test-selector="btnLockUnlock">@btnDisplay</button>
+                            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+
+                         new PopupModel()
+                         {
+                             Title = @Admin_Resources.ConfirmText,
+                             Description = popUpDisplay,
+                             ModalPopUpId = "PopUpConfirmDisableEnable",
+                             Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes = "data-dismiss=modal", OnClickFunctionName = "User.prototype.EnableDisableSingleAccount(true)" } }
+
+                         })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.UserName, new { @class = "required", @data_test_selector = "lblUserName" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.UserName, new { @readonly = "readonly", @data_test_selector = "txtUserName" })
+                            @Html.ValidationMessageFor(model => model.UserName, "", new { @data_test_selector = "valUserName", @id = "errorRequiredUserName" })
+                        </div>
+                        <div class="pull-left" data-toggle="tooltip" data-original-title="@Admin_Resources.ButtonEdit">
+                            <a id="updateUsername" onclick="User.prototype.SetUsername()" class="btn-narrow-icon" data-toggle="modal" data-target="#updateUserView" data-placement="top" data-original-title="@Admin_Resources.TitleUpdateUsername" data-test-selector="btnUpdateUsername"><i class='z-edit'></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblResetPassword">@Admin_Resources.ButtonResetPassword</label>
+                        </div>
+                        <div class="control-md">
+                            <button data-test-selector="btnResetPassword" type="button" data-toggle='modal' data-target='#PopUpConfirmResetPassword' class="btn-text btn-text-secondary btn-margin-left">@Admin_Resources.ButtonSubmit</button>
+                            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                        new PopupModel()
+                        {
+                            Title = @Admin_Resources.TitleConfirmResetPassword,
+
+                            Description = @Admin_Resources.TextConformResetPassword,
+                            ModalPopUpId = "PopUpConfirmResetPassword",
+                            Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "User.prototype.ResetPasswordUsers()" } }
+                        })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.Email, new { @class = "required", @data_test_selector = "lblEmailAddress" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.Email, new { @data_test_selector = "txtEmailAddress" })
+                            @Html.ValidationMessageFor(model => model.Email, null, new { id = "errorRequiredEmail", @data_test_selector = "valEmailAddress" })
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.UserName, new { @class = "required", @data_test_selector = "lblUserName" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.UserName, new { @data_test_selector = "txtUserName" })
+                            @Html.ValidationMessageFor(model => model.UserName, "", new { @data_test_selector = "valUserName", @id = "errorRequiredUserName" })
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(Admin_Resources.LabelExternalIdCode, new { @data_test_selector = "lblExternalId" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ExternalId, new { @data_test_selector = "txtExternalId" })
+                        @Html.ValidationMessageFor(model => model.ExternalId, "", new { @data_test_selector = "valExternalId", @id = "errorExternalId" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.FirstName, new { @class = "required", @data_test_selector = "lblFirstName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.FirstName, new { @data_test_selector = "txtFirstName" })
+                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @data_test_selector = "valFirstName", @id = "errorRequiredFirstName" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.LastName, new { @class = "required", @data_test_selector = "lblLastName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.LastName, new { @data_test_selector = "txtLastName" })
+                        @Html.ValidationMessageFor(model => model.LastName, "", new { @data_test_selector = "valLastName", @id = "errorRequiredLastName" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.PhoneNumber, new { @data_test_selector = "lblPhoneNumber" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.PhoneNumber, new { @data_test_selector = "txtPhoneNumber" })
+                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @data_test_selector = "valPhoneNumber" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.HelptextPhoneNumber)
+                </div>
+            </div>
+            if (!isSalesRep)
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.RoleList, new { @data_test_selector = "lblRoleList" })
+                        </div>
+                        <div class="control-md">
+                            @if (User.Identity.GetUserName() == Model.UserName && !Model.HasError)
+                            {
+                                @Html.DropDownListFor(model => model.RoleId, Model.RoleList, new { @id = "rolelist", disabled = "disabled", @data_test_selector = "drpRoleList" })
+                                @Html.ValidationMessageFor(m => m.RoleList, "", new { @data_test_selector = "valRoleList" })
+                                @Html.HiddenFor(m => m.RoleName, new { @id = "hdnRoleName" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.RoleId, Model.RoleList, new { @id = "rolelist", @data_test_selector = "drpRoleList" })
+                                @Html.ValidationMessageFor(m => m.RoleList, "", new { @data_test_selector = "valRoleList" })
+                                @Html.HiddenFor(m => m.RoleName, new { @id = "hdnRoleName" })
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label data-test-selector="lblMedia">@Admin_Resources.LabelImage</label>
+                    </div>
+                    <div class="control-md">
+                        <div class="upload-images" id="divMediaId">
+                            <img id="MediaId" data-test-selector="imgMedia" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')" src="@mediapath" alt="Upload Image" class="img-responsive">
+                            <span class="change-image" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')">@Admin_Resources.LinkChange</span>
+                            <input type="hidden" id="MediaId" name="MediaId" value="@mediaId">
+                            <input type='hidden' value=@AdminConstants.ImageExtensions Id='hdnMediaId' />
+                            @if (!Equals(mediapath, null) && !Equals(mediapath, ZnodeAdminSettings.DefaultImagePath))
+                            {
+                                <a class="upload-images-close" data-test-selector="linkCloseMedia" data-toggle="tooltip" data-placement="top" title="Remove" onclick="EditableText.prototype.RemoveImage('MediaId')"><em class="z-close-circle"></em></a>
+                            }
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.MediaId, "", new { @data_test_selector = "valMedia" })
+                    <div id="UploadMediaId" class="appendMediaModel">
+                    </div>
+
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.AspNetUserId)
+            @Html.HiddenFor(model => model.IsSelectAllPortal)
+            @Html.HiddenFor(model => model.Email)
+            @Html.HiddenFor(model => model.UserId)
+            @Html.HiddenFor(model => model.PortalIdString)
+            @Html.HiddenFor(model => model.IsVerified)
+        }
+    </section>
+    <!--Call for popUp (partial view)-->
+    <div id="UpdateUsernamePopUp" data-test-selector="divUpdateUsernamePopUp">@Html.Partial("~/Views/Customer/_EditUsername.cshtml")</div>
+</div>
+
+<div class="drop-panel-overlay" style="display: none;"></div>
+<div id="ConfirmPopup" class="modal fade in" role="dialog" style="display: none;">
+    <div class="modal-dialog modal-md" style="width:auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#ConfirmPopup').hide()"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">@Admin_Resources.ZlabelConfirm</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" id="divShoppertoAdminValidation">
+                </div>
+            </div>
+            <div class="modal-footer right">
+                <div class="pull-right  margin-top-bottom">
+                    <button type="button" id="btnConvertShopperToAdmin" class="btn-text" onclick="User.prototype.ConvertShopperToAdmin();$('#ConfirmPopup').hide();">@Admin_Resources.ButtonOk</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="divMediaUploaderPopup"></div>
+
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"></script>
+<script>
+    $("#AreaId").multiselect({ includeSelectAllOption: false, enableCaseInsensitiveFiltering: false });
+    $("#portals").multiselect({ includeSelectAllOption: true, enableCaseInsensitiveFiltering: false });
+</script>

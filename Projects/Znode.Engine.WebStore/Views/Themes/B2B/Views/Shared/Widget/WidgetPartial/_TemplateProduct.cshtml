@@ -1,0 +1,50 @@
+﻿@model Znode.Engine.WebStore.ViewModels.WidgetProductListViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+}
+@if (!Equals(Model, null) && Model.CMSMode)
+{
+    if (Model.IsEmpty)
+    {
+        <div class="col-xs-12 nopadding cms-icon-container">
+            <img src="@_fileLocation/Images/product-list.png" alt="New Product" class="img-fluid cms-img-icon"/>
+        </div>
+    }
+}
+    @if (!Equals(Model?.Products, null))
+    {
+        if (Model.Products.Count > 0 && Model.DisplayName == "NewArrival")
+        {
+            <h3 class="product-list-title">@Html.RenderMessage(WebStoreConstants.NewArrival)</h3>
+        }
+        else if (Model.Products.Count > 0 && Model.DisplayName == "HomePageSpecial")
+        {
+            <h3 class="product-list-title">@Html.RenderMessage(WebStoreConstants.BestSellersTitle)</h3>
+        }
+
+        <div class="template-product-list">
+            @{
+                if (Model.Products.Count > 0)
+                {
+                    foreach (var p in Model.Products)
+                    {
+                        if (!string.IsNullOrEmpty(p.ProductViewModel?.Name))
+                        {
+                            @Html.Partial("_ProductTitleHome", p)
+                        }
+                    }
+                }
+            }
+        </div>
+    }
+
+    <script>
+    $(document).ready(function () {
+        var async = '@Helper.IsAsyncPrice';
+        if (async == 'True') {
+            Product.prototype.GetPriceAsync();
+        }
+    })
+    </script>

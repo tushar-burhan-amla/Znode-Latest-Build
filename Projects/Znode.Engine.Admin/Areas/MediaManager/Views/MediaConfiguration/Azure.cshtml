@@ -1,0 +1,63 @@
+﻿@model Znode.Engine.Admin.ViewModels.MediaConfigurationViewModel
+<div class="col-sm-12 nopadding">
+    <div class="form-group">
+        @if (Model.BucketName != null)
+        {
+            <div class="col-sm-12 nopadding">
+                <div class="control-md control-non">
+                    <button type="button" onclick="javascript: var serverConfig = new MediaConfiguration(); serverConfig.startSyncProcess('@Model.BucketName');" class="btn-text pull-right margin-bottom">@MediaManager_Resources.LabelSyncExistingData</button>
+                </div>
+            </div>
+        }
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(MediaManager_Resources.LabelStorageAccountName, new { @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.AccessKey)
+                <span id="valDisplayAccessKeyErr" class="field-validation-error"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(MediaManager_Resources.LabelAccessKey, new { @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.SecretKey)
+                <span id="valDisplaySecretKeyErr" class="field-validation-error"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(MediaManager_Resources.LabelAzureBucketName, new { @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.BucketName)
+                <span id="valDisplayBucketNameErr" class="field-validation-error"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(MediaManager_Resources.LabelCDNUrl, new { })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.CDNUrl)
+            </div>
+            <div class="help-text">
+                <i class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="The azure domain CDN URL that will be used to fetch and display the images. example: https://domain.azure.net/dev/"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

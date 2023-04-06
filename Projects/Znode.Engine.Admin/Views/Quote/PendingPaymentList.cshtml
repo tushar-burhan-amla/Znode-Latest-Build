@@ -1,0 +1,68 @@
+﻿@model Znode.Engine.Admin.ViewModels.AccountQuoteListViewModel
+@using Znode.Engine.Admin.Models
+@using Znode.Libraries.Resources
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string accountName = string.IsNullOrEmpty(Model?.AccountName) ? @Admin_Resources.LabelAccount : Model?.AccountName;
+}
+    <div id="@Model.GridModel.FrontObjectName">
+        <div class="col-sm-12 title-container">
+            <h1>@Admin_Resources.TitlePendingPaymentList<span class="total-count"><p>@Model.GridModel.TotalRecordCount</p></span></h1>
+            <div class="pull-right">
+                @if (Model.UserId > 0 && Model.AccountId > 0)
+                {
+                    @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "CustomersList", "Account", new { accountId = Model.AccountId }, new { @class = "btn-text-icon" })
+                    @Html.AuthorizedRawActionLink("<em class='z-add-circle'></em>" + Admin_Resources.LabelCreateQuote, "CreateQuoteForCustomer", "Order", new { userId = Model.UserId, accountId = Model.AccountId }, new { @class = "btn-text-icon" })
+                }
+                else if (Model.AccountId > 0)
+                {
+                    @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "list", "Account", null, new { @class = "btn-text-icon" })
+                }
+            </div>
+        </div>
+        <!--Main Container-->
+        <section class="col-sm-12 page-container">
+            @using (Ajax.BeginForm(actionName, controllerName, new { userId = Model.UserId, accountId = Model.AccountId }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+            {
+                <div id="filterComponent">
+                    @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                </div>
+            }
+            <div class="col-sm-12 list-container">
+                @{
+                    @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                }
+            </div>
+            @Html.HiddenFor(m => m.AccountId)
+            @Html.HiddenFor(m => m.UserId)
+            @Html.HiddenFor(m => m.UpdatePageType)
+            @Html.Hidden("UserAccountId", Model.AccountId)
+            <div>
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                new PopupModel()
+                {
+                    Title = @Admin_Resources.TextConfirmQuote,
+                    Description = @Admin_Resources.TextProceedToCheckoutQuote,
+                    ModalPopUpId = "ConfirmConvertToOrder",
+                    Buttons = new List<PopUpButtonModel>
+                    () {
+                    new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "User.prototype.ConvertToOrder()"}
+                    }
+                })
+                <button style="display:none" data-href="" id="btnConvertToOrder" data-toggle="modal" data-target="#ConfirmConvertToOrder"></button>
+                @Html.Hidden("hdnOrderURL")
+            </div>
+        </section>
+    </div>
+<script>
+    $(document).ready(function () {
+        Account.prototype.SetUpdateQuoteUrl();
+
+        $("#@Model.GridModel.FrontObjectName #grid").find('.z-orders').click(function (e) {
+            e.preventDefault();
+            Account.prototype.ValidateOrderStatus($(this).attr('href'))
+        });
+    });
+</script>

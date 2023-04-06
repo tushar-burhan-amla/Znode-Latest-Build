@@ -1,0 +1,74 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model PortalWarehouseViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.TitleMultifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = "/Store/List", FormId = "frmWarehouse" , IsSaveCloseEnable=true };
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+<div id="warehouse-manage">
+    <div class="col-sm-12 title-container">
+        <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelStore)<em class="z-minus"></em><span>@Model.PortalName</span></h1>
+        <div class="pull-right">
+            <div class="pull-right btn-container">
+                @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "List", "Store", null, new { @class = "btn-text-icon", @data_test_selector = "linkCancel" })
+                <div class="btn-text-group padding-left">
+                    <button type="button" class="btn-text btn-text-secondary" onclick="Store.prototype.AssociateWarehouses(@Model.PortalId,'@actionModel.CancelUrl')" data-test-selector="linkSaveNClose">@Admin_Resources.ButtonSaveClose </button>
+                    <button type="button" data-test-selector="btnToggle" class="btn-text-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret caret-color"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="btn-dropdwn-lst" onclick="Store.prototype.AssociateWarehouses(@Model.PortalId,'')" data-test-selector="linkSave">@Admin_Resources.ButtonSave</a></li>
+                    </ul>
+
+
+                </div>
+            </div>         
+        </div>
+    </div>
+    <div class="main-wrapper">
+        <!--Left Panel-->
+        <aside>
+            <button id="slide-menu" class="slide-menu-btn" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+            <div class="slide-container">
+                @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+            </div>
+        </aside>
+        <!--Main Container-->
+        <section class="main-container">
+            @using (Html.BeginForm("AssociateWarehouseToStore", controllerName, FormMethod.Post, new { id = "frmWarehouse" }))
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label class="required" data-test-selector="lblDefaultWarehouse">@Admin_Resources.HeaderMainWarehouse</label>
+                        </div>
+                        <div class="control-sm">
+                            @Html.DropDownListFor(Model => Model.WarehouseId, Model.MainWarehouseList, Admin_Resources.LabelSelectWarehouse, new { id = "warehouseList", @onchange = "Store.prototype.GetWarehouses()", @data_test_selector = "drpWarehouseList" })                            
+                        </div>
+                        <div class="control-non">
+                            <span id="Error-Warehouse" class="error-msg" data-test-selector="valDefaultWarehouse" />
+                        </div>
+                    </div>
+                </div>
+                <h3 class="section-heading margin-top-25" data-test-selector="hdgAlternateWarehouse">@Admin_Resources.LabelAlternateWarehouse</h3>
+                <div id="Alternate-Warehouse" class="col-sm-12 nopadding margin-top-bottom">
+                    @if (Model != null)
+                    {
+                        <div id="columnListDiv">
+                            @{Html.RenderPartial("~/Views/Shared/EditorTemplates/TwoListView.cshtml", Model);}
+                        </div>
+                                }
+                                else
+                                {
+                                    <div id="columnListDiv"></div>
+                                }
+                </div>
+                @Html.HiddenFor(m => m.PortalId)
+                                @Html.HiddenFor(m => m.WarehouseId)
+                                @Html.HiddenFor(m => m.PortalWarehouseId)
+                                }
+        </section>
+    </div>
+</div>

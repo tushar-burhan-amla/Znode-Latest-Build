@@ -1,0 +1,36 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PublishHistoryListViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string callBackActionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = "Update", Controller = controllerName, Callback = callBackActionName, FormId = "frmUpdateCurrency" };
+
+}
+<div id="@Model.GridModel.FrontObjectName">
+    <!--Main Container-->
+    <div class="panel-container" id="aside-popup-panel">
+        <div class="col-sm-12 nopadding">
+            <div class="col-sm-12 title-container">
+                <h1>@GlobalSetting_Resources.TitlePublishHistory</h1>
+                <div class="pull-right">
+                    <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('divPublishHistoryListPopup')"><em class="z-back"></em>BACK</button>
+                </div>               
+            </div>
+            <div class="col-sm-12 page-container">
+                @using (Ajax.BeginForm("List", "PublishHistory", null, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+                {
+                    <div id="filterComponent">
+                        @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                    </div>
+                }
+                <div class="col-sm-12 list-container">
+                    @{
+                        @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PortalApprovalViewModel
+
+@{
+    string displayStatus = Model?.UserApprover?.Count > 0 ? "display: block" : "display: none";
+}
+<div id="Show">
+    <div class="col-xs-12 nopadding text-right margin-bottom" id="add_partial_button">
+        @Html.AuthorizedPrototypeRawActionLink("<em class='z-add-circle'></em>" + Admin_Resources.ButtonAddNewApprover, "GetApproverOrder", "Store", new { id = "defaultValue -add-new-row", @class = "btn-text-icon", onclick = "Store.prototype.AddNewArea();" })
+    </div>
+    <div class="col-sm-12 box-containe nopadding">
+        <div class="table-div" style="@displayStatus">
+            <div class="col-xs-12 thead-div padding-top-bottom nopadding">
+                <div class="col-xs-4">@Admin_Resources.LabelSelectApprovers</div>
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4 text-right">@Admin_Resources.LabelAction</div>
+            </div>
+            <div class="tbody-div">
+                <div id="_PartialPortalApproverPanel" class="removePartial" style="display: none">
+                </div>
+
+                @if (Model?.UserApprover?.Count > 0)
+                {
+                    foreach (var item in Model.UserApprover)
+                    {
+                        @Html.Partial("_PartialPortalUserApproval", item)
+                        @Html.HiddenFor(x => x.PortalApprovalId)
+                    }
+                }
+                @*else
+                {
+                    <div class="MessageBox no-record"><p class="text-center">@Admin_Resources.NoRecordFoundText</p></div>
+                }*@
+            </div>
+        </div>
+    </div>
+</div>
+

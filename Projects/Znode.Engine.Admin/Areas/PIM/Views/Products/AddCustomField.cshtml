@@ -1,0 +1,102 @@
+﻿@model Znode.Engine.Admin.ViewModels.CustomFieldViewModel
+@using Znode.Engine.Admin.ViewModels;
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+@using (Ajax.BeginForm(actionName, controllerName,
+                                new AjaxOptions()
+                                {
+                                    HttpMethod = "post",
+                                    OnSuccess = "Products.prototype.CustomFieldAddResult",
+                                    UpdateTargetId = "divAddCustomPopup",
+                                    InsertionMode = InsertionMode.Replace,
+                                },
+                                new { @id = "addCustomForm" }))
+{
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="pull-right">
+                    <button id="AddCustomfieldCancel" type="button" class="btn-text-icon" data-dismiss="modal"><em class="z-back" data-test-selector="popLinkCancel"></em>@Admin_Resources.ButtonCancel</button>
+                    <div class="pull-right">
+                        <button id="AddCustomfieldSave" type="submit" class="btn-text btn-text-secondary margin-left-10" data-test-selector="popLinkSave">@Admin_Resources.ButtonSave</button>
+                    </div>
+                </div>
+                @if (actionName.ToLower().Contains("editcustomfield"))
+                {<h4 class="modal-title">@PIM_Resources.LabelEditCustomField</h4>}
+            else
+            { <h4 class="modal-title">@PIM_Resources.LabelAddCustomField</h4>}
+            </div>
+
+            <div class="modal-body">
+                <div class="col-sm-12 page-container">
+                    <div id="customFieldModel" class="col-sm-12 nopadding">
+                        <div class="col-sm-12 nopadding">
+                            <span id="customFieldError" class="error-msg text-center padding-bottom">@Model.ErrorMessage</span>
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.CustomCode, new { @class = "required" })
+                                    </div>
+                                    @if (actionName.ToLower() == "editcustomfield")
+                                    {
+                                        <div class="control-md">
+                                            @Html.TextBoxFor(model => model.CustomCode, new { @disabled = "disabled" })
+                                            @Html.HiddenFor(model => model.CustomCode)
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="control-md">
+                                            @Html.TextBoxFor(model => model.CustomCode)
+                                            @Html.ValidationMessageFor(model => model.CustomCode)
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.DisplayOrder)
+                                    </div>
+                                    <div class="control-md">
+                                        @if (actionName.ToLower() == "editcustomfield")
+                                        {
+                                            @Html.TextBoxFor(model => model.DisplayOrder)
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(model => model.DisplayOrder, new { @Value = "500" })
+                                        }
+                                        @Html.ValidationMessageFor(model => model.DisplayOrder)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 nopadding">
+                            <div class="col-sm-12 nopadding">
+                                <h3 class="section-heading">@PIM_Resources.LabelText</h3>
+                            </div>
+
+                            @Html.Partial("~/Areas/PIM/Views/Products/_CustomeFieldLocaleRow.cshtml", Model, new ViewDataDictionary { { "CustomKeyExists", true } })
+
+                            @Html.HiddenFor(x => x.ProductId)
+                            @Html.HiddenFor(x => x.CustomFieldId)
+                        </div>
+
+                        <div class="col-sm-6 nopadding">
+                            <div class="col-sm-12 nopadding">
+                                <h3 class="section-heading">@PIM_Resources.LabelValue</h3>
+                            </div>
+                            @Html.Partial("~/Areas/PIM/Views/Products/_CustomeFieldLocaleRow.cshtml", Model, new ViewDataDictionary { { "CustomKeyExists", false } })
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@Scripts.Render("~/bundles/jqueryval")

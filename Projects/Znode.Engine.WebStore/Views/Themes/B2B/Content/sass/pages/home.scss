@@ -1,0 +1,182 @@
+﻿.home-slider{
+    .owl-carousel{
+        //  Change later (text-alignment from admin side).
+        .carousel-caption{position:relative;padding:20px;top:0;flex:1;transform:translate(0,0);max-width:100%;
+            .first{font-size:24px;}
+            h3{font-size:35px;}
+            div{font-size:18px;}
+            button{margin:15px 0 5px 0;}
+        }
+    }
+    .slider{
+        .item{
+            a{overflow:hidden;display:flex;justify-content:center;flex-wrap:wrap;background-color:$base-primary-light;width:100%;}
+            img{height:auto; width:100%; position:relative;}
+        }
+        .owl-pagination{position:relative;padding-top:10px;}
+        .owl-buttons{
+            .owl-prev,.owl-next{top:40%;}
+        }
+    }
+}
+.offer-banner{padding:0 5px;
+    .owl-item{padding:5px 10px 35px;
+        .item{box-shadow:$box-shadow;border-radius:$primary-radius;
+            &:hover{box-shadow:$box-shadow-hover;}
+            > a{display:flex;padding:25px;flex-wrap:wrap;width:100%;
+                img{order:1;width:100%;max-width:82px;max-height:82px;align-self:center;}
+                .carousel-caption{text-shadow:none;position:relative;order:2;left:0;top:0;transform:translate(0,0);margin-right:0;margin-top:10px;width:100%;text-align:left;
+                     &.Right {text-align: right;} &.Center {text-align: center;}
+                    .promo-title{font-family:$base-font-family-bold;font-size:$base-font-size + 5;color:$text-primary;letter-spacing:1.25px;text-transform:uppercase;}
+                    .promo-description{font-family:$base-font-family;font-size:$base-font-size + 2;color:$base-tertiary;letter-spacing:0.88px;line-height:20px;margin:10px 0;}
+                    .btn{border-color:$base-tertiary-light;display:block;margin:10px auto 0;padding:15px 20px;}
+                    div{color:$text-default;}
+                }
+            }
+        }
+    }
+}
+.featured-products{padding-top:40px;padding-bottom:40px;
+    .featured-products-block{padding:0;}
+}
+.carousel-card {
+    border-bottom: 1px solid #ddd;
+    padding: 2rem 0;
+}
+.user-promotion-msg{
+    font-size:16px;
+    color: $base-secondary-light;
+    padding: 10px;
+}
+.loged-out-product-details{padding:10px 0;
+    .loged-out-product-title{font-family:$base-font-family-bold;font-size:$base-font-size + 1;}
+    .loged-out-product-text{font-size:$base-font-size - 2;}
+    a{text-decoration:underline;}
+}
+.product-list-title{text-align:center;font-size:$base-font-size + 6;text-transform:uppercase;}
+
+//  Used on home page and category list page
+.view-option-category{padding:0 5px;list-style:none;display:flex;flex-wrap:wrap;
+    li{width:50%;padding:10px;}
+    .b2b-categories{padding:10px;}
+    a{width:100%;display:block;
+        &:hover{
+            img{box-shadow:$box-shadow-hover;}
+            label{cursor:pointer;}
+        }
+    }
+    img{padding:15px;box-shadow:$box-shadow;border-radius:$primary-radius;width:100%;}
+    label, span{width:100%;padding-top:15px;text-align:center;font-family:$base-font-family-bold;font-size:$base-font-size + 4;text-transform:uppercase;}
+}
+//  Used on home page and product list page
+.b2b-products {
+    padding: 10px;
+
+    .product-item {
+        box-shadow: $box-shadow;
+        padding: 20px;
+        border-radius: $primary-radius;
+        position: relative;
+        width: 100%;
+
+        &:hover {
+            box-shadow: $box-shadow-product;
+
+            .title {
+                color: $base-primary-light;
+            }
+        }
+
+        .view-item {
+            .image {
+                margin-bottom: 15px;
+                min-height: 250px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .title {
+                font-size: $base-font-size + 3;
+                text-transform: capitalize;
+                max-height: 48px;
+                overflow: hidden;
+            }
+
+            .recommend-product-title a {
+                color: #424242;
+            }
+
+            .product-details {
+                .price {
+                    font-size: $base-font-size + 8;
+                    font-family: $base-font-family-bold;
+                }
+
+                .product-rating {
+                    font-size: $base-font-size - 1.5;
+                }
+            }
+        }
+    }
+}
+.read-reviews{text-decoration:underline;margin-left:5px;}
+.quick-view-content{
+    .product-overview{padding-top:24px;}
+}
+
+//track order
+.track-order{float:right;padding-right:10px;
+    a{color:$white;font-size:$base-font-size - 1px;}
+    i{color:$white; font-style:normal;font-size:$base-font-size + 2px;vertical-align:middle;}
+}
+
+@include screensize(xl-small){
+    .home-slider{
+        .slider{
+            .item{
+                a{overflow:visible;display:block;}
+                img{height:auto;width:100%;}
+            }
+        }
+    }
+}
+@include screensize(small){
+    .product-list-title{font-size:$base-font-size + 12;}
+    .home-slider{
+        .owl-carousel{
+            .carousel-caption{position:absolute;background-color:transparent;padding:0;top:50%;transform:translate(0,-50%);
+                .first{font-size:24px;}
+                h3{font-size:40px;}
+                div{font-size:18px;}
+            }
+        }
+        .slider{
+            .owl-pagination{position:absolute;padding-top:0;}
+            .owl-buttons{
+                .owl-prev,.owl-next{top:50%;}
+            }
+        }
+    }
+    .offer-banner{padding:30px 5px;
+        .owl-item{padding:10px 5px;
+            .item{
+                > a{flex-wrap:nowrap;
+                    img{order:2;}
+                    .carousel-caption{order:1;margin-right:10px;margin-top:0;text-align:left;
+                        .promo-description{font-size:$base-font-size;}
+                        .btn{display:block;margin:0;padding:10px 20px;}
+                    }
+                }
+            }
+        }
+    }
+    .b2b-products .product-item:hover .btn-quick-view{display:block;}
+    .view-option-category li{width:25%;}
+}
+
+
+@include screensize(medium){
+    .view-option-category li{width:16.66%;}
+    .offer-banner .owl-item .item > a .carousel-caption .btn{padding:10px 15px;}
+}

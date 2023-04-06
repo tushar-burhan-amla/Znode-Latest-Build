@@ -1,0 +1,24 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@model QuoteCartViewModel
+@{
+    int priceRoundOff = Convert.ToInt32(DefaultSettingHelper.DefaultPriceRoundOff);
+
+}
+@using (Ajax.BeginForm("UpdateShippingHandling", "Quote"
+                                    , new AjaxOptions
+                                    {
+                                        UpdateTargetId = "divShoppingCart",
+                                        OnBegin = "return Quote.prototype.ValidateShippingDetails(this)",
+                                        OnSuccess = "Quote.prototype.UpdatePriceSuccessCallback(this)"
+                                    }, new { @class = "dirtylisten dirty", @id = "ShippingView" }))
+{
+    <div class="col-sm-12">
+        <div class="row">
+            @Html.HiddenFor(model => model.OmsQuoteId, new { @id = "hdnShippingQuoteId" })
+            @Html.TextBoxFor(model => model.ShippingCost, new { @data_test_selector = "txtShippingCost", @Onchange = "Quote.prototype.SubmitForm(this)", @data_priceRoundOff = priceRoundOff })
+            <div id="shipping_error_msg" style="color: #cc0000"></div>
+        </div>
+    </div>
+}
+@Html.HiddenFor(model => model.ShippingCost, new { @id = "hdnShippingCost" })

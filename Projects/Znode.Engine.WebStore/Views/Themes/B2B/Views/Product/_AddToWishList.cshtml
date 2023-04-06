@@ -1,0 +1,26 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductViewModel
+<div class="col-xs-12 product-page-links nopadding">
+    <div class="col-xs-12 col-sm-8 col-md-12 p-0 d-flex">
+        <button data-test-selector="btnPrint" type="button" class="btn-print" onclick="window.print();">
+            <span class="d-flex align-items-center">
+                <i class="icon-printer"></i>
+                @WebStore_Resources.ButtonPrint
+            </span>
+        </button>
+        <div id="seeMore" class="btn-see-more" data-test-selector="btnSeeMore"></div>
+        <button data-toggle="modal" class="btn-email" data-target="#modelEmailToFriend">
+            <span class="d-flex align-items-center">
+                <i data-test-selector="linkMail" class="icon-mail-envelope" title="Email A Friend"></i>
+                @WebStore_Resources.EmailAFriend
+            </span>
+        </button>
+    </div>
+</div>
+@Html.Action("EmailToFriend", "Product")
+<script>
+    jQuery(document).ready(function (e) {
+        $("#ProductName").val($(".product-name").html());
+        jQuery('#modelEmailToFriend').trigger('click');
+    });
+</script>
+

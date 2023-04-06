@@ -1,0 +1,60 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@model CatalogAssociationViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+}
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.LabelManage<em class="z-minus"></em>@Model.CatalogName</h1>
+    <div class="pull-right btn-container">
+        <a href='/Profiles/GetProfileCatalogList?profileId=@Model.ProfileId' data-test-selector="linkBack" class="btn-text-icon"><em class='z-back'></em>@Admin_Resources.ButtonBack</a>
+        <a class="btn-text-icon" onclick="Catalog.prototype.GetUnassociatedCategoryList();" data-test-selector="linkCategoryAssociation"><em class='z-association-category'></em>@PIM_Resources.TitlePIMCatalogCategoryAssociation </a>
+        <a class="btn-text-icon" id="btn-product-association" onclick="Catalog.prototype.GetUnAssociatedProductsForProfile();" data-test-selector="linkProductAssociation"><em class='z-catalog'></em>@PIM_Resources.TitlePIMCatalogProductAssociation</a>
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    <aside>
+        <div class="slide-container">
+            @Html.Partial("~/Areas/PIM/Views/Catalog/_profileCategoryTree.cshtml")
+        </div>
+    </aside>
+    <section class="main-container">
+        <div class="col-sm-12 nopadding">
+            <div id="@Model.GridModel.FrontObjectName" data-id="@Model.GridModel.FrontObjectName">
+                @Html.Partial("AssociatedCategoriesListForProfile", Model)
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.CatalogId, new { @id = "hdnPimCatalogId" })
+        @Html.HiddenFor(m => m.CategoryId, new { @id = "hdnPimCategoryId" })
+        @Html.HiddenFor(m => m.ProfileCatalogId)
+        @Html.HiddenFor(m => m.ProfileId)
+        @Html.HiddenFor(x => x.GridModel.FrontObjectName, new { id = "container_to_update" })
+        @Html.Hidden("IsRootFolder")
+        <div id="temp_data_to_insert" style="display:none"></div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderConfirmDelete,
+                        Description = @Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "CatalogAssociatedCategoryFromProfileDeletePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Catalog.prototype.RemoveAssociatedCategoriesFromProfileCatalog(this);"}
+                         }
+                    })
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderConfirmDelete,
+                        Description = @Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "ConfirmRemoveAssociatedProducts",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Catalog.prototype.RemoveAssociatedProductsFromProfileCatalog(this);"}
+                         }
+                    })
+    </section>
+</div>
+
+<div id="target-categories-to-display" class="aside-popup-panel modal-dialog modal-lg"></div>
+<div id="target-products-to-display" class="aside-popup-panel  modal-dialog modal-xl"></div>
+<div id="target-category-edit-to-display" class="aside-popup-panel  modal-dialog modal-lg"></div>

@@ -1,0 +1,25 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string areaName = (Equals(HttpContext.Current.Request.RequestContext.RouteData.DataTokens["area"], null)) ? string.Empty : Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.DataTokens["area"]);
+    string controller = string.IsNullOrEmpty(areaName) ? controllerName : $"{areaName}/{controllerName}";
+    ChildMenuHelper objHelper = new ChildMenuHelper();
+    MenuListViewModel menuList = objHelper.GetMenuListByControllerName(controller, areaName);
+
+}
+
+@if (!Equals(menuList?.Menus, null))
+{
+    <ul class="aside-panel">
+        @foreach (MenuViewModel menu in menuList?.Menus)
+        {
+            string className = string.IsNullOrEmpty(menu.CSSClassName) ? "z-info" : menu.CSSClassName;
+            <li>@Html.AuthorizedRawActionLink(menu.MenuName, menu.ActionName, menu.ControllerName, new { Area = menu.AreaName }, null)</li>
+        }
+    </ul>
+}
+
+
+

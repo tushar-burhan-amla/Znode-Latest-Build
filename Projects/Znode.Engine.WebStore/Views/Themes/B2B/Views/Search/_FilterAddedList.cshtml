@@ -1,0 +1,27 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model SearchResultViewModel
+
+<div class="list-group d-flex flex-wrap align-items-center mt-3">
+    <h4 class="panel-title panel-title-edit accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne_AddedList"><span>Filtering By: </span></h4>
+    
+    @foreach (var facetValue in Model.FacetFilters)
+    {
+        <div class="b2b-filter-items d-flex flex-wrap">
+            <h4>@HttpUtility.HtmlDecode(Model.Facets.Find(x => x.AttributeValues.Any(y => y.AttributeCode == facetValue.Item1))?.AttributeName):</h4>
+            @foreach (var facetValueItem in facetValue.Item2)
+            {
+            <div class="filter-item d-flex" onclick="Search.prototype.RemoveFacet('@facetValueItem.Value')">
+                <label class="mr-auto">@HttpUtility.HtmlDecode(facetValueItem.Key)</label>
+                <span class="close-circle-icon"></span>
+            </div>
+            }
+        </div>        
+    }
+    @{
+        if (Model.BrandId > 0)
+        {  <a class="clear-filter" href="JavaScript:void(0);" onclick="Search.prototype.RemoveFacet('Search?IsRemoveAll=true&brandId=@Model.BrandId')">@WebStore_Resources.TextClearAll</a>}
+
+        else
+        { <a class="clear-filter" href="JavaScript:void(0);" onclick="Search.prototype.RemoveFacet('Search?IsRemoveAll=true&categoryId=@Model.CategoryId&SearchTerm=@Model.SearchTerm')">@WebStore_Resources.TextClearAll</a> }
+    }
+</div>

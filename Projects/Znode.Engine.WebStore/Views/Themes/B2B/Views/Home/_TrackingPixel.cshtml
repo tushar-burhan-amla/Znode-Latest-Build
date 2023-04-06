@@ -1,0 +1,8 @@
+﻿@model Znode.Engine.WebStore.ViewModels.PortalViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@if (HelperUtility.IsNotNull(Model.TrackingPixelScriptCode))
+{
+    <!-- Tracking Pixel Script -->
+    @Html.RenderBlock(Model.TrackingPixelScriptCode)
+    <!-- Tracking Pixel Script -->
+}

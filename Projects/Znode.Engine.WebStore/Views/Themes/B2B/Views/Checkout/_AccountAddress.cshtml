@@ -1,0 +1,94 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model AddressListViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string _addressType = ViewBag.AddressType;
+    bool isNewAddress = Convert.ToBoolean(ViewBag.IsNewAddress);
+    string addressText = string.Format((Convert.ToString(Request.QueryString["mode"]) == "guest" || Model.SelectedAddressId < 1) ? WebStore_Resources.TitleAddAddress : WebStore_Resources.LinkTextChangeAddress, $" {_addressType?.ToProperCase()}");
+    AddressViewModel _editAddressModel = Model.AddressList?.FirstOrDefault(x => x.AddressId == Model.SelectedAddressId);
+    bool isAuthenticated = HttpContext.Current.User.Identity.IsAuthenticated;
+    if (HelperUtility.IsNull(_editAddressModel))
+    {
+        if (Equals(_addressType, WebStoreConstants.ShippingAddressType))
+        {
+            _editAddressModel = Model.ShippingAddress;
+            _editAddressModel.IsDefaultShipping = (Model.AddressList?.Count <= 1 && (!Model.AddressList?.Any(x => x.IsDefaultShipping)).GetValueOrDefault()) ? true : false;
+        }
+        else if (Equals(_addressType, WebStoreConstants.BillingAddressType))
+        {
+            _editAddressModel = Model.BillingAddress;
+        }
+    }
+
+    _editAddressModel.AddressCount = ((Equals(_addressType, WebStoreConstants.BillingAddressType) && (Model.AddressList?.Any(x => x.IsDefaultBilling)).GetValueOrDefault()) || (Equals(_addressType, WebStoreConstants.ShippingAddressType) && (Model.AddressList?.Any(x => x.IsDefaultShipping)).GetValueOrDefault())) ? Model.AddressList.Count : 0;
+
+    List<SelectListItem> _AddressName = new List<SelectListItem>();
+
+    if (Model?.AddressList?.Count > 0)
+    {
+        if (Equals(_addressType, WebStoreConstants.ShippingAddressType))
+        {
+            Model.AddressList.Where(e => e.IsShipping).ToList().ForEach(m => _AddressName.Add(new SelectListItem() { Text = m.DisplayName, Value = m.AddressId.ToString() }));
+        }
+        else
+        {
+            Model.AddressList.Where(e => e.IsBilling).ToList().ForEach(m => _AddressName.Add(new SelectListItem() { Text = m.DisplayName, Value = m.AddressId.ToString() }));
+        }
+    }
+
+
+    if (_addressType == WebStoreConstants.ShippingAddressType.ToString().ToLower())
+    {
+        _editAddressModel.OtherAddressId = Model.BillingAddress.AddressId;
+    }
+    else if (_addressType == WebStoreConstants.BillingAddressType)
+    {
+        _editAddressModel.OtherAddressId = Model.ShippingAddress.AddressId;
+    }
+}
+
+@if (_AddressName?.Count > 0 && !isNewAddress && isAuthenticated && !Model.HasError)
+{
+    _AddressName.ForEach(x => { x.Selected = x.Value == Convert.ToString(Model.ShippingAddress.AddressId) ? true : false; });
+    <div class="col-12 pt-2 pl-0 pr-0 pb-3 b2b-form">
+        <div class="form-group">
+            <div class="col-12 p-0">
+                <label class="form-title">@WebStore_Resources.LabelSelectCustomerAddress</label>
+            </div>
+            <div class="col-12 p-0">
+                @using (Ajax.BeginForm("GetAddress", "Checkout", new AjaxOptions() { UpdateTargetId = "Edit-Address-content_" + _addressType, OnSuccess = "ZnodeBase.prototype.HideLoader()" }))
+                {
+                    @Html.AntiForgeryToken();
+                    @Html.Hidden("addressType", _addressType, new { @id = "account_addressType" })
+                    @Html.Hidden("AddressId", new { @id = "account_addressId" });
+                    @Html.Hidden("OtherAddressId", _editAddressModel.OtherAddressId, new { @id = "account_otherAddressId" });
+                    @Html.DropDownListFor(m => Model.SelectedAddressId, _AddressName, new { @id = "ShippingAddress", @onchange = "javascript:$('[name=\"AddressId\"]').val($(this).val());$('#formChange').val(true); $(this).closest('form').submit();" })
+                }
+            </div>
+        </div>
+    </div>
+}
+@using (Ajax.BeginForm("UpdateAddress", "Checkout", new AjaxOptions() { OnBegin = "ZnodeBase.prototype.ShowLoader();", OnSuccess = "Checkout.prototype.SetAddressErrorNotificationMessage", OnFailure = "ZnodeBase.prototype.HideLoader();" }, new { @id = "frmEditAddress_" + _addressType }))
+{
+    @Html.AntiForgeryToken();
+    <div id="Edit-Address-content_@_addressType" class="b2b-checkout-address-popup col-12 px-0">
+        @{Html.RenderPartial("_EditAddress", _editAddressModel);}
+    </div>
+    @Html.Hidden("addressType", _addressType, new { @id = "hnd_addressType" })
+    @Html.Hidden("formChange", true, new { @id = "formChange" })
+}
+
+<script>
+    $('#frmEditAddress :input').change(function () {
+        $("#formChange").val(true);
+    });
+    $('#ShippingAddress option').each(function () {
+        var optionText = this.text;
+        if (optionText.length > 90) {
+            var newOption = optionText.substring(0, 90);
+            $(this).text(newOption + '...');
+        }
+    });
+</script>

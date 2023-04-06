@@ -1,0 +1,65 @@
+﻿@model Znode.Engine.Admin.ViewModels.ContentPageListViewModel
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@{ 
+    PopupModel publishPopupModel = new PopupModel()
+    {
+        Title = @Admin_Resources.TitlePublishConfirm,
+        Description = string.Format(@Admin_Resources.PublishConfirmationMessage, "seo setting"),
+        NoChoiceDescription = string.Format(@Admin_Resources.PublishConfirmationMessageNoChoice, "seo setting"),
+        ModalPopUpId = "PublishSeo",
+        ModalSizeClass = "model-smd",
+        AdditionalNote = string.Format(Admin_Resources.PublishAllLocaleDisclaimerMessage, "seo setting"),
+        InputFields = new List<PopupInputField>
+    {
+        new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = HelperMethods.GetAvailablePublishStates(), RequiredNumberOfItemsToDisplay = 2 }
+    },
+        Buttons = new List<PopUpButtonModel>() {
+                new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal", OnClickFunctionName = "SEO.prototype.PublishSeo(this)" }
+                                                     }
+    };
+}
+
+<div id="@Model.GridModel.FrontObjectName">
+    @using (Ajax.BeginForm("GetContentPages", "SEO", new { PortalId = Model.PortalId }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+    {
+        <div id="filterComponent">
+            @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+        </div>
+    }
+    <div class="col-sm-12 list-container">
+        @{
+            @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+        }
+    </div>
+</div>
+@Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",publishPopupModel)
+<script type="text/javascript">
+$(".z-edit").each(function () { hrefText = $(this).attr("href"); hrefText = hrefText + "&seotypeid=@Model.SEOTypeId" + "&portalid=@Model.PortalId"; $(this).prop("href", hrefText) })
+    $("td").each(function () {
+        if ($(this).closest('table').find('th').eq($(this).index()).text().trim() == "Page Title") {
+            hrefText = $(this).find("a").attr("href");
+            hrefText = hrefText + "&seotypeid=@Model.SEOTypeId" + "&portalid=@Model.PortalId";
+            $(this).find("a").prop("href", hrefText);
+        }
+        $(document).ready(function () {
+            $(".z-publish").off("click").on("click", function () { SEO.prototype.GetContentPagePublishSeoPopup($(this)); });
+        });
+    })
+    $("table[data-swhgcontainer='SEOContentPages'] tbody").children("tr").find("a:first").on("click", function (event) {
+            event.preventDefault();
+        var seoCode = $(this).closest("tr").find("td").first().next().html();
+            seoCode = encodeURIComponent(seoCode);
+            var portalId = $("#hdnPortalId").val();
+            var seoTypeId = $("#hdnSEOTypeId").val();
+            window.location.href = "/SEO/SEODetails?seoCode=" + seoCode + "&seotypeid=" + seoTypeId + "&portalid=" + portalId;
+        });
+    $(".z-edit").on("click", function (event) {
+        event.preventDefault();
+        var seoCode = $(this).closest("tr").find("td").first().next().html();
+            seoCode = encodeURIComponent(seoCode);
+            var portalId = $("#hdnPortalId").val();
+            var seoTypeId = $("#hdnSEOTypeId").val();
+            window.location.href = "/SEO/SEODetails?seoCode=" + seoCode + "&seotypeid=" + seoTypeId + "&portalid=" + portalId;
+    });
+</script>

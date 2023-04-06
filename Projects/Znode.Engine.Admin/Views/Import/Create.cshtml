@@ -1,0 +1,166 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@model ImportViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront; ;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmImport", Callback = "Import.prototype.ValidateAndPost" };
+}
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgImport">@string.Format(@Admin_Resources.TitleAdd, @Admin_Resources.LabelImport)</h1>
+    <div class="pull-right">
+        @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "List", "Import", null, new { @class = "btn-text-icon", @data_test_selector = "linkCancel" })
+        <div class="pull-right">
+            <button type="button" id="importButton" onclick="return Import.prototype.ValidateAndPost();" class="btn-text btn-text-secondary margin-left-10"><em data-test-selector="linkImport"></em>@Admin_Resources.ButtonImport</button>
+        </div>
+    </div>
+</div>
+<div class="col-sm-12 page-container">
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lblLocaleId">@Admin_Resources.LabelLocaleId</label>
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(model => model.LocaleId, new SelectList(Model?.Locale, "Value", "Text"), new { @data_test_selector = "drpLocaleId" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.ImportHeadId, new { @data_test_selector = "lblImportType", @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(model => model.ImportHeadId, Model.ImportTypeList, Admin_Resources.LabelPleaseSelect, new { id = "importTypeList", @data_test_selector = "drpImportType", @onchange = "Import.prototype.GetTemplateAndFamilies()" })
+                <span class="field-validation-error" data-test-selector="valImportType" id="error-importname"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" id="divSelectFamily" style="display:none;">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lblFamilyList" class="required">@Admin_Resources.LabelFamilyList</label>
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(model => model.FamilyId, new SelectList(Model.FamilyList, "Value", "Text"), new { id = "familyList", @data_test_selector = "drpFamilyList", @onchange = "Import.prototype.GetTemplatesFromFamily()" })
+                <span class="field-validation-error" data-test-selector="valFamilyList" id="error-familyname"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" id="divSelectPricing" style="display:none;">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lblSelectPricing" class="required">@Admin_Resources.LabelSelectPricing</label>
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(model => model.ListCode, new SelectList(Model.PricingList, "Value", "Text"), new { id = "pricingList", @data_test_selector = "drpSelectPricing", @onchange = "Import.prototype.GetTemplatesFromFamily()" })
+                <span class="field-validation-error" data-test-selector="valSelectPricing" id="error-familyname"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" id="divSelectCatalog" style="display:none;">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lblSelectCatalog" class="required">@Admin_Resources.LabelSelectCatalog</label>
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(model => model.ListCode, new SelectList(Model.CatalogList, "Value", "Text"), new { id = "catalogList", @data_test_selector = "drpSelectCatalog", @onchange = "Import.prototype.GetTemplatesFromFamily()" })
+                <span class="field-validation-error" data-test-selector="valSelectCatalog" id="error-familyname"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" id="divSelectPromotionType" style="display:none;">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lblSelectPromotionType" class="required">@Admin_Resources.LabelSelectPromotionType</label>
+            </div>
+            <div class="control-md">
+            @Html.DropDownListFor(model => model.PromotionTypeId,  new SelectList(Model.PromotionTypeList, "Value", "Text"), new { id = "promotionTypeList", @data_test_selector = "drpSelectPromotionType", @onchange = "Import.prototype.GetTemplatesFromFamily()" })
+            <span class="field-validation-error" data-test-selector="valSelectPromotion" id="error-familyname"></span>
+        </div>
+        </div>
+    </div>
+    <div class="form-group" id="divSelectCountry" style="display:none;">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lblSelectCountry" class="required">@Admin_Resources.LabelSelectCountry</label>
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(model => model.ListCode, new SelectList(Model.CountryList, "Value", "Text"), new { id = "countryList", @data_test_selector = "drpSelectCountry", @onchange = "Import.prototype.GetTemplatesFromFamily()" })
+                <span class="field-validation-error" data-test-selector="valSelectCountry" id="error-familyname"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" id="divSelectSEODetails" style="display:none;">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lblStore" class="required">@Admin_Resources.LabelSelectStore</label>
+            </div>
+            <div class="control-md">
+                @Html.FastSelectFor(model => model.StoreName, model => model.PortalId, "GetSuggestions", "Typeahead", "Import.prototype.OnSelectPortalResult", 1, true,
+                new
+                {
+                htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStore" },
+                parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                })
+                @Html.ValidationMessageFor(model => model.StoreName, null, new { id = "errorRequiredStore", @data_test_selector = "valStore" })
+                @Html.HiddenFor(x => x.PortalId)
+
+            </div>
+        </div>
+    </div>
+    <div class="form-group" id="divSelectTemplate">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.TemplateId, new { @data_test_selector = "lblTemplateId", @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(model => model.TemplateId, new SelectList(Model.TemplateTypeList, "Value", "Text"), new { id = "templateList", @onchange = "Import.prototype.GetTemplateMappings()", @data_test_selector = "drpTemplateId" })
+                <span class="field-validation-error" id="error-templatename" data-test-selector="valTemplateId"></span>
+                @Html.Hidden("ChangedFileName")
+                <button type="button" id="createTemplate" data-test-selector="btnCreateTemplate" onclick="return Import.prototype.CreateNewTemplate();" class="btn-text btn-text-secondary btn-margin-left margin-top">@Admin_Resources.LabelCreateNewTemplate</button>
+                <form method="post" action="~/Import/DownloadTemplate">
+                    @Html.Hidden("downloadImportHeadId")
+                    @Html.Hidden("downloadImportName")
+                    @Html.Hidden("downloadImportFamilyId", 0)
+                    @Html.Hidden("downloadImportPromotionTypeId")
+                    <button id="downloadImportTemplate" data-test-selector="btnDownloadTemplate" type="submit" onclick="return Import.prototype.CheckImportType();" class="btn-text btn-text-secondary margin-top margin-left-10">@Admin_Resources.LabelDownloadTemplate</button>
+                </form>
+                <button type="button" id="ShowHideTemplates" data-test-selector="btnResetTemplate" onclick="return Import.prototype.ShowTemplateList();" style="display:none;" class="btn-text btn-text-secondary margin-top margin-left-10">@Admin_Resources.LabelResetTemplate</button>
+            </div>
+        </div>
+    </div>
+    <div id="divAddTemplatePopup" class="modal fade" role="dialog">
+        @{Html.RenderPartial("~/Views/Import/_CreateTemplateName.cshtml");}
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.FilePath, new { @class = "required" , @data_test_selector = "lblFileName"})
+                <span class="sub" data-test-selector="spnCSVFileInstructionText">@Admin_Resources.SelectCSVFileInstructionText</span>
+            </div>
+            <div class="control-md">
+                @Html.EditorFor(model => model.FilePath, new { htmlAttributes = new { @onchange = "GetFileHeaders()" } })
+                <span class="field-validation-error" id="error-file-upload" data-test-selector="valFileUpload"></span>
+            </div>
+        </div>
+    </div>
+    <h3 class="section-heading margin-top-25" data-test-selector="hdgSectionHeading">@Admin_Resources.LabelMapCSVHeaders</h3>
+    <p class="sub" data-test-selector="spnTemplateMappingInstructionText">@Admin_Resources.TemplateMappingInstructionText</p>
+    <div id="Alternate-Warehouse" class="col-sm-12 nopadding margin-top-bottom">
+        @if (Model != null)
+        {
+            <div id="columnListDiv">
+                @{Html.RenderPartial("~/Views/Shared/EditorTemplates/ThreeListView.cshtml");}
+            </div>
+        }
+        else
+        {
+            <div id="columnListDiv"></div>
+        }
+    </div>
+    <button type="submit" class="btn-text btn-text-secondary pull-left" id="updateMappings" data-test-selector="btnUpdateMappings" onclick="return Import.prototype.UpdateMappings();">@Admin_Resources.ButtonUpdateMappings</button>
+</div>

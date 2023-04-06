@@ -1,0 +1,35 @@
+﻿@using Znode.Engine.Admin.Models;
+
+<div id="divTaxExemptContainer" class="col-sm-12 nopadding cart-promocode">
+    <div class="form-group margin-left-15 padding-left-15">
+        <div>
+            <div class="control-label">           
+                <a id="btnTaxExempt" onclick="Order.prototype.ApplyTaxExempt();" data-test-selector="linkEditTaxExempt"></a>
+            </div>
+
+            <div id="containerTaxExempt" class="pull-left">
+                <label>
+                    <input data-val="true" id="chkTaxExempt" onclick="Order.prototype.OnTaxExemptChecked();" value="true" type="checkbox" data-test-selector="chkApplyTaxExempt">
+                    <span id="messageTaxExcempt" class="lbl padding-8" data-test-selector="spnApplyTaxExempt">Make Tax Exempt</span>
+                    <input name="chkTaxExempt" value="false" type="hidden">
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                               new PopupModel()
+                               {
+                                   Title = @Admin_Resources.ConfirmText,
+                                   Description = @Admin_Resources.QuoteTaxExemptConfirm,
+                                   ModalPopUpId = "PopUpTaxExemptSubmitOrder",
+                                   Buttons = new List<PopUpButtonModel>() {
+                                   new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "Order.prototype.ConfirmTaxExemptOnCreateOrder()" },
+                                   }
+                               })
+</div>
+<script>
+    $("#PopUpTaxExemptSubmitOrder #btn-cancel-popup").on("click", function () { $("#chkTaxExempt").prop("checked", false) });
+</script>
+

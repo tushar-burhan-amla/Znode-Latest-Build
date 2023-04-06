@@ -1,0 +1,41 @@
+﻿@model string
+<div class="col-12 b2b-block h-100">
+    <div class="form-group">
+        <div class="col-12 block-title">
+            @WebStore_Resources.LabelEstimateShippingCosts
+        </div>
+        <div class="col-12 block-content">
+            <div class="block-items-title">
+                @WebStore_Resources.TitleZipCode
+            </div>
+            <div class="d-flex flex-wrap flex-md-nowrap block-items">
+                <div class="shipping-estimator-input row">
+                    <div class="col-12 col-sm-7 pr-sm-2">
+                        <input data-test-selector="txtZipCode" type="text" id="zipcode" name="zipcode" aria-label="@WebStore_Resources.LabelZipCode" value="@Model" class="mr-md-3" onblur="Cart.prototype.ShowHideCancelButton();" />
+                        <button type="button" id="CancleShippingEstimator" onclick="Cart.prototype.ClearShippingEstimates();" style="display:none;" class="cancel-shipping-estimator close-icon"></button>
+                        <div data-test-selector="lblShippingErrorMsg" id="zipcodeerrormessage" class="field-validation-error"></div>
+                    </div>
+                    <div class="col-12 col-sm-4 mt-2 mt-sm-0 px-md-1">
+                        <button data-test-selector="btnShippingEstimator" type="button" id="shippingEstimator" class="btn btn-secondary btn-block" onclick="Cart.prototype.GetShippingEstimates();">@WebStore_Resources.LabelEstimate</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="shippingOptionsContainer" class="shipping-estimate-details field-validation-error"></div>
+</div>
+<script>
+    $(document).ready(function () {
+        var zipCode = $("#zipcode").val();
+        if (typeof zipCode != 'undefined' && zipCode!= null && zipCode !="") {
+            Cart.prototype.GetShippingEstimates();
+        }
+    })
+
+    //Code for hit estimated shipping button on press enter key
+    $(document).on("keypress", "#zipcode", function (e) {
+        if (e.which == 13) {
+            Cart.prototype.GetShippingEstimates();
+        }
+    });
+</script>

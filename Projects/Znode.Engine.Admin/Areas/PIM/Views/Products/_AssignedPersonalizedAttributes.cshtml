@@ -1,0 +1,37 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model PIMProductAttributeValuesListViewModel
+@{
+    int cultureId = Model.LocaleId;
+    if (!Equals(HttpContext.Current.Request.Cookies["_productCulture"], null))
+    {
+        cultureId = !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies["_productCulture"].Value) ? Convert.ToInt32(HttpContext.Current.Request.Cookies["_productCulture"].Value) : Model.LocaleId;
+    }
+
+}
+<div class="col-sm-12 nopadding">
+    @if (Model.ProductAttributeValues.Count > 0)
+    {
+        foreach (var item in Model.ProductAttributeValues)
+        {
+            if (Equals(item.ControlProperty.ControlType, "File"))
+            { item.ControlProperty.htmlAttributes.Add("IsPimFileControl", "True"); }
+
+            if (Equals(item.IsLocalizable, false) && !Equals(Model.LocaleId, cultureId))
+            {
+                item.ControlProperty.htmlAttributes.Add("disabled", "true");
+                item.ControlProperty.htmlAttributes.Add("pointer-events", "none");
+            }
+
+            @Html.Partial("~/Areas/PIM/Views/Shared/_createControl.cshtml", item)
+        }
+    }
+    else
+    {
+        <div class="col-sm-12 no-record nopadding">
+            <p class="text-center">@Admin_Resources.NoRecordFoundText</p>
+        </div>
+    }
+
+</div>
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Content/bootstrap-3.3.7/js/datepicker.js" type="text/javascript"> </script>

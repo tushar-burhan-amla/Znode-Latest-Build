@@ -1,0 +1,147 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model RMAReturnTotalViewModel
+@{
+    /**/
+
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+}
+@{
+    string cssClass = string.Empty;
+}
+
+@{
+    cssClass = (Model.ReturnShippingCost > 0 || Model.ReturnTaxCost > 0) ? "form-group" : "form-group tax-details";
+}
+
+<div class="@cssClass">
+    <div class="col-sm-7">
+        <label data-test-selector="lblReturnSubTotal">@Admin_Resources.LabelSubTotal</label>
+    </div>
+    <div class="col-sm-5 return-value">
+        <label data-test-selector="lblSpanReturnSubTotal" id="returnSubtotalId">@HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.SubTotal), cultureCode)</label>
+    </div>
+</div>
+
+
+@{
+    cssClass = "form-group";
+}
+
+<div class="@cssClass">
+    <div class="col-sm-7">
+        @Html.Label(Admin_Resources.LabelShipping, new { @data_test_selector = "lblReturnShippingCost" })
+    </div>
+    <div class="col-sm-5  return-value">
+        <label data-test-selector="lblSpanReturnShippingCost" id="returnShippingCostId"> + @HelperMethods.FormatPriceWithCurrency(Model.ReturnShippingCost, cultureCode)</label>
+    </div>
+</div>
+
+
+@if (Model.ReturnImportDuty > 0)
+{
+    <div class="form-group">
+        <div class="col-sm-7">
+            <label data-test-selector="lblImportDuty">@Admin_Resources.LabelImportDuty</label>
+        </div>
+        <div class="col-sm-5 return-value">
+            <label data-test-selector="lblSpanImportDuty" id="returnImportDuty"> + @HelperMethods.FormatPriceWithCurrency(Model.ReturnImportDuty, cultureCode)</label>
+        </div>
+    </div>
+}
+<div class="form-group tax-details">
+    <div class="col-sm-7">
+        @Html.Label(Admin_Resources.LabelTax, new { @data_test_selector = "lblReturnColumnTax" })
+    </div>
+    <div class="col-sm-5 return-value">
+        <label data-test-selector="lblSpanReturnColumnTax" id="returnTaxCostId"> + @HelperMethods.FormatPriceWithCurrency(Model.ReturnTaxCost, cultureCode)</label>
+    </div>
+</div>
+
+@{
+    cssClass = (Model.CSRDiscount > 0 || Model.ReturnShippingDiscount > 0) ? "form-group" : "form-group tax-details";
+}
+@if (Model.DiscountAmount > 0)
+{
+
+    <div class="@cssClass">
+        <div class="col-sm-7">
+            <label data-test-selector="lblDiscountAmount">@Admin_Resources.LabelDiscountAmount</label>
+        </div>
+        <div class="col-sm-5 return-value">
+            <label data-test-selector="lblSpanDiscountAmount" id="returnDiscountAmountId"> - @HelperMethods.FormatPriceWithCurrency(Model.DiscountAmount, cultureCode)</label>
+        </div>
+    </div>
+
+}
+
+@{
+    cssClass = (Model.ReturnShippingDiscount > 0) ? "form-group" : "form-group tax-details";
+}
+@if (Model.CSRDiscount > 0)
+{
+    
+        <div class="@cssClass">
+            <div class="col-sm-7">
+                <label data-test-selector="lblCSRDiscountAmount">@Admin_Resources.LabelCSRDiscount</label>
+            </div>
+            <div class="col-sm-5 return-value">
+                <label data-test-selector="lblSpanDiscountAmount" id="returnCSRDiscountAmountId"> - @HelperMethods.FormatPriceWithCurrency(Model.CSRDiscount, cultureCode)</label>
+            </div>
+        </div>
+   
+        
+}
+@if (Model.ReturnShippingDiscount > 0 && Model?.ReturnShippingCost > 0)
+{
+    <div class="form-group shipping-details">
+        <div class="col-sm-7">
+            <label data-test-selector="lblShippingDiscountAmount">@Admin_Resources.LabelShippingDiscount</label>
+        </div>
+        <div class="col-sm-5 return-value">
+            <label data-test-selector="lblSpanShippingDiscountAmount" id="returnShippingDiscountAmountId"> - @HelperMethods.FormatPriceWithCurrency(Model.ReturnShippingDiscount, cultureCode)</label>
+        </div>
+    </div>
+}
+
+@if (Model.ReturnCharges > 0)
+{
+    <div class="form-group return-details">
+        <div class="col-sm-7">
+            <label data-test-selector="lblReturnChargesAmount">@Admin_Resources.LabelReturnCharges</label>
+        </div>
+        <div class="col-sm-5 return-value">
+            <label data-test-selector="lblSpanReturnChargesAmount" id="returnReturnChargesAmountId"> - @HelperMethods.FormatPriceWithCurrency(Model.ReturnCharges, cultureCode)</label>
+            <div class="help-text">
+                <em class="z-help-circle" data-toggle="tooltip" data-placement="left" title="" data-original-title="@Admin_Resources.TitleReturnChargesTooltip"></em>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+
+<div class="form-group">
+    <div class="col-sm-7">
+        @Html.Label(Admin_Resources.LabelReturnTotal, new { @data_test_selector = "lblReturnTotal" })
+    </div>
+    <div class="col-sm-5 return-value">
+        <label data-test-selector="lblSpanReturnTotal" id="returnTotalId">@HelperMethods.FormatPriceWithCurrency(Model.TotalReturnAmount, cultureCode)</label>
+        @Html.HiddenFor(m => m.TotalReturnAmount, new { @id = "hdnreturntotalid" })
+    </div>
+</div>
+
+@if (Model.VoucherAmount > 0)
+{
+    <div class="form-group">
+        <div class="col-sm-7">
+            @Html.Label(Admin_Resources.LabelVoucherAmount, new { @data_test_selector = "lblVoucherAmount" })
+        </div>
+        <div class="col-sm-5 return-value">
+            <label data-test-selector="lblSpanVoucherAmount" id="voucherAmountId">@HelperMethods.FormatPriceWithCurrency(Model.VoucherAmount, cultureCode)</label>
+            @Html.HiddenFor(m => m.VoucherAmount, new { @id = "hdnvoucheramountiId" })
+        </div>
+    </div>
+}
+

@@ -1,0 +1,46 @@
+﻿@using Znode.Engine.Admin.Models
+@using Znode.Engine.Api.Models;
+@using Znode.Libraries.ECommerce.Utilities;
+@model FilterColumnListModel
+
+@functions
+{
+    //Method to get searchable column list.
+    public static SearchableColumnListModel GetSearchableColumnList(FilterColumnListModel filterColumnListModel)
+    {
+        SearchableColumnListModel searchableColumnListModel = new SearchableColumnListModel();
+        searchableColumnListModel.SearchableColumn = filterColumnListModel.FilterColumnList.FindAll(x => x.IsAllowSearch == "y" & string.Equals(x.DataType, "string", StringComparison.InvariantCultureIgnoreCase))?.Select(x => x.ColumnName)?.ToList();
+        searchableColumnListModel.SearchableColumn.RemoveAll(x => x.Contains("|"));
+        if (!Equals(searchableColumnListModel.SearchableColumn, null) && searchableColumnListModel.SearchableColumn.Count() > 0)
+        {
+
+            if (HttpContext.Current.Request.Url.AbsoluteUri.ToString().Contains("order/list", StringComparison.InvariantCultureIgnoreCase))
+            {
+                searchableColumnListModel.SearchableColumnName = "OrderNumber|UserName|Email|PhoneNumber";
+            }
+            else if (HttpContext.Current.Request.Url.AbsoluteUri.ToString().Contains("quote/quotelist", StringComparison.InvariantCultureIgnoreCase))
+            {
+                searchableColumnListModel.SearchableColumnName = "QuoteNumber|EmailID";
+            }
+            else if (HttpContext.Current.Request.Url.AbsoluteUri.ToString().Contains("rmareturn/list", StringComparison.InvariantCultureIgnoreCase))
+            {
+                searchableColumnListModel.SearchableColumnName = "OrderNumber|ReturnNumber|EmailId";
+            }
+            else if (HttpContext.Current.Request.Url.AbsoluteUri.ToString().Contains("customer/customerslist", StringComparison.InvariantCultureIgnoreCase) ||
+                HttpContext.Current.Request.Url.AbsoluteUri.ToString().Contains("customer/guestuserlist", StringComparison.InvariantCultureIgnoreCase) ||
+                HttpContext.Current.Request.Url.AbsoluteUri.ToString().Contains("user/customerslist", StringComparison.InvariantCultureIgnoreCase))
+            {
+                searchableColumnListModel.SearchableColumnName = "UserName|FullName|Email";
+            }
+            else
+            {
+                searchableColumnListModel.SearchableColumnName = searchableColumnListModel.SearchableColumn.Count() == 1 ? string.Join("|", searchableColumnListModel.SearchableColumn.ToArray()) + "|" : string.Join("|", searchableColumnListModel.SearchableColumn.ToArray());
+            }
+            searchableColumnListModel.FilteredValue = filterColumnListModel.FilterColumnList.FirstOrDefault(x => x.ColumnName.Contains(searchableColumnListModel.SearchableColumnName))?.Value;
+            searchableColumnListModel.FilteredValue = string.IsNullOrEmpty(searchableColumnListModel.FilteredValue) ? string.Empty : searchableColumnListModel.FilteredValue;
+            searchableColumnListModel.FilteredValue = (searchableColumnListModel.FilteredValue.IndexOf("''") >= 0) ? searchableColumnListModel.FilteredValue.Replace("''", "'") : searchableColumnListModel.FilteredValue;
+        }
+
+        return searchableColumnListModel;
+    }
+}

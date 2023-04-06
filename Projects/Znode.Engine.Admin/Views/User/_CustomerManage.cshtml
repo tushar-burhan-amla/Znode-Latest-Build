@@ -1,0 +1,165 @@
+﻿@model Znode.Engine.Admin.ViewModels.CustomerViewModel
+@using Znode.Engine.Admin.Helpers
+
+<div class="col-sm-12 page-container">
+    <div class="col-sm-12 title-container">
+        <h1>General Info</h1>
+        <div class="pull-right">
+            <a href="/User/CustomersList" class="btn-text-icon"><em class="z-back"></em>@Admin_Resources.ButtonBack</a>
+            <a href="/User/CustomerEdit?userId=@Model.UserId" class="btn-text-icon"><em class="z-edit"></em>@Admin_Resources.ButtonEdit</a>
+        </div>
+    </div>
+    <div class="col-sm-12 box-container nopadding">
+        <h3 class="section-heading">@Admin_Resources.ManageContactInformation</h3>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.FullName)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.FullName" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.CompanyName)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.CompanyName" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.PhoneNumber)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.PhoneNumber" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.Email)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.Email" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.EmailOptIn)
+                </div>
+                <div class="control-md">
+                    <em class="@HelperMethods.GetCheckMark(Convert.ToBoolean(Model.EmailOptIn)) padding-left"></em>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-heading">@Admin_Resources.ManageAccountInformation</h3>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.AccountId)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.AccountId" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.ExternalId)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.ExternalId" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.UserName)
+                </div>
+                <div class="control-md">
+                    <input type="text" value="@Model.UserName" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+
+        @* To do: will be removed it after discussion *@
+        @*<h3 class="section-heading">@Admin_Resources.ManageAdditionalInformation</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Website)
+                    </div>
+                    <div class="control-md">
+                        <input type="text" value="@Model.Website" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Description)
+                    </div>
+                    <div class="control-md">
+                        <input type="text" value="@Model.Description" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Source)
+                    </div>
+                    <div class="control-md">
+                        <input type="text" value="@Model.Source" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Custom1)
+                    </div>
+                    <div class="control-md">
+                        <input type="text" value="@Model.Custom1" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Custom2)
+                    </div>
+                    <div class="control-md">
+                        <input type="text" value="@Model.Custom2" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Custom3)
+                    </div>
+                    <div class="control-md">
+                        <input type="text" value="@Model.Custom3" readonly="readonly" />
+                    </div>
+                </div>
+            </div>*@
+
+    </div>
+</div>

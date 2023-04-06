@@ -1,0 +1,120 @@
+﻿@model Znode.Engine.Admin.ViewModels.GlobalAttributeFamilyViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateGlobalAttributeFamily", CancelUrl = "/GlobalAttributeFamily/List", Callback = "GlobalAttributeFamily.prototype.ValidateFamilyCode", IsSaveCloseEnable = true };
+}
+
+<div class="col-sm-12 title-container">
+    @if (actionName.ToLower().Contains("create"))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, "New Attribute Family")</h1>
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, "Attribute Family")<em class="z-minus"></em><span>@Model.FamilyCode</span></h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateGlobalAttributeFamily" }))
+    {
+        <div class="box-container margin-bottom">
+            <div class="form-group" id="EntityType">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label class="required" data-test-selector="lblEntityType">Entity Type</label>
+                    </div>
+                    <div class="control-md">
+                        @if (Model.GlobalAttributeFamilyId > 0)
+                        {
+                            @Html.DropDownListFor(x => x.GlobalEntityId, Model.GlobalEntityType, new { @id = "ddlEntityType", @data_test_selector = "drpEntityType", @disabled = "disabled"})
+                            @Html.HiddenFor(m => m.GlobalEntityId)
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(x => x.GlobalEntityId, Model.GlobalEntityType, new { @id = "ddlEntityType", @data_test_selector = "drpEntityType" })
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group dirtyignore">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.FamilyCode, new { @class = "required", @data_test_selector = "lblFamilyCode" })
+                    </div>
+                    <div class="control-md">
+                        @if (Model.GlobalAttributeFamilyId > 0)
+                        {@Html.TextBoxFor(m => m.FamilyCode, new { @readonly = "readonly", @data_test_selector = "txtFamilyCode" }) }
+                    else
+                    {
+                        @Html.TextBoxFor(m => m.FamilyCode, new { @data_test_selector = "txtFamilyCode" })}
+
+                        @Html.ValidationMessageFor(model => model.FamilyCode, "", new { id = "errorSpanFamilyCode", @data_test_selector = "valFamilyCode" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.GlobalAttributeFamilyId)
+        @Html.HiddenFor(m => m.EntityName)
+        @*Div for creating tabs*@
+        <div class="col-sm-12 nopadding padding-top" id="divGroupToFamily">
+            @{Html.RenderAction("GetTabStructure", controllerName, new { @FamilyCode = @Model.FamilyCode });}
+        </div>
+    }
+
+    <!-- Display order popup Modal -->
+    <div id="divEditDisplayOrderPopup" class="modal fade" style="display:none" role="dialog">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Attribute Group - Edit Display order</h4>
+                </div>
+                <div class="modal-body">
+                    <span id="spanError-DisplayOrder" class="text-danger field-validation-error" data-valmsg-replace="true" style="display:none"></span><br />
+                    <div id="divEditModelBody">
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    <label for="GroupCode" aria-required="true">@Admin_Resources.GroupCode</label>
+                                </div>
+                                <div class="control-md">
+                                    <input type="text" id="txtGroupCode" value="" disabled="disabled" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    <label class="required">@PIM_Resources.LabelDisplayOrder</label>
+                                </div>
+                                <div class="control-md">
+                                    <input type="text" value="" id="txtDisplayOrder" name="txtDisplayOrder">
+                                    <span class="error-msg field-validation-valid" data-valmsg-for="txtDisplayOrder" id="errorSpamtxtDisplayOrder"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type='hidden' id="hdnGroupCodeId" name='hdnGroupCodeId' value='' />
+                    </div>
+                </div>
+                <div class="modal-footer right">
+                    <div class="pull-right">
+                        <button type="button" id="btn-cancel-popup" class="btn-text-icon pull-left" data-dismiss="modal"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                        <button type="button" id="btnSubmitModel" class="btn-text btn-text-secondary margin-left-10" onclick="GlobalAttributeFamily.prototype.UpdateDisplayOrder()">@Admin_Resources.ButtonSave</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

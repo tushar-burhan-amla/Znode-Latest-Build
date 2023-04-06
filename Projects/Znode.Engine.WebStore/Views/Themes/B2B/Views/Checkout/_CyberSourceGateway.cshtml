@@ -1,0 +1,152 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model PaymentTokenViewModel
+@{
+    var jss = new System.Web.Script.Serialization.JavaScriptSerializer();
+    var jwkJson = jss.Serialize(Model.PaymentGatewayToken);
+}
+<!DOCTYPE html>
+<html lang="en">
+<body>
+</body>
+<head>
+    <title>Sample Checkout</title> 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <style>
+        #number-container, #securityCode-container {
+            height: 38px;
+            margin-top: 0px !important;
+            background-color: #FAFAFA;
+            border: 1px solid #9E9E9E;
+            box-shadow: none;
+        }
+
+        .flex-microform-focused {
+            background-color: #fff;
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+    </style>
+</head>
+</html>
+
+<div class="container pl-2">
+    <div class="card-body p-0">
+        @*<h1>Checkout</h1>*@
+        @*<div id="errors-output" class="error-msg mb-2" role="alert"></div>*@
+        <form id="my-sample-form" method="post">
+            <div class="form-group">
+                <label for="cardholderName" class="font-weight-bold">@WebStore_Resources.TitleName</label>
+                <input id="cyscardholderName" name="cardholderName" placeholder="Name on the card" />
+                <div id="errorcybersourcecardholdername" class="field-validation-error" style="display: none">@WebStore_Resources.ErrorCardHolderName</div>
+            </div>
+            <div class="form-group">
+                <label id="cardNumber-label" class="required font-weight-bold">@WebStore_Resources.LabelCardNumber</label>
+                <div id="number-container" class="form-control"></div>
+            </div>
+            <div class="form-group">
+                <label for="securityCode-container" class="required font-weight-bold">@WebStore_Resources.LabelSecurityCode</label>
+                <div id="securityCode-container" class="form-control"></div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="expMonth" class="font-weight-bold">@WebStore_Resources.LabelExpiryMonth</label>
+                    <input type="text" id="expMonth" maxlength="2" data-payment="expiry-month" class="creditCardPayment" placeholder="MM" />
+                    <div id="errorexpmonth" class="field-validation-error" style="display: none">@WebStore_Resources.ValidationEnterValidDate</div>
+                    <div id="errorexpirymonthandyear" class="field-validation-error" style="display:none">@WebStore_Resources.ValidMonthYear</div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="expYear" class="font-weight-bold">@WebStore_Resources.LabelExpiryYear</label>
+                    <input type="text" id="expYear" maxlength="4" data-payment="expiry-year" class="creditCardPayment" placeholder="YYYY" />
+                    <div id="errorexpyear" class="field-validation-error" style="display: none">@WebStore_Resources.ValidationEnterValidYear</div>
+                </div>           
+            </div>
+            
+            <button type="button" id="pay-button" class="btn btn-primary" style="display:none">Pay</button>
+            <input type="hidden" id="flexresponse" name="flexresponse">
+            <input type="hidden" id="hiddenflexresponse" name="flexresponse">
+
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+     // JWK is set up on the server side route for /
+
+    var form = document.querySelector('#my-sample-form');
+    var payButton = document.querySelector('#pay-button');
+    var flexResponse = document.querySelector('#flexresponse');
+    var expMonth = document.querySelector('#expMonth');
+    var expYear = document.querySelector('#expYear');
+    var errorsOutput = document.querySelector('#errors-output');
+
+    // the capture context that was requested server-side for this transaction
+        /*alert(captureContext);*/
+
+    var captureContext = @Html.Raw(jwkJson);
+        $("#hiddenflexresponse").val(captureContext)
+    // custom styles that will be applied to each field we create using Microform
+        var myStyles = {
+            'input': {
+                'font-size': '14px',
+                'font-family': 'helvetica, tahoma, calibri, sans-serif',
+                'color': '#454545'
+            },
+            //':focus': { 'color': 'blue' },
+            ':disabled': { 'cursor': 'not-allowed' },
+            'valid': { 'color': '#3c763d' },
+            'invalid': { 'color': '#a94442' }
+    };
+
+    // setup
+    var flex = new Flex(captureContext);
+    var microform = flex.microform({ styles: myStyles });
+    var number = microform.createField('number', { placeholder: 'Enter card number' });
+    var securityCode = microform.createField('securityCode', { placeholder: '•••' });
+
+    number.load('#number-container');
+    securityCode.load('#securityCode-container');
+
+
+        payButton.addEventListener('click', function () {
+        var options = {
+            expirationMonth: expMonth.value,
+            expirationYear: expYear.value
+        };
+
+            microform.createToken(options, function (err, token) {
+            if (err) {
+                // handle error
+                Checkout.prototype.ErrorDisplayCyberSourcePayment();
+                console.error(err);
+                errorsOutput.textContent = err.message;               
+            } else {
+                // At this point you may pass the token back to your server as you wish.
+                // In this example we append a hidden input to the form and submit it.                
+                flexResponse.value = JSON.stringify(token);
+                $("#CardDataToken").val(flexResponse.value);
+                if ($("#QuoteId").val() > 0) {
+                    Quote.prototype.ConvertQuoteToOrderQuotes();
+                }
+                  else if ($("#IsFromInvoice").val() == 'True') {
+                   User.prototype.SubmitCyberSourcePayment(flexResponse.value);
+                }
+                else {
+                    Checkout.prototype.SubmitCyberSourcePayment(flexResponse.value);
+                }
+              }
+        });
+
+    });
+    });
+</script>

@@ -1,0 +1,20 @@
+﻿@model List<Znode.Engine.WebStore.ViewModels.ProductReviewViewModel>
+@{
+    int reviewsCount = 0;
+    int totalreviews = Model.Count;
+    if (totalreviews > 0)
+    {
+        reviewsCount = totalreviews > WebStoreConstants.ProductReviewCount ? WebStoreConstants.ProductReviewCount : totalreviews;
+
+        for (int iReviewCount = 0; iReviewCount < reviewsCount; iReviewCount++)
+        {
+            @Html.Partial("_ReviewRow", Model.ElementAt(iReviewCount))
+        }
+        if (totalreviews > WebStoreConstants.ProductReviewCount)
+        {
+            <p class="text-center">
+                @Html.ActionLink(string.Format(WebStore_Resources.LinkTextMoreReview, totalreviews - WebStoreConstants.ProductReviewCount), "Allreviews", "Product", new { id = @Model.First().PublishProductId }, new { @class = "underline" })
+            </p>
+        }
+    }
+}

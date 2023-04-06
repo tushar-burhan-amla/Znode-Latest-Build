@@ -1,0 +1,63 @@
+﻿@model Znode.Engine.Admin.ViewModels.MenuListViewModel
+@using Znode.Engine.Admin.Models
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront; ;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var list = new List<BaseDropDownList>();
+    DropDownOptions _data = new DropDownOptions() { DropDownId = "DropDownId1", DropDownList = Model.Data.DropDownList, assignable = true, SortAction = "SortAction", Action = "GetChildMenus", Controller = "RoleAndAccessRight", IsAjax = true, SuccessCallBack = "DynamicGrid.prototype.GetChildMenus", IsMultiple = true, IsDraggable = true, IsAllowCheckAll = false, SelectOptionName = Admin_Resources.LabelParentMenu };
+}
+
+<div class="row">
+    <!--Left Panel-->
+    <aside>
+        <button id="slide-menu" class="slide-menu-btn" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            <h3>@Admin_Resources.TitleRoleAndAccessRight</h3>
+        </div>
+    </aside>
+    <!--Main Container-->
+    <section class="main-container">
+        <div class="col-sm-12 page-container">
+            <div class="col-sm-12 title-container">
+                <h1>@Admin_Resources.LabelPermission</h1>
+            </div>            
+            <div class="col-sm-12 box-container">
+                @{
+                    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+                    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+                }
+
+                @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmRole" }))
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.RoleName)
+                            </div>                            
+                            <div class="control-md">
+                                <span>@Model.RoleName</span>
+                            </div>
+                        </div>                        
+                    </div>
+                        @Html.Hidden("roleId", Model.RoleId)
+                }                
+            </div>
+            <div class="pull-right padding-left manage-column">
+                @Html.Partial("~/Views/Shared/Controls/_CheckBoxDropDown.cshtml", _data)
+            </div>
+
+            <div id="MenuList" class="col-sm-12 nopadding margin-top-bottom list-container">
+                @Html.Partial("~/Views/RolesAndPermissions/_Permission.cshtml", Model)
+            </div>
+            <div class="pull-right">
+                <button type="button" class="btn-text" id="submit-rights">@Admin_Resources.ButtonSave</button>
+                @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonCancel , "RoleList", "RoleAndAccessRight", "btn-text", "RoleAndAccessRight.prototype.RedirectToRoleList()")
+            </div>            
+        </div>
+    </section>
+</div>
+
+
+
