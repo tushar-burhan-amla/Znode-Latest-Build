@@ -1,0 +1,14 @@
+﻿<aside>
+    <button type="button" id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelPriceListInfo, "Edit", "Price", new { @priceListId = Model.PriceListId },new { @data_test_selector = "linkPriceListInfo" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.HeaderAssociatedProducts, "PriceSKUList", "Price", new { @priceListId = Model.PriceListId, @listName = string.Equals(Model.ListName, null) ? Model.ListName : HttpUtility.UrlEncode(Model.ListName)},new { @data_test_selector = "linkAssociatedProducts" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.HeaderAssociatedStores, "GetAssociatedStoreList", "Price", new { @priceListId = Model.PriceListId, @listName = string.Equals(Model.ListName, null) ? Model.ListName : HttpUtility.UrlEncode(Model.ListName) },new { @data_test_selector = "linkAssociatedStores" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.TextAssociatedProfiles, "GetAssociatedProfileList", "Price", new { @priceListId = Model.PriceListId, @listName = string.Equals(Model.ListName, null) ? Model.ListName : HttpUtility.UrlEncode(Model.ListName)},new { @data_test_selector = "linkAssociatedProfiles" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelAssociatedUsers, "GetAssociatedCustomerList", "Price", new { @priceListId = Model.PriceListId, @listName = string.Equals(Model.ListName, null) ? Model.ListName : HttpUtility.UrlEncode(Model.ListName)},new { @data_test_selector = "linkAssociatedUsers" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.HeaderAssociatedAccounts, "GetAssociatedAccountList", "Price", new { @priceListId = Model.PriceListId, @listName = string.Equals(Model.ListName, null) ? Model.ListName : HttpUtility.UrlEncode(Model.ListName)},new { @data_test_selector = "linkAssociatedAccounts" })</li>
+        </ul>
+    </div>
+</aside>
+

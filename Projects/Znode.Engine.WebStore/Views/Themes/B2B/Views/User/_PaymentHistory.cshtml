@@ -1,0 +1,52 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model PaymentHistoryListViewModel
+@{
+    var CultureCode = string.IsNullOrEmpty(Model?.PaymentHistoryList?.FirstOrDefault()?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model?.PaymentHistoryList?.FirstOrDefault()?.CultureCode;
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    Layout = null;
+}
+<div id="paymentHistoryList" class="payment-history">
+    <div class="paymenthistory-heading">
+        <h4 class="page-title payments-title">@WebStore_Resources.LabelPaymentsHistory</h4>
+    </div>
+    <div class="col-sm-12 dashboard-content table-responsive p-0" id="listcontainerId">
+        @{
+            if (Model?.PaymentHistoryList.Count > 0)
+            {
+                <table id="manageOrderGrid" data-test-selector="tblManageOrderGrid" class="table" data-swhgajax="true" data-swhgcontainer="ZnodePaymentHistory" data-swhgcallback="DynamicGrid.prototype.SetSortOrder" aria-describedby="Manage Payment History Table">
+                    <thead>
+                        <tr class="grid-header">
+                            <th scope="col" data-test-selector="tblHdDate">
+                                @WebStore_Resources.TitleDate
+                            </th>
+                            <th scope="col" data-test-selector="tblHdPaymentType">
+                                @WebStore_Resources.LabelOrdersPaymentType
+                            </th>
+                            <th scope="col" data-test-selector="tblHdStatus">
+                                @WebStore_Resources.LabelStatus
+                            </th>
+                            <th scope="col" data-test-selector="tblHdAmount">
+                                @WebStore_Resources.LabelAmount
+                            </th>
+                            <th scope="col" data-test-selector="tblHdRemainingAmount">
+                                @WebStore_Resources.TitleRemaningAmount
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-test-selector="tblBdManageOrderGrid">
+                        @foreach (var dataTable in Model.PaymentHistoryList)
+                        {
+                            <tr>
+                                <td>@dataTable.OrderDateWithTime</td>
+                                <td>@dataTable.PaymentType</td>
+                                <td class="td-break-word">@dataTable.TransactionStatus</td>
+                                <td class="td-break-word">@Helper.FormatPriceWithCurrency(@dataTable.Amount, CultureCode)</td>
+                                <td>@Helper.FormatPriceWithCurrency(@dataTable.RemainingOrderAmount, CultureCode)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,38 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+@model NavigationViewModel
+
+<div class="navgation-control">
+    <div class="pull-left">
+        @if (!string.IsNullOrEmpty(Model.EditAction))
+        {
+            if (!string.IsNullOrEmpty(Model.AreaName))
+            {
+                <a href="/@Model.AreaName/@Model.Controller/@Model.EditAction?@Model.EditDeleteQueryString" data-toggle="tooltip" data-placement="top" title="Edit"><em class="z-edit"></em></a>
+            }
+            else
+            {
+                <a href="/@Model.Controller/@Model.EditAction?@Model.EditDeleteQueryString" data-toggle="tooltip" data-placement="top" title="Edit"><em class="z-edit"></em></a>
+            }
+        }
+
+        @if (!string.IsNullOrEmpty(Model.DeleteAction))
+        {
+            if (!string.IsNullOrEmpty(Model.AreaName))
+            {
+                <a href="/@Model.AreaName/@Model.Controller/@Model.DeleteAction?@Model.EditDeleteQueryString" data-toggle="tooltip" data-placement="top" title="Delete"><em class="z-delete"></em></a>
+            }
+            else
+            {
+                <a href="/@Model.Controller/@Model.DeleteAction?@Model.EditDeleteQueryString" data-toggle="tooltip" data-placement="top" title="Delete"><em class="z-delete"></em></a>
+            }
+        }
+    </div>
+    <div class="pull-left">
+        <p>@Model.CurrentIndex to @Model.TotalCount</p>
+    </div>
+    <div class="pull-left">
+        <button type="button" @(string.IsNullOrEmpty(Model.PreviousID) ? "disabled=disabled" : "") onclick="DynamicGrid.prototype.GetNextPreviousRecords('@Model.AreaName','@Model.Controller','@Model.DetailAction','@Model.PreviousQueryString')" data-toggle="tooltip" data-placement="top" title="@Admin_Resources.LinkPreviousRecord"><em class="z-up"></em></button>
+        <button type="button" @(string.IsNullOrEmpty(Model.NextID) ? "disabled=disabled" : "") onclick="DynamicGrid.prototype.GetNextPreviousRecords('@Model.AreaName','@Model.Controller','@Model.DetailAction','@Model.NextQueryString')" data-toggle="tooltip" data-placement="top" title="@Admin_Resources.LinkNextRecord"><em class="z-down"></em></button>
+    </div>
+</div>

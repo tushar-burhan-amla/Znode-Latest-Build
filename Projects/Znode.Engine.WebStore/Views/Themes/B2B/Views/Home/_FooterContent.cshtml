@@ -1,0 +1,32 @@
+﻿@using Znode.Engine.WebStore.Agents
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+}
+
+<footer id="layout-footer" class="footer" role="contentinfo">
+    <div class="col-12 news-letter">
+        <div class="container">
+            <div class="row news-letter-container" itemscope itemtype="http://schema.org/WebPage">
+                <div class="col-12 col-sm-12 col-lg-9 col-xl-7 pr-0 newsletter-container">
+                    <!--News Letter Widget-->
+                    <z-widget>@Html.WidgetPartial("NewsLetter", "NewsLetter", "777", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId)</z-widget>
+                </div>
+              
+                <div class="col-12 col-sm-12 col-lg-3 col-xl-5 nopadding social-media follow-us">
+                    <div class="social-media-links">
+                        @Html.RenderMessage(WebStoreConstants.FooterShareUsText)
+                        <!--Socal Media Widget-->
+                        <div class="pb-3 py-lg-4" data-test-selector="divSocialMediaList">
+                            <z-widget>
+                                @Html.WidgetPartial("LinkPanel", "SocialMedia", "222", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId)
+                            </z-widget>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <z-widget>@Html.WidgetPartial("Footer", "Footer", "102", "PortalMapping")</z-widget>
+</footer>

@@ -1,0 +1,11 @@
+﻿@model WidgetParameter
+@using Newtonsoft.Json
+@{
+    var cmsmode = string.Empty;
+    if (HttpContext.Current.Request.QueryString["cmsmode"] == "CMS_MODE")
+    {
+        cmsmode = "CMS_MODE";
+    }
+    string properties = Model.properties != null ? JsonConvert.SerializeObject(Model.properties) : null;
+}
+<z-widget-ajax data-type="Widget" data-widgetCode="@Model.WidgetCode" data-displayName="@Model.DisplayName" data-widgetKey="@Model.WidgetKey" data-typeOfMapping="@Model.TypeOfMapping" data-mappingId="@Model.CMSMappingId" data-partialviewname="@Model.PartialViewName" data-cmsmode="@cmsmode" data-properties="@properties"></z-widget-ajax>

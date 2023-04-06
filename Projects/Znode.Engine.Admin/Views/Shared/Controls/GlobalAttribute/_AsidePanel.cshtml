@@ -1,0 +1,21 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model GlobalAttributeEntityDetailsViewModel
+
+@{
+    bool isActiveGroup = true;
+}
+<div class="col-xs-2 nopadding vertical-tab-container dirtyignore">
+    <ul class="nav nav-tabs tabs-left" data-test-selector="listGlobalAttributeContainer" id="globalAttributeAsidePannel">
+        @foreach (var group in Model.Groups)
+        {
+            var htmlClass = isActiveGroup ? "active" : "";
+            isActiveGroup = false;
+            <li data-groupCode="@group.GroupCode" data-test-selector="list@(group.AttributeGroupName)" data-groupType="@group.GroupType" class="@htmlClass"><a href="#groupId_@group.GlobalAttributeGroupId" data-test-selector="link@(group.AttributeGroupName)" data-toggle="tab">@group.AttributeGroupName</a></li>
+        }
+    </ul>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+       GlobalAttribute.prototype.SetActiveTabOnLoad();
+    });
+</script>

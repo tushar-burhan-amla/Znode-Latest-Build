@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Znode.Engine.Recommendations.DataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ZnodeRecommendationBaseProducts">
+          <Key>
+            <PropertyRef Name="RecommendationBaseProductsId" />
+          </Key>
+          <Property Name="RecommendationBaseProductsId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SKU" Type="nvarchar" MaxLength="600" Nullable="false" />
+          <Property Name="PortalId" Type="int" />
+          <Property Name="RecommendationProcessingLogsId" Type="int" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodeRecommendationProcessingLogs">
+          <Key>
+            <PropertyRef Name="RecommendationProcessingLogsId" />
+          </Key>
+          <Property Name="RecommendationProcessingLogsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PortalId" Type="int" />
+          <Property Name="Status" Type="nvarchar" MaxLength="600" Nullable="false" />
+          <Property Name="LastProcessedOrderId" Type="int" Nullable="false" />
+          <Property Name="LastProcessedOrderDate" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodeRecommendedProducts">
+          <Key>
+            <PropertyRef Name="RecommendedProductsID" />
+          </Key>
+          <Property Name="RecommendedProductsID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RecommendationBaseProductsId" Type="bigint" Nullable="false" />
+          <Property Name="SKU" Type="nvarchar" MaxLength="600" Nullable="false" />
+          <Property Name="Quantity" Type="decimal" Precision="28" Scale="6" />
+          <Property Name="Occurrence" Type="int" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ZnodeRecommendationBaseProducts_RecommendationProcessingLogsId">
+          <End Role="ZnodeRecommendationProcessingLogs" Type="Self.ZnodeRecommendationProcessingLogs" Multiplicity="1" />
+          <End Role="ZnodeRecommendationBaseProducts" Type="Self.ZnodeRecommendationBaseProducts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZnodeRecommendationProcessingLogs">
+              <PropertyRef Name="RecommendationProcessingLogsId" />
+            </Principal>
+            <Dependent Role="ZnodeRecommendationBaseProducts">
+              <PropertyRef Name="RecommendationProcessingLogsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZnodeRecommendedProducts_RecommendationBaseProductsId">
+          <End Role="ZnodeRecommendationBaseProducts" Type="Self.ZnodeRecommendationBaseProducts" Multiplicity="1" />
+          <End Role="ZnodeRecommendedProducts" Type="Self.ZnodeRecommendedProducts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZnodeRecommendationBaseProducts">
+              <PropertyRef Name="RecommendationBaseProductsId" />
+            </Principal>
+            <Dependent Role="ZnodeRecommendedProducts">
+              <PropertyRef Name="RecommendationBaseProductsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ZnodeEngineRecommendationsDataModelStoreContainer">
+          <EntitySet Name="ZnodeRecommendationBaseProducts" EntityType="Self.ZnodeRecommendationBaseProducts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodeRecommendationProcessingLogs" EntityType="Self.ZnodeRecommendationProcessingLogs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodeRecommendedProducts" EntityType="Self.ZnodeRecommendedProducts" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ZnodeRecommendationBaseProducts_RecommendationProcessingLogsId" Association="Self.FK_ZnodeRecommendationBaseProducts_RecommendationProcessingLogsId">
+            <End Role="ZnodeRecommendationProcessingLogs" EntitySet="ZnodeRecommendationProcessingLogs" />
+            <End Role="ZnodeRecommendationBaseProducts" EntitySet="ZnodeRecommendationBaseProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZnodeRecommendedProducts_RecommendationBaseProductsId" Association="Self.FK_ZnodeRecommendedProducts_RecommendationBaseProductsId">
+            <End Role="ZnodeRecommendationBaseProducts" EntitySet="ZnodeRecommendationBaseProducts" />
+            <End Role="ZnodeRecommendedProducts" EntitySet="ZnodeRecommendedProducts" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Znode.Engine.Recommendations.DataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Znode_Recommendation_Entities" annotation:LazyLoadingEnabled="false">
+          <EntitySet Name="ZnodeRecommendationBaseProducts" EntityType="Znode.Engine.Recommendations.DataModel.ZnodeRecommendationBaseProduct" />
+          <EntitySet Name="ZnodeRecommendationProcessingLogs" EntityType="Znode.Engine.Recommendations.DataModel.ZnodeRecommendationProcessingLog" />
+          <EntitySet Name="ZnodeRecommendedProducts" EntityType="Znode.Engine.Recommendations.DataModel.ZnodeRecommendedProduct" />
+          <AssociationSet Name="FK_ZnodeRecommendationBaseProducts_RecommendationProcessingLogsId" Association="Znode.Engine.Recommendations.DataModel.FK_ZnodeRecommendationBaseProducts_RecommendationProcessingLogsId">
+            <End Role="ZnodeRecommendationProcessingLog" EntitySet="ZnodeRecommendationProcessingLogs" />
+            <End Role="ZnodeRecommendationBaseProduct" EntitySet="ZnodeRecommendationBaseProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZnodeRecommendedProducts_RecommendationBaseProductsId" Association="Znode.Engine.Recommendations.DataModel.FK_ZnodeRecommendedProducts_RecommendationBaseProductsId">
+            <End Role="ZnodeRecommendationBaseProduct" EntitySet="ZnodeRecommendationBaseProducts" />
+            <End Role="ZnodeRecommendedProduct" EntitySet="ZnodeRecommendedProducts" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ZnodeRecommendationBaseProduct">
+          <Key>
+            <PropertyRef Name="RecommendationBaseProductsId" />
+          </Key>
+          <Property Name="RecommendationBaseProductsId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SKU" Type="String" Nullable="false" MaxLength="600" FixedLength="false" Unicode="true" />
+          <Property Name="PortalId" Type="Int32" />
+          <Property Name="RecommendationProcessingLogsId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" Nullable="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZnodeRecommendationProcessingLog" Relationship="Znode.Engine.Recommendations.DataModel.FK_ZnodeRecommendationBaseProducts_RecommendationProcessingLogsId" FromRole="ZnodeRecommendationBaseProduct" ToRole="ZnodeRecommendationProcessingLog" />
+          <NavigationProperty Name="ZnodeRecommendedProducts" Relationship="Znode.Engine.Recommendations.DataModel.FK_ZnodeRecommendedProducts_RecommendationBaseProductsId" FromRole="ZnodeRecommendationBaseProduct" ToRole="ZnodeRecommendedProduct" />
+        </EntityType>
+        <EntityType Name="ZnodeRecommendationProcessingLog">
+          <Key>
+            <PropertyRef Name="RecommendationProcessingLogsId" />
+          </Key>
+          <Property Name="RecommendationProcessingLogsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PortalId" Type="Int32" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="600" FixedLength="false" Unicode="true" />
+          <Property Name="LastProcessedOrderId" Type="Int32" Nullable="false" />
+          <Property Name="LastProcessedOrderDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" Nullable="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZnodeRecommendationBaseProducts" Relationship="Znode.Engine.Recommendations.DataModel.FK_ZnodeRecommendationBaseProducts_RecommendationProcessingLogsId" FromRole="ZnodeRecommendationProcessingLog" ToRole="ZnodeRecommendationBaseProduct" />
+        </EntityType>
+        <EntityType Name="ZnodeRecommendedProduct">
+          <Key>
+            <PropertyRef Name="RecommendedProductsID" />
+          </Key>
+          <Property Name="RecommendedProductsID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RecommendationBaseProductsId" Type="Int64" Nullable="false" />
+          <Property Name="SKU" Type="String" Nullable="false" MaxLength="600" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Decimal" Precision="28" Scale="6" />
+          <Property Name="Occurrence" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" Nullable="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZnodeRecommendationBaseProduct" Relationship="Znode.Engine.Recommendations.DataModel.FK_ZnodeRecommendedProducts_RecommendationBaseProductsId" FromRole="ZnodeRecommendedProduct" ToRole="ZnodeRecommendationBaseProduct" />
+        </EntityType>
+        <Association Name="FK_ZnodeRecommendationBaseProducts_RecommendationProcessingLogsId">
+          <End Type="Znode.Engine.Recommendations.DataModel.ZnodeRecommendationProcessingLog" Role="ZnodeRecommendationProcessingLog" Multiplicity="1" />
+          <End Type="Znode.Engine.Recommendations.DataModel.ZnodeRecommendationBaseProduct" Role="ZnodeRecommendationBaseProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZnodeRecommendationProcessingLog">
+              <PropertyRef Name="RecommendationProcessingLogsId" />
+            </Principal>
+            <Dependent Role="ZnodeRecommendationBaseProduct">
+              <PropertyRef Name="RecommendationProcessingLogsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZnodeRecommendedProducts_RecommendationBaseProductsId">
+          <End Type="Znode.Engine.Recommendations.DataModel.ZnodeRecommendationBaseProduct" Role="ZnodeRecommendationBaseProduct" Multiplicity="1" />
+          <End Type="Znode.Engine.Recommendations.DataModel.ZnodeRecommendedProduct" Role="ZnodeRecommendedProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZnodeRecommendationBaseProduct">
+              <PropertyRef Name="RecommendationBaseProductsId" />
+            </Principal>
+            <Dependent Role="ZnodeRecommendedProduct">
+              <PropertyRef Name="RecommendationBaseProductsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ZnodeEngineRecommendationsDataModelStoreContainer" CdmEntityContainer="Znode_Recommendation_Entities">
+          <EntitySetMapping Name="ZnodeRecommendationBaseProducts">
+            <EntityTypeMapping TypeName="Znode.Engine.Recommendations.DataModel.ZnodeRecommendationBaseProduct">
+              <MappingFragment StoreEntitySet="ZnodeRecommendationBaseProducts">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="RecommendationProcessingLogsId" ColumnName="RecommendationProcessingLogsId" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="SKU" ColumnName="SKU" />
+                <ScalarProperty Name="RecommendationBaseProductsId" ColumnName="RecommendationBaseProductsId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodeRecommendationProcessingLogs">
+            <EntityTypeMapping TypeName="Znode.Engine.Recommendations.DataModel.ZnodeRecommendationProcessingLog">
+              <MappingFragment StoreEntitySet="ZnodeRecommendationProcessingLogs">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="LastProcessedOrderDate" ColumnName="LastProcessedOrderDate" />
+                <ScalarProperty Name="LastProcessedOrderId" ColumnName="LastProcessedOrderId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="RecommendationProcessingLogsId" ColumnName="RecommendationProcessingLogsId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodeRecommendedProducts">
+            <EntityTypeMapping TypeName="Znode.Engine.Recommendations.DataModel.ZnodeRecommendedProduct">
+              <MappingFragment StoreEntitySet="ZnodeRecommendedProducts">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Occurrence" ColumnName="Occurrence" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="SKU" ColumnName="SKU" />
+                <ScalarProperty Name="RecommendationBaseProductsId" ColumnName="RecommendationBaseProductsId" />
+                <ScalarProperty Name="RecommendedProductsID" ColumnName="RecommendedProductsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

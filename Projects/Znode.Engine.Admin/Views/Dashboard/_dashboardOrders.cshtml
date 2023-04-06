@@ -1,0 +1,56 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@model DashboardItemsListViewModel
+
+<div class="d-flex flex-wrap justify-content-between padding-top padding-bottom table-heading-section">
+    <h2 class="margin-left-15">@Admin_Resources.LabelOrders</h2>
+    <div class="row nopadding">
+        <div class="col-sm-5 margin-top-8">
+            @Html.AuthorizedRawActionLink(Admin_Resources.LabelViewAllOrders, "List", "Order", null, new { @class = "viewalldata" ,@data_test_selector = "linkCreateQuote" })
+        </div>
+        <div class="col-sm-6 margin-right-15">
+            @Html.AuthorizedRawActionLink(Admin_Resources.ButtonCreateOrder, "CreateOrder", "Order", null, new { @class = "btn-text btn-text-secondary", @data_test_selector = "linkCreateOrder", @target = "_blank" })
+        </div>
+    </div>
+</div>
+@if (Html.IsAuthorized("List", "Order"))
+{
+    if (Model.DashboardViewModelList.Count > 0 && Model.DashboardViewModelList.Any(x => string.Equals(x.Type, ZnodeConstant.Order, StringComparison.InvariantCultureIgnoreCase)))
+    {
+        <table class="table" aria-describedby="Order List Table">
+            <thead class="thead-default">
+                <tr>
+                    <th scope="col" class="id-number">@Admin_Resources.LabelOrderNumber</th>
+                    <th scope="col" class="customer-name">@Admin_Resources.LabelCustomerName</th>
+                    <th scope="col">@Admin_Resources.LabelOrderDate</th>
+                    <th scope="col" class="total-section">@Admin_Resources.LabelTotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DashboardItemsViewModel item in Model.DashboardViewModelList)
+                {
+                    if (string.Equals(item.Type, ZnodeConstant.Order, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                <tr>
+                    <td>
+                        @Html.AuthorizedRawActionLink(item.ItemName, "Manage", "Order", new { OmsOrderId = item.ItemId }, new { @class = "viewalldata",@data_test_selector = "linkGeneralSetting", @target = "_blank" })
+                    </td>
+                    <td class="text-break">@Html.RenderBlock(item.CustomerName)</td>
+                    <td>@item.Date</td>
+                    <td>@HelperMethods.FormatPriceWithCurrency(@item.Total, DefaultSettingHelper.DefaultCulture) </td>
+                </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="no-record-found"><p>@Admin_Resources.NoRecordFoundText</p></div>
+    }
+}
+else
+{
+    <div class="no-record-found"><p>@Admin_Resources.ErrorAccessOfView</p></div>
+}

@@ -1,0 +1,113 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.Extensions;
+@model WarehouseAddressViewModel
+
+
+<div class="form-group" id="internalcode-content">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.FirstName, new { @class = "required", @data_test_selector = "lblFirstName" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.FirstName, new { @data_test_selector = "txtFirstName" })
+            @Html.ValidationMessageFor(model => model.FirstName, "", new { @data_test_selector = "valFirstName" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.LastName, new { @class = "required", @data_test_selector = "lblLastName" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.LastName, new { @data_test_selector = "txtLastName" })
+            @Html.ValidationMessageFor(model => model.LastName, "", new { @data_test_selector = "valLastName" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.PhoneNumber, new { @class = "required", @data_test_selector = "lblPhoneNumber" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.PhoneNumber, new { @data_test_selector = "txtPhoneNumber" })
+            @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @data_test_selector = "valPhoneNumber" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.Address1, new { @class = "required", @data_test_selector = "lblAddress1" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.Address1, new { @data_test_selector = "txtAddress1" })
+            @Html.ValidationMessageFor(model => model.Address1, "", new { @data_test_selector = "valAddress1" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.Address2, new { @data_test_selector = "lblAddress2" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.Address2, new { @data_test_selector = "txtAddress2" })
+            @Html.ValidationMessageFor(model => model.Address2, "", new { @data_test_selector = "valAddress2" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(model => model.CountryName, new { @data_test_selector = "lblCountryName" })
+        </div>
+        <div class="control-md">
+            @Html.DropDownListFor(model => model.CountryName, Model.Countries, new { @onchange = "Account.prototype.BindStates()", @data_test_selector = "drpCountryName" })
+            @Html.ValidationMessageFor(m => m.CountryName, "", new { @data_test_selector = "valCountryName" })
+        </div>
+    </div>
+</div>
+<div class="form-group" id="displayorder-content">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.StateName, new { @data_test_selector = "lblStateName" })
+        </div>
+        <div class="control-md">
+            <div id="dev-statecode-textbox">
+                @Html.TextBoxFor(model => model.StateName, new { @id = "StateName", @data_test_selector = "txtStateName" })
+            </div>
+            <div style="display:none;" id="dev-statecode-select">
+                <select class="valid" id="SelectStateName" name="StateName" data-test-selector="drpStateName"></select>
+            </div>
+            @Html.ValidationMessageFor(model => model.StateName, "", new { @data_test_selector = "valStateName" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.CityName, new { @class = "required", @data_test_selector = "lblCityName" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.CityName, new { @data_test_selector = "txtCityName" })
+            @Html.ValidationMessageFor(model => model.CityName, "", new { @data_test_selector = "valCityName" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.PostalCode, new { @class = "required", @data_test_selector = "lblPostalCode" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.PostalCode, new { @data_test_selector = "txtPostalCode" })
+            @Html.ValidationMessageFor(model => model.PostalCode, "", new { @data_test_selector = "valPostalCode" })
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(m => m.StateName, new { @id = "hdn_StateCode" })

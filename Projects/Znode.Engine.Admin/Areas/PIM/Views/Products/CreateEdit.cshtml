@@ -1,0 +1,280 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@model PIMFamilyDetailsViewModel
+@{
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    var unAssociatedAttributes = Model.Attributes.Where(x => x.PimAttributeGroupId == null).ToList();
+    bool flag = true;
+    bool isActiveGroup = true;
+    string IsDownlodableProduct = Model.Attributes?.FirstOrDefault(a => a.AttributeCode == "IsDownloadable")?.AttributeValue;
+    int? pimAttributeFamilyId = Model.Attributes?.FirstOrDefault()?.PimAttributeFamilyId;
+    int cultureId = Model.LocaleId;
+    if (!Equals(HttpContext.Current.Request.Cookies["_productCulture"], null))
+    {
+        cultureId = !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies["_productCulture"].Value) ? Convert.ToInt32(HttpContext.Current.Request.Cookies["_productCulture"].Value) : Model.LocaleId;
+        Model.LocaleId = cultureId;
+    }
+    if (Equals(actionName, "Create") || Equals(Model.ProductId, 0) || Equals(actionName, "Copy"))
+    {
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "btnSaveNClose", DataTestSelector = "linkSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "Products.prototype.SaveProduct('" + "/PIM/Products/List" + "')" });
+        primaryPageAction.PageActions.Add(new PageAction { Action = "SaveProduct", Controller = "Products", ControlId = "btnSaveNDraft", LinkType = LinkType.OnClick, LinkDisplayName = @PIM_Resources.ButtonDraft, OnClick = "Products.prototype.SaveProduct()", DataTestSelector = "linkSave" });
+
+    }
+    else
+    {
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "btnSaveNClose", DataTestSelector = "linkSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "Products.prototype.SaveProduct('" + "/PIM/Products/List" + "')" });
+        primaryPageAction.PageActions.Add(new PageAction { Action = "SaveProduct", Controller = "Products", ControlId = "btnSaveNDraft", LinkType = LinkType.OnClick, LinkDisplayName = @PIM_Resources.ButtonDraft, OnClick = "Products.prototype.SaveProduct()", DataTestSelector = "linkSave" });
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "copyProduct", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @PIM_Resources.ButtonCopy, OnClick = "Products.prototype.CopyProduct()", DataTestSelector = "linkCopy" });
+        primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "PublishProductLink", LinkType = LinkType.OnClick, LinkDisplayName = @PIM_Resources.ButtonReady, OnClick = "Products.prototype.PublishProductPopup()", DataTestSelector = "linkPublish" });
+        
+    }
+}
+@{
+    string cancleUrl = "/PIM/Products/List";
+    if (Model.PimCatalogId > 0)
+    {
+        string categoryId = (Model.CategoryId > 0) ? "&pimCategoryHierarchyId=" + Model.PimCategoryHierarchyId : string.Empty;
+        cancleUrl = cancleUrl = "/PIM/Catalog/Manage?pimCatalogId=" + Model.PimCatalogId + categoryId;
+    }
+}
+@*Important Div to render navigation response Html*@
+<div id="Resultpartial">
+    <div id="productDetails">
+        <div id="divProductHeading">
+            <div class="col-sm-12 title-container">
+                @{
+                    string url = string.Empty;
+                    if (Request.IsAjaxRequest())
+                    { url = Request.UrlReferrer.Segments[3].ToLower(); }
+                    else
+                    { url = Request.Url.Segments[3].ToLower(); }
+
+                    switch (url)
+                    {
+                        case "create":
+                            <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelProduct)</h1>
+                            break;
+                        case "edit":
+                            <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelProduct)<em class="z-minus"></em><span>@Html.RenderBlock(Model.Name)</span></h1>
+                            break;
+                        case "copy":
+                            <h1>@string.Format(@Admin_Resources.TitleCopy, Admin_Resources.LabelProduct)<em class="z-minus"></em><span>@Html.RenderBlock(Model.Name)</span></h1>
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                <div class="pull-right btn-container">
+                    <div class="pull-right">
+                        <a id="btnCancelForProduct" href=@cancleUrl class="btn-text-icon" data-test-selector="linkCancel"><em class='z-back'></em>BACK</a>
+                        @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+                    </div>
+                    <div class="pull-right dirtyignore">
+                        @Html.Partial("~/Views/Shared/_CultureDropdown.cshtml", Model.Locale)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main-wrapper">
+            @Html.Partial("~/Areas/PIM/Views/Products/_AsidePannel.cshtml", Model)
+            <!--Main Container-->
+            <section class="main-container">
+                <div class="col-sm-12 nopadding">
+                    <div id="ConfigureAttributeDiv" class="associted-btn lowerContainer" style="display:none">
+                        <h3 class="section-heading">Attribute</h3>
+                        <div id="ConfigureAttributeCheckboxes" style="display:none"></div>
+                    </div>
+                </div>
+                @using (Html.BeginForm("Create", controllerName, FormMethod.Post, new { @id = "frmProduct" }))
+                {
+                    <input type="hidden" id="ProductId" name="ProductId_attr" value="@Model.ProductId" />
+                    <div class="pull-right margin-bottom dirtyignore">
+                        @if (Model.ProductId > 0)
+                        {
+                            <div id="AssignPersonalizedAttribute" style="display:none" class="associted-btn lowerContainer">
+                                @{
+                                    Html.RenderAction("GetUnAssignedPersonalizedAttributes", "Products", new { productId = Model.ProductId });
+                                }
+                            </div>
+                        }
+                        @Html.Partial("~/Areas/PIM/Views/Products/_ButtonsContainer.cshtml", Model)
+                    </div>
+                    foreach (var group in Model.Groups)
+                    {
+                        if (group.GroupCode == AdminConstants.AddOn ||
+                        group.GroupCode == AdminConstants.Personalization ||
+                        group.GroupCode == AdminConstants.CustomFields ||
+                        group.GroupCode == AdminConstants.Downloadable ||
+                        group.GroupCode == AdminConstants.FrequentlyBought ||
+                        group.GroupCode == AdminConstants.YouMayAlsoLike ||
+                        group.GroupCode == AdminConstants.AssociatedProducts ||
+                        group.GroupType == AdminConstants.LinkType)
+                        {
+                            continue;
+                        }
+
+                        <div class="panel panel-default productInfoPage">
+                            <div class="panel-heading">
+                                <h4 class="panel-title panel-title-edit accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" onclick="Products.prototype.fnShowHide(this,'@group.GroupCode@group.PimAttributeFamilyId');"><span>@group.AttributeGroupName </span></h4>
+                            </div>
+                            <div id="@group.GroupCode@group.PimAttributeFamilyId" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="pimAtribute col-sm-12 nopadding">
+                                        <div class="col-sm-12 nopadding @group.GroupCode">
+                                            @{
+                                                var attributesAssociatedWithGroup = Model.Attributes.Where(x => x.PimAttributeGroupId == group.PimAttributeGroupId && x.PimAttributeFamilyId == group.PimAttributeFamilyId).ToList();
+                                                foreach (var attributes in attributesAssociatedWithGroup)
+                                                {
+                                                    if (Equals(group.GroupCode.ToLower(), "productinfo") && flag)
+                                                    {
+                                                        <div class="form-group">
+                                                            <div class="col-sm-12 nopadding">
+                                                                <div class="control-label">
+                                                                    @Html.LabelFor(model => model.Families, new { @data_test_selector = "lblFamily" })
+                                                                </div>
+                                                                <div class="control-md">
+                                                                    @if (Model.ProductId > 0 && !Equals(Model.LocaleId, cultureId))
+                                                                    {@Html.DropDownListFor(model => model.FamilyId, Model.Families, new { @id = "ddlfamily", @Name = "ddlfamily_attr", @disabled = "true", @data_test_selector = "drpAttributeFamily" }) }
+                                                                else
+                                                                { @Html.DropDownListFor(model => model.FamilyId, Model.Families, new { @id = "ddlfamily", @Name = "ddlfamily_attr", @data_test_selector = "drpAttributeFamily" })}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        flag = false;
+                                                    }
+                                                    //code to add Tag for File type control in PIM
+                                                    if (Equals(attributes.ControlProperty.ControlType, "File"))
+                                                    { attributes.ControlProperty.htmlAttributes.Add("IsPimFileControl", "True"); }
+
+                                                    if (Model.ProductId > 0 && Equals(attributes.IsLocalizable, false) && !Equals(Model.LocaleId, cultureId))
+                                                    {
+                                                        switch (attributes.ControlProperty.ControlType)
+                                                        {
+                                                            case "File":
+                                                            case "Image":
+                                                                attributes.ControlProperty.htmlAttributes.Add("pointer-events", "none");
+                                                                break;
+                                                            case "Yes/No":
+                                                                attributes.ControlProperty.htmlAttributes.Add("pointer-events", "none");
+                                                                break;
+                                                            default:
+                                                                attributes.ControlProperty.htmlAttributes.Add("disabled", "true");
+                                                                break;
+                                                        }
+                                                    }
+                                                    @Html.Partial("~/Areas/PIM/Views/Shared/_createControl.cshtml", attributes)
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <input type="hidden" id="AssociatedAddonValue" name="AssociatedAddonValue_attr" />
+                    <input type="hidden" id="AssignedLinkProducts" name="AssignedLinkProducts_attr" />
+                    <input type="hidden" id="currentGroupCode" name="currentGroupCode" />
+                    <input type="hidden" id="ConfigureAttributeIds" name="ConfigureAttributeIds_attr" value="@Model.ConfigureAttributeIds" />
+                    <input type="hidden" id="ConfigureFamilyIds" name="ConfigureFamilyIds_attr" value="@Model.FamilyId" />
+                    <input type="hidden" id="CultureId" name="CultureId" value="@cultureId" />
+                    <input type="hidden" id="CopyProductId" name="CopyProductId_attr" value="@Model.CopyProductId" />
+                    @Html.HiddenFor(model => model.PimCatalogId, new { id = "hdnPimCatalogIdForCatalog" })
+                    @Html.HiddenFor(model => model.CategoryId, new { id = "hdnCategoryIdForCatalog" })
+                    @Html.HiddenFor(model => model.PimCategoryHierarchyId)
+                    @Html.HiddenFor(model => model.ProductPublishId)
+                    @Html.HiddenFor(model => model.ProductId, new { id = "HdnProductId" })
+                    @Html.Hidden("revisionType");
+                    @Html.Hidden("pimAttributeFamilyId", pimAttributeFamilyId)
+
+                    if (!actionName.Equals("edit", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        <input type="hidden" id="AssociatedProductIds" name="AssociatedProductIds_attr" value="@Model.AssociatedProductIds" />
+                    }
+                    <input type="hidden" id="IsDownlodableProduct" name="IsDownlodableProduct" value="@IsDownlodableProduct" />
+                    <div id="Personalization" class="Personalization"></div>
+                }
+                <input type="hidden" id="hdnpriceListId" name="CultureId" value='@Convert.ToInt32(Request.QueryString["priceListId"])' />
+                <div id="CustomFieldsList"></div>
+                <div id="DownloadableProductKeyList"></div>
+                <div id="AssociatedProductsList"></div>
+                <div id="AssociatedAddonList"></div>
+                <div id="AssignedLinkProductsList"></div>
+                <div id="InventoryDetails" class="product-inventory-panel"></div>
+                <div id="Inventory1"></div>
+                <div id="AssociateCategory"></div>
+                <div id="ProductSEO"></div>
+                <div id="ProductPrice"></div>
+                <div id="CatalogScreen" class="pim-catalog-tree"></div>
+
+            </section>
+        </div>
+    </div>
+
+    <div id="divAddCustomPopup" class="modal fade" role="dialog">
+        @*Don't delete this div, mainly due to "Add custom field popup" will display in this div*@
+    </div>
+    <div id="divConfigureAttributeErrorPopup">
+        @Html.Partial("~/Areas/PIM/Views/Products/_ConfigureAttributeError.cshtml")
+    </div>
+    <div id="divConfigureAttributeCheckbox">
+        @Html.Partial("~/Views/Shared/Controls/_UploadPartialPopup.cshtml",
+        new PopupModel()
+        {
+        ModalPopUpId = "divConfigureAttributeCheckboxes",
+        Title = @PIM_Resources.SelectConfigAttributes,
+        SpanError = @PIM_Resources.ErrorSelectConfigureAttribute,
+        PartialDivName = "divCreateConfigureAttributesCheckboxes",
+        SpanErrorDivName = "errorSelectConfigCheckbox",
+        OnCancelClickFunctionName = "Products.prototype.CancelConfig()",
+        Buttons = new List<PopUpButtonModel>
+            () {
+            new PopUpButtonModel { ButtonText = @Admin_Resources.ButtonSubmit, OnClickFunctionName = "Products.prototype.SetConfigForAssociation()" },
+            }
+            })
+    </div>
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+    new PopupModel()
+    {
+    Title = @Admin_Resources.TitlePublishConfirm,
+    Description = string.Format(Admin_Resources.PublishConfirmationMessage, "product"),
+    NoChoiceDescription = string.Format(Admin_Resources.PublishConfirmationMessageNoChoice, "product"),
+    ModalPopUpId = "PublishProduct",
+    ModalSizeClass = "modal-smd dirtyignore",
+    AdditionalNote = string.Format(Admin_Resources.PublishAllStoreLocaleDisclaimerMessage, "product"),
+    InputFields = new List<PopupInputField>
+        (){
+        new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = HelperMethods.GetAvailablePublishStates(), RequiredNumberOfItemsToDisplay = 2 },
+        },
+        Buttons = new List<PopUpButtonModel>
+            () {
+            new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Products.prototype.UpdateAndPublishProduct()"}
+            }
+            })
+
+</div>
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup">
+</div>
+
+<div id="divAssociateWarehoueseInventory" class="aside-popup-panel modal-dialog modal-lg">
+    @*Important Div to render Warehouse Association Aside pop-up*@
+</div>
+
+<div id="divAssociateProductCategory" class="aside-popup-panel modal-dialog modal-lg">
+    @*Important Div to render Product Association Aside pop-up*@
+</div>
+
+<div id="UnassociatedProductAsidePannel" class="aside-popup-panel modal-dialog modal-lg">
+</div>
+<script src="~/Content/bootstrap-3.3.7/js/datepicker.js"></script>
+<script>
+    //Bootstrap ToolTip Call
+    $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover', html: true });
+</script>
+

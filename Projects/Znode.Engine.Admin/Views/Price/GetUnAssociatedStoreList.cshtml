@@ -1,0 +1,32 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model StoreListViewModel
+<div id="@Model.GridModel.FrontObjectName">
+    <div id="aside-popup-panel">
+        <div class="col-sm-12 title-container">
+            <h1>@Admin_Resources.TextAssociateStore<em class="z-minus"></em><span>@Admin_Resources.LabelStoreList</span></h1>
+            <div class="pull-right btn-container">
+                <button type="button" class="btn-text-icon" onclick="javascript: var price = new Price(); price.AssociatePriceStore(@Model.PriceListId);"><em class='z-save'></em>@Admin_Resources.ButtonSave</button>
+                <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('associatestorelist')"><em class='z-cancel'></em>@Admin_Resources.ButtonCancel</button>
+            </div>
+        </div>
+        <div class="col-sm-12 page-container">
+            <div id="associatedTaxStoreId" class="text-danger" style="display:none">
+                <div class="col-sm-12 nopadding notification-msg margin-bottom" id="body">
+                    <div class="messageBoxContainer error-msg text-center" id="messageBoxContainerId">@Admin_Resources.TextSelectOneStore</div>
+                </div>
+            </div>
+            @using (Ajax.BeginForm("GetUnAssociatedStoreList", "Price", new { priceListId = Model.PriceListId }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+            {
+                <div id="filterComponent">
+                    @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                </div>
+            }            
+            <div class="col-sm-12 list-container">
+                @{
+                    @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                }
+            </div>
+            @Html.HiddenFor(m => m.PriceListId)
+        </div>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+﻿@model List<Znode.Engine.Admin.AttributeValidationHelpers.DefaultValueListModel>
+@using Znode.Engine.Admin.Models
+
+@{
+    string _defaultValues = string.Empty;
+    string _ActionLink = string.Empty;
+    string _defaultValuesCode = string.Empty;
+    int count = 0;
+    List<int> list = new List<int>();
+    var localeArray = "";
+}
+
+@foreach (var _item in Model)
+{
+    list.Add(_item.LocaleId);
+}
+
+@{
+    localeArray = Newtonsoft.Json.JsonConvert.SerializeObject(list);
+}
+<div class="col-sm-12 nopadding dirtyignore">
+    <button type="button" id="defaultValue-add-new-row" class="btn-text blue pull-right margin-bottom" onclick="javascript: var _Attribute = new Attributes();_Attribute.AddNewRow(@localeArray);" data-test-selector="btnAddNew">@Admin_Resources.ButtonAdd</button>
+    <div class="col-sm-12 nopadding attribut-table-container">
+        <table class="table table-bordered attribut-table" id="table-default-Values" aria-describedby="Media Attributes Local Values">
+            <thead>
+                <tr>
+                    <th scope="col">@MediaManager_Resources.LabelCode</th>
+                    @foreach (var _item in Model)
+                {
+                        <th scope="col">
+                            @_item.LocaleName
+                        </th>
+                    _defaultValues += Convert.ToString(Html.Partial("~/Areas/MediaManager/Views/Attributes/_DefaultValueRow.cshtml", _item.DefaultValues, new ViewDataDictionary { { "LocaleId", _item.LocaleId } }));
+                    _ActionLink += count == 0 ? Convert.ToString(Html.Partial("~/Areas/MediaManager/Views/Attributes/_ActionRow.cshtml", _item.DefaultValues)) : string.Empty;
+                    count++;
+                }
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tr>
+                @{ _defaultValuesCode = "<td>";
+                    int _rowIndex = 0;
+                    if (Model?.FirstOrDefault()?.AttributeDefaultValueCodeList?.Count > 0)
+                    {
+                        foreach (var item in Model.FirstOrDefault().AttributeDefaultValueCodeList)
+                        {
+                            _defaultValuesCode += "<div id=code_" + _rowIndex + ">";
+                            _defaultValuesCode += Convert.ToString(Html.TextBox("DefaultValueCode-" + _rowIndex, item.AttributeDefaultValueCode, new { @style = "display:none;", @Localeid = item.AttributeDefaultValueCode }));
+                            _defaultValuesCode += Convert.ToString(" <label>" + item.AttributeDefaultValueCode + "</label>");
+                            _defaultValuesCode += Convert.ToString("<input type='hidden' id='hdnDefaultvalue_" + _rowIndex + "' value='" + item.PimDefaultAttributeValueId + "' />");
+                            _defaultValuesCode += "</div>";
+                            _rowIndex++;
+                        }
+                    }
+                    else
+                    {
+                        _defaultValuesCode += "<div id=code_" + _rowIndex + ">";
+                        _defaultValuesCode += Convert.ToString(Html.TextBox("DefaultValueCode-" + _rowIndex, null));
+                        _defaultValuesCode += Convert.ToString(" <label style='display: none;'></label>");
+                        _defaultValuesCode += Convert.ToString("<input type='hidden' id='hdnDefaultvalue_" + _rowIndex + " value='" + _rowIndex + "' />");
+                        _defaultValuesCode += "</div>";
+                        _rowIndex++;
+                    }
+                    _defaultValuesCode += "</td>";
+
+                }
+                @Html.Hidden("LocaleCount", Model.Count)
+                @Html.Hidden("DefaultValueCount", Model.FirstOrDefault().DefaultValues.Count)
+            </tr>
+            <tr>
+                @Html.RenderBlock(_defaultValuesCode + _defaultValues)
+                @Html.RenderBlock(_ActionLink)
+            </tr>
+        </table>
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderConfirmDelete,
+                        Description = @MediaManager_Resources.TextConfirmDeleteformediaDefaultValue,
+                        ModalPopUpId = "MediaDefaultValueDeletePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Attributes.prototype.DeleteDefaultAttributeValue($('#hdnDeleteDiv').val())"}
+                         }
+                    })
+    </div>
+    <input type="hidden" id="hdnDeleteDiv" />
+</div>
+

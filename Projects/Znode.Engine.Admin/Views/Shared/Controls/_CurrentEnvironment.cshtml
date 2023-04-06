@@ -1,0 +1,7 @@
+﻿@using Znode.Engine.Admin.Helpers;
+
+@if (!string.IsNullOrEmpty(DefaultSettingHelper.DefaultCurrentEnvironment) && 
+        !String.Equals(DefaultSettingHelper.DefaultCurrentEnvironment, CurrentEnvironmentEnum.Prod.ToString(), StringComparison.CurrentCultureIgnoreCase))
+{
+    <span class="label-environment local-name label-current-environment-@DefaultSettingHelper.DefaultCurrentEnvironment">Mode: @DefaultSettingHelper.DefaultCurrentEnvironment</span>
+}

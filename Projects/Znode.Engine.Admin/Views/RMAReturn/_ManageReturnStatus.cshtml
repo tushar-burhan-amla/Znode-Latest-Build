@@ -1,0 +1,21 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model RMAReturnStatusList
+@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("UpdateReturnStatus", "RMAReturn"
+            , new AjaxOptions
+            {
+                OnSuccess = "RMAReturn.prototype.OnUpdateReturnStatus",
+                OnFailure = "",
+            }, new { id = "ReturnStatus", @class = "dirtylisten dirty" }))
+{
+<div class="col-sm-12 nopadding">
+    @Html.DropDownListFor(model => model.SelectedItemId, Model.ReturnStatusList, new { @id = "ddlReturnStatus", onChange = "RMAReturn.prototype.OnReturnStatusChange(this);", @data_test_selector = "drpReturnStatus" })
+
+    @Html.HiddenFor(model => model.SelectedItemId)
+    @Html.HiddenFor(model => model.SelectedItemValue)
+    <input type="hidden" id="hdnUpdatedReturnStatusId" value="@Model.SelectedItemId" />
+</div>
+}
+

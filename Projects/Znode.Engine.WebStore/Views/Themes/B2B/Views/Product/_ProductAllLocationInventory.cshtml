@@ -1,0 +1,52 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductInventoryDetailViewModel
+@using Znode.Engine.WebStore.ViewModels;
+@{
+    bool isOtherHeaderLoad = true;
+}
+<div class="container bio-certified product-view-details warehouse-view-details p-0 py-5">
+    <div class="pl-4">
+        <h5>@WebStore_Resources.HeadingInventoryCheck</h5>
+        <div class="inventory-product-name">@Model.ProductName</div>
+    </div>
+
+    @if (Model?.Inventory?.Count > 0)
+    {
+        List<InventorySKUViewModel> inventoryList = Model.Inventory.OrderByDescending(i => i.IsDefaultWarehouse)?.ToList();
+        foreach (InventorySKUViewModel inventory in inventoryList)
+        {
+            if (inventory.IsDefaultWarehouse)
+            {
+                <div class="default-location py-2 px-4 my-2">
+                    <p class="sub-location">@WebStore_Resources.LabelDefaultLocation</p>
+                    <div class="d-flex align-items-center pb-1 mb-1 pl-2 details-address">
+                        <div class="pr-3 total-stock">@inventory.Quantity</div>
+                        <div>
+                            <p class="address-warehouse">@inventory.WarehouseName @inventory.WarehouseCityName  @inventory.WarehousePostalCode</p>
+                            <p> @inventory.WarehouseAddress @inventory.WarehouseStateName</p>
+                        </div>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+                <div class="Others-Location pb-1 mb-1 mx-4 ">
+                    @if (isOtherHeaderLoad)
+                    {
+                        isOtherHeaderLoad = false;
+                        <p class="sub-location">@WebStore_Resources.LabelOthersLocation</p>
+                    }
+                    <div class="d-flex align-items-center details-address">
+                        <div class="pr-3 pl-2 total-stock">@inventory.Quantity</div>
+                        <div>
+                            <p class="address-warehouse">@inventory.WarehouseName @inventory.WarehouseCityName  @inventory.WarehousePostalCode</p>
+                            <p> @inventory.WarehouseAddress @inventory.WarehouseStateName</p>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+        }
+    }
+</div>

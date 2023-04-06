@@ -1,0 +1,19 @@
+﻿<div class="py-4">
+    <div class="newsletter-widget d-sm-flex align-items-center b2b-new-customer-text b2b-newsletter">
+        <div class="col-xs-12 col-sm-2 col-md-3 p-0">
+            @Html.Label(WebStore_Resources.LabelSignUpNewsletter, new { @data_test_selector = "lblSubscribeNewsLetter" })                 
+        </div>
+        <div class="col-xs-12 col-sm-10 col-md-9 input-field p-0">
+            @using (Ajax.BeginForm("SignUpForNewsLetter", "Home", null, new { @id = "searchform" }))
+            {
+                <div class="input-group" id="newsletter">
+                    @Html.TextBox("txtNewsLetterSignUp", "", new { placeholder = WebStore_Resources.LabelSenderMailId, @data_test_selector = "txtNewsLetterEmail", @class = "form-control" })
+                    <div class="btn-newsletter">              
+                        <button class="btn btn-primary" id="btnNewsLetterSignUp" type="button" onclick="Home.prototype.ValidationForEmailID();" data-test-selector="btnNewsLetterSignUp">@WebStore_Resources.ButtonNewsletter</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="offset-sm-3"><p id="newslettererrormessage" style="display:none" data-test-selector="lblnewslettererrmsg"></p></div>
+</div>

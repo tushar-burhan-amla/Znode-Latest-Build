@@ -1,0 +1,76 @@
+﻿@model WidgetParameter
+@if (!Equals(Model, null) && Model.CMSMode)
+{
+    <div class="widget-cms-overlay d-flex justify-content-between align-items-center px-3">
+        <div class="widget-cms-name">
+            <div class="d-flex align-items-center">
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.VideoWidget, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-video-widget"></span>
+                }
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.ImageWidget, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-image-widget"></span>
+                }
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.TextEditor, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-text-widget"></span>
+                }
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.LinkPanel, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-link"></span>
+                }
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.BannerSlider, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-banner-widget"></span>
+                }
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.ProductList, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-productlist-widget"></span>
+                }
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.CategoryList, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    <span class="icon-categorylist-widget"></span>
+                }
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.OfferBanner, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-banner-widget"></span>
+                }
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.TemplateTextEditor, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-text-widget"></span>
+                }
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.TemplateProductList, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-productlist-widget"></span>
+                }
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.TemplateLinkPanel, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-link"></span>
+                }
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.FormWidget, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-form-widget"></span>
+                }
+                @if (Model.WidgetCode.Equals(@WebStore_Resources.SearchWidget, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-search-widget"></span>
+                }
+                @if (Model.WidgetCode.Equals(WebStore_Resources.ContentContainerWidget, StringComparison.InvariantCultureIgnoreCase))
+                {
+                <span class="icon-content-container"></span>
+                }
+                <div class="widget-name">@Model.DisplayName</div>
+            </div>
+        </div>
+        <div class="widget-cms-button-container">
+            <button class='btn-text btn-text-secondary btn-text-secondary-custom cms-configure-btn text-uppercase pr-0' type='button' onclick='enableOverlays(@Model.CMSMappingId,@Model.WidgetKey,"@Model.WidgetCode");' data-WidgetCode="@Model.WidgetCode" style="visibility:hidden;"><span class="edit-icon"></span> @WebStore_Resources.LinkTextEdit</button>
+            @if (Model.WidgetCode.Equals(@WebStore_Resources.VideoWidget, StringComparison.InvariantCultureIgnoreCase) || Model.WidgetCode.Equals(@WebStore_Resources.ImageWidget, StringComparison.InvariantCultureIgnoreCase) || Model.WidgetCode.Equals(WebStore_Resources.ContentContainerWidget, StringComparison.InvariantCultureIgnoreCase))
+            {
+                <button class='btn-text-secondary-custom text-uppercase pr-0' type='button' onclick='enableOverlays(@Model.CMSMappingId,@Model.WidgetKey,"@Model.WidgetCode", true);'><span class="delete-icon"></span> @WebStore_Resources.LinkTextRemove</button>
+            }
+        </div>
+    </div>
+}
+
+

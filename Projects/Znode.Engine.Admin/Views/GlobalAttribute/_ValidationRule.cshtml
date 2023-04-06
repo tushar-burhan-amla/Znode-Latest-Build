@@ -1,0 +1,70 @@
+﻿@model  List<Znode.Engine.Admin.AttributeValidationHelpers.AttributeInputValidationModel>
+
+<div>
+    @if (!Equals(Model, null) && (Model.Count > 0))
+    {
+        foreach (var Contl in Model)
+        {
+            <div class="form-group" id="@("div"+Contl.Name)">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label class="cancel-click" for="@Contl.Name">@Znode.Engine.Admin.Helpers.HelperMethods.GetResourceNameByValue(Contl.Name)</label>
+                    </div>
+
+                    @Html.CreateControl(Contl.ControlProperty)
+                    @if ("div" + Contl.Name == "divExtensions")
+                    {
+                        <div class="help-text"><em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpAllowedExtension"></em> </div>
+                    }
+
+                    @if ("div" + Contl.Name == "divIsAllowMultiUpload")
+                    {
+                        <div class="help-text"><em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpTextForMultipleFileUpload"></em> </div>
+                    }
+
+                    @if ("div" + Contl.Name == "divUniqueValue")
+                    {
+                        <div class="help-text"><em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpTextForUniqueValue"></em> </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Content/bootstrap-3.3.7/js/datepicker.js" type="text/javascript"> </script>
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"> </script>
+<script>
+    $(".MultiSelectClass").multiselect({ includeSelectAllOption: true });
+    $('#ValidationRule').change(function () {
+        Attributes.prototype.GetInputValidationRuleExpressionValue();
+        Attributes.prototype.AddRequiredValidation();
+    });
+    $(".switch-field").find("label").click(function () {
+        Attributes.prototype.YesNoControlChangeEvent()
+    });
+    $("#MinNumber").blur(function () {
+        var minnumber = $("#MinNumber").val(); var maxnumber = $("#MaxNumber").val();
+        if (Attributes.prototype.CheckNumericValueforMinNumber(minnumber))
+            if (Attributes.prototype.CheckNegitaveNumberforMinNumber(minnumber))
+                if (Attributes.prototype.CheckIsDecimalNumberforMinNumber(minnumber))
+                    Attributes.prototype.CheckRangeofNumber(minnumber, maxnumber);
+    });
+    $("#MaxNumber").blur(function () {
+        var minnumber = $("#MinNumber").val(); var maxnumber = $("#MaxNumber").val();
+        if (Attributes.prototype.CheckNumericValueforMaxNumber(maxnumber))
+            if (Attributes.prototype.CheckNegitaveNumberforMaxNumber(maxnumber))
+                if (Attributes.prototype.CheckIsDecimalNumberforMaxNumber(maxnumber))
+                    Attributes.prototype.CheckRangeofNumber(minnumber, maxnumber);
+    });
+    $('.cancel-click').on('click', function (e) {
+        if (e.target.nodeName === 'LABEL') e.preventDefault();
+    });
+    //Bootstrap ToolTip Call
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover', html: true });
+    });
+   
+</script>
+

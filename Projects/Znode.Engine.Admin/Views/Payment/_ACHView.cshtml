@@ -1,0 +1,43 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+@using Znode.Engine.Admin.Models;
+@{
+        BaseDropDownOptionsModel baseDropDownOptionsModel = new BaseDropDownOptionsModel() { Id = Convert.ToInt32(Model?.PaymentGatewayId ?? 0), ControlId = "ddlPaymentGetways", Name = "PaymentGatewayId", DropDownOptions = Model.PaymentGateways, Disabled = !Convert.ToInt32(Model?.PaymentGatewayId ?? 0).Equals(0) };
+}
+
+<h3 class="section-heading margin-top-25" data-test-selector="hdgPaymentGateway">@Admin_Resources.LabelPaymentGatewayHeader</h3>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelSelectGateway, new { @class = "required" })
+        </div>
+        <div class="control-md">
+            @Html.Partial("~/Views/Shared/Controls/_DropDownOption.cshtml", baseDropDownOptionsModel)
+        </div>
+        <div id="divGatewayModeHelpText" class="d-none">
+            @Html.Partial("_HelpText", @Admin_Resources.HelpTextGatewayModeMessage)
+        </div>
+    </div>
+</div>
+<div class="form-group" id="divGatewayMode">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelGatewayTestMode, new { @data_test_selector = "lblGatewayTestMode" })
+        </div>
+        <div class="control-md">
+            @Html.DropDownListFor(m => Model.TestMode, new List<SelectListItem>()
+                                            {
+                                                new SelectListItem {Text = @Admin_Resources.LabelTestMode,Value="true"},
+                                                new SelectListItem {Text = @Admin_Resources.LabelLiveMode ,Value="false"}
+                                            }, new { @id = "ddlTestMode", @data_test_selector = "drpGatewayTestMode" })
+        </div>
+    </div>
+</div>
+<div id="PaymentGetwayForm-container">
+ @Html.Partial("~/Views/Payment/_CardConnect.cshtml", Model)
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#divIsBillingAddressOptional").hide();
+    });
+</script>

@@ -1,0 +1,17 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model PublishPortalLogListViewModel
+<div id="@Model.GridModel.FrontObjectName">
+    <div id="aside-popup-panel">
+        <div class="col-sm-12 title-container">
+            <h1 class="store-title"><span class="store-name">@Model.StoreName</span><em class="z-minus"></em><span class="publish-status">@PIM_Resources.TitlePublishStatus</span></h1>
+            <div class="pull-right">
+                <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('divPortalPublishStatusList')"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+            </div>
+        </div>
+        <div class="col-sm-12 margin-top-25 padding-top-20 margin-bottom">
+            @{
+                @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+            }
+        </div>
+    </div>
+</div>

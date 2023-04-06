@@ -1,0 +1,97 @@
+﻿.AddToCartBlock {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    left: 0;
+    background: #F2F2F2;
+    z-index: 999999;
+
+    .cart-notify-bar {
+        box-shadow: 0px 1px 2px 1px #c5b7b7;
+
+        .cart-notify-section {
+            min-height: 115px;
+            position: relative;
+        }
+
+        .add-to-heading {
+            font-size: 18px;
+            color: $green;
+            font-weight: bold;
+
+            i {
+                font-size: 34px;
+                font-style: initial !important;
+            }
+        }
+
+        .z-tab img {
+            width: 80px;
+            height: 80px;
+            float: left;
+            border: 1px solid #DCDCDC;
+        }
+
+        .z-tab img {
+            display: block;
+            display: -webkit-box;
+            max-width: 100%;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-number {
+            font-size: 18px;
+
+            span {
+                font-weight: bold;
+            }
+        }
+
+        .z-mini-cart {
+            .btn-cart {
+                border: 1px solid $base-tertiary-light !important;
+                color: $btn-primary !important;
+                border-radius: 0;
+                background: $white;
+            }
+        }
+
+        .z-cart-close {
+            position: absolute;
+
+            i {
+                font-style: initial;
+                font-size: 22px;
+                cursor: pointer;
+            }
+        }
+    }
+}
+    @include screensize(x-small) {
+        .AddToCartBlock .cart-notify-bar .z-cart-close {
+            right: 7%;
+            top: 4%;
+        }
+    }
+    @include screensize(small) {
+        .AddToCartBlock .cart-notify-bar .z-cart-close {
+            right: 4%;
+            top: 5%;
+        }
+    }
+
+    @include screensize(large) {
+        .AddToCartBlock .cart-notify-bar .z-cart-close {
+            right: 4%;
+            top: auto;
+        }
+    }
+
+    @include screensize(x-large) {
+        .AddToCartBlock .cart-notify-bar .z-cart-close {
+            right: 7%;
+        }
+    }

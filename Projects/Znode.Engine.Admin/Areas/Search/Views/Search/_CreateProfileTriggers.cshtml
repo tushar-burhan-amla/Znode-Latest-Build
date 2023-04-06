@@ -1,0 +1,79 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@model SearchTriggersViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateEditTriggers", CancelUrl = "/Search/GetSearchProfilesTriggers?searchProfileId=" + Model.SearchProfileId, IsSaveCloseEnable = true};
+    Model.UserProfileList.RemoveAt(0);
+}
+
+<div class="col-sm-12 title-container">
+    @*<h1>@Admin_Resources.LabelSearchSettings</h1>*@
+    <h1>Add Triggers</h1>
+    <div class="pull-right">
+          <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('divAddTriggerPopup')" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+          <div class="pull-right">
+              <button type="submit" class="btn-text btn-text-secondary" onclick="Search.prototype.CreateTriggers(false)" data-test-selector="linkSave">@Admin_Resources.ButtonSave</button>
+          </div>
+    </div>
+</div>
+<section class="col-sm-12 page-container scheduler-status">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateEditTriggers" }))
+    {
+        <div id="triggerError" class="text-danger" style="display:none">
+            <div class="col-sm-12 nopadding notification-msg margin-bottom" id="body">
+                <div class="messageBoxContainer error-msg text-center" id="triggerMessageBoxContainerId">@Admin_Resources.ErrorSelectSearchProfileTriggers</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.ProfileIds, new { @data_test_selector = "lblProfile" })
+                </div>
+                <div id="profilelist" class="control-md profile-dropdown">
+                        @Html.ListBoxFor(model => model.ProfileIds, Model.UserProfileList, new { @multiple = "multiple", @id = "ProfileId", @data_test_selector = "lstProfile" })
+                        <span id="error-profile" class="error-msg" />            
+                </div>
+                <div class="control-optional-profile"><span>(optional)</span></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.Keyword, new { @data_test_selector = "lblKeyword" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.Keyword, new { @data_role = "tagsinput", @data_test_selector = "txtKeyword" })
+                    @Html.ValidationMessageFor(model => model.Keyword, "", new { @id = "valKeyword", @data_test_selector = "valKeyword" })
+                </div>
+                <div class="control-optional"><span>(optional)</span></div>
+            </div>
+        </div>
+        @Html.HiddenFor(model => model.SearchProfileId)
+    }
+</section>
+<div>
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.ConfirmText,
+                        Description = @Admin_Resources.ConfirmOverrideProfileTriggers,
+                        ModalPopUpId = "PopUpConfirmAddTrigger",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "Search.prototype.CreateTriggers(true)" },
+                           }
+                    })
+</div>
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"> </script>
+<script src="~/Scripts/References/bootstrap-tagsinput.js"></script>
+<script>
+    $("#ProfileId").multiselect({ includeSelectAllOption: true, enableCaseInsensitiveFiltering: false });
+    $('input[type="checkbox"]').css('opacity', '5');
+    $(document).ready(function () {
+        Content.prototype.CheckIsAllProfileSelected();
+    });
+</script>

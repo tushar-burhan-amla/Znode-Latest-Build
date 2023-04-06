@@ -1,0 +1,293 @@
+﻿@using Znode.Engine.WebStore.Models
+@model List<BaseDropDownOptions>
+@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@{
+    int userId = SessionHelper.GetDataFromSession<UserViewModel>(WebStoreConstants.UserAccountKey)?.UserId ?? 0;
+    var billingAccountNumber = SessionProxyHelper.GetBillingAccountNumber(SessionHelper.GetDataFromSession<UserViewModel>(WebStoreConstants.UserAccountKey)?.UserId ?? 0);
+    string _disablePayment = !string.IsNullOrEmpty(Convert.ToString(Request.QueryString["QuoteId"])) ? "disabled='disabled'" : "";
+    int quoteId = Convert.ToInt32(Request.QueryString["QuoteId"] ?? "0");
+    bool isQuote = Convert.ToBoolean(ViewBag.isQuote);
+}
+
+<script src="https://js.braintreegateway.com/web/dropin/1.33.2/js/dropin.min.js"></script>
+<div class="col-12 p-0 h-100 b2b-block" id="allPaymentOptionsDiv">
+    <h3 class="block-title" id="paymentMethodDiv">@WebStore_Resources.SinglePageCheckoutPaymentMethod</h3>
+    @if (isQuote == false)
+    {
+        <div id="applyGiftCardDiv">
+            @Html.Partial("../_ApplyGiftCard", new CartViewModel())
+        </div>
+    }
+    <div class="col-12 block-content payment-block pl-md-4">
+        <h5 class="payment-select-heading pb-3" data-test-selector="hdg-Payment-method">@WebStore_Resources.TitleSelectPaymentMethod</h5>
+        @if (isQuote == false)
+        {
+            <h5 class="payment-heading border-bottom mb-4" id="paymentType">Payment Type</h5>
+        }
+        @Html.Hidden("paymentOptionsId", new { @id = "paymentOptionsId" })
+
+        @foreach (var option in Model)
+        {
+            <div class="col-12 p-0 styled-input">
+                <input type="radio" @_disablePayment class="payment-options-radio" id="@option.Type@option.Id" data-test-selector="@option.Type@option.Id" @((quoteId > 0 && option.IsSelected) ? $"checked='{option.IsSelected}'" : string.Empty) data-isApprovalRequired="@option.Status" data-paymentGroupId=@option.PortalPaymentGroupId data-payment-type="@option.Type" data-isOABRequired="@option.CustomStatus" data-display-text="@option.Text" name="PaymentOptions" value="@option.Value" onclick="Checkout.prototype.ShowPaymentOptions(this);" />
+                <label for="@option.Type@option.Id" data-test-selector="@option.Type@option.Id">@option.Text</label>
+            </div>
+        }
+        <div id="payment-provider-content" class="payment-provider">
+        </div>
+        <div id="div-CreditCard" class="credit-card-container HidePaymentTypeDiv" style="display:none;">
+            <div class="col-12 p-0">
+                <div class="Tab-container dynamic-tabs mt-3">
+                    <ul id="creditCardTab" class="nav nav-tabs">
+                        <li class="active"><a href="#savedCreditCard-panel" id="savedPanel" data-toggle="tab" class="active tabs">@WebStore_Resources.LabelSavedCC</a></li>
+                        <li><a href="#addNewCreditCard-panel" data-toggle="tab" class="tabs">@WebStore_Resources.AddNewCreditCardDetails</a></li>
+                    </ul>
+                    <div id="creditCardPanel" class="tab-content clearfix">
+                        <!--Panels 1-->
+                        <div class="tab-pane fade in active show" id="savedCreditCard-panel">
+                            <div id="radioCCList">
+                            </div>
+                        </div>
+                        <!--Panels 2-->
+                        <div class="tab-pane fade show" id="addNewCreditCard-panel">
+                            <h3 class="section-heading">@WebStore_Resources.LabelCreditCardDetails</h3>
+                            <div class="col-12 col-lg-8 save-cart p-0 pb-2">
+                                <div id="paymentProviders" style="display:none">
+                                </div>
+                            </div>
+                            <div id="credit-card-div" class="col-12 col-lg-8 p-0 credit-cart-form">
+                                <div id="creditCard" style="display:none;">
+                                    <div class="form-group">
+                                        <div class="col-12 p-0">
+                                            <div class="control-label">
+                                                <label class="required font-weight-bold">@WebStore_Resources.SinglePageCheckoutCreditCardNoTitle</label>
+                                            </div>
+                                            <div class="control-md">
+                                                <input type="text" data-payment="number" class="creditCardPayment" maxlength="19" id="CredidCardNumber" />
+                                                <div id="errornumber" class="field-validation-error" style="display: none">@WebStore_Resources.ErrorCardNumber</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-12 p-0">
+                                            <div class="control-label">
+                                                <label class="required font-weight-bold">@WebStore_Resources.SinglePageCheckoutCreditCardExpirationDate</label>
+                                            </div>
+                                            <div class="control-md col-12">
+                                                <div class="row">
+                                                    <div class="col-2 p-0"><input type="text" id="CreditCardExpMonth" maxlength="2" data-payment="exp-month" class="creditCardPayment" /><span class="sub">(MM)</span></div>
+                                                    <div class="col-4"><input type="text" id="CreditCardExpYear" maxlength="4" data-payment="exp-year" class="creditCardPayment" /><span class="sub">(YYYY)</span></div>
+                                                    <div class="col-12 p-0">
+                                                        <div id="errormonth" class="field-validation-error" style="display: none">@WebStore_Resources.ValidationEnterValidDate</div>
+                                                        <div id="erroryear" class="field-validation-error" style="display: none">@WebStore_Resources.ValidationEnterValidYear</div>
+                                                        <div id="errormonthandyear" class="field-validation-error" style="display:none">@WebStore_Resources.ValidMonthYear</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-12 p-0">
+                                            <div class="control-label">
+                                                <label class="required font-weight-bold">@WebStore_Resources.SinglePageCheckoutCreditCardSecurityNo</label>
+                                            </div>
+                                            <div class="col-3 p-0">
+                                                <input type="password" id="CredidCardCVCNumber" data-payment="cvc" maxlength="4" class="creditCardPayment" />
+                                            </div>
+                                            <div class="col-12 p-0">
+                                                <span class="sub">@WebStore_Resources.HintTextCreditCardSecurityNumber</span>
+                                                <div id="errorcvc" class="field-validation-error" style="display: none">@WebStore_Resources.ErrorValidCVC</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="Save-credit-cardholder-name">
+                                        <div class="col-12 p-0">
+                                            <div class="control-label">
+                                                <label class="required font-weight-bold">@WebStore_Resources.CreditCardHolderName</label>
+                                            </div>
+                                            <div class="control-md">
+                                                <input type="text" id="CardHolderName" data-payment="cardholderName" maxlength="100" class="form-input-long" />
+                                                <div id="errorcardholderName" class="field-validation-error" style="display: none">@WebStore_Resources.ErrorCardHolderName</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="divCreditCardCyberSource">
+
+                                </div>
+                                <div id="divCardconnect" style="display:none;">
+                                    <iframe src="" frameborder="0" id="iframebody" scrolling="no" class="cardconnectIframe" title="Cardconnect payment method" style="display:none" onload="Checkout.prototype.Getiframe();"></iframe>
+                                    <div class="col-sm-12 nopadding cardconnectcardholder mb-3">
+                                        <div class="control-label">
+                                            <label class="CardHolder">@WebStore_Resources.CreditCardHolderName</label>
+                                        </div>
+                                        <div class="control-md">
+                                            <input type="text" id="cardconnectCardHolderName" data-payment="cardconnectCardholderName" maxlength="100" class="form-input-long" data-test-selector="txCardconnectCardHolderName" />
+                                            <div id="errorcardconnectcardholderName" class="field-validation-error" style="display: none">@WebStore_Resources.ErrorCardHolderName</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group saveCreditCard" id="Save-credit-card">
+                                    <div class="col-12 p-0">
+                                        <div class="control-md control-non styled-input">
+                                            <input id="SaveCreditCard" name="SaveCreditCard" type="checkbox">
+                                            <label for="SaveCreditCard">@WebStore_Resources.SaveCreditCardForFutureUse</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*Gateway Information*@
+            @Html.Hidden("GatewayCurrencyCode", "USD")
+            @Html.Hidden("paymentProfileId")
+            @Html.Hidden("hdnGatwayName")
+            @Html.Hidden("hdnPaymentCode")
+            @Html.Hidden("hdnEncryptedTotalAmount")
+            @Html.Hidden("CardDataToken")
+            @Html.Hidden("CardExpirationDate")
+            @Html.Hidden("ErrorMessage")
+            @Html.Hidden("BillingAccountNumber", billingAccountNumber)
+            @Html.Hidden("UserId", userId)
+            @Html.Hidden("hdnPaymentGatewayId")
+
+            @if (isQuote)
+            {
+                @Html.Hidden("hdnPaymentApiResponseHeader", (object)ViewBag.PaymentApiResponseHeader)
+            }
+        </div>
+        <div id="divAuthorizeNetIFramePrvoider" class="payment-details-block">
+            <button type="button" class="btn btn-primary ml-2" data-toggle="modal" id="submitandpaybutton" style="display:none;">@WebStore_Resources.PayAndSubmit</button>
+            <div id="divAuthorizeNetIFrame" class="credit-card-container">
+            </div>
+        </div>
+        <div id="div-ACHAccount" class="credit-card-container HidePaymentTypeDiv" style="display:none;">
+            <div class="col-12 p-0">
+                <div class="Tab-container dynamic-tabs mt-3">
+                    <ul id="ACHAccountTab" class="nav nav-tabs">
+                        <li class="active"><a href="#savedACHAccount-panel" id="savedPanel" data-toggle="tab" class="active tabs">Saved Accounts</a></li>
+                        <li><a href="#addNewACHAccount-panel" data-toggle="tab" class="tabs">Add New Account</a></li>
+                    </ul>
+                    <div id="ACHPanel" class="tab-content clearfix">
+                        <!--Panels 1-->
+                        <div class="tab-pane fade in active show" id="savedACHAccount-panel">
+                            <div id="radioACHList">
+                            </div>
+                        </div>
+                        <!--Panels 2-->
+                        <div class="tab-pane fade show" id="addNewACHAccount-panel">
+                            <h3 class="section-heading">@WebStore_Resources.ACHDetails</h3>
+                            <div id="ach-account-div" class="col-12 col-lg-8 p-0 credit-cart-form">
+                                <div id="ACHCard" style="display:none;">
+                                </div>
+                                <div id="divCardconnectACH" class="cardconnect-ACH" style="display:none;" data-test-selector="iframeCardconnectACH">
+                                    <div class="control-label ACH-card-format" id="ACHPayment">
+                                        <p class="font-weight-bold mb-1">@WebStore_Resources.ACHAccountNoRoutingNo</p>
+                                        <p>@WebStore_Resources.ACHBasicInformation</p>
+                                        <p>&lt;@WebStore_Resources.ACHRoutingNoAccountNo&gt;</p>
+                                    </div>
+                                    <iframe src="" frameborder="0" id="iframebodyACH" scrolling="no" class="cardconnectACHIframe" title="Cardconnect payment method" style="display:none" onload="Checkout.prototype.GetiframeACH();"></iframe>
+                                </div>
+                                <div class="form-group saveCreditCard" id="Save-ach-card">
+                                    <div class="col-12 p-0">
+                                        <div class="control-md control-non styled-input">
+                                            <input id="SaveACHAccount" name="SaveACHAccount" type="checkbox">
+                                            <label for="SaveACHAccount" data-test-selector="lblSaveACHCardForFutureUse">@WebStore_Resources.SaveACHCardForFutureUse</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*Gateway Information*@
+            @Html.Hidden("GatewayCurrencyCode", "USD")
+            @Html.Hidden("paymentProfileId")
+            @Html.Hidden("hdnGatwayName")
+            @Html.Hidden("hdnPaymentCode")
+            @Html.Hidden("hdnEncryptedTotalAmount")
+            @Html.Hidden("CardDataToken")
+            @Html.Hidden("CardExpirationDate")
+            @Html.Hidden("ErrorMessage")
+            @Html.Hidden("hdnPaymentGUID")
+            @Html.Hidden("BillingAccountNumber", billingAccountNumber)
+            @Html.Hidden("UserId", userId)
+            @if (isQuote)
+            {
+                @Html.Hidden("hdnPaymentApiResponseHeader", (object)ViewBag.PaymentApiResponseHeader)
+            }
+        </div>
+        @if (string.IsNullOrEmpty(billingAccountNumber))
+        {
+            <div class="form-group payment-details-block" id="div-InvoiceMe" style="display:none">
+                <div class="col-xs-12 nopadding styled-input input-checkbox-IsAddUpdateAddress w-100 ml-0">
+                    <input type="checkbox" class="input-checkbox" name="InvoiceMe" id="InvoiceMe" checked="checked" value="true">
+                    <label for="InvoiceMe">@Html.RenderMessage(WebStoreConstants.InvoiceMeTextMessage)</label>
+                </div>
+            </div>
+        }
+        @*PayPal Express*@
+        @*<div id="paypal-button" style="display:none"></div>*@
+        <div id="div-PaypalExpress" class="col-sm-12 nopadding HidePaymentTypeDiv payment-details-block" style="display:none;">
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-lg control-non">
+                        <button id="paypal-express-checkout" style="cursor:pointer" type="button"><img src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/gold-rect-paypalcheckout-26px.png" alt="PayPal Checkout"></button>
+                        <p class="tinyfade margin-top">@Admin_Resources.LabelPaypalDescription</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*Amazon Pay *@
+        @if (!Equals(Model, null) && Model.Any(item => item.Type != null && Equals(item.Type.ToLower(), "amazon_pay")))
+        {
+            Html.RenderAction("AmazonPaymentOptions", "Checkout", new { @isQuote = isQuote });
+        }
+        @if (Model.Count <= 0)
+        {
+            <div class="form-group" id="divNoPayment" data-test-selector="divNoPayment">
+                <div class="col-xs-12 nopadding field-validation-error ">
+                    <span for="InvoiceMe">@WebStore_Resources.NoPaymentAssociated</span>
+                </div>
+            </div>
+        }
+        @Html.Hidden("PaymentListCount", Model.Count)
+        @Html.Hidden("PaymentSettingId")
+        @Html.Hidden("hdnBraintreecardNumber")
+        @Html.Hidden("hdnBraintreeCardExpirationMonth")
+        @Html.Hidden("hdnBraintreeCardExpirationYear")
+        @Html.Hidden("hdnBraintreeCardHolderName")
+        @Html.Hidden("hdnBraintreeCardType")
+        @Html.Hidden("hdnBraintreeNonce")
+        @Html.Hidden("hdnBraintreeIsVault")
+        @*}*@
+    </div>
+</div>
+<script>
+    if ($("#PaymentListCount").val() <= '0') {
+        $('#btnPayInvoice').prop("disabled", true);
+    }
+
+    $(document).ready(function () {
+        $('#CredidCardNumber').payment('formatCardNumber');
+        $("#payment-view-content #paypal-express-checkout").on("click", function (ev) {
+            Quote.prototype.ConvertToOrderWithPaypalPayment();
+        });
+    });
+</script>
+@if (Helper.IsEnhancedEcommerceTrackingEnabled())
+{
+    <script>
+        $('input[name = "PaymentOptions"]').on("click", function () {
+            var selectedPaymentOption = $(this).data('display-text');
+            GoogleAnalytics.prototype.SendEcommerceCheckoutOptionData(3, selectedPaymentOption);
+        })
+    </script>
+}
+<script src="https://flex.cybersource.com/cybersource/assets/microform/0.11/flex-microform.min.js"></script>
+

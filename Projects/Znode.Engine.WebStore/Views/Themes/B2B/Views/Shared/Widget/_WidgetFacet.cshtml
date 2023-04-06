@@ -1,0 +1,19 @@
+﻿@model WidgetParameter
+
+@{
+    //Read facet values from querystring
+    string facetGroup = HttpUtility.UrlEncode(Convert.ToString(HttpContext.Current.Request.QueryString["FacetGroup"]));
+    string isFromSearch = Convert.ToString(HttpContext.Current.Request.QueryString["fromSearch"]);
+    string properties = string.Empty;
+    string typeOfMapping = HttpUtility.UrlEncode(@Model.TypeOfMapping);
+
+    if (!Equals(Model?.properties, null))
+    {
+        foreach (var x in Model?.properties)
+        {
+            properties += string.IsNullOrEmpty(properties) ? $"{x.Key}={x.Value}" : $"_{x.Key}={x.Value}";
+        }
+    }
+}
+<div class="facets-content-area"></div>
+<script>$.ajax({ url: "/Search/GetFacets?cMSMappingId=" +@Model.CMSMappingId+"&displayName=" + '@Model.DisplayName' + "&typeOfMapping=" + '@typeOfMapping' + "&widgetCode=" + '@Model.WidgetCode' + "&widgetKey=" + '@Model.WidgetKey' + "&properties=" + '@properties' + "&facetGroup=" + '@facetGroup' + "&fromSearch=" + '@isFromSearch', type: "get" }).done(function (t) {$(".facets-content-area").html(t);});</script>

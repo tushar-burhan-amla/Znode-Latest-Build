@@ -1,0 +1,42 @@
+﻿@model Znode.Engine.WebStore.ViewModels.TemplateCartItemViewModel
+@using Znode.Engine.Api.Models
+@{
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    int inventoryRoundOffValue = string.IsNullOrEmpty(inventoryRoundOff) ? 0 : Convert.ToInt32(inventoryRoundOff);
+}
+
+@if (Model.GroupProducts?.Count > 0)
+{
+<div class="group-product-container">
+    @foreach (AssociatedProductModel product in Model.GroupProducts)
+    {
+    using (Html.BeginForm("UpdateTemplateCartQuantity", "User", new { guid = Model.ExternalId, productId = product.ProductId, omsTemplateId = Model.OmsTemplateId }, FormMethod.Post, new { @class = "frmCartQuantity" }))
+    {
+    @Html.AntiForgeryToken()
+    <input type="text" name='Quantity' value="@Math.Round(product.Quantity, inventoryRoundOffValue)" data-cart-productId="@product.ProductId" data-cart-sku="@product.Sku" data-cart-isactive="@product.IsActive" data-cart-isobsolete="@product.IsObsolete" data-cart-outofstock="@product.OutOfStockMessage" data-cart-minquantity="@product.MinQuantity" data-cart-maxquantity="@product.MaxQuantity" data-inventoryRoundOff="@inventoryRoundOff" data-cart-DefaultInventoryCount="@product.DefaultInventoryCount" onchange="Cart.prototype.UpdateTemplateQauntity(this);">
+    <div data-test-selector="divQuantityErrorMsg" id="quantity_error_msg_@product.ProductId" class="error-msg">@Model.ErrorMessage</div>
+    @Html.HiddenFor(x => x.OmsTemplateId)
+    }
+    }
+</div>
+}
+else
+{
+    using (Html.BeginForm("UpdateTemplateCartQuantity", "User", new { guid = Model.ExternalId, productId = 0, omsTemplateId = Model.OmsTemplateId }, FormMethod.Post, new { @class = "frmCartQuantity" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="text" name='Quantity' value="@Model.Quantity" data-cart-productId="@Model.ProductId" data-cart-sku="@Model.SKU" data-cart-isactive="@Model.IsActive" data-cart-isobsolete="@Model.IsObsolete" data-cart-outofstock="@Model.OutOfStockMessage" data-cart-minquantity="@Model.MinQuantity" data-cart-maxquantity="@Model.MaxQuantity" data-inventoryRoundOff="@inventoryRoundOff" data-cart-DefaultInventoryCount="@Model.DefaultInventoryCount" onchange="Cart.prototype.UpdateTemplateQauntity(this);">
+        <div data-test-selector="divQuantityErrorMsg" id="quantity_error_msg_@Model.ProductId" class="error-msg">@Model.ErrorMessage</div>
+        @Html.HiddenFor(x => x.OmsTemplateId)
+    }
+}
+<script>
+    $(document).ready(function () {
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>

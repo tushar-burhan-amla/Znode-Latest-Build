@@ -1,0 +1,77 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+}
+<div class="col-xs-12 nopadding image-view">
+    @if (Convert.ToBoolean(Model.Attributes?.Value("NewProduct")))
+        {
+            <img src="@_fileLocation/Images/new-product-tag.png" alt="New Product" class="img-responsive new-product-tag" />
+        }
+
+    <div class="simpleLens-gallery-container" id="ImageZoom">
+        <div class="simpleLens-container">
+            <div class="simpleLens-big-image-container">
+                <a id="product-lens-image" class="simpleLens-lens-image" data-lens-image="@Model.OriginalImagepath">
+                    <img id="product-image" src="@Model.ImageLargePath" data-src="@Model.ImageLargePath" alt="@(Model.Attributes?.Value("ImageAltText"))" class="simpleLens-big-image b-lazy img-fluid" />
+                </a>
+            </div>
+        </div>
+        <div class="col-12 p-0 product-altimages">
+            <div id="alt-images" class="owl-carousel alternate-img simpleLens-thumbnails-container Product_Altimages">
+                @if (Model?.AlternateImages?.Count > 0 && !Model.IsQuickView)
+                {
+                    <div class="item">
+                        <a href="#" class="simpleLens-thumbnail-wrapper"
+                           data-lens-image="@Model.OriginalImagepath"
+                           data-big-image="@Model.ImageLargePath">
+                            <img src="@Model.ImageLargePath" alt="@(Model.Attributes?.Value("ImageAltText"))" />
+                        </a>
+                    </div>
+                    foreach (var image in Model.AlternateImages)
+                    {
+                        <div class="item">
+                            <a href="#" class="simpleLens-thumbnail-wrapper"
+                               data-lens-image="@image.OriginalImagePath"
+                               data-big-image="@image.ImageLargePath">
+                                <img src="@image.ImageThumbNailPath" alt="@(Model.Attributes?.Value("ImageAltText"))">
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Template Level Script-->
+<script src="@Helper.GetThemeFilePath($"/Views/Themes/", "/Scripts/lib/jquery.simpleGallery.js")"></script>
+<script src="@Helper.GetThemeFilePath($"/Views/Themes/", "/Scripts/lib/jquery.simpleLens.js")"></script>
+
+<!--Product Zoom Effect-->
+<script>
+    $(function () {
+        $('#ImageZoom .simpleLens-thumbnails-container img').simpleGallery();
+        $('#ImageZoom .simpleLens-big-image').simpleLens();
+        $(".Product_Altimages").owlCarousel({
+            autoPlay: false,
+            navigation: true,
+            items: 4,
+            itemsCustom: [
+                [0, 1],
+                [320, 4],
+                [480, 4],
+                [600, 4],
+                [768, 6],
+                [992, 5],
+                [1200, 6]
+            ],
+            navigationText: [
+                "<span class='left-icon'></span>",
+                "<span class='right-icon'></span>"
+            ]
+        });
+
+
+</script>

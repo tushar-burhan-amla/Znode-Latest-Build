@@ -1,0 +1,133 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model WidgetSearchDataViewModel
+<div id="layout-category" class="main-wrapper">
+    <div class="container">
+        <div class="row">
+            <aside class="col-12 col-lg-3 p-0 mt-4 side-nav nav-right b2b-side-bar">
+
+                <div class="facets-content-area">
+                    <div class="panel-group">
+                        <div class="product-grid">
+                            @if (Model?.Facets?.Count > 0)
+                            {
+                                int count = 0;
+                                foreach (var item in Model.Facets)
+                                {
+
+                                    <div class="list-group">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title panel-title-edit accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne_@count"><span>@item.AttributeName</span></h4>
+                                            </div>
+                                            <div id="collapseOne_@count" class="panel-collapse collapse in show">
+                                                <div class="panel-body">
+                                                    <ul class="filter-list">
+                                                        @foreach (var facetValue in item.AttributeValues)
+                                                        {
+                                                            bool? isChecked = Model.FacetFilters?.Any(facetFilter => facetFilter.Item1 == facetValue.AttributeCode && facetFilter.Item2.Any(x => x.Key == facetValue.AttributeValue));
+                                                            if (!string.IsNullOrEmpty(facetValue.AttributeValue))
+                                                            {
+                                                                string data = $"{item.AttributeName}{facetValue.AttributeValue}";
+                                                                <li class="styled-input">
+                                                                    <input id="@data" type="checkbox" onchange="Search.prototype.GetFilterResult('@facetValue.RefineByUrl',this)" class="FacetFilter" @(isChecked.GetValueOrDefault() ? "checked=checked" : "") />
+                                                                    <label for="@data" data-test-selector="lblFacetValue">@Html.RenderBlock(facetValue.Label)</label>
+                                                                    <span class="facet-count" data-test-selector="lblFacetCount">@facetValue.FacetCount</span>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    count++;
+
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 p-0 b2b-compare-product-list">
+                    <div id="compareProductList">
+                    </div>
+                </div>
+            </aside>
+            <div class="col-12 col-lg-9 mt-4 b2b-product-list">
+                @if (Model?.Products?.Count > 0)
+                {
+                    <div class="col-12 p-0 b2b-product-grid">
+                        <div class="b2b-filters d-flex">
+                            <div class="d-flex flex-wrap align-items-center">
+                                <div class="b2b-product-count page-top">
+                                    <p class="search-result" data-test-selector="paraSearchResult">@Html.RenderBlock(Model.SearchResultCountText)</p>
+                                </div>
+                                <div id="layout-search" class="b2b-sorting ml-md-auto">
+                                    <div class="search-sorting">
+                                        <div>
+                                            @Html.Partial("../Search/_Sorting", new ViewDataDictionary(new { Id = "Sort2", @class = "pull-right" }))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="b2b-view-mode ml-auto ml-md-0">
+                                    <span class="filter-text" data-test-selector="spnLabelView">@WebStore_Resources.LabelView</span>
+                                    <a href="javascript:void(0);" class="productview grid-view-opt-active" title="Grid View" data-test-selector="linkGridView"><span class="grid-icon"></span></a>
+                                    <a href="javascript:void(0);" class="productview list-view-opt" title="List View" data-test-selector="linkListView"><span class="list-icon"></span></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    if (Model?.FacetFilters?.Count > 0)
+                    {
+                        <div id="facetFilters" class="col-12 b2b-filtered-list">
+                            <div class="list-group d-flex flex-wrap align-items-center mt-3">
+                                <h4 class="panel-title panel-title-edit accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne_AddedList"><span>Filtering By: </span></h4>
+
+                                @foreach (var facetValue in Model.FacetFilters)
+                                {
+                                    <div class="b2b-filter-items d-flex flex-wrap">
+                                        <h4>@HttpUtility.HtmlDecode(Model.Facets.Find(x => x.AttributeValues.Any(y => y.AttributeCode == facetValue.Item1))?.AttributeName):</h4>
+                                        @foreach (var facetValueItem in facetValue.Item2)
+                                        {
+                                            <div class="filter-item d-flex" onclick="Search.prototype.RemoveFacet('@facetValueItem.Value')">
+                                                <label class="mr-auto">@HttpUtility.HtmlDecode(facetValueItem.Key)</label>
+                                                <span class="close-circle-icon"></span>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <div class="col-xs-12 product-view nopadding">
+                        <ul id="view-option-productgrid" infinnity-loading="@Helper.InfinityLoading" class="product-grid-ul grid-view">
+                            @{
+                                if (!Equals(Model, null))
+                                {
+                                    foreach (var p in Model.Products)
+                                    {
+                                        <li class="b2b-products">
+                                            <article class="product-item">
+                                                @Html.Partial("../Product/_ProductTile", p)
+                                            </article>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
+                        <div id="loading" class="loader" style="display:none;"></div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#facetFilters").html($("#collapseOne_AddedList").html());
+    })
+</script>  

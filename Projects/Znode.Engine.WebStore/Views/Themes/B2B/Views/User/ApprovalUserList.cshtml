@@ -1,0 +1,73 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model  UserApproverListViewModel
+@using Znode.Engine.WebStore.Agents;
+<div class="main-wrapper col">
+    <div class="row">
+        <div class="container-fluid profile-dashboard">
+            <div class="row">
+                <div class="container">
+                    @Html.Partial("_AccountMenuDashboard")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container">
+            <div class="row user-account">
+                <div class="col-12 account-dashboard">
+                    <div class="row mb-5">
+                        <div class="col-12 col-lg-9 order-history right-container">
+                            <div class="row no-gutters">
+                                <div class="col-12">
+                                    <h1 class="page-title">@WebStore_Resources.TextApprovalList</h1>
+                                </div>
+                                <div id="user-approver-popup-content" class="col-12 p-0 mb-4 dashboard-content">
+                                    @if (Model?.UserApprover.Count > 0)
+                                    {
+                                        <h3 class="b2b-section-header">@WebStore_Resources.TextApprovalList</h3>
+                                        <div class="account-recent-orders col-12 list-container p-0">
+                                            <div class="col-12 p-0">
+                                                <div class="col-12 account-recent-orders">
+                                                    @foreach (UserApproverViewModel userApprover in Model?.UserApprover)
+                                                    {
+                                                        <div class="row">
+                                                            <div class="col-12 col-lg-6 col-xl-2 p-0 pr-2">
+                                                                <div class="b2b-recent-order-title">@WebStore_Resources.TextApproverOrder</div>
+                                                                <div class="b2b-recent-order-detail">@userApprover.ApproverOrder</div>
+                                                            </div>
+                                                            <div class="col-12 col-lg-6 col-xl-6 p-0 pr-2">
+                                                                <div class="b2b-recent-order-title">@WebStore_Resources.TextApproverName</div>
+                                                                <div class="b2b-recent-order-detail">@userApprover.ApproverName</div>
+                                                            </div>
+                                                            <div class="col-12 col-lg-6 col-xl-2 p-0 pr-2">
+                                                                <div class="b2b-recent-order-title">@WebStore_Resources.LabelFromBudgetAmount</div>
+                                                                <div class="b2b-recent-order-detail">@Helper.FormatPriceWithCurrency(userApprover.FromBudgetAmount, Model.CultureCode)</div>
+                                                            </div>
+                                                            <div class="col-12 col-lg-6 col-xl-2 p-0 pr-2">
+                                                                <div class="b2b-recent-order-title">@WebStore_Resources.LabelToBudgetAmount</div>
+                                                                <div class="b2b-recent-order-detail">@Helper.FormatPriceWithCurrency(userApprover.ToBudgetAmount, Model.CultureCode)</div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <h3 class="section-header">@WebStore_Resources.TextNoApprovers</h3>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-3 p-0 mt-4 pt-3">
+                            <div class="col-12">
+                                <p class="key-PromoSpot">@Html.RenderMessage("PromoSpot")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

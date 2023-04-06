@@ -1,0 +1,9 @@
+﻿@using Znode.Engine.Admin.Helpers;
+@model Znode.Engine.Admin.ViewModels.HighlightViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+}
+<div id="ManageHighlightDiv">
+    @Html.Partial(AdminConstants.CreateEditHighlightView, Model)
+</div>
+

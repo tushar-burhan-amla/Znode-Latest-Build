@@ -1,0 +1,12 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model GlobalAttributeValuesViewModel
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            <label data-test-selector="lbl@(Model.AttributeName.Replace(" ",""))" for="@Model.ControlProperty.Name">@Model.AttributeName</label>
+        </div>
+        @Html.CreateControl(@Model.ControlProperty)
+    </div>
+</div>
+

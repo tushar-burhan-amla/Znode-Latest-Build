@@ -1,0 +1,12 @@
+﻿<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">        
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(@Attributes_Resources.TitleAttributeFamily, "List", "AttributeFamily", null)</li>
+            <li>@Html.AuthorizedRawActionLink(@Attributes_Resources.TitleAttributeGroups, "List", "AttributeGroup", null)</li>
+            <li>@Html.AuthorizedRawActionLink(@Attributes_Resources.LabelAttributes, "List", "Attributes", null)</li>
+        </ul>
+    </div>
+</aside>
+
+

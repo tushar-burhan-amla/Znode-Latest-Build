@@ -1,0 +1,96 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model List<ProductViewModel>
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    bool isShowPriceAndInventoryToLoggedInCustomersOnly = GlobalAttributeHelper.IsShowPriceAndInventoryToLoggedInUsersOnly();
+}
+<div id="compareProductBox" style="display:none" class="col-12 flex-wrap p-0 compare-product-box">
+    @if (!Equals(Model, null))
+    {
+        <div class="d-flex flex-wrap col-12 p-0">
+            <h4 class="col-12">@WebStore_Resources.LabelCompareProduct</h4>
+            @foreach (ProductViewModel product in Model)
+            {
+                string UOM = Attributes.ValueFromSelectValue(product?.Attributes, "UOM");
+                string productType = product?.Attributes?.SelectAttributeList(ZnodeConstant.ProductType)?.FirstOrDefault()?.Code;
+                string salesPrice = Equals(productType, ZnodeConstant.GroupedProduct) && (!Equals(product.SalesPrice, null) || !Equals(product.RetailPrice, null)) ? string.Format(WebStore_Resources.GroupProductMessage, Helper.FormatPriceWithCurrency(product.SalesPrice, product.CultureCode)) : Helper.FormatPriceWithCurrency(product.SalesPrice, product.CultureCode);
+
+                <div class="col-12 compare-product">
+                    <div class="compare-product-list">
+                        <div class="row no-gutters">
+                            <div class="col-4 col-md-3 p-0">
+                                @{
+                                    string imageSrc = string.IsNullOrEmpty(product.ImageSmallThumbnailPath) ? "/no-image.png" : product.ImageSmallThumbnailPath;
+                                }
+                                <img src="@imageSrc" alt="product" class="img-fluid" />
+                            </div>
+                            <div class="col-8 col-md-9 p-0">
+                                <a href="JavaScript:void(0);" class="remove-compare" data-productid="@product.PublishProductId" title="Remove"><span class="close-circle-icon"></span></a>
+                                <p>@Html.RenderBlock(product.Name)</p>
+                                @*if store level flag - 'show price and inventory to logged-in users only' is set to yes and user is logged off then do not show price to users.*@
+                                @if (isShowPriceAndInventoryToLoggedInCustomersOnly && !Request.IsAuthenticated)
+                                {
+                                <div class="loged-out-product-text">
+                                    <a href="JavaScript:void(0);" data-target="#sign-in-nav" class="OpenNav" onclick="User.prototype.LoginInPopup()">@WebStore_Resources.LabelSignIn</a>
+                                    @WebStore_Resources.TextViewPrice
+                                </div>
+                                }
+                                else
+                                {
+                                    if (!Convert.ToBoolean(product.Attributes?.Value(ZnodeConstant.CallForPricing)))
+                                    {
+                                        if (!string.IsNullOrEmpty(product.GroupProductPriceMessage))
+                                        {
+                                            <p>@product.GroupProductPriceMessage</p>
+                                        }
+                                        else
+                                        {
+                                            if (!Equals(product.SalesPrice, null))
+                                            {
+                                                <span>
+                                                    @Helper.FormatPriceWithCurrency(product.SalesPrice, product.CultureCode, UOM)
+                                                </span>
+                                                if (product.SalesPrice != @product.RetailPrice && !Equals(productType, ZnodeConstant.GroupedProduct))
+                                                {
+                                                    <span class="cut-price">
+                                                        @Helper.FormatPriceWithCurrency(product.RetailPrice, product.CultureCode, UOM)
+                                                    </span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (product.PromotionalPrice > 0)
+                                                {
+                                                    <label>
+                                                        @Helper.FormatPriceWithCurrency(product.PromotionalPrice, product.CultureCode, UOM)
+                                                    </label>
+                                                    <span class="cut-price">
+                                                        @Helper.FormatPriceWithCurrency(product.RetailPrice, product.CultureCode, UOM)
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span>
+                                                        @Helper.FormatPriceWithCurrency(product.RetailPrice, product.CultureCode, UOM)
+                                                    </span>
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Model?.Count > 1)
+    {
+        <div class="col-12 compare-list-btn pt-2 pb-4">
+            @Html.ActionLink(WebStore_Resources.LabelCompareLink, "ViewComparison", controllerName, new { @class = "btn btn-primary btn-block", @data_test_selector = "btnCompareButton" })
+        </div>
+    }
+</div>

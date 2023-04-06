@@ -1,0 +1,34 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model AddonGroupViewModel
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<div class="form-group" id="createAddonGroup">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(model => model.PimAddonGroupLocales[0].AddonGroupName, new { @class = "required", @data_test_selector = "lblAddonGroupName" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.PimAddonGroupLocales[0].AddonGroupName, new { @id = "AddonGroupName" , @data_test_selector= "txtAddonGroupName" })
+            @Html.ValidationMessageFor(m => m.PimAddonGroupLocales[0].AddonGroupName, "", new { @id = "valAddonGroupName" , @data_test_selector = "valAddonGroupName"})
+        </div>
+        @Html.Partial("_HelpText", PIM_Resources.HelptextAddonGroup)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(model => model.DisplayType, new { @class = "required" , @data_test_selector = "lblAddonGroupType" })
+        </div>
+        <div class="control-md">
+            @Html.EnumDropDownListFor(model => model.DisplayTypeValue, PIM_Resources.OptionSelectDisplayType, new {@data_test_selector = "drpAddonGroupType" })
+            @Html.ValidationMessageFor(m => m.DisplayTypeValue, "", new { @id = "valAddonGroupType" , @data_test_selector = "valAddonGroupType" })
+        </div>
+    </div>
+</div>
+
+@Html.HiddenFor(model => model.PimAddonGroupId)
+@Html.HiddenFor(model => model.PimAddonGroupLocales[0].PimAddonGroupLocaleId)

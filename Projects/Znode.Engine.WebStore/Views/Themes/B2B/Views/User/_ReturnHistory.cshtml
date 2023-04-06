@@ -1,0 +1,63 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@model IEnumerable<RMAReturnViewModel>
+
+@if (Model.Any())
+{
+
+    <div class="table-responsive">
+        <table class="table" aria-describedby="Return Item List Details">
+            <thead>
+                <tr>
+                    <th scope="col" data-test-selector="tblHdTitleReturnNumber">@WebStore_Resources.TitleReturnNumber</th>
+                    <th scope="col" data-test-selector="tblHdTitleReturnStatus">@WebStore_Resources.TitleReturnStatus</th>
+                    <th scope="col" data-test-selector="tblHdTitleReturnDate">@WebStore_Resources.TitleReturnDate</th>
+                    <th scope="col" data-test-selector="tblHdTitleExpectedReturnQuantity">@WebStore_Resources.TitleExpectedReturnQuantity</th>
+                    <th scope="col" data-test-selector="tblHdTitleAction" class="d-flex justify-content-start">@WebStore_Resources.TitleAction</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (RMAReturnViewModel returns in Model)
+                {
+                    <tr>
+                        <td data-test-selector="colReturnNumber">
+                            @if (@returns.ReturnStatus == ZnodeConstant.ReturnStateNotSubmitted)
+                            {
+                                <a href="/RMAReturn/ManageOrderReturn?returnNumber=@returns.ReturnNumber" data-test-selector="linkReturnNumber">@returns.ReturnNumber</a>
+                            }
+                            else
+                            {
+                                <a href="/RMAReturn/GetReturnDetails?returnNumber=@returns.ReturnNumber" data-test-selector="linkReturnNumber">@returns.ReturnNumber</a>
+                            }
+                        </td>
+                        <td data-test-selector="colReturnStatus">@returns.ReturnStatus</td>
+                        <td data-test-selector="colReturnDate">@returns.ReturnDate.ToDateTimeFormat()</td>
+                        <td data-test-selector="colExpectedReturnQuantity">@returns.TotalExpectedReturnQuantity</td>
+
+                        <td data-test-selector="colReturnActions" class="d-flex justify-content-start">
+                            @if (@returns.ReturnStatus?.ToLower() == ZnodeConstant.ReturnStateNotSubmitted.ToLower())
+                            {
+                                <a href="/RMAReturn/ManageOrderReturn?returnNumber=@returns.ReturnNumber" class="remove-compare" onclick="" data-test-selector="linkEditReturn" data-toggle="tooltip" data-placement="top" title="Edit Return"><span class="edit-icon ml-1"></span></a>
+                                <a href="/RMAReturn/ManageOrderReturn?returnNumber=@returns.ReturnNumber" class="remove-compare" onclick="" data-test-selector="linkViewReturn" data-toggle="tooltip" data-placement="top" title="View Return"><span class="zf-view ml-1"></span></a>
+                            }
+                            else
+                            {
+                                <a href="/RMAReturn/GetReturnDetails?returnNumber=@returns.ReturnNumber" class="remove-compare" onclick="" data-test-selector="linkViewReturn" data-toggle="tooltip" data-placement="top" title="View Return"><span class="zf-view ml-1"></span></a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="col-12 account-recent-orders">
+        <div class="row">
+            <div class="col-12 pl-2 py-4">
+                <div class="b2b-recent-order-detail">@WebStore_Resources.TextReturnsNotAvailable</div>
+            </div>
+        </div>
+    </div>
+}

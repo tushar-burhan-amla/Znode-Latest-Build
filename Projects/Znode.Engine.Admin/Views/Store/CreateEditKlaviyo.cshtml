@@ -1,0 +1,67 @@
+﻿@model Znode.Engine.Admin.ViewModels.KlaviyoViewModel
+@using Znode.Engine.Admin.ViewModels;
+
+@{
+
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formCreateEditKlaviyo", SaveHeader = Admin_Resources.ButtonAdd, CancelHeader = Admin_Resources.ButtonCancel, CancelUrl = "/Store/List", IsSaveCloseEnable = true };
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelStore)<i class="z-minus"></i><span>@Model.PortalName</span></h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<div class="main-wrapper">
+    @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        <h3 class="section-heading" data-test-selector="hdgKlaviyoAccountConfiguration">Klaviyo Account Configuration</h3>
+        <div id="divTestEmailPopup" class="modal fade" role="dialog">
+            @*Don't delete this div, mainly due to Test Email Popup will display in this div*@
+        </div>
+
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "formCreateEditKlaviyo" }))
+        {
+            <div id="div_klaviyoprovider_option">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelProvider, new { @data_test_selector = "lblProvider" })
+                        </div>
+                        <div class="control-md order-details">
+                            <select id="ddlProviderTypes" name="ddlProviderTypes" onchange="Klaviyo.prototype.ShowProviderHtml();" data-test-selector="drpProviderTypes">
+                                <option id="defaultType">@Admin_Resources.LabelSelect </option>
+                                @foreach (var item in Model.EmailProviderList)
+                                {
+                                    if (Convert.ToInt32(item.Id) == Model.EmailProviderId)
+                                    {
+                                        <option value="@item.Value" id="@item.Id" data-klaviyoprovider-type="@item.Type" selected>@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value" id="@item.Id" data-klaviyoprovider-type="@item.Type">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                            @Html.HiddenFor(model => model.PortalId, new { @id = "hdnportalId" })
+                        </div>
+                    </div>
+                </div>
+
+                <div data-test-selector="divklaviyoprovidertypeform" id="klaviyoprovidertypeform-container">
+
+                </div>
+            </div>
+        }
+    </section>
+</div>
+<script>
+    $(document).ready(function () {
+        Klaviyo.prototype.ShowProviderHtml();
+    })
+</script>

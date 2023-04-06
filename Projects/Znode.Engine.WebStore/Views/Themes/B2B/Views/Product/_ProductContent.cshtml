@@ -1,0 +1,162 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductViewModel
+@using Znode.Libraries.ECommerce.Utilities
+
+@{
+    var CustomeFields = Model.Attributes?.Where(x => x.IsCustomField)?.OrderBy(x => x.DisplayOrder)?.ToList();
+    int productId = Model.ConfigurableProductId > 0 ? Model.ConfigurableProductId : Model.PublishProductId;
+}
+
+@*"aria-owns" attribute added for ADA compliant*@
+<div class="col-12 p-0" id="product-content">
+    <div class="product-details-tab d-flex flex-wrap">
+        <ul id="myTab" class="col-12 p-0 nav nav-tabs d-lg-flex" role="tablist" aria-owns="tab-1 tab-3 tab-4 tab-reviews tab-youtbevideos">
+            <li class="active"><a id="tab-1" href="#panel-1" data-toggle="tab" role="tab" class="tabs active show">@WebStore_Resources.TextOverview</a></li>
+            @*<li><a id="tab-2" href="#panel-2" data-toggle="tab" role="tab" class="tabs">@WebStore_Resources.TextProductDetails</a></li>*@
+            <li><a id="tab-3" href="#panel-3" data-toggle="tab" role="tab" class="tabs">@WebStore_Resources.TextProductSpecifications</a></li>
+            @if (Model.Attributes?.Value("ShippingInformation") != null)
+            {
+                <li><a id="tab-4" href="#panel-4" data-toggle="tab" role="tab" class="tabs">@WebStore_Resources.ColumnShipping</a></li>
+            }
+            <li><a id="tab-reviews" href="#panel-5" data-toggle="tab" role="tab" class="tabs">@WebStore_Resources.TextCustomerReviews</a></li>
+            @if (!string.IsNullOrEmpty(Model.Attributes?.Value(ZnodeConstant.VideoURL)))
+            {
+                <li><a id="tab-youtbevideos" href="#panel-6" data-toggle="tab" role="tab" class="tabs">@WebStore_Resources.TextYouTubeVideos</a></li>
+            }
+            @if (CustomeFields?.Count > 0)
+            {
+                <li><a id="tab-youtbevideos" href="#panel-6" data-toggle="tab" role="tab" class="tabs">@WebStore_Resources.TitleAdditionalInformation</a></li>
+            }
+        </ul>
+        <div id="myTabContent" class="col-12 p-0 tab-content scroll-default" role="tablist" aria-owns="panel-1 panel-3 panel-4 panel-5 panel-6">
+            <!--Panels 1-->
+            <div id="panel-1" class="card tab-pane fade show active" role="tab" aria-labelledby="tab-1">
+                <div class="card-header" role="tab" id="heading-1">
+                    <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+                            @WebStore_Resources.TextOverview
+                        </a>
+                    </h5>
+                </div>
+                <div id="collapse-1" class="collapse show" data-parent="#myTabContent" role="tabpanel" aria-labelledby="heading-1">
+                    <div class="card-body">
+                        @Html.RenderBlock(@WebUtility.HtmlDecode(Model.Attributes?.Value("LongDescription")))
+                    </div>
+                </div>
+            </div>
+            <!--Panels 2-->
+            @*<div id="panel-2" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-2">
+                    <div class="card-header" role="tab" id="heading-2">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse" href="#collapse-2" aria-expanded="true" aria-controls="collapse-2">
+                                @WebStore_Resources.TextProductDetails
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapse-2" class="collapse" data-parent="#myTabContent" role="tabpanel" aria-labelledby="heading-2">
+                        <div class="card-body">
+                            @Html.RenderBlock(@WebUtility.HtmlDecode(Model.Attributes?.Value("FeatureDescription")))
+                        </div>
+                    </div>
+                </div>*@
+            <!--Panels 3-->
+            <div id="panel-3" class="card tab-pane fade" role="tab" aria-labelledby="tab-3">
+                <div class="card-header" role="tab" id="heading-3">
+                    <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapse-3" aria-expanded="true" aria-controls="collapse-3">
+                            @WebStore_Resources.TextProductSpecifications
+                        </a>
+                    </h5>
+                </div>
+                <div id="collapse-3" class="collapse" data-parent="#myTabContent" role="tabpanel" aria-labelledby="heading-3">
+                    <div class="card-body">
+                        @Html.RenderBlock(@WebUtility.HtmlDecode(Model.Attributes?.Value("ProductSpecification")))
+                    </div>
+                </div>
+            </div>
+            <!--Panels 4-->
+            @if (Model.Attributes?.Value("ShippingInformation") != null)
+            {
+                <div id="panel-4" class="card tab-pane fade" role="tab" aria-labelledby="tab-4">
+                    <div class="card-header" role="tab" id="heading-4">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse" href="#collapse-4" aria-expanded="true" aria-controls="collapse-4">
+                                @WebStore_Resources.ColumnShipping
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapse-4" class="collapse" data-parent="#myTabContent" role="tabpanel" aria-labelledby="heading-4">
+                        <div class="card-body">
+                            @Html.RenderBlock(@WebUtility.HtmlDecode(Model.Attributes?.Value("ShippingInformation")))
+                        </div>
+                    </div>
+                </div>
+            }
+            <!--Panels 5-->
+            <div id="panel-5" class="card tab-pane fade" role="tab" aria-labelledby="tab-reviews">
+                <div class="card-header" role="tab" id="heading-5">
+                    <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapse-5" aria-expanded="true" aria-controls="collapse-5">
+                            @WebStore_Resources.TextCustomerReviews
+                        </a>
+                    </h5>
+                </div>
+                <div id="collapse-5" class="collapse" data-parent="#myTabContent" role="tabpanel" aria-labelledby="heading-5">
+                    <div class="card-body">
+                        <div class="col-12 p-0 mb-3 text-right">
+                            <a href="/Product/writereview?id=@productId&name=@Model.Name" id="button-writeReview" class="btn btn-primary d-block d-md-inline-block">@WebStore_Resources.LinkTextWriteReview</a>
+                        </div>
+                        <div class="col-12 p-0">
+                            @Html.Partial("_ProductReviews", Model.ProductReviews)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Panels 6-->
+            @if (!string.IsNullOrEmpty(Model.Attributes?.Value(ZnodeConstant.VideoURL)))
+            {
+                <div id="panel-6" class="card tab-pane fade" role="tab" aria-labelledby="tab-6">
+                    <div class="card-header" role="tab" id="heading-6">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse" href="#collapse-6" aria-expanded="true" aria-controls="collapse-6">
+                                @WebStore_Resources.TextYouTubeVideos
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapse-6" class="collapse" data-parent="#myTabContent" role="tabpanel" aria-labelledby="heading-6">
+                        <div class="card-body">
+                            <div id="product-youtubevideo-container" class="col-12 col-md-6 p-0">
+                                @Html.Video(Model.Attributes?.Value(ZnodeConstant.VideoURL))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (CustomeFields?.Count > 0)
+            {
+                <div id="panel-6" class="card tab-pane fade" role="tab" aria-labelledby="tab-6">
+                    <div class="card-header" role="tab" id="heading-6">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse" href="#collapse-6" aria-expanded="true" aria-controls="collapse-6">
+                                @WebStore_Resources.TitleAdditionalInformation
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapse-6" class="collapse" data-parent="#myTabContent" role="tabpanel" aria-labelledby="heading-6">
+                        <div class="card-body">
+                            <div id="product-youtubevideo-container" class="col-12 col-md-6 p-0">
+                                @foreach (var item in CustomeFields)
+                                {
+                                    <div class="product-brand">
+                                        <label>@Html.RenderBlock(item.AttributeName) : </label>
+                                        @Html.RenderBlock(item.AttributeValues)
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>

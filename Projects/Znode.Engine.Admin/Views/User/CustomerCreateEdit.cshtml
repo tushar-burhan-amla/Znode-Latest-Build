@@ -1,0 +1,313 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CustomerViewModel
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront; ;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string Title = actionName.ToLower().Equals("customeredit") ? "Edit" : "Add";
+    string styleToDisplayContent = Model.AccountId > 0 ? "style=display:none" : "";
+    string cancleUrl = (actionName.ToLower().Equals("customeredit")) ? "/User/CustomerManage?accountId=" + Model.UserId : "/User/CustomersList";
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = cancleUrl, FormId = "frmCreateEditCustomerAccount", Callback = "Account.prototype.SubmitCustomerCreateEditForm" };
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.ToLower().Contains("edit"))
+    {
+        <h1>@Admin_Resources.TitleEdit<em class="z-minus"></em><span>@Model.FullName</span></h1>
+    }
+    else
+    {
+        <h1>@Admin_Resources.TitleAdd</h1>
+    }
+    <div class="pull-right">
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+</div>
+<div id="grid-container">
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateEditCustomerAccount" }))
+            {
+            <h3 class="section-heading">@Admin_Resources.ManageGeneralInformation</h3>
+            if (actionName.ToLower().Equals("customeredit"))
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.UserName)
+                        </div>
+                        <div class="control-md">
+                            <input type="text" value="@Model.UserName" readonly="readonly" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label>@Admin_Resources.ButtonResetPassword</label>
+                        </div>
+                        <div class="control-md">
+                            <button type="button" class="btn-text btn-margin-left" data-toggle='modal' data-target='#PopUpConfirmResetPassword'>@Admin_Resources.ButtonSubmit</button>
+                            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                        new PopupModel()
+                        {
+                            Title = @Admin_Resources.TitleConfirmResetPassword,
+
+                            Description = @Admin_Resources.TextConformResetPassword,
+                            ModalPopUpId = "PopUpConfirmResetPassword",
+                            Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "User.prototype.ResetPasswordUsers()" } }
+                        })
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.UserName, new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.UserName)
+                            @Html.ValidationMessageFor(model => model.UserName)
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ExternalId)
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ExternalId, new { @maxlength = 50 })
+                        @Html.ValidationMessageFor(model => model.ExternalId)
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.NoteExternalId)
+                </div>
+            </div>
+            if (!DefaultSettingHelper.AllowGlobalLevelUserCreation)
+            {
+                <div class="form-group" id="ddlPortals" @styleToDisplayContent>
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.Portals, new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            <div id="areaList">
+                                @if (string.Equals(actionName.ToLower(), "customercreate"))
+                                {
+                                    @Html.DropDownListFor(model => model.PortalId, Model.Portals)
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.PortalId, Model.Portals, new { @readonly = "readonly", disabled = "disabled" })
+                                    @Html.HiddenFor(m => m.PortalId)
+                                }
+                                @Html.ValidationMessageFor(model => model.PortalId)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <h3 class="section-heading margin-top-25">@Admin_Resources.ManageLoginInformation</h3>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.FirstName, new { @class = "required" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.FirstName)
+                        @Html.ValidationMessageFor(model => model.FirstName)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.LastName, new { @class = "required" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.LastName)
+                        @Html.ValidationMessageFor(model => model.LastName)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.PhoneNumber)
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.PhoneNumber)
+                        @Html.ValidationMessageFor(model => model.PhoneNumber)
+                    </div>
+                </div>
+            </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.Email, new { @class = "required" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.Email)
+                                @Html.ValidationMessageFor(model => model.Email)
+                            </div>
+                        </div>
+                    </div>
+
+            if (actionName.ToLower().Equals("customeredit"))
+            {
+                <div class="form-group">
+                    <div class="control-md control-non">
+                        <label>
+                            <input type="checkbox" name="EmailOptIn" value="true" checked="@Model.EmailOptIn" />
+                            <span class="lbl padding-8">@Admin_Resources.NoteSendPeriodicMail</span>
+                            <input name="CustomerAccount.EmailOptIn" type="hidden" value="false">
+                        </label>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <div class="control-md control-non">
+                        <label>
+                            <input type="checkbox" name="EmailOptIn" value="true" checked="checked" />
+                            <span class="lbl padding-8">@Admin_Resources.NoteSendPeriodicMail</span>
+                            <input name="CustomerAccount.EmailOptIn" type="hidden" value="false">
+                        </label>
+                    </div>
+                </div>
+            }
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.AccountId)
+                    </div>
+                    <div class="control-md">
+                        @if (Model.UserId > 0 && Model.AccountId > 0)
+                        {
+                            @Html.DropDownListFor(model => model.AccountId, Model.Accounts ?? new List<SelectListItem>(), Admin_Resources.LabelSelectAccount, new { @id = "ddlAccount", @OnChange = "User.prototype.OnAccountSelection();", @disabled = "disabled", @class = "readonly" })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(model => model.AccountId, Model.Accounts ?? new List<SelectListItem>(), Admin_Resources.LabelSelectAccount, new { @id = "ddlAccount", @OnChange = "User.prototype.OnAccountSelection();" })
+                        }
+                    </div>
+                </div>
+            </div>
+
+            styleToDisplayContent = Model.AccountId > 0 ? "" : "style=display:none";
+
+
+            <div class="form-group" id="divDepartmentId" @styleToDisplayContent>
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.DepartmentId)
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.DepartmentId, Model.Departments ?? new List<SelectListItem>(), Admin_Resources.LabelSelectDepartment, new { @id = "ddlDepartment" })
+                        @Html.HiddenFor(model => model.DepartmentId)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="divUserTypeId" @styleToDisplayContent>
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.RoleName)
+                    </div>
+                    <div class="control-md">
+                        @if (actionName.ToLower().Equals("customeredit") && Model.AccountId > 0)
+                        {
+                            @Html.DropDownListFor(model => model.RoleName, Model.Roles ?? new List<SelectListItem>(), new { @id = "ddlUserType", @OnChange = "User.prototype.OnUserTypeSelection();", @disabled = "disabled", @class = "readonly" })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(model => model.RoleName, Model.Roles ?? new List<SelectListItem>(), new { @id = "ddlUserType", @OnChange = "User.prototype.OnUserTypeSelection();" })
+                        }
+                        @Html.HiddenFor(model => model.RoleName, new { @id = "hdnRoleName" })
+                    </div>
+                </div>
+            </div>
+
+
+            styleToDisplayContent = (Model.AccountId > 0 && Equals(Model.RoleName?.ToLower(), "user")) ? "" : "style=display:none";
+
+
+            <div class="form-group" id="divRole" @styleToDisplayContent>
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.PermissionCode)
+                    </div>
+                    <div class="control-md">
+                        <div id="permission_options">
+
+                        </div>
+                        @Html.HiddenFor(model => model.PermissionCode)
+                    </div>
+                </div>
+            </div>
+
+
+            styleToDisplayContent = (Model.AccountId > 0 && Model.ApprovalUserId > 0 && Equals(Model.RoleName?.ToLower(), "user") && !Equals(Model.PermissionCode, ZnodePermissionCodeEnum.DNRA.ToString())) ? "" : "style=display:none";
+
+
+            <div class="form-group" id="approvalNamesDiv" @styleToDisplayContent>
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ApprovalUserId, new { @class = "required" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.ApprovalUserId, Model.UserApprovalList ?? new List<SelectListItem>(), new { @id = "ddlApproverList" })
+                        @Html.ValidationMessageFor(model => model.ApprovalUserId)
+                        @Html.HiddenFor(model => model.ApprovalUserId)
+                        <span class="error-msg" id="errorRequiredApprovalUserId"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            styleToDisplayContent = (Model.AccountId > 0 && Equals(Model.RoleName.ToLower(), "user") && Equals(Model.PermissionCode, ZnodePermissionCodeEnum.SRA.ToString())) ? "" : "style=display:none";
+
+
+            <div class="form-group" id="maxBudgetDiv" @styleToDisplayContent>
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.BudgetAmount, new { @class = "required" })
+                    </div>
+                    <div class="control-md left-inner-icon">
+                        <em class="unit">@Admin_Resources.CurrencySymbol</em>
+                        @Html.TextBoxFor(model => model.BudgetAmount, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidBudgetAmountForRoundOff, Admin_Resources.ValidBudgetAmountWithoutRoundOff) })
+                        @Html.ValidationMessageFor(model => model.BudgetAmount, null, new { id = "errorRequiredAccountPermissionAccessId" })
+                    </div>
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.UserName)
+            @Html.HiddenFor(model => model.AspNetUserId)
+            @Html.HiddenFor(model => model.AccountId)
+            @Html.HiddenFor(model => model.UserId)
+            @Html.HiddenFor(model => model.IsSelectAllPortal)
+            @Html.HiddenFor(model => model.RoleName)
+            @Html.HiddenFor(model => model.AccountPermissionAccessId)
+        }
+    </section>
+</div>
+
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"> </script>
+<script>
+    $("#AreaId").multiselect({ includeSelectAllOption: false, enableCaseInsensitiveFiltering: false });
+    $("#portals").multiselect({ includeSelectAllOption: true, enableCaseInsensitiveFiltering: false });
+</script>

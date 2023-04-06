@@ -1,0 +1,91 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@model TemplateViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string CancelUrl = "/Template/List";
+    string FormId = "frmTemplate";
+    string Callback = "Template.prototype.ValidateTemplateName";
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "btnSaveNClose", DataTestSelector = "linkSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = Admin_Resources.ButtonSaveClose, OnClick = "Template.prototype.ValidateTemplateName(false,'" + @CancelUrl + "')" });
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "saveDraft", DataTestSelector = "linkSave" , LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "Template.prototype.ValidateTemplateName()" });
+
+
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.Equals("create", StringComparison.InvariantCultureIgnoreCase))
+    {
+        <h1 data-test-selector="hdgPageTemplate">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelPageTemplate)</h1>
+    }
+    else if (actionName.Equals("copy", StringComparison.InvariantCultureIgnoreCase))
+    {
+        <h1 data-test-selector="hdgPageTemplate">@string.Format(@Admin_Resources.TitleCopy, Admin_Resources.LabelPageTemplate)<em class="z-minus"></em><span>@Model.Name</span></h1>
+    }
+    else
+    {
+        <h1 data-test-selector="hdgPageTemplate">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelPageTemplate)<em class="z-minus"></em><span>@Model.Name</span></h1>
+    }
+    <div class="pull-right btn-container dirtyignore">
+        @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+    </div>
+    <div class="pull-right btn-container">
+        @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "List", "Template", null, new { @class = "btn-text-icon", @data_test_selector = "linkCancel" })
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmTemplate", enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.Name, new { @class = "required", @data_test_selector = "lblName" })
+                </div>
+                <div class="control-md dirtyignore">
+                    @if (actionName.Equals("edit", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        @Html.TextBoxFor(model => model.Name, new { @readonly = "readonly", @data_test_selector = "txtName" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.Name, new { @data_test_selector = "txtName" })
+                    }
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @data_test_selector = "valName" })
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="control-label">
+                @Html.LabelFor(model => model.FileName, new { @class = "required", @data_test_selector = "lblFileName" })
+            </div>
+            <div class="control-md">
+                @if (actionName.Equals("copy", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    @Html.TextBoxFor(model => model.FileName, new { @readonly = "readonly", @data_test_selector = "txtFileName" })
+                }
+                else
+                {
+                    @Html.EditorFor(model => model.FilePath, new { @data_test_selector = "txtFileName" })
+                    <span id="errorTemplateFilePath" class="error-msg" />
+                    <span id="fileName" class="file-upload-name" data-test-selector="spnFileName" />
+                }
+            </div>
+        </div>
+
+
+        @Html.Partial("~/Views/Template/_ImagePanel.cshtml")
+
+        @Html.HiddenFor(m => m.CMSTemplateId)
+        @Html.HiddenFor(m => m.FileName)
+    }
+</section>
+<script>
+    $("#txtUpload").attr("title", $("#FileName").val())
+    $("#fileName").attr("title", $("#FileName").val())
+</script>

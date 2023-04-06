@@ -1,0 +1,61 @@
+﻿@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.ViewModels
+@model QuoteResponseViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    Layout = null;
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+}
+
+<div id=quoteHistoryList>
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="panel-heading">
+            <h4 class="panel-title panel-title-edit">@Admin_Resources.LabelQuoteHistoryandNotes</h4>
+        </div>
+        <button type="button" class="btn-text btn-text-secondary margin-right-15 margin-top-15 margin-bottom-15" id="Addnote" onclick="Quote.prototype.GetAdditionalNote()" data-test-selector="btnAdditionalNote">@Admin_Resources.LabelAddQuoteNote</button>
+
+    </div>
+    <div class="col-sm-12 list-container" id="listcontainerId">
+        @{
+            if (Model.QuoteHistoryList.Count > 0)
+            {
+                <table id="manageQuoteGrid" data-test-selector="tblManageQuoteGrid" class="table" data-swhgajax="true" data-swhgcontainer="ZnodeOmsQuoteHistory" data-swhgcallback=""  aria-describedby="Manage Quote History And Notes Table">
+                    <thead>
+                        <tr class="grid-header">
+                            <th scope="col" data-test-selector="tblHdDate">
+                                @Admin_Resources.LabelDate 
+                            </th>
+                            <th scope="col" data-test-selector="tblHdUpdatedBy">
+                                @Admin_Resources.LabelUpdatedBy 
+                            </th>
+                            <th scope="col" data-test-selector="tblHdMessage">
+                                @Admin_Resources.LabelMessage 
+                            </th>
+                            <th scope="col" data-test-selector="tblHdNotes">
+                                @Admin_Resources.LabelNotes 
+                            </th>
+                            <th scope="col" data-test-selector="tblHdAmount">
+                                @Admin_Resources.LabelAmount  
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-test-selector="tblBdManageOrderGrid">
+                        @foreach (var item in Model.QuoteHistoryList)
+                        {
+                            string message = item.Message;
+                            string notes = item.Notes;
+                            <tr>
+                                <td>@Convert.ToDateTime(item.CreatedDate).ToString(HelperMethods.GetStringDateTimeFormat())</td>
+                                <td>@item.UpdatedBy</td>
+                                <td class="td-break-word">@Html.RenderBlock(message)</td>
+                                <td class="td-break-word">@Html.RenderBlock(notes)</td>
+                                <td>@HelperMethods.FormatPriceWithCurrency(item.OrderAmount, cultureCode)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            }
+        }
+    </div>
+</div>

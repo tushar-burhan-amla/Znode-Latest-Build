@@ -1,0 +1,120 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CustomerReviewViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmEditCustomerReview", CancelUrl = "/Review/List", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelProductReview)<em class="z-minus"></em><span data-test-selector="spnProductReview" class="product-review-name" title="@Html.RenderBlock(Model.Headline)">@Html.RenderBlock(Model.Headline)</span></h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmEditCustomerReview", enctype = "multipart/form-data" }))
+            {
+        <div id="loginForm">
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.ProductName, new { @data_test_selector = "lblProductName" })
+                    </div>
+                    <div class="control-md">
+                        <input type="text" value="@Html.RenderBlock(Model.ProductName)" disabled="disabled" data-test-selector="txtProductName" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.Headline, new { @class = "required", @data_test_selector = "lblHeadline" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.Headline, new { @data_test_selector = "txtHeadline" })
+                        @Html.ValidationMessageFor(model => model.Headline, "", new { @data_test_selector = "valHeadline" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.Comments, new { @class = "required", @data_test_selector = "lblComments" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextAreaFor(model => model.Comments, new { @data_test_selector = "txtComments" })
+                        @Html.ValidationMessageFor(model => model.Comments, "", new { @data_test_selector = "valComments" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.UserName, new { @class = "required", @data_test_selector = "lblUserName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.UserName, new { @data_test_selector = "txtUserName" })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @data_test_selector = "valUserName" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.UserLocation, new { @class = "required", @data_test_selector = "lblUserLocation" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.UserLocation, new { @data_test_selector = "txtUserLocation" })
+                        @Html.ValidationMessageFor(model => model.UserLocation, "", new { @data_test_selector = "valUserLocation" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.Rating, new { @data_test_selector = "lblRating" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(m => m.Rating, Model.GetReviewRatings, new { @id = "ddlReviewRating", @data_test_selector = "drpRating" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.Status, new { @data_test_selector = "lblStatus" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(m => m.Status, Model.GetReviewStatus, new { @id = "ddlReviewRating", @data_test_selector = "drpStatus" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(Admin_Resources.LabelCreatedDate, new { @data_test_selector = "lblCreateDate" })
+                    </div>
+                    <div class="control-md">
+                        <input type="text" value="@Model.CreatedDate" disabled="disabled" data-test-selector="txtCreateDate"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        @Html.HiddenFor(model => model.CMSCustomerReviewId)
+        @Html.HiddenFor(model => model.UserId)
+        @Html.HiddenFor(Model => Model.PublishProductId)
+        @Html.HiddenFor(Model => Model.ProductName)
+        @Html.HiddenFor(Model => Model.SKU)
+        @Html.HiddenFor(Model => Model.CreatedDate)
+    }
+</section>

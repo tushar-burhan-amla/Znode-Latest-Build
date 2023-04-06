@@ -1,0 +1,5 @@
+﻿@model WidgetParameter
+@*To get _Product.cshtml view if PDP page setting is enabled from product recommendations section*@
+<div class="product-list-widget">
+    @Html.PDPRecommendationControl("_RecommendedItem", Model)
+</div>

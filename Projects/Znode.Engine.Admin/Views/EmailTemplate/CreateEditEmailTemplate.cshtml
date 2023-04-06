@@ -1,0 +1,84 @@
+﻿@model EmailTemplateViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Models
+
+@{
+    ViewBag.Title = Admin_Resources.LabelCMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateEditEmailTemplate", CancelUrl = "/EmailTemplate/List", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.ToLower().Contains("create"))
+    {
+        <h1 data-test-selector="hdgEmailTemplates">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelEmailTemplates)</h1>
+    }
+    else
+    {
+        <h1 data-test-selector="hdgEmailTemplates">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelEmailTemplates)<em class="z-minus"></em><span>@Model.TemplateName</span></h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateEditEmailTemplate" }))
+    {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.LabelAllowedMessageTokens,new { @data_test_selector = "lblAllowedMessageTokens" })
+                </div>
+                <div class="control-md" data-test-selector="divAllowedMessageTokens">
+                    @Model.EmailTemplateTokensPartOne                    
+                    <div class="display-none" id="templateTokensData">
+                        @Model.EmailTemplateTokensPartTwo
+                    </div>                
+                    <a href="#" id="templateTokens" class="dirtyignore">@Admin_Resources.TextSeeMore</a>    
+                </div>
+                
+            </div>
+        </div>
+        if (Model?.Locale?.Count > 0)
+        {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(x => x.LocaleId,new { @data_test_selector = "lblLocaleId" })
+                    </div>
+                    <div class="control-md">
+                        @if (Model.EmailTemplateId > 0)
+                        {
+                            @Html.DropDownListFor(m => m.LocaleId, Model.Locale, new { @id = "ddl_locale_list_email_template", @data_test_selector = "drpLocaleId" })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => m.LocaleId, Model.Locale, new { @id = "ddl_locale_list_email_template", disabled = "disabled", @data_test_selector = "drpLocaleId" })
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.TemplateName, new { @class = "required", @data_test_selector = "lblTemplateName" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(m => m.TemplateName,new { @data_test_selector = "txtTemplateName" })
+                    @Html.ValidationMessageFor(m => m.TemplateName,"", new { @data_test_selector = "valTemplateName" })
+                </div>
+            </div>
+        </div>
+        <div id="div_email_template_for_locale">
+            @{ Html.RenderPartial("_EmailTemplateForLocale", Model); }
+        </div>
+
+        @Html.HiddenFor(m => m.EmailTemplateId)
+                @Html.HiddenFor(model => model.LocaleId)
+                }
+</section>
+
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup"></div>

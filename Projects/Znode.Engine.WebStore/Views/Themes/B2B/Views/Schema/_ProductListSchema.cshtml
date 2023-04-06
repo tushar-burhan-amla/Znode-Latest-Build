@@ -1,0 +1,25 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using System.Web.Configuration;
+@using Znode.Libraries.ECommerce.Utilities
+@using Newtonsoft.Json.Linq;
+@model ProductListViewModel
+@{
+    string sch_url = ZnodeWebstoreSettings.ZnodeWebStoreUri;
+    string Products = ""; int Position = 0;
+    if (Model?.Products?.Count > 0)
+    {
+        foreach (var p in Model.Products)
+        {
+            string Product_url = WebUtility.HtmlEncode(sch_url + "/" + Url.GetProductUrl(p?.SEOUrl, p?.PublishProductId.ToString()));
+            Products = Products + @"{'@type': 'ListItem','url': '" + Product_url + "','position': '" + Position + "','name': '" + WebUtility.HtmlEncode(p.Name) + "'}" + (Position == Model.Products.Count - 1 ? "" : ",");
+            Position++;
+        }
+    }
+    string Schema = @"{'@context': 'http://schema.org','@type': 'ItemList','itemListElement':[" + Products + "]}";
+
+    HtmlString ProductListSchema = new HtmlString(JObject.Parse(Schema).ToString());
+
+}
+<script type="application/ld+json">
+    @ProductListSchema
+</script>

@@ -1,0 +1,244 @@
+﻿@using Znode.Engine.Admin.Helpers;
+@model ShippingViewModel
+@using Znode.Engine.Admin.ViewModels;
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = "/Shippings/List", FormId = "frmCreateUpdateShipping", Callback = "Shippings.prototype.ValidateShipping", IsSaveCloseEnable = true };
+    var cultureCode = DefaultSettingHelper.DefaultCulture;
+}
+<div class="col-sm-12 title-container">
+    @if (string.Equals(actionName.ToLower(), "create"))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleShipping)</h1>
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.TitleShipping)<em class="z-minus"></em><span>@Model.ShippingName</span></h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/Views/Shippings/_asideShippingPanel.cshtml", Model)
+    <section class="main-container" id="frmCreateEditShipping">
+        <div class="col-sm-12 nopadding">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateUpdateShipping", enctype = "multipart/form-data" }))
+            {
+                <div class="col-sm-12 nopadding" id="generalSettings">
+
+                    <h3 class="section-heading">@Admin_Resources.GeneralSettings</h3>
+                    @if (string.Equals(actionName.ToLower(), "create"))
+                {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    <label class="required" data-test-selector="lblShippingType">@Admin_Resources.ShippingType</label>
+                                </div>
+                                <div class="control-md">
+                                    @Html.DropDownListFor(model => model.ClassName, Model.ShippingTypeList, Admin_Resources.LabelSelectShippingType, new { @id = "ddlShippingTypeList", @onchange = "Shippings.prototype.BindServiceList(\"ddlShippingServiceCodeList\",this);", @data_test_selector = "drpShippingType" })
+                                    @Html.ValidationMessageFor(model => model.ClassName, "", new { @data_test_selector = "valShippingType" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding ">
+                                <div class="control-label">
+                                    <label class="required" data-test-selector="lblShippingType">@Admin_Resources.ShippingType</label>
+                                </div>
+                                <div class="control-md">
+                                    @Html.DropDownListFor(model => model.ClassName, Model.ShippingTypeList, Admin_Resources.LabelSelectShippingType, new { @id = "ddlShippingTypeList", disabled = "disabled", @data_test_selector = "drpShippingType" })
+                                    @Html.ValidationMessageFor(model => model.ClassName, "", new { @data_test_selector = "valShippingType" })
+                                    @Html.HiddenFor(model => model.ClassName)
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group" id="shippingname-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label class="required" data-test-selector="lblShippingName">@Admin_Resources.LabelShippingName</label>
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.ShippingName, new { @data_test_selector = "txtShippingName" })
+                                @Html.ValidationMessageFor(model => model.ShippingName, "", new { id = "errorSpanShippingName", @data_test_selector = "valShippingName" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="displayname-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.Description, new { @class = "required", @data_test_selector = "lblDisplayName" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.Description, null, new { @id = "valDisplayName", @onblur = "Shippings.prototype.ShowHideValidationMessage()", @data_test_selector = "txtDisplayName" })
+                                <span id="valDisplayNameErr" class="field-validation-error" data-test-selector="valDisplayName"></span>
+                            </div>
+                            @Html.Partial("_HelpText", Admin_Resources.HelptextDisplayName)
+
+                    </div>
+                  </div>
+                  <div class="form-group" id="delivery-timeframe-content">
+                    <div class="col-sm-12 nopadding">
+                      <div class="control-label">
+                        @Html.LabelFor(m => m.DeliveryTimeframe)
+                      </div>
+                      <div class="control-md">
+                        @Html.TextAreaFor(model => model.DeliveryTimeframe, new { @id = "valDeliveryTimeframe", @onblur = "Shippings.prototype.ShowHideValidationMessage()" })
+                        <span id="valDeliveryTimeframeErr" class="field-validation-error"></span>                                
+                      </div>
+                      @Html.Partial("_HelpText", Admin_Resources.HelptextDeliveryTimeframe)
+                    </div>
+                  </div>
+                    <div class="form-group" id="internalcode-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.ShippingCode, new { @class = "required", @data_test_selector = "lblInternalCode" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.ShippingCode, null, new { @id = "valInternalCode", @onblur = "Shippings.prototype.ShowHideValidationMessage()", @data_test_selector = "txtInternalCode" })
+                                <span id="valInternalCodeErr" class="field-validation-error" data-test-selector="valInternalCode"></span>
+                            </div>
+                            @Html.Partial("_HelpText", Admin_Resources.HelptextShippingInternalCode)
+                        </div>
+                    </div>
+                    <div class="form-group" id="service-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label class="required" data-test-selector="lblShippingServiceCode"> @Admin_Resources.ShippingServiceCode</label>
+                            </div>
+                            <div class="control-md">
+                                @Html.DropDownListFor(model => model.ShippingServiceCodeId, Model.ShippingServiceCodeList, Admin_Resources.LabelSelectShippingServiceCode, new { @id = "ddlShippingServiceCodeList", @data_test_selector = "drpServiceCode" })
+                                @Html.ValidationMessageFor(model => model.ShippingServiceCodeId, "", new { @data_test_selector = "valServiceCode" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="handlingcharge-content">
+                        <div class="col-sm-12 nopadding ">
+                            <div class="control-label">
+                                <label data-test-selector="lblHandlingCharge">@Admin_Resources.ShippingHandlingCharge</label>
+                            </div>
+                            <div class="control-md">
+                                <div class="col-sm-12 nopadding">
+                                    <label><input @(Model.IsAmount ? "checked='checked'" : "") type="radio" name="HandlingChargeBasedOn" value="Amount" onclick="Shippings.prototype.HandlingChargeBasedOnChange();" /><span class="lbl padding-8" data-test-selector="spnAmount">@Admin_Resources.LabelAmount</span></label>
+                                </div>
+                                <div class="col-sm-12 nopadding">
+                                    <label><input @(Model.IsSubtotal ? "checked='checked'" : "") type="radio" name="HandlingChargeBasedOn" value="SubTotal" onclick="Shippings.prototype.HandlingChargeBasedOnChange();" /><span class="lbl padding-8" data-test-selector="spnSubTotal">@Admin_Resources.LabelPercentageOfOrderSubTotal</span></label>
+                                </div>
+                                <div class="col-sm-12 nopadding margin-bottom">
+                                    <label><input @(Model.IsShipping ? "checked='checked'" : "") type="radio" name="HandlingChargeBasedOn" value="Shipping" onclick="Shippings.prototype.HandlingChargeBasedOnChange();" /><span class="lbl padding-8" data-test-selector="spnShipping">@Admin_Resources.LabelPercentageOfShippingRate</span></label>
+                                </div>
+                                <div class="pull-left padding-right-15" id="currencyDropdown">
+                                    @Html.DropDownListFor(model => model.CurrencyId, Model.CurrencyList ?? new List<SelectListItem>(), new { @data_test_selector = "drpCurrencyId" })
+                                </div>
+                                <div class="control-md">
+                                    <div id="divIcon" class="">
+                                        <em class="unit-text"></em>
+                                        @if (actionName.ToLower() == "Create".ToLower())
+                                        {
+                                            string formatedHandlingCharge = $"{Model.HandlingCharge:0.00}";
+                                            @Html.TextBoxFor(model => model.HandlingCharge, formatedHandlingCharge, new { @Value = "0.00" })
+                                        }
+                                        else
+                                        {
+                                            string formatedHandlingCharge = $"{Model.HandlingCharge:0.00}";
+                                            @Html.TextBoxFor(model => model.HandlingCharge, formatedHandlingCharge)
+                                        }
+                                        @Html.ValidationMessageFor(model => model.HandlingCharge, "", new { @id = "valHandlingCharges", @data_test_selector = "drpHandlingCharge" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="countries-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label data-test-selector="lblDestinationCountry">@Admin_Resources.DestinationCountry</label>
+                            </div>
+                            <div class="control-md">
+                                @Html.DropDownListFor(model => model.DestinationCountryCode, Model.CountryList, new { @id = "ddlCountryList", @onchange = "Shippings.prototype.BindStateList();", @data_test_selector = "drpCountryList" })
+                            </div>
+                            @Html.Partial("_HelpText", Admin_Resources.HelptextShippingDestinationCountry)
+                        </div>
+                    </div>
+                    <div class="form-group" id="state-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label data-test-selector="lblDestinationState">@Admin_Resources.LabelStateList</label>
+                            </div>
+                            <div class="control-md">
+                                @Html.DropDownListFor(model => model.StateCode, Model.StateList, new { @id = "ddlStateList", @data_test_selector = "drpStateList"  })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="ShippingOriginZipCode-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label data-test-selector="lblDestinationShippingOriginZipCode">@Admin_Resources.LabelShippingOriginZipCode</label>
+                            </div>
+                            <div class="control-md">
+                                @Html.TextAreaFor(model => model.ZipCode, new { @data_test_selector = "txtDestinationShippingOriginZipCode" })
+                                <p>@Admin_Resources.HintLabelZipCode</p>
+                                @Html.ValidationMessageFor(model => model.ZipCode, "", new { @data_test_selector = "valDestinationShippingOriginZipCode" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="TrackingUrl-content">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label data-test-selector="lblTrackingUrl">@Admin_Resources.LabelTrackingUrl</label>
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.TrackingUrl, new { @data_test_selector = "txtTrackingUrl" })
+                                @Html.ValidationMessageFor(model => model.TrackingUrl, "", new { @data_test_selector = "valTrackingUrl" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-12 nopadding">
+                    <h3 class="section-heading margin-top-25">@Admin_Resources.ShippingDisplaySettings</h3>
+                </div>
+                <div class="form-group" id="isactive-content">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblShippingEnable">@Admin_Resources.ShippingEnable</label>
+                        </div>
+                        <div class="control-md">
+                            <label>
+                                <input @(Model.IsActive ? "checked='checked'" : "") id="IsActive" name="IsActive" type="checkbox" value="true" data-test-selector="chkShippingEnable">
+                                <span class="lbl padding-8" for="TaxExempt"></span>
+                                <input name="IsActive" type="hidden" value="false">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="displayorder-content">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label class="required" data-test-selector="lblDisplayOrder">@Admin_Resources.ShippingDisplayOrder</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.DisplayOrder, new { @maxlength = "9", @data_test_selector = "txtDisplayOrder" })
+                            @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @data_test_selector = "valDisplayOrder" })
+                        </div>
+                        @Html.Partial("_HelpText", Admin_Resources.HelptextShippingDisplayOrder)
+                    </div>
+                </div>
+
+                @Html.HiddenFor(model => model.ShippingId)
+                @Html.HiddenFor(model => model.ShippingTypeId)
+                @Html.HiddenFor(model => model.ShippingServiceCodeId)
+                <input type="hidden" value="@cultureCode" id="cultureCode" />
+            }
+
+        </div>
+    </section>
+</div>

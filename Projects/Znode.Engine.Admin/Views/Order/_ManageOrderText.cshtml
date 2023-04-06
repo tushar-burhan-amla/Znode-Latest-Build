@@ -1,0 +1,22 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@model CartViewModel
+@{
+    int priceRoundOff = Convert.ToInt32(DefaultSettingHelper.DefaultPriceRoundOff);
+}
+@using (Ajax.BeginForm("UpdateDiscount", "order"
+                                                , new AjaxOptions
+                                                {
+                                                    UpdateTargetId = "divShoppingCart",
+                                                    OnBegin = "return Order.prototype.UpdateOrderTextDetails(this)",
+                                                    OnSuccess = "Order.prototype.UpdatePriceSuccessCallback(this)"
+                                                }, new { @class = "dirtylisten dirty", @id = "CSRDiscountAmountView" }))
+{
+<div class="col-sm-12">
+    <div class="row">
+        @Html.HiddenFor(model => model.OmsOrderId, new { @id = "hdnCSRDiscountAmountViewOrderId" })
+        -  @Html.TextBoxFor(model => model.CSRDiscountAmount, new { @data_test_selector = "txtCSRDiscount", @Onchange = "Order.prototype.SaveFields(this)", @data_priceRoundOff = priceRoundOff })
+        @Html.ValidationMessageFor(model => model.CSRDiscountAmount, "", new { @data_test_selector = "valCSRDiscount" })
+    </div>
+</div>
+}

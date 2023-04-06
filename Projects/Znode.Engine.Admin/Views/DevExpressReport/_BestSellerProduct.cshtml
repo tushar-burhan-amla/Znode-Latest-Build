@@ -1,0 +1,19 @@
+﻿<script type="text/javascript">
+    var paramvalues = ["Store", "Begin Date", "End Date", "Visible Column"];
+    function validationProcessInit(s, e) {
+        if (e.parameter.name == "ShowAllProducts") {
+            e.info.editor = { header: 'parameter-ShowAllProducts' };
+        }
+        if (e.parameter.name == "TopProducts") {
+            e.info.editor = { header: 'parameter-TopProducts' };
+        }
+        OverrideError();
+    }
+</script>
+<script type="text/html" id="parameter-ShowAllProducts">
+    <div data-bind="dxCheckBox: { value: value, onValueChanged:function(){ DevExpressReport.prototype.EnableDisableParameterByOther('paramTopProducts','ShowAllProducts', WebDocumentViewer);}}"> </div>
+</script>
+<script type="text/html" id="parameter-TopProducts">
+    <div data-bind="dxNumberBox:{ value: value,min:1,name:'paramTopProducts'}"> </div>
+</script>
+

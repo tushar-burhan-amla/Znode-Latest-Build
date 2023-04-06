@@ -1,0 +1,29 @@
+﻿<div class="modal fade" id="DeleteCatalogPopup" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" title="@Admin_Resources.ButtonCancel"><em class="z-close-circle"></em></button>
+                <h4 class="modal-title">@Admin_Resources.HeaderDelete</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the selected Catalog</p>
+
+                <div class="chk-product-addons">
+                    <label>
+                        <input type="radio" id="DeletePimCatalog" name="DeletePimCatalog" checked="checked" />
+                        <label class="lbl padding-8 delete-pim-label" for="DeletePimCatalog">@Admin_Resources.DeletePimCatalog</label>
+
+                        <input type="radio" id="IsDeletePublishCatalog" name="DeletePimCatalog" />
+                        <label class="lbl padding-8" for="IsDeletePublishCatalog">@Admin_Resources.DeleteCatalog</label>
+                    </label>
+                </div>
+                @Html.Hidden("DeleteCatalogId")
+            </div>
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type='button' class="btn-text btn-text-secondary" data-dismiss="modal" title='@Admin_Resources.TextOk' onclick="javascript:$('body').removeClass('modal-open'); $('body').removeAttr('style'); Catalog.prototype.DeleteMultipleCatalog(this)">@Admin_Resources.TextOk</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

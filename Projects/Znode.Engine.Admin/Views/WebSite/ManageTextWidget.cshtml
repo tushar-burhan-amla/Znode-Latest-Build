@@ -1,0 +1,72 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model CMSTextWidgetConfigurationViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    bool isSaveCloseShow = Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString()) ? true : false;
+    string cancelUrl = Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())
+        ? string.IsNullOrEmpty(Model?.FileName) ? $"/StoreExperience/StoreSetting?portalId={Model.CMSMappingId}" : $"/StoreExperience/StoreSetting?portalId={Model.CMSMappingId}&fileName={Model.FileName}"
+        : string.IsNullOrEmpty(Model?.FileName) ? $"/Content/EditContentPage?cmsContentPagesId={Model.CMSMappingId}" : $"/Content/EditContentPage?cmsContentPagesId={Model.CMSMappingId}&fileName={Model.FileName}";
+    ActionModel actionModel = new ActionModel { Action = "SaveTextWidgetConfiguration", Controller = "WebSite", CancelUrl = cancelUrl, FormId = "formCmsTextWidgetConfiguration", IsSaveCloseEnable = true, IsSaveCloseIsShow = isSaveCloseShow };
+}
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgManage">@Admin_Resources.LabelManage<em class="z-minus"></em><span>@Model.DisplayName</span></h1>
+    @if (Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.ContentPageMapping.ToString()))
+    {
+        <div class="pull-right btn-container">
+            <button type="button" class="btn-text-icon pull-left" data-test-selector="linkBack" onclick="ZnodeBase.prototype.CancelUpload('associatedPanel')"><em class="z-back"></em>@Admin_Resources.ButtonBack</button>
+            <div class="pull-right padding-left">
+                @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, actionModel.Action, actionModel.Controller, new { @id = "dvSave", @class = "btn-text btn-text-secondary", onclick = "SaveCancel.prototype.SubmitForm('" + @actionModel.FormId + "', '" + @actionModel.Callback + "')" })
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    }
+</div>
+<!--Main Container-->
+<div id="TextWidgetConfigurationDiv">
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm("SaveTextWidgetConfiguration", "WebSite", FormMethod.Post, new { id = "formCmsTextWidgetConfiguration" }))
+        {
+            if (Model?.Locales?.Count > 0)
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(x => x.LocaleId, new { @data_test_selector = "lblLocaleId" })
+                        </div>
+                        <div class="control-md">
+                            @if (Model.CMSTextWidgetConfigurationId > 0)
+                            {
+                                @Html.DropDownListFor(m => m.LocaleId, Model.Locales, new { @id = "ddl_locale_list", @onclick = "Content.prototype.LocaleChangeOnConfigure()" ,@data_test_selector = "drpLocaleId" })
+                           }
+                            else
+                            {
+                                            @Html.DropDownListFor(m => m.LocaleId, Model.Locales, new { @id = "ddl_locale_list", @readonly = "readonly", disabled = "disabled", @data_test_selector = "drpLocaleId" })
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            <div id="div_text_widget">
+                @{ Html.RenderPartial("_TextWidget", Model); }
+            </div>
+            @Html.HiddenFor(model => model.CMSMappingId)
+            @Html.HiddenFor(model => model.CMSTextWidgetConfigurationId)
+            @Html.HiddenFor(model => model.CMSWidgetsId)
+            @Html.HiddenFor(model => model.TypeOFMapping)
+            @Html.HiddenFor(model => model.WidgetsKey)
+            @Html.HiddenFor(model => model.DisplayName)
+            @Html.HiddenFor(model => model.WidgetName)
+            @Html.HiddenFor(model => model.FileName)
+        }
+    </section>
+</div>
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup">
+</div>

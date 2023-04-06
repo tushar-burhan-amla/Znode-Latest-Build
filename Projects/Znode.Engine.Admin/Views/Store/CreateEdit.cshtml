@@ -1,0 +1,348 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities;
+@model StoreViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmStore", CancelUrl = "/Store/List", Callback = "Store.prototype.ValidateEmailNotifaction", IsSaveCloseEnable = true };
+    string portalName = string.IsNullOrEmpty(Model?.StoreName) ? @Admin_Resources.TitleStore : Model?.StoreName;
+    string mainContainer = !actionName.ToLower().Contains("create") ? "main-container" : "col-sm-12 page-container";
+    string mainWrapperClass = !actionName.ToLower().Contains("create") ? "main-wrapper" : "";
+    Model.CopyContentPortalName = Model.CopyContentPortalName ?? Admin_Resources.LabelNone;
+}
+<div class="col-sm-12 title-container">    
+    @if (actionName.ToLower().Contains("create"))
+    {
+        <h1 data-test-selector="hdg@(Admin_Resources.LabelStore.Replace(" ", " "))">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelStore)</h1>
+    }
+    else
+    {
+        <h1 data-test-selector="hdg@(Admin_Resources.LabelStore.Replace(" ", " "))">@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelStore)<em class="z-minus"></em><span>@Model.StoreName</span></h1>
+    }
+
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<div class=@mainWrapperClass>
+    <!--Left Panel-->
+    @if (!actionName.ToLower().Contains("create"))
+    {
+        <aside>
+            <div class="slide-container">
+                @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+            </div>
+        </aside>
+    }
+    <!--Main Container-->
+        <section class="@mainContainer">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmStore", @onsubmit= "return ZnodeBase.prototype.ValidateCodeField('[name=StoreCode]','" + Model.StoreCode + "','/Store/IsStoreCodeExists')" }))
+            {
+            <h3 class="section-heading" data-test-selector="hdgStoreIdentity">Store Identity</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.CompanyName, new { @class = "required", @data_test_selector = "lblBrandName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.CompanyName, new { @data_test_selector = "txtBrandName" })
+                        @Html.ValidationMessageFor(model => model.CompanyName, "", new { @data_test_selector = "valBrandName" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.StoreName, new { @class = "required", @data_test_selector = "lblStoreName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.StoreName, new { @data_test_selector = "txtStoreName" })
+                        @Html.ValidationMessageFor(model => model.StoreName, "", new { @data_test_selector = "valStoreName" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.StoreCode, new { @class = "required", @data_test_selector = "lblStoreCode" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.StoreCode, new { @onblur = "ZnodeBase.prototype.ValidateCodeField('[name=StoreCode]','" + Model.StoreCode + "','/Store/IsStoreCodeExists')", @data_test_selector = "txtStoreCode" })
+                        @Html.ValidationMessageFor(model => model.StoreCode, "", new { @data_test_selector = "valStoreCode" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group dirtyignore">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(Admin_Resources.TitleCatalog, new { @class = "required", @data_test_selector = "lblCatalog" })
+                    </div>
+                    <div class="control-md">
+                        @Html.FastSelectFor(model => model.CatalogName, model => model.PublishCatalogId, "GetSuggestions", "Typeahead", "Store.prototype.OnSelectPubCatalogAutocompleteDataBind", 1, true,
+                        new
+                        {
+                        htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectCatalog, @class = "", @id = "txtCatalogName", @data_test_selector = "txtCatalog" },
+                        parameters = new { @type = ZnodeTypeAheadEnum.CatalogList.ToString() }
+                        })
+                        @Html.HiddenFor(model => model.PublishCatalogId, new { @id = "hdnPublishCatalogId" })
+                        @Html.ValidationMessageFor(model => model.CatalogName, "", new { @id = "errorRequiredCatalog", @data_test_selector = "valCatalog" })
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Theme, new { @class = "required", @data_test_selector = "lblTheme" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.CMSThemeId, Model.ThemeList, Admin_Resources.LabelSelectTheme, new { @id = "ddlTheme", @OnChange = "Store.prototype.BindCSSBasedOnThemeId();", @disabled = "disabled", @data_test_selector = "drpThemeList" })
+                        @Html.ValidationMessageFor(model => model.CMSThemeId, "", new { @data_test_selector = "valTheme" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.CSS, new { @class = "required", @data_test_selector = "lblCSS" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.CMSThemeCSSId, Model.CSSList, Admin_Resources.LabelSelectCss, new { @id = "ddlCSS", @OnClick = "Store.prototype.ValidateCSS();", @disabled = "disabled", @data_test_selector = "drpCSSList" })
+                        @Html.ValidationMessageFor(model => model.CMSThemeCSSId, "", new { @data_test_selector = "valCSS" })
+                    </div>
+                </div>
+            </div>
+
+
+            <h3 class="section-heading margin-top-25" data-test-selector="hdgSecurity">Security</h3>
+            <div class="form-group">
+                <div class="control-md control-non">
+                    <label>
+                        <input id="IsEnableSSL" name="IsEnableSSL" checked="@Model.IsEnableSSL" type="checkbox" value="true" data-test-selector="chkEnableSSL">
+                        <span class="lbl padding-8" for="IsEnableSSL" data-test-selector="spnEnableSSL">@Admin_Resources.LabelEnableSSL</span>
+                        <input name="IsEnableSSL" type="hidden" value="false">
+                    </label>
+                </div>
+            </div>
+            <h3 class="section-heading margin-top-25" data-test-selector="hdgStoreContactInformation">Store Contact Information</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.AdministratorEmail, new { @class = "required", @data_test_selector = "lblAdministratorEmail" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.AdministratorEmail, new { @data_test_selector = "txtAdministratorEmail" })
+                        @Html.ValidationMessageFor(model => model.AdministratorEmail, "", new { @data_test_selector = "valAdministratorEmail" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.HelperTextAdministratorEmail)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.SalesEmail, new { @data_test_selector = "lblSalesEmail" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.SalesEmail, new { @data_test_selector = "txtSalesEmail" })
+                        @Html.ValidationMessageFor(model => model.SalesEmail, "", new { @data_test_selector = "valSalesEmail" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.CustomerServiceEmail, new { @class = "required", @data_test_selector = "lblCustomerServiceEmail" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.CustomerServiceEmail, new { @data_test_selector = "txtCustomerServiceEmail" })
+                        @Html.ValidationMessageFor(model => model.CustomerServiceEmail, "", new { @data_test_selector = "valCustomerServiceEmail" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.SalesPhoneNumber, new { @class = "required", @data_test_selector = "lblSalesPhoneNumber" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.SalesPhoneNumber, new { @data_test_selector = "txtSalesPhoneNumber" })
+                        @Html.ValidationMessageFor(model => model.SalesPhoneNumber, "", new { @data_test_selector = "valSalesPhoneNumber" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.CustomerServicePhoneNumber, new { @class = "required", @data_test_selector = "lblCustomerServicePhoneNumber" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.CustomerServicePhoneNumber, new { @data_test_selector = "txtCustomerServicePhoneNumber" })
+                        @Html.ValidationMessageFor(model => model.CustomerServicePhoneNumber, "", new { @data_test_selector = "valCustomerServicePhoneNumber" })
+                    </div>
+                </div>
+            </div>
+            <h3 class="section-heading margin-top-25" data-test-selector="hdgDefaultSetting">@Admin_Resources.TitleDefaultSettings </h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ReviewStatus, new { @data_test_selector = "lblReviewStatus" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.ReviewStatusId, Model.CustomerReviewStatusList, new { @data_test_selector = "drpReviewStatusList" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding margin-bottom">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.OrderStatus, new { @data_test_selector = "lblOrderStatus" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.OrderStatusId, Model.OrderStatusList, new { @id = "ddlOrderStatus", @data_test_selector = "drpOrderStatusList" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.HelptextDefaultOrderStatus)
+                </div>
+                <div class="col-sm-12 nopadding">
+                    <div class="control-md control-non">
+                        <label>
+                            <input id="IsMannualApproval" name="IsMannualApproval" type="checkbox" onclick="Store.prototype.SetDefaultOrderState(this,'@AdminConstants.PendingApproval')" data-test-selector="chkIsMannualApproval">
+                            <span class="lbl padding-8" for="IsMannualApproval" data-test-selector="spnIsMannualApproval">@Admin_Resources.LabelRequireManualApproval</span>
+                            <input name="IsMannualApproval" type="hidden" value="false">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-lg checkbox-loop control-non store-checkbox store-default-settings">
+                    @Html.CheckBoxListFor(model => model.PortalFeatureIds,
+     model => model.AvailableStoreFeatureList,
+     storeFeature => storeFeature.StoreFeatureId,
+     storeFeature => Admin_Resources.ResourceManager.GetString(storeFeature.StoreFeatureName) + "<div class='help-text'><em class='z-help-circle " + ((storeFeature.StoreFeatureName == "Enable_Product_Inheritance") ? "margin-right-9" : "") + ((storeFeature.StoreFeatureName == "Enable_Add_To_Cart_Option_For_Product_Sliders") ? "margin-right-15" : "") + " ' data-toggle='tooltip' data-placement='right' data-original-title='" + @Admin_Resources.ResourceManager.GetString("Helptext_" + storeFeature.StoreFeatureName) + "'></em></div>",
+                    model => !Equals(model.SelectedStoreFeatureList, null) && model.SelectedStoreFeatureList.Count() > 0 ? model.SelectedStoreFeatureList : new List<StoreFeatureViewModel>()
+                   , x => new { @class = "lbl padding-8 d-flex padding-right", @data_test_selector = "chkPortalFeature" })
+
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.UserVerificationType, new { @data_test_selector = "lblVerificationType" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.UserVerificationTypeCode, Model.UserVerificationTypeCodeList, new { @data_test_selector = "drpVerificationTypeList" })
+                    </div>
+                </div>
+            </div>
+            <h3 class="section-heading margin-top-25" data-test-selector="hdgInventorySetting">@Admin_Resources.LabelInventorySettings</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.InStockMsg, new { @data_test_selector = "lblInStockMsg" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.InStockMsg, new { @data_test_selector = "txtInStockMsg" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.OutOfStockMsg, new { @data_test_selector = "lblOutOfStockMsg" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.OutOfStockMsg, new { @data_test_selector = "txtOutOfStockMsg" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.BackOrderMsg, new { @data_test_selector = "lblBackOrderMsg" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.BackOrderMsg, new { @data_test_selector = "txtBackOrderMsg" })
+                    </div>
+                </div>
+            </div>
+            <h3 class="section-heading margin-top-25" data-test-selector="hdgStoreAlertSetting">@Admin_Resources.LabelStoreAlertSetting</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-md control-non">
+                        <label>
+                            <input id="EnableToStore" name="EnableToStore" checked="@Model.EnableOrderAlert" enabled="enable" type="checkbox" value="false" onchange="Store.prototype.ShowHideEmailNotifaction()" data-test-selector="chkEnableOrderNotification">
+                            <span class="lbl padding-8" for="EnableToStore" data-test-selector="spnEnableOrderNotification">@Admin_Resources.LabelOrderNotificationEmail</span>
+                            <input name="IsActive" type="hidden" value="false">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="enableDisable" style="display:none">
+                <div class="form-group" id="ordernumber">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.OrderAmount, new { @class = "required", @data_test_selector = "lblOrderAmount" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.OrderAmount, new { @data_test_selector = "txtOrderAmount" })
+                            @Html.ValidationMessageFor(model => model.OrderAmount, @Admin_Resources.PleaseEnterOrderAmount, new { @data_test_selector = "valOrderAmount" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="email">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.Email, new { @class = "required", @data_test_selector = "lblEmail" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.Email, new { maxlength = 500, @data_test_selector = "txtEmail" })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @data_test_selector = "valEmail" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            if (actionName.ToLower().Contains("create"))
+            {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(Admin_Resources.LabelCopyContent, new { @data_test_selector = "lblCopyContent" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.CopyContentPortalId, Model.PortalList, Admin_Resources.LabelNone, new { @data_test_selector = "drpCopyContentList" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.HelptextCopyContentPageMessage)
+                </div>
+            </div>
+            }
+
+            if (actionName.ToLower().Contains("update") || actionName.ToLower().Contains("edit"))
+            {
+            @Html.HiddenFor(model => model.PortalId)
+            }
+
+            @Html.HiddenFor(model => model.OrderStatusId)
+            @Html.HiddenFor(model => model.CopyContentPortalId)
+            @Html.HiddenFor(model => model.PublishCatalogId)
+            }
+        </section>
+</div>
+<div id="divCataloglistPopup" class="aside-popup-panel popup-panel-medium ">
+</div>
+<script>
+    $(document).ready(function () {
+        Store.prototype.SetRequiresManualApproval('@Model.OrderStatusId', '@AdminConstants.PendingApproval');
+    });
+</script>
+<script type="text/javascript">
+    $(window).on("load",function () {
+        $('#ddlTheme').prop("disabled", false);
+        $('#ddlCSS').prop("disabled", false);
+    });
+</script>

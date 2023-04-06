@@ -1,0 +1,321 @@
+﻿<script src="~/Scripts/References/PaypalObject/checkout.js"></script>
+@model QuoteCreateViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Models;
+@using Znode.Engine.Admin.Helpers;
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    Model.IsQuote = true;
+    Model.UserAddressDataViewModel.IsOrderQuote = false;
+    string showContainer = Model.IsFromUserCart ? "style=display:none" : string.Empty;
+}
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgOrder">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TextQuote)</h1>
+
+    <div class="pull-right btn-container dirtyignore">
+
+        @if (string.Equals(actionName.ToLower(), "converttoorder"))
+        {
+            <a href="javascript:void(0)" class="btn-text-icon" id="btnCancelQuoteOrderId" onclick="OrderSidePanel.prototype.ConfirmCancelQuotePopUp(PopUpConfirmCancelQuote);" data-test-selector="linkCancel"><em class='z-back'></em>@Admin_Resources.ButtonCancel</a>
+        }
+        else
+        {
+
+            if (Model.IsFromUserCart == true)
+            {
+                @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "GetUserCartByUserId", "Customer", new { userId = Model.UserId }, new { @class = "btn-text-icon", @data_test_selector = "linkBack" })
+            }
+            else
+            {
+                <a href="javascript:void(0)" class="btn-text-icon" id="btnCancelOrderId" onclick="OrderSidePanel.prototype.ConfirmCancelQuotePopUp(PopUpConfirmCancelQuote);" data-test-selector="linkCancel"><em class='z-back'></em>BACK</a>
+            }
+        }
+    </div>
+</div>
+<div class="oms-container dirtyignore">
+    <!--Main Container-->
+    <section class="page-container" @showContainer>
+        <!--Disable AutoFill/AutoComplete of chrome for id txtCustomerName, So chrome will fill user name in userNameDummy instead of txtCustomerName-->
+        <div>
+            <input style="opacity: 0; position: absolute; z-index: -1;" id="userNameDummy" />
+        </div>
+
+        <!--Tab Panel-->
+        @Html.Partial("~/views/Quote/_asideQuoteManagePanel.cshtml")
+        <br />
+
+
+        <div class="tab-content">
+
+            <!-- Customer Tab Starts -->
+            <div id="customer-tab" class="tab-pane fade in active">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <!-- Select Customer Starts -->
+                        <div id="CustomerDiv" class="panel panel-default productInfoPage">
+
+                            <div class="panel-heading order-panel">
+                                <h4 class="panel-title panel-title-edit" style="display: inline-block;">Select Customer</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            @Html.LabelFor(model => model.PortalId, new { @class = "required", @data_test_selector = "lblStore" })
+                                        </div>
+                                        @if (actionName.ToLower() == "createquoterequest")
+                                        {
+                                            <div class="col-md-9">
+                                                @Html.FastSelectFor(model => model.StoreName, model => model.PortalId, "GetSuggestions", "Typeahead", "Order.prototype.OnSelectPortalResult", 1, true,
+                                                new
+                                                {
+                                                htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStore" },
+                                                parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                                                })
+                                                @Html.ValidationMessageFor(model => model.StoreName, null, new { id = "errorRequiredStore", @data_test_selector = "valStore" })
+                                            </div>
+                                        }
+                                        else if (actionName.ToLower() == "reorder")
+                                        {
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(model => model.StoreName, new { @data_test_selector = "txtStore" })
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(model => model.StoreName, new { @data_test_selector = "txtStore", @readOnly = "readOnly" })
+                                            </div>
+                                            @Html.HiddenFor(model => model.QuoteId)
+                                        }
+                                    </div>
+                                    @Html.HiddenFor(model => model.StoreName, new { id = "txtPortalName" })
+                                    @Html.HiddenFor(model => model.PortalId, new { @id = "selectedPortalId", @name = "hdnSelectedPortal" })
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            @Html.LabelFor(m => m.CustomerName, new { @class = "required", @data_test_selector = "lblCustomerName" })
+                                        </div>
+                                        <div class="col-md-9">
+                                            @Html.HiddenFor(model => model.UserId, new { @id = "hdnUserId" })
+                                            @Html.HiddenFor(model => model.AccountId, new { @id = "hdnAccountId" })
+                                            @Html.TextBoxFor(model => model.CustomerName, new { @placeholder = Admin_Resources.TextSearchByNameOrPhone, @id = "txtCustomerName", @data_test_selector = "txtCustomerName", @disabled = "disabled", onblur = "Order.prototype.ValidateUsername()" })
+                                            @Html.HiddenFor(model => model.UserAddressDataViewModel.FullName)
+                                            @Html.ValidationMessageFor(model => model.CustomerName, "", new { @id = "CustomerNameError", @data_test_selector = "valCustomerName" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">&nbsp;</div>
+                                        <div class="col-md-9">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                @if (actionName.ToLower() == "createquoterequest")
+                                                {
+                                                    <div class="btn-advanced-search">
+                                                        <a id="searchCustomer" onclick="Order.prototype.GetCustomerList();" data-action="@actionName.ToLower()" class="btn-text btn-default" data-test-selector="btnSearchCustomer"><em class='z-search'></em> ADVANCED SEARCH</a>
+                                                    </div>
+                                                    if (SessionProxyHelper.IsSalesRepUser() == false)
+                                                    {
+                                                        <span class="or-text"> OR </span>
+
+                                                        <div class="btn-add-customer">
+                                                            <a class="btn-text btn-text-secondary" onclick="Order.prototype.AddNewUser()" data-test-selector="btnAddNewCustomer"> ADD NEW CUSTOMER </a>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Select CUustomer Ends -->
+                    </div>
+                    <div class="col-lg-6">
+                        <!-- Customer Information Starts -->
+                        <div id="AddressDiv" class="panel panel-default customer-info-section">
+                            <div class="panel-heading">
+                                <h4 class="panel-title panel-title-edit ">@Admin_Resources.LabelCustomerInformation</h4>
+                            </div>
+
+                            <div class="panel-body">
+                                @Html.Partial("~/views/Order/UserShippingBillingAddress.cshtml", Model.UserAddressDataViewModel)
+                            </div>
+                        </div>
+                        <!-- Customer Information Ends -->
+                    </div>
+                </div>
+            </div>
+            <!-- Customer Tab Ends -->
+            <!-- Cart & Shipping Tab Starts -->
+            <div id="shipping-cart-tab" class="tab-pane fade">
+
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <!-- Select Products Starts -->
+                        <div class="panel panel-default select-product-section">
+                            <div class="panel-heading">
+                                <h4 class="panel-title panel-title-edit ">@Admin_Resources.LabelSelectProduct</h4>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="panel-body" id="productListDiv"></div>
+                                <div id="loader-productlist">@Html.Partial("_Loader")</div>
+                            </div>
+
+                        </div>
+                        <!-- Select Products Ends -->
+                    </div>
+                    <div class="col-lg-6">
+                        <!-- Cart Starts -->
+                        <div class="panel panel-default cart-section" id="divShoppingCart">
+
+                        </div>
+                        <!-- Cart Ends -->
+                        <div id="shippingMethodDiv">
+                            @{Html.RenderPartial("~/views/Order/ShippingOptions.cshtml", Model.ShippingListViewModel, new ViewDataDictionary { TemplateInfo = new System.Web.Mvc.TemplateInfo { HtmlFieldPrefix = "ShippingListViewModel" } });}
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">@Admin_Resources.LabelQuoteSummarySection</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="cart-total">
+                                    <div class="row" id="divTotal"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+                <hr />
+                <div class="d-flex justify-content-end">
+                    <button class="btn-text btn-text-secondary float-none" id="btnBottomNextTab" onclick="OrderTabs.prototype.ContinueOrder();">@Admin_Resources.NextAddNotes</button>
+                </div>
+
+            </div>
+            <!-- Cart & Shipping Tab Ends -->
+            <!-- Quote Notes Starts -->
+            <div id="payment-tab" class="tab-pane fade">
+                <div class="row">
+                    <div id="quoteNotes">
+                        @Html.Partial("~/Views/Quote/_QuoteNotes.cshtml", Model)
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="panel panel-default payment-cart-item-container">
+                            <div class="panel-heading">
+                                <h4 class="panel-title panel-title-edit" id="cart-count">@Admin_Resources.LabelQuoteSection</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="payment-tab-calculation row" id="OrderDetails"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quote Notes Tab Ends -->
+            <!-- Review & Place Order Tab Starts -->
+            <div id="review-placeorder-tab" class="tab-pane fade review-order-container">
+                <div id="ReviewDiv"></div>
+            </div>
+            <!-- Review & Place Order Tab Ends -->
+            @Html.HiddenFor(model => model.UserAddressDataViewModel.UserId, new { id = "UserAddressDataViewModel.UserId" })
+            @Html.HiddenFor(model => model.UserAddressDataViewModel.IsMultipleCouponCodeAllowed, new { id = "UserAddressDataViewModel.IsMultipleCouponCodeAllowed" })
+            <div id="OrderQuoteData">
+                @Html.HiddenFor(model => model.UserAddressDataViewModel.BudgetAmount, new { id = "UserAddressDataViewModel_BudgetAmount" })
+                @Html.HiddenFor(model => model.UserAddressDataViewModel.PermissionCode, new { id = "UserAddressDataViewModel_PermissionCode" })
+                @Html.HiddenFor(model => model.UserAddressDataViewModel.AccountId, new { id = "UserAddressDataViewModel_AccountId" })
+                @Html.HiddenFor(model => model.UserAddressDataViewModel.IsOrderQuote, new { id = "UserAddressDataViewModel_IsOrderQuote" })
+            </div>
+        </div>
+
+        <div>
+            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                         new PopupModel()
+                         {
+                             Title = @Admin_Resources.ConfirmText,
+                             Description = @Admin_Resources.TextConfirmCancelQuote,
+                             ModalPopUpId = "PopUpConfirmCancelQuote",
+                             Buttons = new List<PopUpButtonModel>
+                             () {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "OrderSidePanel.prototype.ConfirmCancelQuote()" },
+                                }
+                         })
+        </div>
+
+        @*<div>
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                             new PopupModel()
+                             {
+                                 Title = @Admin_Resources.ConfirmText,
+                                 Description = @Admin_Resources.TextConfirmCancelOrder,
+                                 ModalPopUpId = "PopUpConfirmCancelQuoteOrder",
+                                 Buttons = new List<PopUpButtonModel>
+                                 () {
+                                new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "OrderSidePanel.prototype.ConfirmCancelQuoteOrder()" },
+                                    }
+                             })
+            </div>*@
+
+    </section>
+
+    @* Here Store List will display *@
+    <div id="divStoreListAsidePanel" class="aside-popup-panel modal-dialog modal-lg"></div>
+    @* Here Customer Details will display *@
+    <div id="customerDetails" class="aside-popup-panel modal-dialog modal-xl new-customer-popup"></div>
+    @* Here Customer address Details will display *@
+    <div id="addressDetails" class="aside-popup-panel modal-dialog modal-md"></div>
+    <div id="getProductsList" class="aside-popup-panel modal-dialog modal-xl"></div>
+    <div id="productDetailsPanel" class="aside-popup-panel modal-dialog modal-md"></div>
+    <div id="getProductDetail" class="aside-popup-panel modal-dialog modal-md"></div>
+    <div id="skuproductlist"></div>
+</div>
+
+@Html.HiddenFor(model => Model.PortalId, new { id = "hdnPortalId" })
+@Html.HiddenFor(m => m.IsQuote)
+@Html.Hidden("hdnActionName", actionName.ToLower())
+
+@Html.Hidden("hdnAccountId", Model.AccountId)
+@Html.Hidden("hdnQuoteShipppingId", Model.CartViewModel?.ShippingId)
+@Html.Hidden("hdnAddressId", Model.UserAddressDataViewModel.ShippingAddress.AddressId)
+@Html.Hidden("IsFromUserCart", Model.IsFromUserCart)
+@Html.Hidden("selectedUserId")
+@Html.Hidden("selectedUserName")
+@Html.Hidden("selectedShippingId")
+@Html.Hidden("enableAddressValidation", Model.UserAddressDataViewModel.EnableAddressValidation)
+@Html.Hidden("IsQuote", Model.IsQuote)
+<script>
+    $(document).ready(function () {
+        Order.prototype.AutoCompleteApprovalUsers();
+        Order.prototype.SetAttributeForPortalId();
+        if ($("#IsFromUserCart").val() == 'True') {
+            $(".page-container").show();
+            OrderTabs.prototype.ContinueOrder();
+            //below method is called to bind user cart details.
+            Order.prototype.SetShoppingCartDetails();
+        }
+        if ($("#hdnPortalId").val() != 0) {
+            $("#txtCustomerName").prop("disabled", false);
+        }
+
+
+        // https://mrrsoft.atlassian.net/browse/ZPD-8836
+        /* While opening confirmation pop-up body was moving inside
+           due to padding - right of scrollbar in bootstrap js*/
+        $('#PopUpConfirmCancelQuote').on('shown.bs.modal', function () {
+            $("body.modal-open").css({ 'padding-right': 0, 'overflow': 'auto' });
+        });
+    })
+
+</script>

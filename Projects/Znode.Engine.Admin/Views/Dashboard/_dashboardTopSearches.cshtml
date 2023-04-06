@@ -1,0 +1,40 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@model DashboardListViewModel
+
+@*<h3 class="margin-left-20">@Admin_Resources.LabelTopSearches</h3>*@
+<div class="d-flex flex-wrap justify-content-between padding-top padding-bottom table-heading-section">
+    <h2 class="margin-left-15">Searches</h2>
+    <div class="margin-right-15">
+        <button class=" btn-text btn-text-secondary">button</button>
+    </div>
+</div>
+<table class="table" aria-describedby="Top Search Product List Table">
+    <thead class="thead-default">
+        <tr>
+            <th scope="col">@Admin_Resources.LabelTopSearchedItems</th>
+            <th scope="col">@Admin_Resources.LabelNoOfTimesSearched</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.DashboardViewModelList.Count > 0 && Model.DashboardViewModelList.Any(x => string.Equals(x.Type, ZnodeConstant.Search, StringComparison.InvariantCultureIgnoreCase)))
+        {
+            foreach (DashboardTopItemsViewModel item in Model.DashboardViewModelList)
+            {
+                if (string.Equals(item.Type, ZnodeConstant.Search, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    <tr>
+                        <td>@Html.RenderBlock(item.Searches)</td>
+                        <td>@item.Times</td>
+                    </tr>
+                }
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">@Admin_Resources.NoRecordFoundText</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,100 @@
+﻿.select-return-order {
+    label {
+        font-size: 13px;
+    }
+
+    select {
+        border: 1px solid #ccc;
+        padding: 3px 50px 3px 5px;
+        font-size: 12px;
+    }
+
+    .fstElement {
+        border-radius: 2px;
+        font-size: 12px;
+
+        .fstToggleBtn {
+            display: inline-block;
+            border-radius: 2px;
+            font-size: 12px;
+            margin: 2px 5px;
+            padding: 0 7px;
+            background-color: #FFFFFF;
+            /* border: 1px solid #c3c3c3; */
+            cursor: pointer;
+        }
+
+        .fstControls {
+            .fstQueryInput {
+                display: inline-block;
+                border-radius: 2px;
+                font-size: 12px;
+                padding: 0 7px;
+                height: 24px;
+                cursor: pointer;
+            }
+        }
+
+        .fstResults {
+            .fstResultItem {
+                font-size: 12px;
+                padding: 10px;
+
+                &.fstSelected, &.fstFocused {
+                    background-color: $btn-primary;
+                    border-top: 1px solid $btn-primary;
+                }
+            }
+        }
+    }
+}
+
+.return-order-detail {
+    select {
+        border: 1px solid #ccc;
+        padding: 3px 50px 3px 5px;
+        font-size: 12px;
+    }
+
+
+    .header {
+        .lbl-order-detail {
+            font-size: 13px
+        }
+    }
+
+    .return-order-table {
+        thead {
+            color: $base-primary;
+            background-color: $filter-background;
+        }
+
+        tbody {
+            border-bottom: 1px solid $border-light;
+        }
+
+        .mw-100 {
+            min-width: 100px;
+        }
+
+        .mw-200 {
+            min-width: 200px;
+        }
+
+        .mw-300 {
+            min-width: 300px;
+        }
+    }
+}
+.dashboard-content {
+    .return-item-list {
+        .table thead {
+            color: $base-primary;
+            background: $filter-background;     
+        }
+
+        tbody {
+            border-bottom: 1px solid $border-light !important;
+        }
+    }
+}

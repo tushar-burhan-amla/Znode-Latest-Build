@@ -1,0 +1,57 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PortalPaymentApproverViewModel
+
+@{
+    string displayStatus = Model?.UserApprover?.Count > 0 ? "display: block" : "display: none";
+    var count = Model.PaymentDivCount;
+}
+@if (Model.PaymentTypes.Count > 0)
+{
+    <div id="Show_@count" class="payment-portal col-xs-12 nopadding">
+    <div class="col-sm-12 box-containe nopadding">
+        <div class="col-xs-12 nopadding">
+            <div id="payment_to_show" class="col-xs-7 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.PaymentSettingIds)
+                        </div>
+                        <div id="paymentList_@count">
+                            @Html.ListBoxFor(model => model.PaymentSettingIds, Model.PaymentTypes, new { @id = "paymenttypes_" + count, @multiple = "multiple" })
+                            @Html.ValidationMessageFor(model => model.PaymentSettingIds, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5 nopadding text-right margin-top-bottom" id="add_partial_button">
+                @Html.AuthorizedPrototypeRawActionLink("<em class='z-add-circle'></em>" + Admin_Resources.ButtonAddNewApprover, "GetApproverOrder", "Store", new { id = "row_" + @count, @class = "btn-text-icon", onclick = "Store.prototype.AddNewAreaForPayment(this," + @count + ");" })
+                <button type="button" class="Show_@count btn-narrow-icon" title="Cancel" onclick="Store.prototype.CancelPaymentConfigurationArea(@count)"><em class="z-close"></em></button>
+            </div>
+            <div class="table-div" style="@displayStatus">
+                <div class="col-xs-12 thead-div padding-top-bottom nopadding">
+                    <div class="col-xs-4">@Admin_Resources.LabelSelectApprovers</div>
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4 text-right">@Admin_Resources.LabelAction</div>
+                </div>
+
+
+                <div id="_PartialPortalApproverPanel_@count" class="removePartial">
+                    @if (Model?.UserApprover?.Count > 0)
+                    {
+                        foreach (var item in Model.UserApprover)
+                        {
+                            @Html.Partial("~/Views/Store/_PartialPortalUserApproval.cshtml", item)
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(x => x.PaymentDivCount, new { @id = "PaymentDivCount_" + count })
+        @Html.HiddenFor(x => x.PortalPaymentGroupId, new { @id = "PortalPaymentGroupId_" + count })
+    </div>
+</div>
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"></script>
+<script>
+    $("#paymenttypes_" + @count).multiselect({ includeSelectAllOption: true, enableCaseInsensitiveFiltering: false });
+</script>
+}

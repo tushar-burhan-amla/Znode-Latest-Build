@@ -1,0 +1,97 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Libraries.ECommerce.Utilities;
+@model RecommendationSettingViewModel
+@{    
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? string.Empty : Model?.PortalName;
+    string schedulerLabel = Model.ERPTaskSchedulerId > 0 ? Admin_Resources.LabelUpdateScheduler : Admin_Resources.LabelCreateScheduler;
+    ActionModel actionModel = new ActionModel { Action = "SaveRecommendationSetting", Controller = controllerName, FormId = "formProductRecommendationSetting", IsSaveCloseEnable = true };
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, DataTestSelector = "linkSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "SaveCancel.prototype.SubmitForm('formProductRecommendationSetting', '', '/StoreExperience/List')" });
+    primaryPageAction.PageActions.Add(new PageAction { DataTestSelector = "linkSave", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "SaveCancel.prototype.SubmitForm('formProductRecommendationSetting')" });
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelExperience)<em class="z-minus"></em><span>@portalName</span></h1>
+    <div class="pull-right btn-container ">
+        <a href="/StoreExperience/List" class="btn-text-icon" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+        @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+    </div>
+</div>
+
+<div class="col-sm-12 manage-website-container product-recommendation nopadding">
+    @using (Ajax.BeginForm("SaveRecommendationSetting", controllerName, new AjaxOptions { InsertionMode = InsertionMode.Replace, OnSuccess = "WebSite.prototype.SaveWebSiteLogo" }, new { @id = "formProductRecommendationSetting", @class = "dirtylisten" }))
+    {
+        <h3 class="section-heading margin-top padding-bottom" data-test-selector="hdgSecurity">@Admin_Resources.LabelAvailableRecommendationWidgets</h3>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <label>
+                    <input id="IsHomeRecommendation" name="IsHomeRecommendation" checked="@Model.IsHomeRecommendation" type="checkbox" value="true" data-test-selector="chkEnableRecommendationOnHome">
+                    <span class="lbl padding-8" for="IsHomeRecommendation" data-test-selector="spnEnableRecommendationOnHome">@Admin_Resources.LabelEnableRecommendationOnHome</span>
+                    <input name="IsHomeRecommendation" type="hidden" value="false">
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <label>
+                    <input id="IsPDPRecommendation" name="IsPDPRecommendation" checked="@Model.IsPDPRecommendation" type="checkbox" value="true" data-test-selector="chkEnableRecommendationOnPDP">
+                    <span class="lbl padding-8" for="IsPDPRecommendation" data-test-selector="spnEnableRecommendationOnHome">@Admin_Resources.LabelEnableRecommendationOnPDP</span>
+                    <input name="IsPDPRecommendation" type="hidden" value="false">
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <label>
+                    <input id="IsCartRecommendation" name="IsCartRecommendation" checked="@Model.IsCartRecommendation" type="checkbox" value="true" data-test-selector="chkEnableRecommendationOnCart">
+                    <span class="lbl padding-8" for="IsCartRecommendation" data-test-selector="spnEnableRecommendationOnHome">@Admin_Resources.LabelEnableRecommendationOnCart</span>
+                    <input name="IsCartRecommendation" type="hidden" value="false">
+                </label>
+            </div>
+        </div>
+        <h3 class="section-heading margin-top padding-bottom padding-top" data-test-selector="hdgGenerateProductRecommendations">@Admin_Resources.LabelGenerateProductRecommendations</h3>
+        <div class="form-group field-generate">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label class="lbl padding-8" for="lblGenerateRecommendations" data-test-selector="lblGenerateRecommendations">@Admin_Resources.LabelGenerateRecommendations</label>
+                </div>
+                <div class="">
+                    <input type="button" data-test-selector="btnGenerate" id="GenerateRecommendationData" name="GenerateRecommendationData" class="btn-text btn-text-secondary" value="Generate" onclick="Recommendation.prototype.GenerateRecommendationData(@Model.PortalId, false)" />
+                </div>
+                @Html.Partial("_HelpText", @Admin_Resources.HelpTextGenerateRecommendations)
+            </div>
+        </div>        
+        <div class="form-group pt-3 field-automated">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label class="lbl padding-8" for="Scheduler" data-test-selector="lblScheduler">@Admin_Resources.LabelGenerateAutomatedRecommendations</label>
+                </div>
+                <div class="">
+                    <input type="button" data-test-selector="btnScheduler" id="RecommendationScheduler" name="RecommendationScheduler" class="btn-text btn-text-secondary" value="@schedulerLabel" onclick="Recommendation.prototype.GetRecommendationSchedulerView('@Model.TouchPointName', @Model.PortalId)" />
+                </div>
+                @Html.Partial("_HelpText", @Admin_Resources.HelpTextGenerateAutomatedRecommendations)
+            </div>
+        </div>
+        
+        <div id="divCreateSchedulerForRecommendation" data-test-selector="divSchedulerForRecommendation" class="aside-popup-panel catalog-status-schedular create-schedular modal-dialog modal-xl" style="display: none;"></div>
+
+        @Html.HiddenFor(model => model.PortalRecommendationSettingId)
+        @Html.HiddenFor(model => model.PortalId)
+    }
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    $(document).ready(function () {
+        var form = $('#formProductRecommendationSetting')
+            .removeData("validator") /* added by the raw jquery.validate plugin */
+            .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
+        $.validator.unobtrusive.parse(form);
+    });   
+</script>
+
+
+

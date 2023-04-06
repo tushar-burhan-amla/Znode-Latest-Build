@@ -1,0 +1,26 @@
+﻿@model Znode.Engine.Admin.Controllers.DemoModel
+
+@{
+    ViewBag.Title = "DemoControls";
+}
+<h2>DemoControls</h2>
+
+<form method="post" action="/Home/DemoControls" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>DemoModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @{Html.RenderPartial("~/Views/Shared/DynamicControls/_DynamicControls.cshtml", Model.ControlType);}
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml")
+            </div>
+        </div>
+    </div>
+</form>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

@@ -1,0 +1,84 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model WarehouseViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateWarehouse", CancelUrl = "/Warehouse/List", IsSaveCloseEnable = true };
+}
+<div id="grid-container">
+    <div class="col-sm-12 title-container">
+        @if (string.Equals(actionName.ToLower(), "create"))
+        {
+            <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleWarehouseList)</h1>
+        }
+        else
+        {
+            <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.TitleWarehouseList)<em class="z-minus"></em><span>@Html.DisplayFor(model => model.WarehouseName)</span></h1>
+        }
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+    <div class="main-wrapper">
+        <!--Left Panel-->
+        @if (string.Equals(actionName.ToLower(), "edit"))
+            {
+            @Html.Partial("~/Views/Shared/_asideWarehousePanel.cshtml")
+        }
+        <!--Main Container-->
+        <section class="main-container">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateWarehouse" }))
+            {
+                <div id="loginForm">
+                    @if (string.Equals(actionName.ToLower(), "create"))
+                    {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(m => m.WarehouseCode, new { @class = "required", @data_test_selector = "lblWarehouseCode" })
+                                </div>
+                                <div class="control-md">
+                                    @Html.TextBoxFor(model => model.WarehouseCode,new { @data_test_selector = "txtWarehouseCode" })
+                                    @Html.ValidationMessageFor(model => model.WarehouseCode,"",new { @data_test_selector = "valWarehouseCode" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.WarehouseCode, new { @class = "required", @data_test_selector = "lblWarehouseCode" })
+                                </div>
+                                <div class="control-md">
+                                    <input type="text" value="@Model.WarehouseCode" disabled="disabled" data-test-selector = "txtWarehouseCode" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.WarehouseName, new { @class = "required" , @data_test_selector = "lblWarehouseName" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.WarehouseName,new { @data_test_selector = "txtWarehouseName" })
+                                @Html.ValidationMessageFor(model => model.WarehouseName,"",new { @data_test_selector = "valWarehouseName" })
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="section-heading margin-top-25">@Admin_Resources.LabelAddressDetails</h3>
+                    @Html.Partial("~/Views/Warehouse/_warehouseAddress.cshtml", Model.Address, new ViewDataDictionary()
+               {
+                   TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "Address" }
+               })
+                </div>
+                @Html.HiddenFor(model => model.WarehouseId)
+                @Html.HiddenFor(model => model.WarehouseCode)
+            }
+        </section>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model List<HighlightsViewModel>
+@{
+    Layout = null;
+}
+<div id="product-highlights" class="col-12 p-0 b2b-product-highlight my-2 d-flex align-items-center">
+   
+        @if (!Equals(Model, null))
+        {
+            var count = 0;
+            foreach (HighlightsViewModel highlight in Model)
+            {
+                if (count < 3)
+                {
+                <ul class="p-0 list-unstyled d-flex flex-wrap">
+                    <li class="d-flex align-items-center justify-content-center pr-2">
+                        <a onclick="Product.prototype.GetHighlightInfoByCode('@highlight.HighlightCode','@highlight.PublishProductId','@highlight.SKU')" href="javascript:void" id="highlightInfo">
+                            <img title="@highlight.HighlightName" src="@highlight.MediaPath" onclick="javascript:void(0)" class="img-fluid" />
+                        </a>
+                    </li>
+                </ul>
+                }
+                else
+                {
+                <ul class="p-0 list-unstyled">
+                    <li class="d-flex pl-0 align-items-center justify-content-center">
+                        @{
+                            <span class="highlight-total">+ @Convert.ToString(Model.Count - 3)</span>
+                        }
+                    </li>
+                </ul>
+                  
+                    break;
+                }
+                count++;
+            }
+
+        }
+   
+</div>
+<script>
+   $('img').on('error', function (e) {
+       this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+   });
+</script>
+
+
+
+
+
+

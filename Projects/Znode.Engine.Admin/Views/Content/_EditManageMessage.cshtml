@@ -1,0 +1,102 @@
+﻿@model Znode.Engine.Admin.ViewModels.ManageMessageViewModel
+@using Znode.Engine.Admin.ViewModels;
+
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmEditContent" };
+}
+
+<div class="row">
+    <aside>
+        <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            <h3>@Admin_Resources.HeaderManageMessage</h3>            
+        </div>
+    </aside>
+    <section class="main-container">
+        <div class="col-sm-12 page-container">
+            <div class="col-sm-12 title-container">
+                <h1>@Admin_Resources.HeaderManageMessage<span class="separator"> | </span><span class="title-action">@Admin_Resources.TitleEdit</span><span class="separator"> - </span><span id="AttributeCodeLable" class="title-item">@Model.MessageKey</span></h1>
+            </div>
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmEditContent", enctype = "multipart/form-data" }))
+            {
+                <div class="pull-right">
+                    <button type="submit" class="btn-text" onclick="return WebSite.prototype.ValidateAddContentSubmit()">@Admin_Resources.ButtonSubmit</button>                    
+                    @if (controllerName == "Content")
+                    {                       
+                        @Html.AuthorizedRawActionLink(Admin_Resources.ButtonCancel, "ManageMessageList", "Content", null, new { @class = "btn-text" })
+                    }
+                    else
+                    {                        
+                        @Html.AuthorizedRawActionLink(Admin_Resources.ButtonCancel, "Manage", "WebSite", new { storeId=Model.PortalId }, new { @class = "btn-text" })
+                    }
+                </div>
+                <div class="col-sm-12 box-container">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.Areas)
+                            </div>
+                            <div class="control-md">
+                                <div id="areaList">
+                                    @Html.ListBoxFor(model => model.AreaIds, Model.Areas, new { @id = "AreaId", @multiple = "multiple" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.MessageKey)
+                            </div>
+                            <div class="control-md">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(m => m.MessageKey, new { disabled = "disabled" })
+                                    @Html.ValidationMessageFor(model => model.MessageKey)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.Message, new { @class = "required" })
+                            </div>
+                            <div class="control-md">
+                                @Html.EditorFor(m => m.Message)
+                                @Html.ValidationMessageFor(m => m.Message)
+                            </div>
+                        </div>
+                        @Html.HiddenFor(x => x.CMSMessageKeyId)
+                        @Html.HiddenFor(x => x.LocaleId)
+                        @Html.HiddenFor(x => x.PortalId)
+                        @Html.HiddenFor(x => x.MessageKey)
+                        @Html.HiddenFor(x => x.StoreName)
+                        @Html.HiddenFor(x => x.CMSMessageId)
+                        @Html.HiddenFor(x => x.CMSAreaId)
+                        @Html.HiddenFor(x => x.Message)
+
+                        @for (int i = 0; i < Model.PortalIds.Count(); i++)
+                        {
+                            @Html.HiddenFor(model => Model.PortalIds[i])
+                        }
+                    </div>
+                </div>
+
+            }
+        </div>
+
+    </section>
+</div>
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Content/bootstrap-3.3.7/js/datepicker.js" type="text/javascript"> </script>
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"> </script>
+<script>
+    $("#AreaId").multiselect({ includeSelectAllOption: true, enableCaseInsensitiveFiltering: true });    
+    $('input[type="checkbox"]').prop('disabled', true);
+    $("#portals").multiselect({ includeSelectAllOption: true, enableCaseInsensitiveFiltering: true });
+</script>

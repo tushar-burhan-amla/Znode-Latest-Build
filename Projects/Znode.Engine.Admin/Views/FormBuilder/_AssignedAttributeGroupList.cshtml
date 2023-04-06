@@ -1,0 +1,107 @@
+﻿@using Znode.Engine.Admin.Models
+@model Znode.Engine.Admin.ViewModels.FormBuilderAttributeGroupViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    int prevGroupId = 0;
+    int sequence = 1; bool isFirst = false; bool isLast = false;
+}
+<div id="frombuilderControls" class="grid-container dirtyignore">
+    <div class="pull-right margin-bottom">
+        @{Html.RenderAction("GetUnAssignedAttributeGroups", controllerName, new { @id = Model.FormBuilderId });}
+    </div>
+    <div class="pull-right margin-bottom">
+        @{Html.RenderAction("GetUnAssignedAttribute", controllerName, new { @id = Model.FormBuilderId });}
+    </div>
+    <div class="col-sm-12 list-container">
+
+        @if (Model?.Attributes?.Count < 1 || string.IsNullOrEmpty(Model?.Attributes[0].AttributeCode))
+        {
+            <div class="col-sm-12 no-record nopadding" data-test-selector="divNoRecordFound">
+                <p data-test-selector="infoNoRecordFound">@Admin_Resources.NoRecordFoundText</p>
+            </div>
+        }
+        else
+        {
+            <div class="col-sm-9 col-md-8 col-lg-6 nopadding form-builder-container" data-test-selector="divFormbuilderControls" id="FormbuilderControls">
+                @foreach (var ctrl in Model.Attributes)
+                {
+                    isFirst = sequence == 1;
+                    isLast = Model.Attributes.Count == sequence;
+                    int? groupId = ctrl.GlobalAttributeGroupId;
+                    if (groupId == null)
+                    {
+                        <div class="col-xs-12 nopadding padding-top-bottom form-builder-box" data-test-selector="divFormBuilderBox">
+                            <div class="col-sm-1 nopadding form-up-down">
+                                @if (isFirst)
+                                { <button type="button" class="btn-narrow-icon btn-up" data-test-selector="btnUP" title="UP" disabled="disabled"><i class="z-angle-up"></i></button>  }
+                                else
+                                {<button type="button" class="btn-narrow-icon btn-up" data-test-selector="btnUP" title="UP" onclick="FormBuilder.prototype.UpdateAttributeDisplayOrder(@ctrl.GlobalAttributeId,true)"><i class="z-angle-up"></i></button>}
+
+                                @if (isLast)
+                                { <button type="button" class="btn-narrow-icon btn-down" data-test-selector="btnDown" title="Down" disabled="disabled"><i class="z-angle-down"></i></button>}
+                                else
+                                { <button type="button" class="btn-narrow-icon btn-down" data-test-selector="btnDown" title="Down" onclick="FormBuilder.prototype.UpdateAttributeDisplayOrder(@ctrl.GlobalAttributeId,false)"><i class="z-angle-down"></i></button>}
+                            </div>
+                            <div class="col-sm-10 nopadding form-single-control">
+                                @Html.Partial("~/Views/Shared/Controls/GlobalAttribute/_createControl.cshtml", ctrl)
+                            </div>
+                            <div class="col-sm-1 nopadding form-builder-cancel">
+                                <button type="button" data-test-selector="btnRemove" class="btn-narrow-icon" title="Remove" onclick="FormBuilder.prototype.UnAssignAttribute(@ctrl.GlobalAttributeId)"><i class="z-close"></i></button>
+                            </div>
+                        </div>
+                        sequence++;
+                    }
+                    else
+                    {
+                        if (prevGroupId != groupId.Value)
+                        {
+                            var attributesAssociatedWithGroup = Model.Attributes.Where(x => x.GlobalAttributeGroupId == groupId).ToList();
+                            var groupName = Model.Groups.FirstOrDefault(x => x.GlobalAttributeGroupId == groupId).AttributeGroupName;
+                            int itemCount = attributesAssociatedWithGroup.Count;
+                            isLast = (sequence + itemCount - 1) == Model.Attributes.Count;
+                            <div class="col-xs-12 nopadding padding-top-bottom form-builder-box" data-test-selector="divFormBuilderBox">
+                                <div class="col-sm-1 nopadding form-up-down">
+                                    @if (isFirst)
+                                    { <button type="button" class="btn-narrow-icon btn-up" data-test-selector="btnUP" title="UP" disabled="disabled"><em class="z-angle-up"></em></button>  }
+                                    else
+                                    {<button type="button" class="btn-narrow-icon btn-up" data-test-selector="btnUP" title="UP" onclick="FormBuilder.prototype.UpdateGroupDisplayOrder(@ctrl.GlobalAttributeGroupId.Value,true)"><em class="z-angle-up"></em></button>}
+
+                                    @if (isLast)
+                                    { <button type="button" class="btn-narrow-icon btn-down" data-test-selector="btnDown" title="Down" disabled="disabled"><em class="z-angle-down"></em></button>}
+                                    else
+                                    { <button type="button" class="btn-narrow-icon btn-down" data-test-selector="btnDown" title="Down" onclick="FormBuilder.prototype.UpdateGroupDisplayOrder(@ctrl.GlobalAttributeGroupId.Value,false)"><em class="z-angle-down"></em></button>}
+                                </div>
+                                <div class="col-sm-10 nopadding form-group-control">
+                                    <div class="form-heading-builder">
+                                        <h3 class="section-heading pull-left" data-test-selector="hdgGroupName">@groupName</h3>
+                                        @foreach (var attributes in attributesAssociatedWithGroup)
+                                        {
+                                            @Html.Partial("~/Views/Shared/Controls/GlobalAttribute/_createControl.cshtml", attributes)
+                                            sequence++;
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-sm-1 nopadding form-builder-cancel">
+                                    <button type="button" class="btn-narrow-icon" title="Remove" onclick="FormBuilder.prototype.UnAssignGroup(@ctrl.GlobalAttributeGroupId.Value)"><em class="z-close"></em></button>
+                                </div>
+                            </div>
+                            prevGroupId = groupId.Value;
+                        }
+                    }
+                }
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        if ($("#UploadMultiple").length > 0 || $("img").length > 0)
+        {$(".dev-upload-multiple").attr("disabled","disabled");
+        $(".dev-upload-single").css("pointer-events", "none");
+        $(".upload-images").css("cursor", "no-drop");
+        $("span.dev-upload-single").attr("disabled","disabled");
+    }
+    });
+
+</script>

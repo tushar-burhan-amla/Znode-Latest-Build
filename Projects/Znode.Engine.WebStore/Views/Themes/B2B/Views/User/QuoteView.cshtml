@@ -1,0 +1,356 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.WebStore.Agents
+@model AccountQuoteViewModel
+@{
+    decimal price = 0;
+    string accountType = Model.RoleName;
+    string display = (!string.IsNullOrEmpty(Model.OrderStatus) && Model.OrderStatus.Equals(ZnodeConstant.Approved, StringComparison.OrdinalIgnoreCase)) ? string.Empty : "none";
+    string cultureCode = string.IsNullOrEmpty(Model.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    Model.ShoppingCart.CultureCode = cultureCode;
+    string imagePath = string.Empty;
+    string paymentDisplayName = Model.PaymentDisplayName;
+}
+@{
+
+    List<CartItemViewModel> quoteItemViewModel = Model.ShoppingCart?.ShoppingCartItems?.ToList();
+    var consolidatedOrderLineItems = quoteItemViewModel?.GroupBy(x => new { x.SKU, x.GroupId }).Select(c => new CartItemGroupListViewModel
+    {
+        SKU = c.Key.SKU,
+        GroupId = c.Key.GroupId,
+        Children = c.ToList(),
+        Sequence = c.FirstOrDefault().GroupSequence,
+    }).ToList();
+}
+<div id="layout-quote-details" class="main-wrapper col">
+    <div class="row">
+        <div class="container-fluid profile-dashboard">
+            <div class="row">
+                <div class="container">
+                    @Html.Partial("_AccountMenuDashboard")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                <div id="breadCrumb" class="col breadcrumb-container">
+                    <a href="/" class="home-icon pr-2" title="Home"></a><a href="/User/Dashboard">@WebStore_Resources.TitleMyAccount</a> /<a href="/User/QuoteApprovalHistory">@WebStore_Resources.LabelPendingOrderApproval</a>  / @WebStore_Resources.TitleOrder #@Html.RenderBlock(Model.OmsQuoteId.ToString())
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container">
+            <div class="row user-account">
+                <div class="col-12 account-dashboard">
+                    <div class="row mb-5">
+                        <div class="col-12 col-lg-9 add-template right-container">
+
+                            <div class="col-12 p-0 mb-3">
+                                <div class="row align-items-center">
+                                    <div class="col-12 col-sm-8">
+                                        <h4 class="page-title pendingorder-heading pb-0">@WebStore_Resources.LabelPendingOrderDetail @Html.RenderBlock(Model.OmsQuoteId.ToString()) - @ViewBag.Title </h4>
+                                        <span class="orders-date">@Model.CreatedDate</span>
+                                    </div>
+                                    <div class="col-12 col-sm-4 text-sm-right">
+                                        <button type="button" onclick="User.prototype.GetUserApproverList(@Model.OmsQuoteId)" class="btn btn-secondary" data-toggle="modal" data-target="#user-approver-popup-ipad">@WebStore_Resources.LabelSeeApproverHistory</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @using (Html.BeginForm("UpdateQuote", "User", FormMethod.Post, new { @id = "FormQuoteView" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="row mb-4">
+                                    <div class="col-12 col-lg-6 account-profile-section mb-4 mb-lg-0">
+                                        <div class="col-12 p-0 h-100 dashboard-content">
+                                            <h3 class="b2b-section-header">@WebStore_Resources.LabelPendingOrderDetails:</h3>
+                                            <div class="col-12 dashboard-addresses">
+                                                <div class="p-0 py-2">
+                                                    <strong>@WebStore_Resources.LabelPendingOrdersNumber:</strong> @Model.OmsQuoteId
+                                                </div>
+                                                <div class="p-0 py-2">
+                                                    <strong>@WebStore_Resources.LabelPendingOrdersStatus:</strong> @Model.OrderStatus
+                                                </div>
+                                                <div class="p-0 py-2">
+                                                    <strong>@WebStore_Resources.LabelPendingOrderDate:</strong> @(HelperUtility.IsNotNull(Model.CreatedDate) ? @Model.CreatedDate.ToDateTimeFormat() : string.Empty)
+                                                </div>
+                                                <div class="p-0 py-2">
+                                                    <strong>@WebStore_Resources.LabelPendingOrderTotal:</strong> @Model.QuoteOrderTotal
+                                                </div>
+                                                <div class="p-0 py-2">
+                                                    <strong>@WebStore_Resources.LabelOrdersPaymentType:</strong> @Model.PaymentDisplayName
+                                                </div>
+                                                <div class="p-0 py-2">
+                                                    <strong>@WebStore_Resources.LabelJobName:</strong> @Html.RenderBlock(Model.JobName)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-lg-6 pl-lg-2 account-profile-section">
+                                        <div class="col-12 p-0 h-100 dashboard-content">
+                                            <h3 class="b2b-section-header">@WebStore_Resources.TitleBillingTo</h3>
+                                            <div class="col-12 dashboard-addresses">
+                                                <div class="py-3">
+                                                    @if (Model?.BillingAddressId > 0 && !Equals(Model?.BillingAddressModel, null))
+                                                    {
+                                                        @Html.RenderBlock(Model.BillingAddressHtml)
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="address-block w-100">@WebStore_Resources.ErrorNoPrimaryAddress</div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row no-gutters">
+                                    <div class="col-12 p-0 mb-4 dashboard-content">
+
+                                        <h3 class="b2b-section-header">@WebStore_Resources.TitleShippingTo</h3>
+                                        <div class="col-12 p-0">
+                                            <div class="col-12 account-recent-orders">
+                                                <div class="row">
+
+                                                    <div class="col-md-6 p-0 mb-3">
+                                                        @Html.RenderBlock(Model.ShippingAddressHtml)
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="p-0 py-2"><strong>@WebStore_Resources.InHandsDate:</strong> @(Model.InHandDate.HasValue ? Model.InHandDate.Value.ToDateTimeFormat() : string.Empty)</div>
+                                                        <div class="p-0 py-2"><strong>@WebStore_Resources.LabelShippingConstraintsCode:</strong> @(string.IsNullOrWhiteSpace(Model.ShippingConstraintCode) ? string.Empty : HelperUtility.GetEnumDescriptionValue((ShippingConstraintsEnum)Enum.Parse(typeof(ShippingConstraintsEnum), Model.ShippingConstraintCode)))</div>
+                                                        @if (HelperUtility.IsNotNull(Model?.ShippingMethod))
+                                                        {
+                                                            <div class="p-0 py-2"><strong>@WebStore_Resources.LabelShippingMethod:</strong> @Html.RenderBlock(Convert.ToString(Model?.ShippingMethod))</div>
+                                                        }
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row no-gutters">
+                                    <div class="col-12 p-0 mb-4 dashboard-content product-order-details">
+                                        <div>
+                                            <h3 class="b2b-section-header">@WebStore_Resources.HeadingProductsInPendingOrder</h3>
+                                        </div>
+
+                                        <div class="col-12 p-0 table-responsive Pending-order-list">
+                                            <table class="table table-tr  Pending-order" data-test-selector="tblPendingOrderDetails">
+                                                <thead>
+                                                    <tr class="table-heading" data-test-selector="rowPendingOrderTableHeading">
+                                                        <th scope="col" class="table-td receipt-column-item product-title pl-4">@WebStore_Resources.ColumnTitleItem</th>
+                                                        <th scope="col" class="table-td receipt-column-cart-item-description">@WebStore_Resources.LabelDescription</th>
+                                                        <th scope="col" class="table-td receipt-column-Qty">@WebStore_Resources.ColumnTitleQty</th>
+                                                        <th scope="col" class="table-td receipt-column-ShippingCost">@WebStore_Resources.LabelShippingCost</th>
+                                                        <th scope="col" class="table-td receipt-column-Price">@WebStore_Resources.ColumnTitlePrice</th>
+                                                        <th scope="col" class="table-td receipt-column-total">@WebStore_Resources.ColumnTitleTotal</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var items in Model?.AccountQuoteLineItemList?.AsEnumerable().Reverse() ?? new List<AccountQuoteLineItemViewModel>())
+                                                    {
+
+                                                        price = Convert.ToDecimal(items.Price);
+                                                        <tr data-test-selector="rowPendingOrderList">
+                                                            <td class="product-title pl-4 " data-test-selector="colOrderItemName">
+                                                                @Html.RenderBlock(items.ProductName)
+
+                                                                <div class="cart-item-description">
+                                                                    @if (items?.PersonaliseValuesDetail?.Count > 0)
+                                                                    {
+                                                                        foreach (var item in items?.PersonaliseValuesDetail)
+                                                                        {
+                                                                            if (!Equals(item.PersonalizeValue, null) && !Equals(item.PersonalizeValue, string.Empty))
+                                                                            {
+                                                                                <p>
+                                                                                    @item.PersonalizeName: @item.PersonalizeValue
+                                                                                </p>
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                </div>
+                                                            </td>
+                                                            <td class="product-description" data-test-selector="colOrderItemDescription">
+                                                                @Html.RenderBlock(@items.Description)
+                                                            </td>
+                                                            <td data-test-selector="colOrderQuantity">
+                                                                @if ((items.Quantity) % 1 == 0)
+                                                                {
+                                                                    @($"{items.Quantity.ToInventoryRoundOff():n0}")
+                                                                }
+                                                                else
+                                                                {
+                                                                    var orderedQuantity = double.Parse(Convert.ToString(items.Quantity.ToInventoryRoundOff()));
+                                                                    @orderedQuantity
+                                                                }
+                                                            </td>
+                                                            <td data-test-selector="colOrderShippingCost">
+                                                                @Helper.FormatPriceWithCurrency(items.ShippingCost, Model.CultureCode, items.UOM)
+                                                            </td>
+                                                            <td data-test-selector="colOrderPrice">
+                                                                @Helper.FormatPriceWithCurrency(price, Model.CultureCode, items.UOM)
+                                                            </td>
+                                                            <td data-test-selector="colOrderTotal">
+                                                                @Helper.FormatPriceWithCurrency(items.Quantity * price, Model.CultureCode)
+
+                                                            </td>
+
+                                                        </tr>
+
+
+                                                    }
+                                                </tbody>
+                                            </table>
+
+
+                                            <div class="col-12 col-lg-6 p-0 ml-auto receipt-item-list shopping-cart">
+
+                                                @{
+                                                    Model.ShoppingCart.ShippingName = @WebUtility.HtmlDecode(Model.ShippingName);
+                                                }
+                                                @Html.Partial("_QuoteTotalTable", Model.ShoppingCart)
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @Html.HiddenFor(model => model.OmsQuoteId)
+                                @Html.HiddenFor(model => model.PortalId)
+                                @Html.HiddenFor(model => model.UserId)
+                                @Html.HiddenFor(model => model.OmsOrderStateId)
+                                @Html.HiddenFor(model => model.ShippingId)
+                                @Html.HiddenFor(model => model.RoleName)
+                                @Html.HiddenFor(model => model.OrderStatus)
+                                @Html.HiddenFor(model => model.ShippingAddressId)
+                                @Html.HiddenFor(model => model.BillingAddressId)
+                                @Html.HiddenFor(model => model.ApproverUserId)
+                                @Html.HiddenFor(model => model.AdditionalInstruction)
+                                @Html.HiddenFor(model => model.QuoteOrderTotal)
+                                @Html.HiddenFor(model => Model.ShoppingCart)
+                                @Html.HiddenFor(model => Model.CartItemCount)
+                                @Html.HiddenFor(model => Model.PaymentSettingId)
+                                @Html.HiddenFor(model => Model.PurchaseOrderNumber)
+                                @Html.HiddenFor(model => Model.PODocumentName)
+                                @Html.HiddenFor(model => Model.AccountNumber)
+                                @Html.HiddenFor(model => Model.ShippingMethod)
+
+                                {
+
+                                    <div class="col-12 px-4 approval-comment-section" data-test-selector="divApproverCommentOptional">
+                                        @if (!Equals(Model.UserId, Model.LoggedInUserId) && !Model.IsLevelApprovedOrRejected)
+                                        {
+                                            <h6 class="title pt-4" data-test-selector="hdgApproverComments">@WebStore_Resources.LabelApproverComments:</h6>
+                                            @Html.TextAreaFor(Model => Model.Comments, new { rows = 5 })
+
+                                        }
+
+                                        <div id="user-approver-comments-content">
+                                            <div class="row no-gutters">
+                                                <div class="col-md-8 col-sm-12 p-0 pb-3 approver-comment">
+                                                    @if (Model?.QuoteApproverComments.Count > 0)
+                                                    {
+                                                        <h6 class="pt-3 title" data-test-selector="hdgApproverComments">@WebStore_Resources.LabelApproverComments:</h6>
+                                                        foreach (QuoteApprovalViewModel quoteApproverComments in Model?.QuoteApproverComments.AsEnumerable().Reverse())
+                                                        {
+                                                            <div class="approver-comment-info">
+                                                                <p><span class="label-approver">@WebStore_Resources.TitleDate:</span> @quoteApproverComments.CommentModifiedDateTime</p>
+                                                            </div>
+                                                            <div class="approver-comment-info">
+                                                                <p><span class="label-approver">@WebStore_Resources.TextApproverName:</span> @quoteApproverComments.ApproverUserName</p>
+                                                            </div>
+                                                            <div class="approver-comment-info">
+                                                                <span class="label-approver">@WebStore_Resources.LabelComments:</span>
+                                                                <p> @quoteApproverComments.Comments</p>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div>
+
+                                                <div class="col-md-4 col-sm-12 pt-lg-0 pt-3" style="display: @display">
+                                                    <h6 class="title pt-3" data-test-selector="hdgConvertedToOrder">@WebStore_Resources.LabelConvertedToOrder:</h6>
+                                                    <p class="approver-comment-info"><span class="label-approver">@WebStore_Resources.TitleOrderNumber:</span> <a href="/User/OrderReceipt?OmsOrderId=@Model.OmsOrderId"><u>@Model.OrderNumber</u></a></p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @Html.Partial("_QuoteConfirmPopup")
+                                    if (!Equals(Model.UserId, Model.LoggedInUserId))
+                                    {
+                                        <div class="col-12 px-4 pt-4 text-right quotebutton">
+                                            @if (!Model.IsLevelApprovedOrRejected)
+                                            {
+                                                if (!string.Equals(Model.OrderStatus, ZnodeOrderStatusEnum.DRAFT.ToString(), StringComparison.CurrentCultureIgnoreCase) &&
+                                                !string.Equals(Model.OrderStatus, ZnodeOrderStatusEnum.ORDERED.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                                                {
+                                                    <button type="submit" id="btnBottomReject" class="btn btn-secondary mb-4 ml-md-4">@WebStore_Resources.ButtonReject</button>
+                                                    if (!Model.IsLastApprover)
+                                                    {
+                                                        <button type="submit" id="btnBottomApprove" class="btn btn-primary mb-4 ml-md-2">@WebStore_Resources.ButtonApprove</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" id="btnBottomApprove" onclick="Checkout.prototype.ConvertQuoteToOrder()" class="btn btn-primary mb-4 ml-md-2">@WebStore_Resources.LabelApproveAndPlaceOrder</button>
+                                                    }
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (!string.Equals(Model.OrderStatus, ZnodeOrderStatusEnum.DRAFT.ToString(), StringComparison.CurrentCultureIgnoreCase) &&
+                                                                                            !string.Equals(Model.OrderStatus, ZnodeOrderStatusEnum.ORDERED.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                                                {
+                                                    <button type="submit" id="btnBottomReject" class="btn btn-secondary mb-4 ml-md-4" disabled="disabled">@WebStore_Resources.ButtonReject</button>
+                                                    <button type="submit" id="btnBottomApprove" class="btn btn-primary mb-4 ml-md-2" disabled="disabled">@WebStore_Resources.ButtonApprove</button>
+                                                }
+                                            }
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                        <div class="col-12 col-lg-3 p-0 mt-4 pt-3">
+                            <div class="col-12">
+                                <p class="key-PromoSpot">@Html.RenderMessage("PromoSpot")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="user-approver-popup-ipad" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <!-- Modal content-->
+        <div class="modal-content col-12 p-0">
+            <div class="modal-header">
+                <h4 class="modal-title">@WebStore_Resources.LabelApproverHistory</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span id="close-user-approver-popup-ipad" aria-hidden="true"><span class="close-circle-icon"></span></span></button>
+            </div>
+            <div class="modal-body col-12 modal-display-block">
+                <div id="user-approver-popup-content" class="col-12 p-0">
+                    Loading....
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var quoteConfirm = '@WebStore_Resources.QuoteConfirmMessage';
+    $(document).ready(function () {
+        User.prototype.HideAddressChangeLink();
+    });
+    $("#FormQuoteView").submit(function (event) {
+        $(".btnApproveReject").prop("disabled", true).addClass("disabled");
+    });
+</script>
+

@@ -1,0 +1,10 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductViewModel
+ @{
+     int productId = Model.ConfigurableProductId > 0 ? Model.ConfigurableProductId : Model.PublishProductId;
+}
+<div>
+    <z-widget>@Html.WidgetPartial("LinkProductList", "LinkProducts", "1101", "PortalMapping", productId)</z-widget>
+    <div class="container position-relative p-0">
+        <z-widget>@Html.WidgetPartial("RecentlyViewProduct", "RecentlyViewProduct", "126", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())</z-widget>
+    </div>
+</div>

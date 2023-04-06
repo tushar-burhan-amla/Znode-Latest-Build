@@ -1,0 +1,89 @@
+﻿@model Znode.Engine.Admin.ViewModels.WebGridViewModel
+@using Znode.Engine.Admin.Helpers;
+@{
+    ViewBag.Title = Admin_Resources.TitleAdvanced + " | " + Admin_Resources.TitleMultifront;
+}
+
+
+    <div class="col-sm-12 title-container">
+        <h1>@Admin_Resources.TitleGenerateXML</h1>       
+    </div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+    <div class="col-sm-12 filter-component">
+        <h3>@Admin_Resources.LabelSelectEntityType</h3>
+        <div class="col-sm-12 nopadding">
+            <div class="pull-left">
+                @Html.DropDownListFor(model => model.EntityType, new List<SelectListItem>
+                                     {
+                                        new SelectListItem{ Text="Table", Value ="Table" },
+                                        new SelectListItem{ Text="StoredProcedure", Value ="StoredProcedure" },
+                                        new SelectListItem{ Text="View", Value ="View" }
+                            }, new { @id = "entityTypeList" })
+            </div>
+            <div class="pull-left padding-left">
+                @Html.TextBoxFor(model => model.EntityName, new { @id = "txtEntityName" })
+                <div id="autoResult"></div>
+                <label id="entityNameErrMsg" class="error-msg"></label>
+            </div>
+
+            <div class="pull-left">
+                <button id="btnGetColumn" class="btn-text">@Admin_Resources.ButtonGetColumn</button>
+                <button id="btnCancel" class="btn-text" onclick="window.location.href='/XMLGenerator/List';">@Admin_Resources.ButtonCancel</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 nopadding margin-top-bottom">
+        @if (Model.listViewModel != null)
+            {
+            <div id="columnListDiv">
+                @{Html.RenderPartial("~/Views/XMLGenerator/_ListViewBox.cshtml", Model.listViewModel);}
+
+            </div>
+                    }
+                    else
+                    {
+                        <div id="columnListDiv">
+                        </div>
+                    }
+    </div>
+    @if (Model.WebGridColumnModelList != null)
+            {
+        <div id="gridPartialDiv" class="list-container">
+            @{Html.RenderPartial("_GridColumnSettings", Model);}
+        </div>
+                }
+                else
+                {
+                    <div id="gridPartialDiv" class="list-container">
+
+                    </div>
+                }
+</section>
+
+
+
+@Scripts.Render("~/bundles/XmlGenerator")
+
+<script type="text/javascript">
+    var viewMode = '@Model.ViewMode';
+    var id = @Model.Id;
+    var viewOptions = '@Model.ViewOption';
+    var pageName = '@Model.FrontPageName';
+    var objectName = '@Model.FrontObjectName';
+    var columnListJson = @Html.RenderBlock(Json.Encode(Model.WebGridColumnModelList));
+    var entiryNameRequiredMsg = '@DynamicGridConstants.EntityNameErrReq';
+    var displayOtionReqMsg = '@DynamicGridConstants.DisplayOpionErrReq';
+    var pageNameReqMsg = '@DynamicGridConstants.PageErrReq';
+    var objectNameReqMsg = '@DynamicGridConstants.ObjectErrReq';
+    columnListJson = JSON.stringify(columnListJson);
+
+    $(document).ready(function () {
+        $('#btnGetColumn').click(function () {
+            $('#entityNameErrMsg').text('');
+            XmlGenerator.GetColumnList();
+
+        });
+    });
+
+</script>

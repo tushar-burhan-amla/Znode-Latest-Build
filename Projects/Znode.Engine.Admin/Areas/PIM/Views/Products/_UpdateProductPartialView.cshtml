@@ -1,0 +1,91 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model ImportViewModel
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+@using (Ajax.BeginForm(actionName, controllerName, new AjaxOptions()
+{
+    HttpMethod = "post",
+    OnSuccess = "Product.prototype.Result",
+    UpdateTargetId = "DialogUpdateProductAsidePannel",
+    InsertionMode = InsertionMode.Replace,
+},
+                            new { @id = "UpdateProductsForm" }))
+{
+    <div id="aside-popup-panel">
+        <div class="col-sm-12 title-container">
+            <h1>@Admin_Resources.TitleUpdateProducts</h1>
+            <div class="pull-right">
+                <button type="button" class="btn-text-icon" onclick="ZnodeBase.prototype.CancelUpload('DialogUpdateProductAsidePannel')"><em class="z-back" data-test-selector="popLinkCancel"></em>@Admin_Resources.ButtonBack</button>
+                <div class="pull-right padding-left" data-test-selector="popLinkImport">
+                    <a class="btn-text btn-text-secondary dirtyignore" id="importButton" onclick="return Products.prototype.ValidateAndPost();">@Admin_Resources.ButtonImport</a>
+                </div>
+            </div>
+        </div>
+        <!--Main Container-->
+        <div class="col-sm-12 page-container">
+            <div class="col-sm-12 nopadding import-product-update">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding product-sub-heading padding-bottom">
+                        <label id="downloadImportProductTemplate">@Admin_Resources.TextDownloadTemplate</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 nopadding bulk-csv-import padding-bottom">
+                <a target="_blank" rel="noopener noreferrer" href="https://support.znode.com/support/solutions/articles/43000595703-bulk-updating-products">
+                    <div class="col-sm-3 import-help-section">
+                        <span href="#" class="btn-text-icon"><em class="z-help-circle"></em></span>
+                        <div class="padding-top-bottom-20">
+                            <p class="import-sub-heading padding-top-bottom">@Admin_Resources.TextBulkUpdateHelp</p>
+                            <p>@Admin_Resources.TextBulkUpdateGuide</p>
+                        </div>
+                        <label><span target="_blank" href="https://support.znode.com/support/solutions/articles/43000595703-bulk-updating-product">@Admin_Resources.LabelViewUpdateGuide</span></label>
+                    </div>
+                </a>
+
+                <div onclick="Products.prototype.DownloadTemplate()" class="col-sm-3 import-download-section">
+                    <a href="#" class="btn-text-icon"><em class="z-download"></em></a>
+                    <div class="padding-top-bottom-20">
+                        <p class="import-sub-heading padding-top-bottom">@Admin_Resources.TextBulkUpdateDownload</p>
+                        <p>@Admin_Resources.TextBulkSmallUpdateDownload</p>
+                    </div>
+                    <label><a>@Admin_Resources.LabelDownloadSampleFile</a></label>
+                </div>
+            </div>
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label class="required">@Admin_Resources.LabelSelectCSVFile</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.EditorFor(model => model.FilePath, new { htmlAttributes = new { @onchange = "GetFileHeaders()" } })
+                            <span class="field-validation-error" id="error-file-upload"></span>
+                            @Html.Hidden("ChangedFileName")
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 nopadding bulk-checkbox">
+                <div class="form-group">
+                    <div class="control-md">
+                        <label>
+                            <input id="IsAutoPublish" type="checkbox" name="IsAutoPublish" onchange="Products.prototype.IsAutoPublish()" value="false" />
+                            <span class="lbl padding-8">@Admin_Resources.NoteAutoPublishTheUpdateData</span>
+                            <input name="IsAutoPublish" type="hidden" value="false">                           
+                        </label>
+                        <div class="help-text"><em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="Products associated with an already  published category are published."></em></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+</script>
+@Scripts.Render("~/bundles/jqueryval")

@@ -1,0 +1,57 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model PaymentSettingViewModel
+
+<div id="payWithAmazonDiv" style="display:none"> </div>
+@if (!Equals(Model, null))
+{
+    bool isQuote = Convert.ToBoolean(ViewBag.isQuote);
+    if (isQuote == false)
+    {
+        <script>
+        window.onAmazonLoginReady = function () {
+        amazon.Login.setClientId("@Model.TransactionKey");
+        };
+        </script>
+        if (Model.TestMode)
+        {
+        <script type='text/javascript' src="https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js"></script>
+        }
+        else
+        {
+        <script type='text/javascript' src="https://static-na.payments-amazon.com/OffAmazonPayments/us/js/Widgets.js"></script>
+        }
+    }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var quoteId = $("#QuoteId").val();
+            var amazonAddressDetailUrl = quoteId > 0 ? "/Quote/GetAmazonPaymentDetails?paymentSettingId=" + @Model.PaymentSettingId + "&paymentCode=" + '@Model.PaymentCode' + "&clientId=" + '@Model.TransactionKey' + "&sellerId=" + '@Model.GatewayUsername' + "&testMode=" + '@Model.TestMode' + "&access_token=" + '@string.Empty' + "&quoteId=" + (quoteId > 0 ? quoteId : 0) + ""
+                : "/Checkout/GetAddressDetails?paymentSettingId=" + @Model.PaymentSettingId + "&paymentCode=" + '@Model.PaymentCode' + "&clientId=" + '@Model.TransactionKey' + "&sellerId=" + '@Model.GatewayUsername' + "&testMode=" + '@Model.TestMode' + "&access_token=" + '@string.Empty' + "";
+
+            if (quoteId > 0) {
+                OffAmazonPayments.Button("payWithAmazonDiv", "@Model.GatewayUsername", {
+                    type: "PwA",
+                    useAmazonAddressBook: false,
+                    authorization: function () {
+                        amazon.Login.authorize({ scope: "profile payments:widget payments:shipping_address" },
+                            document.location.origin + amazonAddressDetailUrl);
+                    },
+                    onError: function (error) {
+                        ZnodeNotification.prototype.DisplayNotificationMessagesHelper(error.getErrorCode() + ": " + error.getErrorMessage(), "error", false, 0);
+                    }
+                });
+            } else {
+                OffAmazonPayments.Button("payWithAmazonDiv", "@Model.GatewayUsername", {
+                    type: "PwA",
+                    useAmazonAddressBook: true,
+                    authorization: function () {
+                        amazon.Login.authorize({ scope: "profile payments:widget payments:shipping_address" },
+                            document.location.origin + amazonAddressDetailUrl);
+                    },
+                    onError: function (error) {
+                        ZnodeNotification.prototype.DisplayNotificationMessagesHelper(error.getErrorCode() + ": " + error.getErrorMessage(), "error", false, 0);
+                    }
+                });
+            }
+        });
+    </script>
+}

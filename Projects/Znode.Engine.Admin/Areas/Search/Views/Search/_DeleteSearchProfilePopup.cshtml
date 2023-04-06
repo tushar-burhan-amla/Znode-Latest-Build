@@ -1,0 +1,29 @@
+﻿<div class="modal fade" id="DeleteSearchProfilePopup" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" title="@Admin_Resources.ButtonCancel"><i class="z-close-circle"></i></button>
+                <h4 class="modal-title">@Admin_Resources.HeaderDelete</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the selected Search Profile</p>
+
+                <div class="chk-product-addons">
+                    <label>
+                        <input type="radio" id="DeleteSearchProfileData" name="DeleteSearchProfileData" checked="checked" />
+                        <label class="lbl padding-8 delete-pim-label" for="DeleteSearchProfileData">@Admin_Resources.DeleteSearchProfilePreserveIndex</label>
+                        <br>
+                        <input type="radio" id="isDeletePublishSearchProfile" name="DeleteSearchProfileData" />
+                        <label class="lbl padding-8" for="isDeletePublishSearchProfile">@Admin_Resources.DeleteSearchProfileDeleteIndex</label>
+                    </label>
+                </div>
+                @Html.Hidden("DeleteSearchProfileId")
+            </div>
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type='button' class="btn-text btn-text-secondary" data-dismiss="modal" title='@Admin_Resources.TextOk' onclick="javascript:$('body').removeClass('modal-open'); $('body').removeAttr('style'); Search.prototype.DeleteSearchProfiles(this)">@Admin_Resources.TextOk</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

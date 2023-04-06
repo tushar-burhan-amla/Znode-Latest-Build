@@ -1,0 +1,35 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PortalApprovalViewModel
+
+@{
+    string displayStatus = Model?.UserApprover?.Count > 0 ? "display: block" : "display: none";
+    var count = 1;
+}
+<div id="portalpayment" class="col-xs-12 nopadding padding-top-15 margin-bottom">
+    <div id="_PartialPortalPaymentApproverPanel">
+        @if (Model.PortalPaymentUserApproverList?.Count > 0)
+        {
+            foreach (var item in Model.PortalPaymentUserApproverList)
+            {
+                item.PaymentDivCount = count;
+                @Html.Partial("_PartialPortalPaymentApproval", item)
+                @Html.HiddenFor(x => x.PortalApprovalId)
+                count++;
+            }
+        }
+        @*else
+        {
+            <div class="MessageBox no-record"><p class="text-center">@Admin_Resources.NoRecordFoundText</p></div>
+        }*@
+
+    </div>
+</div>
+<div class="col-xs-12 nopadding text-right margin-top-bottom tbody-div" id="add_partial_button">
+    @Html.AuthorizedPrototypeRawActionLink("<em class='z-add-circle'></em>" + Admin_Resources.ButtonAddAnotherConfiguration, "GetApproverOrder", "Store", new { id = "defaultValue -add-new-row", @class = "btn-text-icon", onclick = "Store.prototype.AddNewPaymentApproverArea();" })
+</div>
+@Html.Hidden("paymentCount", @count)
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"></script>
+<script>
+    $("#paymenttypes_" + $("#paymentCount").val()).multiselect({ includeSelectAllOption: true, enableCaseInsensitiveFiltering: false });
+</script>

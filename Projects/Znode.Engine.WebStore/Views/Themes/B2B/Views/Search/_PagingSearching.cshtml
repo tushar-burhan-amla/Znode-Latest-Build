@@ -1,0 +1,28 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ProductListViewModel
+<div class="b2b-product-count page-top">
+    @{if ((Model?.IsSearchFromSuggestions).GetValueOrDefault())
+        {
+            <div class="search-result">
+                <p data-test-selector="paraSearchResult">Showing results for <a href="/Search/Index?SearchTerm=@HttpUtility.UrlEncode(Model.SuggestTerm)">@Model.SuggestTerm </a>instead  of @Model.SearchKeyword.</p>
+                <p>Search instead for <a href="/Search/Index?SearchTerm=@HttpUtility.UrlEncode(Model.SearchKeyword)&usesuggestion=false">@Model.SearchKeyword</a>.</p>
+            </div>
+        }
+        else if (!Equals(Model.SearchResultCountText, null))
+        {
+            <p class="search-result" data-test-selector="paraSearchResult">@Html.RenderBlock(Model.SearchResultCountText)</p>
+        }
+    }
+</div>
+<div id="layout-search" class="b2b-sorting ml-md-auto">
+    <div class="search-sorting">
+        <label for="Sort" class="filter-text">@WebStore_Resources.LabelSortBy</label>@Html.Partial("../Search/_Sorting", new ViewDataDictionary(new { Id = "Sort2" }))
+    </div>
+</div>
+
+<div class="b2b-view-mode ml-auto ml-md-0">
+    <span class="filter-text" data-test-selector="spanLabelView">@WebStore_Resources.LabelView</span>
+    <a href="javascript:void(0);" class="productview grid-view-opt-active" title="Grid View" data-test-selector="lnkGridView"><span class="grid-icon"></span></a>
+    <a href="javascript:void(0);" class="productview list-view-opt" title="List View" data-test-selector="lnklistView"><span class="list-icon"></span></a>
+    <a href="javascript:void(0);" class="productview text-view-opt" title="Text View"><span class="icon-text-view"></span></a>
+</div>

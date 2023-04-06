@@ -1,0 +1,38 @@
+﻿.facets-content-area{background-color:$input-background-facet;
+    .product-grid{padding-bottom:0;
+        .list-group{padding:15px;margin-bottom:10px;border-bottom:1px solid $border-light;
+            &:last-child{border-bottom:none;}
+            .panel-title{font-size:$base-font-size + 6;cursor:pointer;
+                &:after{content:$up-icon;font-family:$znode-icon-font;font-size:$base-font-size - 2;padding:5px 10px;float:right;}
+                &.collapsed::after{content:$down-icon;}
+            }
+            .panel-body ul{display:flex;flex-direction:column;padding:0;
+                li{padding:10px 5px;margin:0;display:flex;align-items:center;
+                    label,a{width:100%;position:relative;display:block;line-height:1.5;cursor:pointer;font-family:$base-font-family-bold;font-size:$base-font-size + 1;color:$text-default;}
+                    .facet-count{margin-left:auto;background-color:$base-primary-light;color:$white;text-indent:0;font-size:$base-font-size - 2;font-family:$base-font-family;padding:5px 10px;letter-spacing:0.75px;line-height:1;}
+                }
+            }
+            #collapseOne_AddedList .panel-body ul{
+                h4{font-size:$base-font-size + 2;padding:10px 0;margin:0;}
+                li{padding:0;cursor:pointer;
+                    label{margin-bottom:0;line-height:2;}
+                    .close-icon{font-size:$base-font-size - 2;padding:5px 10px}
+                }
+            }
+        }
+    }
+}
+.b2b-filtered-list{padding:0 10px;
+    h4{font-size:$base-font-size + 2;margin-bottom:0;padding-right:10px;line-height:1;margin-top:5px;}
+    .b2b-filter-items{border:1px solid $border-default;padding:3px 0 3px 5px;align-items:center;margin-right:5px;margin-top:5px;
+        h4{font-size:$base-font-size;margin-top:0;padding-right:0;}
+        .filter-item{line-height:1;align-items:center;margin-left:auto;
+            label{margin-bottom:0;padding:0 5px;text-transform:uppercase;font-size:$base-font-size - 1;height:14px;}
+            span{margin-right:5px;cursor:pointer;}
+        }
+    }
+    .clear-filter{margin-top:5px;font-size:$base-font-size - 2;}
+}
+@include screensize(medium){
+    .b2b-side-bar.side-nav{position:relative;height:auto;z-index:auto;right:0;background-color:$white;}
+}

@@ -1,0 +1,15 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model List<BrandViewModel>
+<div class="modal fade brand-popup" id="brand-popup-ipad" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="popup-container modal-dialog">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span id="close-brand-view-popup-ipad" aria-hidden="true"><i class="zf-close"></i></span></button>
+        <div id="brand-popup-content">
+            <ul>
+                @foreach (BrandViewModel brandViewModel in Model)
+                {
+                    <li>@brandViewModel.BrandName</li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

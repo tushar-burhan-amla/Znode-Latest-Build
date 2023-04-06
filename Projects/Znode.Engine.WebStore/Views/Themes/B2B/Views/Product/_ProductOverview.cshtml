@@ -1,0 +1,41 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+<h1 class="product-name mt-4 mt-lg-0" title="@Html.RenderBlock(Model.Name)" data-test-selector="hdgProductName">@Html.RenderBlock(Model.Name)</h1>
+<div class="col-12 p-0 my-3 b2b-sku-brand">
+    <div class="product-number-details d-flex flex-wrap">
+        <div class="product-number" data-test-selector="divProductNumber">
+            @if (!string.IsNullOrEmpty(Model.SKU) && !Model.IsQuickView)
+            {
+                <span>@WebStore_Resources.TitleSKU:</span>
+                string sku = !string.IsNullOrEmpty(Model.ConfigurableProductSKU) ? Model.ConfigurableProductSKU : Model.SKU;
+                @Html.RenderBlock(sku)
+            }
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Attributes?.ValueFromSelectValue(ZnodeConstant.Brand)) && Model.IsBrandActive && !Model.IsQuickView )
+        {
+            <div class="product-brand">
+                <span data-test-selector="spnProductBrandLabel">@WebStore_Resources.LabelProductBrand</span>
+                <a href="@Url.GetBrandUrl(Model.BrandSeoUrl, null, Model.BrandId)" data-test-selector="linkProductBrand" id="lnkProductBrand">
+                    @Html.RenderBlock(Model.Attributes?.ValueFromSelectValue(ZnodeConstant.Brand))
+                </a>
+            </div>
+        }
+    </div>
+</div>
+@if (Model.Attributes.Value("ShortDescription") != null && !Model.IsQuickView)
+{
+    <div class="col-12 p-0 mb-3 product-short-description" data-test-selector="divShortDescription">@Html.RenderBlock(@WebUtility.HtmlDecode(Model.Attributes.Value("ShortDescription")))</div>
+}
+
+@if (Model.PublishProductId > 0 && !Model.IsQuickView)
+{
+    List<string> codesList = Model.Attributes?.FirstOrDefault(x => x.AttributeCode == ZnodeConstant.Highlights)?.SelectValues?.Select(y => y.Code)?.ToList();
+    if (codesList?.Count > 0)
+    {
+        string highLightsCodes = string.Join(",", codesList);
+        int publishProductId = Model.ConfigurableProductId > 0 ? Model.ConfigurableProductId : Model.PublishProductId;
+        string sku = !string.IsNullOrEmpty(Model.ConfigurableProductSKU) ? Model.ConfigurableProductSKU : Model.SKU;
+        Html.RenderAction("GetProductHighlights", "Product", new { productId = publishProductId, highLightsCodes = highLightsCodes, sku = sku });
+    }
+}
+@Html.Partial("../Schema/_ProductSchema", Model)

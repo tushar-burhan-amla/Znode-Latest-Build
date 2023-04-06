@@ -1,0 +1,64 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model AttributeFamilyViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleDAM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateAttributeFamily", CancelUrl = "/MediaManager/AttributeFamily/List",Callback= "CommonHelper.prototype.Validate" };
+}
+<div class="row">
+    <!--Left Panel-->
+    @Html.Partial("~/Areas/MediaManager/Views/Shared/_asideAttributePanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        <div class="col-sm-12 page-container">
+
+            @using (Html.BeginForm("Create", "AttributeFamily", FormMethod.Post, new { @id = "frmCreateAttributeFamily" }))
+            {
+                string isDefaultFamily = (!Equals(Model, null) && Model.IsDefaultFamily) ? "checked='checked'" : string.Empty;
+                <div class="col-sm-12 title-container">
+                    <h1>@Attributes_Resources.TitleAttributeFamily<span class="separator"> | </span><span class="title-action">@Admin_Resources.TitleAdd</span></h1>
+                    <div class="pull-right">
+                        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+                    </div>
+                </div>
+                <div id="loginForm" class="box-container">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Attributes_Resources.LabelFamilyCode)
+                            </div>                            
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.FamilyCode)
+                                @Html.ValidationMessageFor(model => model.FamilyCode)
+                            </div>
+                        </div>                        
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Attributes_Resources.LabelExistingAttributeFamily)
+                            </div>                            
+                            <div class="control-md">
+                                @{ Html.RenderAction("GetExistingFamilies", controllerName);}
+                            </div>
+                        </div>                       
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control-md">
+                            <label>
+                                <input @isDefaultFamily data-val="true" id="IsDefaultFamily" name="IsDefaultFamily" type="checkbox" value="true">
+                                <span class="lbl padding-8">@Attributes_Resources.LabelIsDefaultFamily</span><input name="IsParentMenu" type="hidden">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </section>
+</div>
+

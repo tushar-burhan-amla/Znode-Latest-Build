@@ -1,0 +1,49 @@
+﻿@model QuoteCreateViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.Extensions;
+<div class="col-lg-8">
+    <div class="panel panel-default payment-method-container">
+        <div class="panel-heading d-flex flex-wrap align-items-center">
+            <div class="col-xs-6 nopadding">
+                <h4 class="panel-title panel-title-edit">@Admin_Resources.LabelQuoteRequestNotes</h4>
+            </div>
+            <div class="col-xs-6 nopadding">
+                <div class="d-flex align-items-center in-hand-block">
+                    <div class="col-xs-5 nopadding text-right">
+                        <label data-test-selector="lblQuoteExpirationDate">@Admin_Resources.LabelQuoteExpirationDate</label>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="right-inner-icon">
+                            @Html.TextBoxFor(model => model.QuoteExpirationDate, Model?.QuoteExpirationDate != null ? Model.QuoteExpirationDate.ToDateTimeFormat() : string.Empty, new { @id = "QuoteExpirationDate", @name = "QuoteExpirationDate", @mindate = HelperMethods.GetDateTime(), @class = "datepicker", @group = "QuoteExpirationDate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtQuoteExpirationDate" })
+                            <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-3 margin-bottom-15">
+                    <label data-test-selector="lblJobName">@Admin_Resources.LabelJobName</label>
+                </div>
+                <div class="col-md-9 margin-bottom-15">
+                    @Html.TextBoxFor(model => model.JobName, new { maxlength = 100, @data_test_selector = "txtJobName" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 margin-bottom-15">
+                    <label>@Admin_Resources.LabelAdditionalNotes</label>
+                </div>
+                <div class="col-md-9 margin-bottom-15">
+                    @Html.TextArea("AdditionalInstruction", new { maxlength = 500, rows = 5, @data_test_selector = "txtAdditionalNotes" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

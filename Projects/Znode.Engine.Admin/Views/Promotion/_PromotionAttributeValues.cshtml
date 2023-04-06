@@ -1,0 +1,31 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PromotionViewModel
+
+@Html.Hidden("hdnPortalIds", Model.PortalId, new { @id = "hdnPortalIds" })
+@Html.Hidden("hdnProfileIds", string.Join(",", Model.ProfileId), new { @Id = "hdnProfileIds" })
+
+@Html.Hidden("hdnPromotionCatalogs_attr", Model.AssociatedCatelogIds, new { @id = "hdnPromotionCatalogs_attr" })
+@Html.Hidden("hdnPromotionCategories_attr", Model.AssociatedCategoryIds, new { @id = "hdnPromotionCategories_attr" })
+@Html.Hidden("hdnPromotionProducts_attr", Model.AssociatedProductIds, new { @id = "hdnPromotionProducts_attr" })
+@Html.Hidden("hdnReferalProductId_attr", Model.ReferralPublishProductId, new { @id = "hdnReferalProductId_attr" })
+@Html.Hidden("hdnPromotionBrands_attr", Model.AssociatedBrandIds, new { @id = "hdnPromotionBrands_attr" })
+@Html.Hidden("hdnPromotionShippings_attr", Model.AssociatedShippingIds, new { @id = "hdnPromotionShippings_attr" })
+
+<input type="hidden" id="hdnDiscountAmount" value="@Model.Discount" data-test-selector="txtDiscount">
+<input type="hidden" id="hdnStore" value="@Model.PortalId" data-test-selector="txtPortalId">
+<input type="hidden" id="hdnProfile" value="@Model.ProfileId" data-test-selector="txtProfileId">
+<input type="hidden" id="hdnMinQuantity" value="@Model.QuantityMinimum" data-test-selector="txtQuantityMinimum">
+<input type="hidden" id="hdnMinOrderAmount" value="@Model.OrderMinimum" data-test-selector="txtOrderMinimum">
+<input type="hidden" id="hdnRequiredProduct" value="@Model.ReferralPublishProductId" data-test-selector="txtReferralPublishProductId">
+<input type="hidden" id="hdnProductQuantity" value="@Model.PromotionProductQuantity" data-test-selector="txtPromotionProductQuantity">
+<input type="hidden" id="hdnCallForPrice" value="@Model.CallForPriceMessage" data-test-selector="txtCallForPriceMessage">
+<input type="hidden" id="hdnReferralProductName" value="@Model.ReferralProductName" data-test-selector="txtReferralProductName">
+<input type="hidden" id="hdnAssignedProductName" value="@Model.ProductName" data-test-selector="txtProductName">
+
+
+
+
+
+
+
+

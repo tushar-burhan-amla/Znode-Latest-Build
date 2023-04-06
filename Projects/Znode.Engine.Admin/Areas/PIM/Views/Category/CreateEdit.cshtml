@@ -1,0 +1,212 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@model PIMFamilyDetailsViewModel
+
+@{
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+    string actionName = Model.CategoryId > 0 ? "Edit" : "Create";
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCategory", SaveHeader = @PIM_Resources.ButtonDraft };
+    string cancleUrl = "/PIM/Category/List";
+    var unAssociatedAttributes = Model.Attributes.Where(x => x.PimAttributeGroupId == null).ToList();
+    bool isUnAssociatedAttribute = !Equals(unAssociatedAttributes, null) && unAssociatedAttributes.Count > 1;
+    bool flag = true;
+    bool isActiveGroup = true;
+    int cultureId = Model.LocaleId;
+    if (!Equals(HttpContext.Current.Request.Cookies["_productCulture"], null))
+    {
+        cultureId = !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies["_productCulture"].Value) ? Convert.ToInt32(HttpContext.Current.Request.Cookies["_productCulture"].Value) : Model.LocaleId;
+    }
+    if (Model.PimCatalogId > 0)
+    {
+        string parentCategoryId = (Model.PimParentCategoryId > 0) ? "&pimCategoryId=" + Model.PimParentCategoryId : string.Empty;
+        cancleUrl = "/PIM/Catalog/Manage?pimCatalogId=" + Model.PimCatalogId + parentCategoryId;
+    }
+
+    PopupModel publishPopupModel = new PopupModel()
+    {
+        Title = @Admin_Resources.TitlePublishConfirm,
+        Description = string.Format(Admin_Resources.PublishConfirmationMessage, "category"),
+        NoChoiceDescription = string.Format(Admin_Resources.PublishConfirmationMessageNoChoice, "category"),
+        ModalPopUpId = "PublishCategory",
+        ModalSizeClass = "modal-smd",
+        AdditionalNote = string.Format(Admin_Resources.PublishAllStoreLocaleDisclaimerMessage, "category"),
+        InputFields = new List<PopupInputField>(){
+new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = HelperMethods.GetAvailablePublishStates(), RequiredNumberOfItemsToDisplay = 2 },
+},
+        Buttons = new List<PopUpButtonModel>() {
+new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Category.prototype.UpdateAndPublishCategory()"}
+}
+    };
+}
+@*Important Div to render navigation response Html*@
+<div id="Resultpartial">
+    <div id="categoryDetails">
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml", publishPopupModel)
+
+        <div class="col-sm-12 title-container">
+            @if (string.Equals(actionName.ToLower(), "create"))
+            {
+                <h1 data-test-selector="hdgAddCategory">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleCategory)</h1>
+            }
+            else
+            {
+                <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.TitleCategory)<i class="z-minus"></i><span>@Html.RenderBlock(Model.Name)</span></h1>
+            }
+            <div class="pull-right btn-text-group btn-container">
+                <div class="pull-right">
+                    <a id="btnCancelForCategory" href=@cancleUrl class="btn-text-icon" data-test-selector="linkCancel"><i class='z-back'></i>BACK</a>
+                    <div class="btn-group padding-left btn-primary-dropdown  hide-publish">
+                        @{ if (Model.CategoryId > 0)
+                            {
+                                @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSaveClose, actionModel.Action, actionModel.Controller, new { @id = "btnSaveNClose", @class = "btn-text btn-text-secondary", onclick = "Category.prototype.SaveCategory('" + @cancleUrl + "')", @data_test_selector = "linkSaveNClose" })
+                                
+                                @Html.AuthorizedPrototypeRawActionLink(PIM_Resources.AssociateProducts, "GetUnAssociatedCategoryProducts", "Category", new { @class = "btn-text btn-text-secondary associate-products-categories", @data_test_selector = "linkAssociateCategories", style = "display: none", @onclick = "Category.prototype.GetUnAssociatedCategoryProducts()" })
+                            }
+                            else
+                            {
+                                @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSaveClose, actionModel.Action, actionModel.Controller, new { @id = "btnSaveNClose", @class = "btn-text btn-text-secondary", onclick = "Category.prototype.SaveCategory('" + @cancleUrl + "')", @data_test_selector = "linkSaveNClose" })
+                            }
+                        }
+
+                        <button type="button" class="btn-text-dropdown" data-test-selector="btnToggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret" style="color:white"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-hide-show">
+                            @{ if (Model.CategoryId > 0)
+                                {
+                                    <li>@Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSaveClose, actionModel.Action, actionModel.Controller, new { @id = "btnSaveNClose", @class = "btn-dropdwn-lst", onclick = "Category.prototype.SaveCategory('" + @cancleUrl + "')", @data_test_selector = "linkSaveNClose" })</li>
+                                    <li>@Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, actionModel.Action, actionModel.Controller, new { @class = "btn-dropdwn-lst", @id = "saveDraft", @onclick = "Category.prototype.SaveCategory()", @data_test_selector = "linkSaveDraft" })</li>
+                                    <li>@Html.AuthorizedPrototypeRawActionLink(PIM_Resources.ButtonReady, "UpdateAndPublishCategory", "Category", new { @class = "btn-publish dropdown-publish", style = "display: none", @id = "PublishCategoryLink", @onclick = "Category.prototype.PublishCategoryPopup()", @data_test_selector = "linkPublish" })</li>
+                                    //<li>@Html.AuthorizedPrototypeRawActionLink(PIM_Resources.AssociateProducts, "GetUnAssociatedCategoryProducts", "Category", "btn-dropdwn-lst associate-products-categories display-none", "Category.prototype.GetUnAssociatedCategoryProducts()")</li>
+                                }
+                                else
+                                {
+                                    <li>@Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, actionModel.Action, actionModel.Controller, new { @class = "btn-dropdwn-lst", @id = "saveDraft", @onclick = "Category.prototype.SaveCategory()", @data_test_selector = "linkSaveDraft" })</li>
+                                    <li>@Html.AuthorizedPrototypeRawActionLink(PIM_Resources.AssociateProducts, "GetUnAssociatedCategoryProducts", "Category", "btn-dropdwn-lst associate-products-categories display-none", "Category.prototype.GetUnAssociatedCategoryProducts()")</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="pull-right dirtyignore">
+                    @Html.Partial("~/Views/Shared/_CultureDropdown.cshtml", Model.Locale)
+                </div>
+            </div>
+        </div>
+        <div class="main-wrapper">
+            <aside>
+                <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><i class="z-left-collaps-arrow"></i></button>
+                <div class="slide-container dirtyignore">
+                    <ul class="aside-panel" id="CategoryAsidePannel">
+                        @foreach (var group in Model.Groups)
+                        {
+                            var htmlClass = isActiveGroup ? "tab-selected" : "";
+                            isActiveGroup = false;
+                            <li class="groupPannel @htmlClass" data-groupCode="@group.GroupCode@group.PimAttributeFamilyId"><a href="#" data-test-selector="linkAttributeGroupName">@group.AttributeGroupName</a></li>
+                        }
+                        @{isActiveGroup = true; }
+                        @if (isUnAssociatedAttribute)
+                        {
+                            <li id="General" class="groupPannel" data-groupCode="general"><a href="#" data-test-selector="linkGeneral">@PIM_Resources.LabelGeneral</a></li>
+                        }
+                        @if (Model.CategoryId > 0)
+                        {
+                            <li class="groupPannel" data-groupCode="PannelAssociateProducts"><a href="#" data-test-selector="linkAssociatedProducts">@PIM_Resources.TitleAssociatedProducts</a></li>
+                            <li class="groupPannel" data-groupCode="PannelSEO"><a href="#" data-test-selector="linkSEO">@PIM_Resources.LabelSEO.ToUpper()</a></li>
+                        }
+                    </ul>
+                </div>
+            </aside>
+            <!--Main Container-->
+            <section class="main-container dirtyignore">
+                <div class="col-sm-12 page-container">
+
+                    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCategory" }))
+                    {
+                        foreach (var group in Model.Groups)
+                        {
+                            var hidehtml = isActiveGroup ? "" : "style=display:none";
+                            isActiveGroup = false;
+                            <div id="@group.GroupCode@group.PimAttributeFamilyId" @hidehtml class="categoryAttribute" style="display:none;">
+                                @{
+                                    if (Equals(group.GroupCode.ToLower(), "generalinfo") && flag)
+                                    {
+                                        <div class="form-group">
+                                            <div class="col-sm-12 nopadding">
+                                                <div class="control-label">
+                                                    @Html.LabelFor(model => model.Families, new { @data_test_selector = "lblAttributeFamily" })
+                                                </div>
+                                                <div class="control-md">
+                                                    @if (Model.CategoryId > 0 && !Equals(Model.LocaleId, cultureId))
+                                                    {@Html.DropDownListFor(model => model.FamilyId, Model.Families, new { @id = "ddlfamily", @Name = "ddlfamily_attr", @disabled = "true" }) }
+                                                else
+                                                { @Html.DropDownListFor(model => model.FamilyId, Model.Families, new { @id = "ddlfamily", @Name = "ddlfamily_attr", @data_test_selector = "drpAttributeFamily" })}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        flag = false;
+                                    }
+
+                                    var attributesAssociatedWithGroup = Model.Attributes.Where(x => x.PimAttributeGroupId == group.PimAttributeGroupId && x.PimAttributeFamilyId == group.PimAttributeFamilyId).ToList();
+                                    foreach (var attributes in attributesAssociatedWithGroup)
+                                    {
+                                        if (Model.CategoryId > 0 && Equals(attributes.IsLocalizable, false) && !Equals(Model.LocaleId, cultureId))
+                                        {
+                                            switch (attributes.ControlProperty.ControlType)
+                                            {
+                                                case "File":
+                                                case "Image":
+                                                    attributes.ControlProperty.htmlAttributes.Add("pointer-events", "none");
+                                                    break;
+                                                default:
+                                                    attributes.ControlProperty.htmlAttributes.Add("disabled", "true");
+                                                    break;
+                                            }
+                                        }
+                                        //code to add Tag for File type control in PIM
+                                        if (Equals(attributes.ControlProperty.ControlType, "File"))
+                                        { attributes.ControlProperty.htmlAttributes.Add("IsPimFileControl", "True"); }
+
+                                        @Html.Partial("~/Areas/PIM/Views/Shared/_createControl.cshtml", attributes)
+                                    }
+                                }
+                            </div>
+                        }
+                        if (isUnAssociatedAttribute)
+                        {
+                            <div id="general" style="display:none" class="categoryAttribute box-container">
+                                @foreach (var attributes in unAssociatedAttributes)
+                                {
+                                    @Html.Partial("~/Areas/PIM/Views/Shared/_createControl.cshtml", attributes)
+                                }
+                            </div>
+                        }
+                        @Html.HiddenFor(model => model.CategoryId)
+                        @Html.Hidden("revisionType")
+                        @Html.HiddenFor(model => model.PimCatalogId, new { id = "hdnCatalogIdForCatalog" })
+                        @Html.HiddenFor(model => model.PimParentCategoryId, new { id = "hdnPimParentCategoryIdForCatalog" })
+                    }
+                    @if (Model.CategoryId > 0)
+                    {
+                        <div id="PannelAssociateProducts" class="categoryAttribute" style="display:none">
+                        </div>
+                    }
+
+                </div>
+                @*Important Div to render media upload popup*@
+                <div id="divMediaUploaderPopup"></div>
+                <div id="divCategorySEO"></div>
+            </section>
+            @Html.Hidden("HdnCategoryId", Model.CategoryId)
+        </div>
+    </div>
+</div>
+
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup"></div>
+<script>
+    //Bootstrap ToolTip Call
+    $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover', html: true });
+</script>

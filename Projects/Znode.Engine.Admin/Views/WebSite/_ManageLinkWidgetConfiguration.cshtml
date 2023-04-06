@@ -1,0 +1,95 @@
+﻿@model Znode.Engine.Admin.ViewModels.LinkWidgetDataViewModel
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.ViewModels;
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string cancelUrl = Equals(Model.TypeOfMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())
+        ? string.IsNullOrEmpty(Model?.FileName) ? $"/StoreExperience/StoreSetting?portalId={Model.CMSMappingId}" : $"/StoreExperience/StoreSetting?portalId={Model.CMSMappingId}&fileName={Model.FileName}"
+        : string.IsNullOrEmpty(Model?.FileName) ? $"/Content/EditContentPage?cmsContentPagesId={Model.CMSMappingId}" : $"/Content/EditContentPage?cmsContentPagesId={Model.CMSMappingId}&fileName={Model.FileName}";
+    string displayStatus = Model?.LinkWidgetConfigurationList?.Count > 0 ? "display: block" : "display: none";
+
+}
+<div id=@Model.GridModel.FrontObjectName>
+    @Html.HiddenFor(x => x.CMSWidgetsId)
+    @Html.HiddenFor(x => x.CMSMappingId)
+    @Html.HiddenFor(x => x.TypeOfMapping)
+    @Html.HiddenFor(x => x.WidgetsKey)
+    @Html.HiddenFor(x => x.WidgetName)
+    @Html.HiddenFor(x => x.DisplayName)
+    @Html.HiddenFor(x => x.FileName)
+    @Html.HiddenFor(x => x.LocaleId)
+    <div id="Show">
+        <div class="col-sm-12 title-container">
+            @{
+            string widgetName = string.IsNullOrEmpty(Admin_Resources.ResourceManager.GetString(string.Concat(AdminConstants.ZWidgetDisplayName, @Model.WidgetName))) ? @Model.WidgetName : Admin_Resources.ResourceManager.GetString(string.Concat(AdminConstants.ZWidgetDisplayName, @Model.WidgetName));
+            <h1>@Admin_Resources.TextConfigure<em class="z-minus"></em><span>@widgetName</span></h1>
+            }
+            <div class="pull-right btn-container" id="divAddLinkWidget">
+                @if (Equals(Model.TypeOfMapping, ZnodeCMSTypeofMappingEnum.ContentPageMapping.ToString()))
+                {
+                <a class="btn-text-icon pull-left" data-test-selector="linkBack" onclick="ZnodeBase.prototype.CancelUpload('associatedPanel')"><em class="z-back"></em>@Admin_Resources.ButtonBack</a>
+                }
+                else
+                {
+                <a class="btn-text-icon pull-left" data-test-selector="linkBack" onclick="window.location.href='@cancelUrl';"><em class="z-back"></em>@Admin_Resources.ButtonBack</a>
+                }
+
+                <a id="defaultValue-add-new-row" data-test-selector="linkAddNew" class="btn-text btn-text-secondary pull-right margin-left-10" onclick="WebSite.prototype.AddLinkWidget()">@Admin_Resources.ButtonAdd</a>
+
+                @if (Equals(Model.TypeOfMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString()))
+                {
+                @Html.Partial("~/Views/Shared/_CultureDropdown.cshtml", Model.Locale)
+                }
+            </div>
+        </div>
+        <div class="col-sm-12 page-container manage-link-panel">
+            <div class="cms-pages-notification" style="display:none">
+                <div class="cms-pages-msg" id="divmessage"></div>
+                <span onclick="javascript: $('.cms-pages-notification').hide()" class="close pull-right right z-close-circle"></span>
+            </div>
+            <div class="col-sm-12 nopadding">
+                <div class="table-div">
+                    <div class="thead-div" style="@displayStatus">
+                        <div class="col-1" data-test-selector="div@(Admin_Resources.LabelIcon.Replace(" "," "))">@Admin_Resources.LabelIcon</div>
+                        <div class="col-4" data-test-selector="div@(Admin_Resources.LabelTitle.Replace(" "," "))">@Admin_Resources.LabelTitle</div>
+                        <div class="col-2" data-test-selector="div@(Admin_Resources.LabelURL.Replace(" "," "))">@Admin_Resources.LabelURL</div>
+                        <div class="col-2" data-test-selector="div@(Admin_Resources.LabelDisplayOrder.Replace(" "," "))">@Admin_Resources.LabelDisplayOrder</div>
+                        <div class="col-3" data-test-selector="div@(Admin_Resources.LabelOpenInNewTab.Replace(" "," "))">@Admin_Resources.LabelOpenInNewTab</div>
+                        <div class="col-4" data-test-selector="div@(Admin_Resources.LabelAction.Replace(" "," "))">@Admin_Resources.LabelAction</div>
+                    </div>
+
+                    <div data-test-selector="divTbody" class="tbody-div">
+                        <div data-test-selector="divPartial" id="partial" class="removePartial">
+                        </div>
+
+                        @if (Model?.LinkWidgetConfigurationList?.Count > 0)
+                        {
+                        foreach (var item in Model.LinkWidgetConfigurationList)
+                        {
+                        item.CMSWidgetsId = Model.CMSWidgetsId;
+                        item.CMSMappingId = Model.CMSMappingId;
+                        item.WidgetName = Model.WidgetName;
+                        item.WidgetsKey = Model.WidgetsKey;
+                        item.DisplayName = Model.DisplayName;
+                        item.TypeOfMapping = Model.TypeOfMapping;
+
+                        @Html.Partial("~/Views/WebSite/_PartialLinkWidgetCreateEdit.cshtml", item)
+                        }
+                        }
+                        else
+                        {
+                        <div class="MessageBox no-record"><p class="text-center">@Admin_Resources.NoRecordFoundText</p></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="divMediaUploaderPopup">
+
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")

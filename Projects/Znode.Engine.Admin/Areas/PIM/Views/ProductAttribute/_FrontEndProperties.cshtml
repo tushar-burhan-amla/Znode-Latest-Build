@@ -1,0 +1,61 @@
+﻿@model Znode.Engine.Admin.ViewModels.PIMFrontPropertiesViewModel
+@using Znode.Libraries.Resources
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            <label>@PIM_Resources.LabelAttributeComparable</label>
+        </div>
+        <div class="switch-field control-yes-no">
+            @if (Model.IsComparable.GetValueOrDefault())
+            {
+                @Html.RadioButtonFor(x => x.IsComparable, "true", new { @checked = true, @id = "IsComparable_left" }) <label for="IsComparable_left">Yes</label>
+                @Html.RadioButtonFor(x => x.IsComparable, "false", new { @id = "IsComparable_right" }) <label for="IsComparable_right">No</label>
+            }
+            else
+            {
+                @Html.RadioButtonFor(x => x.IsComparable, "true", new { @id = "IsComparable_left" }) <label for="IsComparable_left">Yes</label>
+                @Html.RadioButtonFor(x => x.IsComparable, "false", new { @checked = true, @id = "IsComparable_right" }) <label for="IsComparable_right">No</label>}
+        </div>
+        <div class="help-text"><em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpCompareProduct"></em> </div>
+    </div>
+</div>
+<div class="form-group" id="divIsUseInSearch">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            <label>@PIM_Resources.LabelAttributeUseInSearch</label>
+        </div>
+        <div class="switch-field control-yes-no">
+            @if (Model.IsUseInSearch.GetValueOrDefault())
+            {
+                @Html.RadioButtonFor(x => x.IsUseInSearch, "true", new { @checked = true, @id = "IsUseInSearch_left" }) <label for="IsUseInSearch_left">Yes</label>
+                @Html.RadioButtonFor(x => x.IsUseInSearch, "false", new { @id = "IsUseInSearch_right" }) <label for="IsUseInSearch_right">No</label>
+            }
+            else
+            {
+                @Html.RadioButtonFor(x => x.IsUseInSearch, "true", new { @id = "IsUseInSearch_left" }) <label for="IsUseInSearch_left">Yes</label>
+                @Html.RadioButtonFor(x => x.IsUseInSearch, "false", new { @checked = true, @id = "IsUseInSearch_right" }) <label for="IsUseInSearch_right">No</label>}
+        </div>
+        <div class="help-text"><em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpSearchOptions"></em> </div>
+    </div>
+</div>
+<div class="form-group" id="divIsFacets" style="display:none">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            <label>@PIM_Resources.LabelAttributeIsFacets</label>
+        </div>
+        <div class="switch-field control-yes-no">
+            @if (Model.IsFacets.GetValueOrDefault())
+            {
+                @Html.RadioButtonFor(x => x.IsFacets, "true", new { @checked = true, @id = "IsFacets_left" }) <label for="IsFacets_left">Yes</label>
+                    @Html.RadioButtonFor(x => x.IsFacets, "false", new { @id = "IsFacets_right" }) <label for="IsFacets_right">No</label>
+            }
+            else
+            {
+                @Html.RadioButtonFor(x => x.IsFacets, "true", new { @id = "IsFacets_left" }) <label for="IsFacets_left">Yes</label>
+                    @Html.RadioButtonFor(x => x.IsFacets, "false", new { @checked = true, @id = "IsFacets_right" }) <label for="IsFacets_right">No</label>
+            }
+        </div>
+
+        <div class="help-text"><em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpFacetsOptions"></em> </div></div>
+</div>

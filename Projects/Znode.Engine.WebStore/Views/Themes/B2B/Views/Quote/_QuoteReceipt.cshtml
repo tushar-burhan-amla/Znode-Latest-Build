@@ -1,0 +1,54 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Agents
+@model QuoteResponseViewModel
+@{
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+    Layout = @_fileLocation + "/Views/Shared/_Layout.cshtml";
+}
+<div id="layout-account-receipt" class="col">
+    <div class="row">
+        <div class="container">
+            <div class="row user-account">
+                <div class="col-12 account-dashboard">
+                    <div class="row">
+                        <div class="col-12 order-receipt right-container">
+                            <div class="row pt-3 pb-3">
+                                <div class="col-md-9">
+                                    <h4 data-test-selector="lblThanksMsg">@WebStore_Resources.QuoteCreatedThankyouText</h4>
+                                    <p data-test-selector="lblQuoteNoMsg">
+                                        @WebStore_Resources.YourQuoteNumberText <b>
+
+                                            <span data-test-selector="lblQuoteNo" class="sp-num">#@Model.QuoteNumber</span>
+                                        </b>
+                                    </p>
+                                    <p class="print-none">
+                                        @WebStore_Resources.QuoteCreatedReviewText
+                                        <a data-test-selector="quotehistorylink" href="/Quote/QuoteHistory" class="sp-num">@WebStore_Resources.LabelQuoteHistory</a>
+                                    </p>
+                                </div>
+                                <div class="col-md-3 text-md-right m-md-auto pt-2 pt-md-0">
+                                    <a class="print-none" href="#" onclick="window.print();return false;"><i class="zf-printer"></i> <span>@WebStore_Resources.TextPrint</span></a>
+                                </div>
+                            </div>
+                            @Html.Partial("_QuoteReceiptDetail", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid best seller products no-shadow">
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <div class="col Best seller-products-block" data-test-selector="divBestSellerProducts">
+                    <h3 class="product-list-title key-BestSellerProducts" data-test-selector="lblBestSellerProductsHeading">@Html.RenderMessage("BestSellerProducts")</h3>
+                    <z-widget>@Html.WidgetPartial("ProductList", "BestSellers", "668", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), Model.PortalId)</z-widget>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

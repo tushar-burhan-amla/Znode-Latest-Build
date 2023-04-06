@@ -1,0 +1,37 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model SearchResultViewModel
+
+@if (Model?.Facets?.Count > 0)
+{
+    int count = 0;
+    foreach (var item in Model.Facets)
+    {
+        <div class="list-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title panel-title-edit accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne_@count"><span>@item.AttributeName</span></h2>
+                </div>
+                <div id="collapseOne_@count" class="panel-collapse collapse in show">
+                    <div class="panel-body">
+                        <ul class="filter-list">
+                            @foreach (var facetValue in item.AttributeValues)
+                            {
+                                bool? isChecked = Model.FacetFilters?.Any(facetFilter => facetFilter.Item1 == facetValue.AttributeCode && facetFilter.Item2.Any(x => x.Key == facetValue.AttributeValue));
+                                if (!string.IsNullOrEmpty(facetValue.AttributeValue))
+                                {
+                                    string data = $"{item.AttributeName}{facetValue.AttributeValue}";
+                                    <li class="styled-input">
+                                        <input id="@data" type="checkbox" onchange="Search.prototype.GetFilterResult('@facetValue.RefineByUrl',this)" class="FacetFilter" @(isChecked.GetValueOrDefault() ? "checked=checked" : "") />
+                                        <label for="@data" data-test-selector="lblFacetValue">@Html.RenderBlock(facetValue.Label)</label>
+                                        <span class="facet-count" data-test-selector="lblFacetCount">@facetValue.FacetCount</span>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        count++;
+    }
+}

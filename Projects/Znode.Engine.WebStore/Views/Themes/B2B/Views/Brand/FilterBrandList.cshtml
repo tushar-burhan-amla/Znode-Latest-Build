@@ -1,0 +1,97 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model  List<BrandViewModel>
+@using Znode.Engine.WebStore.Agents
+@{
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+}
+@{
+    string brandName = Request.QueryString["brandName"];
+    string cssClass = string.IsNullOrEmpty(brandName) ? string.Empty : "active-link";
+    bool isChar = string.IsNullOrEmpty(cssClass) ? false : (brandName?.Length != 1) ? true : false;
+}
+<div class="main-wrapper col">
+    @Html.Partial("../_LearnMore", Model)
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a>Brand</div>
+            </div>
+        </div>
+    </div>
+    <div class="row b2b-brand-list">
+        <div class="container">
+            <div class="row brand-container">
+                <div class="col-12 col-md-4">
+                    <h1 class="page-title">@WebStore_Resources.TitleShopByBrand</h1>
+                </div>
+                <div class="col-12 col-md-8 mb-4 mb-md-0 d-flex align-items-center">
+                    <div class="col-12 p-0 pl-md-0 align-self-center">
+                        <ul class="brand-filter p-0">
+                            <li class="col p-0 @{if(isChar){@cssClass}}">
+                                <a href="/Brand/BrandList?brandName=num">#</a>
+                            </li>
+                            @for (char c = 'A'; c <= 'Z'; c++)
+                            {
+                                if (!isChar && !string.IsNullOrEmpty(brandName) && Convert.ToChar(brandName) == c)
+                                {
+                                    <li class="pull-left margin-top-bottom active-link">
+                                        <a href='@string.Format("/Brand/BrandList?brandName={0}", c)'>@c</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="pull-left margin-top-bottom">
+                                        <a href='@string.Format("/Brand/BrandList?brandName={0}", c)'>@c</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-12 p-0 mb-4">
+                    <ul id="view-option-category" class="view-option-category brand-list product-grid-ul grid-view">
+                        @if (Model?.Count > 0)
+                        {
+                            foreach (var brand in Model)
+                            {
+                                if (brand.MediaId > 0)
+                                {
+                                    <li>
+                                        <a href="@Url.GetBrandUrl(brand.SEOFriendlyPageName, null, brand.BrandId)" data-lightbox="enlarge">
+                                            <img src="@brand.ImageSmallPath" class="img-fluid" data-src="@brand.ImageSmallPath" alt="" />
+                                            <label>@brand.BrandName</label>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a href="@Url.GetBrandUrl(brand.SEOFriendlyPageName, null, brand.BrandId)" data-lightbox="enlarge">
+                                            <img src="@brand.ImageSmallPath" class="img-fluid" data-src="@brand.ImageSmallPath" alt="" />
+                                            <label>@brand.BrandName</label>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <li class="col-12 mb-5 text-center font-16">@WebStore_Resources.LabelNoRecordFound</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <div class="col offer-banner mt-4 mt-md-0">
+                    <!--Advertisement Banner Widget-->
+                    <z-widget>@Html.WidgetPartial("OfferBanner", "AdvertisementBanner", "110", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), portalId)</z-widget>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

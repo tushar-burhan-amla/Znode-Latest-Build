@@ -1,0 +1,11 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model List<OrderNotesViewModel>
+
+@foreach (OrderNotesViewModel orderNote in Model)
+{
+    <div class="col-xs-12 nopadding margin-bottom-25">
+        <p>@Html.Label("", "Created On: ") @orderNote.CreatedDate.ToString()</p>
+        <p>@Html.Label("", "Created By: ") @orderNote.UserName</p>
+        <p>@orderNote.Notes</p>
+    </div>
+}

@@ -1,0 +1,133 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model UserAddressDataViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+
+
+@*<div class="dashboard-panel-heading">
+    <h4 class="dashboard-panel-title">@Admin_Resources.LabelAddress</h4>
+</div>*@
+<div id="customerAddresses" class="customer-addresses">
+    <div class="row">
+        @if (HelperUtility.IsNotNull(Model.UserId) && Model.UserId > 0)
+        {
+
+
+            <div class="col-md-4 padding-left margin-top">
+                <div class="form-group" id="customerDiv">
+                    <h3 data-test-selector="hdgShippingAddress" class="section-heading">@Admin_Resources.CustomerHeader</h3>
+                    <div class="limit-text-chars">
+                        @if (@Model.FullName.Contains('|'))
+                        {
+                            @Model.FullName.Split('|')[1]
+                        }
+                    </div>
+                    <div class="limit-text-chars" id="address_email">@Model.Email</div>
+                    <div class="limit-text-chars">@Model.PhoneNumber</div>
+
+                    @*@Html.TextBoxFor(m => m.Email, new { @type = "email", @id = "address_email", @class = "form-input-long", disabled = "disabled", @data_test_selector = "txtEmail" })*@
+                    @*<p class="error-msg">@Html.ValidationMessageFor(m => m.Email, "", new { @data_test_selector = "valEmail" })</p>*@
+                    @*@Html.Hidden("UserAddressDataViewModel.Email", Model.Email)*@
+                </div>
+            </div>
+
+
+            ViewDataDictionary dataDictionary = new ViewDataDictionary { };
+
+            <div class="col-md-4 padding-left margin-top">
+                <div class="form-group">
+                    <h3 data-test-selector="hdgShippingAddress" class="section-heading margin-left-15 margin-right-15">@Admin_Resources.TitleShippingAddress</h3>
+                    @if (Model.ShippingAddress.AddressId > 0 && Model?.UsersAddressNameList?.Count > 0)
+                    {
+                        <div class="col-md-12 address-type-container">
+                            <div class="control-label">
+                                <label data-test-selector="lblSelectCustomerAddress">@Admin_Resources.LabelSelectCustomerAddress</label>
+                            </div>
+                            @if (Model.IsAddEditAddressAllow)
+                            {
+                                <div class="text-right">
+                                    <a href="#" id="changeAddress" onclick="Order.prototype.CreateNewAddress('shipping',0,@Model.BillingAddress.AddressId);" class="btn-address">@Admin_Resources.AddNew</a>
+                                </div>
+                            }
+                            <div class="address-select">
+                                @Html.DropDownListFor(model => model.ShippingAddress.AddressId, Model.UsersAddressNameList, new { @id = "ShippingAddress", @data_test_selector = "drpSelectCustomerAddress", @Onchange = "Order.prototype.OnShippingAddressSelectionChange(this);" })
+                            </div>
+                        </div>
+                        {
+                            Model.ShippingAddress.SelectedBillingId = Model.BillingAddress.AddressId;
+                            Model.ShippingAddress.SelectedShippingId = Model.ShippingAddress.AddressId;
+                            Model.ShippingAddress.IsAddEditAddressAllow = Model.IsAddEditAddressAllow;
+                        }
+                        dataDictionary.Add("addressType", "shipping");
+                        dataDictionary.TemplateInfo = new System.Web.Mvc.TemplateInfo { HtmlFieldPrefix = "UserAddressDataViewModel.ShippingAddress" };
+                        Html.RenderPartial("~/Views/Order/_DisplayAddress.cshtml", Model.ShippingAddress, dataDictionary);
+
+                    }
+                    else
+                    {
+                        <div class="text-center">
+                            <a href="#" onclick="Order.prototype.CreateNewAddress();" class="btn-address">@Admin_Resources.AddNew</a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+            <div class="col-md-4 padding-left margin-top">
+                <div class="form-group">
+                    <h3 class="section-heading margin-left-15">@Admin_Resources.TitleBillingAddress</h3>
+
+                    @if (Model.BillingAddress.AddressId > 0 && Model?.UsersAddressNameList?.Count > 0)
+                    {
+                        <div class="col-md-12 address-type-container">
+                            <div class="control-label">
+                                <label data-test-selector="lblSelectCustomerAddress">@Admin_Resources.LabelSelectCustomerAddress</label>
+                            </div>
+                            @if (Model.IsAddEditAddressAllow)
+                            {
+                                <div class="text-right">
+                                    <a href="#" class="btn-address" onclick="Order.prototype.CreateNewAddress('billing',@Model.ShippingAddress.AddressId,0);">@Admin_Resources.AddNew</a>
+                                </div>
+                            }
+                            <div class="address-select">
+                                @Html.DropDownListFor(model => model.BillingAddress.AddressId, Model.UsersAddressNameList, new { @id = "BillingAddress", @data_test_selector = "drpSelectCustomerAddress", @Onchange = "Order.prototype.OnBillingAddressSelectionChange(this);" })
+                            </div>
+                        </div>
+                        {
+                            Model.BillingAddress.SelectedBillingId = Model.BillingAddress.AddressId;
+                            Model.BillingAddress.SelectedShippingId = Model.ShippingAddress.AddressId;
+                            Model.BillingAddress.IsAddEditAddressAllow = Model.IsAddEditAddressAllow;
+                        }
+                        if (dataDictionary.ContainsKey("addressType"))
+                        {
+                            dataDictionary.Remove("addressType");
+                        }
+                        dataDictionary.Add("addressType", "billing");
+                        dataDictionary.TemplateInfo = new System.Web.Mvc.TemplateInfo { HtmlFieldPrefix = "UserAddressDataViewModel.BillingAddress" };
+                        Html.RenderPartial("~/Views/Order/_DisplayAddress.cshtml", Model.BillingAddress, dataDictionary);
+
+                    }
+                    else
+                    {
+                        <div class="text-center">
+                            <a href="#" onclick="Order.prototype.CreateNewAddress();" class="btn-address">@Admin_Resources.AddNew</a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        }
+
+        @Html.Hidden("hdnIsShipping")
+        @Html.HiddenFor(model => model.PortalCatalogId)
+        @Html.HiddenFor(model => model.EnableAddressValidation)
+        @Html.HiddenFor(model => model.RequireValidatedAddress)
+        @Html.HiddenFor(model => model.CustomerPaymentGUID, new { id = "hdnCustomerGUID" })
+        @Html.HiddenFor(model => model.UserId, new { id = "hdnUserIdAddress" })
+        @Html.Hidden("UserAddressDataViewModel.UserId", Model.UserId)
+        @Html.HiddenFor(model => model.PortalId)
+        @Html.HiddenFor(model => model.ShippingAddress.AddressId)
+        @Html.HiddenFor(model => model.BillingAddress.AddressId)
+        @Html.HiddenFor(model => model.BillingAddress.StateCode, new { @id = "hdnstateCode" })
+        @Html.HiddenFor(model => model.Email, new { @id = "hdnEmailId" })
+    </div>
+</div>

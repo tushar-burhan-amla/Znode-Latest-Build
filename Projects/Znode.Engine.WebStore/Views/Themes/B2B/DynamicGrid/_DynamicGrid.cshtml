@@ -1,0 +1,7 @@
+﻿@model Znode.Engine.WebStore.Models.GridModel
+<div id='grid-content-backdrop' class='modal-backdrop fade in' style="display:none"><div id='loading' class='loader loader-body'></div></div>
+@Html.Partial("_GridControl", Model)
+
+<script>
+    var listCount=@(!Equals(Model, null) ? Model.DataTableToList.Count : 0);if(_gridContainerName="#@Model.FrontObjectName",listCount>0)$.getScript("/Scripts/Core/Controls/WebGrid/GridPager.js");
+</script>

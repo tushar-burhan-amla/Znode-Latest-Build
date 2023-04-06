@@ -1,0 +1,89 @@
+﻿@model Znode.Engine.Admin.ViewModels.DomainViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.Resources
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formCreateEditUrl", SaveHeader = Admin_Resources.ButtonAdd, CancelHeader = Admin_Resources.ButtonCancel, Callback = "Store.prototype.ValidateStoreDomainName" };
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+
+<!--Main Container-->
+<div id="aside-popup-panel">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "formCreateEditUrl" }))
+    {
+        string isActiveStatus = "checked = 'checked'";
+        if (!Equals(Model.DomainName, null))
+        {
+            isActiveStatus = (!Equals(Model, null) && Model.IsActive) ? "checked = 'checked'" : string.Empty;
+        }
+
+        <div class="col-sm-12 title-container">
+            @if (actionName.ToLower() == Admin_Resources.LabelEditUrl.ToLower())
+            {
+                <h1 data-test-selector="hdgAddUrl">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelURL)<em class="z-minus"></em><span>@Model.DomainName</span></h1>
+            }
+            else
+            {
+                <h1 data-test-selector="hdgAddUrl">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelURL)</h1>
+            }
+            <div class="pull-right btn-container">
+                <button type="button" class="btn-text-icon margin-bottom" onclick="ZnodeBase.prototype.CancelUpload('divAddUrl')" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                <div class="pull-right">
+                    <button type="submit" class="btn-text btn-text-secondary" onclick="return Store.prototype.ValidateStoreDomainName()" data-test-selector="linkSave">@Admin_Resources.ButtonSave</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 page-container">
+            <h3 class="section-heading" data-test-selector="hdgDomainDetails">@Admin_Resources.LabelDomainDetails</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.DomainName, new { @class = "required", @data_test_selector = "lblUrlName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.DomainName, new { @data_test_selector = "txtUrlName" })
+                        @Html.ValidationMessageFor(model => model.DomainName, "", new { id = "errorSpanDomainName", @data_test_selector = "valUrlName" })
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.SubHeaderDomainDetails)
+                </div>
+            </div>
+            <div class="form-group" id="displayname-content">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label data-test-selector="lblApplicationType">@Admin_Resources.LabelApplicationType</label>
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.ApplicationType, Model.ApplicationTypeList, new { @data_test_selector = "drpApplicationTypeList" })
+                        <span id="valTextAlignmentErr" class="field-validation-error"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-sm-12 nopadding">
+                <div class="control-md control-non">
+                    <label>
+                        <input @isActiveStatus id="IsActive" name="IsActive" type="checkbox" value="true" data-test-selector="chkEnableUrl" />
+                        <span class="lbl padding-8" data-test-selector="spnEnableUrl">@Admin_Resources.LabelEnableUrl</span>
+                        <input name="IsActive" type="hidden" value="false" />
+                    </label>
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(model => model.DomainId)
+        @Html.HiddenFor(model => model.PortalId)
+        @Html.HiddenFor(model => model.PortalName)
+        @Html.HiddenFor(model => model.ApiKey)
+    }
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Store.prototype.ValidateStore();
+        $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover', html: true });
+    });
+
+</script>
+@Scripts.Render("~/bundles/jqueryval")
+
+
+

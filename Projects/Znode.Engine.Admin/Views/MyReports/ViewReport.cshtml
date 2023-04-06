@@ -1,0 +1,25 @@
+﻿@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.ViewModels;
+@model ReportViewModel
+@{
+    string returnurl = string.Empty;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    ViewBag.Title = Admin_Resources.LabelReport + " | " + Admin_Resources.LabelIndex;
+    if (Model.isDynamicReport)
+    { returnurl = "/MyReports/list"; }
+    else
+    {
+        returnurl = string.IsNullOrEmpty(HttpUtility.UrlDecode(Model.ReturnUrl)) ? "/MyReports/Index" : HttpUtility.UrlDecode(Model.ReturnUrl);
+    }
+}
+
+<!--Main Container-->
+<div class="col-sm-12 title-container margin-bottom">
+    <h1>@Model.Name</h1>
+    <div class="pull-right">
+        <a href="@returnurl" class="btn-text-icon"><em class="z-back"></em>@Admin_Resources.ButtonBack</a>
+    </div>
+</div>
+<section class="col-sm-12 page-container">
+    @Html.Partial(AdminConstants.ReportPartialView, Model)
+</section>

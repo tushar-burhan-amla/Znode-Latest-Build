@@ -1,0 +1,253 @@
+﻿@model Znode.Engine.Admin.Models.ListViewModel
+@if (Model.AssignedList.Count() > 0 || Model.UnAssignedList.Count() > 0)
+{
+
+
+    <div id="listBoxView" class="sorting-container">
+        <h3 class="section-heading">@Admin_Resources.LabelSelectColumn</h3>
+        <div class="col-sm-12 nopadding">
+            <ul>
+                <li>
+                    <div>
+                        <h3 class="section-heading-sub">@Admin_Resources.LabelAvailableColumn</h3>
+                        <div class="col-sm-12 nopadding">
+                            <ul id="SelectedCities" class="sort-box scroll-default">
+                                @{
+                                    int counter = 0;
+                                }
+
+                                @foreach (var item in Model.AssignedList)
+                                {
+                                    <li data-id="available_@counter" data-value="@item.Text">@item.Text</li>
+                                    counter++;
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="add-remove">
+                        <div id="btnAllMoveLeft">
+                            <div class="nav-option">
+                                <em class="z-right-all" data-toggle="tooltip" data-placement="right" type="button" title="Right All"></em>
+                            </div>
+                        </div>
+                        <div id="btnAllMoveRight">
+                            <div class="nav-option">
+                                <em class="z-left-all" data-toggle="tooltip" data-placement="right" type="button" title="Left All"></em>
+                            </div>
+                        </div>
+                        <div id="btnMoveLeft">
+                            <div class="nav-option">
+                                <em class="z-right" data-toggle="tooltip" data-placement="right" type="button" title="Right"></em>
+                            </div>
+                        </div>
+                        <div id="btnMoveRight">
+                            <div class="nav-option">
+                                <em class="z-left" data-toggle="tooltip" data-placement="right" type="button" title="Left"></em>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <h3 class="section-heading-sub">@Admin_Resources.LabelSelectedColumn</h3>
+                        <div class="col-sm-12 nopadding">
+                            <ul id="UnAssignedListBox" name="UnAssignedListBox" class="sort-box scroll-default">
+                                @{
+                                    counter = 0;
+                                }
+
+                                @foreach (var item in Model.UnAssignedList)
+                                {
+                                    <li data-id="unassign_@counter" data-value="@item.Text">@item.Text</li>
+                                    counter++;
+                                }
+
+                            </ul>
+                            <div class="pull-right top-shift">
+                                <button id="btnGridColumn" class="btn-text margin-top-bottom">@Admin_Resources.LabelGenerateGridColumn</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </li>
+                <li>
+                    <div class="add-remove">
+                        <div id="btnAllUp">
+                            <div class="nav-option">
+                                <em class="z-up-all" data-toggle="tooltip" data-placement="right" title="" type="button" data-original-title="Up All"></em>
+                            </div>
+                        </div>
+                        <div id="btnMoveUp">
+                            <div class="nav-option">
+                                <em class="z-angle-up" data-toggle="tooltip" data-placement="right" title="" type="button" data-original-title="Up"></em>
+                            </div>
+                        </div>
+                        <div id="btnMoveDown">
+                            <div class="nav-option">
+                                <em class="z-angle-down" data-toggle="tooltip" data-placement="right" title="" type="button" data-original-title="Down"></em>
+                            </div>
+                        </div>
+                        <div id="btnAllDown">
+                            <div class="nav-option">
+                                <em class="z-down-all" data-toggle="tooltip" data-placement="right" title="" type="button" data-original-title="Down All"></em>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div id="messagebox" class="error-msg"></div>
+        </div>
+    </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="MessageBox no-record"><p>@Admin_Resources.NoRecordFoundText</p></div>
+                                    }
+
+<script type="text/javascript">
+    $(document).on("click", "#btnAllMoveLeft", function () {
+        $("#SelectedCities li").each(function () {
+            $("#UnAssignedListBox").append("<li data-id=" + $(this).attr("data-id") + " title='" + $(this).html() + "' data-value=" + $(this).attr("data-value") + ">" + $(this).html() + "</li>");
+            $(this).remove();
+        });
+
+    });
+    $(document).on("click", "#btnAllMoveRight", function () {
+        $("#UnAssignedListBox li").each(function () {
+            if ($(this).attr("data-mustshow") != "y") {
+                $("#SelectedCities").append("<li data-id=" + $(this).attr("data-id") + " title='" + $(this).html() + "' data-value=" + $(this).attr("data-value") + ">" + $(this).html() + "</li>");
+                $(this).remove();
+            }
+        });
+    });
+    $(document).on("click", "#btnMoveUp", function () {
+        listbox_move("UnAssignedListBox", "up");
+    });
+    $(document).on("click", "#btnMoveDown", function () {
+        listbox_move("UnAssignedListBox", "down");
+    });
+    $(document).on("click", "#btnAllUp", function () {
+        listbox_move("UnAssignedListBox", "First");
+    });
+    $(document).on("click", "#btnAllDown", function () {
+        listbox_move("UnAssignedListBox", "Last");
+    });
+
+    $(document).on("click", "#SelectedCities li", function (e) {
+        if ($(this) != undefined) {
+            $("#SelectedCities li").removeClass("selected");
+            $(this).addClass("selected");
+        }
+    });
+
+    $(document).on("click", "#UnAssignedListBox li", function (e) {
+        if ($(this) != undefined) {
+            $("#UnAssignedListBox li").removeClass("selected");
+            $(this).addClass("selected");
+        }
+    });
+
+    $(document).on("click", "#btnMoveLeft", function () {
+        var elements = $("#SelectedCities li.selected")
+        if (elements != undefined) {
+            $("#UnAssignedListBox").append($("#SelectedCities li.selected"));
+            elements.removeClass("selected");
+        }
+    });
+
+    $(document).on("click", "#btnMoveUp", function () {
+        listbox_move("RequestedSelectedCities", "up");
+    });
+
+    function listbox_move(listID, direction) {
+        var selValue = $("#" + listID + " .selected").attr("data-value");
+        var selText = $("#" + listID + " .selected").html();
+        var selId = $("#" + listID + " .selected").attr("data-id");
+        var mustShow = $("#" + listID + " .selected").attr("data-mustshow");
+        var datatype = $("#" + listID + " .selected").attr("data-datatype");
+        if (selValue != undefined && selId != undefined) {
+            var dynamicHtml = "<li data-id='" + selId + "' title='" + selText + "' data-datatype='" + datatype + "' data-mustshow='" + mustShow + "' data-value='" + selValue + "'>" + selText + "</li>";
+            if (direction == "First") {
+                $("#" + listID).prepend(dynamicHtml);
+            }
+            else if (direction == "Last") {
+                $("#" + listID).append(dynamicHtml);
+            }
+            else if (direction == "down") {
+                var dynamicHtmlTest = $("#" + listID + " .selected").next("li");
+                if (dynamicHtmlTest.length != 0) {
+                    $("#" + listID + " .selected").next("li").after(dynamicHtml);
+                } else { return false; }
+            }
+            else {
+                var dynamicHtmlTest = $("#" + listID + " .selected").prev("li");
+                if (dynamicHtmlTest.length != 0) {
+                    $("#" + listID + " .selected").prev("li").before(dynamicHtml);
+                } else { return false; }
+            }
+            $("#" + listID + " .selected").remove();
+            $("#" + listID + " li[data-id='" + selId + "']").addClass("selected");
+        }
+    }
+
+    $(document).on("click", "#btnMoveRight", function () {
+        var elements = $("#UnAssignedListBox li.selected")
+        if (elements != undefined) {
+            $("#SelectedCities").append($("#UnAssignedListBox li.selected"));
+            elements.removeClass("selected");
+        }
+    });
+
+    $(document).on("click", "#btnGridColumn", function () {
+        GetGrid();
+    });
+
+    function GetGrid() {
+        modelData = CreateModel();
+        $.ajax({
+            type: "POST",
+            url: "/XMLGenerator/SetColumnSettings",
+            data: modelData,
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $("#gridPartialDiv").empty().html(data);
+            },
+            complete: function () {
+            },
+            error: function (e) {
+            }
+        });
+    };
+
+    function CreateModel() {
+        var columnNames = "";
+        $("#UnAssignedListBox li").each(function () {
+            if ($(this).attr("data-value").trim() != "") {
+                if (columnNames.trim() == "")
+                    columnNames = $(this).attr("data-value");
+                else
+                    columnNames = columnNames + "," + $(this).attr("data-value");
+            }
+        });
+        if (columnNames.trim() != "") {
+            var gridParametersModel = {
+                Id: id,
+                ColumnNames: columnNames,
+                ViewMode: viewMode,
+                ViewOptions: viewOptions,
+                PageName: pageName,
+                ObjectName: objectName,
+                _webGridColumnViewModels: JSON.parse(columnListJson)
+            };
+            return JSON.stringify(gridParametersModel);
+        }
+        else {
+            var notification = new ZnodeNotification();
+            notification.DisplayNotificationMessagesHelper("Please, select columns to proceed.", "error", true, 10000);
+        }
+    };
+
+
+</script>

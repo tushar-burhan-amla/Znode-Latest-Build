@@ -1,0 +1,98 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model TemplateViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    Model.IsViewMode = false;
+    TempData["UpdatedTemplateName"] = Model.TemplateName;
+    string AddEditBreadcrumbText = Model.OmsTemplateId > 0 ? WebStore_Resources.LabelEditTemplate : WebStore_Resources.LabelAddTemplate;
+}
+<div id="layout-template-cartItem" class="main-wrapper col">
+    <div class="row">
+        <div class="container-fluid profile-dashboard">
+            <div class="row">
+                <div class="container">
+                    @Html.Partial("_AccountMenuDashboard")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row b2b-breadcrumbs d-none d-md-block">
+        <div class="container">
+            <div class="row">
+                <!-- Breadcrumb -->
+                <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a><a href="/User/Dashboard">@WebStore_Resources.TitleMyAccount</a> /@AddEditBreadcrumbText</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container">
+            <div class="row user-account">
+                <div class="col-12 account-dashboard">
+                    <div class="row">
+                        <div class="col-12 col-lg-8 mb-5 right-container">
+                            <div class="row no-gutters">
+                                <div class="col-12">
+                                    @{
+                                        if (Model.OmsTemplateId > 1)
+                                        {
+                                            <h1 class="page-title">@WebStore_Resources.LabelEditTemplate</h1>
+                                        }
+                                        else
+                                        {
+                                            <h1 class="page-title">@WebStore_Resources.LabelAddTemplate</h1>
+                                        }
+                                    }
+                                </div>
+                                <div class="col-12 p-0 mb-4 dashboard-content">
+                                    <div class="col-12 account-recent-orders">
+                                        <div class="col-12 p-4">
+                                            <div class="col-12 p-0 text-right">
+                                                <!--Quick Order-->
+                                                @Html.Partial("_TemplateQuickOrder", new AutoComplete())
+                                            </div>
+                                            @using (Html.BeginForm(actionName, "User", FormMethod.Post, new { role = "form", @id = "frmCreateEditTemplate", @class = "col-12 p-0" }))
+                                            {
+                                                <div class="col-12 col-md-6 p-0 b2b-form" id="txtTemplateName">
+                                                    @Html.AntiForgeryToken()
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(x => x.TemplateName, new { @class = "required form-title" })
+                                                        @if (Model.OmsTemplateId > 0)
+                                                        {
+                                                            @Html.TextBoxFor(x => x.TemplateName, new { @disabled = "disabled", @class = "readonly" })
+                                                            @Html.HiddenFor(x => x.TemplateName)
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.TextBoxFor(x => x.TemplateName, new { data_val_required = @WebStore_Resources.ValidTemplateName })
+                                                            @Html.ValidationMessageFor(x => x.TemplateName, string.Empty, new { id = "validTemplateName" })
+                                                        }
+                                                    </div>
+                                                </div>
+                                                @Html.HiddenFor(x => x.OmsTemplateId)
+                                            }
+                                        </div>
+                                        <div id="TemplateCartItem" class="col-12 p-0">
+                                            @Html.Partial("_CartTemplateRow", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            @Html.Partial("_QuickOrderPadView", new AutoComplete())
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#txtTemplateName").keypress(function (e) {
+        //Prevent the form submission on enter.
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+</script>

@@ -1,0 +1,91 @@
+﻿
+@using Znode.Engine.WebStore.Helpers;
+@using Znode.Engine.WebStore.ViewModels
+@model ShippingOptionListViewModel
+@{
+    var ErrorMessage = @Model.HasError ? @Model.ErrorMessage : @WebStore_Resources.ErrorAddAddressShippingOption;
+}
+
+<div class="col-12 p-0 h-100">
+    <div id="loaderId"> </div>
+    <div class="col-12 block-content pl-md-4" id="shippingDiv">
+        @using (Ajax.BeginForm("CartReview", "Checkout", new AjaxOptions() { UpdateTargetId = "cart-review-content", OnSuccess = "Checkout.prototype.ShippingErrorMessage();", OnBegin = "Checkout.prototype.ShowPaymentLoader();", OnComplete = "Checkout.prototype.HidePaymentLoader();", OnFailure = "Checkout.prototype.HidePaymentLoader();" }))
+        {
+            if (Model?.ShippingOptions?.Count > 0)
+            {
+                if (!Model.ShippingOptions.Any(x => x.IsSelected))
+                {
+                    Model.ShippingOptions.FirstOrDefault(x => x.IsSelected = Model.IsB2BUser && Model.OmsQuoteId > 0 ? true : false);
+                }
+
+                <div class="d-flex align-items-baseline">
+                    <div>
+                        @foreach (ShippingOptionViewModel option in Model.ShippingOptions)
+                        {
+                            string estimateDate = !string.IsNullOrEmpty(option.EstimateDate) ? " - (" + (@WebUtility.HtmlDecode(option.EstimateDate)) + ")" : string.Empty;
+                            if (option.ShippingCode != "FreeShipping")
+                            {
+                                string originalShippingRate = !string.IsNullOrEmpty(option?.FormattedShippingRateWithoutDiscount) ? "{" + @WebUtility.HtmlDecode(option.FormattedShippingRateWithoutDiscount.ToString()) + "}" : string.Empty;
+                                <div class="styled-input">
+                                    <input data-test-selector="chkShippingOption" type="radio" id="@(option.ShippingCode.Replace(" ", " _")+"_"+option.ShippingId)" data-shippingCode="@option.Description" name="ShippingOptions" value="@option.ShippingId" data-test-selector="@option.ShippingCode.Replace(" ", " _")" onclick="Checkout.prototype.CalculateShipping('@option.ClassName');" @( option.IsSelected ? "checked=checked" : "") />
+                                    <label data-test-selector="lblShipping" for="@(option.ShippingCode.Replace(" ", " _")+"_"+option.ShippingId)">@WebUtility.HtmlDecode(option.Description)@estimateDate - @WebUtility.HtmlDecode(option.FormattedShippingRate) <s class="error-msg">@originalShippingRate</s></label>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="styled-input" style="display:none;">
+                                    <input data-test-selector="chkShippingOption" type="radio" id="@(option.ShippingCode.Replace(" ", " _")+"_"+option.ShippingId)" data-shippingCode="@option.Description" name="ShippingOptions" value="@option.ShippingId" @( option.IsSelected ? "checked=checked" : "") onclick="Checkout.prototype.CalculateShipping('@option.ClassName');" />
+                                    <label data-test-selector="lblShipping" for="@(option.ShippingCode.Replace(" ", " _")+"_"+option.ShippingId)">@WebUtility.HtmlDecode(option.Description)@estimateDate - @WebUtility.HtmlDecode(option.FormattedShippingRate)</label>
+                                    <input data-test-selector="txtFreeShipping" type="hidden" id="hdnIsFreeShipping" value="True" ShippingId="@option.ShippingId" name="@option.ShippingCode.Replace(" ", "_")" data-ShippingClassName="@option.ClassName" />
+                                </div>
+                            }
+                        }
+                        <div class="" id="customerShippingDiv" style="display:none" name="CustomerShipping">
+                            <div class="form-group">
+                                <div class="col-12 p-0">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.AccountNumber, new { @class = "required" })
+                                    </div>
+                                    <div class="control-md">
+                                        @Html.TextBoxFor(model => model.AccountNumber, new { @maxLength = "100", @onblur = "Checkout.prototype.ValidateCustomerShipping();" })
+                                        <div id="errorAccountNumber" class="field-validation-error" style="display: none">@WebStore_Resources.ErrorAccountNumber</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group pt-3">
+                                <div class="col-12 p-0">
+                                    <div class="control-label">
+                                        @Html.LabelFor(model => model.ShippingMethod, new { @class = "required" })
+                                    </div>
+                                    <div class="control-md">
+                                        @Html.TextBoxFor(model => model.ShippingMethod, new { @maxLength = "100", @onblur = "Checkout.prototype.ValidateCustomerShipping();" })
+                                        <div id="errorShippingMethod" class="field-validation-error" style="display: none">@WebStore_Resources.ErrorShippingMethod</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @{
+                            var selectedShippingClassName = Model.ShippingOptions.FirstOrDefault(x => x.IsSelected)?.ClassName;
+                        }
+                        <input type="hidden" id="hndShippingclassName" value='@selectedShippingClassName' />
+                    </div>
+                </div>
+            }
+            else
+            {
+                <span>@ErrorMessage</span>
+            }
+            <div id="message-freeshipping" class="success-msg" style="display:none;"><span>@WebStore_Resources.FreeShippingMessage</span></div>
+        }
+    </div>
+</div>
+@if (Helper.IsEnhancedEcommerceTrackingEnabled())
+{
+    <script>
+        $('input[name = "ShippingOptions"]').on("click", function () {
+            var selectedShippingOption = $(this).data('shippingcode');
+            GoogleAnalytics.prototype.SendEcommerceCheckoutOptionData(2, selectedShippingOption);
+        })
+    </script>
+}
+

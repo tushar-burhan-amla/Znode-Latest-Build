@@ -1,0 +1,90 @@
+﻿@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.ViewModels
+@model OrdersListViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    TempData["ActionName"] = ZnodeConstant.OrderView;
+}
+
+<div id="orderList">
+    <div id=@Model.GridModel.FrontObjectName>
+        <div class="col-sm-12 title-container">
+            <h1>@Admin_Resources.TitleOrdersList<span class="total-count"><p>@Model.GridModel.TotalRecordCount</p></span></h1>
+            <div class="pull-right btn-container">
+                @if (Model.UserId > 0 && Model.AccountId > 0)
+                {
+                    @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "CustomersList", "Account", new { accountId = Model.AccountId }, new { @class = "btn-text-icon", @data_test_selector = "linkBack" })
+                }
+                @if (Model.UserId == 0)
+                {
+                    @Html.AuthorizedRawActionLink(Admin_Resources.ButtonCreateOrder, "CreateOrder", "Order", null, new { @class = "btn-text btn-text-secondary", @data_test_selector = "linkCreateOrder"})
+                }
+            </div>
+
+        </div>
+        <!--Main Container-->
+        <section class="col-sm-12 page-container">
+            <div class="col-xs-12 nopadding order-filters-container">
+                <div class="d-flex date-filter justify-content-around">
+                    <div class="store-selector">
+                        @Html.FastSelectFor(model => model.PortalName, model => model.PortalId, "GetSuggestions", "Typeahead", "Order.prototype.OnSelectStoreAutocompleteDataBind", 1, true,
+                        new {
+                        htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @Name = "SearchTerm", @id = "txtPortalName", @data_test_selector = "txtPortal_Name" },
+                        parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString(), additionalOptions = ZnodeTypeAheadListGenericOptions.All.ToString()}
+                        })
+                    </div>
+
+                    <div class="date-daterange-selector">
+                        @Html.DateTimeRangePicker(Model.GridModel)
+                    </div>
+
+                </div>
+                @using (Ajax.BeginForm("List", "Order", new { portalId = Model.PortalId, portalName = Model.PortalName }, new AjaxOptions() { UpdateTargetId = @Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+                {
+
+                    <div id="filterComponent">
+                        @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                    </div>
+                    <input type="hidden" name="DataOperatorId" value="92" />
+                }
+            </div>
+
+            <div class="col-sm-12 list-container" id="listcontainerId">
+                @{
+                    @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                }
+            </div>
+            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                        new PopupModel()
+                        {
+                            Title = @Admin_Resources.HeaderConfirmDelete,
+                            Description = @Admin_Resources.TextConfirmDelete,
+                            ModalPopUpId = "StoreDeletePopup",
+                            Buttons = new List<PopUpButtonModel>() {
+                                new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Store.prototype.DeleteMultipleStore(this)"}
+                             }
+                        })
+        </section>
+    </div>
+    <script>
+        $(document).ready(function () {
+            Order.prototype.GenerateInvoice();
+            $('*[data-url]').each(function () { fastselectwrapper($(this), $(this).data("onselect-function")); });
+            // filter border
+            if ($("#filter-content-main li").length > 0) {
+                $("#filter-content-main").css("border-bottom", "1px solid #DBDDDD");
+            }
+            var gridrow = $("#grid").find("tr td .z-return");
+            gridrow.each(function (e) {
+                var href = $(this).attr("href") + "&isManageOrder=false";
+                $(this).attr("href", href);
+            });
+            var gridReorder = $("#grid").find("tr td .z-shopping-cart");
+            gridReorder.each(function (e) {
+                var href = $(this).attr("href") + "OrderView";
+                $(this).attr("href", href);});
+        });
+    </script>
+</div>

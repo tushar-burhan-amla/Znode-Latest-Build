@@ -1,0 +1,55 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model RegisterViewModel
+
+@{
+    bool isAjax = Request.IsAjaxRequest();
+}
+<div class="modal-header">
+    <h4 class="modal-title">@WebStore_Resources.TitleRegisterAccount</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="btn close close-circle-icon"></span></button>
+</div>
+<div class="modal-body">
+    <div class="col-xs-12 register-container nopadding">
+        <div class="col-xs-12 nopadding">
+            @if (isAjax)
+            {
+                <div id="ajaxRegisterForm">
+                    @using (Ajax.BeginForm("signup", "User", new AjaxOptions() { OnSuccess = "Checkout.prototype.SetUserCreationStatusMessage" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Partial("_Register", Model)
+                        @Html.Hidden("isSinglePageCheckout", true)
+                        <div class="pull-right">                            
+                            <button type="submit" class="btn btn-primary ">@WebStore_Resources.ButtonCreateAccount</button>
+                            <button type="button" class="btn btn-secondary ml-2" data-dismiss="modal" onclick="javascript: location.reload();">@Admin_Resources.ButtonCancel</button>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                using (Html.BeginForm("signup", "User", FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Partial("_Register", Model)
+                    <div class="pull-right">                        
+                        <button type="submit" class="btn btn-primary">@WebStore_Resources.ButtonCreateAccount</button>
+                        <button type="button" class="btn btn-secondary" onclick="javascript: location.href = '/User/Login';">@WebStore_Resources.ButtonCancel</button>
+                    </div>
+                }
+            }
+        </div>
+        @if (!isAjax)
+        {
+            <div class="col-xs-12 account-signup-container">
+                <div class="user-icon img-circle">
+                    <i class="zf-login-user"></i>
+                </div>
+                <div class="col-xs-12 col-sm-offset-2 col-sm-8">
+                    <h3>@string.Format(WebStore_Resources.TextAlreadyHaveAccount, Model?.StoreName)</h3>
+                    <a href="/User/Login" class="btn-text-full btn-bg-secondary account-signup-link"><i class="zf-checkout"></i> Login Now !</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

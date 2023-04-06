@@ -1,0 +1,51 @@
+﻿@model Znode.Engine.WebStore.ViewModels.WidgetSliderBannerViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+}
+@if (!Equals(Model, null) && Model.CMSMode)
+{
+    if (Model.IsEmpty)
+    {
+        <div class="col-xs-12 nopadding cms-icon-container">
+            <img src="@_fileLocation/Images/banner-slideshow.png" alt="New Product" class="img-responsive cms-img-icon" />
+        </div>
+    }
+    else
+    {
+        <div class="col-xs-12 nopadding cms-no-icon">
+            <img src="@_fileLocation/Images/banner-slideshow.png" alt="New Product" class="img-responsive cms-img-icon" />
+        </div>
+    }
+}
+<div class="banner-widget">
+
+    <div id="offer-banner" class="owl-carousel OfferAdvBanner" data-autoplay=@Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(Convert.ToString(Model.AutoPlay).ToLower())) data-autoplaytimeout="@Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(Model.AutoplayTimeOut))" data-autoplayhoverpause=@Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(@Convert.ToString(Model.AutoplayHoverPause).ToLower()))>
+        @{
+            int counter = 0;
+            string mediaUri = PortalAgent.CurrentPortal.MediaServerUrl;
+            if (!Equals(Model.SliderBanners, null))
+            {
+                foreach (var item in Model.SliderBanners)
+                {
+                    string mediaPath = $"{mediaUri}{item.MediaPath}";
+                    string _active = counter == 0 ? "item active" : "item";
+                    <div class="item @_active">
+                        <a href="@item.ButtonLink" target="_blank" data-test-selector="linkAdvSpecialOfferBannerImg">
+                            <img src="@mediaPath" alt="@item.ImageAlternateText" class="img-fluid" data-test-selector="imgAdvSpecialOfferBannerImg" />
+                            <div class="carousel-caption @item.TextAlignment">
+                                @Html.RenderBlock(item.Description)
+                            </div>
+                        </a>
+                    </div>
+                    counter++;
+                }
+            }
+        }
+    </div>
+</div>
+
+<script>
+        var _autoplay = $(".OfferAdvBanner").data("autoplay"), _autoplaytimeout = $(".OfferAdvBanner").data("autoplaytimeout"), _autoplayhoverpause = $(".OfferAdvBanner").data("autoplayhoverpause"); 1 == _autoplay ? $(".OfferAdvBanner").owlCarousel({ autoPlay: _autoplaytimeout, stopOnHover: _autoplayhoverpause, items: 3, navigation: true, itemsCustom: [[0, 1], [320, 1], [600, 2], [768, 2], [992, 3], [1200, 3]], navigationText: ["<span class='left-icon'></span>", "<span class='right-icon'></span>"] }) : $(".OfferAdvBanner").owlCarousel({ autoPlay: !1, stopOnHover: _autoplayhoverpause, items: 3, navigation: true, itemsCustom: [[0, 1], [320, 1], [600, 2], [768, 2], [992, 3], [1200, 3]], navigationText: ["<span class='left-icon'></span>", "<span class='right-icon'></span>"] });
+</script>

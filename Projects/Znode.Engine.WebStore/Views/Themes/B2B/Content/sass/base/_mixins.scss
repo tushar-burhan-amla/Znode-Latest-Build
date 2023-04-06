@@ -1,0 +1,55 @@
+﻿// Mixins.
+@mixin -webkit-text-size-adjust{
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;  
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -ms-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+@mixin input-field{
+  color:$text-default;
+  padding:0 10px;
+  font:{
+    family: $base-font-family;
+    size:$base-font-size;   
+  }
+  width:100%; 
+  border:1px solid $base-tertiary-light;
+  box-shadow:none;  
+  outline: medium none;
+  background-color:$input-background;
+  border-radius:2px;
+}
+@mixin icon($content) {
+	font-family: $znode-icon-font;
+	content: $content;    
+}
+
+@mixin screensize($size) {
+    @if $size == x-small {
+        @media all and (min-width: $base-screen-x-small) { @content; }
+    }
+    @if $size == xl-small {
+        @media all and (min-width: $base-screen-xl-small) { @content; }
+    }
+    @if $size == small {
+        @media all and (min-width: $base-screen-small) { @content; }
+    }     
+    @if $size == medium {
+        @media all and (min-width: $base-screen-medium) { @content; }
+    }
+    @else if $size == desktop {
+        @media all and (min-width: $base-screen-desktop) { @content; }
+    }
+    @else if $size == large {
+        @media all and (min-width: $base-screen-large) { @content; }
+    }
+    @else if $size == x-large {
+        @media all and (min-width: $base-screen-x-large) { @content; }
+    }
+    @else if $size == xx-large {
+        @media all and (min-width: $base-screen-xx-large) { @content; }
+    }
+}

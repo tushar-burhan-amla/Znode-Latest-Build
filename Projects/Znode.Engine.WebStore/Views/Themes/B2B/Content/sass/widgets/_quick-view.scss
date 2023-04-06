@@ -1,0 +1,302 @@
+﻿@import "../base/_variables.scss";
+
+.quick-view-popup {
+    .modal-content {
+        background-color: $white;
+        min-height: 360px;
+        border: none;
+        border-radius: $primary-radius;
+
+        .btn.close {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            z-index: 1;
+            color: $base-primary;
+            background-color: $white;
+            border: none;
+            padding: 0px;
+            font-size: $base-font-size + 6;
+            border-radius: 50%;
+            height: 18px;
+            width: 18px;
+        }
+
+        #product-content {
+            display: none;
+        }
+
+        .btn-print, .btn-email, .btn-see-more {
+            display: none;
+        }
+    }
+
+    .quick-view-loading {
+        bottom: auto !important;
+        transform: translate(0px, 0) !important;
+    }
+
+    .b2b-block {
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+    }
+}
+
+.payment-view-popup {
+    .modal-content {
+        background-color: $white;
+        border: none;
+        border-radius: $primary-radius;
+
+        .btn.close {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            z-index: 1;
+            color: $base-primary;
+            background-color: $white;
+            border: none;
+            padding: 0px;
+            font-size: $base-font-size + 6;
+            border-radius: 50%;
+            height: 18px;
+            width: 18px;
+        }
+
+        .modal-body {
+            padding: 0;
+            min-height: 200px;
+
+            .payment-view-content {
+                .b2b-block {
+                    box-shadow: none;
+                }
+
+                .block-title {
+                    padding-left: 20px !important;
+                }
+
+                .order-view-content {
+                    .order-info-title {
+                        font-size: $base-font-size + 2;
+                    }
+
+                    .order-content-label {
+                        font-family: $base-font-family-bold;
+                    }
+                }
+
+                .block-content {
+                    .payment-select-heading {
+                        font-size: 16px;
+                    }
+
+                    .credit-card-container {
+                        .form-group {
+                            margin-bottom: 15px;
+                        }
+
+                        .tab-content .tab-pane {
+                            .section-heading {
+                                display: none;
+                            }
+
+                            .save-cart {
+                                margin: 0;
+
+                                label {
+                                    width: 100%;
+                                    font-weight: bold;
+
+                                    &:before {
+                                        margin-top: 10px !important;
+                                    }
+
+                                    &:after {
+                                        margin-top: 14px !important;
+                                    }
+                                }
+
+                                .input-radio_label {
+                                    display: flex;
+                                }
+
+                                .input-radioButton {
+                                    width: auto;
+                                }
+
+                                ul {
+                                    padding: 0;
+                                    display: flex;
+                                    flex-wrap: wrap;
+
+                                    img {
+                                        float: left !important;
+                                        margin-left: 10px;
+                                    }
+                                }
+                            }
+
+                            .cardconnectIframe {
+                                height: 212px;
+                                width: 400px;
+                            }
+
+                            .cardconnectcardholder, .saveCreditCard {
+                                padding-left: 8px;
+                            }
+
+                            .cardconnectcardholder {
+                                .CardHolder {
+                                    font-size: $base-font-size;
+                                    font-family: $base-font-family;
+                                    font-weight: bold;
+                                }
+
+                                input {
+                                    max-width: 300px
+                                }
+                            }
+
+                            .cardconnect-ACH {
+                                .ACH-card-format {
+                                    margin: 0 8px;
+                                }
+
+                                .cardconnectACHIframe {
+                                    height: 60px;
+                                    width: 400px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .payment-block .credit-card-container {
+            .dynamic-tabs {
+                .nav-tabs {
+                    padding: 15px 0;
+                }
+
+                .nav-tabs > li {
+                    float: left;
+                    margin-bottom: -2px;
+                }
+
+                .nav-tabs > li > a {
+                    margin-right: 3px;
+                    line-height: 1.42857143;
+                    border: 1px solid transparent;
+                    border-radius: 4px 4px 0 0;
+                    padding: 15px 10px;
+                    text-decoration: none;
+                    color: $base-primary;
+                    background: $payment-tab;
+                }
+
+                .nav-tabs > li > a.active {
+                    color: $white;
+                    cursor: default;
+                    background-color: $base-primary;
+                    border: 2px solid $border-light;
+                    border-bottom-color: transparent;
+                }
+
+                .nav > li > a:hover{
+                    text-decoration: none;
+                }
+            }
+
+            .tab-content {
+                margin-top: 20px;
+
+                .error-cvv {
+                    margin-left: 2%;
+                }
+            }
+        }
+
+        .modal-footer {
+            border-top: none;
+        }
+    }
+}
+//Email-To-Friend
+.email-to-friend {
+    .modal-header {
+        background-color: $white;
+        border-bottom: none;
+
+        h4 {
+            color: $text-default;
+            font-size: $base-font-size + 12px;
+            text-transform: uppercase;
+        }
+
+        .close {
+            color: $anchor-tag;
+            position: absolute;
+            right: -5px;
+            top: -10px;
+            font-size: $base-font-size + 6px;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+
+    .modal-footer {
+        border-top: none;
+    }
+}
+
+//Media Query.
+@include screensize(x-small) {
+    .payment-view-content .authorizenetIframe {
+        width: 100%;
+        height: 230px;
+        overflow-y: auto;
+    }
+}
+@include screensize(xl-small) {
+    .payment-view-content .authorizenetIframe {
+        width: 448px;
+    }
+}
+    @include screensize(small) {
+        .quick-view-popup {
+            .modal-dialog {
+                max-width: 600px;
+            }
+
+            .product-wishlist {
+                display: none;
+            }
+        }
+    }
+
+    @include screensize(medium) {
+        .quick-view-popup {
+            .modal-dialog {
+                max-width: 900px;
+            }
+
+            .product-wishlist {
+                display: block;
+            }
+        }
+
+        .payment-view-content .authorizenetIframe {
+            width: 768px;
+        }
+    }
+
+    @include screensize(desktop) {
+        .quick-view-popup .modal-dialog {
+            max-width: 1024px;
+        }
+    }
+    

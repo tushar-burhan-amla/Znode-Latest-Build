@@ -1,0 +1,78 @@
+﻿@model Znode.Engine.Admin.ViewModels.ActionModel
+
+<div id="dvSubmitCancel" class="btn-container">
+    <div id="divBtnSaveClose" class="pull-right dirtyignore">
+        <div id="primary-btn" class="btn-text-group padding-left">
+            @if (Model.IsSaveCloseIsShow && Model.IsSaveCloseEnable)
+            {
+                if (string.IsNullOrEmpty(Model.Callback))
+                {
+                    @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSaveClose, Model.Action, Model.Controller, new { @class = "btn-text btn-text-secondary", @id = "btnSaveNClose", @data_test_selector = "linkSaveNClose", onclick = "SaveCancel.prototype.SubmitForm('" + @Model.FormId + "','', '" + @Model.CancelUrl + "')" })
+                }
+                else if (!string.IsNullOrEmpty(Model.Callback))
+                {
+                    @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSaveClose, Model.Action, Model.Controller, new { @id = "btnSaveNClose", @class = "btn-text btn-text-secondary", @data_test_selector = "linkSaveNClose", onclick = "SaveCancel.prototype.SubmitForm('" + @Model.FormId + "','" + @Model.Callback + "', '" + @Model.CancelUrl + "')" })
+                }
+            }
+            else if (Model.IsSaveIsShow)
+            {
+                if (string.IsNullOrEmpty(Model.Callback))
+                {
+                    @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, Model.Action, Model.Controller, new { @class = "btn-text btn-text-secondary", @id = "dvSave", @data_test_selector = "linkSave", @onclick = "SaveCancel.prototype.SubmitForm('" + @Model.FormId + "')" })
+                }
+                else
+                {
+                    @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, Model.Action, Model.Controller, new { @id = "dvSave", @class = "btn-text btn-text-secondary", @data_test_selector = "linkSave", onclick = "SaveCancel.prototype.SubmitForm('" + @Model.FormId + "', '" + @Model.Callback + "')" })
+                }
+            }
+
+            @if (Model.IsSaveCloseIsShow)
+            {
+                <button id="caret-btn" type="button" data-test-selector="btnToggle" class="btn-text-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret caret-color"></span>
+                </button>
+            }
+            @if (Model.IsSaveCloseIsShow)
+            {
+                <ul id="dropdown-lst" class="dropdown-menu dropdown-menu-right">
+                    @if (Model.IsSaveIsShow)
+                    {
+                        if (string.IsNullOrEmpty(Model.Callback))
+                        {
+                            <li> @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, Model.Action, Model.Controller, new { @id = "dvSave", @class = "btn-dropdwn-lst", @data_test_selector = "linkSave", @onclick = "SaveCancel.prototype.SubmitForm('" + @Model.FormId + "')" }) </li>
+                        }
+                        else
+                        {
+                            <li> @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, Model.Action, Model.Controller, new { @id = "dvSave", @class = "btn-dropdwn-lst", @data_test_selector = "linkSave", onclick = "SaveCancel.prototype.SubmitForm('" + @Model.FormId + "', '" + @Model.Callback + "')" }) </li>
+                        }
+                    }
+                </ul>
+            }
+
+        </div>
+    </div>
+    <div id="btnCancel" class="pull-right">
+        @{
+            string returnurl = string.IsNullOrEmpty(Model.CancelUrl) ? HttpUtility.UrlDecode(Model.ReturnUrl) : Model.CancelUrl;
+        }
+        @if (Model.IsCancelIsShow)
+        {
+            if (!string.IsNullOrEmpty(returnurl))
+            {
+                <a href="@returnurl" class="btn-text-icon" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+            }
+            else
+            {
+                @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "Dashboard", "Dashboard", null, new { @class = "btn-text-icon", @id = "dvCancel", @data_test_selector = "linkCancel", @onclick = "SaveCancel.prototype.Cancel()" })
+            }
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.validator.setDefaults({
+            ignore: ""
+        });
+    });
+</script>

@@ -1,0 +1,1643 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{96BE394D-9D18-42D4-941C-DD9A786A4EA5}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Znode.Engine.WebStore</RootNamespace>
+    <AssemblyName>Znode.Engine.WebStore</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort>44315</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <UseGlobalApplicationHostFile>true</UseGlobalApplicationHostFile>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TypeScriptToolsVersion>4.0</TypeScriptToolsVersion>
+    <Use64BitIISExpress />
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0618</NoWarn>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="CaptchaMvc, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe46ad421dd3b0e6, processorArchitecture=MSIL">
+      <HintPath>..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.2.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Windsor.4.1.0\lib\net45\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="Crc32C.NET, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Crc32C.NET.1.0.5.0\lib\net20\Crc32C.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="DevTrends.MvcDonutCaching, Version=1.3.0.0, Culture=neutral, PublicKeyToken=73c58d802958a09f, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvcDonutCaching.1.3.0\lib\net40\DevTrends.MvcDonutCaching.dll</HintPath>
+    </Reference>
+    <Reference Include="DnsClient, Version=1.2.0.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
+      <HintPath>..\packages\DnsClient.1.2.0\lib\net471\DnsClient.dll</HintPath>
+    </Reference>
+    <Reference Include="Elasticsearch.Net, Version=7.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elasticsearch.Net.7.16.0\lib\net461\Elasticsearch.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="EmbeddedResourceVirtualPathProvider, Version=1.3.48.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EmbeddedResourceVirtualPathProvider.1.3.48\lib\net40\EmbeddedResourceVirtualPathProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Log4Mongo, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4mongo-net-custom.2.2.0\lib\net45\Log4Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.2.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.2.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.2.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.2.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.2.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights.TraceListener, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.TraceListener.2.2.0\lib\net45\Microsoft.ApplicationInsights.TraceListener.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.3\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.3\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.4.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.4.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.4.1.0\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.4.1.0\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.4.1.0\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.4.1.0\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Mvc, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mvc2Futures.2.0.50217.0\lib\Microsoft.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.2.10.2\lib\net452\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.2.10.2\lib\net452\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.10.2\lib\net452\MongoDB.Driver.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.GridFS, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.GridFS.2.10.2\lib\net452\MongoDB.Driver.GridFS.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Legacy, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\mongocsharpdriver.2.10.2\lib\net452\MongoDB.Driver.Legacy.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Libmongocrypt, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Libmongocrypt.1.0.0\lib\net452\MongoDB.Libmongocrypt.dll</HintPath>
+    </Reference>
+    <Reference Include="Nest, Version=7.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEST.7.16.0\lib\net461\Nest.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpCompress, Version=0.23.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpCompress.0.23.0\lib\net45\SharpCompress.dll</HintPath>
+    </Reference>
+    <Reference Include="Snappy.NET, Version=1.1.1.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Snappy.NET.1.1.1.8\lib\net45\Snappy.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="StackifyHttpTracer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=93c44ce23f2048dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackifyHttpModule.1.0.32\lib\net40\StackifyHttpTracer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.5.0.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Znode.Libraries.Framework.Business.9.7.4\lib\net48\Znode.Libraries.Framework.Business.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Images\AMEX.png" />
+    <Content Include="Content\Images\DISCOVER.png" />
+    <Content Include="Content\Images\download.png" />
+    <Content Include="Content\Images\loading.svg" />
+    <Content Include="Content\Images\MASTERCARD.png" />
+    <Content Include="Content\Images\no-image.png" />
+    <Content Include="Content\Images\no-video.png" />
+    <Content Include="Content\Images\VISA.png" />
+    <Content Include="Content\Images\throbber.gif" />
+    <Content Include="data\default\Config\EmailTemplateTokens.txt" />
+    <Content Include="DevTrends.MvcDonutCaching.README.txt" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\Core\Controls\Fastselect.standalone.js" />
+    <Content Include="Scripts\lib\DynamsoftBarcode\dbr-7.0.min.js" />
+    <Content Include="Scripts\lib\DynamsoftBarcode\dbr-7.0.wasm.min.js" />
+    <Content Include="Scripts\Core\Znode\ConfigButton.js" />
+    <Content Include="Scripts\lib\AmazonPay\sandbox\Widgets.js" />
+    <Content Include="Scripts\lib\AmazonPay\Widget.js" />
+    <Content Include="Scripts\Core\Config.js" />
+    <Content Include="Scripts\Core\Controls\WebGrid\EditableDynamicGrid.js" />
+    <Content Include="Scripts\Core\Controls\WebGrid\jurl.js" />
+    <Content Include="Scripts\Core\Controls\WebGrid\jurl.min.js" />
+    <Content Include="Scripts\Core\Controls\WebGrid\xmlGenerator.js" />
+    <Content Include="Scripts\lib\PaypalObject\checkout.js" />
+    <Content Include="Scripts\Core\Znode\StoreLocatorMap.js" />
+    <Content Include="Scripts\Extensions\Search.js" />
+    <Content Include="Scripts\lib\blazy.js" />
+    <Content Include="Scripts\lib\bootstrap.js" />
+    <Content Include="Scripts\lib\bootstrap.min.js" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="log4net.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="data\default\Config\Znode.cer" />
+    <Content Include="data\QuickOrder\QuickOrderCSVTemplate.csv" />
+    <Content Include="data\QuickOrder\QuickOrderExcelTemplate.xlsx" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\PublishProfiles\WebStore.pubxml" />
+    <Content Include="Scripts\lib\closest.js" />
+    <Content Include="Scripts\lib\DynamsoftBarcode\dbr-7.0.wasm" />
+    <None Include="Scripts\lib\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\lib\DynamicValidation.js" />
+    <Content Include="Scripts\lib\infiniteScroll.js" />
+    <Content Include="Scripts\lib\jquery-3.3.1.min.map" />
+    <None Include="Scripts\lib\jquery.validate-vsdoc.js" />
+    <None Include="Scripts\lib\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\lib\jquery-3.3.1.js" />
+    <Content Include="Scripts\lib\jquery-3.3.1.min.js" />
+    <None Include="Scripts\lib\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\lib\jquery-ui.js" />
+    <Content Include="Scripts\lib\jquery.media.js" />
+    <Content Include="Scripts\lib\jquery.payment.min.js" />
+    <Content Include="Scripts\lib\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\lib\jquery.validate.js" />
+    <Content Include="Scripts\lib\jquery.validate.min.js" />
+    <Content Include="Scripts\lib\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\lib\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\lib\modernizr-2.6.2.js" />
+    <Content Include="Scripts\lib\purl.js" />
+    <Content Include="Scripts\lib\respond.js" />
+    <Content Include="Scripts\lib\respond.min.js" />
+    <Content Include="Scripts\lib\typeahead.bundle.js" />
+    <Content Include="Scripts\lib\typeahead.bundle.orig.js" />
+    <Content Include="Scripts\lib\typeahead.mvc.model.js" />
+    <Content Include="Scripts\lib\VoiceRecognition\encoder.min.js" />
+    <Content Include="Scripts\lib\VoiceRecognition\libflac3-1.3.2.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\PowerBI\powerbi.js" />
+    <Content Include="Scripts\PowerBI\powerbi.min.js" />
+    <Content Include="Scripts\References\fastselect.mvc.model.js" />
+    <Content Include="Scripts\Tinymce\classes\AddOnManager.js" />
+    <Content Include="Scripts\Tinymce\classes\caret\CaretBookmark.js" />
+    <Content Include="Scripts\Tinymce\classes\caret\CaretCandidate.js" />
+    <Content Include="Scripts\Tinymce\classes\caret\CaretContainer.js" />
+    <Content Include="Scripts\Tinymce\classes\caret\CaretPosition.js" />
+    <Content Include="Scripts\Tinymce\classes\caret\CaretUtils.js" />
+    <Content Include="Scripts\Tinymce\classes\caret\CaretWalker.js" />
+    <Content Include="Scripts\Tinymce\classes\caret\FakeCaret.js" />
+    <Content Include="Scripts\Tinymce\classes\caret\LineUtils.js" />
+    <Content Include="Scripts\Tinymce\classes\caret\LineWalker.js" />
+    <Content Include="Scripts\Tinymce\classes\Compat.js" />
+    <Content Include="Scripts\Tinymce\classes\data\Binding.js" />
+    <Content Include="Scripts\Tinymce\classes\data\ObservableArray.js" />
+    <Content Include="Scripts\Tinymce\classes\data\ObservableObject.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\BookmarkManager.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\ControlSelection.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\Dimensions.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\DomQuery.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\DOMUtils.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\ElementUtils.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\EventUtils.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\MousePosition.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\NodePath.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\NodeType.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\Range.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\RangeUtils.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\ScriptLoader.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\Selection.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\Serializer.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\Sizzle.jQuery.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\Sizzle.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\StyleSheetLoader.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\TreeWalker.js" />
+    <Content Include="Scripts\Tinymce\classes\dom\TridentSelection.js" />
+    <Content Include="Scripts\Tinymce\classes\DragDropOverrides.js" />
+    <Content Include="Scripts\Tinymce\classes\Editor.js" />
+    <Content Include="Scripts\Tinymce\classes\EditorCommands.js" />
+    <Content Include="Scripts\Tinymce\classes\EditorManager.js" />
+    <Content Include="Scripts\Tinymce\classes\EditorObservable.js" />
+    <Content Include="Scripts\Tinymce\classes\EditorUpload.js" />
+    <Content Include="Scripts\Tinymce\classes\EnterKey.js" />
+    <Content Include="Scripts\Tinymce\classes\Env.js" />
+    <Content Include="Scripts\Tinymce\classes\file\BlobCache.js" />
+    <Content Include="Scripts\Tinymce\classes\file\Conversions.js" />
+    <Content Include="Scripts\Tinymce\classes\file\ImageScanner.js" />
+    <Content Include="Scripts\Tinymce\classes\file\Uploader.js" />
+    <Content Include="Scripts\Tinymce\classes\file\UploadStatus.js" />
+    <Content Include="Scripts\Tinymce\classes\fmt\Hooks.js" />
+    <Content Include="Scripts\Tinymce\classes\fmt\Preview.js" />
+    <Content Include="Scripts\Tinymce\classes\FocusManager.js" />
+    <Content Include="Scripts\Tinymce\classes\ForceBlocks.js" />
+    <Content Include="Scripts\Tinymce\classes\Formatter.js" />
+    <Content Include="Scripts\Tinymce\classes\geom\ClientRect.js" />
+    <Content Include="Scripts\Tinymce\classes\geom\Rect.js" />
+    <Content Include="Scripts\Tinymce\classes\html\DomParser.js" />
+    <Content Include="Scripts\Tinymce\classes\html\Entities.js" />
+    <Content Include="Scripts\Tinymce\classes\html\Node.js" />
+    <Content Include="Scripts\Tinymce\classes\html\SaxParser.js" />
+    <Content Include="Scripts\Tinymce\classes\html\Schema.js" />
+    <Content Include="Scripts\Tinymce\classes\html\Serializer.js" />
+    <Content Include="Scripts\Tinymce\classes\html\Styles.js" />
+    <Content Include="Scripts\Tinymce\classes\html\Writer.js" />
+    <Content Include="Scripts\Tinymce\classes\InsertContent.js" />
+    <Content Include="Scripts\Tinymce\classes\InsertList.js" />
+    <Content Include="Scripts\Tinymce\classes\jquery.tinymce.js" />
+    <Content Include="Scripts\Tinymce\classes\LegacyInput.js" />
+    <Content Include="Scripts\Tinymce\classes\Mode.js" />
+    <Content Include="Scripts\Tinymce\classes\NodeChange.js" />
+    <Content Include="Scripts\Tinymce\classes\NotificationManager.js" />
+    <Content Include="Scripts\Tinymce\classes\Register.js" />
+    <Content Include="Scripts\Tinymce\classes\SelectionOverrides.js" />
+    <Content Include="Scripts\Tinymce\classes\Shortcuts.js" />
+    <Content Include="Scripts\Tinymce\classes\text\ExtendingChar.js" />
+    <Content Include="Scripts\Tinymce\classes\text\Zwsp.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\AbsoluteLayout.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\BoxUtils.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Button.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\ButtonGroup.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Checkbox.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\ClassList.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Collection.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\ColorBox.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\ColorButton.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\ColorPicker.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\ComboBox.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Container.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Control.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\DomUtils.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\DragHelper.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\ElementPath.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Factory.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\FieldSet.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\FilePicker.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\FitLayout.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\FlexLayout.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\FloatPanel.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\FlowLayout.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Form.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\FormatControls.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\FormItem.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\GridLayout.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Iframe.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\InfoBox.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\KeyboardNavigation.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Label.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Layout.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\ListBox.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Menu.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\MenuBar.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\MenuButton.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\MenuItem.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\MessageBox.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Movable.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Notification.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Panel.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\PanelButton.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Path.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Progress.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Radio.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\ReflowQueue.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Resizable.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\ResizeHandle.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Scrollable.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\SelectBox.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Selector.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Slider.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Spacer.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\SplitButton.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\StackLayout.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\TabPanel.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\TextBox.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Throbber.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Toolbar.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Tooltip.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Widget.js" />
+    <Content Include="Scripts\Tinymce\classes\ui\Window.js" />
+    <Content Include="Scripts\Tinymce\classes\UndoManager.js" />
+    <Content Include="Scripts\Tinymce\classes\util\Arr.js" />
+    <Content Include="Scripts\Tinymce\classes\util\Class.js" />
+    <Content Include="Scripts\Tinymce\classes\util\Color.js" />
+    <Content Include="Scripts\Tinymce\classes\util\Delay.js" />
+    <Content Include="Scripts\Tinymce\classes\util\EventDispatcher.js" />
+    <Content Include="Scripts\Tinymce\classes\util\Fun.js" />
+    <Content Include="Scripts\Tinymce\classes\util\I18n.js" />
+    <Content Include="Scripts\Tinymce\classes\util\JSON.js" />
+    <Content Include="Scripts\Tinymce\classes\util\JSONP.js" />
+    <Content Include="Scripts\Tinymce\classes\util\JSONRequest.js" />
+    <Content Include="Scripts\Tinymce\classes\util\LocalStorage.js" />
+    <Content Include="Scripts\Tinymce\classes\util\Observable.js" />
+    <Content Include="Scripts\Tinymce\classes\util\Promise.js" />
+    <Content Include="Scripts\Tinymce\classes\util\Quirks.js" />
+    <Content Include="Scripts\Tinymce\classes\util\Tools.js" />
+    <Content Include="Scripts\Tinymce\classes\util\URI.js" />
+    <Content Include="Scripts\Tinymce\classes\util\Uuid.js" />
+    <Content Include="Scripts\Tinymce\classes\util\VK.js" />
+    <Content Include="Scripts\Tinymce\classes\util\XHR.js" />
+    <Content Include="Scripts\Tinymce\classes\WindowManager.js" />
+    <Content Include="Scripts\Tinymce\icons\default\icons.js" />
+    <Content Include="Scripts\Tinymce\icons\default\icons.min.js" />
+    <Content Include="Scripts\Tinymce\inittinymce.js" />
+    <Content Include="Scripts\Tinymce\jquery.tinymce.min.js" />
+    <Content Include="Scripts\Tinymce\license.txt" />
+    <Content Include="Scripts\Tinymce\models\dom\model.js" />
+    <Content Include="Scripts\Tinymce\models\dom\model.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\advlist\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\advlist\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\anchor\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\anchor\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\autolink\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\autolink\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\autoresize\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\autoresize\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\autosave\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\autosave\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\bbcode\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\bbcode\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\charmap\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\charmap\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\codesample\classes\Dialog.js" />
+    <Content Include="Scripts\Tinymce\plugins\codesample\classes\Plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\codesample\classes\Prism.js" />
+    <Content Include="Scripts\Tinymce\plugins\codesample\classes\Utils.js" />
+    <Content Include="Scripts\Tinymce\plugins\codesample\css\prism.css" />
+    <Content Include="Scripts\Tinymce\plugins\codesample\plugin.dev.js" />
+    <Content Include="Scripts\Tinymce\plugins\codesample\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\codesample\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\code\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\code\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\colorpicker\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\colorpicker\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\css\dialog.css" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\img\buttons.png" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\img\icons.gif" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\img\items.gif" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\img\menu_arrow.gif" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\img\menu_check.gif" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\img\progress.gif" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\img\tabs.gif" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\tiny_mce_popup.js" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\utils\editable_selects.js" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\utils\form_utils.js" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\utils\mctabs.js" />
+    <Content Include="Scripts\Tinymce\plugins\compat3x\utils\validate.js" />
+    <Content Include="Scripts\Tinymce\plugins\contextmenu\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\contextmenu\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\directionality\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\directionality\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-cool.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-cry.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-embarassed.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-foot-in-mouth.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-frown.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-innocent.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-kiss.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-laughing.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-money-mouth.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-sealed.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-smile.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-surprised.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-tongue-out.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-undecided.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-wink.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\img\smiley-yell.gif" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\js\emojiimages.js" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\js\emojiimages.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\js\emojis.js" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\js\emojis.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\emoticons\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\example\dialog.html" />
+    <Content Include="Scripts\Tinymce\plugins\example\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\example\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\example_dependency\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\example_dependency\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\fullpage\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\fullpage\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\fullscreen\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\fullscreen\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\help\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\help\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\hr\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\hr\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\config\bolt\atomic.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\config\bolt\browser.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\config\bolt\demo.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\config\bolt\prod.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\src\demo\html\demo.html" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\src\demo\js\Demo.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\src\main\js\CropRect.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\src\main\js\Dialog.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\src\main\js\ImagePanel.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\src\main\js\ImageSize.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\src\main\js\Plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\src\main\js\Proxy.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\src\main\js\UndoStack.js" />
+    <Content Include="Scripts\Tinymce\plugins\imagetools\src\main\js\Utils.js" />
+    <Content Include="Scripts\Tinymce\plugins\image\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\image\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\importcss\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\importcss\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\insertdatetime\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\insertdatetime\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\layer\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\layer\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\legacyoutput\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\legacyoutput\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\link\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\link\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\lists\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\lists\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\media\moxieplayer.swf" />
+    <Content Include="Scripts\Tinymce\plugins\media\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\media\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\nonbreaking\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\nonbreaking\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\noneditable\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\noneditable\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\pagebreak\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\pagebreak\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\paste\classes\Clipboard.js" />
+    <Content Include="Scripts\Tinymce\plugins\paste\classes\Plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\paste\classes\Quirks.js" />
+    <Content Include="Scripts\Tinymce\plugins\paste\classes\SmartPaste.js" />
+    <Content Include="Scripts\Tinymce\plugins\paste\classes\Utils.js" />
+    <Content Include="Scripts\Tinymce\plugins\paste\classes\WordFilter.js" />
+    <Content Include="Scripts\Tinymce\plugins\paste\plugin.dev.js" />
+    <Content Include="Scripts\Tinymce\plugins\paste\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\paste\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\preview\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\preview\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\print\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\print\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\quickbars\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\quickbars\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\save\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\save\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\searchreplace\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\searchreplace\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\spellchecker\classes\DomTextMatcher.js" />
+    <Content Include="Scripts\Tinymce\plugins\spellchecker\classes\Plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\spellchecker\plugin.dev.js" />
+    <Content Include="Scripts\Tinymce\plugins\spellchecker\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\spellchecker\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\tabfocus\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\tabfocus\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\table\classes\CellSelection.js" />
+    <Content Include="Scripts\Tinymce\plugins\table\classes\Dialogs.js" />
+    <Content Include="Scripts\Tinymce\plugins\table\classes\Plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\table\classes\Quirks.js" />
+    <Content Include="Scripts\Tinymce\plugins\table\classes\ResizeBars.js" />
+    <Content Include="Scripts\Tinymce\plugins\table\classes\SplitCols.js" />
+    <Content Include="Scripts\Tinymce\plugins\table\classes\TableGrid.js" />
+    <Content Include="Scripts\Tinymce\plugins\table\classes\Utils.js" />
+    <Content Include="Scripts\Tinymce\plugins\table\plugin.dev.js" />
+    <Content Include="Scripts\Tinymce\plugins\table\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\table\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\template\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\template\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\textcolor\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\textcolor\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\textpattern\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\textpattern\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\css\visualblocks.css" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\address.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\article.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\aside.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\blockquote.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\div.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\dl.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\figure.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\h1.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\h2.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\h3.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\h4.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\h5.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\h6.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\hgroup.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\ol.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\p.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\pre.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\section.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\img\ul.gif" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\visualblocks\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\visualchars\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\visualchars\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\plugins\wordcount\plugin.js" />
+    <Content Include="Scripts\Tinymce\plugins\wordcount\plugin.min.js" />
+    <Content Include="Scripts\Tinymce\skins\content\dark\content.css" />
+    <Content Include="Scripts\Tinymce\skins\content\dark\content.min.css" />
+    <Content Include="Scripts\Tinymce\skins\content\default\content.css" />
+    <Content Include="Scripts\Tinymce\skins\content\default\content.min.css" />
+    <Content Include="Scripts\Tinymce\skins\content\document\content.css" />
+    <Content Include="Scripts\Tinymce\skins\content\document\content.min.css" />
+    <Content Include="Scripts\Tinymce\skins\content\tinymce-5-dark\content.css" />
+    <Content Include="Scripts\Tinymce\skins\content\tinymce-5-dark\content.min.css" />
+    <Content Include="Scripts\Tinymce\skins\content\tinymce-5\content.css" />
+    <Content Include="Scripts\Tinymce\skins\content\tinymce-5\content.min.css" />
+    <Content Include="Scripts\Tinymce\skins\content\writer\content.css" />
+    <Content Include="Scripts\Tinymce\skins\content\writer\content.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide-dark\content.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide-dark\content.inline.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide-dark\content.inline.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide-dark\content.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide-dark\skin.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide-dark\skin.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide-dark\skin.shadowdom.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide-dark\skin.shadowdom.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide\content.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide\content.inline.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide\content.inline.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide\content.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide\skin.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide\skin.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide\skin.shadowdom.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\oxide\skin.shadowdom.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5-dark\content.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5-dark\content.inline.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5-dark\content.inline.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5-dark\content.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5-dark\skin.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5-dark\skin.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5-dark\skin.shadowdom.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5-dark\skin.shadowdom.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5\content.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5\content.inline.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5\content.inline.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5\content.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5\skin.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5\skin.min.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5\skin.shadowdom.css" />
+    <Content Include="Scripts\Tinymce\skins\ui\tinymce-5\skin.shadowdom.min.css" />
+    <Content Include="Scripts\Tinymce\themes\silver\theme.js" />
+    <Content Include="Scripts\Tinymce\themes\silver\theme.min.js" />
+    <Content Include="Scripts\Tinymce\tinymce.dev.js" />
+    <Content Include="Scripts\Tinymce\tinymce.js" />
+    <Content Include="Scripts\Tinymce\tinymce.min.js" />
+    <Content Include="Scripts\Tinymce\TinymceCustom.js" />
+    <Content Include="Scripts\Tinymce\UploadFiles.html" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Shared\_LeadTime.cshtml" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\bootstrap.css" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\js\bootstrap.js" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\js\bootstrap.min.js" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\js\datepicker.js" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\js\npm.js" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\js\popper.min.js" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\js\tooltip.min.js" />
+    <Content Include="Views\Themes\B2B\Content\css\CricketStore.css" />
+    <Content Include="Views\Themes\B2B\Content\css\fastselect.min.css" />
+    <Content Include="Views\Themes\B2B\Content\css\site.css" />
+    <Content Include="Views\Themes\B2B\Content\css\site.min.css" />
+    <Content Include="Views\Themes\B2B\Content\css\VerisonStore.css" />
+    <Content Include="Views\Themes\B2B\Fonts\B2B.svg" />
+    <Content Include="Views\Themes\B2B\Fonts\Roboto-Medium.svg" />
+    <Content Include="Views\Themes\B2B\Fonts\Roboto-Regular.svg" />
+    <Content Include="Views\Themes\B2B\Fonts\znode-web-store.svg" />
+    <Content Include="Views\Themes\B2B\Images\drop-arrow.png" />
+    <Content Include="Views\Themes\B2B\Images\loading.gif" />
+    <Content Include="Views\Themes\B2B\Images\loading.svg" />
+    <Content Include="Views\Themes\B2B\Images\new-product-tag.png" />
+    <Content Include="Views\Themes\B2B\Images\no-image.png" />
+    <Content Include="Views\Themes\B2B\Images\sales-guy.jpg" />
+    <Content Include="Views\Themes\B2B\Images\sales-rep.jpg" />
+    <Content Include="Views\Themes\B2B\Images\scratch.png" />
+    <Content Include="Views\Themes\B2B\Images\throbber.svg" />
+    <Content Include="Views\Themes\B2B\Scripts\lib\easyzoom.js" />
+    <Content Include="Views\Themes\B2B\Scripts\lib\event.js" />
+    <Content Include="Views\Themes\B2B\Scripts\lib\event.min.js" />
+    <Content Include="Views\Themes\B2B\Scripts\lib\jquery.simpleGallery.js" />
+    <Content Include="Views\Themes\B2B\Scripts\lib\jquery.simpleLens.js" />
+    <Content Include="Views\Themes\B2B\Scripts\lib\nicescroll.js" />
+    <Content Include="Views\Themes\B2B\Scripts\lib\owl.carousel.js" />
+    <Content Include="Views\Themes\B2B\Views\RMAReturn\ReturnHistoryList.cshtml" />
+    <Content Include="Scripts\lib\datepicker.js" />
+    <Content Include="Views\Themes\Revision\DummyFile.txt" />
+    <Content Include="Views\Themes\Templates\Error.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Themes\Templates\aboutus.cshtml" />
+    <Content Include="Views\Themes\Templates\NotFound.cshtml" />
+    <Content Include="Views\Themes\Templates\shippinginfo.cshtml" />
+    <Content Include="Views\Themes\Templates\SimpleSingleColumnProducts.cshtml" />
+    <Content Include="Views\Themes\Templates\SimpleStaticContent.cshtml" />
+    <Content Include="Views\Themes\Templates\SimpleProductPromotionWithFacets.cshtml" />
+    <Content Include="Views\Themes\Templates\SimpleSingleColumnCategories.cshtml" />
+    <Content Include="Views\Themes\Templates\SimpleCategoryPromotionWithFacets.cshtml" />
+    <Content Include="Views\Themes\Templates\FormTemplate.cshtml" />
+    <Content Include="Web.DEV.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Int.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.QA.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Themes\Templates\FormTemplateWithoutTextFullWidth.cshtml" />
+    <Content Include="Views\Themes\Templates\SP_StaticPageTemplate.cshtml" />
+    <Content Include="Views\Shared\_DataCapture.cshtml" />
+    <Content Include="Views\Themes\Templates\SimpleSearch.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Shared\_WidgetAjax.cshtml" />
+    <Content Include="Views\Shared\_WidgetPlaceHolder.cshtml" />
+    <Content Include="Views\Shared\_ConfigButton.cshtml" />
+    <Content Include="Scripts\lib\VoiceRecognition\libflac3-1.3.2.min.js.mem" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\bootstrap-grid.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\bootstrap-reboot.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\bootstrap.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_alert.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_background-variant.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_badge.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_border-radius.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_box-shadow.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_breakpoints.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_buttons.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_caret.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_clearfix.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_float.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_forms.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_gradients.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_grid-framework.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_grid.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_hover.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_image.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_list-group.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_lists.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_nav-divider.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_pagination.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_reset-text.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_resize.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_screen-reader.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_size.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_table-row.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_text-emphasis.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_text-hide.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_text-truncate.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_transition.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\mixins\_visibility.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_align.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_background.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_borders.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_clearfix.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_display.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_embed.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_flex.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_float.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_position.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_screenreaders.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_shadows.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_sizing.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_spacing.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_text.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\utilities\_visibility.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_alert.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_badge.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_breadcrumb.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_button-group.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_buttons.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_card.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_carousel.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_close.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_code.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_custom-forms.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_dropdown.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_forms.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_functions.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_grid.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_images.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_input-group.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_jumbotron.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_list-group.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_media.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_mixins.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_modal.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_nav.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_navbar.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_pagination.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_popover.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_print.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_progress.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_reboot.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_root.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_tables.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_tooltip.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_transitions.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_type.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_utilities.scss" />
+    <Content Include="Views\Themes\B2B\Content\bootstrap-4.1.0\scss\_variables.scss" />
+    <Content Include="Views\Themes\B2B\Content\css\site.min.css.gz" />
+    <Content Include="Views\Themes\B2B\Content\sass\base\global.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\base\layout.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\base\_fonts.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\base\_mixins.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\base\_variables.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\base\_variablesCricketStore.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\base\_variablesVerisonStore.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\components\_buttons.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\components\_checkbox-and-radio.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\components\_dropdown.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\components\_form-builder.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\components\_forms.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\components\_grid-filter.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\components\_icons.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\components\_input.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\components\_loader.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\components\_modal.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\components\_navigation.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\CricketStore.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\pages\blog-news.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\pages\brand.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\pages\cart.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\pages\category.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\pages\home.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\pages\login.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\pages\product-details.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\pages\single-page-checkout.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\pages\template.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\pages\user-dashboard.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\site.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\VerisonStore.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\footer.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\header.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_category-list.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_compare-product.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_datepicker.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_dynamic-grid.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_facet.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_form-builder.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_image-zoom.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_link-panel.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_local.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_product-grid.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_product-list.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_quick-order.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_quick-view.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_search.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_shipping-progress-bar.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_slider.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_subscribe.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_tabs.scss" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\_typeahead.scss" />
+    <Content Include="Views\Themes\B2B\DynamicGrid\_DetailView.cshtml" />
+    <Content Include="Views\Themes\B2B\DynamicGrid\_DynamicGrid.cshtml" />
+    <Content Include="Views\Themes\B2B\DynamicGrid\_FilterColumnList.cshtml" />
+    <Content Include="Views\Themes\B2B\DynamicGrid\_FilterComponent.cshtml" />
+    <Content Include="Views\Themes\B2B\DynamicGrid\_FilterControl.cshtml" />
+    <Content Include="Views\Themes\B2B\DynamicGrid\_GridControl.cshtml" />
+    <Content Include="Views\Themes\B2B\DynamicGrid\_GridViewType.cshtml" />
+    <Content Include="Views\Themes\B2B\DynamicGrid\_TileView.cshtml" />
+    <Content Include="Views\Themes\B2B\Fonts\B2B.eot" />
+    <Content Include="Views\Themes\B2B\Fonts\B2B.ttf" />
+    <Content Include="Views\Themes\B2B\Fonts\B2B.woff" />
+    <Content Include="Views\Themes\B2B\Fonts\Roboto-Medium.eot" />
+    <Content Include="Views\Themes\B2B\Fonts\Roboto-Medium.ttf" />
+    <Content Include="Views\Themes\B2B\Fonts\Roboto-Medium.woff" />
+    <Content Include="Views\Themes\B2B\Fonts\Roboto-Regular.eot" />
+    <Content Include="Views\Themes\B2B\Fonts\Roboto-Regular.ttf" />
+    <Content Include="Views\Themes\B2B\Fonts\Roboto-Regular.woff" />
+    <Content Include="Views\Themes\B2B\Fonts\selection.json" />
+    <Content Include="Views\Themes\B2B\Fonts\znode-web-store.eot" />
+    <Content Include="Views\Themes\B2B\Fonts\znode-web-store.ttf" />
+    <Content Include="Views\Themes\B2B\Fonts\znode-web-store.woff" />
+    <Content Include="Views\Themes\B2B\Views\BlogNews\BlogNews.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\BlogNews\BlogNewsDetails.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\BlogNews\_ComentDisplaySection.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Brand\BrandProducts.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Brand\FilterBrandList.cshtml" />
+		<Content Include="Views\Themes\B2B\Views\Brand\List.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Brand\_BrandList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Brand\_BrandListHeader.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Cart\Cart.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Cart\_CartPromotionBar.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Cart\_CartRow.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Cart\_shoppingCart.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\CaseRequest\ContactUs.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\CaseRequest\ContactUsSuccess.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\CaseRequest\CustomerFeedback.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\CaseRequest\CustomerFeedbackSuccess.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\ProductList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\SubCategories.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\_CategoryGrid.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\_CategoryGridRow.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\_CategoryList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\_HeaderNav.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\_HeaderSubNav.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\_HeaderSubNav2.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\_HeaderSubNav3.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\_ProductListContent.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\AmazonShippingOption.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\CartReview.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\MultiStepCheckout.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\PaymentOptions.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\ShippingOptions.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\SinglePage.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_AccountAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_AdditionalInformation.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_AddressOptions.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_AmazonPayAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_BillingShippingAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_CartReview.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_CreateAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_DisplayAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_PaymentOptions.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_ProcessHighRadiusToken.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_PromoCode.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_PurchaseOrder.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_QuoteReceipt.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_RecommendedAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_SearchAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_SearchAddressAutocomplete.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_ShippingOptions.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\ContentPage\ContentPage.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Dev\PortalSelection.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\ECert\AddECertToBalance.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\ECert\AvailableECertList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\FormBuilder\FormTemplate.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Home\Home.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Home\RobotsTxt.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Home\StoreLocator.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Home\_FooterContent.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Home\_HomeContent.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Home\_PortalList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Home\_StoreAnalytics.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Home\_StoreAnalyticsInstallation.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Import\_ImportLogDetails.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Import\_UserImportLogDetails.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Monitor\Index.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\AllReviews.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\Details.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\HighlightInfo.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\ProductDetails.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\ViewComparison.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\WriteReview.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_AddOns.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_AddToWishList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_BarcodeScanner.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_BundleProducts.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ComparableProducts.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ConfigurableAttribute.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_EmailToFriend.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_FacetList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_GroupProductList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_LinkedProductList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_MultipleQuickOrders.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_PersonalisedAttribute.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductAttributes.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductComparePopup.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductComparison.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductComparisonList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductContent.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductExtras.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductGrid.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductHighLights.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductImage.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductImageZoomEffect.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductInfo.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductOverview.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductReviews.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductTile.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_QuickOrder.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_QuickOrderPad.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_QuickOrderPadView.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_QuickViewProduct.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_QuickViewProductView.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_RecentlyViewItem.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_RecentlyViewProduct.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ReviewRow.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_SendMailView.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_TierPricing.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Schema\_OrganizationSchema.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Schema\_ProductListSchema.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Schema\_ProductSchema.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\Search.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_Facet.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_FilterAddedList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_FooterPagination.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_FooterPaging.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_Paging.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_PagingSearching.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_PagingSearchingBottom.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_ProductPaging.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_SearchCategoryList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_Sorting.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Controls\_PopUp.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\CustomView.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\EditorTemplates\FileUploader.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\FormBuilder\_createControl.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\OAuthRedirect.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\PDP Template\_Medium_View.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\PDP Template\_Small_View.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_Brand.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_Category.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_ConfigButton.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_Content.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_Footer.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_FooterContactUsSection.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_FormWidget.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_Header.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_Link.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_LinkProductList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_Locales.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_OfferBanner.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_Product.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_ProductTitleHome.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_QuickView.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_Search.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_SearchWidget.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_Slider.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_TagManager.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_TemplateContent.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_TemplateLink.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_TemplateProduct.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_WidgetQuickOrderPad.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetAdvertisement.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetBannerSlider.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetBrandList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetCategoryGrid.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetCategoryList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetCustomerSupport.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetECertTotalBalance.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetECertUsertProfileDashboardTotal.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetFacet.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetFooter.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetFormWidget.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetHeader.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetHelps.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetHomePageSpecial.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetLinkPanel.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetLinkProductList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetLocales.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetNewsLetter.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetOfferBanner.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetProductGrid.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetProductList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetQuickOrder.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetQuickView.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetRecentlyViewProduct.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetSearchPanel.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetSearchWidget.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetStoreInfo.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetSubcategoryList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetTagManager.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetTemplateLinkPanel.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetTemplateProductList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetTemplateTextEditor.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetTextEditor.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetTopLevelNavigation.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_AmazonPay.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_ApplyCoupon.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_ApplyGiftCard.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_CheckBoxDropDown.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_CurrentEnvironment.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_EditAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_GridPager.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_InlineTemplates.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_LayoutHead.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_LearnMore.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_ModalPopUp.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_Quantity.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_QuoteTotalTable.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_ShippingEstimator.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_StarRating.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_StatusMessage.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_TemplateQuantity.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_TotalTable.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\SiteMap\SiteMap.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\AccountInformation.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\AddressBook.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\AffiliateInformation.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\ApprovalUserList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\ChangePassword.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\CreateEditTemplate.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\Dashboard.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\eCertificateBalance.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\EditAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\EditProfile.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\ForgotPassword.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\GiftCardHistory.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\ImportLogs.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\ImportShippingAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\ImportUser.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\Login.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\OrderDetails.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\OrderHistory.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\OrderList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\OrderReceipt.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\PaymentQuoteHistory.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\PendingPaymentQuoteView.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\QuoteHistory.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\QuoteView.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\Register.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\ResetPassword.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\ResetWebstorePassword.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\ReviewHistory.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\SavedCreditCards.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\TemplateList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\ViewTemplate.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\Wishlist.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_AccountMenu.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_AccountMenuDashboard.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_AddCustomerAsidePanel.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_AffiliateInformation.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_CartTemplateRow.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_createControl.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_CreditCardDetails.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_CustomerList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_DisplayAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_DraftDeleteAllConfirmPopup.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_ImportData.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_Login.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_OrderHistory.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_OrderInvoice.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_QuoteConfirmPopup.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_QuoteHistory.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_QuoteRow.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_ReceiptCalculation.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_RecommendedAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_Register.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_SinglePageRegister.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_TemplateQuickOrder.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_UserApproverList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_UserImportLogs.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_UserOrderInformation.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Home\_BarcodeScanner.cshtml" />
+    <Content Include="Views\Themes\Templates\LandingFormInfoTemplate.cshtml" />
+    <Content Include="Views\Themes\Templates\LandingFormTemplate.cshtml" />
+    <Content Include="Views\Themes\Templates\SearchLandingPage.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_RecommendedItem.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_RecommendedProduct.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_RecommendedProductList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetCartRecommendations.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetHomeRecommendations.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetPDPRecommendations.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\ErrorPage.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductPriceAndInventory.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductTierPrice.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\_HeaderMegaMenuNav.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetMegaMenuNavigation.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\_HeaderMegaMenuSubNav.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_ContentPage.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_ContentPageSearchBottomPaging.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Category\_HeaderNavigation.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_Captcha.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_ReturnHistory.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\RMAReturn\SelectReturnItems.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\RMAReturn\ReturnItemsList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\RMAReturn\_ReturnCalculation.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\RMAReturn\_ReturnItemsList.cshtml" />
+    <Content Include="Views\Themes\B2B\Content\sass\pages\returns.scss" />
+    <Content Include="Views\Themes\B2B\Views\RMAReturn\ReturnOrderReceipt.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\RMAReturn\PrintReturnReceipt.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Home\_TrackingPixel.cshtml" />
+    <Content Include="Views\Themes\B2B\Content\sass\pages\quote.scss" />
+    <Content Include="Views\Themes\B2B\Views\User\_QuoteList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Quote\_QuoteReceipt.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Quote\_QuoteSummary.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Quote\QuoteDetails.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Quote\_QuoteReceiptDetail.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ProductAllLocationInventory.cshtml" />
+    <Content Include="Views\Themes\Templates\SimpleProductPromotionImageContent.cshtml" />
+    <Content Include="Views\Themes\Templates\LandingBannerContentListTemplate.cshtml" />
+    <Content Include="Views\Themes\Templates\SimpleSearchBannerContent.cshtml" />
+    <Content Include="Views\Themes\Templates\SimpleSearchVideoContent.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\WidgetPartial\_Media.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetImageWidget.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetVideoWidget.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_PaymentPopup.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Quote\QuoteRequestHistory.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_AddToCartNotification.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_AddToCartNotification.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\PowerBIReport.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_PowerBIReport.cshtml" />
+    <Content Include="Views\Themes\B2B\Content\sass\widgets\cart-notification.scss" />
+    <Content Include="Views\Themes\B2B\Views\Quote\_QuoteNotesDetail.cshtml" />
+    <Content Include="Views\Shared\Enhanced Ecommerce\_PLPTracking.cshtml" />
+    <Content Include="Views\Shared\Enhanced Ecommerce\_PDPTracking.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\VoucherList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_PLPProductHighLights.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_MultipleQuickOrderRow.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\HighlightInfoPLP.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Quote\_AmazonPayAddress.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Quote\_AmazonPay.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_ReturnCalculation.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_ReturnItemsList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\ReturnItemsList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\SelectReturnItems.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\ReturnOrderReceipt.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\CheckoutReceipt.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\PDP Template\_Big_View.cshtml" />
+    <None Include="Web.Automation-Integration.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Automation-Replica.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <Content Include="Views\Themes\B2B\Views\User\_ResetWebstorePassword.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_ForgotPassword.cshtml" />
+    <Content Include="Views\Themes\Templates\_Container.cshtml" />
+    <Content Include="Views\Themes\Templates\_HomePageTicker.cshtml" />
+    <Content Include="Views\Themes\Templates\_HomePageAdSpace.cshtml" />
+    <Content Include="Views\Themes\Templates\_CartPageAdSpace.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_ConfigurableProducts.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetContentContainer.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\AddPayment.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\SaveForLater\_SaveForLaterCartRow.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\SaveForLater\_SaveForLater.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Search\_SearchResultCategoryList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\AccountUsers.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\AccountOrders.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_PaymentPopupInvoice.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\User\_PaymentHistory.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_AuthorizeNet.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\AuthorizeIframeCommunicator.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_CyberSourceGateway.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_AuthorizedNetIframeHtml.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\SavedCart\SavedCartList.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\SavedCart\SavedCartView.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\SavedCart\EditSavedCartView.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\SavedCart\_EditSavedCartRow.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\SavedCart\_SavedCartQuantity.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Product\_BrandProductGrid.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\Widget\_WidgetBrandProductGridWithFacet.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_DownloadMediaButton.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Checkout\_HostedFieldsBrainTree.cshtml" />
+    <Content Include="Views\Themes\B2B\Views\Shared\_HostedFieldsIframeHtml.cshtml" />
+    <None Include="Web.automation.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.B2B.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Dev.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.LB.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.loadtest.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.QA.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Web.B2BGrowDemo.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Web.B2BProd.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Web.B2BTraining.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Web.Znodellc.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Security.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Scripts\Custom\" />
+    <Folder Include="Scripts\typings\mustache\" />
+    <Folder Include="Views\Themes\Default\Views\User\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Project_Readme.html" />
+    <Content Include="Scripts\lib\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\BarcodeScanner\BarcodeReader.ts" />
+    <TypeScriptCompile Include="Scripts\ClientResource\Resource.de.ts" />
+    <TypeScriptCompile Include="Scripts\ClientResource\Resource.en.ts" />
+    <TypeScriptCompile Include="Scripts\ClientResource\Resource.fr.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Common\ZnodeGlobal.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Common\ZnodeHelper.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Common\ZnodeRegExHelper.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Controls\WebGrid\CustomJurl.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Controls\WebGrid\DynamicGrid.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Controls\WebGrid\GridPager.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Controls\TextBoxEditorFor.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Controls\ZnodeAjaxify.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Controls\ZnodeMultiSelect.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Endpoint\ZnodeEndpoint.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Model\Znode.Model.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\BlogNews.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\ConfigurableProduct.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\RMAReturn.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\Brand.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\Cart.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\CaseRequest.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\Checkout.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\Config.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\ContentPage.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\FormBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\GoogleAnalytics.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\Home.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\Category.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\Import.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\Quote.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\StoreLocator.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\ZnodeNotification.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\Product.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\QuickOrder.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\QuickOrderPad.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\Search.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\SiteMap.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\User.ts" />
+    <TypeScriptCompile Include="Scripts\Core\Znode\ZSearch.ts" />
+    <TypeScriptCompile Include="Scripts\Extensions\CustomHome.ts" />
+    <TypeScriptCompile Include="Scripts\typings\bootstrap-dialog\bootstrap-dialog.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\bootstrap.timepicker\bootstrap.timepicker.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery-validation-unobtrusive\jquery-validation-unobtrusive.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery.cookie\jquery.cookie.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery.validation\jquery.validation.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jstree\jstree.d.ts" />
+    <TypeScriptCompile Include="Scripts\VoiceRecognition\VoiceRecognition.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Engines\Znode.Engine.Exceptions\Znode.Engine.Exceptions.csproj">
+      <Project>{5DD35FD8-FEEB-46B2-87C5-97F05E80AA6B}</Project>
+      <Name>Znode.Engine.Exceptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Znode.Appenders.Custom\Znode.Appenders.Custom.csproj">
+      <Project>{191fdf23-c2a9-46f8-a18c-5cf179aa5a08}</Project>
+      <Name>Znode.Appenders.Custom</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Znode.Infrastructure.PluginInterfaces\Znode.Infrastructure.PluginInterfaces.csproj">
+      <Project>{bcf60bad-96d0-4dad-a205-69aa66c35b78}</Project>
+      <Name>Znode.Infrastructure.PluginInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Znode.Infrastructure.PluginManager\Znode.Infrastructure.PluginManager.csproj">
+      <Project>{4a81bf5c-07a9-4b7f-ad55-d0300065d475}</Project>
+      <Name>Znode.Infrastructure.PluginManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Znode.Libraries.AmazonOAuthProvider\Znode.Libraries.AmazonOAuthProvider.csproj">
+      <Project>{70B56AAF-1389-4FD0-8CEE-FEA0B86D2DB9}</Project>
+      <Name>Znode.Libraries.AmazonOAuthProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Znode.Libraries.Caching\Znode.Libraries.Caching.csproj">
+      <Project>{c52c3e9b-caba-46df-8b29-0cad9258da00}</Project>
+      <Name>Znode.Libraries.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\ZNode.Libraries.ECommerce.Utilities\Znode.Libraries.ECommerce.Utilities.csproj">
+      <Project>{f3703cce-eec4-46b0-a54f-83857d4014df}</Project>
+      <Name>Znode.Libraries.ECommerce.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\ZNode.Libraries.ElasticSearch\Znode.Libraries.ElasticSearch.csproj">
+      <Project>{62a6020a-fe6f-4388-b454-8a656e47ab69}</Project>
+      <Name>Znode.Libraries.ElasticSearch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\ZNode.Libraries.MongoDB.Data\Znode.Libraries.MongoDB.Data.csproj">
+      <Project>{5b6482f4-7b81-4d7c-a099-78237c8a55b3}</Project>
+      <Name>Znode.Libraries.MongoDB.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\ZNode.Libraries.Resources\Znode.Libraries.Resources.csproj">
+      <Project>{0461BA0D-6141-47D7-A78E-C166FF5A75F0}</Project>
+      <Name>Znode.Libraries.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Znode.Web.WindsorInstallers\Znode.Web.WindsorInstallers.csproj">
+      <Project>{fdc25975-59b7-4c06-9e48-91eca9f905c4}</Project>
+      <Name>Znode.Web.WindsorInstallers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Znode.WebStore.Caching\Znode.WebStore.Caching.csproj">
+      <Project>{2ed8a576-93ab-45d6-bf6b-98c2700c93d7}</Project>
+      <Name>Znode.WebStore.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Znode.WebStore.Core\Znode.WebStore.Core.csproj">
+      <Project>{8a234527-08cd-41cf-99df-5be4285c6d9a}</Project>
+      <Name>Znode.WebStore.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DEV|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Dev|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Int|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'loadtest|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'automation|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'B2B|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LB|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3288</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44315/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>https://localhost:44315/</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\BuildWebCompiler.1.12.394\build\BuildWebCompiler.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BuildWebCompiler.1.12.394\build\BuildWebCompiler.targets'))" />
+  </Target>
+  <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <RoslynFiles Include="$(SolutionDir)packages\Microsoft.Net.Compilers.1.1.1\tools\*" />
+    </ItemGroup>
+    <MakeDir Directories="$(WebProjectOutputDir)\bin\roslyn" />
+    <Copy SourceFiles="@(RoslynFiles)" DestinationFolder="$(WebProjectOutputDir)\bin\roslyn" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
+  </Target>
+  <Import Project="..\packages\BuildWebCompiler.1.12.394\build\BuildWebCompiler.targets" Condition="Exists('..\packages\BuildWebCompiler.1.12.394\build\BuildWebCompiler.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Import Project="..\packages\Microsoft.VisualStudio.SlowCheetah.3.0.61\build\Microsoft.VisualStudio.SlowCheetah.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.SlowCheetah.3.0.61\build\Microsoft.VisualStudio.SlowCheetah.targets')" />
+  <Import Project="..\packages\Microsoft.TypeScript.MSBuild.2.6.2\build\Microsoft.TypeScript.MSBuild.targets" Condition="Exists('..\packages\Microsoft.TypeScript.MSBuild.2.6.2\build\Microsoft.TypeScript.MSBuild.targets')" />
+
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

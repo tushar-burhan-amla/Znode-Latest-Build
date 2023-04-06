@@ -1,0 +1,61 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model InventoryViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = "/Inventory/List", FormId = "frmCopyInventory" };
+}
+
+
+<div class="row">
+    <!--Left Panel-->
+    <aside>
+        <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            <h3>@Admin_Resources.LabelManageInventory</h3>
+        </div>
+    </aside>
+    <!--Main Container-->
+    <section class="main-container">
+        <div class="col-sm-12 page-container">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCopyInventory" }))
+            {
+                <div class="col-sm-12 title-container">
+                    <h1>@Admin_Resources.HeaderInventory<span class="separator"> | </span><span class="title-action">@Admin_Resources.TitleCopy</span></h1>
+                    <div class="pull-right">
+                        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+                    </div>
+                </div>
+                <div class="col-sm-12 box-container">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.ListCode, new { @class = "required" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.ListCode)
+                                @Html.ValidationMessageFor(model => model.ListCode)
+                            </div>                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.ListName, new { @class = "required" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.ListName)
+                                @Html.ValidationMessageFor(model => model.ListName)
+                            </div>                            
+                        </div>
+                    </div>
+
+                </div>
+                @Html.HiddenFor(model => model.InventoryListId)
+            }
+        </div>
+    </section>
+</div>

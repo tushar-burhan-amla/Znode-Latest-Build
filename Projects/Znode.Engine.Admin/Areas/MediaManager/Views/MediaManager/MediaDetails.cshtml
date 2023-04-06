@@ -1,0 +1,114 @@
+﻿@model MediaAttributeValuesListViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@{bool isAjaxRequest = Request.IsAjaxRequest(); }
+
+<div class="col-sm-12 page-container detail-view-container">
+    <div class="col-sm-12 title-container">
+        <h3 class="section-heading">@Model.FileName</h3>
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_Navigator.cshtml", Model.navigationModel)
+        </div>
+    </div>
+    <div class="col-sm-12 nopadding image-details">
+        <div class="col-md-4 col-lg-5 nopadding product-image">
+            @{
+                string strHtml = string.Empty;
+                switch (Model.FamilyCode?.ToLower())
+                {
+                    case DynamicGridConstants.Video:
+                        strHtml = $"<div class=\"embed-responsive grid-video\"><video class=\"embed-responsive-item\" controls><source src =\"{Model.MediaPath}\" preload=\"metadata\" /></video></div>";
+                        break;
+                    case DynamicGridConstants.Audio:
+                        strHtml = $"<div class=\"grid-audio\" ><audio controls \"><source src = \"{ Model.MediaPath} \"  /></audio></div>";
+                        break;
+                    case DynamicGridConstants.File:
+                        strHtml = $"<div > <a href=\"{ Model.MediaPath} \" download > <i class='z-file-text' title='File' ></i> </a></div>";
+                        break;
+                    default:
+                        strHtml = $"<img src ='" + Model.MediaPath + "' class='img-responsive'>";
+                        break;
+                }
+            }
+            @Html.RenderBlock(strHtml)
+        </div>
+        <div class="col-md-8 col-lg-7 nopadding">
+            @using (Html.BeginForm("UpdateMediaAttributeValueList", "MediaManager", new { selectedfolder = Request.QueryString["selectedfolder"] }, FormMethod.Post, new { model = Model }))
+            {
+                if (Model?.MediaAttributeValues?.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <table class="table"  aria-describedby="Media Attribute values">
+                            <thead>
+                                <tr>
+                                    <th scope="col">@Attributes_Resources.TitleAttribute</th>
+                                    <th scope="col">@Admin_Resources.LabelValue</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td>@Html.LabelFor(m => m.MediaVirtualPath)</td>
+                                @{
+                                    string pathValue = Model.MediaVirtualPath ?? string.Empty;
+                                }
+                                <td><div class="col-sm-10 nopadding"><input type="text" readonly="readonly" value="@pathValue" /></div></td>
+                                <td></td>
+                                @Html.HiddenFor(m => m.MediaPath)
+                            </tr>
+                            @foreach (var Contl in Model.MediaAttributeValues)
+                            {
+                                string datastring = string.Empty;
+                                foreach (var item in Contl.ControlProperty.htmlAttributes)
+                                {
+                                    if (!string.IsNullOrEmpty(item.Value.ToString()))
+                                    { datastring += $"data-{item.Key}={item.Value} "; }
+                                }
+                                <tr>
+                                    <td><label>@Contl.AttributeName</label></td>
+                                    <td>
+                                        @if (Contl.IsEditable)
+                                        {
+                                            Contl.ControlProperty.htmlAttributes.Add("readonly", "readonly");
+                                            <div id="@Contl.AttributeCode">
+                                                <div class="col-sm-10 nopadding">
+                                                    @{Contl.ControlProperty.IsDetailView = true;}
+                                                    @Html.CreateControl(Contl.ControlProperty)
+                                                </div>
+                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="col-sm-10 nopadding">
+                                                                <input type="text" value="@string.IsNullOrEmpty(Contl.MediaAttributeValue)" readonly="readonly" />
+                                                            </div>
+                                                        }
+                                    </td>
+                                    <td>
+                                        <div id="divSaveCancel_@Contl.AttributeCode" style="display:none" class="attribute-action">
+                                            <a class="btn-narrow-icon" data-field="@Contl.AttributeCode" data-label="@Contl.AttributeName" @datastring onclick="EditableText.prototype.SaveControl(this);" href="#">
+                                                <em class="z-ok" title="Save"></em>
+                                            </a>
+                                            <a class="btn-narrow-icon" onclick="EditableText.prototype.HideControl('@Contl.AttributeCode');" href="#">
+                                                <em class="z-close" title="Close"></em>
+                                            </a>
+                                        </div>
+                                        <a id="divEdit_@Contl.AttributeCode" onclick="EditableText.prototype.EditControl('@Contl.AttributeCode');" href="#">
+                                            <em class="z-edit pull-right" title="Edit"></em>
+                                        </a>
+                                    </td>
+                                </tr>
+                                                        }
+                        </table>
+                    </div>
+                                                            }
+                                                        }
+        </div>
+    </div>
+
+</div>
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/TinymceJs")
+<script>
+    $('.datepicker').datepicker();
+    $('.datepicker').attr("readonly", "readonly");
+</script>

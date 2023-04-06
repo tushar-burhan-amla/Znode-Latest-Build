@@ -1,0 +1,57 @@
+﻿@using Znode.Libraries.Resources
+@using System.Configuration;
+
+<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" type="image/png" href="~/Images/favicon.ico" />
+    <title>API | Multifront®</title>
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <div class="page">
+        <header>
+            <div class="float-left">
+                <p class="site-title">
+                    <a href="~/"><img src="~/Images/znode-logo.png" alt="Znode" /></a>
+                </p>
+            </div>
+
+            <div class="float-right">
+                <nav>
+                    <ul id="menu">
+                        <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
+                        @*<li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>*@
+                        @if (ConfigurationManager.AppSettings["EnableSwagger"].Equals("true", System.StringComparison.OrdinalIgnoreCase))
+                        {
+                            <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)/swagger/ui/index">API</a></li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="clear-fix"></div>
+        </header>
+
+        @RenderBody()
+    </div>
+
+    <footer>
+        <p>@String.Format(@Admin_Resources.Copyright + @System.Configuration.ConfigurationManager.AppSettings["BuildVersion"], DateTime.Now.Year)</p>
+    </footer>
+
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $(function () {
+            $("#sample-tabs").tabs();
+        });
+
+        hljs.initHighlightingOnLoad();
+    </script>
+    @Styles.Render("~/help/css")
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,112 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductViewModel
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.WebStore.ViewModels
+@{
+    decimal quantity = string.IsNullOrEmpty(Model.Attributes?.Value(ZnodeConstant.MinimumQuantity)) ? 1 : Convert.ToDecimal(Model.Attributes?.Value(ZnodeConstant.MinimumQuantity));
+    string sku = string.IsNullOrEmpty(Model.ConfigurableProductSKU) ? Model.SKU : Model.ConfigurableProductSKU;
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    string inventoryMessageClass = Model.ShowAddToCart ? "status-outofstock hvr-pulse success-msg" : "error-msg";
+    bool isObsolete = Convert.ToBoolean(Model.Attributes?.FirstOrDefault(x => x.AttributeCode == ZnodeConstant.IsObsolete)?.AttributeValues);
+    bool addToCartDisabled = isObsolete || Model.IsCallForPricing || Convert.ToBoolean(Model.Attributes?.Value(ZnodeConstant.CallForPricing));
+    string maxQty = Model.Attributes?.Value(ZnodeConstant.MaximumQuantity);
+    string minQty = Model.Attributes?.Value(ZnodeConstant.MinimumQuantity);
+    bool IsCallForPricing = Convert.ToBoolean(Model.Attributes?.Value(ZnodeConstant.CallForPricing));
+    ProductPromotionViewModel promotionCallForPricing = Model?.Promotions?.FirstOrDefault(x => x.PromotionType == ZnodeConstant.PromotionCallForPricing);
+    if (HelperUtility.IsNotNull(promotionCallForPricing))
+    {
+        IsCallForPricing = true;
+    }
+    string disable = isObsolete || IsCallForPricing || !Model.ShowAddToCart ? "disabled" : "";
+    bool isShowPriceAndInventoryToLoggedInCustomersOnly = GlobalAttributeHelper.IsShowPriceAndInventoryToLoggedInUsersOnly();
+    bool IsCloudflareEnabled = GlobalAttributeHelper.IsCloudflareEnabled();
+    string productSku = string.IsNullOrEmpty(Model.ConfigurableProductSKU) ? Model.SKU : Model.ConfigurableProductSKU;
+    bool isBundleProduct = string.Equals(Model.Attributes?.SelectAttributeList(ZnodeConstant.ProductType)?.FirstOrDefault()?.Code, ZnodeConstant.BundleProduct, StringComparison.OrdinalIgnoreCase);
+    bool isDontTrackInventory = Convert.ToBoolean(Model.Attributes?.FirstOrDefault(y => y.AttributeCode.Equals(ZnodeConstant.OutOfStockOptions, StringComparison.InvariantCultureIgnoreCase))?.SelectValues?.Where(x => x.Code.Equals(ZnodeConstant.DontTrackInventory, StringComparison.InvariantCultureIgnoreCase))?.Any());
+    bool isAllowBackOrdering = Convert.ToBoolean(Model.Attributes?.FirstOrDefault(y => y.AttributeCode.Equals(ZnodeConstant.OutOfStockOptions, StringComparison.InvariantCultureIgnoreCase))?.SelectValues?.Where(x => x.Code.Equals(ZnodeConstant.AllowBackOrdering, StringComparison.InvariantCultureIgnoreCase))?.Any());
+    bool isEnableInventoryStockNotification = Convert.ToBoolean(GlobalAttributeHelper.IsEnableInventoryStockNotification());
+    string typicalLeadTime = Convert.ToString(Model.Attributes?.FirstOrDefault(x => x.AttributeCode.Equals(ZnodeConstant.TypicalLeadTime, StringComparison.InvariantCultureIgnoreCase))?.AttributeValues);
+}
+@if (Model.IsConfigurable)
+{
+    @Html.Partial("_ConfigurableAttribute", Model.ConfigurableData)
+}
+@{
+    <div class="col-12 p-0">
+        <div class="form-group">
+            <div class="col-12 p-0 product-details-qty add-to-cart-block" id="product-details-quantity">
+                <label for="Quantity" class="visuallyhidden ada-label">@WebStore_Resources.EnterQuantity</label>
+                <input data-test-selector="txtQuantity" type="text" name='Quantity' value="@quantity" data-sku="@sku" data-maxQuantity="@maxQty" data-minQuantity="@minQty" data-parentsku="@Model.SKU" data-parentProductId="@Model.ParentProductId" data-inventoryRoundOff="@inventoryRoundOff" class="quantity" @disable id="Quantity">
+                @Html.AddToCartAjaxRequest(WebStore_Resources.ButtonAddToCart, "/Product/AddToCartProduct", Model.CartParameter, "btn btn-primary", "Product.prototype.BindAddOnProductSKU(this,event)", disable, "Product.prototype.DisplayAddToCartMessage(data)")
+            </div>
+            <div id="quantity-error-msg" class="error-msg"></div>
+            @if (!isObsolete)
+            {
+                if (HelperUtility.IsNull(Model?.ConfigurableData?.CombinationErrorMessage) && !Equals(Model.ProductType, ZnodeConstant.GroupedProduct))
+                {
+        <div id="dynamic-inventory" class="@inventoryMessageClass">
+            @if (Model.IsConfigurable)
+            {
+                if (string.IsNullOrEmpty(Model.ConfigurableData.CombinationErrorMessage))
+                {
+                    if (isAllowBackOrdering || isDontTrackInventory)
+                    {
+                            @Model.InventoryMessage
+                        }
+                    else
+                    {
+                        @Model.InventoryMessage
+                        if ((!isShowPriceAndInventoryToLoggedInCustomersOnly || Request.IsAuthenticated) && Model.Quantity > 0)
+                        {
+                            <span class="product-count">(@Model.Quantity)</span>
+                        }
+                            if (!isBundleProduct && isEnableInventoryStockNotification && !Model.ShowAddToCart && !Model.IsQuickView)
+                            {
+                            <a href="javascript:void(0);" class="stock-notice-link d-block" onclick="Product.prototype.BindStockSKU(this)" data-sku="@Model.SKU" data-toggle="modal" data-test-selector="linkStockNotice" data-target="#StockNoticeModal">@WebStore_Resources.StockNotification</a>
+                            }
+                        <input type="hidden" id="selectedSKU" />
+                    }
+                    if (IsCloudflareEnabled)
+                    {
+                        <span class="product-count ml-2 cloudflareInventorySpan" data-type="simpleproduct" data-sku="@productSku" data-id="@Model.PublishProductId">Loading..</span>
+                    }
+                    if (HelperUtility.IsNotNull(typicalLeadTime) && !isBundleProduct)
+                    {
+                        <div id="divTypicalLeadTime" class="timelead-field"><span class="font-weight-bold">@WebStore_Resources.LabelTypicalLeadTime: </span>@typicalLeadTime @WebStore_Resources.LabelDays </div>
+                    }
+
+                }
+                else
+                {
+                    @Model.ConfigurableData.CombinationErrorMessage
+                }
+            }
+            else
+            {
+                if (isAllowBackOrdering || isDontTrackInventory)
+                {
+                    @Model.InventoryMessage
+                }
+                else
+                {
+                    @Model.InventoryMessage
+                    if ((!isShowPriceAndInventoryToLoggedInCustomersOnly || Request.IsAuthenticated) && Model.Quantity > 0)
+                    {
+                        <span class="product-count">(@Model.Quantity)</span>
+                    }
+                        if (!isBundleProduct && isEnableInventoryStockNotification && !Model.ShowAddToCart && !Model.IsQuickView)
+                        {
+                        <a href="javascript:void(0);" class="stock-notice-link d-block" onclick="Product.prototype.BindStockSKU(this)" data-sku="@Model.SKU" data-toggle="modal" data-test-selector="linkStockNotice" data-target="#StockNoticeModal">@WebStore_Resources.StockNotification</a>
+                        }
+                    <input type="hidden" id="selectedSKU" />
+                }
+                if (HelperUtility.IsNotNull(typicalLeadTime) && !isBundleProduct)
+                {
+                    <div id="divTypicalLeadTime" class="timelead-field"><span class="font-weight-bold">@WebStore_Resources.LabelTypicalLeadTime: </span>@typicalLeadTime @WebStore_Resources.LabelDays </div>
+                }
+            }
+        </div>
+                }
+            }
+        </div>
+    </div>
+}

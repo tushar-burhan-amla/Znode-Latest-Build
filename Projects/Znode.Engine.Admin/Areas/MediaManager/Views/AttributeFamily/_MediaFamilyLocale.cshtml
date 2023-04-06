@@ -1,0 +1,7 @@
+﻿@model List<Znode.Engine.Admin.AttributeValidationHelpers.LocaleDataModel>
+@{
+    int attributeFamilyId = Convert.ToInt32(Request.QueryString["attributefamilyid"]);
+}
+
+@Html.Partial("~/Areas/MediaManager/Views/Attributes/_Locale.cshtml", Model)
+

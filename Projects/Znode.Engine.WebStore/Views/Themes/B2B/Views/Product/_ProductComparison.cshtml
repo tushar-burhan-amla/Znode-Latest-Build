@@ -1,0 +1,214 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model ProductViewModel
+@{
+    Model.Attributes = Model.Attributes.OrderBy(x => x.DisplayOrder).ToList();
+    string callForPricingMessage = Html.RenderMessage(WebStoreConstants.ProductCallForPricing)?.ToString();
+    bool IsCallForPricing = Convert.ToBoolean(Model.Attributes?.Value(ZnodeConstant.CallForPricing));
+    ProductPromotionViewModel promotionCallForPricing = Model?.Promotions?.FirstOrDefault(x => x.PromotionType == ZnodeConstant.PromotionCallForPricing);
+    if (HelperUtility.IsNotNull(promotionCallForPricing))
+    {
+        IsCallForPricing = true;
+        callForPricingMessage = string.IsNullOrEmpty(promotionCallForPricing.PromotionMessage) ? callForPricingMessage : promotionCallForPricing.PromotionMessage;
+    }
+
+                var productsVariants = Model.Attributes.Where(x => x.IsConfigurable).ToList();
+                string productType = Model.Attributes?.SelectAttributeList(ZnodeConstant.ProductType)?.FirstOrDefault()?.Code;
+                bool IsObsolete = Convert.ToBoolean(Model.Attributes?.FirstOrDefault(x => x.AttributeCode == ZnodeConstant.IsObsolete)?.AttributeValues);
+                string disable = IsObsolete || IsCallForPricing || !Model.ShowAddToCart ? "disabled" : "";
+                bool imageIsComparable = (Model.Attributes.FirstOrDefault(x => x.AttributeCode == ZnodeConstant.ProductImage)?.IsComparable).GetValueOrDefault();
+                string UOM = Attributes.ValueFromSelectValue(Model?.Attributes, "UOM");
+                bool isPersonalizable = Model.Attributes.Where(x => x.IsPersonalizable == true).Select(x => x.IsPersonalizable).FirstOrDefault();
+                string ratingText = Model.Rating > 0 ? string.Format(WebStore_Resources.TextRating, Math.Round(Model.Rating, 1), Model.TotalReviews) : string.Empty;
+                Model.CartParameter.Add("IsRedirectToCart", "False");
+                Model.CartParameter.Add("ProductName", Model.Name);
+                bool isShowPriceAndInventoryToLoggedInCustomersOnly = GlobalAttributeHelper.IsShowPriceAndInventoryToLoggedInUsersOnly();
+}
+
+<div class="col-12 product-item">
+    <a data-test-selector="linkRemoveProdOnComparePage" href="" class="remove-compare" onclick="Category.prototype.RemoveProduct('@Model.PublishProductId')" title="@WebStore_Resources.LinkTextRemove" data-productid="@Model.PublishProductId"><span class="close-circle-icon"></span></a>
+    <div class="compare-product-list-items">
+        @if (IsCallForPricing)
+        {
+            <div class="price mb-3 error-msg text-center"><strong>@callForPricingMessage</strong></div>
+        }
+        else if (Equals(productType, ZnodeConstant.GroupedProduct) || Equals(productType, ZnodeConstant.ConfigurableProduct))
+        {
+            <button type="button" class="btn btn-primary btn-block mb-3" onclick="javascript: location.href = '@Url.GetProductUrl(Model.SEOUrl, Model.PublishProductId.ToString())'" id="Model.PublishProductId"><i class='zf-view-details'></i>@WebStore_Resources.ButtonViewDetails</button>
+        }
+        else if (isPersonalizable)
+        {
+            <button type="button" class="btn btn-primary btn-block mb-3" onclick="javascript: location.href = '@Url.GetProductUrl(Model.SEOUrl, Model.PublishProductId.ToString())'" id="Model.PublishProductId"><i class='zf-view-details'></i>@WebStore_Resources.ButtonViewDetails</button>
+        }
+        else if (!Model.ShowAddToCart)
+        {
+            <div class="status-outofstock mb-3 error-msg text-center"><strong>@Model.InventoryMessage</strong></div>
+        }
+        else
+        {
+            @Html.AddToCartAjaxRequest(WebStore_Resources.ButtonAddToCart, "/Product/AddToCartProduct", Model.CartParameter, "btn btn-primary btn-block mb-3", "Product.prototype.GetProductOutOfStockDetails(this,event)", disable, "Product.prototype.DisplayAddToCartMessage(data)")
+        }
+
+        @if (imageIsComparable)
+        {
+            <div class="col-12 p-0 text-center mb-3">
+                <img src="@Model.ImageMediumPath" alt="@Attributes.Value(Model.Attributes, "ImageAltText")" class="img-fluid" data-test-selector="imgIsComparable" />
+            </div>
+        }
+        <div class="product-compare-details">
+            <div class="form-group">
+                <div class="col-12 p-0">
+                    @Html.Label(WebStore_Resources.LabelProductName, new { @data_test_selector = "lblProductNameTitle" })
+                </div>
+                <div class="col-12 p-0 text-break" data-test-selector="divProductName">
+                    @if (string.IsNullOrEmpty(Model.Name))
+                    {
+                        @Html.Label("-")
+                    }
+                    else
+                    {
+                        @WebUtility.HtmlDecode(Model.Name)
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-12 p-0">
+                    @Html.Label(WebStore_Resources.ColumnTitlePrice, new { @data_test_selector = "lblTitlePrice" })
+                </div>
+                @*if store level flag - 'show price to logged-in users only' is set to yes and user is logged off then do not show price to users.*@
+                @if (isShowPriceAndInventoryToLoggedInCustomersOnly && !Request.IsAuthenticated)
+                {
+                    <div class="loged-out-product-text">
+                        <a href="JavaScript:void(0);" data-target="#sign-in-nav" class="OpenNav" onclick="User.prototype.LoginInPopup()">@WebStore_Resources.LabelSignIn</a>
+                        @WebStore_Resources.TextViewPrice
+                    </div>
+                }
+                else
+                {
+                    if (!IsCallForPricing)
+                    {
+                        <div class="col-12 p-0">
+                            @if (!string.IsNullOrEmpty(Model.GroupProductPriceMessage))
+                            {
+                                <p>@Model.GroupProductPriceMessage</p>
+                            }
+                            else
+                            {
+                                if (!Equals(Model.SalesPrice, null))
+                                {
+                                    <span id="spnProductPrice">
+                                        @Helper.FormatPriceWithCurrency(Model.SalesPrice, Model.CultureCode, UOM)
+                                    </span>
+                                    if (Model.SalesPrice != @Model.RetailPrice && !Equals(productType, ZnodeConstant.GroupedProduct))
+                                    {
+                                        <span class="cut-price" data-test-selector="spnPriceText">
+                                            @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode, UOM)
+                                        </span>
+                                    }
+                                }
+                                else
+                                {
+                                    if (Model.PromotionalPrice > 0)
+                                    {
+                                        <label>
+                                            @Helper.FormatPriceWithCurrency(Model.PromotionalPrice, Model.CultureCode, UOM)
+                                        </label>
+                                        <span class="cut-price" data-test-selector="spnPriceText">
+                                            @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode, UOM)
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span id="spnProductPrice">
+                                            @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode, UOM)
+                                        </span>
+                                    }
+                                }
+                            }
+                        </div>
+                    }
+                }
+            </div>
+            <div class="form-group">
+                <div class="col-12 p-0">
+                    @Html.Label(WebStore_Resources.TextCustomerReviews, new { @data_test_selector = "lblReviewsTitle" })
+                </div>
+                <div class="col-12 p-0 product-rating">
+                    @Html.Partial("_StarRating", Model.Rating)
+                    @ratingText<a href="@Url.GetProductUrl(Model.SEOUrl, Model.PublishProductId.ToString())#product-content" id="jumpto-readreviews-productTile" data-test-selector="linkReviewText">@WebStore_Resources.LinkTextReadReviews</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-12 p-0">
+                    @Html.Label(WebStore_Resources.LabelVariants, new { @data_test_selector = "lblVariants" })
+                </div>
+                <div class="col-12 p-0 product-rating">
+                    @if (Equals(productType, ZnodeConstant.ConfigurableProduct))
+                    {
+                        if (productsVariants?.Count > 0)
+                        {
+                            <ul class="product-variants">
+                                @foreach (var item in productsVariants)
+                                {
+                                    if (item?.ConfigurableAttribute?.Count > 0)
+                                    {
+                                        <li>
+                                            <span><b>@item.AttributeName</b>:&nbsp;</span>
+                                            <span>@string.Join(", ", item.ConfigurableAttribute.Select(x => x.AttributeValue))</span>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        }
+                    }
+                </div>
+            </div>
+            @{
+                Model.Attributes.RemoveAll(x => x.IsComparable == false || x.AttributeTypeName == ZnodeConstant.Link || x.AttributeCode == ZnodeConstant.ProductImage || (string.IsNullOrEmpty(x.AttributeValues)) && x.SelectValues?.Count == 0);
+            }
+            <div class="col-12 p-0 text-break">
+                @foreach (var attribute in Model.Attributes)
+                {
+                    if (!string.Equals(attribute.AttributeName, "Product Name", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        <div class="form-group">
+                            <div class="col-12 p-0 text-break">
+                                @Html.Label(attribute.AttributeName)
+                            </div>
+                            @if (attribute.AttributeTypeName == "Yes/No")
+                            {
+                                if (attribute.AttributeValues == "true")
+                                {
+                                    <div class="col-12 p-0">
+                                        <span class='active-icon'></span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-12 p-0">
+                                        <span class='inactive-icon'></span>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                if (!string.IsNullOrEmpty(attribute.SelectValues.FirstOrDefault()?.Value))
+                                {
+                                    <div class="col-12 p-0 text-break">
+                                        <p>@Html.RenderBlock(attribute.SelectValues.FirstOrDefault()?.Value)</p>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-12 p-0 text-break">
+                                        <p>@Html.RenderBlock(attribute.AttributeValues)</p>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

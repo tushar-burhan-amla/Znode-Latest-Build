@@ -1,0 +1,12 @@
+﻿@model WidgetParameter
+
+<div class="sub-categpry-content-area col-xs-12 nopadding" style="position:relative;">
+    @{ Html.RenderAction("GetSubCategories", "Search", new
+        {
+            cMSMappingId = Model.CMSMappingId,
+            displayName = Model.DisplayName,
+            typeOfMapping = @Model.TypeOfMapping,
+            widgetCode = @Model.WidgetCode,
+            widgetKey = @Model.WidgetKey
+        }); }
+</div>

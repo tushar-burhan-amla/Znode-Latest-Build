@@ -1,0 +1,60 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model RMAReturnViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    Layout = null;
+}
+<div>
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="panel-heading">
+            <h4 class="panel-title panel-title-edit">@Admin_Resources.LabelReturnHistory</h4>
+        </div>
+        <button type="button" class="btn-text btn-text-secondary margin-right-15 margin-top-15 margin-bottom-15" id="AddReturnNote" onclick="RMAReturn.prototype.GetAdditionalReturnNote()" data-test-selector="btnAdditionalReturnNote">@Admin_Resources.LabelAddReturnNote</button>
+    </div>
+    <div class="col-sm-12 list-container" id="listcontainerId">
+        @{
+            if (Model?.ReturnHistoryAndNotesList?.Count > 0)
+            {
+                <table id="manageReturnGrid" data-test-selector="tblManageReturnGrid" class="table" data-swhgajax="true" data-swhgcontainer="ZnodeOmsHistory" data-swhgcallback="DynamicGrid.prototype.SetSortOrder" aria-describedby="Return Order History Table">
+                    <thead>
+                        <tr class="grid-header">
+                            <th scope="col" data-test-selector="tblHdDate">
+                                @Admin_Resources.LabelDate
+                            </th>
+                            <th scope="col" data-test-selector="tblHdUpdatedBy">
+                                @Admin_Resources.LabelUpdatedBy
+                            </th>
+                            <th scope="col" data-test-selector="tblHdMessage">
+                                @Admin_Resources.LabelMessage
+                            </th>
+                            <th scope="col" data-test-selector="tblHdNotes">
+                                @Admin_Resources.LabelNotes
+                            </th>
+                            <th scope="col" data-test-selector="tblHdAmount">
+                                @Admin_Resources.LabelAmount
+                            </th>
+                            <th scope="col" data-test-selector="tblHdTransactionID">
+                                @Admin_Resources.LabelTransactionId
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-test-selector="tblBdManageReturnGrid">
+                        @foreach (var returnHistory in Model?.ReturnHistoryAndNotesList)
+                        {
+                            string message = returnHistory.Message;
+                            string notes = returnHistory.Notes;
+                            <tr>
+                                <td>@returnHistory.ReturnDateWithTime</td>
+                                <td>@returnHistory.UpdatedBy</td>
+                                <td class="td-break-word">@Html.RenderBlock(message)</td>
+                                <td class="td-break-word">@Html.RenderBlock(notes)</td>
+                                <td>@returnHistory.ReturnAmountWithCurrency</td>
+                                <td>@returnHistory.TransactionId</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,111 @@
+﻿
+@model Znode.Engine.Admin.ViewModels.CMSPortalContentPageIndexViewModel
+@using Znode.Engine.Admin.Models
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers
+@using Znode.Engine.Admin.ViewModels;
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = "InsertCreateIndexData", Controller = controllerName, ControlId = "CmsContentIndexLink", DataTestSelector = "linkCreateIndex", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = Admin_Resources.ButtonCreateIndex, OnClick = "SearchConfiguration.prototype.CmsPageRevisionTypePopUp()" });
+
+    List<PopupInputFieldDataItem> revisionType = HelperMethods.GetAvailablePublishStates();
+
+    PopupModel publishPopupModel = new PopupModel()
+    {
+        Title = @Admin_Resources.TitleIndexConfirm,
+        Description = @Admin_Resources.IndexConfirmationMessage,
+        NoChoiceDescription = @Admin_Resources.IndexConfirmationMessageNoChoice,
+        ModalPopUpId = "CmsPageIndexPopup",
+        ModalSizeClass = "modal-smd",
+        AdditionalNote = string.Format(Admin_Resources.CreateAllStoreLocaleDisclaimerMessage, ""),
+        InputFields = new List<PopupInputField>(){
+new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = revisionType, RequiredNumberOfItemsToDisplay = 2 },
+},
+        Buttons = new List<PopUpButtonModel>() {
+new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "SearchConfiguration.prototype.CreateCmsPageIndexSection()"}
+}
+    };
+}
+
+<div id="divCreateCMSIndex">
+    @using (Ajax.BeginForm("InsertCreateIndexData", controllerName, null, new AjaxOptions() { UpdateTargetId = "createIndexSection", OnFailure = "SearchConfiguration.prototype.GetCmsPageSearchIndexMonitorList()", OnSuccess = "SearchConfiguration.prototype.GetCmsPageSearchIndexMonitorList()" }, new { @id = "frmCmsPageCreateIndexData" }))
+    {       
+        <div class="d-flex manage-index-section">
+            <div class="catalog-field">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.TitleStore, new { @class = "required", @data_test_selector = "lblStore" })
+                </div>
+                <div class="control-md">
+                    @Html.FastSelectFor(model => model.StoreName, model => model.PortalId, "GetSuggestions", "Typeahead", "SearchConfiguration.prototype.OnSelectCmsPortalDataBind", 1, true,
+                           new
+                           {
+                               htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtPortal" },
+                               parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                           })
+                   
+                    @CustomHtmlHelper.HiddenField("hdnPortalId", "hdnPortalId", "hidden", Convert.ToString(@Model.PortalId))
+                    @CustomHtmlHelper.HiddenField("hdnPortalName", "hdnPortalName", "hidden", Convert.ToString(@Model.StoreName))
+                </div>
+
+
+            </div>
+
+            <div class="create-section">
+                <div class="index-name-field">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.IndexName, new { @class = "required", @data_test_selector = "lblIndexName" })
+                        <div class="help-text">
+                            <em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-html="true" data-original-title="@(Admin_Resources.HelpTextIndexName)"></em>
+                        </div>
+                    </div>
+                    <div class="control-md">
+                        @if ((Model.CMSSearchIndexId > 0 || !string.IsNullOrEmpty(Model.IndexName)) && !Model.HasError)
+                        {
+                            @Html.TextBoxFor(model => model.IndexName, new { @onblur = "SearchConfiguration.prototype.ValidateCMSPageIndexName();" })}
+                        else
+                        {@Html.TextBoxFor(model => model.IndexName, new { @data_test_selector = "txtIndexName", @onblur = "SearchConfiguration.prototype.ValidateCMSPageIndexName();" })}
+                        @Html.ValidationMessageFor(model => model.IndexName, "", new { id = "errorSpanIndexName", @data_test_selector = "valIndexName" })
+                    </div>
+                </div>
+                <div class="create-index-btn field-automated">
+                    <input type="button" data-test-selector="linkCreateIndex" id="CmsContentIndexLink" name="CmsContentIndexLink" class="btn-text btn-text-secondary" value="@Admin_Resources.ButtonCreateIndex" onclick="SearchConfiguration.prototype.CmsPageRevisionTypePopUp()" />
+                </div>
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.PortalId)
+        @Html.HiddenFor(model => model.StoreName)
+        @Html.HiddenFor(model => model.RevisionType, new { @Value = revisionType.FirstOrDefault().Value })
+
+
+        <input type="hidden" id="ErrorMessage" value="@Model.ErrorMessage" />
+        <input type="hidden" id="HasError" value="@Model.HasError.ToString()" />
+        <input type="hidden" id="SearchCreateIndexMonitorId" name="SearchCreateIndexMonitorId" value="@Model.CMSSearchIndexMonitorId" />
+        <input type="hidden" id="CMSSearchIndexId" name="CMSSearchIndexId" value="@Model.CMSSearchIndexId" />
+        <input type="hidden" id="SearchConfigurationType" name="searchConfigurationType" value="CreateIndex" />
+
+    }
+</div>
+
+@Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml", publishPopupModel)
+
+<div id="searchIndexMonitorList">
+    @*Monitor list will be displayed here*@
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        var IsDisabledCMSPageResults = '@Model.IsDisabledCMSPageResults';
+        if (IsDisabledCMSPageResults == 'True') {
+            ZnodeNotification.prototype.DisplayNotificationMessagesHelper('@Admin_Resources.DisabledCMSPageResults', 'error', isFadeOut, fadeOutTime);
+        }
+        SearchConfiguration.prototype.GetCmsPageSearchIndexMonitorList();
+    })
+    $('[data-toggle="tooltip"]').tooltip();
+    ZnodeBase.prototype.RemoveAndAddUnobtrusiveValidation();
+</script>
+

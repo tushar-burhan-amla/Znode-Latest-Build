@@ -1,0 +1,40 @@
+﻿
+.form-builder-container .page-title{text-transform:uppercase;}
+.form-builder{padding-bottom:20px;
+    .form-group-container{padding:15px 10px;margin-bottom:10px;background:$form-builder-bgcolor;overflow:hidden;
+        .form-group-name{font-size:$base-font-size + 7;padding-bottom:5px;border-bottom:1px solid $border-bgcolor-default;}
+    }
+    .file-upload{
+        .file-upload-name{display:inline-flex;vertical-align:middle;float:none;margin-left:5px;}
+        .file-browse-btn{display:inline-flex;}
+    }
+  .form-group{
+    .datepicker-control{width:20%;}
+    .multiselect-dropdown{background:none;padding:0;}
+    .switch-field{overflow: hidden;margin-top:1px;
+        input {display:none;}
+        label {float:left;display:inline-block;width:40px;height:24px;font-weight:normal !important;background-color:$base-color-white;line-height:20px !important;text-align: center;text-shadow: none;padding: 1px;border: 1px solid rgba(0, 0, 0, 0.2);-webkit-transition:all 0.1s ease-in-out;-moz-transition:all 0.1s ease-in-out;-ms-transition:all 0.1s ease-in-out;-o-transition: all 0.1s ease-in-out;transition:all 0.1s ease-in-out;
+           &:hover {cursor: pointer;}
+           &:first-of-type {border-radius:0;}
+           &:last-of-type {border-radius:0;}
+        }
+   }
+  .switch-title {margin-bottom:6px;}
+  .switch-field input:checked + label {background-color:$base-color-primary;color:$base-color-white; -webkit-box-shadow: none;box-shadow: none;}
+      .file-upload{.btn-text{margin-left:0;}}
+  }
+}
+@include screensize(x-small) {
+   .form-builder {
+       .form-group{
+        .datepicker-control{width:30%;}
+     }
+   }
+}
+@include screensize(small) {
+   .form-builder {
+       .form-group{
+        .datepicker-control{width:20%;}
+     }
+   }
+}

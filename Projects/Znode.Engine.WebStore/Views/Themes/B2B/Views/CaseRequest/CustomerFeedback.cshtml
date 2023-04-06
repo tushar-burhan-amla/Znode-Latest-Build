@@ -1,0 +1,101 @@
+﻿@model Znode.Engine.WebStore.ViewModels.CaseRequestViewModel
+@{
+    ViewBag.Title = WebStore_Resources.TitleUserFeedback;
+}
+<div id="layout-contactus" class="col">
+    <div class="row">
+        <div class="container">
+            <div class="row contain-pages">
+                <div class="col-12">
+                    <h1 class="page-title">@WebStore_Resources.HeaderCustomerFeedback</h1>
+                </div>
+                <div class="col-12 col-lg-7 col-xl-6 b2b-form mb-5">
+                    @using (Html.BeginForm("CustomerFeedback", "CaseRequest", FormMethod.Post, new { @id = "formCreateCaseRequest" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="col-12 p-0 mb-3">@WebStore_Resources.CustomerFeedbackIntroText</div>
+
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                <div class="control-label form-title">
+                                    @Html.Label(WebStore_Resources.LabelComments)
+                                </div>
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextAreaFor(model => model.Message)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                <div class="control-label">
+                                    @Html.Label(WebStore_Resources.LabelFirstName, new { @class = "required" })
+                                </div>
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextBoxFor(model => model.FirstName)
+                                <span id="valFirstNameErr" class="field-validation-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                <div class="control-label">
+                                    @Html.Label(WebStore_Resources.LabelLastName, new { @class = "required" })
+                                </div>
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextBoxFor(model => model.LastName, new { @maxlength = 100 })
+                            <span data-test-selector="spanLastNameValidation" id="valLastNameErr" class="field-validation-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                <div class="control-label">
+                                    @Html.Label(WebStore_Resources.LabelCity)
+                                </div>
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextBoxFor(model => model.CustomerCity)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                <div class="control-label">
+                                    @Html.Label(WebStore_Resources.LabelState)
+                                </div>
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextBoxFor(model => model.CustomerState)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12 p-0">
+                                <div class="control-label">
+                                    @Html.Label(WebStore_Resources.LabelEmailAddress, new { @class = "required" })
+                                </div>
+                            </div>
+                            <div class="col-12 p-0">
+                                @Html.TextBoxFor(model => model.EmailID, new { @maxlength = 200, @id = "valEmailAddress" })
+                            <span data-test-selector="spanEmailIDValidation" id="valEmailAddressErr" class="field-validation-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 p-0 styled-input">
+                            <input type="checkbox" id="allow_sharing" name="AllowSharingWithCustomer" value="true" checked="checked" /><label for="allow_sharing">@WebStore_Resources.CheckBoxTextFeedbackShare</label>
+                        </div>
+                        <div id="div-captcha">
+                            @Html.ZnodeCaptcha()
+                            @if (Model != null)
+                            {
+                                <span id="valueCaptchaError" class="field-validation-error">@Model.ErrorMessage</span>
+                            }
+                        </div>
+                    <div class="form-group">
+                        <div class="col-12 p-0 my-3">
+                            <button type="submit" class="btn btn-primary mr-2" id="customer-feedback">@WebStore_Resources.ButtonSubmit</button>
+                            <a href="/Home/Index" class="btn btn-primary mr-2">@WebStore_Resources.ButtonCancel</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

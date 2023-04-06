@@ -1,0 +1,69 @@
+﻿@using Znode.Engine.WebStore.ViewModels;
+@using Znode.Engine.WebStore.Agents;
+@model PowerBIEmbedViewModel
+@{
+    string portalId = PortalAgent.CurrentPortal?.PortalId.ToString();
+}
+<script src="~/Scripts/PowerBI/powerbi.min.js"></script>
+
+@if (string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div id="reportContainer" style="height:100vh"></div>
+}
+else
+{
+    <div class="col-12 pr-0 pl-0 reviews-wishlist-section dashboard-content">
+        <div class="col-12 p-0">
+            <h3 class="b2b-section-header">@WebStore_Resources.LabelPowerBIReports</h3>
+            <div class="col-12 p-4">
+                <p>@Model.ErrorMessage</p>
+            </div>
+        </div>
+    </div>
+}
+
+@if (string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <script>
+        const filter1 = {
+            $schema: "http://powerbi.com/product/schema#basic",
+            target: {
+                table: "View_OrderDetails",
+                column: "PortalId",
+            },
+            operator: "Is",
+            values: [@portalId],
+            filterType: 1, // pbi.models.FilterType.BasicFilter
+            displaySettings: {
+                isLockedInViewMode: true,
+                isHiddenInViewMode: true
+            }
+        };
+
+        // Read embed application token from Model
+        var accessToken = "@Model.EmbedToken.Token";
+        // Read embed URL from Model
+        var embedUrl = "@Html.Raw(Model.EmbedUrl)";
+        // Read report Id from Model
+        var embedReportId = "@Model.ReportId";
+        // Get models. models contains enums that can be used.
+        var models = window['powerbi-client'].models;
+        var config = {
+            type: 'report',
+            tokenType: models.TokenType.Embed,
+            accessToken: accessToken,
+            embedUrl: embedUrl,
+            id: embedReportId,
+            permissions: models.Permissions.All,
+            filters: [filter1],
+            settings: {
+                filterPaneEnabled: true,
+                navContentPaneEnabled: true
+            }
+        };
+        // Get a reference to the embedded report HTML element
+        var reportContainer = $('#reportContainer')[0];
+        // Embed the report and display it within the div container.
+        var report = powerbi.embed(reportContainer, config);
+    </script>
+}

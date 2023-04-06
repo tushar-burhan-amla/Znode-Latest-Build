@@ -1,0 +1,41 @@
+﻿@model Znode.Engine.WebStore.Models.GridPagerModel
+
+<div class="pagination mr-auto">
+    <div class="paginationContent d-flex flex-wrap justify-content-center justify-content-sm-start">
+        <div class="PageLimit d-flex">
+            <a id="first" href="javascript:void(0)" class="first" title="Backward"><span class="zf-backward" data-toggle="tooltip" data-placement="top" title="First"></span></a>
+            <a id="previousPage" href="javascript:void(0)" class="Previous" title="Previous Page"><span class="zf-first" data-toggle="tooltip" data-placement="top" title="Previous Page"></span></a>
+            <span> @Admin_Resources.LabelPage </span>
+            <span>
+                @Html.TextBox("pagerTxt", null, new { @class = "pagerTxt", autocomplete = "off", @title="Page Number" })
+            </span>
+            <span class="LowerCase"> / @Model.PageCount&nbsp;</span>
+            <a id="nextPage" href="javascript:void(0)" class="Next" title="Next Page"><span class="zf-forward" data-toggle="tooltip" data-placement="top" title="Next Page"></span></a>
+            <a id="last" href="javascript:void(0)" class="last" title="Last Page"><span class="zf-last" data-toggle="tooltip" data-placement="top" title="Last"></span></a>
+        </div>
+        <div class="ShowPerPage show-per-page mt-4 mt-sm-0 ml-sm-4">
+            <span> @Admin_Resources.LabelShow </span>@Html.DropDownListFor(ob => ob.PageSize, Model.PageSizeOptions, new { @class = "pageSizeList", id = "pageSizeList", @title = "Page Size" })<span> @Admin_Resources.LabelPerPage </span>
+            <a href="#" id="refreshGrid" class="ml-3" title="Refresh"><span class="zf-refresh" data-toggle="tooltip" data-placement="top" title="Refresh"></span></a>
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(x => x.PageIndex)
+@Html.HiddenFor(x => x.PageCount)
+@Html.HiddenFor(x => x.PageSize)
+@Html.HiddenFor(x => x.RecordPerPageFieldName)
+@Html.HiddenFor(x => x.PageFieldName)
+@Html.HiddenFor(x => x.Sort)
+@Html.HiddenFor(x => x.SortDir)
+@Html.HiddenFor(x => x.SortFieldName)
+@Html.HiddenFor(x => x.SortDirFieldName)
+<script type="text/javascript">
+    PageIndex = parseInt('@Model.PageIndex');
+    PageCount = parseInt('@Model.PageCount');
+    PageSize = '@Model.PageSize';
+    RecordPerPageFieldName = '@Model.RecordPerPageFieldName';
+    PageFieldName = '@Model.PageFieldName';
+    Sort = '@Model.Sort';
+    SortDir = '@Model.SortDir';
+    SortFieldName = '@Model.SortFieldName';
+    SortDirFieldName = '@Model.SortDirFieldName';
+</script>

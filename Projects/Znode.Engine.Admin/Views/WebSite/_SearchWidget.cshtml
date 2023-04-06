@@ -1,0 +1,19 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CMSSearchWidgetConfigurationViewModel
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.SearchKeyword, new { @class = "required", @data_test_selector = "lblSearchKeyword" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => m.SearchKeyword,new { @data_test_selector = "txtSearchKeyword" })
+            @Html.ValidationMessageFor(m => m.SearchKeyword, "", new { @id = "valSearchKeyword" , @data_test_selector = "valSearchKeyword" })
+        </div>
+        <div class="col-sm-3 nopadding">
+            <div class="query-help-text">
+                @Html.Partial("_HelpText",Admin_Resources.HelpDescriptionSearchKeyword)
+            </div>
+        </div>
+    </div>
+</div>

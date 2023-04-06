@@ -1,0 +1,95 @@
+﻿@using Znode.Engine.Admin.Models;
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@model InventorySKUViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel
+    {
+        Action = actionName,
+        Controller = controllerName,
+        CancelUrl = "/Warehouse/GetAssociatedInventoryList?warehouseId=" + Model.WarehouseId + "&warehouseName=" + Model.WarehouseName,
+        FormId = "frmAssociateItemInventoryWarehouse",
+        Callback = "Inventory.prototype.ValidateSKU"
+    };
+}
+<div id="grid-container">
+    <div class="col-sm-12 title-container">
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelSKU)<em class="z-minus"></em><span>@Model.SKU</span></h1>
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmAssociateItemInventoryWarehouse" }))
+            {
+            <div id="createForm">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.SKU, new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            <input type="text" value="@Html.RenderBlock(Model.SKU)" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.HeaderWarehouse)
+                        </div>
+                        <div class="control-md">
+                            <input type="text" value="@Html.RenderBlock(Model.WarehouseName)" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.Quantity, new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.Quantity, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForInventory(), @Message = HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorValidQuantityFromInventoryForRoundOff, Admin_Resources.ErrorValidInventory) })
+                            @Html.ValidationMessageFor(model => model.Quantity)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.ReOrderLevel)
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.ReOrderLevel, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForInventory(), @Message = HelperMethods.GetInventoryFormatErrorMessage(Admin_Resources.ErrorValidReOrderLevelFromInventoryForRoundOff, Admin_Resources.ErrorValidInventory) })
+                            @Html.ValidationMessageFor(model => model.ReOrderLevel)
+                        </div>
+                    </div>
+                </div>
+
+
+
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderConfirmDelete,
+                        Description = @Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "StoreDeletePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "javscript: var inventory = new Inventory(); inventory.DeleteMultipleSKUInventory()"}
+                         }
+                    })
+
+            </div>
+                @Html.HiddenFor(m => m.InventoryId)
+                @Html.HiddenFor(m => m.SKU)
+                @Html.HiddenFor(m => m.WarehouseId)
+                @Html.HiddenFor(m => m.WarehouseCode)
+                @Html.HiddenFor(m => m.WarehouseName)
+        }
+    </section>
+</div>

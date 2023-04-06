@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "FileUploader";
+    Layout = null;
+    string _display = Request.QueryString["mode"] == "add" ? "display:block" : "display:none";
+}
+<div id="FileUploader" style="@_display">
+    <div class="col-sm-12 nopadding margin-top">
+        <div class="pull-right btn-back">
+            <button id="backtolist" data-test-selector="btnBack" class="btn-text-icon"><em class='z-back'></em>@Admin_Resources.ButtonBack</button>
+        </div>
+        <div class="col-sm-12 nopadding">
+            @Html.Partial("~/Views/Shared/Controls/_FileUploader.cshtml")
+        </div>
+    </div>
+</div>
+<div id="massages"></div>
+<script src="~/Scripts/References/MediaUpload/ZUploader.js"></script>

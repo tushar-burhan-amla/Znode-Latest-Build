@@ -1,0 +1,310 @@
+﻿@model Znode.Engine.Admin.ViewModels.StoreLocatorDataViewModel
+
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Extensions;
+@using Znode.Engine.Admin.Helpers;
+
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmcreatestorelocator", CancelUrl = "/StoreLocator/List", IsSaveCloseEnable = true, Callback = "Store.prototype.ValidateForStore" };
+    string mediapath = string.IsNullOrEmpty(Model?.MediaPath) ? ZnodeAdminSettings.DefaultImagePath : Model?.MediaPath;
+    int? mediaId = Model?.MediaId > 0 ? Model.MediaId : 0;
+
+}
+<div id="Resultpartial">
+    <div class="col-sm-12 title-container">
+        @if (actionName.ToLower().Contains("create"))
+        {
+            <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleStoreLocation)</h1>
+        }
+        else
+        {
+            <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.TitleStoreLocation)<em class="z-minus"></em><span>@Model.StoreName</span></h1>
+        }
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        @Html.Partial("~/views/storelocator/_asidestorelocatorpanel.cshtml")
+        <!--Main Container-->
+        <section class="main-container">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmcreatestorelocator", @onsubmit = "return ZnodeBase.prototype.ValidateCodeField('[name=StoreLocationCode]','" + Model.StoreLocationCode + "','/StoreLocator/IsStoreLocatorCodeExists')" }))
+            {
+
+                <div class="col-sm-6 nopadding store-form-field">
+                    <h3 class="section-heading" data-test-selector="hdgGeneralInformation">@Admin_Resources.LabelGeneralInformation</h3>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.PortalList, new { @class = "required", @data_test_selector = "lblPortalList" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.HiddenFor(model => model.PortalId, new { @id = "hdnPortalId" })
+                                    @Html.FastSelectFor(model => model.PortalName, model => model.PortalId, "GetSuggestions", "Typeahead", "Store.prototype.OnSelectStoreAutocompleteDataBind", 1, true,
+                                    new {
+                                        htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @Name = "SearchTerm", @id = "txtPortalName", @data_test_selector = "txtPortal_Name" },
+                                        parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString()}
+                                    })
+                                    @Html.ValidationMessageFor(model => model.PortalName, null, new { id = "errorRequiredStore", @data_test_selector = "valPortalName" })
+                                    <span class="typeaheaderrorspan control-optional-profile"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.StoreName, new { @class = "required", @data_test_selector = "lblStoreName" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(model => model.StoreName, new { @data_test_selector = "txtStoreName" })
+                                    @Html.ValidationMessageFor(model => model.StoreName, "", new { @data_test_selector = "valStoreName" })
+                                </div>
+                            </div>
+                            @Html.Partial("_HelpText", @Admin_Resources.HelptextStoreLocatorStoreName)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.StoreLocationCode, new { @class = "required", @data_test_selector = "lblStoreLocationCode" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(model => model.StoreLocationCode, new { @onblur = "ZnodeBase.prototype.ValidateCodeField('[name=StoreLocationCode]','" + Model.StoreLocationCode + "','/StoreLocator/IsStoreLocatorCodeExists')", @data_test_selector = "txtStoreLocationCode" })
+                                    @Html.ValidationMessageFor(model => model.StoreLocationCode, "", new { @data_test_selector = "valStoreLocationCode" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-lg control-non">
+                            <label>
+                                <input id="IsActive" name="IsActive" checked="@Model.IsActive" type="checkbox" value="true" data-test-selector="chkIsActive">
+                                <span class="lbl padding-8" for="IsActive">@Admin_Resources.LabelIsActive</span>
+                                <input name="StoreAddress.IsActive" type="hidden" value="false">
+                            </label>
+                        </div>
+                    </div>
+                    <h3 class="section-heading" data-test-selector="hdgAddressDetails">@Admin_Resources.LabelAddressDetails</h3>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Admin_Resources.LabelAddress1, new { @class = "required", @data_test_selector = "lblAddress1" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(model => model.Address1, new { @onblur = "StoreLocator.prototype.GetLatLng()", @data_test_selector = "txtAddress1" })
+                                    @Html.ValidationMessageFor(model => model.Address1, "", new { @data_test_selector = "valAddress1" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Admin_Resources.LabelAddress2, new { @data_test_selector = "lblAddress2" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(model => model.Address2, new { @onblur = "StoreLocator.prototype.GetLatLng()", @data_test_selector = "txtAddress2" })
+                                    @Html.ValidationMessageFor(model => model.Address2, "", new { @data_test_selector = "valAddress2" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.CountryName, new { @class = "required", @data_test_selector = "lblCountryName" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.DropDownListFor(model => model.CountryName, Model.CountryList, new { @id = "ddlCountryList", @onblur = "StoreLocator.prototype.GetLatLng()", @onchange = "Account.prototype.BindStates('ddlCountryList')", @data_test_selector = "drpCountryName" })
+                                    @Html.ValidationMessageFor(model => model.CountryName, "", new { @data_test_selector = "valCountryName" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.StateName, new { @class = "required", @data_test_selector = "lblStateName" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    <div id="dev-statecode-textbox">
+                                        @Html.TextBoxFor(model => model.StateName, new { @onblur = "StoreLocator.prototype.GetLatLng()", @data_test_selector = "txtStateName" })
+                                    </div>
+                                    <div style="display:none;" id="dev-statecode-select">
+                                        <select class="valid" id="SelectStateName" name="StateName" onchange="StoreLocator.prototype.GetLatLng()" data-test-selector="drpStateName"></select>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.StateName, "", new { @data_test_selector = "valStateName" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.CityName, new { @class = "required", @data_test_selector = "lblCityName" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(model => model.CityName, new { @onblur = "StoreLocator.prototype.GetLatLng()", @data_test_selector = "txtCityName" })
+                                    @Html.ValidationMessageFor(model => model.CityName, "", new { @data_test_selector = "valCityName" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.PostalCode, new { @class = "required", @data_test_selector = "lblPostalCode" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(model => model.PostalCode, new { @data_test_selector = "txtPostalCode" })
+                                    @Html.ValidationMessageFor(model => model.PostalCode, "", new { @data_test_selector = "valPostalCode" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.Longitude, new { @data_test_selector = "lblLongitude" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(model => model.Longitude, new { @data_test_selector = "txtLongitude" })
+                                    @Html.ValidationMessageFor(model => model.Longitude, "", new { @data_test_selector = "valLongitude" })
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.Latitude, new { @data_test_selector = "lblLatitude" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(model => model.Latitude, new { @data_test_selector = "txtLatitude" })
+                                    @Html.ValidationMessageFor(model => model.Latitude, "", new { @data_test_selector = "valLatitude" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.PhoneNumber, new { @class = "required", @data_test_selector = "lblPhoneNumber" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(model => model.PhoneNumber, new { @data_test_selector = "txtPhoneNumber" })
+                                    @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @data_test_selector = "valPhoneNumber" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.FaxNumber, new { @data_test_selector = "lblFaxNumber" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(model => model.FaxNumber, new { @data_test_selector = "txtFaxNumber" })
+                                    @Html.ValidationMessageFor(model => model.FaxNumber, "", new { @data_test_selector = "valFaxNumber" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label(Admin_Resources.LabelContactName, new { @data_test_selector = "lblContactName" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(model => model.DisplayName, new { @data_test_selector = "txtContactName" })
+                                    @Html.ValidationMessageFor(model => model.DisplayName, "", new { @data_test_selector = "valContactName" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.DisplayOrder, new { @class = "required", @data_test_selector = "lblDisplayOrder" })
+                            </div>
+                            <div class="control-lg">
+                                <div id="areaList">
+                                    @Html.TextBoxFor(model => model.DisplayOrder, new { @data_test_selector = "txtDisplayOrder" })
+                                    @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @data_test_selector = "valDisplayOrder" })
+                                </div>
+                            </div>
+                            @Html.Partial("_HelpText", @Admin_Resources.HelptextStoreLocatorDisplayOrder)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label data-test-selector="lbl@(Admin_Resources.LabelImage)">@Admin_Resources.LabelImage</label>
+                            </div>
+                            <div class="control-lg">
+                                <div class="upload-images" id="divMediaId">
+                                    <img id="MediaId" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')" src="@mediapath" alt="Upload Store Locator Image"class="img-responsive" data-test-selector="imgBrowseMedia">
+                                    <span class="change-image" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')">@Admin_Resources.LinkChange</span>
+                                    <input type="hidden" id="MediaId" name="MediaId" value="@mediaId">
+                                    <input type='hidden' value=@AdminConstants.ImageExtensions Id='hdnMediaId' />
+                                    @if (!Equals(mediapath, null) && !Equals(mediapath, ZnodeAdminSettings.DefaultImagePath))
+                                    {
+                                        <a class="upload-images-close" data-toggle="tooltip" data-placement="top" title="Remove" onclick="EditableText.prototype.RemoveImage('MediaId')"><em class="z-close-circle"></em></a>
+                                    }
+                                </div>
+                            </div>
+                            <div id="UploadMediaId" class="appendMediaModel">
+                            </div>
+                        </div>
+                    </div>
+                    @Html.HiddenFor(m => m.PortalAddressId)
+                    @Html.HiddenFor(m => m.AddressId)
+                </div>
+                <div class="col-sm-6 nopadding store-map">
+                    <div class="col-xs-12 nopadding help-text-label margin-bottom">
+                        <h3 class="section-heading">Location geocode</h3>
+                        @Html.Partial("_HelpText", "Drag marker to catch latitude/longitude")
+                    </div>
+                    <div class="col-xs-12 nopadding">
+                        <div id="map" style="height:530px;"></div>
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        Typeahead.prototype.Ontextkeypress();
+    });
+</script>
+@Html.HiddenFor(m => m.StateName, new { @id = "hdn_StateCode" })
+<div id="divMediaUploaderPopup"></div>
+<div id="divStorePopupPanel" class="aside-popup-panel modal-dialog modal-lg"></div>
+<script src="~/Scripts/Core/Znode/StoreLocatorMap.js"></script>
+@Html.Hidden("gocoderGoogleAPI", ZnodeWebstoreSettings.ZnodeGocoderGoogleAPI)
+@Html.Hidden("gocoderGoogleAPIKey", ZnodeWebstoreSettings.ZnodeGoogleMapKey)
+<script async defer src="@ZnodeWebstoreSettings.ZnodeGoogleAPIDomainKey/maps/api/js?key=@(ZnodeWebstoreSettings.ZnodeGoogleMapKey)&callback=initMap" type="text/javascript"></script>

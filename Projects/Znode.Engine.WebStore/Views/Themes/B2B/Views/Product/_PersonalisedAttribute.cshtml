@@ -1,0 +1,20 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model List<AttributeValidationViewModel>
+@{
+    Layout = null;
+}
+<form id="frmPersonalised" class="noSubmitOnEnterKeyPress b2b-dynamic-addons" method="post" novalidate="novalidate">
+    @foreach (var item in Model)
+    {
+        <div class="form-group col-12 p-0 personlised-attribute">
+            <div class="col-12 p-0">
+                <label for="@item.ControlProperty.Name">@item.AttributeName</label>
+            </div>
+            <div class="col-12 p-0">
+                @Html.CreateControl(item.ControlProperty)
+            </div>
+        </div>
+    }
+</form>
+<script src="~/Scripts/lib/DynamicValidation.js"></script>
+<script src="~/Scripts/Core/Common/ZnodeHelper.js"></script>

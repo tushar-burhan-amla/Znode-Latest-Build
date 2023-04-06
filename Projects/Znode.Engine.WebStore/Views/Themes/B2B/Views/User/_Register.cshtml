@@ -1,0 +1,58 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model RegisterViewModel
+
+<p id="ExistingUserError" class="error-msg" />
+
+<div class="form-group">
+    <div class="col-12 p-0">
+        @Html.Label(WebStore_Resources.LabelUsername, new { @class = "control-label required", @for = "UserName", @data_test_selector = "lblUsername" })
+    </div>
+    <div class="col-12 p-0">
+        @Html.TextBoxFor(m => m.UserName, new { @data_test_selector = "txtUsername" })
+        @Html.ValidationMessageFor(m => m.UserName, "", new { @data_test_selector = "spnValidForUsername" })
+    </div>
+</div>
+@if (Model.UserVerificationTypeCode != UserVerificationTypeEnum.EmailVerificationCode)
+{
+    <div class="form-group">
+        <div>
+            @Html.Label(WebStore_Resources.ColumnCreatePassword, new { @class = "control-label required", @for = "Password", @data_test_selector = "lblPassword" })
+
+        </div>
+        <div>
+            @Html.PasswordFor(m => m.Password)
+            @Html.ValidationMessageFor(m => m.Password, "", new { @data_test_selector = "spnValidForPassword" })
+            <p class="text-secondary">@WebStore_Resources.ValidPassword</p>
+        </div>
+    </div>
+    <div class="form-group">
+
+        <div>
+            @Html.Label(WebStore_Resources.ColumnReTypePassword, new { @class = "control-label required", @for = "ReTypePassword", @data_test_selector = "lblReTypePassword" })
+        </div>
+        <div>
+            @Html.PasswordFor(m => m.ReTypePassword)
+            @Html.ValidationMessageFor(m => m.ReTypePassword, "", new { @data_test_selector = "spnValidForReTypePass" })
+        </div>
+
+    </div>
+}
+<div class="form-group">
+    <div class="col-12 styled-input p-0">
+        <input id="signup_optin" name="EmailOptIn" value="true" type="checkbox" data-test-selector="chksignup_optin">
+        <label for="signup_optin" data-test-selector="spnLabelsignup_optin">@WebStore_Resources.CheckBoxTextNewsLetter</label>
+    </div>
+</div>
+
+
+
+<div class="hidden-field">
+    @{
+        string _returnUrl = Convert.ToString(Request.QueryString["returnUrl"]);
+    }
+    @Html.Hidden("returnUrl", _returnUrl)
+    @Html.HiddenFor(x => x.UserName)
+    @Html.HiddenFor(x => x.Email)
+    @Html.HiddenFor(x => x.UserVerificationTypeCode)
+</div>

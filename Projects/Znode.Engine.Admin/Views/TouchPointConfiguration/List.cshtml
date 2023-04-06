@@ -1,0 +1,68 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model TouchPointConfigurationListViewModel
+@using Znode.Engine.Admin.Models
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div id="@Model.GridModel.FrontObjectName">
+    <div class="col-sm-12 title-container">
+        <h1>@Model.ERPClassName @ERP_Resources.TitleERPConfiguratorList</h1>
+        <div class="pull-right btn-container">
+            @Html.AuthorizedPrototypeRawActionLink("<em class='z-add-circle'></em>" + Admin_Resources.ButtonAdd, "GetUnAssignedTouchPointsList", "TouchPointConfiguration", new { @class = "btn-text-icon", onclick = "ZnodeBase.prototype.BrowseAsidePoupPanel('/TouchPointConfiguration/GetUnAssignedTouchPointsList', 'UnassignedTouchPointsAsidePannel')" })
+        </div>
+    </div>
+    <div class="main-wrapper">
+        @Html.Partial("~/Views/TouchPointConfiguration/_asideERPconfiguration.cshtml", Model?.ERPClassName)
+        <!--Main Container-->
+        <section class="main-container">
+            @using (Ajax.BeginForm(actionName, controllerName, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+            {
+                <div id="filterComponent">
+                    @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                </div>
+            }
+            <div class="col-sm-12 list-container erp-configurator">
+                @{
+                    @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                }
+            </div>
+            <div class="col-sm-12 list-container">
+                @{
+                    @Html.Hidden("hdnEnableDisableActionURL")
+                    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.ConfirmText,
+
+                        Description = @ERP_Resources.DisableTaskSchedulerConfirmationMessage,
+                        ModalPopUpId = "PopUpConfirmDisable",
+                        Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "DynamicGrid.prototype.RedirectToEnableDisable()" } }
+                    })
+
+                    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                        new PopupModel()
+                        {
+                            Title = @Admin_Resources.ConfirmText,
+                            Description = @ERP_Resources.EnableTaskSchedulerConfirmationMessage,
+                            ModalPopUpId = "PopUpConfirmEnable",
+                            Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "DynamicGrid.prototype.RedirectToEnableDisable()" } }
+                        })
+
+                    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = Admin_Resources.HeaderConfirmDelete,
+                        Description = Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "TouchPointConfigurationDeletePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                        new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "ERPConfigurator.prototype.DeleteERPTaskScheduler(this)"}
+                        }
+                    })
+                }
+            </div>
+        </section>
+    </div>
+</div>
+<div id="UnassignedTouchPointsAsidePannel" class="aside-popup-panel modal-dialog modal-xl"></div>

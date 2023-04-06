@@ -1,0 +1,22 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model SearchKeywordsRedirectListViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+}
+<div id="searchSettings">
+    <div class="title-container">
+        <h1>@Admin_Resources.LabelSearchSettings</h1>
+    </div>
+    <div class="main-wrapper">
+        <!--Left Panel-->
+        @Html.Partial("~/Views/SearchConfiguration/_asidePanel.cshtml")
+        <!--Main Container-->
+        <section class="main-container clearfix">
+            <div id="SearchKeywordsList">
+                @Html.Partial("~/Views/SearchConfiguration/_KeywordsList.cshtml", Model)
+            </div>
+        </section>
+    </div>
+</div>
+<div id="divCataloglistPopup" class="aside-popup-panel modal-dialog modal-lg"></div>
+

@@ -1,0 +1,33 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model PaymentDetailsViewModel
+
+@{ 
+    string poDocumentClass = Model.IsPoDocRequire ? "required" : string.Empty;
+}
+<div id="divpurchase-order" class="payment-details-block">
+    <div class="col-12 col-lg-6 p-0">   
+            <div class="form-group">
+                <div class="form-title"> @Html.LabelFor(model => model.PurchaseOrderNumber, new { @class = "required" })</div>
+                <div class="col-12 p-0">
+                    @Html.TextBoxFor(model => model.PurchaseOrderNumber, new { @id = "txtPurchaseOrderNumber", @onblur = "Checkout.prototype.HidePONumberValidateMessage()", @class = "form-input-long" })
+                    <span id="errorpurchaseorder" class="error-msg" style="display:none"></span>
+                </div>
+            </div>
+            @if (Model.IsPoDocUploadEnable)
+            {
+                <div class="form-group mt-4" id="divPODocUpload">
+                    <div class="form-title">
+                        @Html.Label(WebStore_Resources.LabelPODocument, new { @id = "lblSelectFile", @class = poDocumentClass })
+                    </div>
+                    <div class="col-12 p-0">
+                        <div id="poUploader">
+                            @Html.EditorFor(model => model.PODocument)
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    @Html.HiddenFor(model => model.IsPoDocUploadEnable)
+    @Html.HiddenFor(model => model.IsPoDocRequire)
+
+</div>

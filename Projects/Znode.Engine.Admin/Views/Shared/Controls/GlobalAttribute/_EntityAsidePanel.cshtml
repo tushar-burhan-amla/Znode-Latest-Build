@@ -1,0 +1,15 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@model GlobalAttributeEntityDetailsViewModel
+@{
+    string viewPath = (string.Equals(Model.EntityType, Convert.ToString(EntityTypeEnum.Store), StringComparison.CurrentCultureIgnoreCase)) ? "~/views/store/_asidestoremanagepanel.cshtml"
+        : (string.Equals(Model.EntityType, Convert.ToString(EntityTypeEnum.User), StringComparison.CurrentCultureIgnoreCase)) ? "~/views/User/_asideCustomerManagePanel.cshtml"
+        : (string.Equals(Model.EntityType, Convert.ToString(EntityTypeEnum.Account), StringComparison.CurrentCultureIgnoreCase)) ? "~/views/Account/_asideaccountmanagepanel.cshtml" : string.Empty;
+}
+<div>
+    @if (!string.IsNullOrEmpty(viewPath))
+    {
+        @Html.Partial(viewPath);
+    }
+</div>
+

@@ -1,0 +1,32 @@
+﻿@model Znode.Engine.Admin.ViewModels.AttributesViewModel
+@using Znode.Engine.Admin.ViewModels;
+
+@{
+    ViewBag.Title = Admin_Resources.TitleDAM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateAttribute", CancelUrl = "/MediaManager/Attributes/List", Callback = "Attributes.prototype.IsAttributeCodeExist", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.ToLower().Contains("create"))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelAttribute)</h1>
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelAttribute)<i class="z-minus"></i><span id="AttributeCodeLable">@Model.AttributeCode</span></h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateAttribute" }))
+            {
+        @*Div for creating tabs*@
+        <div class="col-sm-12 nopadding">
+            @Html.Partial("~/Views/Shared/Controls/_TabStructure.cshtml", Model.Tabs)
+        </div>
+    }
+</section>

@@ -1,0 +1,21 @@
+﻿
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+}
+
+@if (actionName != "Create")
+{
+    <aside>
+        <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            <ul class="aside-panel">
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.TitleHighlight, "Edit", "Highlight", new { highlightId = Model?.HighlightId, localeId = Model?.LocaleId }, new { @data_test_selector = "linkHighlights" })</li>
+                <li id = "tabHighlightProductList" data-test-selector = "linkAssociatedProducts">
+                    @Html.AuthorizedRawActionLink(@PIM_Resources.TitleAssociatedProducts, "HighlightProductList", "Highlight", new {localeId = Model?.LocaleId, highlightId = Model?.HighlightId, highlightCode = Model?.HighlightCode },
+              new AjaxOptions { UpdateTargetId = "ManageHighlightDiv", InsertionMode = InsertionMode.Replace, OnSuccess = "ZnodeBase.prototype.activeAsidePannelAjax(this);" })
+                </li>
+            </ul>
+        </div>
+    </aside>
+}
+

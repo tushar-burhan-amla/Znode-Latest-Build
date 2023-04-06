@@ -1,0 +1,9 @@
+﻿<div id="parentAppendDiv" class="col-sm-12 nopadding">
+    <div id="appendDiv" class="media-upload-panel">
+    </div>
+    <input id='txtImage' style='display: none' type='text' name='imageName' />
+    <img id="uploadedmediaId" src='' alt="Upload Image" class='img-responsive upload-images' />
+   @* <button type='button' class='btn-text-icon red upload-btn' onclick='EditableText.prototype.GetMediaData("uploadedmediaId")'><em class='z-upload'></em>Choose a Media...</button>*@
+    @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonAdd, "List", "MediaManager", "btn-text upload-btn", "EditableText.prototype.GetMediaData('uploadedmediaId')")
+    <div id='appendMediaModel'> </div>
+</div>

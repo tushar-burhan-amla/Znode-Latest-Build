@@ -1,0 +1,123 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+@model CatalogViewModel
+
+@{
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateEditCatalog", CancelUrl = "CatalogList", IsSaveCloseEnable = true };
+}
+
+
+<div class="col-sm-12 title-container">
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+    @if (actionName.ToLower().Contains("create"))
+    {
+        <h1 data-test-selector = "hdgAddCatalog" >@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleCatalog)</h1>
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.TitleCatalog)</h1>
+    }
+</div>
+
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    <div id="create-edit-catalog" class="catalog-edit-form">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateEditCatalog", @onsubmit = "return ZnodeBase.prototype.ValidateCodeField('[name=CatalogCode]','" + Model.CatalogCode + "','/Catalog/IsCatalogCodeExists')" }))
+        {
+            <h3 id="catalog_general_information" class="section-heading" data-test-selector="hdgGeneralInformation">@Admin_Resources.ManageGeneralInformation</h3>
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.CatalogName, new { @class = "required", @data_test_selector = "lblCatalogName" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.CatalogName, new { maxlength = 255, @data_test_selector = "txtCatalogName" })
+                            @Html.ValidationMessageFor(model => model.CatalogName, "", new { id = "errorSpanCatalogName", @data_test_selector = "valCatalogName" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.CatalogCode, new { @class = "required", @data_test_selector = "lblCatalogCode" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.CatalogCode, new { @onblur = "ZnodeBase.prototype.ValidateCodeField('[name=CatalogCode]','" + Model.CatalogCode + "','/Catalog/IsCatalogCodeExists')", @data_test_selector = "txtCatalogCode" })
+                            @Html.ValidationMessageFor(model => model.CatalogCode, "", new { @data_test_selector = "valCatalogCode" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="col-sm-12 nopadding">
+                            <h3 id="index_setting" class="section-heading" data-test-selector="hdgIndexSetting">@PIM_Resources.LabelIndexSetting</h3>
+                        </div>
+                        <div class="col-sm-6 col-md-8 col-lg-6 nopadding index-note">
+                            @PIM_Resources.AllowIndexingNote
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.IsAllowIndexing, new { @data_test_selector = "LabelDisplayPricingAndSEODetailsOfProductsFromIndex" })
+                        </div>
+                        <div class="control-sm">
+                            <div class="switch-field">
+                                @if (Model.IsAllowIndexing)
+                                {
+                                @Html.RadioButtonFor(x => x.IsAllowIndexing, "true", new { @checked = true, @id = "IsAllowIndexing_left", @data_test_selector = "chkEventLoggingEnabledLeft", @class="IsAllowIndexing", @data_val="Enable" }) <label data-test-selector="lblEventLoggingEnabledLeft" for="IsAllowIndexing_left">Enable</label>
+                                @Html.RadioButtonFor(x => x.IsAllowIndexing, "false", new { @id = "IsAllowIndexing_right", @data_test_selector = "chkEventLoggingEnabledRight", @class = "IsAllowIndexing", @data_val = "Disable" }) <label data-test-selector="lblEventLoggingEnabledRight" for="IsAllowIndexing_right">Disable</label>
+                                }
+                                else
+                                {
+                                @Html.RadioButtonFor(x => x.IsAllowIndexing, "true", new { @id = "IsAllowIndexing_left", @data_test_selector = "chkEventLoggingEnabledLeft", @class = "IsAllowIndexing", @data_val = "Enable" }) <label data-test-selector="lblEventLoggingEnabledLeft" for="IsAllowIndexing_left">Enable</label>
+                                @Html.RadioButtonFor(x => x.IsAllowIndexing, "false", new { @checked = true, @id = "IsAllowIndexing_right", @data_test_selector = "chkEventLoggingEnabledRight", @class = "IsAllowIndexing", @data_val = "Disable" }) <label data-test-selector="lblEventLoggingEnabledRight" for="IsAllowIndexing_right">Disable</label>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.DefaultStore, new { @data_test_selector = "lblDefaultStore" })
+                        </div>
+                        <div class="control-sm">
+                            @Html.FastSelectFor(model => model.DefaultStore, model => model.PortalId, "GetSuggestions", "Catalog", "Catalog.prototype.OnSelectPortalResult", 1, true,
+                                 new
+                                 {
+                                     htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @id = "txtPortalName", @data_test_selector = "txtStore" },
+                                     parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString() }
+                                 })
+                            <span class="field-validation-valid" data-test-selector="valCatalogName" data-valmsg-for="DefaultStore" data-valmsg-replace="true" id="errorSpanDefaultStore"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @Html.HiddenFor(m => m.PortalId)
+            if (actionName.ToLower().Contains("edit"))
+            {
+                @Html.HiddenFor(model => model.PimCatalogId)
+                @Html.HiddenFor(model => model.CatalogName)
+            }
+        }
+    </div>
+    <div id="render-unassociated-list" class="col-sm-12 page-container">
+    </div>
+</section>

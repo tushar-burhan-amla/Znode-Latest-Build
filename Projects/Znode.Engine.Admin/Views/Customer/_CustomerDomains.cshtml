@@ -1,0 +1,22 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CustomerAffiliateViewModel
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.DomainIds, new { @data = "dat", @data_test_selector = "lblTrackingLink" })
+        </div>
+        <div class="control-md">
+            <div id="areaList">
+                @Html.ListBoxFor(model => model.DomainIds, Model.Domains, new { @id = "domains", @multiple = "multiple", @data_test_selector = "drpTrackingLinkList" })
+                @Html.ValidationMessageFor(model => model.DomainIds, "", new { @data_test_selector = "valTrackingLink" })
+                <span class="error-msg" id="errorRequire_domains"></span>
+            </div>
+        </div>
+    </div>
+</div>       
+<script src="~/Content/bootstrap-3.3.7/js/bootstrap-multiselect.js" type="text/javascript"> </script>
+<script>
+    $("#AreaId").multiselect({ includeSelectAllOption: false, enableCaseInsensitiveFiltering: false });
+    $("#domains").multiselect({ includeSelectAllOption: true, enableCaseInsensitiveFiltering: false });
+</script>

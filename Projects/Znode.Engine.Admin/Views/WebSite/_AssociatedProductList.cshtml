@@ -1,0 +1,95 @@
+﻿@model Znode.Engine.Admin.ViewModels.CMSWidgetProductListViewModel
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.Resources
+@{
+    /**/
+
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string typeOfMapping = Model.TypeOfMapping;
+    string cancelUrl = Equals(Model.TypeOfMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())
+                ? string.IsNullOrEmpty(Model?.FileName) ? $"/StoreExperience/StoreSetting?portalId={Model.CMSMappingId}" : $"/StoreExperience/StoreSetting?portalId={Model.CMSMappingId}&fileName={Model.FileName}"
+                : string.IsNullOrEmpty(Model?.FileName) ? $"/Content/EditContentPage?cmsContentPagesId={Model.CMSMappingId}" : $"/Content/EditContentPage?cmsContentPagesId={Model.CMSMappingId}&fileName={Model.FileName}";
+}
+<div id="@Model.GridModel.FrontObjectName">
+    <div id="associate-store-btn" style="display:none"></div>
+    @* If statement is added so that the popup doesnot appear twice in CMS popup 1st popup is present in _WidgetPageList.cshtml *@
+    @if (Equals(Model.TypeOfMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString()))
+    {
+        <div id="associateproductlist" class="aside-popup-panel modal-dialog modal-xl" style="z-index:10000;">
+            @*product list will display in this div*@
+        </div>
+    }
+    <div id="ContentAssociatedProductList">
+        <div class="col-sm-12 title-container">
+            @{
+                string widgetName = string.IsNullOrEmpty(Admin_Resources.ResourceManager.GetString(string.Concat(AdminConstants.ZWidgetDisplayName, @Model.WidgetName))) ? @Model.WidgetName : Admin_Resources.ResourceManager.GetString(string.Concat(AdminConstants.ZWidgetDisplayName, @Model.WidgetName));
+                <h1>@Admin_Resources.TextConfigure<em class="z-minus"></em><span>@widgetName</span></h1>
+            }
+            <div class="pull-right btn-container">
+                @if (cancelUrl.Contains("/Content"))
+                {
+                    <button type="button" class="btn-text-icon" data-test-selector="linkBack" onclick="ZnodeBase.prototype.CancelUpload('associatedPanel')"><em class="z-back"></em>@Admin_Resources.ButtonBack</button>
+                }
+                else
+                {
+                    <button type="button" class="btn-text-icon" data-test-selector="linkBack" onclick="window.location.href = '@cancelUrl'"><em class="z-back"></em>@Admin_Resources.ButtonBack</button>
+                }
+                <div class="pull-right">
+                    @Ajax.AuthorizedRawActionLink("" + Admin_Resources.TextAssociateProduct,"GetUnAssociatedProductList", "WebSite", new { cmsWidgetsId = Model.CMSWidgetsId, cmsMappingId = Model.CMSMappingId, widgetKey = Model.WidgetsKey, typeOfMapping = Model.TypeOfMapping, widgetName = Model.WidgetName, displayName = Model.DisplayName, fileName = Model.FileName }, new AjaxOptions { UpdateTargetId = "associateproductlist", InsertionMode = InsertionMode.Replace, OnBegin = "$('body').append(\"<div class='modal-backdrop fade in' style='z-index:9999;'></div>\")", OnSuccess = "$('#associateproductlist').show();" }, new { @class = "btn-text btn-text-secondary margin-left-10", @data_test_selector = "linkAssociateProduct" })
+                </div>
+            </div>
+        </div>
+
+        <!--Main Container-->
+        <div class="cms-notification">
+            <div id="CMSProductAssociatedSuccessMessage" class="cms-error-msg" style="display:none"></div>
+        </div>
+        <section class="col-sm-12 page-container">
+            @using (Ajax.BeginForm("GetAssociatedProductList", "Website", new { cmsWidgetsId = Model.CMSWidgetsId, cmsMappingId = Model.CMSMappingId, widgetKey = Model.WidgetsKey, typeOfMapping = Model.TypeOfMapping, widgetName = Model.WidgetName, displayName = Model.DisplayName, fileName = Model.FileName }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+            {
+                <div id="filterComponent">
+                    @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                </div>
+            }
+            <div class="col-sm-12 list-container">
+                @{
+                    @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                }
+            </div>
+            @Html.HiddenFor(x => x.CMSWidgetsId)
+            @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderConfirmDelete,
+                        Description = @Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "CMSWidgetProductDeletePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "WebSite.prototype.UnAssociateProduct(this,"+ Model.CMSMappingId +",'"+ HttpUtility.UrlEncode(Model.FileName) +"',0)"}
+                         }
+                    })
+            @Html.HiddenFor(m => m.CMSWidgetsId)
+            @if (!Equals(Model.TypeOfMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString()))
+            {
+                @Html.Hidden("ContentPageRedirectURL", "/Content/EditContentPage?cmsContentPagesId=" + Model.CMSMappingId + "&fileName=" + HttpUtility.UrlEncode(Model.FileName) + "&localeId=0&isFromWebSiteController=false")
+            }
+        </section>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        EditableGridEvent.Init();
+        $(document).off("GRID_ON_DELETE").on("GRID_ON_DELETE", function () {
+            if (typeOfMapping != "PortalMapping") {
+                window.location.href = window.location.protocol + "//" + window.location.host + $("#ContentPageRedirectURL").val()
+            }
+        });
+    });
+    $("input[data-columnname='DisplayOrder']").on("change", function () {
+        if ($(this).val())
+            validateForm = Products.prototype.ValidateDisplayOrderField(this);
+    });
+</script>
+

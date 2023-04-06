@@ -1,0 +1,37 @@
+﻿@model Znode.Engine.WebStore.ViewModels.WidgetTitleListViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+    string imagePath = PortalAgent.CurrentPortal.MediaServerThumbnailUrl;
+}
+@if (!Equals(Model, null) && Model.CMSMode)
+{
+    if (Model.IsEmpty)
+    {
+        <div class="col-xs-12 nopadding cms-icon-container">
+            <img src="@_fileLocation/Images/links.png" alt="New Product" class="img-responsive cms-img-icon" />
+        </div>
+    }
+}
+<ul class="link-panel-widget">
+    @foreach (var link in Model?.TitleList)
+    {
+        if (string.IsNullOrEmpty(link.MediaPath) && link.IsActive)
+        {
+            <li>
+                <a href="@link.Url" target="_blank">@Html.RenderBlock(link.Title)</a>
+            </li>
+        }
+        else if (link.IsActive)
+        {
+            <li>
+                <a href="@link.Url" target="_blank">
+                    <img class="img-responsive b-lazy" data-src="@imagePath/@link.MediaPath" alt="Image" title="@link.Title" />
+                    <span class="title">@link.Title</span>
+                </a>
+            </li>
+        }
+
+    }
+</ul>

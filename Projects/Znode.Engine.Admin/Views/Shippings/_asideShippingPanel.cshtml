@@ -1,0 +1,35 @@
+﻿@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+}
+
+@if (Equals(Model.ClassName, "ZnodeShippingCustom") && (Model?.ShippingId > 0))
+{
+    <aside aria-labelledby="Side Menu">
+        <button id="slide-menu" type="button" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            <ul class="aside-panel">
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.ManageShipping, "Edit", "Shippings", new { shippingId = Model?.ShippingId },new {@data_test_selector = "linkManageShipping"})</li>
+                <li>@Html.AuthorizedRawActionLink(@Admin_Resources.AssociatedRules, "ShippingRuleList", "Shippings", new { shippingId = Model?.ShippingId, shippingTypeId = Model?.ShippingTypeId },new{ @data_test_selector = "linkAssociatedRules" })</li>
+            </ul>
+        </div>
+    </aside>
+}
+else {
+    <aside aria-labelledby="Side Menu">
+        <button id="slide-menu" type="button" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+        <div class="slide-container">
+            <ul class="aside-panel">
+                @if (Model?.ShippingId > 0)
+                {
+                <li class="active">@Html.AuthorizedRawActionLink(@Admin_Resources.ManageShipping, "Edit", "Shippings", new { shippingId = Model?.ShippingId }, null)</li>
+                }
+                else
+                {
+                    <li class="active">@Html.AuthorizedRawActionLink(@Admin_Resources.ManageShipping, "Create", "Shippings", null)</li>
+                }
+            </ul>
+        </div>
+    </aside>
+}
+
+

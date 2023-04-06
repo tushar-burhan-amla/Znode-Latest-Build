@@ -1,0 +1,29 @@
+﻿<div class="file-upload dirtyignore">
+
+    @{
+        string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+        var metadata = ViewData.ModelMetadata;
+        var prop = metadata.ContainerType.GetProperty(metadata.PropertyName);
+        var attributes = prop.GetCustomAttributes(false);
+
+        if (string.Equals(actionName, "GetMediaAttributeValues", StringComparison.CurrentCultureIgnoreCase))
+        {
+    <span class="btn-text btn-text-secondary" title="Upload" data-test-selector="spnUpload">@Admin_Resources.ReplaceMedia</span>
+        }
+        else
+        {
+            <span class="btn-text btn-text-secondary" title="Upload" data-test-selector="spnUpload">@Admin_Resources.BrowseButton</span>
+        }
+        if (string.Equals(actionName, "AddCSS", StringComparison.CurrentCultureIgnoreCase))
+        {
+            @Html.TextBox("", null, new { type = "file", @data_test_selector = "txtMultiUpload", multiple = "multiple", @OnChange = "FileUpload.GetFileName();", @id = "txtUpload", @class = "btn-text btn-text-secondary" })
+        }
+        else
+        {
+            @Html.TextBox("", null, new { type = "file", @data_test_selector = "txtMultiUpload", @OnChange = "FileUpload.GetFileName();", @id = "txtUpload", @class = "btn-text btn-text-secondary" })
+        }
+
+    }
+    @Html.ValidationMessage("")
+    <span id="fileName" class="file-upload-name" data-test-selector="spnFileName"></span>
+</div>

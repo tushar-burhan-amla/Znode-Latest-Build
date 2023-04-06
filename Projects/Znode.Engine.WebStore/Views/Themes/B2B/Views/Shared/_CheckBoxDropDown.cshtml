@@ -1,0 +1,92 @@
+﻿@model Znode.Engine.WebStore.Models.DropDownOptions
+
+@if (!Model.IsDropDownHidden || Model.DropDownList.Count > 0)
+{
+    <div class="dropdown">
+        <a href="javascript:void(0)" class="btn-dropdown dropdown-toggle">
+            <span>@Model.SelectOptionName</span><i class="zf-down"></i>
+        </a>
+        <div class='dropdown-menu dropdown-list-container'>
+            <div class="dropdown-wrapper">
+                <div class="dropdown-search">
+                    <div class="right-inner-icon ms-search">
+                        <i class="z-search"></i>
+                        <input type="text" name="ManageSearch" placeholder="Search Option" value="" />
+                    </div>
+                </div>
+
+                @if (Model.DropDownList.Count > 0)
+                {
+                    <ul id="@Model.DropDownId" class="dropdown-list-ul dropdown-list-multiselect mutliSelect">
+                        @if (@Model.IsAllowCheckAll)
+                    {
+                            <div>
+                                <label>
+                                    <input type='checkbox' id='selectall' onclick="MultiSelectDDL.prototype.CheckAll(this,'@Model.HiddenItemDataStorage')" text='Select All' />
+                                    <span class="lbl padding-8">Select All</span>
+                                </label>
+                            </div>
+                        }
+                        @foreach (var item in Model.DropDownList)
+                    {
+                        string _checked = item.IsChecked ? "checked='checked'" : string.Empty;
+                            <li class="child-options">
+                                <label>
+                                    <input type="checkbox" onclick="MultiSelectDDL.prototype.CheckBoxChecked(this,'@Model.HiddenItemDataStorage')" class="btncheckbox" @_checked data-controller="@Model.Controller" data-action="@Model.Action" data-issubmit="@Model.ShowSubmitButton" data-issuboption="@Model.IsSubOptions" data-sucess="@Model.SuccessCallBack" value="@item.id" id="@item.id" data-value="@item.DataId" data-ismultiple="@Model.IsMultiple" />
+                                    <span class="lbl padding-8">@item.name</span>
+                                </label>
+                            </li>
+                            if (Model.IsSubOptions)
+                            {
+                                if (item.Sublist != null)
+                                {
+                                    foreach (var subitem in item.Sublist)
+                                    {
+                                        <ul id="optgroup-@item.id">
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" class="btncheckbox" @_checked value="@subitem.id" id="@subitem.id" data-value="@subitem.DataId" />
+                                                    <span class="lbl padding-8">@subitem.name</span>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    }
+                                }
+                            }
+
+                        }
+                    </ul>
+                    if (@Model.ShowSubmitButton)
+                    {
+                        <div class="dropdown-submit">
+                            <button type="button" class="btn-text btn-bg-primary pull-right" data-ddlId="@Model.DropDownId" data-controller="@Model.Controller" data-action="@Model.Action" onclick="MultiSelectDDL.prototype.SubmitData(this)">@Admin_Resources.ButtonSubmit</button>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-xs-12 no-record nopadding">
+                        <p>@Admin_Resources.NoRecordFoundText</p>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(document).ready(function () {
+        var _MultiSelectDDL = new MultiSelectDDL(window.document);
+        var id = '@Model.DropDownId'
+        var enable = '@Model.IsDraggable'
+        var controller = '@Model.Controller';
+        var Action = "@Model.SortAction";
+
+        _MultiSelectDDL.SortColumn(id, enable, controller, Action);
+
+        _MultiSelectDDL.BindSearch();
+    });
+
+
+
+</script>

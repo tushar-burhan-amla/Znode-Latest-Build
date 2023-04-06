@@ -1,0 +1,7 @@
+﻿@model Znode.Engine.Admin.Models.GridModel
+
+@Html.Partial("~/Views/DynamicGrid/_GridControl.cshtml", Model)
+
+<script>
+    var listCount=@(!Equals(Model, null) ? Model.DataTableToList.Count : 0);if(_gridContainerName="#@Model.FrontObjectName",listCount>0)$.getScript("/Scripts/Core/Controls/WebGrid/GridPager.js");else try{ZnodeBase.prototype.activeAsidePannel()}catch(ex){$(window).on("load",function(){ZnodeBase.prototype.activeAsidePannel()})}
+</script>

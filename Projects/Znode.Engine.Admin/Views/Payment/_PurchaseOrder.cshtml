@@ -1,0 +1,50 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+@{
+    string enablePODocUpload = Model.IsPoDocUploadEnable ? "checked='checked'" : string.Empty;
+    string isPODocRequired = Model.IsPoDocRequire ? "checked='checked'" : string.Empty;
+}
+@Html.Partial("_EnableOAB", Model)
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelEnablePODocumentUpload, new { @data_test_selector = "lblPoDocUploadEnable" })
+        </div>
+        <div class="control-md">
+            <div class="col-sm-6 nopadding">
+                <label>
+                    <input @enablePODocUpload data-val="true" data-test-selector="chkPoDocUploadEnable" id="IsPoDocUploadEnable" name="IsPoDocUploadEnable" type="checkbox" value="true">
+                    <span class="lbl padding-8" data-test-selector="spnPoDocUploadEnable"></span> @Admin_Resources.LabelPODocumentUploadFeature
+                    <input name="IsPoDocUploadEnable" type="hidden" value="false">
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="divIsPODocRequired" style="display:none">
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(@Admin_Resources.LabelIsPOdocumentrequired, new { @data_test_selector = "lblPoDocRequire" })
+            </div>
+            <div class="control-md">
+                <div class="col-sm-6 nopadding">
+                    <label>
+                        <input @isPODocRequired data-val="true" data-test-selector="chkPoDocRequire" id="IsPoDocRequire" name="IsPoDocRequire" type="checkbox" value="true">
+                        <span class="lbl padding-8" data-test-selector="spnPoDocRequire"></span> @Admin_Resources.LabelPODocumentRequired
+                        <input name="IsPoDocRequire" type="hidden" value="false">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var enablePODocUpload = $("#IsPoDocUploadEnable").is(":checked");
+        if (enablePODocUpload) {
+            $("#divIsPODocRequired").show();
+        }
+        Payment.prototype.ShowBillingAddressOptional();
+    });
+</script>

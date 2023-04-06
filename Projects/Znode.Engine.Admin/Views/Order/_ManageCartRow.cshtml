@@ -1,0 +1,287 @@
+﻿@model Znode.Engine.Admin.ViewModels.CartItemViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@{
+    string imagePath = string.IsNullOrEmpty(Model?.ImagePath) ? ZnodeAdminSettings.DefaultImagePath : Model?.ImagePath;
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    string priceRoundOff = DefaultSettingHelper.DefaultPriceRoundOff;
+    string _displayPartialRefund = Model.IsOrderPartialRefund ? "display:block;" : "display:none;";
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    string _displayLinks = Model.IsEditStatus ? "display:block;" : "display:none;";
+    string sku = string.IsNullOrEmpty(Model.ConfigurableProductSKUs) ? Model.SKU : Model.ConfigurableProductSKUs;
+    string TrackingUrl = string.IsNullOrEmpty(Model.TrackingUrl) ? Model.TrackingNumber : $"<a target = _blank href ={Model.TrackingUrl + Model.TrackingNumber}>{Model.TrackingNumber}</a>";
+    if (Model.OrderLineItemStatus.ToUpper() == ZnodeOrderStatusEnum.CANCELED.ToString())
+    {
+        Model.ShippingStatusList.Add(new SelectListItem() { Text = Model.OrderLineItemStatus, Value = Model.OrderLineItemStatusId.ToString() });
+    }
+    bool isNotShipped = !(Model.OrderLineItemStatus.Equals(ZnodeOrderStatusEnum.SHIPPED.ToString(), StringComparison.InvariantCultureIgnoreCase ));
+
+    bool isDisableShipping = (string.Equals(Model.OrderLineItemStatus, ZnodeOrderStatusEnum.SHIPPED.ToString(), StringComparison.InvariantCultureIgnoreCase)
+                                || string.Equals(Model.OrderLineItemStatus, ZnodeOrderStatusEnum.FAILED.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                                 ? true : false;
+}
+
+
+<li class="imageicon sp-image">
+    <img src="@imagePath" alt="Model.ProductName Image" class="grid-img" />
+    @Html.Hidden("hdnCurrencySymbol_" + Model.ExternalId, (HelperMethods.FormatPriceWithCurrency(0.00M, cultureCode)).Replace("0.00", ""))
+</li>
+@if (Model.GroupProducts?.Count > 0)
+{
+    string mainProductName = Model.ProductName;
+    foreach (var product in Model.GroupProducts)
+    {
+<li class="sp-sku">
+    <label>@Html.DisplayTextFor(model => product.Sku)</label>
+</li>
+        <li class="sp-product-name">
+            <div class="ordered-product-name">@Html.RenderBlock(mainProductName)</div>
+
+            @if (HelperUtility.IsNotNull(Model.PersonaliseValuesDetail))
+            {
+            <div>
+                <em class="zf-caret-right"></em>
+                @foreach (var personalization in Model.PersonaliseValuesDetail)
+                {
+                    <p> @personalization.PersonalizeName : @personalization.PersonalizeValue </p>
+                }
+            </div>
+            }
+            @if (string.IsNullOrEmpty(Model.CartDescription))
+            {
+                <div><em class="zf-caret-right"></em>@Html.RenderBlock(product.ProductName)</div>
+                if (!HelperUtility.IsNull(Model.PersonaliseValuesDetail))
+                {
+                    <div>
+                        <em class="zf-caret-right"></em>
+                        @foreach (var personalization in Model.PersonaliseValuesDetail)
+                        {
+                            <p>  @personalization.PersonalizeName :   @personalization.PersonalizeValue </p>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="cart-item-description">@Html.RenderBlock(Model.CartDescription)</div>
+                if (!HelperUtility.IsNull(Model.PersonaliseValuesDetail))
+                {
+                    <div>
+                        <em class="zf-caret-right"></em>
+                        @foreach (var personalization in Model.PersonaliseValuesDetail)
+                        {
+                            <p>  @personalization.PersonalizeName :   @personalization.PersonalizeValue </p>
+                        }
+                    </div>
+                }
+            }
+
+            @if (!Model.IsAllowedTerritories)
+            {
+                <div id="dynamic-allowesterritories" class="status-outofstock hvr-pulse error-msg">@Admin_Resources.AllowedTerritoriesProductError</div>
+            }
+        </li>
+        <li class="sp-status">
+            <span id="shippingstatus_@Model.ExternalId" data-orderstate="@Model.OrderLineItemStatusId" style="display:none" value="@Model.OrderLineItemStatus">@Model.OrderLineItemStatus</span>
+            @if (!Equals(Model.ShippingStatusList, null))
+            {
+                @Html.DropDownListFor(model => model.OrderLineItemStatusId, Model.ShippingStatusList, new { @id = "shipping-status-" + Model.ExternalId, @data_test_selector = "drpOrderStatusList", @onchange = "Order.prototype.OnLineItemStatusChange('" + Model.ExternalId + "')" })
+
+            }
+        </li>
+        <li class="sp-tracking-number">
+            <span id="trackingnumber_@Model.ExternalId">@Html.RenderBlock(TrackingUrl)</span>
+            @Html.TextBoxFor(model => model.TrackingNumber, new { @id = "tracking-number-" + Model.ExternalId, @style = "display:none" })
+        </li>
+        <li class="sp-shipping-status" style="display:none">
+            <div class="col-sm-12 nopadding" style="display:none" id="returnShipping_@Model.ExternalId">
+                <label for="IsShippingReturn">
+                    <input type="checkbox" value="true" name="IsShippingReturn" id="IsShippingReturn_@Model.ExternalId">
+                    <span class="lbl padding-8"></span><input type="hidden" value="false" name="IsShippingReturn">
+                </label>
+            </div>
+        </li>
+        <li class="sp-shipping-status" style="display:none" id="reason_@Model.ExternalId">
+        </li>
+        <li class="sp-unit-price">
+            <span id="unitprice-@Model.ExternalId">@HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode)</span>
+            @Html.TextBox("NULL", null, new { @id = "unit-price-" + Model.ExternalId, @style = "display:none", @class = "price-input" })
+            <div id="unit_price_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+        </li>
+        <li class="sp-quantity">
+            <span id="quantity-@Model.ExternalId" data-isactive="@Model.IsActive">@product.Quantity</span>
+            @Html.TextBoxFor(model => product.Quantity, new { @id = "cartQuantity-" + Model.ExternalId, @data_inventoryRoundOff = inventoryRoundOff, @style = "display:none", @class = "price-input", @Value = product.Quantity, @data_cart_productid = product.ProductId, @data_cart_sku = product.Sku, @data_cart_externalid = Model.ExternalId, @data_cart_minquantity = Model.MinQuantity, @data_cart_maxquantity = Model.MaxQuantity, @data_cart_productName = product.ProductName })
+
+            @Html.TextBoxFor(model => model.CustomQuantity, new { @id = "custom-quantity-" + Model.ExternalId, @class = "price-input", @style = "display:none" })
+
+            <div id="quantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+
+            @if (Model.InsufficientQuantity)
+            {
+                <span class="error-msg">@Admin_Resources.ErrorOutOfStockMessage</span>
+            }
+        </li>
+    }
+}
+else
+{
+    <li class="sp-sku">
+        <label>@sku</label>
+        @if (!string.IsNullOrEmpty(Model.DownloadableProductKey))
+        {
+            List<string> keys = Model?.DownloadableProductKey.Split(',').ToList();
+            <h5>Product Keys</h5>
+            foreach (string item in keys)
+            {
+                <div>@Html.RenderBlock(item)</div>
+                @Html.Hidden("DownloadableProductKey_" + Model.ExternalId, true)
+            }
+        }
+        else
+        { @Html.Hidden("DownloadableProductKey_" + Model.ExternalId, false)}
+    </li>
+    <li class="sp-product-name">
+        <div class="ordered-product-name">@Html.RenderBlock(Model.ProductName)</div>
+
+        @if (Model?.PersonaliseValuesDetail?.Count > 0)
+        {
+            foreach (var item in Model.PersonaliseValuesDetail)
+            {
+                if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                {
+                    <div class="cart-item-description">
+                        <p> @item.PersonalizeName : @item.PersonalizeValue </p>
+                    </div>
+                }
+            }
+        }
+        else if (Model?.PersonaliseValuesList?.Count > 0)
+        {
+            foreach (var item in Model.PersonaliseValuesList)
+            {
+                if (!Equals(item.Key, null) && !Equals(item.Value, string.Empty))
+                {
+                    <p> @item.Key : @item.Value </p>
+                }
+            }
+        }
+
+        <div class="ordered-product-description">@Html.RenderBlock(Model.CartDescription)</div>
+
+        @if (Model.InsufficientQuantity)
+        {
+            <span class="error-msg">@Admin_Resources.ErrorOutOfStockMessage</span>
+        }
+        @if (!Model.IsAllowedTerritories)
+        {
+            <div id="dynamic-allowesterritories" class="status-outofstock hvr-pulse error-msg">@Admin_Resources.AllowedTerritoriesProductError</div>
+        }
+    </li>
+    <li class="sp-status">
+        <span id="shippingstatus_@Model.ExternalId" data-orderstate="@Model.OrderLineItemStatusId" style="display:none" value="@Model.OrderLineItemStatus">@Model.OrderLineItemStatus</span>
+        @if (!Equals(Model.ShippingStatusList, null))
+        {
+            @Html.DropDownListFor(model => model.OrderLineItemStatusId, Model.ShippingStatusList, new { @id = "shipping-status-" + Model.ExternalId, @data_test_selector = "drpOrderStatusList", @onchange = "Order.prototype.OnLineItemStatusChange('" + Model.ExternalId + "')" })
+
+        }
+    </li>
+    <li class="sp-tracking-number">
+        <span id="trackingnumber_@Model.ExternalId" data-shipSeperately="@Model.ShipSeperately">@Html.RenderBlock(TrackingUrl)</span>
+        @Html.TextBoxFor(model => model.TrackingNumber, new { @id = "tracking-number-" + Model.ExternalId, @style = "display:none" })
+    </li>
+    <li class="sp-shipping-status" style="display:none">
+        <div class="col-sm-12 nopadding" style="display:none" id="returnShipping_@Model.ExternalId">
+            <label for="IsShippingReturn">
+                <input type="checkbox" value="true" name="IsShippingReturn" id="IsShippingReturn_@Model.ExternalId">
+                <span class="lbl padding-8"></span><input type="hidden" value="false" name="IsShippingReturn">
+            </label>
+        </div>
+    </li>
+    <li class="sp-returned-reason" id="reason_@Model.ExternalId" style="display:none">
+
+    </li>
+    <li class="sp-unit-price">
+        <span id="unitprice-@Model.ExternalId">@HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode)</span>
+        @Html.TextBox("NULL", null, new { @id = "unit-price-" + Model.ExternalId, @style = "display:none", @class = "price-input", @data_priceRoundOff = priceRoundOff })
+        <div id="unit_price_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+    </li>
+    if (!string.IsNullOrEmpty(Model.ConfigurableProductSKUs))
+    {
+        <li class="sp-quantity">
+            <span id="quantity-@Model.ExternalId" data-isactive="@Model.IsActive">@Model.Quantity</span>
+            <div id="quantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+
+            @Html.TextBoxFor(model => model.CustomQuantity, new { @id = "custom-quantity-" + Model.ExternalId, @data_test_selector = "txtCustomQuantity", @class = "price-input", @style = "display:none" })
+
+            @if (Model.InsufficientQuantity)
+            {
+                <span class="error-msg" data-test-selector="valOutOfStockMessage">@Admin_Resources.ErrorOutOfStockMessage</span>
+            }
+        </li>
+    }
+    else
+    {
+        <li class="sp-quantity">
+            <span id="quantity-@Model.ExternalId" data-isactive="@Model.IsActive">@Model.Quantity</span>
+
+            @Html.TextBoxFor(model => model.CustomQuantity, new { @id = "custom-quantity-" + Model.ExternalId, @data_test_selector = "txtCustomQuantity", @class = "price-input", @style = "display:none" })
+
+            <div id="quantity_error_msg_@Model.ExternalId" data-test-selector="valOutOfStockMessage" style="color: #cc0000"></div>
+        </li>
+    }
+}
+<li class="sp-refundlist" style="@_displayPartialRefund">
+    @if (Model.PartialRefundAmount > 0)
+    {
+        <div id="lblpartialRefund_@Model.ExternalId" class="sp-partial-refund">@HelperMethods.FormatPriceWithCurrency(Model.PartialRefundAmount, cultureCode)</div>
+    }
+    else
+    {
+        <div id="lblpartialRefund_@Model.ExternalId" class="sp-partial-refund" style="display:none">@HelperMethods.FormatPriceWithCurrency(Model.PartialRefundAmount, cultureCode)</div>
+    }
+    @Html.TextBox("NULL", null, new { @id = "partialRefund_" + Model.ExternalId, @data_test_selector = "txtPartialRefund", @class = "price-input sp-partial-refund", @style = "display:none", @data_priceRoundOff = priceRoundOff })
+    <div id="partialRefund_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+</li>
+<li class="sp-shipping">
+    @if (isDisableShipping)
+    {
+        @Html.TextBoxFor(model => model.ShippingCost, HelperMethods.GetFormattedRoundOffPrice(), new { @disabled = "disabled", @id = "orderLineItemShipping_" + @Model.ExternalId, @data_test_selector = "txtShippingCost", @Onchange = "return Order.prototype.SaveOrderLineItemShipping(event)", @data_priceRoundOff = priceRoundOff });
+    }
+    else
+    {
+        @Html.TextBoxFor(model => model.ShippingCost, HelperMethods.GetFormattedRoundOffPrice(), new { @id = "orderLineItemShipping_" + @Model.ExternalId, @data_test_selector = "txtShippingCost", @Onchange = "return Order.prototype.SaveOrderLineItemShipping(event)", @data_priceRoundOff = priceRoundOff });
+    }
+
+    @Html.HiddenFor(model => model.ShippingCost, new { @id = "hdnLineItemShipping_" + @Model.ExternalId, @name = "hdnShippingCost", @data_priceRoundOff = priceRoundOff })
+    <input id="hdnExternalId" name="ExternalId" type="hidden" value="@Model.ExternalId">
+    @Html.Hidden("IsOrderLineShippingUpdated_" + @Model.ExternalId)
+</li>
+<li class="sp-total">
+    <span id="extendedPrice_@Model.ExternalId"> @HelperMethods.FormatPriceWithCurrency(Model.ExtendedPrice, cultureCode)</span>
+</li>
+<li class="sp-actions">
+    <div id="actionLinks_@Model.ExternalId" style="@_displayLinks">
+        <a href="#" class="action-link dirtyignore"><em class="dg-manage font-20 light-grey-text-color" data-toggle="tooltip" data-placement="top" title="" data-original-title="Manage"></em></a>
+        <ul class="action-ui">
+
+            @if (Model.OrderLineItemStatus.ToUpper() == ZnodeOrderStatusEnum.SHIPPED.ToString())
+            {
+                <li>
+                    <a class="z-print dirtyignore" onclick="Order.prototype.PrintOnPackageSlip(@Model.OmsOrderLineItemsId)" title="@Admin_Resources.TitlePrintPackagingSlip"></a>
+                </li>
+            }
+            <li>
+                <a class="z-resend-email dirtyignore" onclick="Order.prototype.ResendOrderLineItemConfirmMail(@Model.OmsOrderLineItemsId)" title="Resend Cart Line Item Mail"></a>
+            </li>
+        </ul>
+    </div>
+</li>
+@Html.HiddenFor(model => model.ProductType)
+<script>
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+    $(document).ready(function () {
+        Order.prototype.OnLineItemStatusChange('@Model.ExternalId');
+    });
+</script>

@@ -1,0 +1,65 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model Znode.Engine.Admin.ViewModels.PrimaryPageActionModel
+
+<div class="btn-text-group padding-left">
+    @{
+        PageAction primaryAction = Model.PageActions?.FirstOrDefault();
+
+        if (!Equals(primaryAction, null))
+        {
+            switch (primaryAction.LinkType)
+            {
+                case LinkType.AuthorizedRawActionLink:
+                    @Html.AuthorizedRawActionLink(primaryAction.LinkDisplayName, primaryAction.Action, primaryAction.ControlId, primaryAction.RouteParameters, new { @class = "btn-text btn-text-secondary", @data_test_selector = primaryAction.DataTestSelector });
+                    break;
+                case LinkType.AuthorizedPrototypeRawActionLink:
+                    @Html.AuthorizedPrototypeRawActionLink(primaryAction.LinkDisplayName, primaryAction.Action, primaryAction.Controller, new { @id = primaryAction.ControlId, @class = "btn-text btn-text-secondary dirtyignore", @data_test_selector = primaryAction.DataTestSelector, onclick = primaryAction.OnClick })
+                    break;
+                case LinkType.UrlAction:
+                    <a class="btn-text btn-text-secondary dirtyignore" data-test-selector="@primaryAction.DataTestSelector" href="@Url.Action(primaryAction.Action, primaryAction.Controller, primaryAction.RouteParameters)">@primaryAction.LinkDisplayName</a>
+                    break;
+                case LinkType.OnClick:
+                    <a id="@primaryAction.ControlId" href="@primaryAction.HrefLink" class="btn-text btn-text-secondary dirtyignore" data-test-selector="@primaryAction.DataTestSelector" onclick="@primaryAction.OnClick">@primaryAction.LinkDisplayName</a>
+                    break;
+                case LinkType.Url:
+                    <a href="@primaryAction.HrefLink" class="btn-text btn-text-secondary dirtyignore" data-test-selector="@primaryAction.DataTestSelector">@primaryAction.LinkDisplayName</a>
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    @if (Model.PageActions?.Count > 1)
+    {
+        <button type="button" class="btn-text-dropdown" id="btnToggle" data-test-selector="btnToggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret caret-color"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+            @for (int i = 1; i < Model.PageActions.Count; i++)
+            {
+                PageAction pageActionItem = Model.PageActions[i];
+                switch (pageActionItem.LinkType)
+                {
+                    case LinkType.AuthorizedRawActionLink:
+                        <li>@Html.AuthorizedRawActionLink(pageActionItem.LinkDisplayName, pageActionItem.Action, pageActionItem.ControlId, pageActionItem.RouteParameters, new { @class = "btn-dropdown-lst", @data_test_selector = pageActionItem.DataTestSelector })</li>
+                        break;
+                    case LinkType.AuthorizedPrototypeRawActionLink:
+                        <li>@Html.AuthorizedPrototypeRawActionLink(pageActionItem.LinkDisplayName, pageActionItem.Action, pageActionItem.Controller, new { @id = pageActionItem.ControlId, @class = "btn-dropdwn-lst dirtyignore", @data_test_selector = pageActionItem.DataTestSelector, onclick = pageActionItem.OnClick })</li>
+                        break;
+                    case LinkType.UrlAction:
+                        <li> <a class="btn-dropdwn-lst dirtyignore" data-test-selector="@pageActionItem.DataTestSelector" href="@Url.Action(pageActionItem.Action, pageActionItem.Controller, pageActionItem.RouteParameters)">@pageActionItem.LinkDisplayName</a></li>
+                        break;
+                    case LinkType.OnClick:
+                        <li><a id="@pageActionItem.ControlId" href="@pageActionItem.HrefLink" class="btn-dropdwn-lst dirtyignore" data-test-selector="@pageActionItem.DataTestSelector" onclick="@pageActionItem.OnClick">@pageActionItem.LinkDisplayName</a></li>
+                        break;
+                    case LinkType.Url:
+                        <li><a href="@pageActionItem.HrefLink" class="btn-dropdwn-lst dirtyignore" data-test-selector="@pageActionItem.DataTestSelector">@pageActionItem.LinkDisplayName</a></li>
+                        break;
+                    default:
+                        break;
+                }
+            }
+        </ul>
+
+    }
+</div>

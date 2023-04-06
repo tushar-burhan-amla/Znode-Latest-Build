@@ -1,0 +1,254 @@
+﻿@using Znode.Engine.Admin.Models
+@model  GridModel
+@using Znode.Engine.Admin.Helpers
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string queryString = string.Empty;
+    string _url = string.Empty;
+    string area = Convert.ToString(ViewContext.RouteData.DataTokens["area"]);
+    bool fliterExist = Convert.ToBoolean(Model?.FilterColumn?.FilterColumnList.Any(x => !string.IsNullOrEmpty(x.Value)));
+    int userId = SessionProxyHelper.GetUserDetails().UserId;
+
+
+    foreach (string key in Request.Params.AllKeys)
+    {
+        if (key != "__RequestVerificationToken")
+        {
+            if (key != null && key != "activetab" && key != "CurrentUrl" && key != "recordPerPage" && key != "page" && key != "sort" && key != "sortdir" && key != "ViewMode")
+            {
+                queryString += string.IsNullOrEmpty(queryString) ? $"?{key}={HttpUtility.UrlEncode(Request.Params[key])}" : $"&{key}={HttpUtility.UrlEncode(Request.Params[key])}";
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+    _url = string.IsNullOrEmpty(area) ? $"/{controllerName}/{actionName}{queryString}" : $"/{area}/{controllerName}/{actionName}{queryString}";
+    var list = new List<BaseDropDownList>();
+    foreach (var item in Model.GridColumnList)
+    {
+        bool _isAttributeColumn = false;
+
+
+        if (((IDictionary<string, object>)item).Keys.Contains("isattributecolumn"))
+        {
+            object _value;
+            ((IDictionary<string, object>)item).TryGetValue("isattributecolumn", out _value);
+            _isAttributeColumn = !string.IsNullOrEmpty(Convert.ToString(_value)) ? Convert.ToString(_value) == "n" ? false : true : false;
+        }
+
+        if (item.ischeckbox == DynamicGridConstants.Yes || item.name == "Manage" || item.musthide == DynamicGridConstants.Yes)
+        {
+            list.Add(new BaseDropDownList() { id = item.name, DataId = Convert.ToInt32(item.id), name = item.headertext, IsChecked = item.isvisible == "y" ? true : false, IsHide = true });
+        }
+        else if (item.mustshow == DynamicGridConstants.No && item.musthide == DynamicGridConstants.No)
+        {
+            list.Add(new BaseDropDownList() { id = item.name, DataId = Convert.ToInt32(item.id), name = item.headertext, IsChecked = item.isvisible == "y" ? _isAttributeColumn ? false : true : false });
+        }
+        else
+        {
+            list.Add(new BaseDropDownList() { id = item.name, DataId = Convert.ToInt32(item.id), name = item.headertext, IsChecked = item.isvisible == "y" ? true : false, IsDisabled = true });
+        }
+    }
+    DropDownOptions _data = new DropDownOptions() { DropDownId = "DropDownId1", DropDownList = list, assignable = true, SortAction = "SortAction", Action = "ShowHidecolumn", Controller = "XMLGenerator", IsAjax = true, SuccessCallBack = "DynamicGrid.prototype.ShowHidecolumn", IsMultiple = true, IsDraggable = true, IsAllowCheckAll = false, SelectOptionName = "Columns", IsDropDownHidden = true };
+}
+<div>
+    <section data-container-name="gridpager" data-pager-url="@_url" update-container-id="@Model.FrontObjectName">
+        <div id="Dynamic_Grid" class="dynamic-grid dirtyignore">
+            @if (Model?.DataTableToList?.Count > 0)
+            {
+
+                if ((!Equals(Model.ViewMode, ViewModeTypes.List.ToString())))
+                {
+                    @Html.Partial($"~/Views/DynamicGrid/_{Model.ViewMode}View.cshtml", Model);
+                }
+                else
+                {
+
+                    @Html.Hidden("hdnDeleteActionURL")
+
+                    if (!string.IsNullOrEmpty(Model.SubRecordFilterKeyName) && !string.IsNullOrEmpty(Model.DelegateTypeName) && !string.IsNullOrEmpty(Model.DelegateTypeMethodName))
+                    {
+                        Model.WebGridColumn.Add(new WebGridColumn()
+                        {
+                            Format = (item) =>
+                            {
+                                WebGrid subGrid = new WebGrid(source: FilterHelpers.GetSubRecords(item, Model.SubRecordFilterKeyName, Model.DelegateTypeName, Model.DelegateTypeMethodName), canSort: false);
+                                return subGrid.GetHtml(
+                                    htmlAttributes: new { id = "subT", @style = "width:50%;" },
+                                    columns: subGrid.Columns(
+                                    subGrid.Column("Text", header: "", format: (item1) => new HtmlString(item1.Text))
+                                    ));
+                            }
+                        });
+                    }
+
+                    WebGrid grid = new WebGrid(rowsPerPage: Model.RowPerPageCount, ajaxUpdateContainerId: Model.FrontObjectName,
+                        ajaxUpdateCallback: "DynamicGrid.prototype.SetSortOrder");
+                    grid.Bind(source: Model.DataTableToList,
+                        rowCount: Model.TotalRecordCount, autoSortAndPage: false);
+                    grid.SortDirection = Model.GridSortDirection;
+                    grid.SortColumn = Model.GridSortColumn;
+                    <div class="grid-control pull-right">
+                        <!-- Manage Column -->
+                        <div class="pull-right manage-column">
+                            @Html.Partial("~/Views/Shared/Controls/_CheckBoxDropDown.cshtml", _data)
+                        </div>
+                        @if (Model.FilterColumn.ToolMenuList?.Count > 0)
+                        {
+                            <!-- Tools -->
+                            <div class="pull-right">
+                                <div class="dropdown-tool" id="poptreeview">
+                                    <a href="#" class="btn-dropdown dropdown-toggle" data-toggle="dropdown" data-test-selector="drpTools">
+                                        <em class="z-global-setting"></em>&nbsp;<span>@Admin_Resources.LabelTool</span><em class="z-down"></em>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-list-ul dropdown-menu-right">
+                                        @foreach (var item in Model.FilterColumn.ToolMenuList)
+                                        {
+                                            <li>
+                                                <a @(string.IsNullOrEmpty(item.ControlId) ? "" : "id=" + item.ControlId ) @(string.IsNullOrEmpty(item.ControllerName) ? "" : "data-controller=" + item.ControllerName) @(string.IsNullOrEmpty(item.ActionName) ? "" : "data-action=" + item.ActionName) @(string.IsNullOrEmpty(item.Value) ? "" : "data-exportTypeId=" + item.Value) @(string.IsNullOrEmpty(item.Type) ? "" : "data-exportType=" + item.Type) href="@(string.IsNullOrEmpty(item.Url) ? "#" : item.Url)" @(string.IsNullOrEmpty(item.DataToggleModel) ? "" : "data-toggle=" + item.DataToggleModel ) @(string.IsNullOrEmpty(item.DataTarget) ? "" : "data-target=" + item.DataTarget ) @(string.IsNullOrEmpty(item.JSFunctionName) ? "" : "onclick=" + item.JSFunctionName ) @(!Equals(item.DataDisable, null) ? (item.DataDisable == true ? "data-enable=" + item.DataDisable : "data-disable=" + item.DataDisable) : "" ) data-test-selector="link@(item.DisplayText.Replace(" ",""))">@item.DisplayText</a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                        <!-- Manage Filters -->
+                        @*<div class="pull-right padding-left">
+                                    <a href="#" class="btn-text-icon nomargin ManageFilter"><em class="z-manage-filter"></em>@Admin_Resources.LabelManageFilters</a>
+                            </div>*@
+                        <!-- Default View -->
+                        <div class="pull-right">
+                            <div class="dropdown-tool" style="position:relative">
+                                <a href="#" class="btn-dropdown dropdown-toggle" data-test-selector="drpSystemView" data-toggle="dropdown" id="menu1">
+                                    <em class="z-default-view"></em>
+                                    <span>
+                                        @{
+                                            string _viewName = Model.Views.FirstOrDefault(x => x.IsSelected == true)?.ViewName;
+                                            if (string.IsNullOrEmpty(_viewName))
+                                            {
+                                                _viewName = Model.Views.FirstOrDefault().ViewName;
+                                            }
+                                        }
+                                        @_viewName
+                                    </span>
+                                    <em class="z-down"></em>
+                                </a>
+                                <ul class="dropdown-menu dropdown-list-ul default-view save-view-filter" id="view-item-menu" role="menu" aria-labelledby="menu1">
+                                    <div class="col-xs-12 nopadding save-view-main">
+                                        <ul class="save-list-view" data-test-selector="listSystemViewContainer">
+                                            <span>@Admin_Resources.LabelAllViews</span>
+                                            @foreach (var item in Model.Views)
+                                            {
+                                                <li role="presentation">
+                                                    <div class="view-details">
+
+
+                                                        @if (item.ViewId != 0 && item.ViewId != -1 && item.CreatedBy == userId)
+                                                        {
+                                                            <a href="#" class="default-public-option" data-targetid="#default-item-content-@item.ViewId" data-id="@item.ViewId" data-text="@item.ViewName" data-isPublic="@item.IsPublic" data-isDefault="@item.IsDefault" onclick="DynamicGrid.prototype.ChangeViewVisibility(this)" title="@(item.IsPublic ? "Click to toggle the view as private" : "Click to toggle the view as public")"><em class=" @(item.IsPublic ? "z-unlock" : "z-lock") "></em></a>
+                                                            <a href="#" class="default-item-option @(item.IsDefault ? "" : "unlock-log")" data-test-selector="txtIsPublic" data-targetid="#default-item-content-@item.ViewId" data-id="@item.ViewId" data-text="@item.ViewName" data-isPublic="@item.IsPublic" data-isDefault="@item.IsDefault" title="@(item.IsDefault ? "Default View" : "Set As Default View")"><em class="z-pin"></em></a>
+                                                            @*<a href="#" data-targetid="#default-item-content-@item.ViewId" data-id="@item.ViewId" data-text="@item.ViewName" data-isPublic="@item.IsPublic" data-isDefault="@item.IsDefault" title="Default"><em class="z-lock"></em></a>*@
+                                                            <a href="#" class="view-item-edit" id="view-item-edit-@item.ViewId" data-id="@item.ViewId" data-test-selector="linkEditAutomationView" data-targetid="#view-item-content-@item.ViewId" title="Edit"><em data-test-selector="linkEdit@(item.ViewName.Replace(" ", ""))" class="z-edit"></em></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="#" class="default-public-option" data-targetid="#default-item-content-@item.ViewId" data-id="@item.ViewId" data-text="@item.ViewName" data-isPublic="@item.IsPublic" data-isDefault="@item.IsDefault" title=" You cannot change the visibility for the view"><em class=" @(item.IsPublic || item.ViewId==-1 ? "z-unlock" : "z-lock") "></em></a>
+                                                        }
+
+
+                                                        <a role="menuitem" class="view-item-option" id="view-item-name@item.ViewId" data-id="@item.ViewId" data-text="@item.ViewName" data-test-selector="link@(item.ViewName.Replace(" ", ""))" href="#">@item.ViewName</a>
+                                                    </div>
+                                                    <div id="view-item-content-@item.ViewId" class="view-item-content view-item-content-edit" data-btn-edit style="display:none;">
+                                                        @Html.TextBox("EditView", item.ViewName, new { @id = "view_item_" + item.ViewId, @maxLength = "25" })
+                                                        <a href="#" class="view-item-save" data-targetid="#view-item-content-@item.ViewId" data-id="@item.ViewId" data-isPublic="@item.IsPublic" data-isDefault="@item.IsDefault" title="Save"><em class="z-save"></em></a>
+                                                        <a href="#" class="view-item-delete" data-test-selector="linkDelete@(item.ViewName.Replace(" ", ""))" data-targetid="#view-item-content-@item.ViewId" data-id="@item.ViewId" title="Delete"><em class="z-delete"></em></a>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="col-xs-12 nopadding save-view-textbox">
+                                        <a role="menuitem" href="#" id="save-view-link" class="save-view-link" onclick="javascript: $('.view-item-content-0, .save-view-link').toggle();">@Admin_Resources.LabelSaveViewAs</a>
+                                        <div id="view-item-content-0" class="view-item-content view-item-content-0">
+                                            @Html.TextBox("NewView", "New View", new { @id = "view_item_0", @maxLength = "25", @class = "text-view-point", @data_test_selector = "txtNewView" })
+                                            <a href="#" data-id="0" data-test-selector="linkSaveNewView" data-targetid="#view-item-content-0" class="view-item-save" title="Save"><em class="z-save"></em></a>
+                                        </div>
+                                        <div class="saved-view-text">
+                                            <input type="checkbox" name="isPublic" id="isPublic" class="grid-row-checkbox">
+                                            <label class="public-checkbox lbl padding-8" data-test-selector="txtIsPublic">@Admin_Resources.LabelmakeItPublic</label>
+                                            <input type="hidden" name="isPublic" value="false">
+                                        </div>
+                                    </div>
+                                </ul>
+
+                            </div>
+                        </div>
+                        <!-- View Type -->
+                        <div class="pull-right padding-left">
+                            @Html.Partial("~/Views/DynamicGrid/_GridViewType.cshtml")
+                        </div>
+                        @if (!Equals(Model.FilterColumn.ExportFileType, null) && Model.FilterColumn.ExportFileType.Count > 0)
+                        {
+                            <!-- Export -->
+                            <div class="pull-right">
+                                <div class="dropdown-export padding-left" style="position:relative">
+                                    <a href="#" class="btn-dropdown dropdown-toggle" data-toggle="dropdown">
+                                        <em class="z-export"></em>&nbsp;<span>@Admin_Resources.LabelExport</span><em class="z-down"></em>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-list-ul ">
+                                        @foreach (var item in Model.FilterColumn.ExportFileType)
+                                        {
+                                            <li><a href='@Url.Action("ExportMedia", "MediaManager", new { exportFileTypeId = item.Value })' class="export-media" value="@item.Value" onclick="ExportMedia">@item.Text</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="table-responsive col-sm-12 nopadding gridcontrol-table dirtyignore">
+                        @Html.RenderBlock(HttpUtility.HtmlDecode(grid.Table(
+                                              htmlAttributes: new { id = "grid", @class = "table", @data_test_selector = "tblGrid" },
+                                              headerStyle: "grid-header",
+                                              columns: Model.WebGridColumn).ToHtmlString()))
+                                             
+                    </div>
+                    <div class="col-sm-12 nopadding pagination-bottom dirtyignore">
+                        @grid.CustomPager(Html, Model.TotalRecordCount)
+                        @Html.Hidden("dir", grid.SortDirection) @Html.Hidden("col", grid.SortColumn)
+                    </div>
+                }
+            }
+            else
+            {
+                if (@fliterExist == true)
+                {
+                    <div class="col-sm-12 no-record nopadding">
+                        <div class="grid-control pull-right">
+                            <!-- Manage Filters -->
+                            @*<div class="pull-right padding-left">
+                                    <a href="#" class="btn-text-icon nomargin ManageFilter"><em class="z-manage-filter"></em>@Admin_Resources.LabelManageFilters</a>
+                                </div>*@
+                        </div>
+                        <div class="col-sm-12 nopadding">
+                            <p data-test-selector="infoNoRecordFound">@Admin_Resources.NoRecordFoundText</p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-sm-12 no-record nopadding">
+                        <div class="col-sm-12 nopadding">
+                            <p data-test-selector="infoNoRecordFound">@Admin_Resources.NoRecordFoundText</p>
+                        </div>
+                    </div>
+                }
+            }
+            @Html.HiddenFor(m => m.ViewMode)
+        </div>
+    </section>
+</div>

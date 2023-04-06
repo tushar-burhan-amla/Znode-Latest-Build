@@ -1,0 +1,130 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model TemplateViewModel
+
+@{
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    int inventoryRoundOffValue = string.IsNullOrEmpty(inventoryRoundOff) ? 0 : Convert.ToInt32(inventoryRoundOff);
+    Layout = null;
+    string disable = Model.TemplateCartItems.Any(x => x.ErrorMessage != "") ? "disabled" : "";
+}
+
+@if (Model.TemplateCartItems?.Count > 0)
+{
+    <div class="col-12 cart-products p-0 no-shadow border-top" id="layout-template-cartItem">
+        <div class="col-12 b2b-cart">
+            @foreach (TemplateCartItemViewModel cartItem in Model.TemplateCartItems.AsEnumerable().Reverse())
+            {
+                <div class="row b2b-cart-row align-items-center">
+                    <div class="b2b-remove-item">
+                        @if (!Model.IsViewMode)
+                        {
+                            using (Html.BeginForm("RemoveSavedCartItem", "SavedCart", new { guid = cartItem.ExternalId, omsTemplateId = cartItem.OmsTemplateId }, FormMethod.Post, new { id = "FormRemoveTemplateCartItem", @data_test_selector = "formRemoveSavedCart" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <a href="JavaScript:void(0);" class="template-cart-item-remove cart-item-remove" onclick="javascript: $($(this).closest('form').submit());" title="Remove Item" data-test-selector="linkDeleteSavedCart"><span class="close-circle-icon"></span></a>
+                            }
+                        }
+                    </div>
+                    <div class="b2b-cart-item-details">
+                        <a href="@Url.GetProductUrl(cartItem?.SEOUrl, cartItem?.ProductId.ToString())"><img src="@cartItem.ImagePath" class="img-fluid" alt=""></a>
+                        <div class="cart-description d-flex flex-wrap align-content-center">
+                            <a href="@Url.GetProductUrl(cartItem?.SEOUrl, cartItem?.ProductId.ToString())" class="cart-item-title">@Html.RenderBlock(cartItem.ProductName)</a>
+                            <div class="col-12 p-0 cart-item-description" data-test-selector="divCartItemDescription">@Html.RenderBlock(cartItem.CartDescription)</div>
+                            <div class="col-12 p-0 group-product-list">
+                                @if (cartItem?.GroupProducts?.Count > 0)
+                                {
+                                    foreach (var item in cartItem.GroupProducts)
+                                    {
+                                        <p><span class="right-icon"></span>@item.ProductName</p>
+                                    }
+                                }
+                            </div>
+                            @if (cartItem?.PersonaliseValuesDetail?.Count() > 0)
+                            {
+                                foreach (var personalisedValue in cartItem.PersonaliseValuesDetail)
+                                {
+                                    <p data-test-selector="paraCartItemDescription">@personalisedValue.PersonalizeName : @personalisedValue.PersonalizeValue</p>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="w-100 d-lg-none"></div>
+                    <div class="b2b-col-width pl-4 pb-4 p-lg-0 cart-item-unitprice">
+                        <div class="b2b-col-item-title" data-test-selector="divPriceText">@WebStore_Resources.LabelTierPrice</div>
+                        @if (cartItem?.GroupProducts?.Count > 0)
+                        {
+                            foreach (var item in cartItem.GroupProducts)
+                            {
+                                <div class="group-product-list">
+                                    @Helper.FormatPriceWithCurrency(item.UnitPrice, Model.CultureCode)
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            @Helper.FormatPriceWithCurrency(cartItem.UnitPrice, Model.CultureCode)
+                        }
+                    </div>
+                    <div class="b2b-col-width pb-4 p-lg-0 cart-item-quantity">
+                        <div class="b2b-col-item-title">@WebStore_Resources.ColumnTitleQuantity</div>
+                        @if (!Model.IsViewMode)
+                        {
+                            @Html.Partial("_SavedCartQuantity", cartItem)
+                        }
+                        else
+                        {
+                            if (cartItem?.GroupProducts?.Count > 0)
+                            {
+                                foreach (var item in cartItem.GroupProducts)
+                                {
+                                    <div class="group-product-list">
+                                        @Html.TextBox("Quantity", @Math.Round(item.Quantity, inventoryRoundOffValue), new { @readonly = "readonly", @data_test_selector = "txtQuantityGroupSavedCart" })
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                @Html.TextBox("Quantity", cartItem.Quantity, new { @readonly = "readonly", @data_test_selector = "txtQuantityGroupSavedCart" })
+                            }
+                        }
+                    </div>
+                    <div class="b2b-col-width pb-4 p-lg-0 cart-item-total">
+                        <div class="b2b-col-item-title" data-test-selector="divTotalText">@WebStore_Resources.ColumnTitleTotal</div>
+                        <div class="cart-item-price" title="@Helper.FormatPriceWithCurrency(cartItem.ExtendedPrice, Model.CultureCode)"> @Helper.FormatPriceWithCurrency(cartItem.ExtendedPrice, Model.CultureCode)</div>
+                    </div>
+                </div>
+            }
+        </div>
+        @if (!Model.IsViewMode)
+        {
+            <div class="col-12 py-4 px-2">
+                <div class="row no-gutters align-items-center">
+                    <div class="col-12 col-md-3 mb-3 mb-md-0">
+                        @using (Html.BeginForm("RemoveAllSavedCartItem", "SavedCart", new { omsTemplateId = Model.OmsTemplateId }, FormMethod.Post, new { id = "FormSavedAllTemplateCartItem", @data_test_selector = "formRemoveAllSavedCart" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <a href="JavaScript:void(0);" class="cart-item-remove-all cart-item-remove" onclick="javascript: $('#FormSavedAllTemplateCartItem').submit();" data-test-selector="linkdeleteAllSavedCart"><span class="close-circle-icon"></span>@WebStore_Resources.TextClearAllItems</a>
+                        }
+                    </div>
+                    <div class="col-12 col-md-9 text-right quotebutton pr-3">
+                        @if (Model.IsAddToCartButtonDisable)
+                        {
+                            <button type="submit" id="checkOut-link" class="btn btn-secondary addtocart disable-anchor">@WebStore_Resources.ButtonAddToCart</button>
+                        }
+                        else
+                        {
+                            <button type="submit" id="checkout-link" onclick="Cart.prototype.AddProductToCartForSaveCart()" @disable class="btn btn-secondary addtocart" data-test-selector="btnMoveSavedCartToCart">@WebStore_Resources.MoveItemsToCart</button>
+                        }
+                        <button type="submit" id="checkOuts-link" onclick="return User.prototype.ValidateCreateEditTemplate()" class="btn btn-primary mt-md-0 mt-2 ml-md-2 saveorder" data-test-selector="btnSaveSavedCart">@WebStore_Resources.Save</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+
+    <div class="text-center pb-4">@WebStore_Resources.EmptySavedCart</div>
+}
+@Html.Hidden("hdnTemplateCartItemCount", Model.TemplateCartItems?.Count ?? 0)

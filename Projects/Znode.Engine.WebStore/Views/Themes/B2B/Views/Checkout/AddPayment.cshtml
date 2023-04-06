@@ -1,0 +1,42 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Models
+@model OrdersViewModel
+@{
+    int priceRoundOff = Convert.ToInt32(DefaultSettingHelper.DefaultPriceRoundOff);
+
+}
+
+<div id="grid-container">
+    <div><span class="order-info-title order-content-label">@WebStore_Resources.OrderInformation</span></div>
+    <div class="my-2">
+        <span class="order-content-label">@WebStore_Resources.LabelOrdersNumber:</span>
+        <span class="px-2">@Model.OrderNumber</span>
+    </div>
+    <div class="my-2">
+        <span class="order-content-label">@WebStore_Resources.LabelOrderTotal:</span>
+        <span class="px-2" id="LabelOrderTotal">@Model.Total</span>
+    </div>
+    <div class="my-2">
+        <span class="order-content-label"> Amount Due:</span>
+        <span class="px-2" id="AmountDue">@Model.RemainingOrderAmount</span>
+    </div>
+    <div>
+        <div class="order-content-label my-2"><span class="required">Payment Amount:</span></div>
+        <div class="w-50" id="txturl">
+            @Html.TextBoxFor(model => model.RemainingOrderAmount, new { @id = "paymentAmount", @type = "number", @onchange = "User.prototype.ValidateInvoiceAmount()" })
+            @Html.ValidationMessageFor(model => model.RemainingOrderAmount, "", new { @id = "errorPaymentAmount", @class = "error-msg" })
+        </div>
+    </div>
+    <!--Main Container-->
+</div>
+@*remainingorderamount needs to added*@
+@Html.Hidden("Total", Convert.ToDecimal(Model.Total))
+@Html.HiddenFor(model => model.OmsOrderId)
+@Html.HiddenFor(model => model.IsUserForOfflinePayment)
+@Html.Hidden("hdnPaymentGUID")
+@Html.Hidden("hdnCustomerGUID", Model.CustomerPaymentGUID)
+@Html.Hidden("priceRoundOff", priceRoundOff)
+@Html.Hidden("hdnPaymentApiResponseHeader", Model.PaymentApiResponseHeader)
+@Html.Hidden("hdnEncryptedTotalAmount", Helper.GetEncryptedValue(Convert.ToString(Model.RemainingOrderAmount)))
+@Html.Hidden("OrderNumber", Model.OrderNumber)
+

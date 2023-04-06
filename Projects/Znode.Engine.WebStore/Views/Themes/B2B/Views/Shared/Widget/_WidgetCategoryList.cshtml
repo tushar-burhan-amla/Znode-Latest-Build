@@ -1,0 +1,7 @@
+﻿@model WidgetParameter
+@{
+    string className = "home-categorylist-area" + @Model.WidgetKey;
+}
+<div class=@className>
+    @Html.CategoryControl("_Category", Model)
+</div>

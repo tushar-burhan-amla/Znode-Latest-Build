@@ -1,0 +1,769 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActivatelicenseText" xml:space="preserve">
+    <value>You are about to activate your license.&lt;br&gt;
+                If you are activating a Free Trial then proceed with the activation. You will have the option of creating an activation without using a license key.
+                &lt;br /&gt;
+                If you are using a purchased license, then you should be aware that this activation can only be used on one CPU.</value>
+  </data>
+  <data name="ActivateyourLicense" xml:space="preserve">
+    <value>Activate your License</value>
+  </data>
+  <data name="APITitle" xml:space="preserve">
+    <value>Znode Web API</value>
+  </data>
+  <data name="BodyParameters" xml:space="preserve">
+    <value>Body Parameters</value>
+  </data>
+  <data name="Copyright" xml:space="preserve">
+    <value>Copyright © 2015 Znode, LLC.</value>
+  </data>
+  <data name="LicenceConfirmationMessage" xml:space="preserve">
+    <value>Yes, I wish to activate my license for this CPU. I also understand that once activated, my key can only be used on this CPU.</value>
+  </data>
+  <data name="ReadAndAgreed" xml:space="preserve">
+    <value>I have read and agreed to the software license agreement (EULA) above</value>
+  </data>
+  <data name="RequestInformation" xml:space="preserve">
+    <value>Request Information</value>
+  </data>
+  <data name="RequiredPassword" xml:space="preserve">
+    <value>Password is required.</value>
+  </data>
+  <data name="RequiredUserName" xml:space="preserve">
+    <value>Username is required.</value>
+  </data>
+  <data name="ResourceDescription" xml:space="preserve">
+    <value>Resource Description</value>
+  </data>
+  <data name="ResponseFormats" xml:space="preserve">
+    <value>Response Formats</value>
+  </data>
+  <data name="ResponseInformation" xml:space="preserve">
+    <value>Response Information</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Znode 9_0</value>
+  </data>
+  <data name="RequiredDescription" xml:space="preserve">
+    <value>Description is required.</value>
+  </data>
+  <data name="RequiredName" xml:space="preserve">
+    <value>Name is required.</value>
+  </data>
+  <data name="RequiredClassName" xml:space="preserve">
+    <value>Class Name is required.</value>
+  </data>
+  <data name="ErrorRequired" xml:space="preserve">
+    <value>Required</value>
+  </data>
+  <data name="ValidationUrl" xml:space="preserve">
+    <value>Validation Url</value>
+  </data>
+  <data name="LabelURLName" xml:space="preserve">
+    <value>URL Name</value>
+  </data>
+  <data name="RequiredDisplayOrder" xml:space="preserve">
+    <value>Display Order is required.</value>
+  </data>
+  <data name="EnterWeighting" xml:space="preserve">
+    <value>Please enter weighting.</value>
+  </data>
+  <data name="InvalidContactEmail" xml:space="preserve">
+    <value>Invalid contact email.</value>
+  </data>
+  <data name="InvalidHandlingChargeValue" xml:space="preserve">
+    <value>Invalid handling charge value.</value>
+  </data>
+  <data name="InvalidNotificationEmailId" xml:space="preserve">
+    <value>Invalid notification email.</value>
+  </data>
+  <data name="InvalidRange" xml:space="preserve">
+    <value>Invalid range of handing charge value .</value>
+  </data>
+  <data name="InvalidShippingDisplayOrder" xml:space="preserve">
+    <value>Invalid range of Display Order.</value>
+  </data>
+  <data name="InvalidWeightingValue" xml:space="preserve">
+    <value>Invalid weighting value.</value>
+  </data>
+  <data name="PleaseEnterDisplayOrder" xml:space="preserve">
+    <value>Please enter a Display Order.</value>
+  </data>
+  <data name="PleaseEnterProfileName" xml:space="preserve">
+    <value>Please enter a Profile Name.</value>
+  </data>
+  <data name="PleaseEnterSupplierName" xml:space="preserve">
+    <value>Please enter a Supplier Name.</value>
+  </data>
+  <data name="ErrorMessageMaxLengthActionName" xml:space="preserve">
+    <value>Action Name length can not exceed 200 characters.</value>
+  </data>
+  <data name="ErrorMessageMaxLengthControllerName" xml:space="preserve">
+    <value>Controller Name length can not exceed 200 characters.</value>
+  </data>
+  <data name="ErrorMessageMaxLengthMenuName" xml:space="preserve">
+    <value>Menu Name length can not exceed 100 characters.</value>
+  </data>
+  <data name="ErrorMessageMaxLengthRoleName" xml:space="preserve">
+    <value>Role Name length can not exceed 100 characters.</value>
+  </data>
+  <data name="LabelActionName" xml:space="preserve">
+    <value>Action Name</value>
+  </data>
+  <data name="LabelControllerName" xml:space="preserve">
+    <value>Controller Name</value>
+  </data>
+  <data name="LabelIsActive" xml:space="preserve">
+    <value>Is Active</value>
+  </data>
+  <data name="LabelIsParentMenu" xml:space="preserve">
+    <value>Is Parent Menu</value>
+  </data>
+  <data name="LabelMenuName" xml:space="preserve">
+    <value>Menu Name</value>
+  </data>
+  <data name="LabelSequenceNumber" xml:space="preserve">
+    <value>Sequence Number</value>
+  </data>
+  <data name="MessageNumericValueAllowed" xml:space="preserve">
+    <value>Enter only a numeric value.</value>
+  </data>
+  <data name="MessageSequenceNumberLength" xml:space="preserve">
+    <value>Sequence number can not exceed 15 characters.</value>
+  </data>
+  <data name="RequiredMessageActionName" xml:space="preserve">
+    <value>Enter Action Name.</value>
+  </data>
+  <data name="RequiredMessageControllerName" xml:space="preserve">
+    <value>Enter Controller Name.</value>
+  </data>
+  <data name="RequiredMessageMenuName" xml:space="preserve">
+    <value>Enter Menu Name.</value>
+  </data>
+  <data name="RequiredMessageMenuSequenceNumber" xml:space="preserve">
+    <value>Enter a Menu Sequence Number.</value>
+  </data>
+  <data name="RequiredMessageRoleName" xml:space="preserve">
+    <value>Enter a Role Name.</value>
+  </data>
+  <data name="RequiredFamilyCode" xml:space="preserve">
+    <value>Attribute Family Code is required.</value>
+  </data>
+  <data name="PleaseEnterHandlingCharges" xml:space="preserve">
+    <value>Please enter Handling Charges.</value>
+  </data>
+  <data name="PleaseSelectProfile" xml:space="preserve">
+    <value>Please select a profile.</value>
+  </data>
+  <data name="PleaseSelectShippingType" xml:space="preserve">
+    <value>Please select a valid Shipping Type.</value>
+  </data>
+  <data name="GSTTaxErrorMessage" xml:space="preserve">
+    <value>Must enter a valid GST Tax (ex: 123.45).</value>
+  </data>
+  <data name="HSTTaxErrorMessage" xml:space="preserve">
+    <value>Must enter a valid HST Tax (ex: 123.45).</value>
+  </data>
+  <data name="InvalidDisplayOrder" xml:space="preserve">
+    <value>Enter a whole number.</value>
+  </data>
+  <data name="PleaseSelectTaxClass" xml:space="preserve">
+    <value>Please select tax class.</value>
+  </data>
+  <data name="PSTTaxErrorMessage" xml:space="preserve">
+    <value>Must enter a valid PST Tax (ex: 123.45).</value>
+  </data>
+  <data name="RangeBetween0to100" xml:space="preserve">
+    <value>Must be between 0 and 100.</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>{0} field is required.</value>
+  </data>
+  <data name="SalesTaxErrorMessage" xml:space="preserve">
+    <value>Must enter a valid Sales Tax (ex: 123.45).</value>
+  </data>
+  <data name="SKURequiredMessage" xml:space="preserve">
+    <value>SKU is required.</value>
+  </data>
+  <data name="VATTaxErrorMessage" xml:space="preserve">
+    <value>Must enter a valid VAT Tax (ex: 123.45).</value>
+  </data>
+  <data name="RequiredSchedulerName" xml:space="preserve">
+    <value>Scheduler Name is required.</value>
+  </data>
+  <data name="RequiredStartDate" xml:space="preserve">
+    <value>Start Date is required.</value>
+  </data>
+  <data name="RequiredTouchPointName" xml:space="preserve">
+    <value>Touch Point Name is required.</value>
+  </data>
+  <data name="AlphaNumericOnly" xml:space="preserve">
+    <value>Only alphanumeric characters are allowed; no special characters.</value>
+  </data>
+  <data name="ContentRequiredMessage" xml:space="preserve">
+    <value>Content is required.</value>
+  </data>
+  <data name="EmailTemplateNameRequiredMessage" xml:space="preserve">
+    <value>The Email Template Name is required.</value>
+  </data>
+  <data name="LabelContentHtml" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="LabelEmailTemplateName" xml:space="preserve">
+    <value>Email Template Name</value>
+  </data>
+  <data name="SubjectRequiredMessage" xml:space="preserve">
+    <value>Subject is required.</value>
+  </data>
+  <data name="Errorlength" xml:space="preserve">
+    <value>{0} can not exceed {1} characters.</value>
+  </data>
+  <data name="RequiredEmailID" xml:space="preserve">
+    <value>Email Address is required.</value>
+  </data>
+  <data name="AttributeCodeLength" xml:space="preserve">
+    <value>Attribute Code can not exceed 100 characters.</value>
+  </data>
+  <data name="PleaseEnterAttributeCode" xml:space="preserve">
+    <value>Please enter a valid Attribute Code.</value>
+  </data>
+  <data name="PleaseEnterPaymentName" xml:space="preserve">
+    <value>Payment Name is required.</value>
+  </data>
+  <data name="PleaseEnterShippingName" xml:space="preserve">
+    <value>Shipping Name is required. </value>
+  </data>
+  <data name="ZipCodeLengthErrorMessage" xml:space="preserve">
+    <value>Zip Code can not exceed 5000 characters.</value>
+  </data>
+  <data name="OrderNotesLengthErrorMessage" xml:space="preserve">
+    <value>Order Notes can not exceed 500 characters.</value>
+  </data>
+  <data name="ErrorMessageMaxLength" xml:space="preserve">
+    <value>{0} can not exceed {1} characters.</value>
+  </data>
+  <data name="DefaultPublishStateDisableErrorMessage" xml:space="preserve">
+    <value>A default publish state can not be disabled.</value>
+  </data>
+  <data name="StoreAssociatedWithEntityNotPublished" xml:space="preserve">
+    <value>Store associated with the {0} has not been published.</value>
+  </data>
+  <data name="EntityExceptionMessageDuringPublish" xml:space="preserve">
+    <value>Publish failed due to an underlying entity model failure.</value>
+  </data>
+  <data name="GenericExceptionMessageDuringPublish" xml:space="preserve">
+    <value>Publish failed.</value>
+  </data>
+  <data name="SQLExceptionMessageDuringPublish" xml:space="preserve">
+    <value>Publish failed due to an underlying sql agent failure.</value>
+  </data>
+  <data name="EntityNotFoundMessageDuringPublish" xml:space="preserve">
+    <value>Publish could not be performed for the requested {0} since it does not exist.</value>
+  </data>
+  <data name="InvalidEntityMessageDuringPublish" xml:space="preserve">
+    <value>Publish cannot be performed since the supplied data is invalid.</value>
+  </data>
+  <data name="InvalidCountryCode" xml:space="preserve">
+    <value>Invalid Country Code.</value>
+  </data>
+  <data name="RequiredAddress1" xml:space="preserve">
+    <value>Address line 1 is required.</value>
+  </data>
+  <data name="RequiredState" xml:space="preserve">
+    <value>State is required.</value>
+  </data>
+  <data name="CouponMessage" xml:space="preserve">
+    <value>The coupon you are trying to apply cannot be clubbed with the already applied coupon.</value>
+  </data>
+  <data name="NoFurtherCouponMessage" xml:space="preserve">
+    <value>Maximum discount limit reached on the line item Total or the Subtotal.</value>
+  </data>
+  <data name="ErrorDiscountExceeded" xml:space="preserve">
+    <value>The total discount cannot exceed the SubTotal value.</value>
+  </data>
+  <data name="ApiNotAvailableMessage" xml:space="preserve">
+    <value>The Znode API seems to be unavailable or broken. Ask your system Administrator to directly check the Znode API for more details.</value>
+  </data>
+  <data name="InvalidDomainConfigurationMessage" xml:space="preserve">
+    <value>This domain has not been configured to work with Znode.</value>
+  </data>
+  <data name="InvalidElasticSearchConfigurationMessage" xml:space="preserve">
+    <value>Please check if the Elastic Search Service has been started on the host server and it is correctly configured to work with the Znode API.</value>
+  </data>
+  <data name="InvalidSqlConfigurationMessage" xml:space="preserve">
+    <value>Please check if the SQL server has been correctly configured to work with the Znode API.</value>
+  </data>
+  <data name="InvalidDataForConfigurableProduct" xml:space="preserve">
+    <value>The passed parent and the child product information doesn't belong to the same product</value>
+  </data>
+  <data name="PricingForLoggedInUsersMessage" xml:space="preserve">
+    <value>Please visit the webstore to see the pricing</value>
+  </data>
+  <data name="ExceptionMessageSearchKeyword" xml:space="preserve">
+    <value>Keyword property value of searchrequest model can't be null</value>
+  </data>
+  <data name="ExceptionMessageSearchModelNull" xml:space="preserve">
+    <value>Search request model can't be null</value>
+  </data>
+  <data name="ErrorQuoteCreate" xml:space="preserve">
+    <value>Failed to create quote.</value>
+  </data>
+  <data name="ErrorBillingAddressIdRequired" xml:space="preserve">
+    <value>Billing address id is required.</value>
+  </data>
+  <data name="ErrorPortalIdRequired" xml:space="preserve">
+    <value>Portal id is required.</value>
+  </data>
+  <data name="ErrorQuoteTotalRequired" xml:space="preserve">
+    <value>Quote total is required.</value>
+  </data>
+  <data name="ErrorShippingAddressIdRequired" xml:space="preserve">
+    <value>Shipping address id is required.</value>
+  </data>
+  <data name="ErrorShippingIdRequired" xml:space="preserve">
+    <value>Shipping type id is required.</value>
+  </data>
+  <data name="ErrorUserIdRequired" xml:space="preserve">
+    <value>User id is required.</value>
+  </data>
+  <data name="ErrorQuoteIdRequired" xml:space="preserve">
+    <value>Quote id is required.</value>
+  </data>
+  <data name="ErrorPaymentSettingIdRequired" xml:space="preserve">
+    <value>Payment setting id is required.</value>
+  </data>
+  <data name="LabelInHandDate" xml:space="preserve">
+    <value>In Hands Date</value>
+  </data>
+  <data name="LabelShippingConstraintsCode" xml:space="preserve">
+    <value>Shipping Constraints</value>
+  </data>
+  <data name="ErrorCustomerPaymentIdRequired" xml:space="preserve">
+    <value>Customer payment id or customer profile id is required.</value>
+  </data>
+  <data name="DetailsNotFound" xml:space="preserve">
+    <value>Details not found.</value>
+  </data>
+  <data name="ErrorQuoteIdGreaterThanZero" xml:space="preserve">
+    <value>Quote Id should be greater than zero.</value>
+  </data>
+  <data name="ModelNotNull" xml:space="preserve">
+    <value>Model can not be null.</value>
+  </data>
+  <data name="ErrorConvertQuoteToOrder" xml:space="preserve">
+    <value>Certain selections for this Quote request are either not available or are changed. Please contact the customer service to convert this quote to an order.</value>
+  </data>
+  <data name="VoucherCodeCanNotBeEmpty" xml:space="preserve">
+    <value>Voucher code cannot be empty.</value>
+  </data>
+  <data name="VoucherCodeIsInValidMessage" xml:space="preserve">
+    <value>Voucher code is invalid</value>
+  </data>
+  <data name="QuoteNumberIsInValidMessage" xml:space="preserve">
+    <value>Quote number is invalid</value>
+  </data>
+  <data name="QuoteNumberCanNotBeEmpty" xml:space="preserve">
+    <value>Quote number can not be empty.</value>
+  </data>
+  <data name="AlphanumericOnlyWithNoSpaces" xml:space="preserve">
+    <value>Only alphanumeric characters are allowed.</value>
+  </data>
+  <data name="CatalogCodeMaxLength" xml:space="preserve">
+    <value>Catalog Code can not exceed 100 characters.</value>
+  </data>
+  <data name="ErrorCatalogCodeRequired" xml:space="preserve">
+    <value>Catalog Code is required.</value>
+  </data>
+  <data name="CatalogCodeIsInValidMessages" xml:space="preserve">
+    <value>Catalog Code is invalid.</value>
+  </data>
+  <data name="AccountCodeMaxLength" xml:space="preserve">
+    <value>Account Code can not exceed 100 characters.</value>
+  </data>
+  <data name="ErrorAccountCodeRequired" xml:space="preserve">
+    <value>Account Code is required.</value>
+  </data>
+  <data name="AccountCodeIsInValidMessage" xml:space="preserve">
+    <value>Account Code is invalid</value>
+  </data>
+  <data name="AccountCodeCanNotBeEmpty" xml:space="preserve">
+    <value>Account code cannot be empty.</value>
+  </data>
+  <data name="AttributeFamilyCode" xml:space="preserve">
+    <value>Attribute Family Code</value>
+  </data>
+  <data name="DeleteAccountSuccessMessage" xml:space="preserve">
+    <value>Account deleted successfully.</value>
+  </data>
+  <data name="DeleteCatalogSuccessMessage" xml:space="preserve">
+    <value>Catalog deleted successfully.</value>
+  </data>
+  <data name="InvalidCouponCode" xml:space="preserve">
+    <value>Invalid Coupon Code</value>
+  </data>
+  <data name="ErrorCatalogDelete" xml:space="preserve">
+    <value>Failed to delete some Catalog as it is associated to a Store.</value>
+  </data>
+  <data name="ContainerKeyError" xml:space="preserve">
+    <value>Please use only alphabets and numbers.</value>
+  </data>
+  <data name="ContainerKeyLimit" xml:space="preserve">
+    <value>Container Key can not exceed 100 characters.</value>
+  </data>
+  <data name="ContainerNameLimit" xml:space="preserve">
+    <value>Container Name can not exceed 100 characters.</value>
+  </data>
+  <data name="TemplateCodeLimit" xml:space="preserve">
+    <value>Template Code can not exceed 100 characters.</value>
+  </data>
+  <data name="ErrorContentContainerId" xml:space="preserve">
+    <value>Content Container Id is Required</value>
+  </data>
+  <data name="ErrorContentContainerKey" xml:space="preserve">
+    <value>Content Container Key is Required</value>
+  </data>
+  <data name="ErrorIsGlobalContentWidget" xml:space="preserve">
+    <value>Please select if the Content Widget is Global</value>
+  </data>
+  <data name="ErrorRequiredLocaleId" xml:space="preserve">
+    <value>Locale Id is required.</value>
+  </data>
+  <data name="ErrorRequiredProfileId" xml:space="preserve">
+    <value>Profile Id is required.</value>
+  </data>
+  <data name="RequiredContentContainerName" xml:space="preserve">
+    <value>Content Container name is required.</value>
+  </data>
+  <data name="RequiredFileNameErrorMessage" xml:space="preserve">
+    <value>File Name Is Required.</value>
+  </data>
+  <data name="RequiredContainerTemplateCode" xml:space="preserve">
+    <value>Template Code is Required</value>
+  </data>
+  <data name="TemplateNameRequired" xml:space="preserve">
+    <value>Template Name is Required</value>
+  </data>
+  <data name="NoFurtherShippingCouponMessage" xml:space="preserve">
+    <value>Maximum discount limit reached for Shipping.</value>
+  </data>
+  <data name="ErrorShippingOptionWithRatesGet" xml:space="preserve">
+    <value>Failed to get shipping options with rates.</value>
+  </data>
+  <data name="ErrorIsAllowedTerritoriesRequired" xml:space="preserve">
+    <value>IsAllowedTerritories field is required.</value>
+  </data>
+  <data name="ErrorOrderDetailsIdRequired" xml:space="preserve">
+    <value>OmsOrderDetailsId field is required.</value>
+  </data>
+  <data name="ErrorOrderHistoryRequired" xml:space="preserve">
+    <value>OrderHistory field is required.</value>
+  </data>
+  <data name="ErrorOrderIdRequired" xml:space="preserve">
+    <value>OmsOrderId field is required.</value>
+  </data>
+  <data name="ErrorOrderLineItemHistoryRequired" xml:space="preserve">
+    <value>OrderLineItemHistory field is required.</value>
+  </data>
+  <data name="ErrorOrderLineItemsRequired" xml:space="preserve">
+    <value>OrderLineItems field is required.</value>
+  </data>
+  <data name="ErrorOrderStateIdRequired" xml:space="preserve">
+    <value>OmsOrderStateId field is required.</value>
+  </data>
+  <data name="ErrorOrderStateRequired" xml:space="preserve">
+    <value>OrderState field is required.</value>
+  </data>
+  <data name="ErrorOverDueAmountRequired" xml:space="preserve">
+    <value>OverDueAmount field is required.</value>
+  </data>
+  <data name="ErrorReturnItemListRequired" xml:space="preserve">
+    <value>ReturnItemList field is required.</value>
+  </data>
+  <data name="ErrorShippingCostRequired" xml:space="preserve">
+    <value>ShippingCost field is required.</value>
+  </data>
+  <data name="ErrorShippingDifferenceRequired" xml:space="preserve">
+    <value>ShippingDifference field is required.</value>
+  </data>
+  <data name="ErrorShoppingCartItemsCountRequired" xml:space="preserve">
+    <value>ShoppingCartItemsCount field is required.</value>
+  </data>
+  <data name="ErrorShoppingCartOverDueAmountRequired" xml:space="preserve">
+    <value>ShoppingCartOverDueAmount field is required.</value>
+  </data>
+  <data name="ErrorTotalRequired" xml:space="preserve">
+    <value>Total field is required.</value>
+  </data>
+  <data name="MessageMaximumApplicableDiscount" xml:space="preserve">
+    <value>Maximum discount limit reached on the line item Total or the Subtotal.</value>
+  </data>
+  <data name="CurrentDateMessage" xml:space="preserve">
+    <value>Enter Current date or Future date </value>
+  </data>
+  <data name="RangeGreaterThan0" xml:space="preserve">
+    <value>Must be greater than 0.</value>
+  </data>
+  <data name="HighlightAlreadyExists" xml:space="preserve">
+    <value>Highlight with same code already exists</value>
+  </data>
+  <data name="AssociateShippingId" xml:space="preserve">
+    <value>Shipping Ids {0} already exists &amp; Shipping Ids {1} Associated Successfully.</value>
+  </data>
+  <data name="AssociateShippingIdNotNullOrEmpty" xml:space="preserve">
+    <value>Associate Shipping Id cannot be Null or Empty and Value must be Integer only.</value>
+  </data>
+  <data name="ShippingIdExist" xml:space="preserve">
+    <value>Shipping Id Already Exist.</value>
+  </data>
+  <data name="AttributeCodeValidation" xml:space="preserve">
+    <value>Attribute code with same value is already exists</value>
+  </data>
+  <data name="HttpCode_401_AccessDeniedMsg" xml:space="preserve">
+    <value>The page cannot be displayed. Make sure you are authorized to view this page.</value>
+  </data>
+  <data name="InvalidQuantity" xml:space="preserve">
+    <value>Selected quantity should be between {0} to {1}.</value>
+  </data>
+  <data name="ErrorAvataxConnection" xml:space="preserve">
+    <value>Avatax connector error:</value>
+  </data>
+  <data name="SuccessAvataxConnection" xml:space="preserve">
+    <value>Connection success!</value>
+  </data>
+  <data name="ErrorCheckSettingsInConfigurationFile" xml:space="preserve">
+    <value>Please verify that the account, license, and URL settings have been provided in the configuration file.</value>
+  </data>
+  
+  <data name="FailedAssociateAccountProfileToUserProfile" xml:space="preserve">
+    <value>Failed to Associate Account Profile to User Profile.</value>
+  </data>
+  <data name="SuccessAssociateAccountProfileToUserProfile" xml:space="preserve">
+    <value>Account profile has been Associated to User Profile Successfully.</value>
+  </data>
+  <data name="AttributeAlreadyAssociated" xml:space="preserve">
+    <value>The group cannot be associated since the attribute from the group is already associated</value>
+  </data>
+  <data name="ErrorProfilePaymentAlreadyExist" xml:space="preserve">
+    <value>The selected payment method is already associated with profile, please associate a different payment method</value>
+  </data>
+  <data name="ErrorPortalIdProfileId" xml:space="preserve">
+    <value>Please enter either ProfileId or PortalId.</value>
+  </data>
+  <data name="ErrorPortalPaymentAlreadyExist" xml:space="preserve">
+    <value>The selected payment method is already associated with the portal, please associate a different payment method</value>
+  </data>
+  <data name="ErrorDeleteDefaultContainerVariant" xml:space="preserve">
+    <value>The default variant cannot be deleted.</value>
+  </data>
+  <data name="ErrorContainerVariantAlreadyExists" xml:space="preserve">
+    <value>This Variant already exists.</value>
+  </data>
+  <data name="ErrorDefaultVariantDeactivateMessage" xml:space="preserve">
+    <value>The default Variant cannot be deactivated.</value>
+  </data>
+  <data name="VariantActivatedSuccessMessage" xml:space="preserve">
+    <value>The selected Variant(s) is activated.</value>
+  </data>
+  <data name="VariantDeactivatedSuccessMessage" xml:space="preserve">
+    <value>The selected Variant(s) is deactivated.</value>
+  </data>
+  <data name="ErrorFailedToActivateVariant" xml:space="preserve">
+    <value>Failed to activate variant(s).</value>
+  </data>
+  <data name="ErrorFailedToDeactivateVariant" xml:space="preserve">
+    <value>Failed to deactivate variant(s).</value>
+  </data>
+  <data name="ContainerPublishCheckForVariantPublish" xml:space="preserve">
+    <value>Variants created for non - published Content Containers cannot be published.Please publish the Content Container first.</value>
+  </data>
+  <data name="ErrorContentContainerVariantId" xml:space="preserve">
+    <value>Content Container Variant Id is required.</value>
+  </data>
+  <data name="SuccessQuoteLineItemDelete" xml:space="preserve">
+    <value>Quote Line Item deleted successfully.</value>
+  </data>
+  <data name="ErrorQuoteLineItemDelete" xml:space="preserve">
+    <value>Failed to delete the Quote Line item.</value>
+  </data>
+  <data name="ErrorMessageForCMSMappingId" xml:space="preserve">
+    <value>Invalid CMSMappingId.</value>
+  </data>
+  <data name="ErrorMessageForWidgetsKey" xml:space="preserve">
+    <value>Invalid WidgetsKey.</value>
+  </data>
+  <data name="ErrorMessageForWidgetsKeyAndCMSMappingId" xml:space="preserve">
+    <value>Invalid CMSMappingId or WidgetsKey.</value>
+  </data>
+  <data name="ErrorModelNull" xml:space="preserve">
+    <value>Model cannot be null.</value>
+  </data>
+  <data name="ErrorCMSWidgetContainerConfigurationInsert" xml:space="preserve">
+    <value>Failed to insert CMS Widget Slider Banner Configuration.</value>
+  </data>
+  <data name="ErrorCMSWidgetContainerConfigurationUpdate" xml:space="preserve">
+    <value>Failed to update CMS Widget Slider Banner Configuration.</value>
+  </data>
+  <data name="SuccessCMSWidgetContainerConfigurationInsert" xml:space="preserve">
+    <value>CMS Widget Slider Banner Configuration inserted successfully.</value>
+  </data>
+  <data name="SuccessCMSWidgetContainerConfigurationUpdate" xml:space="preserve">
+    <value>CMS Widget Slider Banner Configuration with Id {0} updated successfully</value>
+  </data>
+  <data name="ErrorOrderPaymentModelNull" xml:space="preserve">
+    <value>Order Payment Data model cannot be null.</value>
+  </data>
+  <data name="InvalidData" xml:space="preserve">
+    <value>Invalid data</value>
+  </data>
+  <data name="InvalidPortalId" xml:space="preserve">
+    <value>Invalid portal Id</value>
+  </data>
+  <data name="SuccessUpdateUsername" xml:space="preserve">
+    <value>Username updated successfully</value>
+  </data>
+  <data name="UsernameAlreadyExists" xml:space="preserve">
+    <value>Username already exists</value>
+  </data>
+  <data name="ErrorEmailAddress" xml:space="preserve">
+    <value>Invalid email address</value>
+  </data>
+  <data name="ErrorIsGuestUser" xml:space="preserve">
+    <value>Username of a Guest User cannot be updated</value>
+  </data>
+  <data name="InvalidUserId" xml:space="preserve">
+    <value>Invalid user id</value>
+  </data>
+  <data name="IsVerifiedUser" xml:space="preserve">
+    <value>User is verified</value>
+  </data>
+  <data name="ExportErrorMessage" xml:space="preserve">
+    <value>Please Wait</value>
+  </data>
+  <data name="ExportSuccessMessage" xml:space="preserve">
+    <value>Form Submission export has been initiated. Click here or redirect to the Exports screen to view more details</value>
+  </data>
+  <data name="ExportDownloadErrorMessage" xml:space="preserve">
+    <value>Please try once the export process is completed.</value>
+  </data>
+</root>

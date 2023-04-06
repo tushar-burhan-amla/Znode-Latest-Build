@@ -1,0 +1,13 @@
+@using Znode.Engine.WebStore.Agents
+@model Int32
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    Layout = null;
+}
+
+<div class="container">
+    <div class="row">
+        <z-widget>@Html.WidgetPartial("TextEditor", "ContentPage", "996070", "ContentPageMapping", (int)Model)</z-widget>
+    </div>
+</div>

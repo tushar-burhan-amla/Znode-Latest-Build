@@ -1,0 +1,117 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model EmailTemplateAreaDataViewModel
+@{
+    string displayStatus = Model?.MappedEmailTemplateList?.Count > 0 ? "display: block" : "display: none";
+}
+<div id="Show">
+    <div class="col-sm-12 box-container email-template nopadding">
+        <div class="table-div sms-table-div">
+            <div class="thead-div" style="@displayStatus">
+                <div class="col-1">@Admin_Resources.LabelAreaName</div>
+                <div class="col-2">@Admin_Resources.LabelName</div>
+                <div class="col-3">@Admin_Resources.LabelIsActive</div>
+                <div class="col-3">@Admin_Resources.LabelIsEnableBcc</div>
+                <div class="col-3">@Admin_Resources.LabelIsSmsActive</div>
+                <div class="col-3">@Admin_Resources.LabelAction</div>
+            </div>
+
+            <div class="tbody-div dirtyignore">
+                <div id="partial" class="removePartial" style="display: none">
+                </div>
+
+                @if (Model?.MappedEmailTemplateList?.Count > 0)
+                {
+                    foreach (var item in Model.MappedEmailTemplateList)
+                    {
+                        using (Ajax.BeginForm("SaveEmailTemplateAreaConfiguration", "EmailTemplate", new AjaxOptions()
+                        {
+                            HttpMethod = "post",
+                            OnSuccess = "EmailTemplate.prototype.AreaMapperAddResult(data,this)",
+                            InsertionMode = InsertionMode.Replace,
+
+                        }, new { id = "frmEmailTemplateArea_" + item.EmailTemplateMapperId }))
+                        {
+            <div class="tr-div" id="PartialPage">
+                <div class="col-1">
+                    @if (item.IsAddMode && item?.EmailTemplateAreaList?.Count > 0)
+                    {
+                        @Html.DropDownListFor(m => item.EmailTemplateAreasId, item.EmailTemplateAreaList, new { @id = "emailArea_" + item.EmailTemplateMapperId + "", @data_test_selector = "drpEmailTemplateArea", @Onchange = "EmailTemplate.prototype.OnEmailTemplateAreaChange()" })
+                        @Html.ValidationMessageFor(model => item.EmailTemplateAreasId, "", new { @data_test_selector = "valEmailTemplateArea" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(m => item.EmailTemplateAreaName, new { @id = "emailArea_" + item.EmailTemplateMapperId + "", disabled = "disabled", @data_test_selector = "drpEmailTemplateArea" })
+                        @Html.ValidationMessageFor(model => item.EmailTemplateAreaName, "", new { @data_test_selector = "valEmailTemplateArea" })
+                    }
+                </div>
+                <div class="col-2">
+                    @if (item.IsAddMode)
+                    {
+                        @Html.TextBoxFor(m => item.EmailTemplateName, new { @placeholder = Admin_Resources.TextEnterEmailTemplate, @id = "emailTemplate_" + item.EmailTemplateMapperId + "", @class = "txtEmailTemplate", @data_test_selector = "txtEmailTemplateName" })
+                        @Html.ValidationMessageFor(model => item.EmailTemplateName, "", new { @id = "valEmailTemplate_" + item.EmailTemplateMapperId + "", @data_test_selector = "valEmailTemplateName" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(m => item.EmailTemplateName, new { @placeholder = Admin_Resources.TextEnterEmailTemplate, @id = "emailTemplate_" + item.EmailTemplateMapperId + "", disabled = "disabled", @class = "txtEmailTemplate", @data_test_selector = "txtEmailTemplateName" })
+                        @Html.ValidationMessageFor(model => item.EmailTemplateName, "", new { @id = "valEmailTemplate_" + item.EmailTemplateMapperId + "", @data_test_selector = "valEmailTemplateName" })
+                    }
+                </div>
+                <div class="col-3">
+                    <label>
+                        <input id="areaActive_@item.EmailTemplateMapperId" name="IsActive" checked="@item.IsActive" type="checkbox" value="true" disabled="disabled">
+                        <span class="lbl padding-8" for="IsActive"></span>
+                        <input name="IsActive" type="hidden" value="false">
+                    </label>
+
+                </div>
+
+                <div class="col-3">
+                    <label>
+                        <input id="areaIsEnableBcc_@item.EmailTemplateMapperId" name="IsEnableBcc" checked="@item.IsEnableBcc" type="checkbox" value="true" disabled="disabled">
+                        <span class="lbl padding-8" for="IsEnableBcc"></span>
+                        <input name="IsEnableBcc" type="hidden" value="false">
+                    </label>
+
+                </div>
+
+                <div class="col-3">
+                    <label>
+                        <input id="areaSmsActive_@item.EmailTemplateMapperId" name="IsSMSNotificationActive" checked="@item.IsSMSNotificationActive" type="checkbox" value="true" disabled="disabled">
+                        <span class="lbl padding-8" for="IsSmsActive"></span>
+                        <input name="IsSmsActive" type="hidden" value="false">
+                    </label>
+
+                </div>
+                <div class="col-3">
+                    <button type="submit" id="saveAreaMapping_@item.EmailTemplateMapperId" class="btn-narrow-icon btnSaveTemplateMapping" title="Save" style="display:none !important;" data-test-selector="btnSaveAreaMapping"><em class="z-ok"></em></button>
+                    <button type="button" id="CancelAreaMapping_@item.EmailTemplateMapperId" class="btn-narrow-icon" title="Cancel" style="display:none !important" onclick="EmailTemplate.prototype.CancelNewAddAreaMapping('CancelAreaMapping_@item.EmailTemplateMapperId',this)" data-test-selector="btnCancelAreaMapping"><em class="z-close"></em></button>
+                    @Html.AuthorizedPrototypeRawActionLink(" ", "SaveEmailTemplateAreaConfiguration", "EmailTemplate", new { id = "EditAreaMapping_" + item.EmailTemplateMapperId + "", @class = "img-icon-edit btn-narrow-icon z-edit", title = Admin_Resources.ButtonEdit, onclick = "EmailTemplate.prototype.EditAreaMapping(" + item.EmailTemplateMapperId + ")", @data_test_selector = "btnEditAreaMapping" })
+                    @Html.AuthorizedPrototypeRawActionLink(" ", "SaveEmailTemplateAreaConfiguration", "EmailTemplate", new { id = "deleteAreaMapping_" + item.EmailTemplateMapperId + "", @class = "img-icon-delete btn-narrow-icon z-delete", title = Admin_Resources.ButtonDelete, onclick = "EmailTemplate.prototype.DeleteAreaMapping(" + item.EmailTemplateMapperId + "," + "this" + ")", @data_test_selector = "btnDeleteAreaMapping" })
+                </div>
+            </div>
+
+                            <input id="hdn_portal_id_emailtemplatemapper" name="EmailTemplateMapperId" type="hidden" value="@item.EmailTemplateMapperId">
+                            <input id="EmailTemplateId" name="EmailTemplateId" type="hidden" value="@item.EmailTemplateId">
+                            <input id="EmailTemplateAreasId" name="EmailTemplateAreasId" type="hidden" value="@item.EmailTemplateAreasId">
+                            <input id="hdn_portal_id_emailtemplate" name="PortalId" type="hidden" value="@item.PortalId">
+
+                        }
+
+                    }
+                }
+                else
+                {
+                    <div class="MessageBox no-record"><p class="text-center">@Admin_Resources.NoRecordFoundText</p></div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    $(document).ready(function () {
+        EmailTemplate.prototype.AutoCompleteEmailTemplates();
+        EmailTemplate.prototype.SaveTemplateMapping();
+    });
+</script>

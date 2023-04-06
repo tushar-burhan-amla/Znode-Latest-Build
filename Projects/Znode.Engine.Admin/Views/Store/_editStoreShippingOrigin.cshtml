@@ -1,0 +1,374 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalShippingViewModel
+@{    
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    // ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmEditShippings", CancelUrl = "/Store/List", Callback = null, IsSaveCloseEnable = true };
+    ViewBag.Title = @Admin_Resources.TitleStoreAndReps + " | " + @Admin_Resources.TitleMultifront;
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+@using (Html.BeginForm("EditStoreShipping", controllerName, FormMethod.Post, new { @id = "frmEditShippings" , @class="shipping-orgin-form"}))
+{
+  <h3 class="section-heading">@Admin_Resources.LabelShippingOrigin</h3>
+
+  <div class="form-group">
+
+      <div class="col-sm-12 nopadding">
+          <div class="control-label">
+              <label></label>
+          </div>
+          <div class="control-md">
+              <label>
+                  <input @(Model.IsUseWarehouseAddress.GetValueOrDefault() ? "checked='checked'" : "" ) id="IsDefaultWarehouse" onclick="Store.prototype.IsDefaultWarehouse()" name="IsUseWarehouseAddress" type="checkbox" value="true">
+                  <span class="lbl padding-8">@Admin_Resources.LabelIsUseWareHouseAddress</span>
+                  <input name="IsUseWarehouseAddress" type="hidden" value="false">
+              </label>
+          </div>
+      </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.ShippingOriginAddress1)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.ShippingOriginAddress1, new { @class = "lblShippingOrigin" })
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.ShippingOriginAddress2)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.ShippingOriginAddress2, new { @class = "lblShippingOrigin" })
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.ShippingOriginCity)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.ShippingOriginCity, new { @maxlength = 200, @class = "lblShippingOrigin" })
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.ShippingOriginStateCode)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.ShippingOriginStateCode, new { @maxlength = 20, @class = "lblShippingOrigin" })
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.ShippingOriginZipCode)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.ShippingOriginZipCode, new { @maxlength = 200, @class = "lblShippingOrigin" })
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.ShippingOriginCountryCode)
+      </div>
+      <div class="control-md">
+        @Html.DropDownListFor(model => model.ShippingOriginCountryCode, Model.countryList, new { @class = "lblShippingOrigin" })
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.ShippingOriginPhone)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.ShippingOriginPhone, new { @maxlength = 20, @class = "lblShippingOrigin" })
+      </div>
+    </div>
+  </div>
+
+  <h3 class="section-heading margin-top-25">@Admin_Resources.LabelShippingWeightLimit</h3>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.PackageWeightLimit, new { @class = "required" })
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.PackageWeightLimit)
+        @Html.ValidationMessageFor(model => model.PackageWeightLimit)
+      </div>
+      <div class="help-text"><em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.PackageWeightLimitHelpText"></em> </div>
+    </div>
+  </div>
+
+  <h3 class="section-heading margin-top-25">@Admin_Resources.LabelFedex</h3>
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.FedExAccountNumber)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.FedExAccountNumber)
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.FedExLTLAccountNumber)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.FedExLTLAccountNumber)
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.FedExMeterNumber)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.FedExMeterNumber)
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.FedExProductionKey)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.FedExProductionKey)
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.FedExSecurityCode)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.FedExSecurityCode)
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.FedExDropoffType)
+      </div>
+      <div class="control-md">
+        @Html.DropDownListFor(model => model.FedExDropoffType, Model.FedexDropOffTypes)
+
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.FedExPackagingType)
+      </div>
+      <div class="control-md">
+        @Html.DropDownListFor(model => model.FedExPackagingType, Model.PackagingTypes)
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+      <div class="col-sm-12 nopadding">
+          <div class="control-label">
+              <label></label>
+          </div>
+          <div class="control-md">
+              <label>
+                  <input @(Model.FedExUseDiscountRate.GetValueOrDefault() ? "checked='checked'" : "" ) id="FedExUseDiscountRate" name="FedExUseDiscountRate" type="checkbox" value="true">
+                  <span class="lbl padding-8">Use FedEx Discount Rate</span>
+                  <input name="FedExUseDiscountRate" type="hidden" value="false">
+              </label>
+          </div>
+      </div>
+  </div>
+
+  <div class="form-group">
+      <div class="col-sm-12 nopadding">
+          <div class="control-label">
+              <label></label>
+          </div>
+          <div class="control-md">
+              <label>
+                  <input @(Model.FedExAddInsurance.GetValueOrDefault() ? "checked='checked'" : "" ) id="FedExAddInsurance" name="FedExAddInsurance" type="checkbox" value="true">
+                  <span class="lbl padding-8">Add Insurance</span>
+                  <input name="FedExAddInsurance" type="hidden" value="false">
+              </label>
+          </div>
+      </div>
+  </div>
+
+  <h3 class="section-heading  margin-top-25">@Admin_Resources.LabelUPS</h3>
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.UpsUsername)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.UpsUsername)
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.UpsPassword)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.UpsPassword, new { type = "password" })
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.UpsKey)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.UpsKey)
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.LTLUPSAccountNumber)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.LTLUPSAccountNumber)
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.LTLUPSAccessLicenseNumber)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.LTLUPSAccessLicenseNumber)
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.LTLUPSUsername)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.LTLUPSUsername)
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.LTLUPSPassword)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.LTLUPSPassword, new { type = "password" })
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.UPSDropoffType)
+      </div>
+      <div class="control-md">
+        @Html.DropDownListFor(model => model.UPSDropoffType, Model.UPSDropOffTypes)
+
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.UPSPackagingType)
+      </div>
+      <div class="control-md">
+        @Html.DropDownListFor(model => model.UPSPackagingType, Model.UPSPackagingTypes)
+      </div>
+    </div>
+  </div>
+
+  <h3 class="section-heading  margin-top-25">@Admin_Resources.LabelUSPS</h3>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.USPSShippingAPIURL)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.USPSShippingAPIURL)
+        @Html.ValidationMessageFor(model => model.USPSShippingAPIURL)
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-12 nopadding">
+      <div class="control-label">
+        @Html.LabelFor(m => m.USPSWebToolsUserID)
+      </div>
+      <div class="control-md">
+        @Html.TextBoxFor(model => model.USPSWebToolsUserID)
+        @Html.ValidationMessageFor(model => model.USPSWebToolsUserID)
+      </div>
+    </div>
+  </div>
+
+  @Html.HiddenFor(m => m.PortalId)
+  @Html.HiddenFor(m => m.PortalName)
+  @Html.HiddenFor(m => m.ShippingPortalId)
+  @Html.HiddenFor(m => m.ShippingPortalId)
+  @Html.HiddenFor(m => m.ShippingOriginAddress1)
+  @Html.HiddenFor(m => m.ShippingOriginAddress2)
+  @Html.HiddenFor(m => m.ShippingOriginCity)
+  @Html.HiddenFor(m => m.ShippingOriginCountryCode)
+  @Html.HiddenFor(m => m.ShippingOriginPhone)
+  @Html.HiddenFor(m => m.ShippingOriginStateCode)
+  @Html.HiddenFor(m => m.ShippingOriginZipCode)
+  @Html.HiddenFor(m => m.PublishStateId)
+}
+  <script>
+      $(document).ready(function () {
+          Store.prototype.IsDefaultWarehouse();
+      });      
+  </script>

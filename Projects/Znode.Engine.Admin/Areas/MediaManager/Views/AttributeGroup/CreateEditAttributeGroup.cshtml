@@ -1,0 +1,71 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers
+@model AttributeGroupViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleDAM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateEditAttributeGroup", CancelUrl = "/MediaManager/AttributeGroup/List", Callback = "AttributeGroup.prototype.ValidateMediaAttributeGroupCode", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    @if (Model.MediaAttributeGroupId > 0)
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelAttributeGroup)<i class="z-minus"></i><span id="GroupCodeLable">@Model.GroupCode</span></h1>
+        @Html.HiddenFor(m => m.GroupCode)
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelAttributeGroup)</h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @if (Equals(Model.ViewModeType, AdminConstants.DetailsView))
+    {
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_Navigator.cshtml", Model.NavigationViewModel)
+        </div>
+    }
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmCreateEditAttributeGroup" }))
+            {
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.GroupCode, new { @class = "required" })
+                </div>
+                <div class="control-md">
+                    @if (Model.MediaAttributeGroupId > 0)
+                    { @Html.TextBoxFor(m => m.GroupCode, new { @readonly = "readonly" })}
+                    else
+                    { @Html.TextBoxFor(m => m.GroupCode);
+                    }
+                    @Html.ValidationMessageFor(model => model.GroupCode, "", new { id = "errorSpanGroupCode" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.DisplayOrder)
+                </div>
+                <div class="control-md">
+                    @if (actionName.ToLower() == "Create".ToLower())
+                    {@Html.TextBoxFor(model => model.DisplayOrder, new { @Value = "500" }) }
+                    else
+                    { @Html.TextBoxFor(model => model.DisplayOrder) }
+                    @Html.ValidationMessageFor(model => model.DisplayOrder)
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.IsSystemDefined)
+        </div>
+        <div class="col-sm-12 nopadding margin-top">
+            @Html.Hidden("MediaAttributeGroupId", @Model.MediaAttributeGroupId)
+            @{Html.RenderAction("GetTabStructure", controllerName, new { @mediaAttributeGroupId = @Model.MediaAttributeGroupId });}
+        </div>
+                }
+</section>

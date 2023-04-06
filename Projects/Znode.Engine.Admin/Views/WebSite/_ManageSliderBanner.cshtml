@@ -1,0 +1,188 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CMSWidgetConfigurationViewModel
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    bool isSaveCloseShow = Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString()) ? true : false;
+    bool isSaveCloseEnableShow= Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString()) ? true : false;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string cancelurl = Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())
+                ? string.IsNullOrEmpty(Model?.FileName) ? $"/StoreExperience/StoreSetting?portalId={Model.CMSMappingId}" : $"/StoreExperience/StoreSetting?portalId={Model.CMSMappingId}&fileName={Model.FileName}"
+                : string.IsNullOrEmpty(Model?.FileName) ? $"/Content/EditContentPage?cmsContentPagesId={Model.CMSMappingId}" : $"/Content/EditContentPage?cmsContentPagesId={Model.CMSMappingId}&fileName={Model.FileName}";
+    ActionModel actionModel = new ActionModel { Action = "SaveWebSiteLogo", Controller = "WebSite", CancelUrl = cancelurl, FormId = "formCmsWidgetConfiguration", Callback = "WebSite.prototype.ValidationAutoPlayTime", IsSaveCloseEnable = isSaveCloseEnableShow, IsSaveCloseIsShow = isSaveCloseShow };
+
+    string _code = Convert.ToString(Request.QueryString["widgetCode"]);
+
+}
+<div class="title-container">
+    @{
+        string widgetName = string.IsNullOrEmpty(Admin_Resources.ResourceManager.GetString(string.Concat(AdminConstants.ZWidgetDisplayName, @Model.WidgetName))) ? @Model.WidgetName : Admin_Resources.ResourceManager.GetString(string.Concat(AdminConstants.ZWidgetDisplayName, @Model.WidgetName));
+        <h1>@Admin_Resources.TextConfigure<em class="z-minus"></em><span>@widgetName</span></h1>
+    }
+    @if (Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.ContentPageMapping.ToString()))
+    {
+        <div class="pull-right btn-container">
+            <button type="button" class="btn-text-icon pull-left" data-test-selector="linkBack" onclick="ZnodeBase.prototype.CancelUpload('associatedPanel')"><em class="z-back"></em>@Admin_Resources.ButtonBack</button>
+            <div class="pull-right padding-left">
+                @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, actionModel.Action, actionModel.Controller, new { @id = "dvSave", @class = "btn-text btn-text-secondary", onclick = "SaveCancel.prototype.SubmitForm('" + @actionModel.FormId + "', '" + @actionModel.Callback + "')" })
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    }
+</div>
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm("SaveCMSWidgetSliderBanner", "WebSite", FormMethod.Post, new { id = "formCmsWidgetConfiguration" }))
+    {
+        @Html.Hidden("WidgetCode", _code)
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.CMSSliderId, new { @class = "required", @data_test_selector = "lblCMSSlider" })
+                </div>
+                <div class="control-md">
+                    @Html.DropDownListFor(model => model.CMSSliderId, Model.CMSPortalSliderList, new { @data_test_selector = "drpCMSSlider" })
+                    @Html.ValidationMessageFor(model => model.CMSSliderId, "", new { @data_test_selector = "valCMSSlider" })
+                </div>
+            </div>
+        </div>
+
+        if (!Equals(Model.WidgetCode, AdminConstants.OfferBanner))
+        {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Type, new { @data_test_selector = "lblType" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.Type, Model.SliderTypeList, new { @data_test_selector = "drpType" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Navigation, new { @data_test_selector = "lblNavigation" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.Navigation, Model.SliderNavigationTypeList, new { @data_test_selector = "drpNavigation" })
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.AutoPlay, new { @data_test_selector = "lblAutoPlay" })
+                </div>
+                <div class="control-md">
+                    <div class="switch-field switchAutoPlay">
+                        @if (Model.AutoPlay)
+                        {
+                            @Html.RadioButtonFor(x => x.AutoPlay, "true", new { @checked = true, @id = "AutoPlay_left" }) <label id="AutoPlay_true" data-test-selector="lblAutoPlayTrue" for="AutoPlay_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.AutoPlay, "false", new { @id = "AutoPlay_right" }) <label id="AutoPlay_false" data-test-selector="lblAutoPlayFalse" for="AutoPlay_right">No</label>
+                        }
+                        else
+                        {
+                            @Html.RadioButtonFor(x => x.AutoPlay, "true", new { @id = "AutoPlay_left" }) <label id="AutoPlay_true" data-test-selector="lblAutoPlayTrue" for="AutoPlay_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.AutoPlay, "false", new { @checked = true, @id = "AutoPlay_right" }) <label id="AutoPlay_false" data-test-selector="lblAutoPlayFalse" for="AutoPlay_right">No</label>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        if (Model.AutoPlay)
+        {
+            <div class="form-group" id="divAutoPlayTimeout">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.AutoplayTimeOut, new { @id = "LabelAutoPlay", @data_test_selector = "lblAutoPlayTimeOut" })
+                    </div>
+                    <div class="control-md">
+                        <div class="right-inner-icon">
+                            @Html.TextBoxFor(model => model.AutoplayTimeOut, new { @data_test_selector = "txtAutoPlayTimeOut" })
+                            <em class="unit-text">@Admin_Resources.UnitSec</em>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.AutoplayTimeOut, "", new { @data_test_selector = "valAutoPlayTimeOut" })
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group" id="divAutoPlayTimeout" style="display:none">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.AutoplayTimeOut, new { @id = "LabelAutoPlay", @data_test_selector = "lblAutoPlayTimeOut" })
+                    </div>
+                    <div class="control-md">
+                        <div class="right-inner-icon">
+                            @Html.TextBoxFor(model => model.AutoplayTimeOut, new { @data_test_selector = "txtAutoPlayTimeOut" })
+                            <em class="unit-text">@Admin_Resources.UnitSec</em>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.AutoplayTimeOut, "", new { @data_test_selector = "valAutoPlayTimeOut" })
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(model => model.AutoplayHoverPause, new { @data_test_selector = "lblAutoplayHoverPause" })
+                </div>
+                <div class="control-md">
+                    <div class="switch-field">
+                        @if (Model.AutoplayHoverPause)
+                        {
+                            @Html.RadioButtonFor(x => x.AutoplayHoverPause, "true", new { @checked = true, @id = "AutoplayHoverPause_left" }) <label data-test-selector="lblAutoplayHoverPauseLeft" for="AutoplayHoverPause_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.AutoplayHoverPause, "false", new { @id = "AutoplayHoverPause_right" }) <label data-test-selector="lblAutoplayHoverPauseRight" for="AutoplayHoverPause_right">No</label>
+                        }
+                        else
+                        {
+                            @Html.RadioButtonFor(x => x.AutoplayHoverPause, "true", new { @id = "AutoplayHoverPause_left" }) <label data-test-selector="lblAutoplayHoverPauseLeft" for="AutoplayHoverPause_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.AutoplayHoverPause, "false", new { @checked = true, @id = "AutoplayHoverPause_right" }) <label data-test-selector="lblAutoplayHoverPauseRight" for="AutoplayHoverPause_right">No</label>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        if (!Equals(Model.WidgetCode, AdminConstants.OfferBanner))
+        {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.TransactionStyle, new { @data_test_selector = "lblTransactionStyle" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.TransactionStyle, Model.SliderTransitionTypeList, new { @data_test_selector = "drpTransactionStyle" })
+                    </div>
+                </div>
+            </div>
+        }
+
+        @Html.HiddenFor(model => model.CMSWidgetSliderBannerId)
+        @Html.HiddenFor(model => model.CMSMappingId)
+        @Html.HiddenFor(model => model.CMSWidgetsId)
+        @Html.HiddenFor(model => model.WidgetsKey)
+        @Html.HiddenFor(model => model.TypeOFMapping)
+        @Html.HiddenFor(model => model.DisplayName)
+        @Html.HiddenFor(x => x.WidgetName)
+        @Html.HiddenFor(x => x.FileName)
+    }
+</section>
+@Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+    $(function () {
+        WebSite.prototype.ValidationAutoPlayTime();
+        WebSite.prototype.AutplayRequiredOnClick();
+    });
+</script>

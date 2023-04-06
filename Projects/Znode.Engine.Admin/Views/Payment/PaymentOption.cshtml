@@ -1,0 +1,150 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Models;
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string isactive = Convert.ToBoolean(Model?.IsActive) ? "checked='checked'" : string.Empty;
+    string isOABRequired = Convert.ToBoolean(Model?.IsOABRequired) ? "checked='checked'" : string.Empty;
+    string isapprovalrequired = Convert.ToBoolean(Model?.IsApprovalRequired) ? "checked='checked'" : string.Empty;
+    string isbillingaddressoptional = Convert.ToBoolean(Model?.IsBillingAddressOptional) ? "checked='checked'" : string.Empty;
+    string paymentTypeCode = Model?.PaymentTypeCode;
+    string isUsedForInvoice = Convert.ToBoolean(Model?.IsUsedForOfflinePayment) ? "checked='checked'" : string.Empty;
+
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = "/Payment/List", FormId = "frmCreateUpdatePayment", Callback = "Payment.prototype.ValidatePayment", IsSaveCloseEnable = true };
+    BaseDropDownOptionsModel _data = new BaseDropDownOptionsModel() { Id = Model.PaymentTypeId, ControlId = "ddlPaymentTypes", Name = "PaymentTypeId", DropDownOptions = Model.PaymentTypes, Disabled = !Model.PaymentTypeId.Equals(0) };
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.ToLower() == "create")
+    {
+        <h1 data-test-selector="hdgPaymentMethod">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelPaymentMethod)</h1>
+    }
+    else
+    {
+        <h1 data-test-selector="hdgPaymentMethod">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelPaymentMethod)<em class="z-minus"></em><span data-test-selector="spnPaymentName">@Model.PaymentCode</span></h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateUpdatePayment" }))
+    {
+        <h3 class="section-heading" data-test-selector="hgdGeneralSettings">@Admin_Resources.LabelPaymentOptionHeader</h3>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(@Admin_Resources.LabelSelectPaymentType, new { @data_test_selector = "lblSelectPaymentType" })
+                </div>
+                <div class="control-md">
+                    @Html.Partial("~/Views/Shared/Controls/_DropDownOption.cshtml", _data)
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.PaymentCode, new { @class = "required", @data_test_selector = "lblPaymentName" })
+                </div>
+                <div class="control-md">
+                    @if (Model.PaymentSettingId > 0)
+                    {
+                        @Html.TextBoxFor(model => model.PaymentCode, new { @disabled = "disabled", @data_test_selector = "txtPaymentName" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.PaymentCode, new { @data_test_selector = "txtPaymentName" })
+                    }
+                    @Html.ValidationMessageFor(model => model.PaymentCode, "", new { id = "errorSpanPaymentCode", @data_test_selector = "valPaymentName" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.LabelFor(m => m.PaymentDisplayName, new { @class = "required", @data_test_selector = "lblPaymentDisplayName" })
+                </div>
+                <div class="control-md">
+                    @Html.TextBoxFor(model => model.PaymentDisplayName, new { @data_test_selector = "txtPaymentDisplayName" })
+                    @Html.ValidationMessageFor(model => model.PaymentDisplayName, "", new { id = "errorSpanPaymentDisplayName", @data_test_selector = "valPaymentDisplayName" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(@Admin_Resources.LabelPaymentDisplaySetting, new { @data_test_selector = "lblDisplaySetting" })
+                </div>
+                <div class="control-md">
+                    <label>
+                        <input @isactive data-val="true" data-test-selector="chkDisplaySetting" data-val-required="The IsActive field is required." id="IsActive" name="IsActive" type="checkbox" value="true">
+                        <span class="lbl padding-8" data-test-selector="spnDisplaySetting"></span> @Admin_Resources.LabelDisplaySettingCheckBox
+                        <input name="IsActive" type="hidden" value="false">
+                    </label>
+                </div>
+            </div>
+        </div>
+        if (!string.Equals(paymentTypeCode, Admin_Resources.AutomatedClearingHouse, StringComparison.InvariantCultureIgnoreCase))
+        {
+        <div class="form-group" id="divIsBillingAddressOptional">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(Admin_Resources.LabelCheckBoxHideBillingAddress)
+                </div>
+                <div class="control-md">
+                    <label>
+                        <input @isbillingaddressoptional data-test-selector="chkHideBillingAddress" data-val="true" data-val-required="The IsActive field is required." id="IsBillingAddressOptional" name="IsBillingAddressOptional" type="checkbox" value="true">
+                        <span class="lbl padding-8"></span> @Admin_Resources.LabelCheckBoxHideBillingAddress
+                        <input name="IsBillingAddressOptional" type="hidden" value="false">
+                    </label>
+                </div>
+            </div>
+        </div>
+        }
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    @Html.Label(@Attributes_Resources.LabelDisplayOrder, new { @class = "required", @data_test_selector = "lblDisplayOrder" })
+                </div>
+                <div class="control-md">
+                    @if (actionName.ToLower().Equals("edit"))
+                    {
+                        @Html.TextBoxFor(model => model.DisplayOrder, new { @maxlength = "9", @data_test_selector = "txtDisplayOrder" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.DisplayOrder, new { Value = 1, @maxlength = "9", @data_test_selector = "txtDisplayOrder" })
+                    }
+                    @Html.ValidationMessageFor(model => model.DisplayOrder)
+                </div>
+                @Html.Partial("_HelpText", @Admin_Resources.HelptextDisplayOrderMessage)
+            </div>
+        </div>
+
+        <div data-test-selector="divPaymenTypeForm" id="paymenttypeform-container">
+        </div>
+
+        @Html.HiddenFor(model => model.PaymentSettingId)
+        @Html.HiddenFor(model => model.PaymentTypeCode)
+        @Html.HiddenFor(model => model.PaymentCode)
+        @Html.HiddenFor(model => model.GatewayCode)
+    }
+</section>
+<div id="temp-btn" style="display:none"></div>
+<div>
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.EnableTestmodeTitle,
+                        Description = @Admin_Resources.LabelTestModeMessage,
+                        ModalPopUpId = "testModeHiddenMessage"
+                    })
+</div>
+<script>
+    $(document).ready(function () {        
+        Payment.prototype.GetPaymentTypesForm($('#ddlPaymentTypes option:selected').attr('data-type'), @Html.RenderBlock(Json.Encode(Model)));
+    });
+</script>

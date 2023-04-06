@@ -1,0 +1,212 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model CartItemViewModel
+@using Znode.Engine.Api.Models
+@{
+    string trId = "trQuoteItem_" + Model.ProductId;
+    string accountType = Model.RoleName;
+    string defaultQuantityRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    int inventoryRoundOff = string.IsNullOrEmpty(defaultQuantityRoundOff) ? 0 : Convert.ToInt32(defaultQuantityRoundOff);
+    Model.Quantity = Math.Round(Model.Quantity, inventoryRoundOff);
+    string productId = !string.IsNullOrEmpty(Model.ConfigurableProductSKUs) ? Convert.ToString(Model.ParentProductId) : Model.ProductId;
+    bool removeBtnOnAr = Convert.ToBoolean(string.IsNullOrEmpty(Convert.ToString(Model.OmsQuoteId)));
+}
+
+@if (Model.PermissionDraft)
+{
+    if (removeBtnOnAr)
+    {
+        <div class="b2b-remove-item">
+            @if (Model.QuoteLineItemCount == 1 && Model.OrderStatus.ToLower() == "draft")
+            {
+                <a href="#" id="removebtn" class="template-cart-item-remove cart-item-remove" onclick="User.prototype.DeleteDraft()" title="Remove Item"><span class="close-circle-icon"></span></a>
+            }
+            else
+            {
+                using (Html.BeginForm("DeleteQuoteLineItem", ZnodeRoleEnum.User.ToString(), new { omsQuoteLineItemId = Model.OmsQuoteLineItemId, omsQuoteId = Model.OmsQuoteId, quoteLineItemCount = Model.QuoteLineItemCount, orderStatus = Model.OrderStatus, roleName = accountType }, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <a href="#" id="removebtn" class="template-cart-item-remove cart-item-remove" onclick="javascript:$($(this).closest('form').submit());" title="Remove Item"><span class="close-circle-icon"></span></a>
+                }
+
+            }
+        </div>
+    }
+}
+        <div class="b2b-cart-item-details">
+            <a href="@Url.GetProductUrl(Model?.SeoPageName, productId)"><img src="@Model.ImagePath" class="img-fluid" alt=""></a>
+            <div class="b2b-col-item-title font-weight-bold">@WebStore_Resources.ColumnTitleItem
+            <div class="cart-description d-flex flex-wrap align-content-center">
+                <a href="@Url.GetProductUrl(Model?.SeoPageName, productId)" class="cart-item-title">@Html.RenderBlock(Model.ProductName)</a>
+                <div class="col-12 p-0 cart-item-description" data-test-selector="divCartItemDescription">
+                    @if (Model?.PersonaliseValuesDetail?.Count > 0)
+                    {
+                        foreach (var item in Model?.PersonaliseValuesDetail)
+                        {
+                            if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                            {
+                                <p>
+                                    @item.PersonalizeName: @item.PersonalizeValue
+                                </p>
+                            }
+                        }
+                    }
+                    else if (Model?.PersonaliseValuesList?.Count > 0)
+                    {
+                        foreach (var items in Model?.PersonaliseValuesList)
+                        {
+                            if (!Equals(items.Value, null) && !Equals(items.Value, string.Empty))
+                            {
+                                <p> @items.Key : @items.Value </p>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+            <div class="col-12 p-0 cart-item-description" data-test-selector="divCartItemDescription">@Html.RenderBlock(Model.CartDescription)</div>
+            <div class="col-12 p-0 group-product-list">
+                @if (Model?.GroupProducts?.Count > 0)
+                {
+                    foreach (var item in Model.GroupProducts)
+                    {
+                        <p>@item.ProductName</p>
+                    }
+                }
+            </div>
+        </div>
+        </div>
+<div class="w-100 d-lg-none"></div>
+<div class="b2b-col-width pl-4 pb-4 p-lg-0 cart-item-unitprice">
+    <div class="b2b-col-item-title" data-test-selector="divPriceText">@WebStore_Resources.ColumnTitleItemPrice</div>
+    @if (Model?.GroupProducts?.Count > 0)
+    {
+        foreach (var item in Model.GroupProducts)
+        {
+            <div class="group-product-list">
+                @Helper.FormatPriceWithCurrency(item.UnitPrice, Model?.CultureCode)
+            </div>
+        }
+    }
+    else
+    {
+        @Helper.FormatPriceWithCurrency(Model.UnitPrice, Model?.CultureCode)
+    }
+</div>
+<div class="b2b-col-width pb-4 p-lg-0 cart-item-quantity">
+    <div class="b2b-col-item-title">@WebStore_Resources.ColumnTitleQuantity</div>
+    @if (Model.PermissionReject)
+    {
+        if (string.Equals(Model.ProductType, "GroupedProduct", StringComparison.CurrentCultureIgnoreCase) && Model.GroupProducts?.Count > 0)
+        {
+            <div class="group-product-container">
+                @foreach (AssociatedProductModel product in Model.GroupProducts)
+                {
+                    string disabled = Model?.OrderStatus == ZnodeOrderStatusEnum.REJECTED.ToString() ? "disabled" : "";
+                    using (Html.BeginForm("UpdateQuoteLineItemQuantity", ZnodeRoleEnum.User.ToString(), FormMethod.Post, new { @Id = "frmUpdateQuoteQuantity" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.TextBox("Quantity", @Math.Round(product.Quantity, inventoryRoundOff), new { @onchange = "User.prototype.UpdateQuoteLineItemQuantity(this);", @data_cart_sku = product.Sku, @min_Qty = Model.MinQuantity, @max_Qty = Model.MaxQuantity, @data_inventoryRoundOff = inventoryRoundOff, @disabled = @disabled })
+                        <div id="quantity_error_msg_@product.Sku" class="error-msg"></div>
+                        if (Model.InsufficientQuantity)
+                        {
+                            <div id="quantity_error_msg_@product.Sku" class="error-msg">@Model.OutOfStockMessage</div>
+                        }
+                        else
+                        {
+                            <div class="status-outofstock" id="dynamic_quoteinventory_@product.ProductId" style="display:none"></div>
+                        }
+                        @Html.Hidden("OmsQuoteId", product.OmsQuoteId)
+                        @Html.Hidden("OmsQuoteLineItemId", product.OmsQuoteLineItemId)
+                        @Html.Hidden("ParentOmsQuoteLineItemId", product.ParentOmsQuoteLineItemId)
+                        @Html.Hidden("OrderLineItemRelationshipTypeId", product.OrderLineItemRelationshipTypeId)
+                        @Html.Hidden("Sequence", product.Sequence)
+                        @Html.Hidden("CustomText", product.CustomText)
+                        @Html.Hidden("SKU", product.Sku)
+                        @Html.Hidden("CartAddOnDetails", product.CartAddOnDetails)
+                        @Html.HiddenFor(m => m.OrderStatus)
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            using (Html.BeginForm("UpdateQuoteLineItemQuantity", ZnodeRoleEnum.User.ToString(), FormMethod.Post, new { @Id = "frmUpdateQuoteQuantity" }))
+            {
+                @Html.AntiForgeryToken()
+                string disabled = Model?.OrderStatus == ZnodeOrderStatusEnum.REJECTED.ToString() ? "disabled" : "";
+                if (string.IsNullOrEmpty(Model.ConfigurableProductSKUs))
+                {
+
+                    @Html.TextBoxFor(model => model.Quantity, new { @id = "Quantity", @onchange = "User.prototype.UpdateQuoteLineItemQuantity(this);", @data_cart_sku = Model.SKU, @min_Qty = Model.MinQuantity, @max_Qty = Model.MaxQuantity, @data_inventoryRoundOff = inventoryRoundOff, @disabled = @disabled })
+                    <div id="quantity_error_msg_@Model.SKU" class="error-msg"></div>
+                    if (Model.InsufficientQuantity)
+                    {
+                        <div id="quantity_error_msg_@Model.SKU" class="error-msg">@Model.OutOfStockMessage</div>
+                    }
+                    else
+                    {
+                        <div class="status-outofstock" id="dynamic_quoteinventory_@Model.ProductId" style="display:none"></div>
+                    }
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.Quantity, new { @id = "Quantity", @onchange = "User.prototype.UpdateQuoteLineItemQuantity(this);", @data_cart_sku = Model.ConfigurableProductSKUs, @min_Qty = Model.MinQuantity, @max_Qty = Model.MaxQuantity, @data_inventoryRoundOff = inventoryRoundOff, @disabled = @disabled })
+                    <div id="quantity_error_msg_@Model.ConfigurableProductSKUs" class="error-msg"></div>
+                    if (Model.InsufficientQuantity)
+                    {
+                        <div id="quantity_error_msg_@Model.ConfigurableProductSKUs" class="error-msg">@Model.OutOfStockMessage</div>
+                    }
+                    else
+                    {
+                        <div class="status-outofstock" id="dynamic_quoteinventory_@Model.ProductId" style="display:none"></div>
+                    }
+                }
+
+                @Html.HiddenFor(model => model.OmsQuoteId)
+                @Html.HiddenFor(model => model.OmsQuoteLineItemId)
+                @Html.HiddenFor(model => model.ParentOmsQuoteLineItemId)
+                @Html.HiddenFor(model => model.OrderLineItemRelationshipTypeId)
+                @Html.HiddenFor(model => model.Sequence)
+                @Html.HiddenFor(model => model.CustomText)
+                @Html.HiddenFor(model => model.SKU)
+                @Html.HiddenFor(model => model.CartAddOnDetails)
+                @Html.HiddenFor(model => model.OrderStatus)
+            }
+        }
+    }
+    else
+    {
+        if (string.Equals(Model.ProductType, "GroupedProduct", StringComparison.CurrentCultureIgnoreCase) && Model.GroupProducts?.Count > 0)
+        {
+            foreach (AssociatedProductModel product in Model.GroupProducts)
+            {
+                <div class="quoteQuantity">@Math.Round(product.Quantity, inventoryRoundOff)</div>
+                if (Model.InsufficientQuantity)
+                {
+                    <div id="quantity_error_msg_@product.Sku" class="error-msg">@Model.OutOfStockMessage</div>
+                }
+                else
+                {
+                    <div class="status-outofstock" id="dynamic_quoteinventory_@product.ProductId" style="display:none"></div>
+                }
+            }
+        }
+        else
+        {
+            <div class="quoteQuantity">@Math.Round(Model.Quantity, inventoryRoundOff)</div>
+            if (Model.InsufficientQuantity)
+            {
+                <div id="quantity_error_msg_@Model.SKU" class="error-msg">@Model.OutOfStockMessage</div>
+            }
+            else
+            {
+                <div class="status-outofstock" id="dynamic_quoteinventory_@Model.ProductId" style="display:none"></div>
+            }
+        }
+    }
+</div>
+<div class="b2b-col-width pb-4 p-lg-0 cart-item-total">
+    <div class="b2b-col-item-title" data-test-selector ="divTotalText">@WebStore_Resources.ColumnTitleTotal</div>
+    @Helper.FormatPriceWithCurrency(Model.ExtendedPrice, Model?.CultureCode)
+</div>
+@Html.Partial("_DraftDeleteAllConfirmPopup", Model.QuoteLineItemCount)

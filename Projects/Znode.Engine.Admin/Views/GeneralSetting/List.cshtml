@@ -1,0 +1,113 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model GlobalSettingViewModel
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront; ;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string FormId = "frmGeneralSetting";
+}
+@using (Html.BeginForm("Update", controllerName, FormMethod.Post, new { id = "frmGeneralSetting" }))
+{
+    <div class="col-sm-12 title-container">
+        <h1 data-test-selector="hdgGlobalSetting">@GlobalSetting_Resources.TitleGlobalSetting</h1>
+        <div class="pull-right btn-container">
+            @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, actionName, controllerName, new { @data_test_selector = "btnSave", @class = "btn-text btn-text-secondary dirtyignore", @id = "dvSave", @onclick = "SaveCancel.prototype.SubmitForm('" + @FormId + "')" })
+        </div>
+    </div>
+    <div class="main-wrapper">
+        <!--Left Panel-->
+        @Html.Partial("~/Views/Shared/_asideGlobalSettingPanel.cshtml")
+        <!--Main Container-->
+        <section class="main-container">
+            <div class="col-sm-12 nopadding">
+                <p class="left" data-test-selector="paraGlobalSettingNote">@GlobalSetting_Resources.GlobalSettingNote</p>
+            </div>
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label" data-test-selector="lblStorageUnits">
+                            <label>@GlobalSetting_Resources.LabelStorageUnits</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.DisplayUnitId, Model.DisplayUnitList, new { @id = "ddlDisplayUnitList", @data_test_selector = "drpStorageUnits" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblDateFormat">@GlobalSetting_Resources.LabelDateFormat</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.DateFormatId, Model.DateFormatList, new { @id = "ddlDateFormatList", @data_test_selector = "drpDateFormat"
+                       })
+                            @Html.ValidationMessageFor(model => model.DateFormatId)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label>@GlobalSetting_Resources.LabelTimeFormat</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.TimeFormatId, Model.TimeFormatList, new { @id = "ddlTimeFormatList", @data_test_selector = "drpTimeFormat"  })
+                            @Html.ValidationMessageFor(model => model.TimeFormatId, "", new { @data_test_selector = "valDateFormat" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label>  @GlobalSetting_Resources.DisplayTimeZone</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.TimeZoneId, Model.TimeZoneList, new { @id = "ddlTimeZoneList" })
+                        </div>
+                        @Html.Partial("_HelpText", @Admin_Resources.GlobalSettingHelpText)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label>@GlobalSetting_Resources.ServerTimeZone</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model=>model.ServerTimeZone,Model.ServerTimeZone ,new { @id = "serverTimeZone", @data_test_selector = "serverTimeZone", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.PriceRoundOffFeatureValue, new { @data_test_selector = "lblPriceRoundOff" })
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.PriceRoundOffFeatureValue, Model.PriceRoundOffList, new { @data_test_selector = "drpPriceRoundOff" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.InventoryRoundOffFeatureValue, new { @data_test_selector = "lblInventoryRoundOff" })
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.InventoryRoundOffFeatureValue, Model.InventoryRoundOffList, new { @data_test_selector = "drpInventoryRoundOff" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.CurrentEnvironmentFeatureValue, new { @data_test_selector = "lblCurrentEnvironment" })
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.CurrentEnvironmentFeatureValue, Model.EnvironmentsList, new { @data_test_selector = "drpCurrentEnvironment" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+}

@@ -1,0 +1,31 @@
+﻿@model List<Znode.Engine.Admin.AttributeValidationHelpers.LocaleDataModel>
+
+@{
+    int attributeId = Convert.ToInt32(Request.QueryString["globalattributeid"]);
+}
+
+<div class="col-sm-12 nopadding">
+    @Html.Partial("~/Views/GlobalAttribute/_Locale.cshtml", Model)
+</div>
+
+<div class="col-sm-12 nopadding margin-top-25 dirtyignore" id="divDefaultAtrributeValue" data-test-selector="divDefaultAtrributeValue">
+    @if (attributeId > 0)
+    {
+        <div class="col-sm-12 nopadding">
+            <h3 class="section-heading pull-left" data-test-selector="hdgDefaultvalue">@Admin_Resources.LabelOptionsDefaultValues</h3>
+
+            @{Html.RenderAction("SwatchType", "GlobalAttribute", new { @attributeId = attributeId });}
+
+            @{Html.RenderAction("DefaultValues", "GlobalAttribute", new { @attributeId = attributeId });}
+        </div>
+                }
+                else
+                {
+                    <div class="col-sm-12 nopadding">
+                        <h3 class="section-heading">@Admin_Resources.LabelOptionsDefaultValues</h3>
+                        <span class="margin-bottom">@Admin_Resources.LabelManageOption</span>
+                    </div>
+                }
+</div>
+
+<div id="divMediaUploaderPopup"></div>

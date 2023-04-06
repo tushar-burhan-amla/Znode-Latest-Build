@@ -1,0 +1,42 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+@using Znode.Libraries.ECommerce.Utilities
+@model ERPTaskSchedulerViewModel
+
+<div class="col-sm-12 nopadding">
+    <h3 class="section-heading margin-top" data-test-selector="hdgSchedularSettings">@ERP_Resources.LabelSetting</h3>
+</div>
+<div class="col-sm-12 nopadding margin-top-bottom">
+    <label class="padding-right">@Html.RadioButtonFor(model => model.SchedulerFrequency, "OneTime", new { @data_test_selector = "chkOneTime" }) <span data-test-selector="lblOneTime" class="lbl padding-8">@ERP_Resources.LabelOneTime</span></label>
+    
+    @if (Model.TouchPointName.IndexOf(ZnodeConstant.PublishContainer, StringComparison.InvariantCultureIgnoreCase) == -1)
+    {
+        <label class="padding-right">@Html.RadioButtonFor(model => model.SchedulerFrequency, "Recurring", new { @data_test_selector = "chkOneTime" }) <span data-test-selector="lblRecurring" class="lbl padding-8">@ERP_Resources.LabelRecurring</span></label>
+    }
+</div>
+
+<div class="form-group padding-top-15">
+    <div class="col-sm-12 nopadding" id="divSchedulerFrequency">
+        @if (Model.SchedulerFrequency == "OneTime")
+        {
+            @Html.Partial("~/Views/TouchPointConfiguration/_OneTime.cshtml", Model)
+        }
+        else if (Model.SchedulerFrequency == "Recurring")
+        {
+            @Html.Partial("~/Views/TouchPointConfiguration/_Recurring.cshtml", Model)
+        }
+    </div>
+
+    @Html.HiddenFor(x => x.HangfireJobId)
+    @Html.HiddenFor(x => x.StartDate, new { @id = "hdnStartDate" })
+</div>
+
+    <div class="col-sm-12 nopadding">
+        <div class="control-md">
+            <label>
+                <input id="IsActive" data-test-selector="txtIsActive" name="IsEnabled" checked="@Model.IsEnabled" type="checkbox" value="true">
+                <span class="lbl padding-8" data-test-selector="spnIsActive" for="IsEnabled">@ERP_Resources.LabelEnabled</span>
+                <input name="IsEnabled" type="hidden" value="false">
+            </label>
+        </div>
+    </div>

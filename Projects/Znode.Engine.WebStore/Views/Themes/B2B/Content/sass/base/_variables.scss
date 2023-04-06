@@ -1,0 +1,170 @@
+﻿// |
+// |
+// | BASE SASS
+// | Global variables and mixins For B2B Demo Theme
+// | 2015-16; Znode, Inc.
+// | 
+
+// Font Variable.
+$base-font-family: Roboto-Regular, Arial, sans-serif;
+$base-font-family-bold: Roboto-Medium, Arial, sans-serif;
+$base-font-size:14px;
+
+// Color Variable.
+$base-primary:#01579B;
+$base-secondary:#CB5800;
+$base-tertiary:#454545;
+$base-primary-light:#5D8BA9;
+$base-secondary-light:#FF6F00;
+$base-tertiary-light:#9E9E9E;
+
+$btn-primary: #ff6f00;
+$btn-secondary:#FFFFFF;
+$btn-primary-hover:#FF6F00;
+$btn-secondary-hover:#FFFFFF;
+$dashboard-color:#01579B;
+$footer-txt:#D6D6D6;
+
+// General Variable.
+$text-default:#454545;
+$text-primary:#0D47A1;
+$required-star:#CC0000;
+$red:#CC0000;
+$green:#5CB85C;
+$white:#FFFFFF;
+$black:#000000;
+$border-default:#454545;
+$border-light:#DEE2E6;
+$border-primary:#c5b7b7;
+$anchor-tag:#01579B;
+$anchor-tag-hover:#03A9F4;
+$box-shadow:0px 1px 2px 1px #c5b7b7;
+$box-shadow-hover:0px 3px 10px 0px #8f8787;
+$nav-box-shadow:0px 0 0 1px #efebeb;
+$input-background:#FAFAFA;
+$input-background-facet:#F1F1F1;
+$account-menu-background:#f8f8f8;
+$filter-background:#FAFAFA;
+$cart-count-color:#F76D00;
+$footer-color:#242424;
+$primary-radius:2px;
+$dividing-shadow:0px 0px 1px 0px #c5b7b7;
+$box-shadow-product:0px 3px 10px 0px #8f8787;
+$group-products-background:#F5F5F5;
+$box-shadow-locale: 0px 3px 6px #000000;
+
+$nav-bgcolor:#343434;
+$nav-bgcolor-hover:#cc0000;
+$footer-bgcolor:#252525;
+$form-builder-bgcolor:#dadada;
+$news-letter-bgcolor:#2e2e2e;
+$footer-fgtext-color:#626262;
+$base-heading-font-primary:30px;
+$base-heading-font-secondary:27px;
+$alert-msg-danger:#d8929c;
+$alert-msg-success:#5cb85c;
+$alert-msg-info:#79cff7;
+$header-nav-link:#F1F1F1;
+$shipping-progress-bar:#e5e5e5;
+$shipping-fill-bar:#008300;
+$pdp-links: #B9B9B9;
+$inventory-product-count:#1BAC02;
+$inventory-product-title:rgba(0, 0, 0, 0.87);
+$ticker-bgcolor: #ff8d36;
+$adspace-bgcolor: #ececec;
+$overlay-bgcolor: #6DBE4B;
+$payment-tab: #f5eded;
+
+// Form Builder
+$form-builder-bgcolor: #dadada;
+
+// Znode Icon Variable.
+$znode-icon-font:'znode-web-store';
+
+$profile-icon:"\e900";
+$up-icon:"\e901";
+$down-icon:"\e902";
+$left-icon:"\e903";
+$right-icon:"\e904";
+$location-icon:"\e905";
+$cart-icon:"\e906";
+$list-icon:"\e907";
+$grid-icon:"\e908";
+$search-icon:"\e607";
+$hamburger-icon:"\e909";
+$close-icon:"\e90a";
+$close-circle-icon:"\e90e";
+$star-full-icon:"\e90b";
+$star-empty-icon:"\e90c";
+$star-half-icon:"\e90d";
+$home-icon:"\e90f";
+$heart-icon:"\e910";
+$stop-icon:"\e911";
+$active-icon:"\e912";
+$edit-icon:"\e913";
+$delete-icon:"\e914";
+$view-icon:"\e915";
+$refresh-icon:"\e916";
+$settings-icon:"\e917";
+$clock-icon:"\e918";
+$sort-icon:"\e919";
+$last-icon:"\e91d";
+$first-icon:"\e91c";
+$next-icon:"\e91b";
+$previous-icon:"\e91a";
+$envelop-icon:"\e91e";
+$account-dashboard:"\e91f";
+$my-orders:"\e920";
+$my-profile:"\e921";
+$pending-orders-path1:"\e922";
+$pending-orders-path2:"\e923";
+$pending-orders-path3:"\e924";
+$product-lists:"\e925";
+$quick-orders-path1:"\e926";
+$quick-orders-path2:"\e927";
+$order-templates:"\e928";
+$icon-scan:"\e929";
+$icon-voice: "\e92a";
+$icon-return-webstore: "\e92c";
+$icon-quote: "\e92b";
+$icon-return-arrow: "\e92d";
+$icon-calendar: "\e92e";
+$icon-check-circle:"\e92f";
+$icon-voucher:"\e930";
+$icon-compare: "\e931";
+$icon-file-uploader: "\e932";
+$icon-help-circle: "\e933";
+$icon-track-order: "\e935";
+$icon-printer: "\e954";
+$icon-mail-envelop: "\e934";
+$icon-text-view: "\e936";
+$icon-see-more: "\e937";
+$icon-image-widget: "\e93e";
+$icon-banner-widget: "\e942";
+$icon-categorylist-widget: "\e941";
+$icon-content-container: "\e940";
+$icon-form-widget: "\e93f";
+$icon-link: "\e93d";
+$icon-productlist-widget: "\e93c";
+$icon-richtext-widget: "\e93b";
+$icon-search-widget: "\e93a";
+$icon-text-widget: "\e939";
+$icon-video-widget: "\e938";
+$icon-arrow-drop-up: "\e946";
+$icon-arrow-drop-down: "\e947";
+$icon-up-left-arrow: "\e943";
+$reset-icon: "\e944";
+$disable-icon: "\f05e";
+$enable-icon: "\f05d";
+$icon-dollar: "\e945";
+$icon-file-upload: "\e948";
+
+// Responsive Screen Sizes.
+$base-screen-x-small: 0;
+$base-screen-xl-small: 576px;
+$base-screen-small: 768px;
+$base-screen-medium: 992px;
+$base-screen-desktop: 1200px;
+$base-screen-large: 1300px;
+$base-screen-x-large: 1500px;
+$base-screen-xx-large : 1600px;

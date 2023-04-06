@@ -1,0 +1,42 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model QuickOrderViewModel
+@{
+    int hdproductIndex = new Random().Next();
+    string productIndex = Model.ProductDetail?.Count > 0 ? string.Join(",", Model.ProductDetail.Select(x => x.UniqueId == 0 ? 1 : x.UniqueId)) : "";
+}
+@for (int i = 0; i < Model.ProductDetail?.Count; ++i)
+{
+    var product = Model.ProductDetail[i];
+    int index = product.UniqueId == 0 ? 1 : product.UniqueId;
+    Model.Id = product.Id;
+    Model.Name = product.SKU;
+
+    <div id="quickorderdiv">
+        <div class="form-group" id="form-group-@index">
+            <div class="row no-gutters align-items-start">
+                <div class="col-8">
+                    @Html.AutocompleteFor(model => model.Name, model => model.Id, "GetProductListBySKU", "Product", "QuickOrderPad.prototype.OnItemSelect", false, new { htmlAttributes = new { @placeholder = WebStore_Resources.TextEnterSku, @id = "txtQuickOrderPadSku_" + index, @class = "quick-order-pad-autocomplete", data_qo_sku = product.SKU, data_qo_product_id = product.Id == 0 ? "" : product.Id.ToString(), data_qo_product_name = product.Name, data_qo_cart_quantity = Convert.ToString(product.CartQuantity), data_qo_quantity_on_hand = Convert.ToString(product.QuantityOnHand), data_qo_product_type = product.ProductType, data_qo_addon_product = product.AddOnProductSkus, data_qo_in_stock_message = "", data_qo_out_stock_message = product.OutOfStockMessage, data_qo_min_quantity = Convert.ToString(product.MinQuantity), data_qo_max_quantity = Convert.ToString(product.MaxQuantity), data_qo_call_for_pricing = Convert.ToString(product.IsCallForPricing).ToLower(), data_is_first = "true", data_qo_track_inventory = product.TrackInventory, data_qo_inventorycode = product.InventoryCode, data_qo_isobsolete = product.IsObsolete, data_qo_group_product_sku = product.GroupProductSKUs, data_qo_group_product_qty = Convert.ToString(product.GroupProductsQuantity), data_qo_configurable_product_sku = product.ConfigurableProductSKUs, data_qo_autoaddonskus = product.AutoAddonSKUs, data_qo_isactive = Convert.ToString(product.IsActive).ToLower(), data_qo_retail_price = Convert.ToString(product.RetailPrice), data_qo_child_track_inventory = Convert.ToString(product.ChildTrackInventory), onchange = "QuickOrderPad.prototype.IsValidProductSKU(this)", onKeyPress = "QuickOrderPad.prototype.CheckUpdateSKU(this,event)", onblur = "QuickOrderPad.prototype.CheckUpdateSKU(this,event)" } })                    
+                </div>
+                <div class="col-3 px-2 px-md-3">
+                    @Html.TextBox("txtQuickOrderPadQuantity_" + index, product.Quantity, null, new { @placeholder = WebStore_Resources.ColumnTitleQty, @maxlength = "4", @class = "quantity quick-order-pad-quantity text-right", @parentcontrol = "txtQuickOrderPadSku_" + index, @onchange = "QuickOrderPad.prototype.OnQuantityChange(this)" })
+                    <p id="inventoryquickorderMessage_@index" for="txtQuickOrderPadQuantity_@index" class="col-xs-12 nopadding error-msg"></p>
+                </div>
+                <div class="col-1">
+                    <div id="removeRow_@index" class="remove_row remove-item" title="@WebStore_Resources.ButtonClear"><i class="close-icon"></i></div>
+                </div>
+                <p id="inventoryMessage_@index" for="txtQuickOrderPadSku_@index" class="col-xs-12 nopadding error-msg"></p>
+            </div>
+        </div>
+    </div>
+}
+@Html.Hidden("hdproductIndex_"+ hdproductIndex, productIndex)
+<script>
+    $(document).ready(function () {
+        var productArray = $("#hdproductIndex_"+@hdproductIndex).val().length > 0 ? $("#hdproductIndex_"+@hdproductIndex).val().split(',') : undefined;
+        if (productArray != undefined) {
+            for (i = 0; i < productArray.length; i++) {
+                autocompletewrapper($("#txtQuickOrderPadSku_" + productArray[i]), $("#txtQuickOrderPadSku_" +productArray[i]).data('onselect-function'));
+            }
+        }
+    });
+</script>

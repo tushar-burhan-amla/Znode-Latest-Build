@@ -1,0 +1,55 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Libraries.ECommerce.Utilities
+@model CMSWidgetsViewModel
+@{
+
+    string code = Model.Code + Model.MappingKey;
+    string mediaExtnsn = code.Contains("Image") ? AdminConstants.ImageExtensions : AdminConstants.VideoExtensions;
+}
+
+<div class="widget-wrapper" id="@("img"+code)">
+    <div class="widget-name d-flex justify-content-center align-items-baseline">
+        @if (Model.Code.Equals(@Admin_Resources.VideoWidget, StringComparison.InvariantCultureIgnoreCase))
+        {
+            <span class="z-video-widget"></span>
+        }
+        @if (Model.Code.Equals(@Admin_Resources.ImageWidget, StringComparison.InvariantCultureIgnoreCase))
+        {
+            <span class="z-image-widget"></span>
+        }
+        <h3 class="text-uppercase">@Model.DisplayName</h3>
+    </div>
+    <img src="~/Content/Images/Widgets/@Model.FileName" alt="" class="img-responsive" />
+    <div class="configure-option" data-test-selector="div@(Model.DisplayName.Replace(" ", ""))">
+        <div class="configure-options d-flex">
+            <div class="edit-option margin-right-9 text-uppercase" onclick="EditableText.prototype.BrowseMedia('@code','False','True','True','Content.prototype.SaveMediaWidget','true')"><em class="z-edit"></em>@Admin_Resources.ButtonEdit</div>
+            @if (Model.Code.Equals(@Admin_Resources.VideoWidget, StringComparison.InvariantCultureIgnoreCase) || Model.Code.Equals(@Admin_Resources.ImageWidget, StringComparison.InvariantCultureIgnoreCase))
+            {
+                <div class="remove-option text-uppercase" onclick="Content.prototype.RemoveWidgetData(@Model.CMSMappingId,@Model.MappingKey, '@Model.Code', true);"><em class="z-delete"></em>@Admin_Resources.LabelRemove</div>
+            }
+        </div>
+    </div>
+
+</div>
+
+<div class="control-md" style="display:none">
+
+    <div class="upload-images" id="@("div"+code)">
+        <img id="@code" data-test-selector="imgMedia" onclick="EditableText.prototype.BrowseMedia('@code','False','True','True','Content.prototype.SaveMediaWidget','true')" alt="Upload Image" class="img-responsive" data-url="@Model.WidgetActionUrl">
+        <span class="change-image" onclick="EditableText.prototype.BrowseMedia('@code','False','True','True','Content.prototype.SaveMediaWidget','true')">@Admin_Resources.LinkChange</span>
+        <input type="hidden" id="@code" name="MediaId">
+        <input type='hidden' value=@mediaExtnsn id="@("hdn"+code)" />
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        if (($('#hdnPreviewUrl').val() != "")) {
+            $('#img'+'@code').attr('style','display:none');
+        }
+    })
+</script>
+
+

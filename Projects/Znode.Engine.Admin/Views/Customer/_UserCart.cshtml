@@ -1,0 +1,60 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model CartViewModel
+@{
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    bool IsShoppingCartHasItems = Model?.ShoppingCartItems?.Any() ?? false;
+}
+@if (IsShoppingCartHasItems)
+{
+    <div id="usercart" class="col-xs-12 cart-products user-cart-products nopadding margin-bottom">
+        <div class="cart-product-table">
+            <ul class="product-list">
+                <li class="product-image">@Admin_Resources.LabelImage</li>
+                <li class="product-label">@Admin_Resources.LabelProduct</li>
+                <li class="product-unit-price">@Admin_Resources.LabelUnitPrice</li>
+                <li class="product-quantity">@Admin_Resources.LabelQuantity</li>
+                <li class="product-total">@Admin_Resources.LabelTotal</li>
+            </ul>
+            @* do not remove class="product-list-items" used in TS file *@
+            @*To show the recently added product on the top of cart.*@
+
+                @foreach (CartItemViewModel cartItem in Model.ShoppingCartItems.AsEnumerable().Reverse())
+                {
+                    <ul id="cart-row-div" class="product-list product-list-items">
+                        @Html.Partial("~/Views/User/_userCartRow.cshtml", cartItem)
+                    </ul>
+                }
+        </div>
+        <div class="col-xs-12 margin-top-bottom">
+            @Ajax.ActionLink(@Admin_Resources.LabelRemoveAllCartItems, "RemoveAllShoppingCartItems", "order",
+            new { userId = Model?.UserId, portalId = Model?.PortalId, isFromUserCart = true },
+             new AjaxOptions
+             {
+                 UpdateTargetId = "usercart",
+                 InsertionMode = InsertionMode.Replace,
+                 HttpMethod = "GET",
+                 OnSuccess = "$('#btnUserCart').load(' #btnUserCart');"
+             }, new { @id = "btnRemoveAllCartItem", @data_test_selector = "linkRemoveAllCartItem" })
+        </div>
+
+        <div class="cart-total col-sm-6 col-md-6 col-lg-3 nopadding pull-right margin-top" id="divTotal">
+            <div class="col-sm-12 cart-summary nopadding">
+                <div class="form-group nopadding">
+                    <div class="col-sm-6 nopadding">
+                        <label data-test-selector="lblSubTotal" for="SubTotal">@Admin_Resources.LabelSubTotal</label>
+                    </div>
+                    <div class="col-sm-6 nopadding">
+                        <label data-test-selector="lblSubTotalValue" for="SubTotalValue"> @HelperMethods.FormatPriceWithCurrency(Model.SubTotal, cultureCode)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-sm-12 nopadding cart-summary">
+        <p class="text-center margin-top-bottom no-record">@Admin_Resources.TextUserEmptyCart</p>
+    </div>
+}

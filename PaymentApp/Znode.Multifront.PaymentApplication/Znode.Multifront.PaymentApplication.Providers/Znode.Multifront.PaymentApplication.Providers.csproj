@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1DBAE43A-1755-4EB8-8297-323411252AE3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Znode.Multifront.PaymentApplication.Providers</RootNamespace>
+    <AssemblyName>Znode.Multifront.PaymentApplication.Providers</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Int|AnyCPU'">
+    <OutputPath>bin\Int\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <OutputPath>bin\QA\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'B2B|AnyCPU'">
+    <OutputPath>bin\B2B\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'automation|AnyCPU'">
+    <OutputPath>bin\automation\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AmazonPay, Version=3.1.1.0, Culture=neutral, PublicKeyToken=29b2e72291465862, processorArchitecture=MSIL">
+      <HintPath>..\packages\AmazonPay.3.2.0\lib\net20\AmazonPay.dll</HintPath>
+    </Reference>
+    <Reference Include="AuthenticationSdk, Version=0.0.0.14, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CyberSource.Authentication.0.0.0.14\lib\AuthenticationSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="AuthorizeNet, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AuthorizeNet.1.9.6\lib\AuthorizeNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Braintree, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31b586f34d3e96c7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Braintree.3.3.0\lib\net452\Braintree.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.2.0.0\lib\2.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="cybersource-rest-client-dotnet, Version=0.0.1.23, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CyberSource.Rest.Client.0.0.1.23\lib\cybersource-rest-client-dotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="CyberSource.Base, Version=1.4.0.0, Culture=neutral, PublicKeyToken=7091342136fdb0df, processorArchitecture=MSIL">
+      <HintPath>..\packages\CyberSource.1.4.0\lib\CyberSource.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="CyberSource.Clients, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CyberSource.1.4.0\lib\CyberSource.Clients.dll</HintPath>
+    </Reference>
+    <Reference Include="jose-jwt, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jose-jwt.2.4.0\lib\net461\jose-jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.5.10\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Payflow_dotNET, Version=4.4.0.0, Culture=neutral, PublicKeyToken=14aa1e8d77f2a97c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Payflow_dotNET.4.4.0\lib\Payflow_dotNET.dll</HintPath>
+    </Reference>
+    <Reference Include="Paymentech, Version=7.4.0.0, Culture=neutral, PublicKeyToken=c7002af83b0fc7a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\Paymentech.1.0.4\lib\net45-full\Paymentech.dll</HintPath>
+    </Reference>
+    <Reference Include="PayPal, Version=1.8.0.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPal.1.8.0\lib\net451\PayPal.dll</HintPath>
+    </Reference>
+    <Reference Include="PayPalCheckoutSdk, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPalCheckoutSdk.1.0.4\lib\netstandard2.0\PayPalCheckoutSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="PayPalHttp-Dotnet, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPalHttp.1.0.1\lib\netstandard2.0\PayPalHttp-Dotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="paypal_base, Version=5.6.92.0, Culture=neutral, PublicKeyToken=b37401294aaf5617">
+      <HintPath>..\packages\PayPalBase.5.6.92\lib\paypal_base.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.12.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.12.0\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Stripe.net, Version=6.12.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stripe.net.6.12.0\lib\net45\Stripe.net.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\structuremap.3.1.1.134\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap.Net4, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\structuremap.3.1.1.134\lib\net40\StructureMap.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\structuremap.web.3.1.0.133\lib\net40\StructureMap.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TwoCheckout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TwoCheckout.1.0.0.0\lib\net40\TwoCheckout.dll</HintPath>
+    </Reference>
+    <Reference Include="Znode.Multifront.PaymentFramework.Bussiness, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Znode.Multifront.PaymentFramework.Bussiness.9.7.5\lib\net48\Znode.Multifront.PaymentFramework.Bussiness.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AmazonPayProvider.cs" />
+    <Compile Include="AuthorizeNetAPI\AnetApiSchema.cs" />
+    <Compile Include="AuthorizeNetAPI\XmlAPIUtilities.cs" />
+    <Compile Include="AuthorizeNetCustomerProvider.cs" />
+    <Compile Include="BaseConnector.cs" />
+    <Compile Include="BaseProvider.cs" />
+    <Compile Include="BraintreeProvider.cs" />
+    <Compile Include="CardConnectProvider.cs" />
+    <Compile Include="CardConnectRestClient.cs" />
+    <Compile Include="CyberSourceCustomerProvider.cs" />
+    <Compile Include="GatewayConnector.cs" />
+    <Compile Include="IPaymentProviders.cs" />
+    <Compile Include="PayFlowCustomerProvider.cs" />
+    <Compile Include="PaymentConstant.cs" />
+    <Compile Include="PaymentTechProvider.cs" />
+    <Compile Include="PaypalCustomerProvider.cs" />
+    <Compile Include="PaypalExpressRestClient.cs" />
+    <Compile Include="PaypalExpressRestProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecureNetCustomerProvider.cs" />
+    <Compile Include="StripeCustomerProvider.cs" />
+    <Compile Include="TwoCheckoutProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PaymentGateways\SecureNetRestApiSDK\SecureNetRestApiSDK.csproj">
+      <Project>{06162613-960b-4949-9617-6db96cf4b325}</Project>
+      <Name>SecureNetRestApiSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaymentGateways\SNET.Core\SNET.Core.csproj">
+      <Project>{773c5633-1029-4f1b-a6a4-42bc3274aac4}</Project>
+      <Name>SNET.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Libraries.PaypalRest\Znode.Libraries.PaypalRest.csproj">
+      <Project>{62b9a1f5-63f4-462d-831a-636df91b7775}</Project>
+      <Name>Znode.Libraries.PaypalRest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Libraries.Paypal\Znode.Libraries.Paypal.csproj">
+      <Project>{84b7d6fd-b088-449c-a8f0-1a741e1161ba}</Project>
+      <Name>Znode.Libraries.Paypal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Multifront.PaymentApplication.Data\Znode.Multifront.PaymentApplication.Data.csproj">
+      <Project>{13820b70-aad5-4166-87d9-3c4a97a152b1}</Project>
+      <Name>Znode.Multifront.PaymentApplication.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Multifront.PaymentApplication.Helpers\Znode.Multifront.PaymentApplication.Helpers.csproj">
+      <Project>{7ad72856-700d-490a-baaf-5031bfcb56e7}</Project>
+      <Name>Znode.Multifront.PaymentApplication.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Multifront.PaymentApplication.Models\Znode.Multifront.PaymentApplication.Models.csproj">
+      <Project>{8d756fd6-8c4c-4885-97e5-c104a236b31d}</Project>
+      <Name>Znode.Multifront.PaymentApplication.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

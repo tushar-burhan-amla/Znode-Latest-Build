@@ -1,0 +1,52 @@
+﻿@model Znode.Engine.Admin.ViewModels.RMAConfigurationViewModel
+@using Znode.Engine.Admin.ViewModels;
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmIssusGiftCard" };
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+}
+<div id="grid-container">
+    <div class="title-container">
+        <h1>@Admin_Resources.TitleIssueGiftCard</h1> 
+        <div class="pull-right">
+            <button id="dvSave" type="button" class="btn-text-icon" onclick="SaveCancel.prototype.SubmitForm('frmIssusGiftCard')"><em class="z-save"></em>@Admin_Resources.ButtonSave</button>
+        </div>
+    </div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmIssusGiftCard" }))
+                {
+            <div id="loginForm">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.GcExpirationPeriod, new { @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.GcExpirationPeriod, new { maxlength = 5 })
+                            @Html.ValidationMessageFor(model => model.GcExpirationPeriod)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.GcNotification)
+                        </div>
+                        <div class="control-md">
+                            @Html.TextAreaFor(model => model.GcNotification, new { @rows = "5" })
+                        </div>
+                    </div>
+                </div>
+                @Html.HiddenFor(model => model.RmaConfigurationId)
+                @Html.HiddenFor(model => model.MaxDays)
+                @Html.HiddenFor(model => model.DisplayName)
+                @Html.HiddenFor(model => model.Email)
+                @Html.HiddenFor(model => model.Address)
+                @Html.HiddenFor(model => model.ShippingDirections)
+                @Html.HiddenFor(model => model.IsEmailNotification)
+            </div>
+                }
+    </section>
+</div>

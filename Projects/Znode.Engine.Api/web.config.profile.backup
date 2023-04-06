@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  For more information on how to configure your ASP.NET application, please visit
+  http://go.microsoft.com/fwlink/?LinkId=301879
+  -->
+<configuration>
+  <configSections>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+    <section name="znodeApiCache" type="Znode.Engine.Api.Configuration.CacheConfigSectionHandler, Znode.Api.Core" />
+    <section name="ZNodePersistantStorage" type="ZNode.Libraries.Framework.Business.ZNodeStorageConfiguration" allowDefinition="MachineToApplication" requirePermission="false" restartOnExternalChanges="true" />
+    <section name="ZNodeCacheDependency" type="ZNode.Libraries.Framework.Business.ZNodeCacheDependencyConfiguration" allowDefinition="MachineToApplication" requirePermission="false" restartOnExternalChanges="true" />
+  </configSections>
+  <ZNodePersistantStorage defaultProvider="ZNodeStorageProviderFile">
+    <providers>
+      <add name="ZNodeStorageProviderFile" type="ZNode.Libraries.ECommerce.Utilities.ZNodeStorageProviderFile" description="File Storage Provider" />
+    </providers>
+  </ZNodePersistantStorage>
+  <ZNodeCacheDependency defaultProvider="ZNodeCacheDependencyProviderSQL">
+    <providers>
+      <add name="ZNodeCacheDependencyProviderSQL" type="ZNode.Libraries.ECommerce.Utilities.ZNodeCacheDependencyProviderSQL" description="SQL Cache Dependency Provider" />
+    </providers>
+  </ZNodeCacheDependency>
+  
+  <connectionStrings>
+    <add name="ZNodeECommerceDB" connectionString="Data Source=mssvr039;Initial Catalog=Znode_Multifront_90_Dev;User Id=znode;Password=mrr@123" providerName="System.Data.SqlClient" />
+    <add name="Znode_Entities" connectionString="metadata=res://*/DataModel.ZnodeEntities.csdl|res://*/DataModel.ZnodeEntities.ssdl|res://*/DataModel.ZnodeEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=mssvr039;Initial Catalog=
+Znode_Multifront_90_Dev;User Id=znode;Password=mrr@123;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient" />
+    <add name="ZNodeReportDB" connectionString="Data Source=MSSVR039;Initial Catalog=ReportServer;User Id=znode;Password=mrr@123" providerName="System.Data.SqlClient" />
+    <add name="ZNodeMongoDB" connectionString="mongodb://MSSVR039/Znode_Multifront_90_Dev_New"/>
+  </connectionStrings>
+
+
+  <!--<connectionStrings>
+    <add name="ZNodeECommerceDB" connectionString="Data Source=mssvr039;Initial Catalog=Znode_Multifront_90_Dev_ABS;User Id=sa;Password=mrrDb@!2017" providerName="System.Data.SqlClient" />
+    <add name="Znode_Entities" connectionString="metadata=res://*/DataModel.ZnodeEntities.csdl|res://*/DataModel.ZnodeEntities.ssdl|res://*/DataModel.ZnodeEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=mssvr039;Initial Catalog=
+Znode_Multifront_90_Dev_ABS;User Id=sa;Password=mrrDb@!2017;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient" />
+    <add name="ZNodeReportDB" connectionString="Data Source=MSSVR039;Initial Catalog=ReportServer;User Id=znode;Password=mrr@123" providerName="System.Data.SqlClient" />
+    <add name="ZNodeMongoDB" connectionString="mongodb://MSSVR039/Znode_Multifront_90_Dev_New"/>
+  </connectionStrings>-->
+
+  
+
+  <appSettings>
+    <add key="ZnodeApiRootUri" value="http://localhost:44762" />
+    <add key="AdminWebsiteUrl" value="http://localhost:6766" />
+    <!-- The path to the DLSC license file. Defaults to /data/default/config if not specified. -->
+    <add key="LicensePath" value="~/License" />
+    <!-- These settings are defaulted to work with a development environment. Be sure to set each of these items before going to production. -->
+    <add key="EnableFileLogging" value="1" />
+    <add key="EnableDBLogging" value="1" />
+    <!-- In most cases this should be true in production environments -->
+    <add key="ValidateAuthHeader" value="false" />
+    <!--Lock User Account, maximum invalid attempt count -->
+    <add key="MaxInvalidPasswordAttempts" value="5" />
+    <!--Reset Password Link, expiration duration, in days -->
+    <add key="ResetPassworLinkExpirationDuration" value="24" />
+    <!-- URI endpoint separators -->
+    <add key="ZnodeApiUriItemSeparator" value="," />
+    <add key="ZnodeApiUriKeyValueSeparator" value="~" />
+    <!-- Password Expired within days. Default value 60-->
+    <add key="PasswordExpiration" value="60" />
+    <!-- This is the FedEx test URL. The production URL is https://wsbeta.fedex.com:443/web-services/rate. -->
+    <add key="FedExGatewayURL" value="https://wsbeta.fedex.com:443/web-services/rate" />
+    <add key="UPSGatewayURL" value="https://wwwcie.ups.com/ups.app/xml/Rate" />
+    <add key="UPSAddressValidationURL" value="https://wwwcie.ups.com/ups.app/xml/AV" />
+    <!-- USPS (United States Postal Service) settings. -->
+    <add key="USPSShippingAPIURL" value="http://production.shippingapis.com/ShippingAPI.dll" />
+    <add key="USPSWebToolsUserID" value="678ZNODE6006" />
+    <!-- This is the  USPS  Shipping Weight Limit-->
+    <add key="USPSWeightLimitInLBS" value="65" />
+    <add key="SiteMapNameSpace" value="xmlns=http://www.sitemaps.org/schemas/sitemap/0.9,xmlns:image=http://www.google.com/schemas/sitemap-image/1.1,xmlns:g=http://base.google.com/ns/1.0" />
+    <add key="GoogleProductFeedNameSpace" value="http://base.google.com/ns/1.0" />
+    <add key="ProductFeedRecordCount" value="100" />
+    <!-- Import Chunk limit -->
+    <add key="ZnodeImportChunkLimit" value="1000" />
+    <!--QuickBook web connector login credentials-->
+    <add key="QBAdminZnodeUsername" value="admin@znode.com" />
+    <add key="QBWebConnectorUsername" value="username" />
+    <add key="QBWebConnectorPassword" value="password" />
+    <!--Base64 encrypted QuickBook web connector username+password-->
+    <add key="QBWebConnectorValidationToken" value="dXNlcm5hbWVwYXNzd29yZA==" />
+    <!-- Report Server Details -->
+    <add key="MvcReportViewer.Username" value="manish.mandaogade" />
+    <add key="MvcReportViewer.Password" value="newuser@123" />
+    <add key="ReportServerDomain" value="MRRSoft" />
+    <add key="ReportServerUrl" value="http://mssvr039/ReportServer" />
+    <add key="ZnodeReportFolderName" value="ZNodeDevReport" />
+    <add key="ReportServerDynamicReportFolderName" value="ZnodeDevDynamicReport" />
+    <add key="ReportDataSetName" value="DevReportDataSource" />
+    <add key="WebstoreWebsiteName" value="ZnodeUAT_Webstore" />
+    <!-- Elastic search keys -->
+    <!--If set to true then we can use custom analyzer with user defined filters and tokenizers; else default analyzer will be used-->
+    <add key="UseCustomAnalyzer" value="true" />
+    <add key="UseSynonyms" value="true" />
+    <!--comma seperated values(default token filters available:"standard,asciifolding,uppercase,length,nGram,edgeNGram,porter_stem,shingle,word_delimiter,etc.")-->
+    <add key="DefaultTokenFilters" value="lowercase" />
+    <add key="SearchIndexChunkSize" value="1000" />
+    <add key="RemovableProductAttributes" value='{"Hidden":"true"}' />
+    <!--Used to add different user logontype while using on hosted site.-->
+    <add key="CreateSchedulerOnServer" value="false" />
+    <add key="ZnodeSupportEmail" value="manish@yopmail.com" />
+    <add key="SwaggerBuildVersion" value="9_0_2" />
+     <add key="BuildVersion" value="9.0.2" />
+    <!--Change the below key to 'false' in production environment-->
+    <add key="CCHTestTransactionMode" value="true"/>
+    <add key="ERPConfigurationPath" value="/Data/ERPScheduler/{0}.{1}"/>
+    <add key="CCHWebServiceURL" value="http://66.195.231.132/STOWebServices/Service2.0.asmx"/>
+    <add key="CCHTransactionType" value="01"/>
+    <add key="CCHCustomerType" value="08"/>
+    <add key="CCHProviderType" value="70"/>
+    <add key="CCHTaxGroup" value="0000"/>
+    <add key="CCHTaxItem" value="000"/>
+    <add key="CCHSourceSystem" value="Znode_Multifront"/>
+    <add key="CCHTransactionDescription" value="Znode multifront sample transaction"/>
+    <!--Maximum time for which publish product process will run. If publish product is not complete in maximum time, it will be failed.-->
+    <!--Publish product time will be relative to publish product sleep time-->
+    <!--Example: If we need publish product service to run for 30 minutes and sleep time is 10000 miliseconds, then publish product max time will be 180-->
+    <!--Example: If we need publish product service to run for 30 minutes and sleep time is 20000 miliseconds, then publish product max time will be 90-->
+    <add key="ProductPublishMaxTime" value="540" />
+    <!--Publish product thread sleep time in miliseconds-->
+    <add key="ProductPublishSleepTime" value="20000" />
+    <add key="AllowedMediaExtention" value=".svg" />
+    <add key="ABSFilePath" value="c:/ABS/"/>
+  </appSettings>
+  <znodeApiCache configSource="cache.config" />
+
+  <system.web>
+    <authentication mode="None" />
+    <compilation debug="true" targetFramework="4.6" />
+    <httpRuntime targetFramework="4.6" maxUrlLength="999999" maxQueryStringLength="999999" maxRequestLength="214748364" />
+    <caching>
+      <sqlCacheDependency enabled="true" pollTime="5000">
+        <databases>
+          <add name="ZNodeMultifront" connectionStringName="ZNodeECommerceDB" />
+        </databases>
+      </sqlCacheDependency>
+    </caching>
+  </system.web>
+  <system.webServer>
+    <modules>
+      <remove name="WebDAVModule" />
+    </modules>
+    <handlers>
+      <remove name="WebDAV" />
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+      <remove name="OPTIONSVerbHandler" />
+      <remove name="TRACEVerbHandler" />
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+    </handlers>
+
+    <security>
+      <requestFiltering>
+        <requestLimits maxQueryString="999999" maxUrl="999999" maxAllowedContentLength="4294967295" />
+      </requestFiltering>
+    </security>
+  </system.webServer>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security.OAuth" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security.Cookies" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" culture="neutral" publicKeyToken="30ad4fe6b2a6aeed" />
+        <bindingRedirect oldVersion="0.0.0.0-9.0.0.0" newVersion="10.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Optimization" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-1.1.0.0" newVersion="1.1.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="WebGrease" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-1.5.2.14234" newVersion="1.5.2.14234" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Http" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Net.Http.Formatting" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Autofac" publicKeyToken="17863af14b0044da" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-4.0.1.0" newVersion="4.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Http.Owin" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Autofac.Integration.WebApi" publicKeyToken="17863af14b0044da" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  <entityFramework>
+    <defaultConnectionFactory type="System.Data.Entity.Infrastructure.SqlConnectionFactory, EntityFramework" />
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" />
+    </providers>
+  </entityFramework>
+  <system.codedom>
+    <compilers>
+      <compiler language="c#;cs;csharp" extension=".cs" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.CSharpCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" warningLevel="4" compilerOptions="/langversion:6 /nowarn:1659;1699;1701" />
+      <compiler language="vb;vbs;visualbasic;vbscript" extension=".vb" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.VBCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" warningLevel="4" compilerOptions="/langversion:14 /nowarn:41008 /define:_MYTYPE=\&quot;Web\&quot; /optionInfer+" />
+    </compilers>
+  </system.codedom>
+</configuration>

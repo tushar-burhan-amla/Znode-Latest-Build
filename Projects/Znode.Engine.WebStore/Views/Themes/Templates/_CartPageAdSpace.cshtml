@@ -1,0 +1,47 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ContentContainerDataViewModel
+@{
+    string containerKey = Model?.ContainerKey;
+    string CartPageTitle1 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "CartPageTitle1" && x.AttributeValue != null)?.AttributeValue;
+    string CartPageTitle2 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "CartPageTitle2" && x.AttributeValue != null)?.AttributeValue;
+    string CartPageTitle3 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "CartPageTitle3" && x.AttributeValue != null)?.AttributeValue;
+
+
+    string CartPageText1 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "CartPageText1" && x.AttributeValue != null)?.AttributeValue;
+    string CartPageText2 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "CartPageText03" && x.AttributeValue != null)?.AttributeValue;
+    string CartPageText3 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "CartPageText3" && x.AttributeValue != null)?.AttributeValue;
+
+    string C1 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "C1" && x.AttributeValue != null)?.AttributeValue;
+    string C2 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "C2" && x.AttributeValue != null)?.AttributeValue;
+    string C3 = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "C3" && x.AttributeValue != null)?.AttributeValue;
+    var domainurl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+}
+@if (!string.IsNullOrEmpty(containerKey) && containerKey.Equals("CartPageAdSpace", StringComparison.InvariantCultureIgnoreCase))
+{
+    <div class="container container-twotextbox">
+        <div class="row">
+            <div class="col-12 pr-0">
+                <div class="Adspace-wrapper d-md-flex">
+                    <a href="@domainurl@C1" class="Adspace-outer mr-md-1 d-flex align-items-center">
+                        <div class="fstadspace">
+                            <div class="Adspace-title">@CartPageTitle1 <span class="right-icon"></span></div>
+                            <p class="Adspace-description">@CartPageText1</p>
+                        </div>
+                    </a>
+                    <a href="@domainurl@C2" class="Adspace-outer mt-2 mt-md-0 mr-md-1 d-flex align-items-center">
+                        <div class="fstadspace">
+                            <div class="Adspace-title">@CartPageTitle2 <span class="right-icon"></span></div>
+                            <p class="Adspace-description">@CartPageText2</p>
+                        </div>
+                    </a>
+                    <a href="@domainurl@C3" class="Adspace-outer mt-2 mt-md-0 d-flex align-items-center">
+                        <div class="fstadspace">
+                            <div class="Adspace-title">@CartPageTitle3 <span class="right-icon"></span></div>
+                            <p class="Adspace-description">@CartPageText3</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

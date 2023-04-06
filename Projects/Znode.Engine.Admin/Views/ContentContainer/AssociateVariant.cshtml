@@ -1,0 +1,64 @@
+﻿@model Znode.Engine.Admin.ViewModels.ContainerVariantViewModel
+
+<div class="col-sm-12 title-container">
+    <h1>@Admin_Resources.HeadingAddVariant</h1>
+
+    <div class="pull-right btn-container">
+        <button type="button" class="btn-text-icon margin-bottom" onclick="ZnodeBase.prototype.CancelUpload('VariantPanel')" data-test-selector="linkBack"><em class='z-back'></em>@Admin_Resources.ButtonBack</button>
+        <div class="pull-right">
+            <a id="btnAddVariant" class="btn-text btn-text-secondary dirtylisten" data-test-selector="btnAddVariant" onclick = "ContentContainer.prototype.SubmitContainerVariantsForm(event)">@Admin_Resources.Add</a>
+        </div>
+    </div>
+</div>
+
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Ajax.BeginForm("AssociateVariants", "ContentContainer"
+            , new AjaxOptions
+            {
+                OnSuccess = "ContentContainer.prototype.BindVariantDropdown",
+                OnFailure = "",
+            }, new { id = "formContainerVariants", @class = "dirtyignore" }))
+    {
+       <div id="containervarianterrormsg" class="status-outofstock text-center padding-bottom error-msg" data-test-selector="divContainervariant-error-msg"></div>
+    <div class="box-container margin-bottom">
+        <div class="form-group">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label class="required" data-test-selector="lblStore">@Admin_Resources.LabelStoreName</label>
+                </div>
+                <div class="control-md">
+                    <div id="areaList">
+                        @Html.DropDownListFor(x => x.PortalId, Model.Portals, new { @id = "ddlPortal", @data_test_selector = "drpPortals", onChange = "ContentContainer.prototype.GetUnassociatedProfiles()"})
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label class="required" data-test-selector="lblProfile">@Admin_Resources.LabelUserProfile</label>
+                    </div>
+                    <div class="control-md">
+                        <div id="areaList">
+                            @Html.DropDownListFor(x => x.ProfileId, Model.Profiles, new { @id = "profileList", @data_test_selector = "drpProfiles" }) 
+                            <span class="field-validation-error hidden" id="profileListError">@Admin_Resources.DropdownUserProfile</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(x => x.ContentContainerId)
+            @Html.HiddenFor(x => x.ContainerKey, new { @id = "hdnContainerKey" })
+
+        </div>
+    }
+</section>
+<script>
+    $(document).ready(function () {
+        ContentContainer.prototype.GetUnassociatedProfiles();
+        $("#hdnContainerKey").val($("#ContainerKey").val());
+    });
+
+</script>
+

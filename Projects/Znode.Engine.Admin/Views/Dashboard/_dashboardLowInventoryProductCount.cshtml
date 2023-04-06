@@ -1,0 +1,31 @@
+﻿@*@using Znode.Engine.Admin.ViewModels
+    @model DashboardListViewModel
+
+    <h3>@Admin_Resources.LabelAlertNotification</h3>
+    @if (Model?.DashboardViewModelList?.Count > 0)
+    {
+        <ul>
+            <li>@Model.DashboardViewModelList.FirstOrDefault().ProductCount @Admin_Resources.AlertLowInventoryProductMessage</li>
+        </ul>
+    }*@
+<div class="d-flex flex-wrap justify-content-between padding-top padding-bottom table-heading-section">
+    <h2 class="margin-left-15">Brands</h2>
+    <div class="margin-right-15">
+        <button class=" btn-text btn-text-secondary">button</button>
+    </div>
+</div>
+<table class="table" aria-describedby="Low Inventory Product Count">
+    <thead class="thead-inverse">
+        <tr>
+            <th scope="col">Account Name</th>
+            <th scope="col">Customer Name</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>value</td>
+            <td>value</td>
+        <tr>
+    </tbody>
+</table>

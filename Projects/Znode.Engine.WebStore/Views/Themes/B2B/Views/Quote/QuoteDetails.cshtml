@@ -1,0 +1,140 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Agents
+@model QuoteResponseViewModel
+@{
+    string disableConvertToOrder = Model.EnableConvertToOrder ? "" : "disabled";
+    var _portal = PortalAgent.CurrentPortal;
+    string _fileLocation = $"/Views/Themes/{_portal.Theme}";
+}
+<div id="layout-account-receipt" class="col">
+    <div class="row">
+        <div class="container-fluid profile-dashboard">
+            <div class="row">
+                <div class="container">
+                    @Html.Partial("_AccountMenuDashboard")
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model != null)
+    {
+        <div class="row">
+            <div class="container">
+                <div class="row user-account">
+                    <div class="col-12 account-dashboard">
+                        <div class="row">
+                            <div class="col-12 order-receipt right-container">
+                                <div class="py-4 row align-items-center">
+                                    <div class="col-12 col-md-5 pr-0">
+                                        <h4 class="quoteeceipt-title" data-test-selector="hdgTitleQuoteReceipt">
+                                            @Html.RenderBlock(string.Format(WebStore_Resources.TitleQuoteNo.ToString(), Model.QuoteNumber.ToString()))
+                                        </h4>
+
+                                    </div>
+
+                                    <div class="col-12 col-md-7 py-4 py-md-0 text-md-right">
+                                        <a class=" btn btn-secondary mr-2" href="#" onclick="window.print();return false;">@WebStore_Resources.TextPrint</a>
+
+                                         <button id="btnShowPaymentOptions" name="showPaymentOptions" class=" btn btn-primary mt-4" data-toggle="modal" data-target=".payment-view-popup" @disableConvertToOrder>
+                                            @WebStore_Resources.ButtonConvertQuoteToOrder
+                                        </button>
+
+
+                                    </div>
+                                </div>
+
+                                @Html.Partial("_QuoteReceiptDetail", Model)
+                                <div class="notes-details">
+                                    <div id="quoteNotes" data-test-selector="divquoteNoteList">
+                                        @if (Model.QuoteNoteList.Count > 0)
+                                        {
+                                            @Html.Partial("_QuoteNotesDetail", Model)
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                          
+                             
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p class="text-center">@WebStore_Resources.NoResult</p>
+    }
+</div>
+<!-- Modal -->
+<div class="modal fade" id="PaymentModal" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog compare-product-popup modal-dialog-centered">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" data-test-selector="lblPaymentApplMsg">@WebStore_Resources.LabelPaymentApplication</h4>
+            </div>
+            <div class="modal-body">
+                <p data-test-selector="lblPaymentMethodMsg">@WebStore_Resources.TextPaymentMethod</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="PaypalPaymentModal" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog compare-product-popup modal-dialog-centered">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" data-test-selector="lblPaymentApplMsg">@WebStore_Resources.LabelPaymentApplication</h4>
+            </div>
+            <div class="modal-body">
+                <p data-test-selector="lblPaypalPaymentMethodMsg">@WebStore_Resources.TextPaypalPaymentMethod</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Error Payment Modal-->
+<div class="modal fade" id="ErrorPaymentModal" role="dialog">
+    <div class="modal-dialog compare-product-popup">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@WebStore_Resources.LabelPaymentApplication</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i aria-hidden="true" class="close-circle-icon"></i></button>
+            </div>
+            <div class="modal-body">
+                <p data-test-selector="lblPaymentMethodErrMsg" class="font-16"></p>
+                <div class="col-12 margin-top-bottom p-0">
+                    <div class="pull-right">
+                        <button data-test-selector="btnPaymentOk" type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* Loader *@
+<div id='Single-loader-content-backdrop' class='loader modal-backdrop' style="display:none">
+    <div id='loading' class='d-flex modal-dialog-centered justify-content-center'>
+        <img src="@_fileLocation/Images/loading.svg" alt="Loading Image" />
+    </div>
+</div>
+@Html.Partial("_PaymentPopup")
+@Html.Hidden("hdnUserId", Model.UserId)
+@Html.Hidden("hdnOmsQuoteId", Model.OmsQuoteId)
+@Html.Hidden("Total", Model.QuoteTotal)
+@Html.Hidden("SubTotal", Model.SubTotal)
+@Html.Hidden("hdnPortalId", Model.PortalId)
+@Html.Hidden("QuoteId", Model.OmsQuoteId)
+@Html.Hidden("QuoteNumber", Model.QuoteNumber)
+@Html.Hidden("hdnCustomerGUID", Model.CustomerPaymentGUID)
+<div id="shipping-content">@Html.Hidden("AddressId", Model.ShippingAddressId)</div>
+<div id="billing-content">@Html.Hidden("AddressId", Model.BillingAddressId)</div>
+<script>
+    $(document).ready(function () {
+        $("#btnShowPaymentOptions").on("click", function () {
+            Quote.prototype.GetPaymentOptions();
+        });
+    });
+</script>

@@ -1,0 +1,23 @@
+﻿@using Znode.Engine.WebStore.Agents
+@model Int32
+@using Znode.Libraries.ECommerce.Utilities
+@{
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    Layout = null;
+}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 nopadding col-12 p-0">
+            <z-widget>@Html.WidgetPartial("TemplateTextEditor", "TextVideoWidget", "414788", "ContentPageMapping", (int)Model)</z-widget>
+        </div>     
+        <div class="col-xs-12 nopadding col-12 p-0">
+            <z-widget>@Html.WidgetPartial("TemplateTextEditor", "Text", "414799", "ContentPageMapping", (int)Model)</z-widget>
+        </div>
+        <div class="col-xs-12 nopadding col-12 p-0">
+            <z-widget>@Html.WidgetPartial("SearchWidget", "SearchWidget", "414729", "ContentPageMapping", (int)Model)</z-widget>
+        </div>
+        <div class="col-xs-12 nopadding col-12 p-0">
+            <z-widget>@Html.WidgetPartial("TemplateTextEditor", "TextWidget", "4147077", "ContentPageMapping", (int)Model)</z-widget>
+        </div>      
+    </div>
+</div>

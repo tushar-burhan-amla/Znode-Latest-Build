@@ -1,0 +1,49 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model PortalCatalogViewModel
+
+@using (Ajax.BeginForm("EditPortalCatalog", "Store",
+    new AjaxOptions()
+    {
+        HttpMethod = "post",
+        OnSuccess = "Store.prototype.EditPortalCatalogResult",
+        InsertionMode = InsertionMode.Replace,
+    },
+    new { @id = "frmPortalCatalog" }))
+{
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+                <h4 class="modal-title">@Admin_Resources.HeaderAssociateCatalog</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12 page-container">
+                    <div id="customFieldModel" class="col-sm-12 nopadding">
+                        <div class="col-sm-12 nopadding">
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        @Html.Label(PIM_Resources.LabelPublishCatalog)
+                                    </div>                                    
+                                    <div class="control-md">
+                                        @Html.DropDownListFor(model => model.PublishCatalogId, new SelectList(Model.PublishCatalogs, "PublishCatalogId", "CatalogName", Model.PublishCatalogId))
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.PortalCatalogId)
+            @Html.HiddenFor(model => model.PortalId)
+            <div class="modal-footer">
+                <div class="col-sm-12 nopadding">
+                    <div class="pull-right">
+                        <button id="AddCustomfieldSave" type="submit" class="btn-text-icon"><em class="z-save"></em>@Admin_Resources.ButtonSave</button>
+                        <button id="AddCustomfieldCancel" type="button" class="btn-text-icon" data-dismiss="modal"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

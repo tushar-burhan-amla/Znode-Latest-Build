@@ -1,0 +1,77 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+<div class="col-12 col-md-6 col-lg-5 p-0 ml-auto receipt-item-list shopping-cart">
+   
+    <div class="col-12 cart-total mt-4 cart-summary receipt-totals">
+        <div class="form-group">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8">@WebStore_Resources.ColumnSubTotal</div>
+                <div class="col-4 text-right" data-test-selector="divSubtotal">@Helper.FormatPriceWithCurrency(Model.SubTotal, Model.CultureCode)</div>
+            </div>
+        </div>
+        @if (Model.ShippingCost > 0)
+        {
+            <div class="form-group">
+                <div class="row no-gutters px-3 px-md-4">
+                    <div class="col-8">@WebStore_Resources.LabelShippingCost </div>
+                    <div class="col-4 text-right" data-test-selector="divShippingCost"> + @Helper.FormatPriceWithCurrency(Model.ShippingCost, Model.CultureCode)</div>
+                </div>
+            </div>
+        }
+        @if (Model.ShippingHandlingCharges > 0)
+        {
+            <div class="form-group">
+                <div class="row no-gutters px-3 px-md-4">
+                    <div class="col-8">@WebStore_Resources.LabelShippingHandlingCharge </div>
+                    <div class="col-4 text-right" data-test-selector="divShippingHandlingCharges"> + @Helper.FormatPriceWithCurrency(Model.ShippingHandlingCharges, Model.CultureCode)</div>
+                </div>
+            </div>
+        }
+        @if (Model.ImportDuty > 0)
+        {
+            <div class="form-group">
+                <div class="row no-gutters px-3 px-md-4">
+                    <div class="col-8">@WebStore_Resources.ImportDuty</div>
+                    <div class="col-4 text-right" data-test-selector="divImportDuty"> + @Helper.FormatPriceWithCurrency(Model.ImportDuty, Model.CultureCode)</div>
+                </div>
+            </div>
+        }     
+        <div class="form-group">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8">@WebStore_Resources.ColumnTax</div>
+                <div class="col-4 text-right" data-test-selector="divTaxCost"> + @Helper.FormatPriceWithCurrency(Model.TaxCost, Model.CultureCode)</div>
+            </div>
+        </div>
+        @if (Model?.TaxSummaryList?.Count > 0)
+        {
+        <div class="col-xs-12 form-group tax-summary">
+            <table class="table" id="TaxSummary" aria-describedby="Tax Details">
+                <thead>
+                    <tr>
+                        <th scope="col" data-test-selector="lblTaxName" class="pl-3 pl-md-4">@WebStore_Resources.ColumnTitleTaxName</th>
+                        <th scope="col" data-test-selector="lblRate">@WebStore_Resources.ColumnTitleRate</th>
+                        <th scope="col" class="text-right pr-3 pr-md-4" data-test-selector="lblTaxes">@WebStore_Resources.ColumnTitleTaxesFees</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (TaxSummaryViewModel taxSummary in Model.TaxSummaryList)
+                    {
+                        <tr>
+                            <td class="pl-3 pl-md-4">@taxSummary.TaxName</td>
+                            <td>@taxSummary.Rate</td>
+                            <td class="text-right pr-3 pr-md-4">@taxSummary.Tax</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }     
+        <div class="form-group total receipt-total">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-8"><h2>@WebStore_Resources.LabelQuoteTotal</h2></div>
+                <div class="col-4 text-right" data-test-selector="divOrderTotal"><h2>@Helper.FormatPriceWithCurrency(Convert.ToDecimal(Model.QuoteTotal), Model.CultureCode)</h2></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

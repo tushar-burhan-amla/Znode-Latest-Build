@@ -1,0 +1,130 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+@using Znode.Engine.Admin.Helpers
+@using Znode.Libraries.ECommerce.Utilities
+@using System.Globalization
+@model PortalApprovalViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmSavePortalApprovalDetails", CancelUrl = "/Store/List", IsSaveCloseEnable = true, Callback = "Store.prototype.SubmitApprovalForm" };
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+    CultureInfo ci = new CultureInfo(DefaultSettingHelper.DefaultCulture);
+    string symbol = ci.NumberFormat.CurrencySymbol;
+    string style = Model.EnableApprovalManagement ? "display:block" : "display:none";
+}
+<div class="col-sm-12 title-container">
+	<h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelStore)<em class="z-minus"></em><span>@Model.PortalName</span></h1>
+	@*<div class="pull-right">
+			<button type="button" class="btn-text-icon" onclick="Store.prototype.SubmitApprovalForm()"><em class='z-save'></em>@Admin_Resources.ButtonSave</button>
+			<button type="button" class="btn-text-icon" onclick="Store.prototype.SubmitApprovalForm(@Model.PortalId,'@actionModel.CancelUrl')"><em class="z-save-and-close"></em>@Admin_Resources.ButtonSaveClose</button>
+			@Html.AuthorizedRawActionLink("<em class='z-cancel'></em>" + Admin_Resources.ButtonCancel, "List", "Store", null, new { @class = "btn-text-icon" })
+		</div>*@
+	<div class="pull-right">
+		@Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+	</div>
+</div>
+<!--Left Panel-->
+<aside aria-labelledby="Side Menu">
+    <button id="slide-menu" class="slide-menu-btn" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+        @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+    </div>
+</aside>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @if (!actionName.ToLower().Contains("create"))
+    {
+        <aside aria-labelledby="Side Menu">
+            <div class="slide-container">
+                @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+            </div>
+        </aside>
+    }
+    <!--Main Container-->
+    <section class="main-container portal-approval-block">
+        @using (Html.BeginForm("SaveUpdatePortalApprovalDetails", "Store", new { portalId = Model.PortalId }, FormMethod.Post, new { @id = "frmSavePortalApprovalDetails", @class= "dirtyignore" }))
+        {
+            <div class="col-xs-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label>Enable Approval Management</label>
+                        </div>
+                        <div class="switch-field control-yes-no">
+                            @if (Model.EnableApprovalManagement)
+                            {
+                                @Html.RadioButtonFor(x => x.EnableApprovalManagement, "true", new {@class= "ApprovalManagement", @name = "btnApprovalManagement", @checked = true, @id = "IsApprovalManagement_left", @onclick = "Store.prototype.HideShowApprovalTab()" }) <label for="IsApprovalManagement_left">Yes</label>
+                                @Html.RadioButtonFor(x => x.EnableApprovalManagement, "false", new { @class = "ApprovalManagement", @name = "btnApprovalManagement", @id = "IsApprovalManagement_right", @onclick = "Store.prototype.HideShowApprovalTab()" }) <label for="IsApprovalManagement_right">No</label>
+                            }
+                            else
+                            {
+                                @Html.RadioButtonFor(x => x.EnableApprovalManagement, "true", new{ @class = "ApprovalManagement", @name = "btnApprovalManagement", @id = "IsApprovalManagement_left", @onclick = "Store.prototype.HideShowApprovalTab()" }) <label for="IsApprovalManagement_left">Yes</label>
+                                @Html.RadioButtonFor(x => x.EnableApprovalManagement, "false", new { @class = "ApprovalManagement", @name = "btnApprovalManagement", @checked = true, @id = "IsApprovalManagement_right", @onclick = "Store.prototype.HideShowApprovalTab()" }) <label for="IsApprovalManagement_right">No</label>}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="ApprovalManagement" class="col-xs-12 nopadding" style="@style">
+                <div class="col-xs-6 nopadding">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.PortalApprovalTypeId, new { @class = "required" })
+                            </div>
+                            <div class="control-md">
+                                @Html.DropDownListFor(model => model.PortalApprovalTypeId, Model.PortalApprovalTypes, @Admin_Resources.LabelPortalApprovalType, new { @id = "ddlPortalApprovalTypes", @OnChange = "Store.prototype.GetApprovalList();" })
+                                @Html.ValidationMessageFor(model => model.PortalApprovalTypeId)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 nopadding">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.PortalApprovalLevelId, new { @class = "required" })
+                            </div>
+                            <div class="control-md">
+                                @Html.DropDownListFor(model => model.PortalApprovalLevelId, Model.PortalApprovalLevel, @Admin_Resources.LabelPortalApprovalLevel, new { @id = "ddlPortalApprovalLevel", @OnClick = "" })
+                                @Html.ValidationMessageFor(model => model.PortalApprovalLevelId)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 nopadding">
+                    <div class="col-xs-6 nopadding">
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    @Html.Label(string.Format(@Admin_Resources.LabelOrderLimit, symbol))
+                                </div>
+                                <div class="control-md">
+                                    @Html.TextBoxFor(model => model.OrderLimit, new { @id = "valOrderLimit" })
+                                    <div class="col-xs-12 nopadding" style="color:grey;">@Admin_Resources.TextOrderLimit</div>
+                                    <span id="valOrderLimit" class="field-validation-error"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="content-to-dispaly-in-portal-approval-table" class="col-xs-12 nopadding margin-bottom-25">
+                    @if (Equals(Model.PortalApprovalTypeName, ZnodePortalApprovalsLevelEnum.Store.ToString()))
+                    {
+                        @Html.Partial("~/Views/Store/PortalUserApproval.cshtml", Model)
+                    }
+                    else if (Equals(Model.PortalApprovalTypeName, ZnodePortalApprovalsLevelEnum.Payment.ToString()))
+                    {
+                        @Html.Partial("~/Views/Store/PortalPaymentApproval.cshtml", Model)
+                    }
+                </div>
+            </div>
+            @Html.HiddenFor(x => x.PortalApprovalId)
+        }
+    </section>
+    @Html.HiddenFor(x => x.PortalId, new { id = "portalId" })
+</div>
+<div id="divCataloglistPopup" class="aside-popup-panel">
+</div>

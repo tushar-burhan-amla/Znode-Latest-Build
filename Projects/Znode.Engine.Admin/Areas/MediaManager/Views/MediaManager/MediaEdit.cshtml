@@ -1,0 +1,166 @@
+﻿@model MediaAttributeValuesListViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@{bool isAjaxRequest = Request.IsAjaxRequest(); }
+@{
+    ViewBag.Title = Admin_Resources.TitleDAM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = "/MediaManager/MediaManager/List?folderId=" + Request.QueryString["selectedfolder"], FormId = "frmMediaEdit", Callback = "ValidateTypeAndSaveToServer", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.HeadingMediaExplorer)<em class="z-minus"></em><span>@Model.FileName</span></h1>
+    <div class="pull-right">
+
+        @if (isAjaxRequest)
+        {
+            @Html.Partial("~/Views/Shared/Controls/_Navigator.cshtml", Model.navigationModel)
+        }
+        else
+        {
+            <div class="pull-right">
+                @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+            </div>
+        }
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container detail-view-container">
+    <form method="post" action="/MediaManager/MediaManager/UpdateMediaAttributeValueList?selectedfolder=@Request.QueryString["selectedfolder"]" id="frmMediaEdit" enctype="multipart/form-data">
+        <div class="col-sm-12 nopadding image-details">
+            <div class="col-sm-4 nopadding product-image">
+                @{
+                    string strHtml = string.Empty;
+
+                    switch (Model.FamilyCode?.ToLower())
+                    {
+                        case DynamicGridConstants.Video:
+                            @Html.Video(Model.MediaPath)
+                            break;
+                        case DynamicGridConstants.Audio:
+                            @Html.Audio(Model.MediaPath)
+                            break;
+                        case DynamicGridConstants.File:
+                            <div class="grid-file"><em class='z-file-text' title='File'></em></div>
+                            break;
+                        default:
+                            <div class="grid-img"><img src='@Model.MediaPath' id="impPrev" alt="Media Image" class='img-responsive preview-link' title='Click Here To Preview'></div>
+                            break;
+                    }
+                }
+
+                <h3 class="text-center"><a onclick="return MediaManagerTools.prototype.DownloadMedia();"><em class="z-download"></em> @Model.FileName</a></h3>
+                @Html.HiddenFor(model => model.Path, new { id = "Path" })
+                @Html.HiddenFor(model => model.MediaPath, new { id = "MediaPath" })
+                <div id="ReplaceMediadiv" class="text-center media-section">
+                    @Html.EditorFor(model => model.FilePath, new { htmlAttributes = new { @onchange = "GetFileHeaders()" } })
+                    <span class="field-validation-error" id="error-file-upload" data-test-selector="valFileUpload"></span>
+                    @Html.HiddenFor(model => model.IsMediaReplace, new { id = "isMediaReplace", @data_val = @Model.MediaPathId })
+                </div>
+                <div id="GenerateImagediv" class="justify-content-center d-flex media-section margin-top margin-right">
+                    <button id="btnGenerateImages" class="btn-text btn-text-secondary" onclick="return MediaConfiguration.prototype.GenerateImageOnEdit();" type="button" data-test-selector="btnGenerateImages">Generate Image</button>
+                </div>
+            </div>
+            <div class="col-sm-8 nopadding">
+
+                @Html.Partial("_MetaInformation", Model)
+
+                @if (Model?.MediaAttributeValues?.Count > 0)
+                {
+                    string groupName = string.Empty;
+                    foreach (var Contl in Model.MediaAttributeValues)
+                    {
+                        <div class="col-sm-12 nopadding">
+                            @if (groupName != Contl.AttributeGroupName)
+                            {
+                                groupName = Contl.AttributeGroupName;
+                                <h3 class="section-heading margin-top-25">@groupName</h3>
+                            }
+
+                            <div class="form-group">
+                                <div class="col-sm-12 nopadding">
+                                    <div class="control-label">
+                                        <label for="@Contl.ControlProperty.Name">@Contl.AttributeName</label>
+                                    </div>
+                                    @if (Contl.AttributeTypeName.Equals("Image", StringComparison.InvariantCultureIgnoreCase) && !String.IsNullOrEmpty(Contl.ControlProperty.Value))
+                                    {
+                                        @Html.Raw(@Html.CreateControl(Contl.ControlProperty).ToHtmlString().Replace("src='" + Contl.MediaAttributeValue + "'", "src='" + Contl.MediaAttributeThumbnailPath + "'").Replace("<input type='hidden' id=" + Contl.ControlProperty.Id + " name=" + Contl.ControlProperty.Id + " value=" + Contl.DefaultAttributeValue + ">", "<input type='hidden' id=" + Contl.ControlProperty.Id + " name=" + Contl.ControlProperty.Name + " value=" + Contl.ControlProperty.Value + ">"))
+                                    }
+                                    else if (Contl.AttributeTypeName.Equals("Image", StringComparison.InvariantCultureIgnoreCase))
+                                    {
+                                        @Html.Raw(@Html.CreateControl(Contl.ControlProperty).ToHtmlString().Replace("<input type='hidden' id=" + Contl.ControlProperty.Id + " name=" + Contl.ControlProperty.Id + " value=" + Contl.DefaultAttributeValue + ">", "<input type='hidden' id=" + Contl.ControlProperty.Id + " name=" + Contl.ControlProperty.Name + " value=" + Contl.DefaultAttributeValue + ">"));
+                                    }
+                                    else
+                                    {
+                                        @Html.CreateControl(Contl.ControlProperty)
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.MediaId)
+    </form>
+</section>
+<div class='modal fade media-upload-popup' id='myModal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+    <div class='modal-dialog modal-lg'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                <h4 class='modal-title'>@MediaManager_Resources.TitleMediaUploader</h4>
+            </div>
+            <div class='modal-body'>
+                <div class='col-sm-12 nopadding'>
+                    <div id='upload_popup'>
+                    </div>
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button type='button' id='btnSave' class='btn-text btn-text-secondary pull-right margin-top' onclick='UploadImages();' data-dismiss='modal'>@Admin_Resources.ButtonSubmit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup">
+</div>
+
+<div id="fileuploadstatus" class="file-upload-status dirtyignore" style="display:none;" data-test-selector="divFileUploadStatus">
+    <div class="header">
+        <h4>@Admin_Resources.UploadStatus</h4>
+        <div class="pull-right">
+            <a href="#" onclick="MediaManagerTools.prototype.HideStatusGrid();" class="close"><em class="z-close-circle"></em></a>
+        </div>
+    </div>
+    <div class="status-container">
+        <table class="table" aria-describedby="File Upload Status">
+            <thead>
+                <tr>
+                    <th scope="col">@Admin_Resources.LabelFileName</th>
+                    <th scope="col">@Admin_Resources.LabelSize</th>
+                    <th scope="col">@Admin_Resources.LabelStatus</th>
+                    <th scope="col">@Admin_Resources.TextCancel</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        MediaEdit.prototype.ReplaceMedia();
+    })
+
+    function ValidateTypeAndSaveToServer() {
+        var totalFiles = document.getElementById("txtUpload").files.length;
+        if (totalFiles > 0) {
+            MediaEdit.prototype.ValidateImageAndSaveToServer(($("#txtUpload").get(0)).files[0], totalFiles);
+        }
+        return true;
+    }
+</script>

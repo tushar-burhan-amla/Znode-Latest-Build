@@ -1,0 +1,122 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Agents
+@model CartViewModel
+@{
+    var CultureCode = string.IsNullOrEmpty(Model.CultureCode) ? DefaultSettingHelper.DefaultCurrency : Model.CultureCode;
+    int PublishStateId = (byte)PortalAgent.CurrentPortal.PublishState;
+    bool isTaxSummaryAvailable = Model?.TaxSummaryList?.Count > 0;
+}
+    
+<div class="col-12 cart-total pl-0 pl-lg-4 mt-4 cart-summary receipt-totals">
+    <div class="form-group">
+        <div class="row no-gutters px-3 px-md-4">
+            <div class="col-6">@WebStore_Resources.LabelSubTotal</div>
+            <div class="col-6 text-right">@Helper.FormatPriceWithCurrency(Model.SubTotal, CultureCode)</div>
+        </div>
+    </div>
+    @if (Model.ShippingCost > 0)
+    {
+        string shipName = string.IsNullOrEmpty(Model?.ShippingName) ? "" : $"({Model?.ShippingName})";
+        <div class="form-group">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-6">@WebStore_Resources.LabelShippingCost</div>
+                <div class="col-6 text-right">+ @Helper.FormatPriceWithCurrency(Model.ShippingCost, CultureCode)</div>
+            </div>
+        </div>
+    }
+    @if (Model.ShippingHandlingCharges > 0)
+    {
+        <div class="form-group">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-6">@WebStore_Resources.LabelShippingHandlingCharge</div>
+                <div class="col-6 text-right">+ @Helper.FormatPriceWithCurrency(Model.ShippingHandlingCharges, CultureCode)</div>
+            </div>
+        </div>
+    }
+    @if (Model.ImportDuty > 0)
+    {
+        <div class="form-group">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-6">@WebStore_Resources.ImportDuty</div>
+                <div class="col-6 text-right">@Helper.FormatPriceWithCurrency(Model.ImportDuty, CultureCode)</div>
+            </div>
+        </div>
+    }
+   
+    @if (Model.TaxCost > 0)
+    {
+        <div class="form-group">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-6">@WebStore_Resources.ColumnTax</div>
+                <div class="col-6 text-right">+ @Helper.FormatPriceWithCurrency(Model.TaxCost, CultureCode)</div>
+            </div>
+        </div>
+        if (isTaxSummaryAvailable == true)
+        {
+            <div class="col-xs-12 form-group tax-summary">
+                <table class="table" id="TaxSummary" aria-describedby="Tax Details">
+                    <thead>
+                        <tr>
+                            <th scope="col" data-test-selector="lblTaxName" class="pl-3 pl-md-4">@WebStore_Resources.ColumnTitleTaxName</th>
+                            <th scope="col" data-test-selector="lblRate">@WebStore_Resources.ColumnTitleRate</th>
+                            <th scope="col" class="text-right pr-3 pr-md-4" data-test-selector="lblTaxes">@WebStore_Resources.ColumnTitleTaxesFees</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (TaxSummaryViewModel taxSummary in Model.TaxSummaryList)
+                        {
+                            <tr>
+                                <td class="pl-3 pl-md-4">@taxSummary.TaxName</td>
+                                <td>@taxSummary.Rate</td>
+                                <td class="text-right pr-3 pr-md-4">@taxSummary.Tax</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
+
+    @if (Model.Discount > 0)
+    {
+        <div class="form-group">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-6">@WebStore_Resources.ColumnDiscounts</div>
+                <div class="col-6 text-right">- @Helper.FormatPriceWithCurrency(Model.Discount, CultureCode)</div>
+            </div>
+        </div>
+    }
+
+    @if (Model.ShippingDiscount > 0)
+    {
+        <div class="form-group">
+            <div class="row no-gutters px-3 px-md-4">
+                <div class="col-6">@WebStore_Resources.LabelShippingDiscount</div>
+                <div class="col-6 text-right">- @Helper.FormatPriceWithCurrency(Model.ShippingDiscount, CultureCode)</div>
+            </div>
+        </div>
+    }
+
+    <div class="form-group total receipt-total block-content border-top">
+        <div class="row no-gutters px-3 px-md-4">
+            <div class="col-6"><h2>@WebStore_Resources.LabelPendingOrderTotal</h2></div>
+            <div class="col-6 text-right"><h2>@Helper.FormatPriceWithCurrency(Model.Total, CultureCode)</h2></div>
+            @Html.Hidden("hdnTotalOrderAmount", Model.Total)
+        </div>
+    </div>
+</div>
+<input type="hidden" id="Total" value="@Model.Total" />
+@Html.HiddenFor(m => m.SubTotal)
+
+@Html.HiddenFor(m => m.Discount)
+
+@Html.HiddenFor(m => m.ShippingCost)
+
+
+@Html.Hidden("hdnCurrencySuffix", Model.CurrencySuffix)
+
+@Html.Hidden("hdnCurrencyCode", Model.CurrencyCode)
+
+@Html.Hidden("hdnCustomerGUID", Model.CustomerPaymentGUID)
+
+@Html.Hidden("hdnAnonymousUser", Model.UserId)

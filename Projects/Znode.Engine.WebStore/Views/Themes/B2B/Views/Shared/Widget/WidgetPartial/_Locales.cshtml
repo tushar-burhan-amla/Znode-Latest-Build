@@ -1,0 +1,56 @@
+﻿@using Znode.Engine.WebStore.Agents
+@using System.Globalization
+@{
+
+    string html = string.Empty;
+    string titleLocale = string.Empty;
+    string regionName = string.Empty;
+    string selectedClass = string.Empty;
+    foreach (var item in PortalAgent.CurrentPortal.Locales)
+    {
+        int localeid = Convert.ToInt32(Request.Cookies["_WebStoreculture"].Value);
+        if (item.LocaleId == localeid)
+        {
+            titleLocale = item.Name;
+            selectedClass = "selected";
+            CultureInfo culture = new CultureInfo(item.Code);
+            try
+            {
+                RegionInfo region = new RegionInfo(culture.LCID);
+                regionName = region.TwoLetterISORegionName;
+            }
+            catch (Exception ex)
+            {
+                regionName = string.Empty;
+            }
+        }
+        else
+        {
+            selectedClass = string.Empty;
+        }
+
+        html += " <li><a href='/Home/ChangeLocale?LocaleId=" + item.LocaleId + "' class='" + selectedClass + "' data-test-selector='linkLocaleLang'>" + item.Name + "</a></li>";
+    }
+}
+@using (Html.BeginForm("ChangeLocale", "Home", FormMethod.Post))
+{
+    @*@Html.AntiForgeryToken()*@
+    <div class="locale-widget">
+        <div class="dropdown">
+            <button class="dropdown-toggle" type="button" data-toggle="dropdown" data-test-selector="btnLocSelectLang">
+                @titleLocale<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li>
+                    <h5 data-test-selector="lblLocaleHeading">Select Locale</h5>
+                    <div>
+                        <ul>
+                            @Html.RenderBlock(html)
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+}
+

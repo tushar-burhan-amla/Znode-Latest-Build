@@ -1,0 +1,22 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+
+@{
+    string isOABRequired = Convert.ToBoolean(Model.IsOABRequired) ? "checked='checked'" : string.Empty;
+}
+@if (Model.IsOABSupported())
+{
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(Admin_Resources.LabelEnableOAB)
+            </div>
+            <div class="control-md">
+                <label>
+                    <input @isOABRequired data-val="true" data-val-required="The IsOABRequired field is required." id="IsOABRequired" name="IsOABRequired" type="checkbox" value="true">
+                    <span class="lbl padding-8"></span> @Admin_Resources.LabelEnableOAB
+                    <input name="IsOABRequired" type="hidden" value="false">
+                </label>
+            </div>
+        </div>
+    </div>
+}

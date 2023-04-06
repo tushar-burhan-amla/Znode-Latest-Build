@@ -1,0 +1,222 @@
+﻿@model BannerViewModel
+@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.Extensions
+@using Znode.Engine.Admin.Helpers
+
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = "/WebSite/GetBannerList?cmsSliderId=" + Model.CMSSliderId, FormId = "frmCreateUpdateBanner", Callback = "WebSite.prototype.ValidateExistBannerTitle", IsSaveCloseEnable = true };
+    string mediapath = string.IsNullOrEmpty(Model?.MediaPath) ? ZnodeAdminSettings.DefaultImagePath : Model?.MediaPath;
+    int? mediaId = Model?.MediaId > 0 ? Model?.MediaId : 0;
+}
+
+<div id="grid-container">
+    <div class="col-sm-12 title-container">
+        @if (string.Equals(actionName.ToLower(), "createbanner"))
+        {
+            <h1 data-test-selector="hdgBanner">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleBanner)</h1>
+        }
+        else
+        {
+            <h1 data-test-selector="hdgBanner">@string.Format(@Admin_Resources.TitleManage, Admin_Resources.TitleBanner)<em class="z-minus"></em><span>@Html.DisplayFor(model => model.Title)</span></h1>
+        }
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+        <div class="pull-right btn-container" id="localeddl">
+            @if (Model?.Locales?.Count > 0)
+            {
+                @Html.Partial("~/Views/Shared/_CultureDropdown.cshtml", Model.Locales)
+            }
+        </div>
+    </div>
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateUpdateBanner" }))
+        {
+            <div id="createForm">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.Title, new { @class = "required", @data_test_selector = "lblTitle" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.Title, new { @data_test_selector = "txtTitle" })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { id = "errorSpanBannerTitle", @data_test_selector = "valTitle" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label class="required" data-test-selector="lblImage">@Admin_Resources.LabelImage</label>
+                        </div>
+                        <div class="control-md">
+                            <div class="upload-images" id="divMediaId">
+                                <img id="MediaId" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')" src="@mediapath" alt="Upload Banner Image" class="img-responsive" data-test-selector="imgBrowseMedia">
+                                <span class="change-image" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')">@Admin_Resources.LinkChange</span>
+                                @Html.HiddenFor(model => model.MediaId)
+                                <input type='hidden' value=@AdminConstants.ImageExtensions Id='hdnMediaId' />
+                                @if (!Equals(mediapath, null) && !Equals(mediapath, ZnodeAdminSettings.DefaultImagePath))
+                                {
+                                    <a class="upload-images-close" data-toggle="tooltip" data-placement="top" title="Remove" onclick="EditableText.prototype.RemoveImage('MediaId')"><em class="z-close-circle"></em></a>
+                                }
+                            </div>
+                            @Html.ValidationMessageFor(model => model.MediaId, "", new { @data_test_selector = "valMediaId" })
+                        </div>
+                        <div id="UploadMediaId" class="appendMediaModel">
+                        </div>
+                    </div>
+                </div>
+                @if (!string.Equals(actionName.ToLower(), "createbanner"))
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label data-test-selector="lblMediaId">@Admin_Resources.LabelMediaId</label>
+                            </div>
+                            <div class="control-md">
+                                <input type="text" value="@Model.MediaId" disabled="disabled" data-test-selector="txtMediaId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label data-test-selector="lblFileName">@Admin_Resources.LabelMediaFileName</label>
+                            </div>
+                            <div class="control-md">
+                                <input type="text" value="@Model.FileName" disabled="disabled" data-test-selector="txtFileName" />
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblImageAlternateText">@Admin_Resources.LabelImageAltText</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.ImageAlternateText, null, new { @maxlength = 100, @data_test_selector = "txtImageAlternateText" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblBannerSequence">@Admin_Resources.LabelBannerSequence </label>
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.BannerSequence, new { @data_test_selector = "txtBannerSequence" })
+                            @Html.ValidationMessageFor(model => model.BannerSequence, "", new { @data_test_selector = "valBannerSequence" })
+                            <span id="valBannerSequenceErr" class="field-validation-error"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblBannerLink">@Admin_Resources.LabelBannerLink</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.ButtonLink, new { @data_test_selector = "txtButtonLink" })
+                            @Html.ValidationMessageFor(model => model.ButtonLink, "", new { @data_test_selector = "valButtonLink" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblDescription">@Admin_Resources.LabelBannerText</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.EditorFor(m => m.Description, new { @data_test_selector = "txtDescription" })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @data_test_selector = "valDescription" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblTextAlignment">@Admin_Resources.LabelTextAlignments</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.TextAlignment, new List<SelectListItem>
+                                    {
+                                    new SelectListItem{ Text=Admin_Resources.LabelLeftAlign, Value = "Left Align" },
+                                    new SelectListItem{ Text=Admin_Resources.LabelRightAlign, Value = "Right Align" },
+                                    new SelectListItem{ Text=Admin_Resources.LabelCenterAlign, Value = "Center Align" }
+                                    },new { @data_test_selector = "drpTextAlignment" })
+                            <span id="valTextAlignmentErr" class="field-validation-error"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                @*<div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                <label>@Admin_Resources.LabelButtonLabelName</label>
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.ButtonLabelName)
+                                @Html.ValidationMessageFor(model => model.ButtonLabelName)
+                            </div>
+                        </div>
+                    </div>*@
+
+
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelActivationDate, new { @data_test_selector = "lblActivationDate" })
+                        </div>
+                        <div class="control-sm">
+                            <div class="right-inner-icon">
+                                @Html.TextBox("ActivationDate", Model.ActivationDate != null ? Model.ActivationDate.ToDateTimeFormat() : string.Empty, new { @id = "ActivationDate", @mindate = "", @class = "datepicker", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtActivationDate" })
+                                <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                            </div>
+                            <span class="text-danger field-validation-error" id="spamDate"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelExpirationDate, new { @data_test_selector = "lblExpirationDate" })
+                        </div>
+                        <div class="control-sm">
+                            <div class="right-inner-icon">
+                                @Html.TextBox("ExpirationDate", Model.ExpirationDate != null ? Model.ExpirationDate.ToDateTimeFormat() : string.Empty, new { @id = "ExpirationDate", @class = "datepicker", @maxdate = "", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtExpirationDate" })
+                                <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @Html.HiddenFor(model => model.CMSSliderId)
+                @Html.HiddenFor(model => model.MediaId)
+                @Html.HiddenFor(model => model.CMSSliderBannerId)
+                @Html.HiddenFor(model => model.LocaleId)
+                @Html.HiddenFor(m => m.Name)
+            </div>
+        }
+    </section>
+</div>
+
+@*To do:Keeping this code to test some functionality. Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup">
+</div>
+<script>
+    $(document).ready(function () {
+        WebSite.prototype.ValidateBanner();
+    });
+</script>

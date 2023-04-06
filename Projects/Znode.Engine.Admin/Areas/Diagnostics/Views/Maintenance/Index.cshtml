@@ -1,0 +1,46 @@
+﻿@using Znode.Engine.Admin.Models
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+}
+
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgDiagnosticsMaintenance">@Admin_Resources.TitleDiagnosticsMaintenance</h1>
+</div>
+
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/Areas/Diagnostics/Views/Shared/_asideDiagnosticsMaintenancePanel.cshtml")
+
+    <!--Main Container-->
+    <section class="main-container">
+        <div class="col-sm-12 page-container">
+            <div class="col-sm-12">
+                <h4>
+                    @Admin_Resources.TitleClearData
+                </h4>
+                <br />
+                <p>
+                    @Html.RenderBlock(@Admin_Resources.MaintenanceInformation)
+                </p>
+            </div>
+
+            <div class="col-sm-12 btn-container">
+                <a class="btn-text btn-text-secondary" onclick="Diagnostics.prototype.MaintenaceCleanDataPopup()" data-test-selector="btncleardata">@Admin_Resources.TextClearDataButton</a>
+            </div>
+        </div>
+
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+      new PopupModel()
+      {
+          Title = Admin_Resources.HeaderConfirmDelete,
+          Description = Admin_Resources.TextConfirmClearData,
+          ModalPopUpId = "maintenancecleardata",
+          ModalSizeClass = "modal-smd dirtyignore",
+          Buttons = new List<PopUpButtonModel>() {
+              new PopUpButtonModel { ButtonText = @Admin_Resources.ButtonOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Diagnostics.prototype.ClearAllPublishedData()"}
+              }
+      })
+
+    </section>
+</div>

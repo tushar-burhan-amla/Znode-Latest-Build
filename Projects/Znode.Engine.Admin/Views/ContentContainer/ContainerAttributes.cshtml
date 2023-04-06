@@ -1,0 +1,58 @@
+﻿@model Znode.Engine.Admin.ViewModels.GlobalAttributeEntityDetailsViewModel
+@{
+    Model.EntityType = Admin_Resources.LabelContentContainers;
+    int profileVariantId = 0;
+    if (ViewBag.profileVariantId != null)
+    {
+        profileVariantId = ViewBag.profileVariantId;
+    }
+}
+
+<div class="padding-top-15 padding-bottom-15 padding-left">
+    <div class="attributes-button d-flex align-items-center justify-content-between">
+        <h3 id="DynamicHeading" class="section-heading"></h3>
+    </div>
+
+</div>
+
+<div class="col-sm-12 nopadding">
+    <div class="tab-content">
+        @foreach (var group in Model.Groups)
+        {
+            <div class="panel panel-default " id="@group.GroupCode@Model.FamilyCode">
+                <div class="panel-heading">
+                    <h4 class="panel-title panel-title-edit accordion-toggle collapsed" id="Title" data-toggle="collapse" data-parent="#accordion" onclick="ContentContainer.prototype.fnShowHide(this,'@group.GroupCode');"><span>@group.AttributeGroupName </span></h4>
+                </div>
+                <div id="@group.GroupCode" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="col-sm-12 nopadding">
+                            @{
+                                var attributesAssociatedWithGroup = Model.Attributes.Where(x => x.GlobalAttributeGroupId == group.GlobalAttributeGroupId).ToList();
+
+                                foreach (var attributes in attributesAssociatedWithGroup)
+                                {
+                                    if (Equals(attributes.ControlProperty.ControlType, "File"))
+                                    { attributes.ControlProperty.htmlAttributes.Add("IsGlobalAttributeFileControl", "True"); }
+                                    @Html.Partial("~/Views/Shared/Controls/GlobalAttribute/_createControl.cshtml", attributes)
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @Html.HiddenFor(model => model.EntityId)
+    @Html.HiddenFor(model => model.EntityType)
+    @Html.Hidden("ProfileVariantId", profileVariantId)
+    @Html.Hidden("LocaleFamilyCode")
+</div>
+<div id="divMediaUploaderPopup"></div>
+<script src="~/Scripts/References/DynamicValidation.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#frmCreateContentContainer").find('.panel-collapse').first().attr("style", "display:block")
+        $("#formContainerVariants").find('.panel-collapse').first().attr("style", "display:block")
+    });
+</script>

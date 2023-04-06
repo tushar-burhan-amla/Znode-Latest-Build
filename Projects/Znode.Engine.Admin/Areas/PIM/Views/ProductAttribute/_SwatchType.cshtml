@@ -1,0 +1,26 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@model PIMAttributeViewModel
+@if (Equals(Model.AttributeTypeName, "Multi Select") || Equals(Model.AttributeTypeName, "Simple Select"))
+{
+    <div id="swatchType" class="switch-field dirtyignore pull-right padding-left">
+        @if ((Model?.IsSwatchImage) == true)
+        {
+            @Html.RadioButtonFor(x => x.IsSwatchImage, "true", new { @checked = true, @id = "IsSwatchImage_yes" }) <label id="IsSwatchImage_yes" for="IsSwatchImage_yes" class="switchSwatchType" style="width:100px">Swatch Image</label>
+            @Html.RadioButtonFor(x => x.IsSwatchImage, "false", new { @id = "IsSwatchImage_no" }) <label id="IsSwatchImage_no" for="IsSwatchImage_no" class="switchSwatchType" style="width:100px">Swatch Text</label>
+            @Html.RadioButtonFor(x => x.IsSwatchImage, "null", new { @id = "IsText" }) <label id="IsText" for="IsText" class="switchSwatchType" style="width:100px">Text</label>
+        }
+        @if ((Model?.IsSwatchImage) == false)
+        {
+            @Html.RadioButtonFor(x => x.IsSwatchImage, "true", new { @id = "IsSwatchImage_yes" }) <label id="IsSwatchImage_yes" for="IsSwatchImage_yes" class="switchSwatchType" style="width:100px">Swatch Image</label>
+            @Html.RadioButtonFor(x => x.IsSwatchImage, "false", new { @checked = true, @id = "IsSwatchImage_no" }) <label id="IsSwatchImage_no" for="IsSwatchImage_no" class="switchSwatchType" style="width:100px">Swatch Text</label>
+            @Html.RadioButtonFor(x => x.IsSwatchImage, "null", new { @id = "IsText" }) <label id="IsText" for="IsText" class="switchSwatchType" style="width:100px">Text</label>
+        }
+        else if ((Model?.IsSwatchImage) == null)
+        {
+            @Html.RadioButtonFor(x => x.IsSwatchImage, "true", new { @id = "IsSwatchImage_yes" }) <label id="IsSwatchImage_yes" for="IsSwatchImage_yes" class="switchSwatchType" style="width:100px">Swatch Image</label>
+            @Html.RadioButtonFor(x => x.IsSwatchImage, "false", new { @id = "IsSwatchImage_no" }) <label id="IsSwatchImage_no" for="IsSwatchImage_no" class="switchSwatchType" style="width:100px">Swatch Text</label>
+            @Html.RadioButtonFor(x => x.IsSwatchImage, "null", new { @checked = true, @id = "IsText" }) <label id="IsText" for="IsText" class="switchSwatchType" style="width:100px">Text</label>
+        }
+    </div>
+}

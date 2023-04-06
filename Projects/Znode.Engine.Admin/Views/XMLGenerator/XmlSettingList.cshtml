@@ -1,0 +1,42 @@
+﻿@model  List<Znode.Engine.Admin.Models.ApplicationSettingModel>
+
+<h2>XmlSettingList</h2>
+@{
+
+    WebGrid grid = new WebGrid(ajaxUpdateContainerId: "grid", canPage: false, canSort: false);
+    if (Model != null)
+    {
+        if (Model.Count > 0)
+        {
+            grid.Bind(source: Model);
+
+        }
+    }
+}
+
+@if (Model != null)
+{
+    if (Model.Count != 0)
+    {
+        @grid.GetHtml(htmlAttributes: new { id = "grid" },
+                    tableStyle: "table",
+                        headerStyle: "gridheader",
+                        footerStyle: "gridFooter",
+                         mode: WebGridPagerModes.All,
+                        alternatingRowStyle: "alternate",
+                        columns: grid.Columns(
+                         grid.Column("GroupName"),
+                              grid.Column("ItemName"),
+                                   grid.Column("GroupName"),
+                                        grid.Column("ViewOptions"),
+    grid.Column(header: "True", format: @<text>  
+                <a class="Delete" href="/XMLGenerator/DeleteStrengthStruggle/@item.Id" onclick="return DeleteApplicationSetting(@item.Id)" title="Delete">Delete</a>
+    </text>)))
+    }
+    else
+    {
+        <span class="common-infoMessage no-data">@Admin_Resources.NoRecordFoundText</span>
+    }
+}
+
+

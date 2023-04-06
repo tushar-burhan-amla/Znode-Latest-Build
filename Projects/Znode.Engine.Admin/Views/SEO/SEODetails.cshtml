@@ -1,0 +1,123 @@
+﻿@model SEODetailsViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.Models
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = AdminConstants.SEODetails;
+    string formId = "frmCreatEditSEODEtails";
+    string returnUrl = "/SEO/GetProductsForSEO";
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string cancleUrl = Equals(Model.SEOTypeName, AdminConstants.Product) ? "/SEO/GetProductsForSEO?PortalId=" + Model.PortalId + "" : Equals(Model.SEOTypeName, AdminConstants.Category) ? "/SEO/GetCategoriesForSEO?PortalId=" + Model.PortalId + "" : Equals(Model.SEOTypeName, AdminConstants.ContentPage) ? "/SEO/GetContentPages?PortalId=" + Model.PortalId + "" : "/SEO/SEOSetting";
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "btnSaveNClose", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSaveClose, OnClick = "SaveCancel.prototype.SubmitForm('" + "frmCreatEditSEODEtails" + "','', '" + @cancleUrl + "')" });
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "dvSave", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSave, OnClick = "SaveCancel.prototype.SubmitForm('" + "frmCreatEditSEODEtails" + "')" });
+    primaryPageAction.PageActions.Add(new PageAction { Action = "UpdateAndPublishSeo", Controller = "SEO", ControlId = "dvSave", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonPublish, OnClick = "SEO.prototype.PublishSeoPopupEdit($(this))" });
+
+
+    PopupModel publishPopupModel = new PopupModel()
+    {
+        Title = @Admin_Resources.TitlePublishConfirm,
+        Description = string.Format(Admin_Resources.PublishConfirmationMessage, "seo setting"),
+        NoChoiceDescription = string.Format(@Admin_Resources.PublishConfirmationMessageNoChoice, "seo setting"),
+        ModalPopUpId = "UpdateAndPublishSeo",
+        AdditionalNote = string.Format(Admin_Resources.PublishAllLocaleDisclaimerMessage, "seo setting"),
+        ModalSizeClass = "model-smd",
+        InputFields = new List<PopupInputField>
+{
+new PopupInputField() { ControlGroupClientSideId = "radBtnPublishState", InputFieldType = PopupInputFieldTypeEnum.RadioButtonGroup, InputFieldLabel = null, InputFieldData = HelperMethods.GetAvailablePublishStates(), RequiredNumberOfItemsToDisplay = 2 }
+},
+        Buttons = new List<PopUpButtonModel>() {
+new PopUpButtonModel { ButtonText = @Admin_Resources.TextProceed, ButtonAttributes="data-dismiss=modal", OnClickFunctionName = "SEO.prototype.UpdateAndPublishSeo()" }
+         }
+    };
+    Model.TakeFromDraftFirst = true;
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleEdit, "SEO Detail")<em class="z-minus"></em><span id="seoName">@Model.ItemName</span></h1>
+    <div class="pull-right btn-container dirtyignore">
+        <a href="@cancleUrl" class="btn-text-icon"><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+        @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+    </div>
+</div>
+<!--Main Container-->
+<div id="SEODetailsContainer">
+    <section class="col-sm-12 page-container dirtyignore">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreatEditSEODEtails" }))
+        {
+            if (Model?.Locales?.Count > 0)
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(x => x.LocaleId, new { @data_test_selector = "lblLocale" })
+                        </div>
+                        <div class="control-md">
+                            @if (Model.CMSSEODetailId > 0)
+                            {
+                                @Html.DropDownListFor(m => m.LocaleId, Model.Locales, new { @id = "ddl_locale_list_for_seoDetails", @data_test_selector = "drpLocale" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(m => m.LocaleId, Model.Locales, new { @id = "ddl_locale_list_for_seoDetails", @readonly = "readonly", disabled = "disabled", @data_test_selector = "drpLocale" })
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            <div id="div_seo_details_locale_field">
+                @{ Html.RenderPartial("_SEODetails", Model); }
+            </div>
+            <div class="form-group">
+                <div class="control-md control-non">
+                    <label>
+                        <input id="IsRedirect" name="IsRedirect" checked="@Model.IsRedirect" type="checkbox" value="true" data-test-selector="chkIsRedirect">
+                        <span class="lbl padding-8" for="IsRedirect" data-test-selector="spnIsRedirect">@Admin_Resources.LabelIsRedirect</span>
+                        <input name="IsCouponRequired" type="hidden" value="false">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.CanonicalURL, new { @data_test_selector = "lblCanonicalURL" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.CanonicalURL, new { @data_test_selector = "txtCanonicalURL" })
+                        @Html.ValidationMessageFor(model => model.CanonicalURL, "", new { @data_test_selector = "valCanonicalURL" })
+                    </div>
+                    @Html.Partial("_HelpText", Equals(Model.SEOTypeName, AdminConstants.Product)? Admin_Resources.CanonicalURLHelpTextProduct: Admin_Resources.CanonicalURLHelpTextCategory)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.RobotTag, new { @data_test_selector = "lblRobotTagValue" })
+                    </div>
+                    <div class="control-md">
+                        @Html.EnumDropDownListFor(model => model.RobotTag, new { @data_test_selector = "drpRobotTagValue" })
+                        @Html.ValidationMessageFor(model => model.RobotTag, "", new { @data_test_selector = "valRobotTagValue" })
+                    </div>
+                    @Html.Partial("_HelpText", Equals(Model.SEOTypeName, AdminConstants.Product) ? Admin_Resources.RobotTagHelpTextProduct : Admin_Resources.RobotTagHelpTextCategory)
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.CMSSEODetailId)
+            @Html.HiddenFor(model => model.CMSSEOTypeId)
+            @Html.HiddenFor(model => model.ItemName)
+            @Html.HiddenFor(model => model.SEOTypeName)
+            @Html.HiddenFor(model => model.SEOId)
+            @Html.HiddenFor(model => model.OldSEOURL)
+            @Html.HiddenFor(model => model.PortalId)
+            @Html.HiddenFor(model => model.SEOCode)
+            @Html.HiddenFor(model => model.TargetPublishState)
+            @Html.HiddenFor(model => model.TakeFromDraftFirst)
+            @Html.HiddenFor(model => model.PimProductId)
+        }
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml", publishPopupModel)
+    </section>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".z-publish").off("click").on("click", function () { SEO.prototype.PublishSeoPopupEdit($(this)); });
+    });
+</script>

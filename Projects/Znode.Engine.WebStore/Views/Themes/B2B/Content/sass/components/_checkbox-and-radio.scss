@@ -1,0 +1,24 @@
+// Checkbox & Redio Button
+.styled-input{position:relative;display:inline-block;margin-right:1em;margin-bottom:5px;line-height:1.25;
+    input[type=checkbox], input[type=radio]{display:none;
+        &:checked~label{
+            &:before{border-color:$base-secondary-light;}
+            &:after{background-color:$base-secondary-light;margin:4px;height:10px;width:10px;}
+        }
+        &:before{transition:all .5s ease;border-color:$base-tertiary;}
+    }
+    input[type=checkbox]{
+        &~label{
+            &:after,&:before{border-radius:3px;}
+        }
+    }
+    input[type=radio]{
+        &~label{
+            &:after,&:before{border-radius:50%;}
+        }
+    }
+    label{margin:0;text-indent:25px;font-family:$base-font-family-bold;font-size:$base-font-size + 1;cursor:pointer;word-break: break-all;
+        &:after,&:before{content:'';width:18px;height:18px;border:1px solid transparent;position:absolute;left:0;top:0;transition:all .5s ease;border-width:2px;}
+        &:before{transition:all .5s ease;border-color:$base-tertiary;}
+    }
+}

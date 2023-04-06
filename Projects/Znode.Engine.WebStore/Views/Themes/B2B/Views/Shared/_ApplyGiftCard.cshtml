@@ -1,0 +1,60 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model CartViewModel
+<div class="col-12 voucher-gift-card">
+    <h4 class="voucher-heading border-bottom" data-selector="lblVoucherHeading">@WebStore_Resources.LinkTextVouchers</h4>
+    @using (Ajax.BeginForm("ApplyDiscount", "Checkout", new { isGiftCard = true }, new AjaxOptions { HttpMethod = "Post", OnBegin = "return Checkout.prototype.CheckDiscountCodeValue('giftcard')", OnSuccess = "Checkout.prototype.DisplayAppliedDiscountCode" }, new { @id = "applyGiftCard" })
+    )
+    {
+    @Html.AntiForgeryToken();
+    <div class="form-group">
+        <div class="col-12 py-3">
+            <div class="block-items-title">
+                @WebStore_Resources.LabelVoucherNumber
+            </div>
+            <div id="cart-apply-giftCard" class="d-flex flex-wrap flex-md-nowrap block-items">
+                <div class="shipping-estimator-input row">
+                    <div class="col-12 col-sm-7 pr-sm-2">
+                        <input type="text" id="giftCard" data-test-selector="txtVoucherNumber" name="discountCode" value="@Model.GiftCardNumber" class="mr-md-3" />
+                        <span id="RequiredgiftCardErrorMessage" class="error-msg" data-test-selector="spnErrorMessage"></span>
+                    </div>
+                    <div class="col-12 col-sm-4 mt-2 mt-sm-0 px-md-1">
+                        <button type="submit" class="btn btn-secondary" data-selector="btnVoucherApply">@WebStore_Resources.ButtonApply</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-xs-12 nopadding gift-card-details">
+        <div id="giftCardMessageContainer" class="px-3" data-test-selector="divGiftCardMessageContainer">
+            @if (Model.Vouchers?.Count > 0)
+            {
+            foreach (var item in Model.Vouchers)
+            {
+            <div class='col-xs-12 nopadding'>
+                @if (item.IsVoucherApplied)
+                {
+                <p class=""> <a class='zf-close' onclick="Checkout.prototype.RemoveVoucher('@item.VoucherNumber');" style='cursor:pointer;color:#cc0000;padding-right:3px;'></a><b>@item.VoucherAmountUsed</b> @item.VoucherName (Expires : @item.ExpirationDate.ToDateTimeFormat())</p>;
+                <P>@item.VoucherNumber</P>
+                }
+                else
+                {
+                <p class="error-msg"> <a class='zf-close' onclick="Checkout.prototype.RemoveVoucher('@item.VoucherNumber');" style='cursor:pointer;color:#cc0000;padding-right:3px;'></a>@item.VoucherMessage </p>;
+                }
+
+            </div>
+
+            }
+            }
+        </div>
+    </div>
+    }
+</div>
+
+<script>
+     @if (Model.Vouchers?.Count > 0)
+     {
+         var vouchers = Html.Raw(Json.Encode(Model.Vouchers));
+     }
+</script> 

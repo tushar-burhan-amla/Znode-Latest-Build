@@ -1,0 +1,315 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.Extensions;
+@model PIMAttributeViewModel
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div class="col-sm-12 nopadding">
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label data-test-selector="lblAttributeType">@Attributes_Resources.LabelAttributeType</label>
+            </div>
+            <div class="control-md">
+
+                @using (Ajax.BeginForm("ValidationRule", "ProductAttribute", new AjaxOptions() { UpdateTargetId = "validation-container" }))
+                {
+                    if (Model.PimAttributeId == 0)
+                    {
+                        @Html.DropDownListFor(m => m.AttributeTypeId, new SelectList(Model.AttributeTypes, "AttributeTypeId", "AttributeTypeName", Model.AttributeTypeId), new { id = "attributeTypeList", @onchange = "javascript:var _atrObj=new ProductAttribute(); _atrObj.ValidationView();", @data_test_selector= "drpAttributeType" })
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(m => m.AttributeTypeId)
+                        @Html.DropDownListFor(m => m.AttributeTypeId, new SelectList(Model.AttributeTypes, "AttributeTypeId", "AttributeTypeName", Model.AttributeTypeId), new { id = "attributeTypeList", @disabled = "disabled", @data_test_selector = "drpAttributeType" })
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label class="required" data-test-selector="lblAttributeCode">@PIM_Resources.LabelAttributeCode</label>
+            </div>
+            <div class="control-md">
+                @if (Model.PimAttributeId > 0)
+                {
+                    @Html.TextBoxFor(x => x.AttributeCode, new { @disabled = "disabled", @data_test_selector = "txtAttributeCode" })
+                    @Html.Hidden("AttributeCode", Model.AttributeCode)
+                }
+                else
+                {
+                    @Html.TextBoxFor(x => x.AttributeCode, new { @data_test_selector = "txtAttributeCode" })
+                }
+                @Html.ValidationMessageFor(m => m.AttributeCode, "", new { id = "errorSpanPIMAttributeCode", @data_test_selector = "valAttributeCode" })
+            </div>
+            <div class="help-text"><i class="z-help-circle" data-test-selector="txtHelpAttributeCode" data-toggle="tooltip" data-placement="right" title="" data-original-title="This is used internally. Only a unique value in an alphanumeric format without spaces is allowed and must start with an alphabet."></i> </div>
+        </div>
+    </div>
+    @if (!Equals(Model.AttributeTypeName, AdminConstants.LinkType))
+    {
+        <div class="form-group" id="divIsRequired" style="display:none">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblRequired">@PIM_Resources.LabelRequired</label>
+                </div>
+                <div class="control-md">
+                    <div class="switch-field">
+                        @if (Model.IsRequired.GetValueOrDefault())
+                        {
+                            @Html.RadioButtonFor(x => x.IsRequired, "true", new { @checked = true, @id = "IsRequired_left", @data_test_selector = "chkIsRequired_true" }) <label for="IsRequired_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.IsRequired, "false", new { @id = "IsRequired_right" , @data_test_selector = "chkIsRequired_false" }) <label for="IsRequired_right">No</label>
+                        }
+                        else
+                        {
+                            @Html.RadioButtonFor(x => x.IsRequired, "true", new { @id = "IsRequired_left", @data_test_selector = "chkIsRequired_true" }) <label for="IsRequired_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.IsRequired, "false", new { @checked = true, @id = "IsRequired_right" , @data_test_selector = "chkIsRequired_false" }) <label for="IsRequired_right">No</label>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        if (controllerName.ToLower().Contains("product"))
+        {
+            <div class="form-group" id="divAttributConfigurable" style="display:none">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label>@PIM_Resources.LabelAttributeConfigurable</label>
+                    </div>
+                    <div class="control-md">
+                        <div class="switch-field">
+                            @if (Model.IsConfigurable.GetValueOrDefault())
+                            {
+                                @Html.RadioButtonFor(x => x.IsConfigurable, "true", new { @checked = true, @id = "IsConfigurable_left" }) <label for="IsConfigurable_left">Yes</label>
+                                @Html.RadioButtonFor(x => x.IsConfigurable, "false", new { @id = "IsConfigurable_right" }) <label for="IsConfigurable_right">No</label>
+                            }
+                            else
+                            {
+                                @Html.RadioButtonFor(x => x.IsConfigurable, "true", new { @id = "IsConfigurable_left" }) <label for="IsConfigurable_left">Yes</label>
+                                @Html.RadioButtonFor(x => x.IsConfigurable, "false", new { @checked = true, @id = "IsConfigurable_right" }) <label for="IsConfigurable_right">No</label>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="divAttributPersonalizable" style="display:none">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label>@PIM_Resources.LabelAttributePersonalizable</label>
+                    </div>
+                    <div class="control-md">
+                        <div class="switch-field">
+                            @if (Model.IsPersonalizable.GetValueOrDefault())
+                            {
+                                @Html.RadioButtonFor(x => x.IsPersonalizable, "true", new { @checked = true, @id = "IsPersonalizable_left" }) <label for="IsPersonalizable_left">Yes</label>
+                                @Html.RadioButtonFor(x => x.IsPersonalizable, "false", new { @id = "IsPersonalizable_right" }) <label for="IsPersonalizable_right">No</label>
+                            }
+                            else
+                            {
+                                @Html.RadioButtonFor(x => x.IsPersonalizable, "true", new { @id = "IsPersonalizable_left" }) <label for="IsPersonalizable_left">Yes</label>
+                                @Html.RadioButtonFor(x => x.IsPersonalizable, "false", new { @checked = true, @id = "IsPersonalizable_right" }) <label for="IsPersonalizable_right">No</label>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="form-group" id="divAttributLocalizable">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblAttributLocalizable">@PIM_Resources.LabelAttributeLocalizable</label>
+                </div>
+                <div class="control-md">
+                    <div class="switch-field">
+                        @if (Model.IsLocalizable.GetValueOrDefault())
+                        {
+                            @Html.RadioButtonFor(x => x.IsLocalizable, "true", new { @checked = true, @id = "IsLocalizable_left", @data_test_selector= "chkAttributLocalizable_true" }) <label for="IsLocalizable_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.IsLocalizable, "false", new { @id = "IsLocalizable_right", @data_test_selector = "chkAttributLocalizable_false" }) <label for="IsLocalizable_right">No</label>
+                        }
+                        else
+                        {
+                            @Html.RadioButtonFor(x => x.IsLocalizable, "true", new { @id = "IsLocalizable_left", @data_test_selector = "chkAttributLocalizable_true" }) <label for="IsLocalizable_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.IsLocalizable, "false", new { @checked = true, @id = "IsLocalizable_right", @data_test_selector = "chkAttributLocalizable_false" }) <label for="IsLocalizable_right">No</label>}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" id="divAttributshowongrid">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblAttributeIsShowOnGrid">@PIM_Resources.LabelAttributeIsShowOnGrid</label>
+                </div>
+                <div class="control-md">
+                    <div class="switch-field">
+                        @if (Model.IsShowOnGrid.GetValueOrDefault())
+                        {
+                            @Html.RadioButtonFor(x => x.IsShowOnGrid, "true", new { @checked = true, @id = "IsShowOnGrid_left", @data_test_selector = "chkIsShowOnGrid_true" }) <label for="IsShowOnGrid_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.IsShowOnGrid, "false", new { @id = "IsShowOnGrid_right", @data_test_selector = "chkIsShowOnGrid_false" }) <label for="IsShowOnGrid_right">No</label>
+                        }
+                        else
+                        {
+                            @Html.RadioButtonFor(x => x.IsShowOnGrid, "true", new { @id = "IsShowOnGrid_left", @data_test_selector = "chkIsShowOnGrid_true" }) <label for="IsShowOnGrid_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.IsShowOnGrid, "false", new { @checked = true, @id = "IsShowOnGrid_right", @data_test_selector = "chkIsShowOnGrid_false" }) <label for="IsShowOnGrid_right">No</label>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 nopadding" id="validation-container">
+            @{Html.RenderAction("ValidationRule", "ProductAttribute", new { @AttributeTypeId = Equals(Model.AttributeTypeId, null) ? Model.AttributeTypes.FirstOrDefault().AttributeTypeId : Model.AttributeTypeId, @attributeId = Model.PimAttributeId });}
+        </div>
+        if (!Model.IsSystemDefined.GetValueOrDefault())
+        {
+            <div class="form-group" id="divAttributGroup">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        <label data-test-selector="lblAttributeGroups">@PIM_Resources.TitleAttributeGroups</label>
+
+                    </div>
+                    <div class="control-md" data-test-selector="drpAttributeGroups">
+                        @{Html.RenderAction("AttributeGroup", controllerName, new { attributeGroupId = Model.AttributeGroupId });}
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="col-sm-12 nopadding" id="divFrontendProperty">
+            @{
+                if (!Model.IsCategory && !Equals(Model.AttributeTypeName, AdminConstants.LinkType))
+                {
+                    Html.RenderAction("FrontEndProperties", "ProductAttribute", new { AttributeId = Model.PimAttributeId });
+                }
+            }
+        </div>
+        <div class="form-group" id="divDefaultValueNumber" style="display:none">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblAttributeDefaultValue">@PIM_Resources.TitleAttributeDefaultValue</label>
+                </div>
+                <div class="control-md">
+                    <div class="control-md">
+                        @Html.TextBoxFor(x => x.AttributeDefaultValue, new { onblur = "javascript:var _atrObj=new ProductAttribute(); _atrObj.ValidateNumberDefaultValue();", maxlength = 12, @data_test_selector= "txtAttributeDefaultValue" })
+                        <span id=@("errorAttributeDefaultValue") class="error-msg" data-test-selector="valAttributeDefaultValue"></span>
+                        @Html.HiddenFor(x => x.AttributeDefaultValueId)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" id="divDefaultValueDate" style="display:none">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblAttributeDefaultValue">@PIM_Resources.TitleAttributeDefaultValue</label>
+                </div>
+                @{
+                    string value = Model.AttributeTypeName == AdminConstants.DateType ? Model.AttributeDefaultValue.ToDateTimeFormat() : Model.AttributeDefaultValue;
+                }
+                <div class="control-sm right-inner-icon">
+                    <input type="text" data-test-selector="txtAttributeDefaultValue" id="AttributeDefaultDateValue" value="@value" class="datepicker valid" data-date-format="@HelperMethods.GetDateFormat()" name="AttributeDefaultValue" data-val="true" group="DateGroup">
+                    <em class="z-calendar"></em>
+                    @Html.HiddenFor(x => x.AttributeDefaultValueId)
+                </div>
+                <div class="col-sm-12 nopadding">
+                    <div class="control-non">
+                        <span id=@("errorAttributeDateDefaultValue") class="error-msg" data-test-selector="valAttributeDefaultValue"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group" id="divDefaultValueYESNO" style="display:none">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblAttributeDefaultValue">@PIM_Resources.TitleAttributeDefaultValue</label>
+                </div>
+                <div class="control-md">
+                    <div class="switch-field">
+                        @if (Equals(Model.AttributeDefaultValue, "true"))
+                        {
+                            @Html.RadioButtonFor(x => x.AttributeDefaultValue, "true", new { @checked = true, @id = "AttributeDefaultValue_left", @data_test_selector= "chkAttributeDefaultValue_true" }) <label for="AttributeDefaultValue_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.AttributeDefaultValue, "false", new { @id = "AttributeDefaultValue_right", @data_test_selector = "chkAttributeDefaultValue_false" }) <label for="AttributeDefaultValue_right">No</label>
+                        }
+                        else
+                        {
+                            @Html.RadioButtonFor(x => x.AttributeDefaultValue, "true", new { @id = "AttributeDefaultValue_left", @data_test_selector = "chkAttributeDefaultValue_true" }) <label for="AttributeDefaultValue_left">Yes</label>
+                            @Html.RadioButtonFor(x => x.AttributeDefaultValue, "false", new { @checked = true, @id = "AttributeDefaultValue_right", @data_test_selector = "chkAttributeDefaultValue_false" }) <label for="AttributeDefaultValue_right">No</label>
+                        }
+                        @Html.HiddenFor(x => x.AttributeDefaultValueId)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" id="divHelpDescription">
+            <div class="col-sm-12 nopadding">
+                <div class="control-label">
+                    <label data-test-selector="lblHelpDescription">@PIM_Resources.HelpDescription</label>
+                </div>
+                <div class="control-md">
+                    @Html.TextAreaFor(x => x.HelpDescription, new { @data_test_selector= "txtHelpDescription" })
+                </div>
+                <div class="help-text"><em class="z-help-circle" data-test-selector="txtHelptextForHelpDescription" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpDescriptionAttribute"></em> </div>
+            </div>
+        </div>
+    }
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(x => x.DisplayOrder, new { @data_test_selector= "lblDisplayOrder" })
+            </div>
+            <div class="control-md">
+                @if (Model.PimAttributeId == 0)
+                {@Html.TextBoxFor(model => model.DisplayOrder, new { @Value = "500", @onblur = "return ProductAttribute.prototype.Validate()", @data_test_selector= "txtDisplayOrder" }) }
+            else
+            { @Html.TextBoxFor(model => model.DisplayOrder, new { @onblur = "return ProductAttribute.prototype.Validate()", @data_test_selector = "txtDisplayOrder" }) }
+                @Html.ValidationMessageFor(m => m.DisplayOrder)
+                <span id="errDisplayOrder" class="error-msg" data-test-selector="valDisplayOrder"></span>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(x => x.IsCategory)
+    @Html.HiddenFor(m => m.IsSystemDefined)
+    @Html.Hidden("AttributeId", Model.PimAttributeId)
+
+    @if (Model.PimAttributeId == 0)
+    {
+        @Html.HiddenFor(m => m.IsSwatchImage)
+    }
+    @if (Model.PimAttributeId > 0)
+    {
+        if (!Equals(Model.AttributeTypeName, "Multi Select"))
+        {
+            if (!Equals(Model.AttributeTypeName, "Simple Select"))
+            {
+                @Html.HiddenFor(m => m.IsSwatchImage)
+            }
+        }
+        else if (!Equals(Model.AttributeTypeName, "Simple Select"))
+        {
+            if (!Equals(Model.AttributeTypeName, "Multi Select"))
+            {
+                @Html.HiddenFor(m => m.IsSwatchImage)
+            }
+        }
+    }
+
+</div>
+
+<script>
+    //for handling default value between min and max date.
+    $(document).ready(function () {
+        jQuery('#AttributeDefaultDateValue').datepicker({
+            weekStart: 1,
+            autoclose: true
+        }).on('show', function (ev) {
+            var srcDate = $('#MinDate').val().replace(/-/g, ' ');
+            var startDate = new Date(srcDate);
+            startDate.setDate(startDate.getDate(new Date(srcDate)));
+            $(this).datepicker('setStartDate', startDate);
+            srcDate = $('#MaxDate').val().replace(/-/g, ' ');
+            var maxdate = new Date(srcDate);
+            $(this).datepicker('setEndDate', maxdate);
+        });
+    })
+</script>

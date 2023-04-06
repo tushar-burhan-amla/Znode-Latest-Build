@@ -1,0 +1,41 @@
+﻿.sorting-container{
+    ul{padding:0; margin:0;list-style:none;  
+       li{float:left;}
+       li:nth-child(2n+1){width:300px;}
+       li:nth-child(2n+2){width:50px;}
+    }
+    .sort-box{border: 1px solid $border-bgcolor-primary; height:250px;overflow-y:scroll;
+        li {display:block; margin:2px 0 !important;padding: 5px 10px; cursor:pointer;list-style:none;width:100% !important;
+            &:hover{background-color:$base-color-tertiary;color:$base-color-secondary;}
+        }
+        li.selected {background-color:$base-color-tertiary;color:$base-color-secondary;}
+    }
+    .add-remove{height:145px;text-align:center;margin-top:75px;padding:15px;
+        .nav-option{width:22px;height:24px;border:1px solid $border-bgcolor-primary;margin-bottom:5px;
+            i{color:$base-color-secondary;font-size:20px;vertical-align: middle;cursor:pointer;line-height:19px;padding:0 3px;}
+            &:hover{background-color:$base-color-primary;
+                i{color:$base-color-white;}
+            }
+        }        
+        .not-active .nav-option{cursor:not-allowed;background-color:#e6e6e6;color:$text-fgcolor-default;}
+    }
+   
+}
+.flip-scroll table td{border:1px solid $border-bgcolor-default;height:35px;}
+.flip-scroll table tbody{border-bottom:none;}
+.flip-scroll .cf:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
+.flip-scroll * html .cf { zoom: 1; }
+.flip-scroll *:first-child+html .cf { zoom: 1; }
+.flip-scroll table {border-collapse: collapse; border-spacing: 0; display: block; position: relative; width: 100%;}
+.flip-scroll th,.flip-scroll td { margin: 0; vertical-align: top; }
+.flip-scroll table tbody tr td input[type="text"]{width:100%!important;}
+.flip-scroll th {display: block; text-align: right; border-bottom: 0; border-left: 0; }	
+.flip-scroll thead { display: block; float: left; }
+.flip-scroll tbody { display: block; width: auto; position: relative; overflow-x: auto; white-space: nowrap; }
+.flip-scroll thead tr { display: block; }
+.flip-scroll tbody tr { display: inline-block; vertical-align: top; border-left: 1px solid $border-bgcolor-default;}
+.flip-scroll td { display: block; min-height: 1.25em; text-align: left; }
+.flip-scroll th:last-child,.flip-scroll td:last-child { border-bottom: 1px solid $border-bgcolor-default; }	
+.flip-scroll .table-heading{width:200px;}
+.flip-scroll .table-heading label{font-family:$base-font-family-bold;}
+.flip-scroll table thead th{height:55px;width:150px;}

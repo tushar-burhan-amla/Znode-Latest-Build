@@ -1,0 +1,48 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model BlogNewsListViewModel
+@using Znode.Engine.WebStore.Agents
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string imagePath = PortalAgent.CurrentPortal.MediaServerThumbnailUrl;
+}
+
+<div class="col main-wrapper">
+    <div class="container">
+        <div class="contain-pages blogs-news-list">
+            <div>
+                <h1 class="page-title">@Model.BlogNewsType</h1>
+            </div>
+
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                if (Model?.BlogNewsList?.Count > 0)
+                {
+                    <div class="row blog-news">
+                        @foreach (var blogNews in Model.BlogNewsList.AsEnumerable().Reverse())
+                        {
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <article class="mb-3 pb-4">
+                                    <div class="text-center text-md-left blog-image">
+                                            <a href="@Url.GetBlogNewsUrl(blogNews?.SEOUrl, null, blogNews.BlogNewsId, blogNews.BlogNewsType)"><img src="@imagePath/@blogNews.MediaPath" class="img-fluid main-blog-image" data-src="@imagePath/@blogNews.MediaPath" alt="Image" title="@blogNews.BlogNewsTitle" /></a>
+                                    </div>
+                                    <div class="pt-2 pb-1 blog-news-title">
+                                        <h6 class="m-0 mt-2"><a href="@Url.GetBlogNewsUrl(blogNews?.SEOUrl, null, blogNews.BlogNewsId, blogNews.BlogNewsType)">@blogNews.BlogNewsTitle</a></h6>
+                                    </div>
+                                    <div class="mb-3 blog-news-date-time">
+                                        @blogNews.ActivationDate.ToDateTimeFormat()
+                                    </div>
+                                </article>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12 p-0 mb-5">@string.Format(WebStore_Resources.TextForEmptyBlogNewsList, Model.BlogNewsType)</div>
+                }
+            }
+        </div>
+    </div>
+</div>

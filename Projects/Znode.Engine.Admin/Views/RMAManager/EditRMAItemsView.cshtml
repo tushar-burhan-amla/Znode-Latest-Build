@@ -1,0 +1,147 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model RMARequestItemListViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Api.Models
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.ToLower().Contains("edit") || actionName.ToLower().Contains("append"))
+    {
+        <h1>@string.Format(Admin_Resources.TitleEdit, Admin_Resources.TitleRMARequest)<em class="z-minus"></em><span>@Model.RMARequestId</span></h1>
+        <div class="pull-right">
+            @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "RMAList", controllerName, null, new { @class = "btn-text-icon" })
+        </div>
+    }
+    else if (actionName.ToLower().Contains("view"))
+    {
+        <h1>@Admin_Resources.LabelPreview<em class="z-minus"></em><span>@Model.RMARequestId</span></h1>
+        <div class="pull-right dirtyignore">
+            @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonBack, "RMAList", controllerName, null, new { @class = "btn-text-icon" })
+            @if (!Equals(Model.RequestCode, ZnodeRmaRequestStatusEnum.Void.ToString()))
+                {
+                <button class="btn-text-icon" type="button" onclick="RMAManager.prototype.PrintContent()"><em class='z-print'></em>@Admin_Resources.LabelPrint</button>
+            }
+        </div>
+    }
+    else if (actionName.Equals("createrma", StringComparison.InvariantCultureIgnoreCase))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.HeaderRMA)</h1>
+        <div class="pull-right dirtyignore">
+            <button id="btnSubmitRMA" type="button" class="btn-text-icon" onclick="RMAManager.prototype.CreateRMARequest();"><em class='z-save'></em>@Admin_Resources.ButtonSave</button>
+            @Html.AuthorizedRawActionLink("<em class='z-cancel'></em>" + Admin_Resources.ButtonCancel, "List", "Order", null, new { @class = "btn-text-icon" })
+        </div>
+    }
+</div>
+<section class="col-md-12 page-container" id='rmalist'>
+    @using (Html.BeginForm("IssueGiftCard", "RMAManager", FormMethod.Post, new { name = "", id = "" }))
+    {
+        if (actionName.ToLower().Contains("edit") || actionName.ToLower().Contains("append"))
+        {
+            <div class="pull-right">
+                <button name="command" value="GiftCard" class="btn-text-icon" type="submit" onclick="return RMAManager.prototype.IssueGiftCard();"><em class='z-issue-gift-card'></em>@Admin_Resources.HeaderIssueGiftCard</button>
+            </div>
+        }
+        @Html.RenderBlock(Model.ViewHtml.ToHtmlString())
+        <div class="col-xs-12 col-sm-5 nopadding">
+            @Html.Partial("_TotalView", Model)
+        </div>
+        @Html.Hidden("Quantities")
+        @Html.Hidden("Total")
+        @Html.Hidden("OrderLineItems")
+        @Html.Hidden("Mode")
+        @Html.HiddenFor(m => m.CurrencyCode)
+        @Html.HiddenFor(m => m.CultureCode)
+        @Html.HiddenFor(m => m.RMARequestId)
+        @Html.HiddenFor(m => m.OmsOrderDetailsId)
+        @Html.HiddenFor(m => m.Comments)
+        @Html.HiddenFor(m => m.PortalId)
+    }
+    @using (Html.BeginForm())
+    {
+        if (actionName.ToLower().Contains("edit") || actionName.ToLower().Contains("append"))
+        {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">@PIM_Resources.LabelComments</div>
+                    <div class="control-md">@Html.TextAreaFor(m => m.Comments)</div>
+                </div>
+            </div>
+        }
+        else if (actionName.ToLower().Contains("view"))
+        {
+            if (Equals(Model.RequestCode, ZnodeRmaRequestStatusEnum.Returned_Refunded.ToString()))
+            {
+                <div class="form-group">
+                    <h3 class="section-heading margin-top-25">@Admin_Resources.HeaderGiftCard</h3>
+                    @foreach (var giftCardIssued in Model.GiftCardsIssued.IssuedGiftCardModels)
+                    {
+                        giftCardIssued.CultureCode = Model.CultureCode;
+                        <div class="gift-card-status">
+                            @Html.Partial("_GiftCardIssuedView", giftCardIssued)
+                        </div>
+                    }
+                </div>
+            }
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">@PIM_Resources.LabelComments</div>
+                    <div class="control-md">@Html.TextAreaFor(m => m.Comments, new { @disabled = "disabled" })</div>
+                </div>
+            </div>
+        }
+        else if (actionName.Equals("createrma", StringComparison.InvariantCultureIgnoreCase))
+        {
+            <div class="col-sm-12 nopadding margin-top">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">@Html.LabelFor(m => m.Comments)</div>
+                        <div class="control-md">@Html.TextAreaFor(m => m.Comments)</div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-5 cart-total nopadding">
+                    <div class="col-sm-12 cost-container nopadding">
+                        <div class="form-group">
+                            <div class="control-md control-non">
+                                <label>
+                                    <input id="emailRMA" name="emailRMA" type="checkbox" value="true" class="css-checkbox chkboxstyle">
+                                    <span class="lbl padding-8">@Admin_Resources.LabelEmailRMAReport</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+                <h3 class="section-heading margin-top-25">@Admin_Resources.HeaderGiftCard</h3>
+                @foreach (var giftCardIssued in Model.GiftCardsIssued.IssuedGiftCardModels)
+                {
+                    giftCardIssued.CultureCode = Model.CultureCode;
+                    <div class="gift-card-status">
+                        @Html.Partial("_GiftCardIssuedView", giftCardIssued)
+                    </div>
+                }
+            </div>
+        }
+    }
+    @Html.HiddenFor(m => m.RMARequestId)
+    @Html.HiddenFor(m => m.flag)
+    @Html.Hidden("hdnSubtotal", Model.SubTotal)
+    @Html.Hidden("hdnTax", Model.Tax)
+    @Html.Hidden("hdnMode", "create")
+    @Html.HiddenFor(m => m.CurrencyCode)
+    @Html.HiddenFor(m => m.CultureCode)
+    @Html.Hidden("requestNumber", Model.RequestNumber)
+    @Html.HiddenFor(m => m.OmsOrderDetailsId)
+    @Html.HiddenFor(m => m.OMSOrderId)
+    @Html.HiddenFor(m => m.StoreName)
+    @Html.HiddenFor(m => m.CustomerName)
+    @Html.HiddenFor(m => m.SalesPhoneNumber)
+    @Html.Hidden("comments", Model.Comments)
+    @Html.Hidden("orderNumber", Model.OrderNumber)
+</section>

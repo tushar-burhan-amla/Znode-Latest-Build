@@ -1,0 +1,1842 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{786F7274-2F78-4282-B91C-978CB79FB2F3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Znode.Libraries.Data</RootNamespace>
+    <AssemblyName>Znode.Libraries.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Int|AnyCPU'">
+    <OutputPath>bin\Int\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'loadtest|AnyCPU'">
+    <OutputPath>bin\loadtest\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'automation|AnyCPU'">
+    <OutputPath>bin\automation\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'B2B|AnyCPU'">
+    <OutputPath>bin\B2B\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LB|AnyCPU'">
+    <OutputPath>bin\LB\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.Extended.6.1.0.168\lib\net45\EntityFramework.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Znode.Libraries.Framework.Business.9.7.5\lib\net48\Znode.Libraries.Framework.Business.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants\ContextEntities.cs" />
+    <Compile Include="Constants\ProcedureFilterOperators.cs" />
+    <Compile Include="Constants\StoredProcedureKeys.cs" />
+    <Compile Include="DataModel\AIZnodePortalSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\AspNetRole.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\AspNetUser.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\AspNetUserClaim.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\AspNetUserLogin.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\AspNetZnodeUser.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\AspNet_SqlCacheTablesForChangeNotification.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\Klaviyo_Entities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Klaviyo_Entities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\Klaviyo_Entities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Klaviyo_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\Klaviyo_Entities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Klaviyo_Entities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\SchemaVersion.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_AccountProfileList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_AdminUserDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_AttributeValidationList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_CategoryAssociatedProduct.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_CategoryHierarchy.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_CategoryUnAssociatedProduct.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_CMSContentFolder.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_CMSWidgetsConfigurationList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_CustomerReferralCommissionDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_CustomerUserDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_DefaultGlobalConfiguration.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_EntityDetailRowCount.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_FamilyExtensions.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetAccountAccessPermission.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetAllMediaInRoot.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetAssociatedCMSThemeToPortal.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetAssociatedPortalToPriceList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetAssociatedPortalToShipping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetAssociatedPortalToTaxClass.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetAssociatedProfileToPriceList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetAttributeFamilyByName.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetCatalogCategory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetCatalogCategoryProduts.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetCatalogProduct.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetCMSCustomerReviewInformation.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetConfigureAttributeDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetContentPageDetails.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetListOfPimAttributeValues.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetLocaleDetails.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetManageMessageForEdit.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetManageMessageList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetMediaFolderDetails.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetMediaPathDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetNotes.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetObjectColumnList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetOmsOrderNotes.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetPaymentSettings.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetPimAddonGroups.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetPriceListUsers.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetProfileCatalog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetRMASearchRequest.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetShippingList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_GetUserDetails.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_ImportPriceList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_LoadCategoryProductList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_LoadManageProduct.cs" />
+    <Compile Include="DataModel\View_LoadManageProductInternal.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_ManageLinkProductList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_ManageProductList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_ManageProductTypeAssociationList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_MediaAttributeValues.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_MediaBredCrumbDetails.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_MediaFolderUserShare.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_MediaPathDetails.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimAddonGroupLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimAttributeFamilyLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimAttributeGroupbyFamily.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimAttributeLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimAttributeValues.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimCategoryAttributeValueLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimCategoryAttributeValues.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimCategoryDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimDefaultValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimPersonalisedAttributeValues.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimProductAttributeValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimProductAttributeValueLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_PimProductImage.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_QuoteOrderTemplateDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_ReturnBoolean.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_ReturnBooleanWithMessage.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_RoleUsers.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_Table_FK_Details.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_Test.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_UserRoles.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_ZnodeDeleteMediaFolder.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_ZnodePimAttributeValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\View_ZnodeTouchPointConfiguration.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccessPermission.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccount.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccountAddress.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccountGlobalAttributeValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccountGlobalAttributeValueLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccountPermission.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccountPermissionAccess.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccountProfile.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccountPromotion.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccountRole.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccountType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccountUserOrderApproval.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAccountUserPermission.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAction.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeActivityLog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAddress.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeApplicationCache.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeApplicationSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeApproverLevel.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAttributeInputValidation.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAttributeInputValidationRule.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeAttributeType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeBlogNew.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeBlogNewsComment.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeBlogNewsCommentLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeBlogNewsContent.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeBlogNewsLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeBrandDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeBrandDetailLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeBrandPortal.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeBrandProduct.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeBuildEnvironment.cs" />
+    <Compile Include="DataModel\ZnodeCasePriority.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCaseRequest.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCaseRequestHistory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCaseStatu.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCaseType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCatalogIndex.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCity.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSArea.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSAreaMessageKey.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSContainerConfiguration.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSContainerProfileVariant.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSContainerProfileVariantLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSContainerTemplate.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSContentContainer.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSContentPage.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSContentPageGroup.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSContentPageGroupLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSContentPageGroupMapping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSContentPagesLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSContentPagesProfile.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSContentWidget.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSCustomerReview.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSFormWidgetConfiguration.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSMediaConfiguration.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSMessage.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSMessageKey.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSPortalMessage.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSPortalMessageKeyTag.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSPortalProductPage.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSPortalSEOSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSPortalTheme.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSSearchIndex.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSSearchIndexMonitor.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSSearchIndexServerStatu.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSSearchWidget.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSSEODetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSSEODetailLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSSEOType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSSlider.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSSliderBanner.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSSliderBannerLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSTemplate.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSTextWidgetConfiguration.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSTheme.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSThemeCSS.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSUrlRedirect.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSWidget.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSWidgetBrand.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSWidgetCategory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSWidgetProduct.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSWidgetProfileVariant.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSWidgetSliderBanner.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSWidgetTemplate.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSWidgetTitleConfiguration.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCMSWidgetTitleConfigurationLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCountry.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCulture.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCurrency.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCustomReportFilter.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCustomReportTemplate.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeCustomReportTemplateColumn.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeDateFormat.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeDepartment.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeDepartmentUser.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeDisplayUnit.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeDomain.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeECertificate.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeECertificateWallet.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeEmailProvider.cs">
+      <DependentUpon>Klaviyo_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeEmailTemplate.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeEmailTemplateArea.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeEmailTemplateLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeEmailTemplateMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeEmailTemplateMessageToken.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ZnodeEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ZnodeEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeERPConfigurator.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeERPTaskScheduler.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeExportProcessLog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeFormBuilder.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeFormBuilderAttributeMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeFormBuilderSubmit.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeFormWidgetEmailConfiguration.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGiftCard.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGiftCardHistory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGiftCardLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalAttribute.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalAttributeDefaultValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalAttributeDefaultValueLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalAttributeFamily.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalAttributeFamilyLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalAttributeGroup.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalAttributeGroupLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalAttributeGroupMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalAttributeLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalAttributeValidation.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalAttributeValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalAttributeValueLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalEntity.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalEntityFamilyMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalFamilyGroupMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalGroupEntityMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalMediaDisplaySetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGlobalSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeGoogleTagManager.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeHighlight.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeHighlightLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeHighlightType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeImpersonificationLog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeImportAccountDefaultTemplate.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeImportHead.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeImportLog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeImportProcessLog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeImportSuccessLog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeImportTemplate.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeImportTemplateMapping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeInventory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeKlaviyoEntities.cs" />
+    <Compile Include="DataModel\ZnodeListView.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeListViewFilter.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeLoginProvider.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMedia.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaAttribute.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaAttributeDefaultValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaAttributeDefaultValueLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaAttributeFamily.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaAttributeGroup.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaAttributeGroupLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaAttributeGroupMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaAttributeLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaAttributeValidation.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaAttributeValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaCategory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaConfiguration.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaFamilyGroupMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaFamilyLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaFolderUser.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaPath.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaPathLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMediaServerMaster.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMenu.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMenuActionsPermission.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMultifront.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeMultifrontLicense.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeNote.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsArtifiDesign.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsCookieMapping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsCustomerShipping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsDiscountType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsDownloadableProductKey.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsEmailHistory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsFailedOrderPayment.cs" />
+    <Compile Include="DataModel\ZnodeOmsHistory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsNote.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsOrder.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsOrderAttribute.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsOrderDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsOrderDiscount.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsOrderLineItem.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsOrderLineItemRelationshipType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsOrderLineItemsAdditionalCost.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsOrderLineItemsShipping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsOrderShipment.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsOrderState.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsOrderStateShowToCustomer.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsOrderWarehouse.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsPaymentRefund.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsPaymentState.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsPersonalizeCartItem.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsPersonalizeItem.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsQuote.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOMSQuoteApproval.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsQuoteComment.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsQuoteHistory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsQuoteLineItem.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsQuoteOrderDiscount.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsQuotePersonalizeItem.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsQuoteTaxOrderDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsQuoteTaxRule.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsQuoteType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsReferralCommission.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsRefundType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsSavedCart.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsSavedCartLineItem.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsTaxOrderDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsTaxOrderLineDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsTaxOrderSummary.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsTaxQuoteSummary.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsTaxRule.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsTemplate.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsTemplateLineItem.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsTemplatePersonalizeCartItem.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOmsUsersReferralUrl.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeOrderPayment.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePageSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePasswordLog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePaymentGateway.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePaymentSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePaymentType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAddonGroup.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAddonGroupLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAddonGroupProduct.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAddOnProduct.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAddOnProductDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAttribute.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAttributeDefaultValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAttributeDefaultValueLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAttributeFamily.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAttributeGroup.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAttributeGroupLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAttributeGroupMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAttributeLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAttributeValidation.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAttributeValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimAttributeValueLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimCatalog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimCategory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimCategoryAttributeValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimCategoryAttributeValueLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimCategoryHierarchy.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimCategoryProduct.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimConfigureProductAttribute.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimCustomField.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimCustomFieldLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimDownloadableProduct.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimDownloadableProductKey.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimFamilyGroupMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimFamilyLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimFrontendProperty.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimLinkProductDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimProduct.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimProductImage.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimProductTypeAssociation.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimVendor.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePimVersioning.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortal.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalAccount.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalAddress.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalAlternateWarehouse.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalApproval.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalApprovalLevel.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalApprovalType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalBrand.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalCatalog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalCountry.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalCustomCss.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalFeature.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalFeatureMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalGlobalAttributeValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalGlobalAttributeValueLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalKlaviyoSetting.cs">
+      <DependentUpon>Klaviyo_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalLoginProvider.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalPageSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalPaymentApprover.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalPaymentGroup.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalPaymentSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalPixelTracking.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalProfile.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalRecommendationSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalSearchProfile.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalShipping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalShippingDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalSmsSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalSmtpSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalSortSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalTaxClass.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalUnit.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePortalWarehouse.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePrice.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePriceList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePriceListAccount.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePriceListAddress.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePriceListDiscount.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePriceListPortal.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePriceListProfile.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePriceListUser.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePriceTier.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeProductFeed.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeProductFeedSiteMapType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeProductFeedType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeProductReviewState.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeProfile.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeProfilePaymentSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeProfileShipping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePromotion.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePromotionAttribute.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePromotionAttributeValidation.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePromotionBrand.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePromotionCatalog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePromotionCategory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePromotionCoupon.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePromotionDiscountAttributeMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePromotionProduct.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePromotionProfileMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePromotionShipping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePromotionType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishAssociatedProduct.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishAddonEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishBlogNewsEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishBundleProductEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishCatalogAttributeEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishCatalogEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishCatalogLog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishCatalogSearchProfile.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishCategoryEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishConfigurableProductEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishContainerWidgetEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishContentContainerEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishContentContainerVariantEntity.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishContentPageConfigEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishContetContainerVersionEntity.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishedXml.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ZnodePublishEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ZnodePublishEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishErrorLogEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishGlobalMessageEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishGlobalVersionEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishGroupProductEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishMediaWidgetEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishMessageEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishPortalBrandEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishPortalCustomCssEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishPortalErrorLogEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishPortalGlobalAttributeEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishPortalLog.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishPreviewLogEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishProductEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishProductPageEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishProgressNotifierEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishSearchProfileEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishSearchWidgetEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishSeoEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishState.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishStateApplicationTypeMapping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishTextWidgetEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishVersionEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishWebstoreEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishWidgetBrandEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishWidgetCategoryEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishWidgetProductEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishWidgetSliderBannerEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublishWidgetTitleEntity.cs">
+      <DependentUpon>ZnodePublishEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodePublish_Entities.cs" />
+    <Compile Include="DataModel\ZnodeReferralCommissionType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeReportCategory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeReportDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeReportSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeReportStyleSheet.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaConfiguration.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaReasonForReturn.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaRequest.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaRequestItem.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaRequestStatu.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaReturnDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaReturnEmailHistory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaReturnHistory.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaReturnLineItem.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaReturnNote.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaReturnPaymentDetail.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaReturnPaymentRefund.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaReturnState.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRmaReturnType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRobotsTxt.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRoleMenu.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeRoleMenuAccessMapper.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSalesRepCustomerUserPortal.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSavedReportView.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchActivity.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchCatalogRule.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchDocumentMapping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchFeature.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchGlobalProductBoost.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchGlobalProductCategoryBoost.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchIndexMonitor.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchIndexServerStatu.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchItemRule.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchKeywordsRedirect.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchProfile.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchProfileAttributeMapping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchProfileFeatureMapping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchProfileFieldValueFactor.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchProfileProductMapping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchProfileTrigger.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchQueryType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchQueryTypeFeature.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchSynonym.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSearchTriggerRule.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeShipping.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeShippingPortal.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeShippingRule.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeShippingRuleType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeShippingServiceCode.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeShippingSKU.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeShippingType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSmsProvider.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeSortSetting.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeState.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeStockNotice.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeTaxClass.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeTaxClassSKU.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeTaxPortal.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeTaxRule.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeTaxRuleType.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeTimeFormat.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeTimeZone.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeTradeCentricUser.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeUom.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeUser.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeUserAddress.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeUserApprover.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeUserGlobalAttributeValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeUserGlobalAttributeValueLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeUserPortal.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeUserProfile.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeUserPromotion.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeUserRegistrationAttempt.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeUserWishList.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeWarehouse.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeWarehouseAddress.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeWeightUnit.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeWidgetGlobalAttributeValue.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\ZnodeWidgetGlobalAttributeValueLocale.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\Znode_EFTestView.cs">
+      <DependentUpon>ZnodeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\Znode_Entities.cs" />
+    <Compile Include="Dynamics\DynamicLibrary.cs" />
+    <Compile Include="Dynamics\PagedList.cs" />
+    <Compile Include="Extensions\EntityAutoMapperExtension.cs" />
+    <Compile Include="Extensions\EntityExtension.cs" />
+    <Compile Include="Filters\FilterDataCollection.cs" />
+    <Compile Include="Filters\FilterDataTuple.cs" />
+    <Compile Include="Helpers\EntityLogging.cs" />
+    <Compile Include="Helpers\EntityWhereClauseModel.cs" />
+    <Compile Include="Helpers\ExecuteSpHelper.cs" />
+    <Compile Include="Helpers\HelperMethods.cs" />
+    <Compile Include="Helpers\ObjectExtension.cs" />
+    <Compile Include="Helpers\DynamicClauseHelper.cs" />
+    <Compile Include="Helpers\ZnodeDynamicClauseHelper.cs" />
+    <Compile Include="Helpers\ZnodeEntityBaseModel.cs" />
+    <Compile Include="Interfaces\IDBContext.cs" />
+    <Compile Include="Interfaces\IPagedList.cs" />
+    <Compile Include="Interfaces\IZnodeDynamicClauseHelper.cs" />
+    <Compile Include="Interfaces\IZnodeRepository.cs" />
+    <Compile Include="Interfaces\IZnodeViewRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ZnodeRepository.cs" />
+    <Compile Include="Repositories\ZnodeViewRepository.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="DataModel\ZnodeEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ZnodeEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="DataModel\Klaviyo_Entities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Klaviyo_Entities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DataModel\Klaviyo_Entities.edmx.diagram">
+      <DependentUpon>Klaviyo_Entities.edmx</DependentUpon>
+    </None>
+    <None Include="DataModel\ZnodeEntities.edmx.diagram">
+      <DependentUpon>ZnodeEntities.edmx</DependentUpon>
+    </None>
+    <EntityDeploy Include="DataModel\ZnodePublishEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ZnodePublishEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DataModel\ZnodePublishEntities.edmx.diagram">
+      <DependentUpon>ZnodePublishEntities.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DataModel\Klaviyo_Entities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Klaviyo_Entities.edmx</DependentUpon>
+      <LastGenOutput>Klaviyo_Entities.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DataModel\Klaviyo_Entities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Klaviyo_Entities.edmx</DependentUpon>
+      <LastGenOutput>Klaviyo_Entities.cs</LastGenOutput>
+    </Content>
+    <Content Include="DataModel\ZnodeEntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ZnodeEntities.edmx</DependentUpon>
+      <LastGenOutput>ZnodeEntities.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DataModel\ZnodeEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ZnodeEntities.edmx</DependentUpon>
+      <LastGenOutput>ZnodeEntities.cs</LastGenOutput>
+    </Content>
+    <Content Include="DataModel\ZnodePublishEntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ZnodePublishEntities.edmx</DependentUpon>
+      <LastGenOutput>ZnodePublishEntities.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DataModel\ZnodePublishEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ZnodePublishEntities.edmx</DependentUpon>
+      <LastGenOutput>ZnodePublishEntities.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Znode.Libraries.Observer\Znode.Libraries.Observer.csproj">
+      <Project>{ff50503a-684e-41d6-b2bf-61c522f12405}</Project>
+      <Name>Znode.Libraries.Observer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SonarQubeSetting Include="sonar.coverage.exclusions">
+      <Value>**/DataModel.*</Value>
+    </SonarQubeSetting>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

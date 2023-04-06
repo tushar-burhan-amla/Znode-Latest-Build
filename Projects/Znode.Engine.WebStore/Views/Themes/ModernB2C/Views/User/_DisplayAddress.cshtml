@@ -1,0 +1,22 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model AddressViewModel
+@using Znode.Libraries.ECommerce.Utilities
+
+<div class="address-block">
+    <div class="address-change">
+        <div class="pull-right">
+            @if (!Equals(Model, null) && Model.AddressId > 0 && !string.Equals(Model.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase))
+            {
+                <a href="Address?id=@Model.AddressId" class="change-address"><i class="zf-edit" title="@WebStore_Resources.LinkTextEditAddress"></i></a>
+
+                <a href="DeleteAddress?addressId=@Model.AddressId" id="delete-address" class="change-address"><i class="zf-delete" title="@WebStore_Resources.LinkTextDeleteAddress"></i></a>
+            }
+        </div>
+    </div>
+    <p class="address-title">@Model.DisplayName</p>
+    <p class="address-title">@Model.CompanyName</p>
+    <p class="address-name">@Model.FirstName @Model.LastName</p>
+    <p class="address-street">@Model.Address1<br />@Model.Address2</p>
+    <p class="address-citystate">@Model.CityName, @Model.StateName, @Model.CountryName @Model.PostalCode</p>
+    <p class="address-phonenumber">Ph: @Model.PhoneNumber</p>
+</div>

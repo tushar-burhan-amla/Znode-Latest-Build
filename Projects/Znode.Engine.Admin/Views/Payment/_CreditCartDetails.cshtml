@@ -1,0 +1,122 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Models;
+@{
+    string enableVisa = Convert.ToBoolean(Model.EnableVisa) ? "checked='checked'" : string.Empty;
+    string enableMasterCard = Convert.ToBoolean(Model.EnableMasterCard) ? "checked='checked'" : string.Empty;
+    string enableAmericanExpress = Convert.ToBoolean(Model.EnableAmericanExpress) ? "checked='checked'" : string.Empty;
+    string enableDiscover = Convert.ToBoolean(Model.EnableDiscover) ? "checked='checked'" : string.Empty;
+
+    string preauthorize = Convert.ToBoolean(Model.PreAuthorize) ? "checked='checked'" : string.Empty;
+
+    string isRmaCompatible = Convert.ToBoolean(Model.IsRmaCompatible) ? "checked='checked'" : string.Empty;
+    string isCaptureDisable = Convert.ToBoolean(Model.IsCaptureDisable) ? "checked='checked'" : string.Empty;
+    BaseDropDownOptionsModel _data = new BaseDropDownOptionsModel() { Id = Convert.ToInt32(Model?.PaymentGatewayId ?? 0), ControlId = "ddlPaymentGetways", Name = "PaymentGatewayId", DropDownOptions = Model.PaymentGateways, Disabled = !Convert.ToInt32(Model?.PaymentGatewayId ?? 0).Equals(0) };
+}
+@Html.Partial("_EnableOAB", Model)
+
+<h3 class="section-heading margin-top-25" data-test-selector="hdgPaymentGateway">@Admin_Resources.LabelPaymentGatewayHeader</h3>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelSelectGateway, new { @class = "required" })
+        </div>
+        <div class="control-md">
+            @Html.Partial("~/Views/Shared/Controls/_DropDownOption.cshtml", _data)
+        </div>
+        <div id="divGatewayModeHelpText" class="d-none">
+            @Html.Partial("_HelpText", @Admin_Resources.HelpTextGatewayModeMessage)
+        </div>
+    </div> 
+</div>
+<div class="form-group" id="divGatewayMode">
+  <div class="col-sm-12 nopadding">
+    <div class="control-label">
+      @Html.Label(@Admin_Resources.LabelGatewayTestMode, new { @data_test_selector = "lblGatewayTestMode" })
+    </div>
+    <div class="control-md">
+      @Html.DropDownListFor(m => Model.TestMode, new List<SelectListItem>()
+                                      {
+                                          new SelectListItem {Text = @Admin_Resources.LabelTestMode,Value="true"},
+                                          new SelectListItem {Text = @Admin_Resources.LabelLiveMode ,Value="false"}
+                                      }, new { @id = "ddlTestMode", @data_test_selector = "drpGatewayTestMode" })
+    </div>
+  </div>
+</div>
+<div id="PaymentGetwayForm-container">
+  @Html.Partial("~/Views/Payment/_Authorize_net.cshtml", Model)
+</div>
+
+<div class="form-group" id="paymentPreAuthorize">
+  <div class="col-sm-12 nopadding">
+    <div class="control-label">
+      @Html.Label(@Admin_Resources.LabelCreditCardAuthorization, new { @data_test_selector = "lblCreditCardAuthorization" })
+    </div>
+    <div class="control-md">
+      <label>
+        <input @preauthorize data-val="true" data-test-selector="chkCreditCardAuthorization" id="PreAuthorize" name="PreAuthorize" type="checkbox" value="true">
+        <span class="lbl padding-8" data-test-selector="spnCreditCardAuthorization"></span>@Admin_Resources.LabelCreditCardAuthorizationMessage
+        <input name="PreAuthorize" type="hidden" value="false">
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="form-group" id="paymentcardtype">
+  <div class="col-sm-12 nopadding">
+    <div class="control-label">
+      @Html.Label(@Admin_Resources.LabelAcceptCard, new { @class = "required", @data_test_selector = "lblAcceptCard" })
+    </div>
+    <div class="control-md">
+      <div class="col-sm-6 nopadding">
+        <label>
+          <input @enableVisa data-val="true" data-test-selector="chkVisa" id="EnableVisa" name="EnableVisa" type="checkbox" value="true">
+          <span class="lbl padding-8" data-test-selector="lblVisa"></span> @Admin_Resources.LabelCheckboxVisa
+          <input name="EnableVisa" type="hidden" value="false">
+        </label>
+      </div>
+      <div class="col-sm-6 nopadding">
+        <label>
+          <input @enableMasterCard data-val="true" data-test-selector="chkMasterCard" id="EnableMasterCard" name="EnableMasterCard" type="checkbox" value="true">
+          <span class="lbl padding-8" data-test-selector="lblMasterCard"></span> @Admin_Resources.LabelCheckboxMasterCard
+          <input name="EnableMasterCard" type="hidden" value="false">
+        </label>
+      </div>
+      <div class="col-sm-6 nopadding">
+        <label>
+          <input @enableAmericanExpress data-val="true" data-test-selector="chkAmericanExpress" id="EnableAmericanExpress" name="EnableAmericanExpress" type="checkbox" value="true">
+          <span class="lbl padding-8" data-test-selector="lblAmericanExpress"></span> @Admin_Resources.LabelCheckboxAmericanExpress
+          <input name="EnableAmericanExpress" type="hidden" value="false">
+        </label>
+      </div>
+      <div class="col-sm-6 nopadding">
+        <label>
+          <input @enableDiscover data-val="true" data-test-selector="chkDiscover" id="EnableDiscover" name="EnableDiscover" type="checkbox" value="true">
+          <span class="lbl padding-8" data-test-selector="lblDiscover"></span> @Admin_Resources.LabelCheckboxDiscover
+          <input name="EnableDiscover" type="hidden" value="false">
+        </label>
+      </div>
+      <span id="AcceptedCardsValidation" data-test-selector="valAcceptCard" class="field-validation-error" style="display:none">@Admin_Resources.ErrorSelectCardType</span>
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-sm-12 nopadding">
+    <div class="control-label">
+      @Html.Label(@Admin_Resources.LabelCheckboxCaptureDisable)
+    </div>
+    <div class="control-md">
+      <label>
+        <input @isCaptureDisable data-test-selector="chkCaptureDisable" data-val="true" id="IsCaptureDisable" name="IsCaptureDisable" type="checkbox" value="true">
+        <span class="lbl padding-8"></span>
+        <input name="IsCaptureDisable" type="hidden" value="false">
+      </label>
+    </div>
+  </div>
+</div>
+<script>
+    $(document).ready(function () {
+        Payment.prototype.ShowBillingAddressOptional();
+    });
+</script>

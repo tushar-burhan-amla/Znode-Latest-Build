@@ -1,0 +1,13 @@
+﻿<script type="text/javascript">
+    var paramvalues = ["Store", "Begin Date", "End Date", "Visible Column","Ware"];
+    function validationProcessInit(s, e) {
+        if (e.parameter.name == "ShowOnlyActiveProducts") {
+            e.info.editor = { header: 'parameter-ShowOnlyActiveProducts' };
+        }
+        OverrideError();
+    }
+</script>
+<script type="text/html" id="parameter-ShowOnlyActiveProducts">
+    <div data-bind="dxCheckBox: { value: value}"> </div>
+</script>
+

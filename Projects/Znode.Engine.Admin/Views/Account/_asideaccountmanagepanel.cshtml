@@ -1,0 +1,33 @@
+﻿@using Znode.Libraries.ECommerce.Utilities;
+
+@{
+    bool hasAccountId = Model.GetType().GetProperty("AccountId") != null;
+    int accountId = hasAccountId ? Model.AccountId : Model.EntityId;
+
+    bool hasParentAccountKey = Model.GetType().GetProperty("HasParentAccounts") != null;
+    bool hasChildAccount = hasParentAccountKey ? Model.HasParentAccounts : Model.HasChildAccount;
+
+}
+
+<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">        
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.GeneralSettings, "EditAccount", "Account", new { accountId = accountId }, new { @data_test_selector = "linkGeneralSetting" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelAddresses, "Manage", "Account", new { accountId = accountId }, new { @data_test_selector = "linkAddress" })</li>
+                @if (hasChildAccount)
+                {
+                    <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelChildAccounts, "SubAccountList", "Account", new { parentAccountId = accountId }, new { @data_test_selector = "linkChildAccount" })</li>
+                }
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.TextPermission, "PermissionList", "Account", new { accountId = accountId }, new { @data_test_selector = "linkPermissionList" })</li>           
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelDepartments, "AccountDepartmentList", "Account", new { accountId = accountId }, new { @data_test_selector = "linkAccountDepartmentList" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelUsers, "CustomersList", "Account", new { accountId = accountId }, new { @data_test_selector = "linkCustomersList" })</li>                      
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelProfile, "GetAssociatedProfileForAccount", "Account", new { accountId = accountId }, new { @data_test_selector = "linkProfile" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelOrders, "AccountUserOrderList", "Account", new { accountId = accountId }, new { @data_test_selector = "linkOrder" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelQuotes, "AccountQuoteList", "Account", new {accountId = accountId }, new { @data_test_selector = "linkQuotes" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.TitlePriceManagement, "GetAssociatedPriceListForAccount", "Account", new { accountId = accountId }, new { @data_test_selector = "linkPriceManagment" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelNotes, "AccountNoteList", "Account", new { accountId = accountId }, new { @data_test_selector = "linkNotes" })</li>
+            <li>@Html.GlobalAttributeActionLink(Admin_Resources.LabelAdditionalAttributes, accountId, Convert.ToString(EntityTypeEnum.Account), new { @data_test_selector = "linkAdditionalAttributes" })</li>
+        </ul>
+    </div>
+</aside>

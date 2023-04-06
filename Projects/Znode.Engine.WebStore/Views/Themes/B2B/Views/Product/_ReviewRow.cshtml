@@ -1,0 +1,11 @@
+﻿@model Znode.Engine.WebStore.ViewModels.ProductReviewViewModel
+<div class="col-12 p-0 product-review mb-4">
+    <div class="col-12 p-0 review-title">
+        @Html.Partial("_StarRating", Model.Rating) &nbsp; @Html.RenderBlock(Model.Headline)
+    </div>
+    <div class="col-12 p-0 review-meta">@string.Format(WebStore_Resources.ReviewCreateTime, Model.UserName, Model.UserLocation, Model.CreatedDate)</div>
+    <div class="col-12 p-0 review-body">
+        @Html.RenderBlock(Model.Comments)
+    </div>
+</div>
+

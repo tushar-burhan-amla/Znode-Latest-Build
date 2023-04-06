@@ -1,0 +1,141 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Admin.Core.ViewModels
+@model SearchBoostAndBuryRuleViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div class="col-sm-12 nopadding tigger-add-block padding-top">
+    <div class="col-sm-12 nopadding">
+        <div class="drop-selection pull-left margin-top-bottom">
+            <p>@Admin_Resources.LabelIf</p>
+            <p class="drop-condition">
+                @Html.DropDownListFor(model => model.IsItemForAll, new List<SelectListItem> { new SelectListItem { Text = Admin_Resources.LabelAny, Value = AdminConstants.False }, new SelectListItem { Text = Admin_Resources.LabelAll, Value = AdminConstants.True } }, new
+           {
+               @data_test_selector = "drpIsItemForAlls"
+           })
+            </p>
+            <p>@Admin_Resources.LabelOfTheConditionsAreMet</p>
+        </div>
+        <div class="pull-right">
+            <button type="button" id="defaultValue-add-new-row_search_Item" class="btn-text btn-text-primary pull-left margin-top-bottom" data-test-selector="btnAddConditionBoost">@Admin_Resources.ButtonAddCondition</button>
+        </div>
+    </div>
+
+    <div class="col-sm-12 nopadding table-trigger-data">
+
+        <table id="searchItem" class="display table table-striped product-keys-table" aria-describedby="Search Items">
+            
+            <tbody>
+                @if (Equals(actionName, "UpdateBoostAndBuryRule"))
+                {
+                    for (int i = 0; i < Model?.SearchItemRuleList?.Count; i++)
+                    { 
+                        <tr class="update-value-condition">
+                            <th id="idSearchItemKeywordkey">
+                                <select name="SearchItemRuleList[@i].SearchItemKeyword" onchange="Search.prototype.ChangeFieldDropdown(@i,this)">
+                                    @foreach (var item in Model.SearchConditionList)
+                                    {
+                                        <option value="@item.AttributeCode" @(Model.SearchItemRuleList[i].SearchItemKeyword == item.AttributeCode ? "selected=selected" : "") data-type="@item.AttributeType">@item.AttributeName</option>
+                                    }
+                                </select>
+                            </th>
+                            @if (Model.SearchItemTextOperatorList.Select(x => x.Value).ToList().Contains(Model.SearchItemRuleList[i].SearchItemCondition))
+                            {
+                                <th scope="row">
+                                    @Html.DropDownListFor(m => m.SearchItemRuleList[i].SearchItemCondition, new SelectList(Model.SearchItemTextOperatorList, "Value", "Text", Model.SearchItemRuleList[i].SearchItemCondition))
+                                </th>
+                            }
+                            else
+                            {
+                                <th scope="row">
+                                    @Html.DropDownListFor(m => m.SearchItemRuleList[i].SearchItemCondition, new SelectList(Model.SearchItmeNumericOperatorList, "Value", "Text", Model.SearchItemRuleList[i].SearchItemCondition))
+                                </th>
+                            }
+                            <th scope="row">
+                                @Html.TextBoxFor(m => m.SearchItemRuleList[i].SearchItemValue, new { @id = "itemValue", @class = "boostAndBuryClass", @placeholder = Admin_Resources.LabelItemValue, data_toggle = "tooltip", data_placement = "top", data_original_title = "" })
+                                @Html.ValidationMessageFor(model => model.SearchItemRuleList[i].SearchItemValue, "", new { @data_test_selector = "valValue" })
+                            </th>
+                            <th scope="row">
+                                @Html.TextBoxFor(m => m.SearchItemRuleList[i].SearchItemBoostValue, new { @id = "boostValue", @placeholder = Admin_Resources.LabelBoostValueBetween })
+                                @Html.ValidationMessageFor(model => model.SearchItemRuleList[i].SearchItemBoostValue, "", new { @data_test_selector = "valBoostValue" })
+
+                            </th>
+                            <th scope="row" class="grid-action"><a href="#" class="img-icon-delete" title="@Admin_Resources.ButtonDelete"><em class="z-delete"></em></a></th>
+
+                            <th scope="row" style="display:none">@Html.TextBoxFor(m => m.SearchItemRuleList[i].SearchItemRuleId, new { @hidden = "hidden", @class = "priceTierId" })</th>
+                        </tr>
+                    }
+
+                }
+                else
+                {
+                    Model.SearchItemRuleList = new List<SearchItemRuleViewModel>();
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script src="~/Scripts/References/jquery.dataTables.js"></script>
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+    $(document).ready(function () {
+        var counter = @Model.SearchItemRuleList.Count;
+       
+        $('#defaultValue-add-new-row_search_Item').on('click', function () {
+            if ($('#searchItem > tbody > tr').length > 0) {
+                $('#searchItem tr:last').after('<tr class="update-value-condition"> <td id="idSearchItemKeywordkey"> <select onchange="Search.prototype.ChangeFieldDropdown( ' + counter + ',this)" id="SearchItemRuleList[' + counter + '].SearchItemKeyword" name="SearchItemRuleList[' + counter + '].SearchItemKeyword" data-test-selctor="drpSearchItemKeywordkey"> @foreach (var item in Model.SearchConditionList){<option value=@item.AttributeCode data-type=@item.AttributeType>@item.AttributeName</option>}</select><span class="field-validation-valid" data-valmsg-for="SearchItemRuleList[' + counter + '].SearchItemKeyword" data-valmsg-replace="true"><span id="SearchItemRuleList[' + counter + '].SearchItemKeyword-error" class="">Item Keyword is required.</span></span> </td><td> <select id="SearchItemRuleList_' + counter + '__SearchItemCondition" name="SearchItemRuleList[' + counter + '].SearchItemCondition" data-test-selector="drpItemCondition">@foreach (var item in Model.SearchItemTextOperatorList){<option value=@item.Value>@item.Text</option>}</select> </td><td> <input data-val="true" data-val-maxlength="Item value can not be longer than 600 characters." data-val-maxlength-max="600"  data-val-required="Item Value is required." id="SearchItemRuleList[' + counter + '].SearchItemValue" name="SearchItemRuleList[' + counter + '].SearchItemValue" placeholder="Item Value" data-toggle = "tooltip", data-placement = "top", data-original-title = "" type="text" value="" id="itemValue" class = "boostAndBuryClass" data-test-selector="txtItemValue"> <span class="field-validation-valid" data-valmsg-for="SearchItemRuleList[' + counter + '].SearchItemValue" data-valmsg-replace="true"><span id="SearchItemRuleList[' + counter + '].SearchItemValue-error" class="">Item Value is required.</span></span> </td><td> <input data-val="true" data-val-required="Boost Value is required." id="SearchItemRuleList[' + counter + '].SearchItemBoostValue" name="SearchItemRuleList[' + counter + '].SearchItemBoostValue" placeholder="Boost Value" type="text" value="" id="itemBoostValue" data-val-range="@Admin_Resources.BoostValueRangeValidator" data-val-range-max="999" data-val-range-min="0" data-val-regex="@Admin_Resources.BoostDecimalValueRangeValidator" data-val-regex-pattern="^(?!(?:1|(?:1+([.][0-0]*))|1.00)$)\\d+(\\.\\d{1,2})?" data-test-selector="txtBoostValue"> <span class="field-validation-valid" data-valmsg-for="SearchItemRuleList[' + counter + '].SearchItemBoostValue" data-valmsg-replace="true"><span id="SearchItemRuleList[' + counter + '].SearchItemBoostValue-error" class="">@Admin_Resources.RequiredBoostValueField</span></span> </td><td class="grid-action"><a href="#" class="img-icon-delete" title="Delete"><i class="z-delete" data-test-selector="btnDeleteBoost"></i></a></td><td style="display:none"><input class="priceTierId" data-val="true" data-val-number="Boost Value must be a number." data-val-required="@Admin_Resources.RequiredBoostValueField" hidden="hidden" id="SearchItemRuleList[' + counter + '].SearchItemRuleId" name="SearchItemRuleList[' + counter + '].SearchItemRuleId" type="text" value="0"></td></tr>');
+                Search.prototype.AutocompleteFieldSuggestion();
+            }
+            else {
+                $('#searchItem > tbody').append('<tr class="update-value-condition"> <td id="idSearchItemKeywordkey"> <select onchange="Search.prototype.ChangeFieldDropdown( ' + counter + ',this)" id="SearchItemRuleList[' + counter + '].SearchItemKeyword" name="SearchItemRuleList[' + counter + '].SearchItemKeyword" data-test-selctor="drpSearchItemKeywordkey"> @foreach (var item in Model.SearchConditionList){<option value=@item.AttributeCode data-type=@item.AttributeType>@item.AttributeName</option>}</select><span class="field-validation-valid" data-valmsg-for="SearchItemRuleList[' + counter + '].SearchItemKeyword" data-valmsg-replace="true"><span id="SearchItemRuleList[' + counter + '].SearchItemKeyword-error" class="">Item Keyword is required.</span></span> </td><td> <select id="SearchItemRuleList_' + counter + '__SearchItemCondition" name="SearchItemRuleList[' + counter + '].SearchItemCondition" data-test-selector="drpItemCondition">@foreach (var item in Model.SearchItemTextOperatorList){<option value=@item.Value>@item.Text</option>}</select> </td><td> <input data-val="true"  data-val-maxlength="Item value can not be longer than 600 characters." data-val-maxlength-max="600"  data-val-required="Item Value is required." id="SearchItemRuleList[' + counter + '].SearchItemValue" name="SearchItemRuleList[' + counter + '].SearchItemValue" placeholder="Item Value" type="text" value="" data-toggle = "tooltip", data-placement = "top", data-original-title = "" id="itemValue" class = "boostAndBuryClass" data-test-selector="txtItemValue"> <span class="field-validation-valid" data-valmsg-for="SearchItemRuleList[' + counter + '].SearchItemValue" data-valmsg-replace="true"><span id="SearchItemRuleList[' + counter + '].SearchItemValue-error" class="">Item Value is required.</span></span> </td><td> <input data-val="true" data-val-required="Boost Value is required." id="SearchItemRuleList[' + counter + '].SearchItemBoostValue" name="SearchItemRuleList[' + counter + '].SearchItemBoostValue" placeholder="Boost Value" type="text" value="" id="itemBoostValue" data-val-range="@Admin_Resources.BoostValueRangeValidator" data-val-range-max="999" data-val-range-min="0" data-val-regex="@Admin_Resources.BoostDecimalValueRangeValidator" data-val-regex-pattern="^(?!(?:1|(?:1+([.][0-0]*))|1.000)$)\\d+(\\.\\d{1,2})?" data-test-selector="txtBoostValue"> <span class="field-validation-valid" data-valmsg-for="SearchItemRuleList[' + counter + '].SearchItemBoostValue" data-valmsg-replace="true"><span id="SearchItemRuleList[' + counter + '].SearchItemBoostValue-error" class="">@Admin_Resources.RequiredBoostValueField</span></span> </td><td class="grid-action"><a href="#" class="img-icon-delete" title="Delete"><i class="z-delete" data-test-selector="btnDeleteBoost"></i></a></td><td style="display:none"><input class="priceTierId" data-val="true" data-val-number="Boost Value must be a number." data-val-required="@Admin_Resources.RequiredBoostValueField" hidden="hidden" id="SearchItemRuleList[' + counter + '].SearchItemRuleId" name="SearchItemRuleList[' + counter + '].SearchItemRuleId" type="text" value="0"></td></tr>');
+                Search.prototype.AutocompleteFieldSuggestion();
+            }
+             counter++;
+
+             var form = $("#frmCreateEditBoostAndBuryRule")
+                 .removeData("validator") /* added by the raw jquery.validate plugin */
+                 .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin */
+
+             $.validator.unobtrusive.parse(form);
+
+        });
+        $.validator.unobtrusive.parse($("#frmCreateEditBoostAndBuryRule"));
+        $('#searchItem tbody').on('click', '.img-icon-delete', function () {
+            $(this).closest('tr').remove();
+            var newIndex = 0;
+            $('#searchItem tbody tr').each(function () {
+                var select = $(this).find('select');
+                var input = $(this).find('input');
+                select.each(function () {
+                    var _this = this;
+                    var _name = $(_this).attr('name');
+                    var _onchange = $(_this).attr('onchange');
+                    //change name index value
+                    var namesub = _name.substring(_name.indexOf('['), _name.indexOf(']') + 1);
+                    $(_this).attr('name', _name.replace(namesub, '[' + newIndex + ']'));
+                    //change onchange index value
+                    if (_onchange != undefined) {
+                        var onchamgesub = _onchange.substring(_onchange.indexOf('('), _onchange.indexOf(')') + 1);
+                        $(_this).attr('onchange', _onchange.replace(onchamgesub, '(' + newIndex + ',this)'));
+                    }
+                    var _id = $(_this).attr('id');
+                    if (_id != undefined) {
+                        var sub1 = _id.substring(_id.indexOf('_'), _id.indexOf('__') + 2);
+                        $(_this).attr('id', _id.replace(sub1, '_' + newIndex + '__'));
+                    }
+                });
+                input.each(function () {
+                    var _this = this;
+                    var _name = $(_this).attr('name');
+                    var sub = _name.substring(_name.indexOf('['), _name.indexOf(']') + 1);
+                    $(_this).attr('name', _name.replace(sub, '[' + newIndex + ']'));
+                });
+                newIndex++;
+            })
+        });
+    });
+        Search.prototype.AutocompleteFieldSuggestion();
+</script>

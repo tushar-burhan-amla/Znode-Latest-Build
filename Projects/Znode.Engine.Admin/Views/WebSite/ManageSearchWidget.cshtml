@@ -1,0 +1,66 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model CMSSearchWidgetConfigurationViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.TitleCMS + " | " + Admin_Resources.Multifront;
+    bool isSaveCloseShow = Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString()) ? true : false;
+    string cancelUrl = Equals(Model.TypeOFMapping, ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())
+        ? string.IsNullOrEmpty(Model?.FileName) ? $"/Store/StoreSetting?portalId={Model.CMSMappingId}" : $"/Store/StoreSetting?portalId={Model.CMSMappingId}&fileName={Model.FileName}"
+        : string.IsNullOrEmpty(Model?.FileName) ? $"/Content/EditContentPage?cmsContentPagesId={Model.CMSMappingId}" : $"/Content/EditContentPage?cmsContentPagesId={Model.CMSMappingId}&fileName={Model.FileName}";
+    ActionModel actionModel = new ActionModel { Action = "SaveSearchWidgetConfiguration", Controller = "WebSite", CancelUrl = cancelUrl, FormId = "formCmsSearchWidgetConfiguration", IsSaveCloseEnable = false, IsSaveCloseIsShow = isSaveCloseShow };
+}
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgManage">@Admin_Resources.LabelManage<em class="z-minus"></em><span>@Model.DisplayName</span></h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+
+<!--Main Container-->
+<div id="TextWidgetConfigurationDiv">
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm("SaveSearchWidgetConfiguration", "WebSite", FormMethod.Post, new { id = "formCmsSearchWidgetConfiguration" }))
+        {
+            if (Model?.Locales?.Count > 0)
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(x => x.LocaleId,new { @data_test_selector = "lblLocaleId" })
+                        </div>
+                        <div class="control-md">
+                            @if (Model.CMSSearchWidgetId > 0)
+                            {
+                                @Html.DropDownListFor(m => m.LocaleId, Model.Locales, new { @id = "ddl_SearchWidget_locale_list", @data_test_selector = "drpLocaleId" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(m => m.LocaleId, Model.Locales, new { @id = "ddl_SearchWidget_locale_list", @readonly = "readonly", disabled = "disabled" , @data_test_selector = "drpLocaleId" })
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            <div id="div_Search_widget">
+                @{ Html.RenderPartial("_SearchWidget", Model); }
+            </div>
+            @Html.HiddenFor(model => model.CMSMappingId)
+            @Html.HiddenFor(model => model.CMSSearchWidgetId)
+            @Html.HiddenFor(model => model.CMSWidgetsId)
+            @Html.HiddenFor(model => model.TypeOFMapping)
+            @Html.HiddenFor(model => model.WidgetsKey)
+            @Html.HiddenFor(model => model.DisplayName)
+            @Html.HiddenFor(model => model.WidgetName)
+            @Html.HiddenFor(model => model.FileName)
+        }
+    </section>
+</div>
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup">
+</div>
+<script>
+    $(document).ready(function () {
+        $('form').removeData('validator'); $('form').removeData('unobtrusiveValidation'); $.validator.unobtrusive.parse('form');
+    })
+</script>

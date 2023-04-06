@@ -1,0 +1,7 @@
+﻿@using Znode.Engine.WebStore.Helpers;
+@using Znode.Libraries.ECommerce.Utilities
+@if (!string.IsNullOrEmpty(DefaultSettingHelper.DefaultCurrentEnvironment) &&
+                    !String.Equals(DefaultSettingHelper.DefaultCurrentEnvironment, CurrentEnvironmentEnum.Prod.ToString(), StringComparison.CurrentCultureIgnoreCase))
+{
+    <span class="label-environment pull-right padding-right-15 label-current-environment-@DefaultSettingHelper.DefaultCurrentEnvironment">Mode: @string.Format("{0} [{1}]", DefaultSettingHelper.DefaultCurrentEnvironment, DefaultSettingHelper.CurrentPublishState)</span>
+}

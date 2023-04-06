@@ -1,0 +1,33 @@
+﻿.login-page{padding:0;}
+.login-container{background-color:$base-color-tertiary;height:100%;width:100%;position:fixed;top:0;left:0;
+    .login-box{position:absolute;top:50%;left:50%;width:380px;transform: translate(-50%, -50%); -moz-transform: translate(-50%, -50%);-webkit-transform: translate(-50%, -50%);background-color:$base-color-white;padding:40px 35px;margin-top:-25px;box-shadow: 0px 5px 12px -5px; border: solid .5px #f3f3f3;
+    .login-header{margin-bottom:15px;
+        h3{padding:0 0 10px;margin:0;line-height:20px;font-family:$base-font-family-bold;font-size:20px;color:$text-fgcolor-default;border-bottom:1px solid $border-bgcolor-primary;letter-spacing:1pt;text-transform:capitalize;}
+    }
+    input[type="text"], input[type="password"]{height:35px;width:100%;margin-bottom:5px;}
+    .btn-text {font-family:$base-font-family-bold;}
+    .login-btn{width:100%;height:33px;margin:15px 0;font-size:13px;letter-spacing:1pt;border-radius:3px;line-height:28px;border:none;color:$base-color-white;background-color:$base-color-secondary;
+               &:hover,&:focus{color:$base-color-white;background-color:$base-color-primary}
+    }
+    .btn-text-icon{background-color:transparent;}
+ }
+    .form-group {
+        .control-label{float:none;width:100%;text-transform:uppercase;font-family:$base-font-family-bold;margin-bottom:5px;font-size:14px;}
+        .control-md {float:none;width:100%;}
+    }
+}
+.znode-logo{width:135px;margin:0 0 15px;}
+.footer-login{position:fixed;bottom:0;width:100%;height:50px;background-color:$base-color-white;border-top:1px solid $border-bgcolor-primary;text-align:center;line-height:50px;}
+.CustomerEdit .sales-details .page-container .gridcontrol-table table tbody tr {
+    cursor: pointer;
+}
+// Reset Password.
+.user-resetadminpassword, .user-resetpassword {
+    .top-user-details, .nav-dropdown-container {
+        display: none;
+    }
+
+    header .nav-dropdown-menu {
+        pointer-events: none;
+    }
+}

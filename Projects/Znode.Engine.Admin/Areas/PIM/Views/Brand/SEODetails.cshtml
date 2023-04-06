@@ -1,0 +1,69 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@model BrandViewModel
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            <label data-test-selector="lblSEOKeywords">@PIM_Resources.LabelSEOMetaKeyword</label>
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.SEOKeywords, new { @data_test_selector = "txtSEOKeywords" })
+            @Html.ValidationMessageFor(model => model.SEOKeywords, "", new { @data_test_selector = "valSEOKeywords" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            <label data-test-selector="lblSEODescription">@PIM_Resources.LabelSEOMetaDescription</label>
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.SEODescription, new { @data_test_selector = "txtSEODescription" })
+            @Html.ValidationMessageFor(model => model.SEODescription, "", new { @data_test_selector = "valSEODescription" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+
+            <label data-test-selector="lblWebSiteLink">@PIM_Resources.LabelWebSiteLink</label>
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.WebsiteLink, new { @data_test_selector = "txtWebSiteLink" })
+            @Html.ValidationMessageFor(model => model.WebsiteLink, "", new { @data_test_selector = "valWebSiteLink" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            <label data-test-selector="lblSEOTitle">@PIM_Resources.LabelSEOMetaTitle</label>
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(model => model.SEOTitle, new { @data_test_selector = "txtSEOTitle" })
+            @Html.ValidationMessageFor(model => model.SEOTitle, "", new { @data_test_selector = "valSEOTitle" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            <label data-test-selector="lblSEOFriendlyPageName">@PIM_Resources.LabelSEOFriendlyPageName</label>
+        </div>
+        <div class="control-md">
+            @if (string.IsNullOrEmpty(Model.SEOFriendlyPageName) || Model.LocaleId == (Convert.ToInt32(DefaultSettingHelper.DefaultLocale)))
+            {
+                @Html.TextBoxFor(model => model.SEOFriendlyPageName, new { @onblur = "Brand.prototype.ValidateBrandSEOFriendlyPageName()", @data_test_selector = "txtSEOFriendlyPageName" })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => model.SEOFriendlyPageName, new { @readonly = "readonly", disabled = "disabled", @data_test_selector = "txtSEOFriendlyPageName" })
+            }
+            @Html.ValidationMessageFor(model => model.SEOFriendlyPageName, "", new { id = "errorSEOFriendlyPageName", @data_test_selector = "valSEOFriendlyPageName" })
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,63 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model ProductListViewModel
+@{
+    int pageSize = Convert.ToInt32(Request.QueryString["PageSize"]) != 0 ? Convert.ToInt32(Request.QueryString["PageSize"]) : 1;
+
+    if (!Equals(SessionHelper.GetDataFromSession<int?>("PageSizeValue"), null))
+    {
+        pageSize = SessionHelper.GetDataFromSession<int?>("PageSizeValue").Value;
+    }
+    int pageIndex = Convert.ToInt32(Request.QueryString["pagenumber"]);
+    pageIndex = pageIndex == 0 ? pageIndex : (pageIndex - 1);
+    int countFrom = pageIndex > 0 ? (pageSize * pageIndex) + 1 : 1;
+    int countTo = pageIndex > 0 ? (countFrom - 1) + pageSize : pageSize;
+    countTo = (Model.TotalPages - 1) == pageIndex ? Convert.ToInt32(Model.TotalProductCount) : countTo;
+}
+<div id="layout-paging" class="b2b-paging">
+    <div class="search-paging">
+        <label for="PageSize" class="filter-text">@WebStore_Resources.LabelProductsPerPage</label>@Html.Partial("../Search/_Paging", new ViewDataDictionary(new { Id = "Page" }))
+    </div>
+</div>
+
+<div class="b2b-product-count">
+    @{if ((Model?.IsSearchFromSuggestions).GetValueOrDefault())
+        {
+            <div class="mb-3 mb-sm-0">
+                <p>Showing results for <a href="/Search/Index?SearchTerm=@HttpUtility.UrlEncode(Model.SuggestTerm)">@Model.SuggestTerm </a>instead  of @Model.SearchKeyword.</p>
+                <p>Search instead for <a href="/Search/Index?SearchTerm=@HttpUtility.UrlEncode(Model.SearchKeyword)&usesuggestion=false">@Model.SearchKeyword</a>.</p>
+            </div>
+        }
+        else if (!Equals(Model.SearchResultCountText, null))
+        {
+            <p class="search-result" data-test-selector="paraSearchResult">@countFrom - @countTo of @Model.TotalProductCount</p>
+        }
+    }
+</div>
+
+<div class="search-pagination b2b-pagination">
+    <ul>
+        <li class="search-more-nav arrow-left"><a class="prev-page-search" href="javascript: void(0)" data-pageno="@Request.QueryString["pagenumber"]" class="button" title="Previous" data-test-selector="linkArrowLeftBottom"><span class='left-icon'></span></a></li>
+        <li class="search-more-nav arrow-right"><a class="next-page-search" href="javascript: void(0)" data-pageno="@Request.QueryString["pagenumber"]" class="button" title="Next" data-test-selector="linkArrowRightBottom"><span class='right-icon'></span></a></li>
+    </ul>
+    @Html.HiddenFor(model => model.TotalPages, new { id = "hdnTotalPages" })
+</div>
+<script>
+    $(document).ready(function () {
+        totalPages = parseInt($("#hdnTotalPages").val(), 10);
+        var pageno = ZSearch.prototype.GetQueryStringParameterByName("pagenumber");
+        if (totalPages == 1) {
+            $('#prev-page-search').addClass('disabled');
+            $('#next-page-search').addClass('disabled');
+            return false;
+        }
+        if (parseInt(pageno) == 1 || pageno == "") {
+            $('#prev-page-search').addClass('disabled');
+            return false;
+        }
+        if (parseInt(pageno) == (totalPages)) {
+            $('#next-page-search').addClass('disabled');
+            return false;
+        }
+    });
+</script>

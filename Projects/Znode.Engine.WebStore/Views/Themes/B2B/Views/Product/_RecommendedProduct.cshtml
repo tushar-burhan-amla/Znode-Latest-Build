@@ -1,0 +1,48 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model List<ProductViewModel>
+
+@if (Model?.Count > 0)
+{
+    var _productCount = ViewBag.ProductCount;
+    <h3 class="page-title product-list-title pb-3 pb-md-4">@Html.RenderMessage(WebStoreConstants.RecommendedProductsTitle)</h3>
+    <div class="owl-carousel Recommended_View_Products_relProduct">
+        @{
+            foreach (var p in Model)
+            {
+                @Html.Partial("../Product/_RecommendedProductList", p)
+            }
+        }
+    </div>
+}
+<script>
+    var navigationFlag = @Model.Count > 4 ? true :false;
+    $(".Recommended_View_Products_relProduct").owlCarousel({
+        autoPlay: false,
+        navigation: navigationFlag,
+        items: 4,
+        itemsCustom: [
+          [0, 1],
+          [320, 1],
+          [480, 2],
+          [600, 2],
+          [768, 2],
+          [992, 3],
+          [1200, 4]
+        ],
+        navigationText: [
+            "<span class='left-icon'></span>",
+            "<span class='right-icon'></span>"
+        ]
+    });
+
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+
+    $(document).ready(function () {
+        var async = '@Helper.IsAsyncPrice';
+        if (async == 'True') {
+            Product.prototype.GetPriceAsync();
+        }
+    })
+</script>

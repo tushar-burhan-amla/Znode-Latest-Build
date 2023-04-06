@@ -1,0 +1,53 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ImportLogsListViewModel
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    int importProcessLogId = Convert.ToInt32(Request.QueryString?.ToString().Split('&')?[0]?.ToString().Split('=')?[1]?.ToString());
+}
+<div id=@Model.GridModel.FrontObjectName>
+    <div class="main-wrapper">
+        <div class="container">
+            <div class="row user-account">
+                <div class="col-xs-12 nopadding">
+                    <h1>@WebStore_Resources.HeaderImportLogDetails</h1>
+                </div>
+                <div class="col-xs-12 account-dashboard nopadding">
+                    <div class="col-xs-12 col-sm-3 col-lg-2 nopadding">
+                        <nav class="account-container-menu">
+                            @Html.Partial("_AccountMenu")
+                        </nav>
+                    </div>
+                    <div class="col-xs-12 col-sm-9 col-lg-10 order-history right-container">
+                        <div class="col-xs-12 nopadding">
+                            <div class="col-xs-12 product-search nopadding">
+                                <div class="col-xs-12 filter-component">
+                                    <div class="pull-right back-btn">
+                                        <button type="button" class="btn-text btn-bg-secondary" { onclick="javascript: location.href = '/User/ImportUserLogs';" })>@WebStore_Resources.ButtonBack</button>
+                                    </div>
+                                    @using (Ajax.BeginForm(actionName, controllerName, new { importProcessLogId = importProcessLogId }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+                                    {
+                                        <div id="filterComponent">
+                                            @Html.Partial("_FilterComponent", Model.GridModel.FilterColumn)
+                                        </div>
+                                    }
+                                </div>
+                                <div class="col-xs-12 list-container margin-top nopadding">
+                                    <div class="col-xs-12 nopadding">
+                                        @Html.Partial("_DynamicGrid", Model.GridModel)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

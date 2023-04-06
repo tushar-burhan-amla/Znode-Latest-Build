@@ -1,0 +1,297 @@
+﻿@-webkit-keyframes fstAnimationEnter {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -1em, 0)
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0)
+    }
+}
+
+@-moz-keyframes fstAnimationEnter {
+    from {
+        opacity: 0;
+        -moz-transform: translate3d(0, -1em, 0)
+    }
+
+    to {
+        opacity: 1;
+        -moz-transform: translate3d(0, 0, 0)
+    }
+}
+
+@keyframes fstAnimationEnter {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -1em, 0);
+        -moz-transform: translate3d(0, -1em, 0);
+        -ms-transform: translate3d(0, -1em, 0);
+        -o-transform: translate3d(0, -1em, 0);
+        transform: translate3d(0, -1em, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        -moz-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+        -o-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.fstElement {
+    display: inline-block;
+    position: relative;
+    border: 1px solid #969EA4;
+    box-sizing: border-box;
+    color: #232323;
+    border-radius: 3px;
+    font-size: 1.1em;
+    background-color: $base-color-white;
+    box-shadow: none;
+    outline: medium none;
+    width: 100%;
+}
+
+.fstElement > select,
+.fstElement > input {
+    position: absolute;
+    left: -999em;
+}
+
+.fstToggleBtn {
+    font-size: 12px;
+    display: block;
+    position: relative;
+    box-sizing: border-box;
+    padding: .71429em 1.42857em .71429em .71429em;
+    min-width: 14.28571em;
+    cursor: pointer;
+    padding-right: 30px;
+}
+
+.fstToggleBtn:after {
+    position: absolute;
+    content: "";
+    right: 1.0em;
+    top: 50%;
+    margin-top: -.17857em;
+    border: .45714em solid transparent;
+    border-top-color: #6E767C;
+}
+
+.fstQueryInput {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    outline: none;
+    box-sizing: border-box;
+    background: transparent;
+    border: 0;
+}
+
+.fstResults {
+    position: absolute;
+    left: -1px;
+    top: 100%;
+    right: -1px;
+    max-height: 30em;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #969EA4;
+    border-top: 0;
+    background-color: #FFF;
+    display: none;
+}
+
+.fstResultItem {
+    font-size: 12px;
+    display: block;
+    padding: .5em .71429em;
+    margin: 0;
+    cursor: pointer;
+    border-top: 1px solid #fff;
+}
+
+.fstResultItem.fstUserOption {
+    color: #707070;
+}
+
+.fstResultItem.fstFocused {
+    color: #fff;
+    background-color: lighten(#3c4145, 40%);
+    //border-color: #73baf6
+}
+
+.fstResultItem.fstSelected {
+    color: #fff;
+    background-color: lighten(#3c4145, 30%);
+    //border-color: #73baf6
+}
+
+.fstGroupTitle {
+    font-size: 1.4em;
+    display: block;
+    padding: .5em .71429em;
+    margin: 0;
+    font-weight: bold;
+}
+
+.fstGroup {
+    padding-top: 1em;
+}
+
+.fstGroup:first-child {
+    padding-top: 0;
+}
+
+.fstNoResults {
+    font-size: 12px;
+    display: block;
+    padding: .71429em .71429em;
+    margin: 0;
+    color: $error-msg-fgcolor;
+}
+
+.fstSingleMode .fstControls {
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: 100%;
+    padding: 0.5em;
+    border: 1px solid #969EA4;
+    background-color: $base-color-white;
+    display: none;
+}
+
+.fstSingleMode .fstQueryInput {
+    font-size: 12px;
+    display: block;
+    width: 100%;
+    padding: .5em .35714em;
+    color: #999;
+    border: 1px solid #969EA4;
+}
+
+.fstSingleMode.fstActive {
+    z-index: 100;
+}
+
+.fstSingleMode.fstActive.fstElement,
+.fstSingleMode.fstActive .fstControls,
+.fstSingleMode.fstActive .fstResults {
+    box-shadow: 0 0.2em 0.2em rgba(0, 0, 0, 0.1);
+}
+
+.fstSingleMode.fstActive .fstControls {
+    display: block;
+}
+
+.fstSingleMode.fstActive .fstResults {
+    display: block;
+    z-index: 10;
+    margin-top: -1px;
+}
+.new-customer-popup {
+    min-height: 550px;
+
+    .account-typehead {
+        .fstResults {
+            max-height: 150px;
+            margin-bottom: 10px;
+        }
+    }
+}
+
+
+.fstChoiceItem {
+    display: inline-block;
+    font-size: 11px;
+    position: relative;
+    margin: 0 .41667em .41667em 0;
+    padding: .33333em .33333em .33333em 1.5em;
+    float: left;
+    border-radius: .25em;
+    //border: 1px solid #5db043;
+    cursor: auto;
+    color: $base-color-white;
+    background-color: lighten(#3c4145, 30%);
+    -webkit-animation: fstAnimationEnter 0.2s;
+    -moz-animation: fstAnimationEnter 0.2s;
+    animation: fstAnimationEnter 0.2s;
+}
+
+.fstChoiceItem.mod1 {
+    background-color: #F9F9F9;
+    border: 1px solid #D7D7D7;
+    color: #232323;
+}
+
+.fstChoiceItem.mod1 > .fstChoiceRemove {
+    color: #a4a4a4;
+}
+
+.fstChoiceRemove {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    background: none;
+    font-size: 1.16667em;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 1.28571em;
+    line-height: 1.28571em;
+    margin-top: -.64286em;
+    text-align: center;
+    color: $base-color-white;
+}
+
+.fstChoiceRemove::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+.fstMultipleMode .fstControls {
+    box-sizing: border-box;
+    padding: 0.5em 0.5em 0em 0.5em;
+    overflow: hidden;
+    cursor: text;
+}
+
+.fstMultipleMode .fstQueryInput {
+    font-size: 14px;
+    float: left;
+    padding: .28571em 0;
+    margin: 0 0 .35714em 0;
+    width: 2em;
+    color: #999;
+}
+
+.fstMultipleMode .fstQueryInputExpanded {
+    float: none;
+    width: 100%;
+    padding: .1em .35714em;
+}
+
+.fstMultipleMode .fstFakeInput {
+    font-size: 1.4em;
+}
+
+.fstMultipleMode.fstActive,
+.fstMultipleMode.fstActive .fstResults {
+    box-shadow: 0 0.2em 0.2em rgba(0, 0, 0, 0.1);
+}
+
+.fstMultipleMode.fstActive .fstResults {
+    display: block;
+    z-index: 10;
+    border-top: 1px solid #D7D7D7;
+}

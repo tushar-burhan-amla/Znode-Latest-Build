@@ -1,0 +1,133 @@
+﻿@model Znode.Engine.Admin.ViewModels.TaxPortalViewModel
+@using Znode.Engine.Admin.ViewModels;
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmEditTax", CancelUrl = "/Store/List", Callback = null, IsSaveCloseEnable = true };
+    ViewBag.Title = @Admin_Resources.TitleStoreAndReps + " | " + @Admin_Resources.TitleMultifront;
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdg@(Model.PortalName)">@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelStore)<em class="z-minus"></em><span>@Model.PortalName</span></h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmEditTax" }))
+        {
+            <h3 class="section-heading" data-test-selector="hdg@(Admin_Resources.TextAvatax)">@Admin_Resources.TextAvatax</h3>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.AvataxUrl, new { @data_test_selector = "lblAvataxUrl" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.AvataxUrl, new { @data_test_selector = "txtAvataxUrl" })
+                        @Html.ValidationMessageFor(model => model.AvataxUrl, "", new { @data_test_selector = "valAvataxUrl" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.AvalaraAccount, new { @data_test_selector = "lblAvalaraAccount" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.AvalaraAccount, new { @data_test_selector = "txtAvalaraAccount" })
+                        @Html.ValidationMessageFor(model => model.AvalaraAccount, "", new { @data_test_selector = "valAvalaraAccount" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.AvalaraCompanyCode, new { @data_test_selector = "lblAvalaraCompanyCode" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(m => m.AvalaraCompanyCode, new { @data_test_selector = "txtAvalaraCompanyCode" })
+                        @Html.ValidationMessageFor(model => model.AvalaraCompanyCode, "", new { @data_test_selector = "valAvalaraCompanyCode" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.AvalaraLicense, new { @data_test_selector = "lblAvalaraLicense" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.AvalaraLicense, new { @data_test_selector = "txtAvalaraLicense" })
+                        @Html.ValidationMessageFor(model => model.AvalaraLicense, "", new { @data_test_selector = "valAvalaraLicense" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.AvalaraFreightIdentifier, new { @data_test_selector = "lblAvalaraFreightIdentifier" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.AvalaraFreightIdentifier, new { @data_test_selector = "txtAvalaraFreightIdentifier" })
+                        @Html.ValidationMessageFor(model => model.AvalaraFreightIdentifier, "", new { @data_test_selector = "valAvalaraFreightIdentifier" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding avalara-tax-field">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.AvataxIsTaxIncluded, new { @data_test_selector = "lblAvataxIsTaxIncluded" })
+                    </div>
+                    <div class="control-md">
+                        @Html.CheckBoxFor(model => model.AvataxIsTaxIncluded, new { @data_test_selector = "cheAvataxIsTaxIncluded", @class = "lbl padding-8"})
+                        @Html.ValidationMessageFor(model => model.AvataxIsTaxIncluded, "", new { @data_test_selector = "valAvataxIsTaxIncluded" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-md control-non">
+                    <input type="button" id="test_avatax" class="btn-text btn-text-secondary pull-right" value="Test Connection" onclick="Store.prototype.TestAvalaraConnection()" />
+                </div>
+            </div>
+
+            
+
+            <h3 class="section-heading margin-top-25">@Admin_Resources.TextVertext</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.Custom1, new { @data_test_selector = "lblCustom1" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.Custom1, new { @data_test_selector = "txtCustom1" })
+                        @Html.ValidationMessageFor(model => model.Custom1, "", new { @data_test_selector = "valCustom1" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.Custom2, new { @data_test_selector = "lblCustom2" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.Custom2, new { @data_test_selector = "txtCustom2" })
+                        @Html.ValidationMessageFor(model => model.Custom2, "", new { @data_test_selector = "valCustom2" })
+                    </div>
+                </div>
+            </div>
+
+            @Html.HiddenFor(m => m.PortalId)
+            @Html.HiddenFor(m => m.TaxPortalId)
+        }
+    </section>
+</div>

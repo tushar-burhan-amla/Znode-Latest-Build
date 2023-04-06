@@ -1,0 +1,10 @@
+﻿@model AutoComplete
+<div class="form-group">
+    <label>Search for Shipping Address</label>
+    <form action="/Checkout" method="GET">
+        <div class="col-xs-12 nopadding">
+            @Html.AutocompleteFor(model => model.Name, model => model.Id, "GetSearchLocation", "CustomCheckout", "CustomCheckout.prototype.OnItemSelect", false, new { htmlAttributes = new { @placeholder = "Location Name, City, Zip, etc.", @class = "hdnAddressName", @Name = "AddressTerm", @id = "SearchLocation" } })
+        </div>
+        <div id="typeahead-results" class="ui-autocomplete-home"></div>
+    </form>
+</div>

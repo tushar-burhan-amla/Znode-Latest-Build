@@ -1,0 +1,41 @@
+﻿@{
+    bool isEnableTradeCentric = GlobalAttributeHelper.IsTradeCentricUserActive();
+    string firstName = ViewBag.FirstName ?? "";
+}
+@if (Request.IsAuthenticated)
+{
+    if (!isEnableTradeCentric)
+    {
+        <div class="text-right nav-header" id="userNameDiv">
+            <a class="dropdown-toggle d-block d-lg-none text-white" href="javaScript:void(0);" role="button" id="dropdownMenuButton" onclick="User.prototype.GetAccountMenus();">
+                <span class="profile-icon"></span>
+            </a>
+
+            <a class="dropdown-toggle d-none d-lg-block b2b-username" href="javascript:void(0);" role="button" id="dropdownMenuButton" onclick="User.prototype.GetAccountMenus(); closeNav();">
+                @string.Format(WebStore_Resources.TextHelloFirstName, firstName)
+            </a>
+            <div id="accountMenusDiv"></div>
+        </div>
+    }
+    else
+    {
+        <div class="text-right nav-header" id="userNameDiv">
+            @string.Format(WebStore_Resources.TextHelloFirstName, firstName)
+        </div>
+    }
+}
+else
+{
+    <div class="cut-text mt-3 mb-3" onclick="User.prototype.LoginInPopup();">
+        <div class="d-none d-lg-block">@WebStore_Resources.LabelSignInRegister</div>
+        <span class="profile-icon d-block d-lg-none"></span>
+    </div>
+}
+<script type="text/javascript">
+    $(document).click(function (e) {
+        var container = $("#userNameDiv");
+        if (!container.is(e.target) && container.has(e.target).length === 0) {
+            $("#accountMenusDiv .dropdown-menu").hide();
+        }
+    });
+</script>

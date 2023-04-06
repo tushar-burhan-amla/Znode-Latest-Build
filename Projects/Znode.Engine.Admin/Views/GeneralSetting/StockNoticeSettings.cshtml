@@ -1,0 +1,59 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model StockNoticeSettingsViewModel
+@{
+    ViewBag.Title = "GetStockNoticeSettings";
+}
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront; ;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmStockNoticeSettingsManagement" };
+}
+<div class="col-sm-12 title-container">
+    <h1>@GlobalSetting_Resources.TitleGlobalSetting</h1>
+    <div class="pull-right btn-container">
+        <a id="dvSave" data-test-selector="linkSave" class="btn-text btn-text-secondary" onclick="SaveCancel.prototype.SubmitForm('frmStockNoticeSettingsManagement')">Save</a>
+    </div>
+</div>
+<div class="main-wrapper dirtyignore">
+    <!--Left Panel-->
+    @Html.Partial("~/Views/Shared/_asideGlobalSettingPanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm("UpdateStockNoticeSettings", controllerName, FormMethod.Post, new { id = "frmStockNoticeSettingsManagement" }))
+        {
+            <h3 class="section-heading" data-test-selector="hdgInventorySubscriptionNotificationSettingsDetails">@Admin_Resources.SubTitleStockNoticeSettings</h3>
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.DeleteAlreadySentEmails, new { @data_test_selector = "lblDeleteAlreadySentEmails", @class= "required"})
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.DeleteAlreadySentEmails, new { @id = "txtDeleteAlreadySentEmails" , @data_test_selector = "txtDeleteAlreadySentEmails" })
+                            @Html.ValidationMessageFor(model => model.DeleteAlreadySentEmails, "", new { @data_test_selector = "valDeleteAlreadySentEmails" })
+                        </div>
+                        <div class="help-text">
+                            <i class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpTextDeleteAlreadySentEmails"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(model => model.DeletePendingEmails, new { @data_test_selector = "lableDeletePendingEmails", @class = "required" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.DeletePendingEmails, new { @id = "txtDeletePendingEmails", @data_test_selector = "txtDeletePendingEmails" })
+                            @Html.ValidationMessageFor(model => model.DeletePendingEmails, "",new { @data_test_selector = "valDeletePendingEmails" })
+                        </div>
+                        <div class="help-text">
+                            <i class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Admin_Resources.HelpTextDeletePendingEmails"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+</div>

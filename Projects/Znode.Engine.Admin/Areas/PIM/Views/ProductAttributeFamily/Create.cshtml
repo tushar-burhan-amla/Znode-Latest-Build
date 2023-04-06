@@ -1,0 +1,55 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PIMAttributeFamilyViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmPIMCreateAttributeFamily", CancelUrl = controllerName == "ProductAttributeFamily" ? "/PIM/ProductAttributeFamily/List" : "/PIM/CategoryAttributeFamily/List", Callback = "PIMAttributeFamily.prototype.ValidatePIMAttributeFamilyCode", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgAddAttrFamily">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelAttributeFamily)</h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmPIMCreateAttributeFamily" }))
+    {
+
+        <div id="loginForm" class="box-container">
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(Attributes_Resources.LabelFamilyCode, new { @class = "required" , @data_test_selector="lblFamilyCode"})
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.FamilyCode , new { @data_test_selector = "txtFamilyCode" })
+                        @Html.ValidationMessageFor(model => model.FamilyCode, "", new { id = "errorSpanFamilyCode" , @data_test_selector = "valFamilyCode" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(Attributes_Resources.LabelExistingAttributeFamily, new { @class = "required" })
+                    </div>
+                    <div class="control-md">
+                        @{ Html.RenderAction("GetExistingFamilies", controllerName);}
+                    </div>
+                </div>
+            </div>
+        </div>
+                <div class="col-sm-12 nopadding padding-top">
+                    @{Html.RenderAction("GetTabStructure", controllerName, new { @pimAttributeFamilyId = 0 });}
+                </div>
+                @Html.HiddenFor(m => m.IsCategory)
+                        }
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+        PIMAttributeFamily.prototype.ValidatePIMAttributeFamily();
+    });
+</script>

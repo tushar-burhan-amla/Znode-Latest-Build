@@ -1,0 +1,246 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Agents
+@model CartViewModel
+@{
+    var CultureCode = string.IsNullOrEmpty(Model.CultureCode) ? DefaultSettingHelper.DefaultCurrency : Model.CultureCode;
+    int PublishStateId = (byte)PortalAgent.CurrentPortal.PublishState;
+    string shipName = string.IsNullOrEmpty(Model?.ShippingName) ? "" : $"({Model?.ShippingName})";
+    var localPath = Equals(HttpContext.Current.Request.UrlReferrer, null) ? string.Empty : string.IsNullOrEmpty(HttpContext.Current.Request.UrlReferrer.LocalPath) ? string.Empty : HttpContext.Current.Request.UrlReferrer.LocalPath;
+    bool isDisplayZeroShippingAndTax = (!string.Equals(localPath, "/cart", StringComparison.InvariantCultureIgnoreCase) && !string.Equals(localPath, "/cart/index", StringComparison.InvariantCultureIgnoreCase));
+    bool isTaxSummaryAvailable = Model?.TaxSummaryList?.Count > 0;
+}
+
+<div class="form-group total mb-0">
+    <div class="col-12 block-title" data-test-selector="divOrderSummaryTitle">Order Summary</div>
+    <div class="col-12 p-0">
+        @if (Model.ShippingHandlingCharges > 0 || Model.TaxCost > 0 || Model.ShippingCost > 0)
+        {
+            <div class="row no-gutters px-4 pt-2">
+                <div class="col-6">
+                    <p data-test-selector="paraSubTotal">@WebStore_Resources.LabelSubTotal</p>
+                </div>
+                <div class="col-6 p-0 text-right" data-test-selector="txtSubTotal">
+                    @Helper.FormatPriceWithCurrency(Model.SubTotal, CultureCode)
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row no-gutters mt-2 pb-1 px-4">
+                <div class="col-6">
+                    <p data-test-selector="paraSubTotal">@WebStore_Resources.LabelSubTotal</p>
+                </div>
+                <div class="col-6 p-0 text-right" data-test-selector="txtSubTotal">
+                    @Helper.FormatPriceWithCurrency(Model.SubTotal, CultureCode)
+                </div>
+            </div>
+        }
+
+        @if (isDisplayZeroShippingAndTax || Model.ShippingCost > 0)
+        {
+            <div class="row no-gutters px-4 mt-2">
+                <div class="col-6">
+                    <p data-test-selector="paraShippingNameLabel">@WebStore_Resources.LabelShippingCost @shipName</p>
+                </div>
+                <div class="col-6 p-0 text-right" data-test-selector="ShippingCost">
+                    <div data-test-selector="divShippingCost" id="dynamic-shipping-amount"> + @Helper.FormatPriceWithCurrency(Model.ShippingCost, CultureCode)</div>
+                </div>
+            </div>
+        }
+
+
+        @if (Model.ShippingHandlingCharges > 0)
+        {
+            if (Model.TaxCost > 0)
+            {
+                <div class="row no-gutters mt-2 px-4">
+                    <div class="col-6">
+                        <p data-test-selector="paraShippingHandlingLabel">@WebStore_Resources.LabelShippingHandlingCharge</p>
+                    </div>
+                    <div class="col-6 p-0 text-right" data-test-selector="ShippingCost">
+                        <div data-test-selector="divShippingHandlingCharges" id="dynamic-ShippingHandlingCharges-amount"> + @Helper.FormatPriceWithCurrency(Model.ShippingHandlingCharges, CultureCode)</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row no-gutters mt-2 px-4 pb-1">
+                    <div class="col-6">
+                        <p data-test-selector="paraShippingHandlingLabel">@WebStore_Resources.LabelShippingHandlingCharge</p>
+                    </div>
+                    <div class="col-6 p-0 text-right" data-test-selector="ShippingCost">
+                        <div data-test-selector="divShippingHandlingCharges" id="dynamic-ShippingHandlingCharges-amount"> + @Helper.FormatPriceWithCurrency(Model.ShippingHandlingCharges, CultureCode)</div>
+                    </div>
+                </div>
+            }
+
+        }
+        @if (Model.ImportDuty > 0)
+        {
+            <div class="row no-gutters px-4 mt-2">
+                <div class="col-6">
+                    <p data-test-selector="paraImportDuty">@WebStore_Resources.ImportDuty</p>
+                </div>
+                <div class="col-6 p-0 text-right" data-test-selector="txtImportDuty"> +
+                    @Helper.FormatPriceWithCurrency(Model.ImportDuty, CultureCode)
+                </div>
+            </div>
+        }
+        @if (isDisplayZeroShippingAndTax || Model.TaxCost > 0)
+        {
+            <div class="row no-gutters mt-2 px-4 pb-1">
+                <div class="col-6">
+                    <p data-test-selector="paraTax">
+                        @WebStore_Resources.ColumnTax
+                        @if (isTaxSummaryAvailable == true)
+                        {
+                            <span class="down-arrow" onclick="Checkout.prototype.ShowTaxDetails()">&#x25BC;</span>
+                        }
+                    </p>
+                </div>
+                <div class="col-6 p-0 text-right" data-test-selector="divTaxCost">
+                    + @Helper.FormatPriceWithCurrency(Model.TaxCost, CultureCode)
+                </div>
+            </div>
+            if (isTaxSummaryAvailable == true)
+            {
+                <div class="col-xs-12 tax-summary px-3 mt-2"> 
+                    <table class="table" id="TaxSummary" style="display:none" aria-describedby="Tax Details">
+                        <thead>
+                            <tr>
+                                <th scope="col" data-test-selector="lblTaxName" class="pl-2">@WebStore_Resources.ColumnTitleTaxName</th>
+                                <th scope="col" data-test-selector="lblRate">@WebStore_Resources.ColumnTitleRate</th>
+                                <th scope="col" class="text-right pr-2" data-test-selector="lblTaxes">@WebStore_Resources.ColumnTitleTaxesFees</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (TaxSummaryViewModel taxSummary in Model.TaxSummaryList)
+                            {
+                                <tr>
+                                    <td class="pl-2">@taxSummary.TaxName</td>
+                                    <td>@taxSummary.Rate</td>
+                                    <td class="text-right pr-2">@taxSummary.Tax</td>
+                                </tr>
+                            }
+                     </tbody>
+                    </table>
+                </div>         
+            }
+        }
+        <ul class="mt-2 ml-3 px-4 ava-tax-msg" style="display:none;">
+            @if (Model?.TaxMessageList?.Count > 0)
+            {
+                foreach (var message in Model.TaxMessageList)
+                {
+                    <li>@message</li>
+                }
+            }
+        </ul>
+
+        @if (Model.Discount > 0)
+        {
+            if (Model.ShippingDiscount > 0)
+            {
+                <div class="row no-gutters mt-2 px-4">
+                    <div class="col-6">
+                        <p data-test-selector="paraDiscount">@WebStore_Resources.ColumnDiscounts</p>
+                    </div>
+                    <div class="col-6 p-0 text-right" data-test-selector="txtDiscount">
+                        <div id="dynamic-discount-amount"> - @Helper.FormatPriceWithCurrency(Model.Discount, CultureCode)</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row no-gutters mt-2 px-4 pb-1">
+                    <div class="col-6">
+                        <p data-test-selector="paraDiscount">@WebStore_Resources.ColumnDiscounts</p>
+                    </div>
+                    <div class="col-6 p-0 text-right" data-test-selector="txtDiscount">
+                        <div id="dynamic-discount-amount"> - @Helper.FormatPriceWithCurrency(Model.Discount, CultureCode)</div>
+                    </div>
+                </div>
+            }
+
+        }
+
+        @if (Model.ShippingCost > 0 && Model.ShippingDiscount > 0)
+        {
+            <div class="row no-gutters mt-2 px-4 pb-1">
+                <div class="col-6">
+                    <p data-test-selector="paraShippingDiscount">@WebStore_Resources.LabelShippingDiscount</p>
+                </div>
+                <div class="col-6 p-0 text-right" data-test-selector="txtShippingDiscount">
+                    <div id="dynamic-ShippingDiscount-amount"> - @Helper.FormatPriceWithCurrency(Model.ShippingDiscount, CultureCode)</div>
+                </div>
+            </div>
+        }
+        <div class="row no-gutters mt-2 px-4 block-content border-top">
+            <div class="col-6">
+                <h2 data-test-selector="hdgOrdertotal" class="m-0">
+                    @if (Model.IsQuoteRequest)
+                    {
+                        @WebStore_Resources.LabelQuoteTotal
+                    }
+                    else
+                    {
+                        @WebStore_Resources.ColumnOrderTotal
+                    }
+                </h2>
+            </div>
+            <div class="col-6 p-0 text-right" data-test-selector="txtTotalAmt">
+                <div id="dynamic-order-total"><h2 data-test-selector="hdgOrderGrandTotal" class="m-0">@Helper.FormatPriceWithCurrency(Model.OrderTotalWithoutVoucher, CultureCode)</h2></div>
+                @Html.Hidden("hdnTotalOrderAmount", Model.Total)
+            </div>
+        </div>
+
+        @if (Model.GiftCardAmount > 0)
+        {
+            <div class="row no-gutters mt-2 px-4">
+                <div class="col-6">
+                    <p data-test-selector="paraVoucherAmount">@WebStore_Resources.LabelVoucherAmount</p>
+                </div>
+                <div class="col-6 p-0 text-right" data-test-selector="GiftCardApplied">
+                    <div id="dynamic-giftcard-amount" class="left-sm-shift">@Helper.FormatPriceWithCurrency(Model.GiftCardAmount, CultureCode)</div>
+                </div>
+            </div>
+
+            <div class="row no-gutters my-2 px-4">
+                <div class="col-6">
+                    <p data-test-selector="paraAmounttobepaid">(@WebStore_Resources.LabelAmountToBePaid</p>
+                </div>
+                <div class="col-6 p-0 text-right" data-test-selector="AmounttobepaidApplied">
+                    <div id="dynamic-giftcard-amount" class="left-sm-shift">@Helper.FormatPriceWithCurrency(Model.Total, CultureCode))</div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<input type="hidden" id="Total" value="@Model.Total" />
+@Html.Hidden("hdnOrderTotalWithoutVoucher", Model.OrderTotalWithoutVoucher)
+
+@Html.HiddenFor(m => m.SubTotal)
+
+@Html.HiddenFor(m => m.Discount)
+
+@Html.HiddenFor(m => m.ShippingCost)
+
+@Html.HiddenFor(m => m.GiftCardAmount)
+
+@Html.Hidden("hdnCurrencySuffix", Model.CurrencySuffix)
+
+@Html.Hidden("hdnCurrencyCode", Model.CurrencyCode)
+
+@Html.Hidden("hdnCustomerGUID", Model.CustomerPaymentGUID)
+
+@Html.Hidden("hdnAnonymousUser", Model.UserId)
+<script>
+    var coupon = @Html.Raw(Json.Encode(Model.Coupons));
+    if (coupon.length > 0) { Cart.prototype.ShowCouponsMessages(coupon) };
+
+    var vouchers = @Html.Raw(Json.Encode(Model.Vouchers));
+    $(document).ready(function () {
+        if (vouchers.length > 0) { Checkout.prototype.BindVoucherHtml(vouchers) };
+    })
+</script>

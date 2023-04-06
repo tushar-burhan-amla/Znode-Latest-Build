@@ -1,0 +1,196 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model ReviewOrderViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers
+@using Znode.Engine.Admin.Extensions;
+
+@{
+    bool isQuote = Convert.ToBoolean(Model?.ShoppingCart?.IsQuote);
+    var notesLabel = isQuote ? Admin_Resources.LabelQuoteRequestNotes + ":" : Admin_Resources.LabelOrderNotes + ":";
+    List<CartItemViewModel> cartItemViewModel = Model?.ShoppingCart?.ShoppingCartItems?.ToList();
+    var consolidatedCartItems = cartItemViewModel?.GroupBy(x => new { x.SKU, x.GroupId }).Select(c => new CartItemGroupListViewModel
+    {
+        SKU = c.Key.SKU,
+        GroupId = c.Key.GroupId,
+        Children = c.ToList(),
+        Sequence = c.FirstOrDefault().GroupSequence,
+    }).ToList();
+    ViewDataDictionary viewData = new  ViewDataDictionary { { "isQuote", isQuote } };
+}
+
+
+<div class="multiple-checkout">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title" data-test-selector="hdgReviewOrder">
+                @Admin_Resources.LabelReviewInformation
+            </h4>
+        </div>
+
+        <div class="panel-body">
+            @if (isQuote)
+            {
+                <div class="row d-flex align-items-center flex-wrap customer-info-heading">
+                    <div class="col-xs-6 nopadding">
+                        <h4 class="panel-title panel-title-edit">@Admin_Resources.TitleQuoteInformation</h4>
+                    </div>
+                    <div class="col-xs-6 nopadding">
+                        <div class="d-flex align-items-center in-hand-block">
+                            <div class="col-xs-10 nopadding text-right">
+                                <h4 class="panel-title panel-title-edit" data-test-selector="lblQuoteExpirationDate">@Admin_Resources.LabelQuoteExpirationDate: </h4>
+                            </div>
+                            <div class="col-xs-2 nopadding padding-left">
+                                <h4 class="panel-title panel-title-edit h5" id="divQuoteExpirationDate"> date here </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <h4 class="customer-info-heading">
+                    @Admin_Resources.LabelCustomerInformation
+                </h4>
+            }
+
+
+                @if (HelperUtility.IsNotNull(Model?.ShoppingCart))
+                {
+                    <div class="row checkout-totals-shippingto">
+
+                        <div class="col-sm-4 col-lg-2">
+                            <div class="form-group" id="customerDivReview">
+                            </div>
+                        </div>
+
+                        <div class="address col-sm-4 col-lg-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3 class="section-heading margin-left-15" data-test-selector="hdgShippingAddress">@Admin_Resources.TitleShippingAddress</h3>
+                                    @Html.Partial("_DisplayAddress", Model.ShippingAddress)
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h3 class="section-heading margin-left-15" data-test-selector="hdgBillingAddress">@Admin_Resources.TitleBillingAddress</h3>
+                                    @Html.Partial("_DisplayAddress", Model.BillingAddress)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="shipping col-sm-4 col-lg-2">
+
+                            <h3 class="section-heading" data-test-selector="hdgShippingMethod">@Admin_Resources.LabelShippingMethod</h3>
+                            <div id="selectedShippingName" data-test-selector="divSelectedShipping"></div>
+                            @if (HelperUtility.IsNotNull(Model.ShoppingCart?.CustomShippingCost))
+                            {
+                                <p>@string.Format(@Admin_Resources.LabelCustomShippingCost, HelperMethods.FormatPriceWithCurrency(Model.ShoppingCart.CustomShippingCost, Model.ShoppingCart.CultureCode))</p>
+                            }
+                            <div data-test-selector="divSelectedInHandsDate" class="pb-2">
+                                <label>@Admin_Resources.LabelInHandsDate:</label> <span id="inHandDates" data-test-selector="spInHandsDate"></span>
+                            </div>
+                            <div data-test-selector="divSelectedShippingConstraintsCode" class="pb-2">
+                                <label>@Admin_Resources.LabelShippingConstraintsCode:</label> <span id="shippingConstraintsCode" data-test-selector="spShippingConstraintsCode"></span>
+                            </div>
+
+
+                        </div>
+                        
+
+                        <div class="col-sm-4 col-lg-2 order-notes-content">
+
+                               <h3 data-test-selector="hdgShippingAddress" class="section-heading"> @Admin_Resources.ManageAdditionalInformation</h3>
+                            <div class="order-note-scroll">
+                                <div class="pb-2">
+                                    <label data-test-selector="lblJobName">@Admin_Resources.LabelJobName: </label>
+                                    <span id="jobName" data-test-selector="spJobName"></span>
+                                </div>
+
+                                <div class="pb-2">
+                                    <label data-test-selector="lblOderNotes">@notesLabel</label>
+                                    <span id="orderNotes" data-test-selector="spOderNotes"></span>
+                                </div>
+                            </div>
+
+                            </div>
+                            </div>
+                }
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title" data-test-selector="hdgReviewOrder">
+                @if (isQuote)
+                {
+                    @Admin_Resources.LabelProductsQuoted
+                }
+                else
+                {
+                    @Admin_Resources.LabelProductsOrdered
+                }
+            </h4>
+        </div>
+
+        <div class="panel-body">
+            <div>
+                <div class="list-container cart-products">
+                    <div class="cart-product-table" data-test-selector="tblOrderedItems">
+                        <ul class="product-list head">
+                            <li class="product-image">@Admin_Resources.LabelImage</li>
+                            <li class="product-label">@Admin_Resources.LabelProduct</li>
+                            <li class="product-sku">@Admin_Resources.LabelSKU</li>
+                            <li class="product-unit-price">@Admin_Resources.LabelPrice</li>
+                            <li class="product-quantity">@Admin_Resources.LabelQuantity</li>
+                            <li class="product-total">@Admin_Resources.LabelTotal</li>
+                        </ul>
+                        @if (Model?.ShoppingCart?.ShoppingCartItems != null)
+                        {
+                            foreach (CartItemGroupListViewModel cartItemGroup in consolidatedCartItems.OrderBy(x => x.Sequence))
+                            {
+                                if (cartItemGroup?.Children != null)
+                                {
+                                    if (cartItemGroup?.Children.Count == 1)
+                                    {
+                                        cartItemGroup?.Children.ForEach(c => c.IsReviewPage = true);
+                                        @* do not remove class="product-list-items" used in TS file *@
+                                        <ul id="cart-row-div" class="product-list product-list-items">
+                                            @Html.Partial("_CartRow", cartItemGroup.Children.FirstOrDefault(), viewData)
+                                        </ul>
+                                    }
+                                    else if (cartItemGroup?.Children.Count > 1)
+                                    {
+                                        var totalExtendedPrice = cartItemGroup.Children.Sum(x => x.ExtendedPrice);
+
+                                        foreach (CartItemViewModel variation in cartItemGroup.Children.OrderBy(x => x.Sequence))
+                                        {
+                                            if (variation.GroupProducts?.Count < 0)
+                                            {
+                                                variation.ExtendedPrice = totalExtendedPrice;
+                                            }
+                                            variation.IsReviewPage = true;
+                                            @* do not remove class="product-list-items" used in TS file *@
+                                            <ul id="cart-row-div" class="product-list grouped-product-list product-list-items">
+                                                @Html.Partial("_CartRow", variation, viewData)
+                                            </ul>
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+            @if (HelperUtility.IsNotNull(Model?.ShoppingCart))
+            {
+                <div class="cart-total" id="divTotal">
+                    <div class="row">
+                        @Html.Partial("_TotalTable", Model.ShoppingCart)
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

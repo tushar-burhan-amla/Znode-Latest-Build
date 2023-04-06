@@ -1,0 +1,25 @@
+﻿@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+}
+
+<div class="TreeClass tree-container">
+    <div class="tree-search">
+        <div class="right-inner-icon">
+            <em class="z-search" data-test-selector="linkSearch"></em>
+            <input type="text" data-test-selector="txtTreeSearch" class="treesearch" />
+        </div>
+        <span id="contentsearchresult" class="error-msg"></span>
+    </div>
+
+    <div id="Content_Page_Main_Tree" data-test-selector="divContentPageMainTree" data-tree="@Model.Tree">
+    </div>
+
+    @if (Equals(actionName.ToLower(), "addcontentpage"))
+    {
+        @Html.Hidden("IsAddContentPageMode", true)
+    }
+    else
+    {
+        @Html.Hidden("IsAddContentPageMode", false)
+    }
+</div>

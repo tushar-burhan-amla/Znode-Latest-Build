@@ -1,0 +1,101 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model RMAReturnCalculateViewModel
+@{
+    string isApplyBorderLineForReturnTaxCost = (Model.ReturnTaxCost > 0) ? "" : "price-border-bottom";
+    string isApplyBorderLineForDiscountAmount = (Model.CSRDiscount > 0 || Model.ReturnShippingDiscount > 0) ? "" : "price-border-bottom";
+    string isApplyBorderLineForCSRDiscount = (Model.ReturnShippingDiscount > 0) ? "" : "price-border-bottom";
+}
+<div class="col-xs-12 nopadding cart-summary receipt-totals text-right">
+    <div class="col-sm-offset-8 col-md-offset-9">
+        <div class="form-group @isApplyBorderLineForReturnTaxCost">
+            <div class="row">
+                <div class="col-xs-6 text-left" id="lblReturnSubtotal">@Admin_Resources.LabelSubTotal</div>
+                <div class="col-xs-6" id="returnSubtotal" data-test-selector="divReturnSubtotal">@HelperMethods.FormatPriceWithCurrency(Model.ReturnSubTotal ?? 0, Model.CultureCode)</div>
+            </div>
+        </div>
+
+        <div id="returnOrderDetails">
+            @if (Model.ReturnShippingCost != null && Model.ReturnShippingCost > 0)
+            {
+                <div class="form-group @isApplyBorderLineForReturnTaxCost">
+                    <div class="row">
+                        <div class="col-xs-6 text-left" id="lblReturnShippingCost">@Admin_Resources.TitleShipping</div>
+                        <div class="col-xs-6" id="returnShippingCost" data-test-selector="divReturnShippingCost"> + @HelperMethods.FormatPriceWithCurrency(Model.ReturnShippingCost ?? 0, Model.CultureCode)</div>
+                    </div>
+                </div>
+            }
+
+            @if (Model.ReturnImportDuty > 0)
+            {
+
+                <div class="form-group @isApplyBorderLineForReturnTaxCost">
+                    <div class="row">
+                        <div class="col-xs-6 text-left" id="lblReturnImportDuty">@Admin_Resources.LabelImportDuty</div>
+                        <div class="col-xs-6" id="ReturnImportDuty" data-test-selector="divReturnImportDuty">  + @HelperMethods.FormatPriceWithCurrency(Model.ReturnImportDuty,Model.CultureCode)</div>
+                    </div>
+                </div>          
+            }
+
+            @if (Model.ReturnTaxCost != null && Model.ReturnTaxCost > 0)
+            {
+                <div class="form-group border-line price-border-bottom">
+                    <div class="row">
+                        <div class="col-xs-6 text-left" id="lblReturnTaxCost">@Admin_Resources.LabelTax</div>
+                        <div class="col-xs-6" id="returnTaxCost" data-test-selector="divReturnTaxCost"> + @HelperMethods.FormatPriceWithCurrency(Model.ReturnTaxCost ?? 0, Model.CultureCode)</div>
+                    </div>
+                </div>
+            }
+
+
+            @if (Model.Discount > 0)
+            {
+                <div class="form-group @isApplyBorderLineForDiscountAmount">
+                    <div class="row">
+                        <div class="col-xs-6 text-left" id="lblDiscountAmount">@Admin_Resources.LabelDiscountAmount</div>
+                        <div class="col-xs-6" id="returnDiscountAmount" data-test-selector="divDiscountAmount"> - @HelperMethods.FormatPriceWithCurrency(Model.Discount, Model.CultureCode)</div>
+                    </div>
+                </div>
+            }
+            @if (Model.CSRDiscount > 0)
+            {
+                <div class="form-group @isApplyBorderLineForCSRDiscount">
+                    <div class="row">
+                        <div class="col-xs-6 text-left" id="lblCSRDiscountAmount">@Admin_Resources.LabelCSRDiscount</div>
+                        <div class="col-xs-6" id="returnCSRDiscountAmount" data-test-selector="divCSRDiscountAmount"> - @HelperMethods.FormatPriceWithCurrency(Model.CSRDiscount, Model.CultureCode)</div>
+                    </div>
+                </div>
+            }
+
+            @if (Model.ReturnShippingDiscount > 0)
+            {
+                <div class="form-group border-line price-border-bottom">
+                    <div class="row">
+                        <div class="col-xs-6 text-left" id="lblShippingDiscount">@Admin_Resources.LabelShippingDiscount</div>
+                        <div class="col-xs-6" id="returnShippingDiscountAmountId" data-test-selector="divShippingDiscount"> - @HelperMethods.FormatPriceWithCurrency(Model.ReturnShippingDiscount, Model.CultureCode)</div>
+                    </div>
+                </div>
+            }
+
+            @if (Model.ReturnCharges > 0)
+            {
+                <div class="form-group borderline price-border-bottom">
+                    <div class="row">
+                        <div class="col-xs-6 text-left" id="lblReturnCharges">@Admin_Resources.LabelReturnCharges</div>
+                        <div class="col-xs-6" id="returnChargesAmount" data-test-selector="divReturnCharges">
+                            - @HelperMethods.FormatPriceWithCurrency(Model.ReturnCharges, Model.CultureCode)
+                            <em class="zf-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@WebStore_Resources.TitleReturnChargesTooltip"></em>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="form-group receipt-total">
+            <div class="row">
+                <div class="col-xs-6 text-left" id="lblReturnTotal"><h2>@Admin_Resources.LabelReturnTotal</h2></div>
+                <div class="col-xs-6" id="returnTotal" data-test-selector="divReturnTotal"><h2>@HelperMethods.FormatPriceWithCurrency(Model.ReturnTotal ?? 0, Model.CultureCode)</h2></div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("hdnCurrencyCode", (HelperMethods.FormatPriceWithCurrency(0.00M, Model.CultureCode)).Replace("0.00", ""))

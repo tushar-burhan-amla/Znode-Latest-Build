@@ -1,0 +1,186 @@
+﻿@using Znode.Libraries.Resources
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers
+@using System.Configuration
+<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+<head>
+    <script language="JavaScript">
+        window.addEventListener('message', function (event) {
+            if (event != undefined && event.data != undefined && event.data.toString().indexOf("framebus") === -1) { // To avoid console error related to framebus when we do Payment against Braintree
+                var token = JSON.parse(event.data);
+                Order.prototype.CardConnectPayment(token);
+            }
+        }, false);
+    </script>
+
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <meta name="robots" content="noindex,nofollow">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link href="~/Content/Images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <script src="~/Scripts/References/jquery-3.3.1.min.js"></script>
+    @Styles.Render("~/content/css/AllCss")
+    @{
+        bool _sslOn = @Convert.ToBoolean(ConfigurationManager.GetSection("system.web/httpCookies")?.GetProperty("RequireSSL"));
+        string _secureCookies = _sslOn ? ",secure: true" : string.Empty;
+    }
+
+</head>
+<body id="@ViewContext.RouteData.Values["Controller"].ToString()" class="@ViewContext.RouteData.Values["Action"] nav-open @ViewContext.RouteData.Values["Controller"].ToString().ToLower()-@ViewContext.RouteData.Values["Action"].ToString().ToLower()" data-controller="@ViewContext.RouteData.Values["Controller"].ToString()" data-view="@ViewContext.RouteData.Values["Action"].ToString()" onload="javascript: var notification = new ZnodeNotification(); $.cookie('_backURL', '', { path: '/' @_secureCookies }); ZnodeBase.prototype.ShowLoader(); notification.DisplayNotificationMessages();">
+    <header>
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle nav-dropdown-menu" data-toggle="dropdown" aria-expanded="false" data-test-selector="linkNavMenu"><i class="z-nav-menu"></i></a>
+            <ul class="dropdown-menu nav-dropdown-container contain-area">
+                <li>@Html.Partial("_Menu")</li>
+            </ul>
+        </div>
+        <div class="logo">
+            <a href="/Dashboard/Dashboard">
+                <img src="~/Content/Images/header-admin-logo.png" alt="Znode" />
+                @*<img src="~/Content/Images/multifront-logo.png" class="z-multifront" alt="Multifront" />*@
+            </a>
+        </div>
+
+        @Html.Partial("_AttachMenu")
+        <div class="pull-right">
+            <ul class="top-user-details">
+                <li>@Html.Partial("~/Views/Shared/Controls/_CurrentEnvironment.cshtml")</li>
+                <li class="global-search-box">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="z-search"></i><span class="local-name">@Admin_Resources.TitleSearch</span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <h4 class="popup-heading">Search</h4>
+                            <div class="global-search-container">
+                                <form action="/Dashboard/GlobalSearch" method="post" class="dirtylisten" id="frmGlobalSearch">
+                                    @Html.DropDownList("GlobalSearchType", HelperMethods.GetGlobalSearchList())
+                                    <input type="text" name="SearchValue" placeholder="Search Here..." /><div class="pull-left"><button type="submit" class="btn-search"><i class="z-search"></i></button></div>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="dropdown-toggle create-quick" data-toggle="dropdown"><i class="z-plus-circle"></i><span class="local-name">@Admin_Resources.LabelNew</span></a>
+                    <ul class="dropdown-menu create-quick-links contain-area">
+                        <li>@Html.Partial("_CreateQuickLinks")</li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="z-help-circle"></i><span class="local-name">@Admin_Resources.LabelHelp</span></a>
+                    <ul class="dropdown-menu help-box">
+                        <li>
+                            <h4 class="popup-heading padding-top">@Admin_Resources.LabelHelp</h4>
+                            <ul class="help-box-details">
+                                <li><a href="https://support.znode.com/support/home" target="_blank" rel="noopener noreferrer">@Admin_Resources.LabelZnodeKnowledgeBaseWiki</a></li>
+                                <li><a href="@ZnodeAdminSettings.ZnodeApiRootUri" target="_blank">@Admin_Resources.LabelZnodeAPIDocumentation</a></li>
+                            </ul>
+                            <div class="contact-details">
+                                <div>
+                                    <img src="~/Content/Images/help.png" alt="Help Icon" class="img-responsive" />
+                                </div>
+                                <div class="padding-left">
+                                    <label class="label-help">@Admin_Resources.LabelNeedMoreHelp</label>
+                                    <a href="http://www.znode.com/About/contact-us/" target="_blank" rel="noopener noreferrer" class="contact-label">@Admin_Resources.ZWidgetContactUs</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="user-details">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="z-account_circle"></i><span class="local-name">@Admin_Resources.HeaderProfile</span></a>
+                    <ul class="dropdown-menu user-dropdown-menu">
+                        <li>@Html.Partial("_LoginPartial")</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <div class="container-fluid wrapper">
+        <div class="col-sm-12 nopadding notification-msg" id="body">
+            <div class="messageBoxContainer" id="messageBoxContainerId" data-message="@TempData["Notifications"]"></div>
+            @{
+                TempData.Remove("Notifications");
+            }
+        </div>
+        <div class="row body-wrapper">
+            @RenderBody()
+        </div>
+    </div>
+    <div id="publishProgressBar" class="file-upload-status active" x-data-active="true" style="display:none;">
+        <div class="header">
+            <h4>Publish Status</h4>
+            <a data-toggle="collapse" class="pull-right collapsed" href="#publishProgressBardiv"><i class="z-down"></i></a>
+        </div>
+        <div id="publishProgressBardiv" class="status-container panel-collapse collapse">
+            <table class="table" id="publishStatusTable" aria-describedby="Publish Status Table">
+                <thead>
+                    <tr>
+                        <th scope="col">@Admin_Resources.LabelJob</th>
+                        <th scope="col">@Admin_Resources.LabelProgress</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div id="loading-div-background" class="overlay pointer-none" style="display:none">
+        <div id="loading-div" class="loader-container">
+            <div class="loader">
+                <div class="circle circle-one"></div>
+                <div class="circle circle-two"></div>
+                <div class="circle circle-three"></div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = Admin_Resources.Error,
+                        Description = @Admin_Resources.ErrorSelectRecord,
+                        ModalPopUpId = "NoCheckboxSelected",
+                        IsErrorPopUp = true,
+                    })
+
+    <footer>
+        <div class="footer-container">
+            <p>@String.Format(@Admin_Resources.Copyright + @System.Configuration.ConfigurationManager.AppSettings["BuildVersion"], DateTime.Now.Year)</p>
+        </div>
+    </footer>
+
+    <div id="aside-popup-main" class="aside-popup" style="display:none;">
+        <input type="checkbox" checked />
+        <label data-expanded="Media Uploader" data-collapsed="Media Uploader"></label>
+        <a class="z-close-circle popup-close" id="popclose"></a>
+        <div id="aside-popup-datacontainer" class="aside-popup-container">
+        </div>
+    </div>
+    @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderConfirmDelete,
+                        Description = @Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "PopUpConfirm",
+                        Buttons = new List<PopUpButtonModel>() { new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "DynamicGrid.prototype.RedirectToDelete(this)" } }
+                    })
+    <input type="hidden" id="SessionWarningTime" value="@ZnodeAdminSettings.SessionWarningTime" />
+    @Html.Hidden("hdnPaymentAppUrl", @ZnodeAdminSettings.PaymentApplicationUrl)
+    @Html.Hidden("hdnAdminUrl", @ZnodeAdminSettings.ZnodeAdminUri)
+
+    <script src="~/Scripts/Tinymce/tinymce.js"></script>
+    <script src="~/Scripts/Tinymce/inittinymce.js"></script>
+    <script src="~/Scripts/tinymce/TinymceCustom.js" async></script>
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/Core")
+    @Scripts.Render("~/bundles/Custom")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.RenderFormat(@"<script src=""{0}"" async></script>", "~/bundles/JsTree")
+    @Scripts.RenderFormat(@"<script src=""{0}"" async></script>", "~/bundles/jqueryajax")
+    @Scripts.RenderFormat(@"<script src=""{0}"" async></script>", "~/bundles/cookies")
+    @Scripts.RenderFormat(@"<script src=""{0}"" async></script>", "~/bundles/Controls")
+    @Scripts.RenderFormat(@"<script src=""{0}"" async></script>", "~/bundles/ClientResource")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

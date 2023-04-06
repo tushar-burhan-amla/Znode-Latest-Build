@@ -1,0 +1,166 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Engine.WebStore.Agents
+@using Znode.Libraries.ECommerce.Utilities
+@model SearchRequestViewModel
+@{
+    //Check if category ID is present or not
+    if (Model.CategoryId <= 0)
+    {
+        ViewBag.Title = "Search";
+    }
+    int portalId = PortalAgent.CurrentPortal.PortalId;
+    string searchTerm = Model?.SearchTerm;
+    bool isEnableCMSPageSearch = Helper.IsEnableCMSPageSearch();
+    int contentPageNumber = SessionHelper.GetDataFromSession<int>(WebStoreConstants.CMSPageNumber);
+    int contentPageSize = SessionHelper.GetDataFromSession<int>(WebStoreConstants.CMSPageSizeValue);
+    int productCount = Convert.ToInt32(Model?.ProductListViewModel?.TotalProductCount);
+}
+@if (!isEnableCMSPageSearch)
+{
+    <div id="layout-category" data-category="@Model.SearchTerm" data-categoryId="@Model.CategoryId" class="col">
+        @Html.Partial("../_LearnMore", Model)
+        <div class="row b2b-breadcrumbs d-none d-md-block">
+            <div class="container">
+                <div class="row">
+                    <!-- Breadcrumb -->
+                    <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a>Search</div>
+                </div>
+            </div>
+        </div>
+        <div class="row b2b-products-list">
+            <div class="container">
+                <div class="row mb-5">
+                    <div class="col-12">
+                        <h1 class="page-title">Search</h1>
+                    </div>
+
+                    @if (Model?.ProductListViewModel?.Products?.Count > 0)
+                    {
+                        <div id="facets" class="col-12 col-lg-3 p-0 side-nav nav-right b2b-side-bar">
+                            <div class="d-lg-none">
+                                <div class="col-12 text-right nav-header">
+                                    <a href="JavaScript:void(0);" class="CloseNav p-0 close-icon"></a>
+                                    <div class="nav-label"><div class="cut-text"> Sort & Filter</div></div>
+                                </div>
+                            </div>
+                            @{Html.RenderPartial("_FacetList", Model.ProductListViewModel.SearchResultViewModel);}
+                            <div class="col-12 p-0 b2b-compare-product-list">
+                                <div id="compareProductList">
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="col-12 col-lg-9 b2b-product-list">
+                        @{Html.RenderPartial("_ProductGrid", Model.ProductListViewModel);}
+                    </div>
+                    <div class="col-12 p-0">
+                        <z-widget class="category-recent-view-list">@Html.WidgetPartial("RecentlyViewProduct", "Recently View Product", "126", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())</z-widget>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <div class="col offer-banner mt-4 mt-md-0">
+                        <!--Advertisement Banner Widget-->
+                        <z-widget>@Html.WidgetPartial("OfferBanner", "AdvertisementBanner", "110", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), Model.PortalId)</z-widget>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div id="layout-category" data-category="@Model.SearchTerm" data-categoryId="@Model.CategoryId" class="col search-page">
+        @Html.Partial("../_LearnMore", Model)
+
+        <div class="row b2b-breadcrumbs d-none d-md-block">
+            <div class="container">
+                <div class="row">
+                    <!-- Breadcrumb -->
+                    <div id="breadCrumb" class="col breadcrumb-container"><a href="/" class="home-icon pr-2" title="Home"></a>Search</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row b2b-products-list">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-12 header-results-text">
+                        @Html.RenderBlock(WebStore_Resources.TextSearchResult?.Replace("{0}", searchTerm))
+                    </div>
+                </div>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" id="search-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="product-list-tab" data-toggle="tab" href="#product-list" role="tab" aria-controls="product-list" aria-selected="true">@Model.ProductListViewModel.TotalProductCount PRODUCTS </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#pages-list" onclick="Search.prototype.GetSearchCMSPage(this)" id="formcmspagesearch" data-searchterm="@searchTerm" data-targetid="#searchcmspages" role="tab" aria-controls="pages-list" aria-selected="false">@Model.ProductListViewModel.TotalCMSPageCount PAGES</a>
+                    </li>
+                </ul>
+
+
+                <div class="tab-content" id="search-tab-content">
+                    <div role="tabpanel" class="tab-pane fade show active" id="product-list" aria-labelledby="product-list">
+                        <div class="row mb-5">
+                            @*<div class="col-12">
+                                    <h1 class="page-title">Search</h1>
+                                </div>*@
+
+                            @if (Model?.ProductListViewModel?.Products?.Count > 0)
+                            {
+                                <div id="facets" class="col-12 col-lg-3 p-0 side-nav nav-right b2b-side-bar">
+                                    <div class="d-lg-none">
+                                        <div class="col-12 text-right nav-header">
+                                            <a href="JavaScript:void(0);" class="CloseNav p-0 close-icon"></a>
+                                            <div class="nav-label"><div class="cut-text"> Sort & Filter</div></div>
+                                        </div>
+                                    </div>
+                                    @{Html.RenderPartial("_FacetList", Model.ProductListViewModel.SearchResultViewModel);}
+                                    <div class="col-12 p-0 b2b-compare-product-list">
+                                        <div id="compareProductList">
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="col-12 col-lg-9 b2b-product-list">
+                                @{Html.RenderPartial("_ProductGrid", Model.ProductListViewModel);}
+                            </div>
+                            <div class="col-12 p-0">
+                                <z-widget class="category-recent-view-list">@Html.WidgetPartial("RecentlyViewProduct", "Recently View Product", "126", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())</z-widget>
+                            </div>
+                            <input type="hidden" id="hdncontentPageNumber" name="hdncontentPageNumber" value="@contentPageNumber">
+                            <input type="hidden" id="hdncontentPageSize" name="hdncontentPageSize" value="@contentPageSize">
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane fade" id="pages-list" aria-labelledby="pages-list">
+                        <div id="searchcmspages"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <div class="col offer-banner mt-4 mt-md-0">
+                        <!--Advertisement Banner Widget-->
+                        <z-widget>@Html.WidgetPartial("OfferBanner", "AdvertisementBanner", "110", ZnodeCMSTypeofMappingEnum.PortalMapping.ToString(), Model.PortalId)</z-widget>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<input type="hidden" id="hdnProductCount" name="hdnProductCount" value="@productCount">
+<input type="hidden" id="hdnSearchTerm" name="hdnSearchTerm" value="@searchTerm">

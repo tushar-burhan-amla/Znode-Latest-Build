@@ -1,0 +1,25 @@
+﻿<div class="modal fade" id="DraftConfirmPopup" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" title="@Admin_Resources.ButtonCancel"><i class="z-close-circle"></i></button>
+                <h4 class="modal-title">@WebStore_Resources.ConfirmDeleteTitle</h4>
+            </div>
+            <div class="modal-body">
+                @{
+                    var message = @WebStore_Resources.DraftDeleteAllErrorMessage;
+                }
+
+                <p>@message</p>
+                @Html.Hidden("QuoteConfirmId")
+            </div>
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type='button' class="btn-text btn-bg-primary" data-dismiss="modal" title='@Admin_Resources.TextOk' onclick="User.prototype.DeleteQuoteLineItem()">@Admin_Resources.TextOk</button>
+                    <button type="button" id="btn-cancel-popup" class="btn-text btn-bg-secondary" data-dismiss="modal">@Admin_Resources.ButtonCancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

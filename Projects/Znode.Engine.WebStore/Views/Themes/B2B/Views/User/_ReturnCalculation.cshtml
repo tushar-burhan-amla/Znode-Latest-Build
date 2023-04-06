@@ -1,0 +1,115 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model RMAReturnCalculateViewModel
+@{
+    string cssClass = string.Empty;
+    decimal zeroValueInDecimal = 0.00M;
+}
+<div class="col-12 col-lg-5 p-0 ml-auto receipt-item-list shopping-cart">
+    <div class="col-12 cart-total mt-4 cart-summary receipt-totals">
+        <div class="col-sm-offset-5 col-md-offset-6">
+            @{
+                cssClass = (Model.ReturnShippingCost > 0 || Model.ReturnTaxCost > 0) ? "form-group" : "form-group border-line";
+            }
+            <div class='@cssClass'>
+                <div class="row no-gutters">
+                    <div class="col-8">@WebStore_Resources.ColumnSubTotal</div>
+                    <div class="col-4 pr-3 pr-md-3 text-right" id="returnSubtotalId" data-test-selector="divReturnSubtotal">@Helper.FormatPriceWithCurrency(Model.ReturnSubTotal ?? 0, Model.CultureCode)</div>
+                </div>
+            </div>
+
+            <div id="returnOrderDetails">
+                @{
+                    cssClass = (Model.ReturnTaxCost > 0) ? "form-group" : "form-group border-line";
+                }
+                @if (Model.ReturnShippingCost != null && Model.ReturnShippingCost > 0)
+                {
+                    <div class='@cssClass'>
+                        <div class="row no-gutters">
+                            <div class="col-8">@WebStore_Resources.ColumnShipping</div>
+                            <div class="col-4 pr-3 pr-md-3 text-right" id="returnShippingCostId" data-test-selector="divReturnShippingCost"> + @Helper.FormatPriceWithCurrency(Model.ReturnShippingCost ?? 0, Model.CultureCode)</div>
+                        </div>
+                    </div>
+                }
+                @if (Model.ReturnShippingCost != null && Model.ReturnShippingCost > 0)
+                {
+                    <div class="form-group border-line">
+                        <div class="row no-gutters">
+                            <div class="col-8">@WebStore_Resources.ColumnTax</div>
+                            <div class="col-4 pr-3 pr-md-3 text-right" id="returnTaxCostId" data-test-selector="divReturnTaxCost"> + @Helper.FormatPriceWithCurrency(Model.ReturnTaxCost ?? 0, Model.CultureCode)</div>
+                        </div>
+                    </div>
+                }
+                @if (Model.Discount > 0)
+                {
+
+                    cssClass = (Model.CSRDiscount > 0 || Model.ReturnShippingDiscount > 0) ? "form-group" : "form-group border-line";
+
+                    <div class='@cssClass'>
+                        <div class="row no-gutters">
+                            <div class="col-8">@WebStore_Resources.ColumnDiscounts</div>
+                            <div class="col-4 pr-3 pr-md-3 text-right" id="returnDiscountAmountId" data-test-selector="divDiscountAmount"> - @Helper.FormatPriceWithCurrency(Model.Discount, Model.CultureCode)</div>
+                        </div>
+                    </div>
+                }
+                @if (Model.CSRDiscount > 0)
+                {
+                    {
+                        <div class="form-group">
+                            <div class="row no-gutters">
+                                <div class="col-8">@WebStore_Resources.LabelCSRDiscountAmount</div>
+                                <div class="col-4 pr-3 pr-md-3 text-right" id="returnCSRDiscountAmountId" data-test-selector="divCSRDiscountAmount"> - @Helper.FormatPriceWithCurrency(Model.CSRDiscount, Model.CultureCode)</div>
+                            </div>
+                        </div>
+                    }
+                }
+
+
+
+
+                @if (Model.ReturnShippingDiscount > 0)
+                {
+                    <div class="form-group border-line">
+                        <div class="row no-gutters">
+                            <div class="col-8">@WebStore_Resources.LabelShippingDiscount</div>
+                            <div class="col-4 pr-3 pr-md-3 text-right" id="returnShippingDiscountAmountId" data-test-selector="divShippingDiscount"> - @Helper.FormatPriceWithCurrency(Model.ReturnShippingDiscount, Model.CultureCode)</div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.ReturnCharges > 0)
+                {
+                    <div class="form-group border-line">
+                        <div class="row no-gutters">
+                            <div class="col-8">@WebStore_Resources.LabelReturnCharges</div>
+                            <div class="col-4 pr-3 pr-md-3 text-right" id="returnChargesAmountId" data-test-selector="divReturnCharges">
+                                - @Helper.FormatPriceWithCurrency(Model.ReturnCharges, Model.CultureCode)
+                                <i class="icon-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@WebStore_Resources.TitleReturnChargesTooltip"></i>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+                @if (Model.GiftCardAmount > 0)
+                {
+                    <div class="form-group">
+                        <div class="col-xs-6 nopadding">@WebStore_Resources.ColumnGiftCardAmount</div>
+                        <div class="col-xs-6 nopadding" id="returnGiftCardAmountId" data-test-selector="divGiftCardAmount">@Helper.FormatPriceWithCurrency(Model.GiftCardAmount, Model.CultureCode)</div>
+                    </div>
+                }
+            </div>
+
+            <div class="form-group total receipt-total">
+                <div class="row no-gutters">
+                    <div class="col-8"><h2>@WebStore_Resources.LabelReturnTotal</h2></div>
+                    <div class="col-4 pr-3 pr-md-3 text-right" id="returnTotalId" data-test-selector="divReturnTotal"><h2>@Helper.FormatPriceWithCurrency(Model.ReturnTotal ?? 0, Model.CultureCode)</h2></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("hdnDefaultPrice", @Helper.FormatPriceWithCurrency(0, Model.CultureCode))
+@Html.Hidden("hdnCurrencyCode", (Helper.FormatPriceWithCurrency(zeroValueInDecimal, Model.CultureCode)).Replace(WebStoreConstants.ZeroValueInDecimal, ""))
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+</script>

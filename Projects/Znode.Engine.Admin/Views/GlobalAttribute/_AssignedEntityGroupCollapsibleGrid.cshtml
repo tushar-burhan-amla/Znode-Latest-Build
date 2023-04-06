@@ -1,0 +1,49 @@
+﻿@model AssignedEntityGroupListViewModel
+@using Znode.Engine.Admin.ViewModels;
+
+@{
+    string controller = ViewContext.RouteData.Values["controller"].ToString();
+    string action = "AssignedGlobalAttributes";
+    int entityId = Model.EntityId;
+}
+
+    <div class="collapsible-grid dirtyignore">
+        <table class="table" data-test-selector="tblAssignedEntityGroup" aria-describedby="Global Attributes Table">
+            <thead>
+                <tr>
+                    <th scope="col" data-test-selector="tblHd@(Admin_Resources.LabelAttributeCode)">@Admin_Resources.LabelAttributeCode</th>
+                    <th scope="col" data-test-selector="tblHd@(Admin_Resources.LabelType)">@Admin_Resources.LabelType</th>
+                    <th scope="col" data-test-selector="tblHd@(Admin_Resources.LabelRequired)">@Admin_Resources.LabelRequired</th>
+                    <th scope="col" data-test-selector="tblHd@(Admin_Resources.LabelAttributeLocalizable)">@Attributes_Resources.LabelAttributeLocalizable</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{foreach (AssignedEntityGroupViewModel item in Model.AssignedEntityGroupList)
+                    {
+                        <tr>
+                            <td colspan="5">
+                                <table class="table child-table" aria-describedby="Global Attributes Child Table">
+                                    <thead>
+                                        <tr class="header">
+                                            <th scope="col" class="th-header" colspan="7">
+                                                <button type="button" class="btn-dropdown" onclick="GlobalAttributeEntity.prototype.HideShowExpandOption(this,'@controller','@action');" data-attributegroupid="@item.GlobalAttributeGroupId"><em class="z-add"></em></button>
+                                                <span data-test-selector="lbl@(item.GroupCode)">@item.GroupCode</span> 
+                                                <a class="pull-right padding-right" title="Delete" onclick="GlobalAttributeEntity.prototype.UnAssignAttributeGroup('@item.GlobalAttributeGroupId')"><em class="z-delete"></em></a>
+                                                <a class="pull-right padding-right" title="Edit" onclick="GlobalAttributeEntity.prototype.EditDisplayOrder('@item.GlobalAttributeGroupId', '@item.GroupCode', '@item.DisplayOrder')"><em class="z-edit"></em></a>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="attributeData" data-test-selector="tblBdAttributeData">
+
+                                    @*Attribute Data will be rendered here*@
+
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

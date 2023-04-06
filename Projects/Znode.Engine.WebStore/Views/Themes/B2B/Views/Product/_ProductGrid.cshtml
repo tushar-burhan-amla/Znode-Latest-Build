@@ -1,0 +1,105 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ProductListViewModel
+@{
+    TempData[WebStoreConstants.ProductCount] = Model?.Products?.Count;
+    string searchTerm = Request.QueryString["SearchTerm"]?.ToString();
+    string searchValue = string.IsNullOrEmpty(Model.SuggestTerm) ? Model.SearchKeyword : Model.SuggestTerm;
+    UserViewModel userModel = Helper.GetUserDetails();
+    int? portalId = Helper.GetCurrentPortalId();
+    int? userId = userModel?.UserId;
+    int? profileId = userModel?.Profiles?.FirstOrDefault()?.ProfileId;
+    long? resultCount = Model?.TotalProductCount;
+
+    bool addDataToDB = !string.IsNullOrEmpty(searchTerm) ? true : false;
+    if (Request.QueryString != null && (Request.QueryString["fromSearch"] != null || Request.QueryString["sort"] != null || Request.QueryString["pagenumber"] != null || Request.QueryString["pageSize"] != null))
+    {
+        addDataToDB = false;
+    }
+}
+
+@if (Model?.Products?.Count > 0)
+{
+    var categoryName = Model.Products.First()?.CategoryName;
+
+    <div class="col-12 p-0 b2b-product-grid">
+        <div class="b2b-filters d-flex">
+            <div class="d-flex flex-wrap align-items-center">
+                @Html.Partial("../Search/_PagingSearching", Model)
+            </div>
+        </div>
+        <div class="b2b-facets-btn d-lg-none quotebutton">
+            <button data-target="#facets" class="OpenNav nav-link btn-block btn btn-secondary m-md-auto">Sort & Filter</button>
+        </div>
+        <div id="facetFilters" class="col-12 b2b-filtered-list"></div>
+        <div class="col-12 product-view p-0 my-3">
+            <ul id="view-option-productgrid" infinnity-loading="@Helper.InfinityLoading" class="product-grid-ul grid-view">
+                @{
+                    if (!Equals(Model, null))
+                    {
+                        foreach (var p in Model.Products)
+                        {
+                            <li class="b2b-products">
+                                <article class="product-item d-flex flex-column justify-content-between">
+                                    @Html.Partial("../Product/_ProductTile", p)
+                                </article>
+                            </li>
+                        }
+                    }
+                }
+            </ul>
+
+            <div id="loading" class="loader" style="display:none;"></div>
+        </div>
+        <div class="b2b-filters d-flex">
+            <div class="d-flex flex-wrap justify-content-center align-items-center">
+                @Html.Partial("../Search/_PagingSearchingBottom", Model)
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    if (!string.IsNullOrEmpty(Model.SearchTextName) && Model.SearchTextName != "Search")
+    {
+
+        <div class="col-12 col-md-8 p-0">
+            @string.Format(WebStore_Resources.ErrorProductSearchResult, Model.SearchTextName)
+        </div>
+    }
+    else
+    {
+        <div class="col-12 col-md-8 p-0">
+            @Html.RenderBlock(WebStore_Resources.NoSearchResultsFound?.Replace("{0}", searchTerm))
+        </div>
+    }
+}
+<input type="hidden" id="hdnLocaleId" value="@Helper.GetLocaleId()" data-test-selector="txtLocaleId">
+<input type="hidden" id="hdnProfileId" value="@Helper.GetProfileId()" data-test-selector="txtProfileId">
+<input type="hidden" id="hdnAccountId" value="@Helper.GetUserAccountId()" data-test-selector="txtAccountId">
+<input type="hidden" id="hdnCatalogId" value="@Helper.GetUserProfileCatalogId()" data-test-selector="txtCatalogId">
+<script>
+    $(document).ready(function () {
+        Search.prototype.SaveSearchKeywords();
+        var async = '@Helper.IsAsyncPrice';
+        if (async == 'True') {
+            Product.prototype.GetPriceAsync();
+        }
+        $("#searchTextBox").val(`@Html.RenderBlock(searchValue)`);
+
+        if ('@addDataToDB'=='True') {
+            var model = {
+                "UserId": '@userId',
+                "SearchProfileId": '@Model.SearchProfileId',
+                "PortalId": '@portalId',
+                "UserProfileId": '@profileId',
+                "SearchKeyword": '@HttpUtility.JavaScriptStringEncode(Model.SearchKeyword,false)',
+                "TransformationKeyword": '@Model.SuggestTerm',
+                "ResultCount": '@resultCount'
+            };
+            Search.prototype.SaveSearchReportData(model)
+        }
+
+    })
+</script>
+@Html.Partial("~/Views/Shared/Enhanced Ecommerce/_PLPTracking.cshtml", Model.GetProductImpressionsData())
+@Html.Partial("../Schema/_ProductListSchema", Model)

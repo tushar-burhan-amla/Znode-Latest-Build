@@ -1,0 +1,14 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CMSTextWidgetConfigurationViewModel
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.Text,new { @data_test_selector = "lblText" })
+        </div>
+        <div class="control-lg">
+            @Html.EditorFor(m => m.Text)
+        </div>
+        @Html.ValidationMessageFor(m => m.Text,"",new { @data_test_selector = "valText" })
+    </div>
+</div> 
+                     

@@ -1,0 +1,30 @@
+﻿<!--Partial view to update username-->
+<body>
+    <div id="updateUserView" data-test-selector="divUpdateUserView" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-between">
+                    <h5 data-test-selector="hdgTitle" class="modal-title">@Admin_Resources.TitleUpdateUsername</h5>
+                    <div class="pull-right btn-container">
+                        <a id="btnCancelUpdate" href="" onclick="User.prototype.ClearField()" data-dismiss="modal" class="btn-text-icon" data-test-selector="linkCancel"><i class="z-back"></i>@Admin_Resources.ButtonBack</a>
+                        <div class="pull-right padding-left">
+                            <button type="button" class=" btn-text btn-text-secondary" onclick="User.prototype.UpdateExistingUsername();" data-test-selector="linkSaveNClose">@Admin_Resources.ButtonSave</button>
+                        </div>
+                    </div>
+                </div>
+                <!--Main Container-->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label data-test-selector="lblCurrentUsername">@Admin_Resources.ExistingUsername</label>
+                        <input data-test-selector="txtCurrentUsername" disabled="disabled" id="currentUsername" type="text" />
+                    </div>
+                    <div class="form-group">
+                        <label class="required" data-test-selector="lblNewUsername">@Admin_Resources.NewUsername</label>
+                        <input id="newUsername" type="text" required="@Admin_Resources.RequiredUserNameErrorMessage" data-test-selector="txtNewUsername" /><br />
+                        <span id="errorMessage" data-test-selector="valNewUsername"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

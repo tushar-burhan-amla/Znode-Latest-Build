@@ -1,0 +1,19 @@
+@using Znode.Engine.WebStore.ViewModels
+@model MediaViewModel
+
+    <div>
+        @{ 
+            if (Model != null)
+            {
+                if (Model.MediaId > 0)
+                {
+                    <a class="btn btn-secondary" onclick='Home.prototype.DownloadMediaByMediaId("@Model.MediaId");' id="downloadButton"><i class='zf-view-details'></i>Download</a>
+                }
+                else if (!string.IsNullOrEmpty(Model.MediaPath))
+                {
+                    <a class="btn btn-secondary" onclick='Home.prototype.DownloadMediaByGuid("@Model.MediaPath");' id="downloadButton"><i class='zf-view-details'></i>Download</a>
+                }
+            }
+         }
+    </div>
+    

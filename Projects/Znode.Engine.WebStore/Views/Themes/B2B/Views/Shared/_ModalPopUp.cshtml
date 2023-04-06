@@ -1,0 +1,29 @@
+﻿@using Znode.Libraries.ECommerce.Utilities
+
+@{
+    string modalTitle = string.Empty;
+    string jqueryFunction = string.Empty;
+    if (HelperUtility.IsNotNull(ViewData["modal-title"]))
+    {
+        modalTitle = Convert.ToString(ViewData["modal-title"]);
+        jqueryFunction = Convert.ToString(ViewData["jqueryFunction"]);
+    }
+}
+
+<div class="modal fade" id="custom-modal" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@modalTitle</h4>
+                <button type="button" class="close" data-dismiss="modal" @jqueryFunction><span class="close-circle-icon"></span></button>
+
+            </div>
+            <div class="modal-body">
+                <div id="custom-content">
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>

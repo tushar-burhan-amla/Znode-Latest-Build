@@ -1,0 +1,177 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@model BrandViewModel
+
+@{
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = "/PIM/Brand/List", FormId = "frmCreateUpdateBrand", Callback = "Brand.prototype.ValidateBrandSEOFriendlyPageName", IsSaveCloseEnable = true };
+    string mediapath = string.IsNullOrEmpty(Model?.MediaPath) ? ZnodeAdminSettings.DefaultImagePath : Model?.MediaPath;
+    int? mediaId = Model?.MediaId > 0 ? Model?.MediaId : null;
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.ToLower().Contains("create"))
+    {
+        <h1 data-test-selector="hdgBrand">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelBrand)</h1>
+    }
+    else
+    {
+        <h1 data-test-selector="hdgBrand">@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelBrand)<em class="z-minus"></em><span>@Model.BrandName</span></h1>
+    }  
+  <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @if (actionName.ToLower().Equals("edit"))
+    {
+        <aside>
+            <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+            <div class="slide-container">
+                <ul class="aside-panel">
+                    <li>@Html.AuthorizedRawActionLink(@PIM_Resources.TitleBrand, "Edit", "Brand", new { BrandId = Model.BrandId }, new { @data_test_selector = "linkBrands" })</li>
+                    <li>@Html.AuthorizedRawActionLink(@PIM_Resources.TitleAssociatedProducts, "AssociatedProductList", "Brand", new { area = "PIM", BrandId = Model.BrandId, brandCode = Model.BrandCode, brandName = Server.UrlEncode(Model.BrandName), localeId = Model.LocaleId }, new { @data_test_selector = "linkAssociatedProducts" })</li>
+                    @*<li>@Html.AuthorizedRawActionLink(@Admin_Resources.TitleAssociatedStores, "AssociatedStoreList", "Brand", new { area = "PIM", BrandId = Model.BrandId, brandCode = Model.BrandCode, brandName = Server.UrlEncode(Model.BrandName), localeId = Model.LocaleId }, null)</li>*@
+                </ul>
+            </div>
+        </aside>
+    }
+    <!--Main Container-->
+    <section class="main-container">
+        <div class="col-sm-12 page-container">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateUpdateBrand", enctype = "multipart/form-data" }))
+            {
+            <div class="col-sm-12 nopadding">
+                @if (Model?.Locale?.Count > 0)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(x => x.LocaleId, new { @data_test_selector = "lblLocale" })
+                            </div>
+                            <div class="control-md dirtyignore">
+                                @if (Model.BrandId > 0)
+                                {
+                                    @Html.DropDownListFor(m => m.LocaleId, Model.Locale, new { @id = "ddlBrandLocale", @onchange = "Brand.prototype.CultureChangeOnEdit()", @data_test_selector = "drpLocale" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(m => m.LocaleId, Model.Locale, new { @id = "ddlBrandLocale", disabled = "disabled", @data_test_selector = "drpLocale" })
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label class="required" data-test-selector="lblBrandName">@Admin_Resources.LabelBrandCode</label>
+                        </div>
+                        <div class="control-md">
+                            @*@if (Model.BrandId <= 0)
+                    {
+                        @Html.TextBoxFor(model => model.BrandCode, new { @maxlength = "30", @onchange = "Brand.prototype.CheckUniqueBrandCode(this)" })
+                        <span id="errorSpanForUnique"></span>
+                        @Html.ValidationMessageFor(model => model.BrandCode)
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.BrandCode, new { @maxlength = "30", disabled = "disabled" })
+
+                        @Html.ValidationMessageFor(model => model.BrandCode)
+                    }*@
+                            @if (string.Equals(actionName.ToLower(), "create"))
+                            {
+                                @Html.DropDownListFor(model => model.BrandCode, Model.BrandCodeList, new { @id = "ddlBrandCodeList", @data_test_selector = "drpBrandCode", @onchange="Brand.prototype.GetBrandName(this)" })
+                                @Html.ValidationMessageFor(model => model.BrandCode, "", new { @data_test_selector = "valBrandCode" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => model.BrandCode, new { @readonly = "readonly", @data_test_selector = "txtBrandCode" })
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label class="required" data-test-selector="lblBrandName">@PIM_Resources.LabelBrandName</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(model => model.BrandName, new { @maxlength = "100", @readonly = "readonly", @data_test_selector = "txtBrandName" })
+                            @Html.ValidationMessageFor(model => model.BrandName,"", new { @data_test_selector = "valBrandName" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblIsActive">@PIM_Resources.LabelIsActive</label>
+                        </div>
+                        <div class="control-md">
+                            <label>
+                                <input @(Model.IsActive ? "checked='checked'" : "") id="IsActive" name="IsActive" type="checkbox" value="true" data-test-selector="chkIsActive">
+                                <span class="lbl padding-8" for="IsActive" data-test-selector="spnIsActive"></span>
+                                <input name="IsActive" type="hidden" value="false">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblBrandDescription">@PIM_Resources.LabelBrandDescription</label>
+                        </div>
+                        <div class="control-md">
+                            @Html.EditorFor(model => model.Description, new { @data_test_selector = "txtBrandDescription" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            <label data-test-selector="lblBrandLogo">@PIM_Resources.LabelBrandLogo</label>
+                        </div>
+                        <div class="control-md">
+                            <div class="upload-images" id="divMediaId">
+                                <img id="MediaId" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')" src="@mediapath" alt="@Model.BrandName Logo" class="img-responsive" data-test-selector="imgBrandLogo">
+                                <span class="change-image" onclick="EditableText.prototype.BrowseMedia('MediaId','False','True','True')" data-test-selector="linkChange">@Admin_Resources.LinkChange</span>
+                                <input type="hidden" id="MediaId" name="MediaId" value="@mediaId">
+                                <input type='hidden' value=@AdminConstants.ImageExtensions Id='hdnMediaId' />
+                                @if (!Equals(mediapath, null) && !Equals(mediapath, ZnodeAdminSettings.DefaultImagePath))
+                                {
+                                    <a class="upload-images-close" data-toggle="tooltip" data-placement="top" title="Remove" onclick="EditableText.prototype.RemoveImage('MediaId')" data-test-selector="linkRemove"><em class="z-close-circle"></em></a>
+                                }
+                            </div>
+                        </div>
+                        <div id="UploadMediaId" class="appendMediaModel">
+                        </div>
+                    </div>
+                </div>
+                @Html.Partial("~/Areas/PIM/Views/Brand/SEODetails.cshtml")
+
+
+                @Html.Partial("~/Areas/PIM/Views/Brand/_CustomDetails.cshtml")
+
+ </div>
+                @Html.HiddenFor(model => model.BrandId)
+                @Html.HiddenFor(model => model.BrandCode)
+                @Html.HiddenFor(model => model.CMSSEODetailId)
+                @Html.HiddenFor(model => model.CMSSEODetailLocaleId)
+                @Html.HiddenFor(model => model.LocaleId)
+                @Html.HiddenFor(model => model.BrandDetailLocaleId)
+                @Html.HiddenFor(model=>model.SEOFriendlyPageName)
+            }
+            @*To do:Keeping this code to test some functionality. Important Div to render media upload popup*@
+            <div id="divMediaUploaderPopup">
+            </div>
+        </div>
+    </section>
+</div>

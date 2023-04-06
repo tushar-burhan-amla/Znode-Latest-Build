@@ -1,0 +1,89 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model  ConfigurableAttributeViewModel
+@{
+    Layout = null;
+    var attributes = Model?.ConfigurableAttributes?.Where(x => x.IsConfigurable)?.ToList();
+}
+
+@if (attributes?.Count > 0)
+{
+    foreach (var att in attributes?.OrderBy(x => x.DisplayOrder)?.ThenBy(x => x.AttributeCode))
+    {
+        switch (att.IsSwatch)
+        {
+            case "true":
+                <div class="col-12 p-0 my-4 b2b-dynamic-addons b2b-configurable-attribute">
+                    <div class="form-group">
+                        <div class="col-12 p-0">
+                            <label class="section-header">@att.AttributeName</label>
+                        </div>
+                        <div class="col-12 p-0">
+                            <ul class="swatch-img size-swatch p-0 img-attribute ">
+                                @foreach (var image in att.ConfigurableAttribute?.OrderBy(x => x.DisplayOrder).ThenBy(x => x.AttributeValue))
+                                {
+                                    <li class="styled-input scratch-attribute-img">
+                                        <input type="radio" class="ConfigurableAttribute" autocomplete="off" name="@att.AttributeCode" Onchange="Product.prototype.OnAttributeSelect(this);" id="@att.AttributeCode-@image.AttributeValue" code="@att.AttributeCode" value="@image.AttributeValue" @( att.SelectedAttributeValue.Contains(image.AttributeValue) ? "checked=checked" : "") />
+                                        <label for="@att.AttributeCode-@image.AttributeValue" class="scratch-image @( image.IsDisabled ? "scratchattribute" : "") @( att.SelectedAttributeValue.Contains(image.AttributeValue) ? "active" : "")"><img src="@image.ImagePath" class="SwatchImage img-responsive" title="@image.AttributeValue" alt="@image.AttributeValue" /> <span class="img-scratch"></span> </label>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                break;
+            case "false":
+                <div class="col-12 p-0 my-3 b2b-dynamic-addons b2b-configurable-attribute">
+                    <div class="form-group">
+                        <div class="col-12 p-0">
+                            <label class="section-header">@att.AttributeName</label>
+                        </div>
+                        <div class="col-12 p-0">
+                            <ul class="swatch-img size-swatch color-swatch p-0 color-attribute">
+                                @foreach (var image in att.ConfigurableAttribute?.OrderBy(x => x.DisplayOrder).ThenBy(x => x.AttributeValue))
+                                {
+                                    <li class="styled-input">
+                                        <input type="radio" class="ConfigurableAttribute" name="@att.AttributeCode" autocomplete="off" Onchange="Product.prototype.OnAttributeSelect(this);" id="@att.AttributeCode-@image.AttributeValue" code="@att.AttributeCode" value="@image.AttributeValue" @( att.SelectedAttributeValue.Contains(image.AttributeValue) ? "checked=checked" : "") />
+                                        <label for="@att.AttributeCode-@image.AttributeValue" class="scratch-image @( image.IsDisabled ? "scratchattribute" : "") @( att.SelectedAttributeValue.Contains(image.AttributeValue) ? "active" : "")"> <span class="swatch-icon stop-icon" style="color:@image.SwatchText !important;" title="@image.AttributeValue"></span> <span class="scratch-color"></span> </label>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                break;
+            default:
+                <div class="col-12 p-0 my-3 b2b-dynamic-addons b2b-configurable-attribute">
+                    <div class="form-group">
+                        <div class="col-12 p-0">
+                            <label class="section-header">@att.AttributeName</label>
+                        </div>
+                        <div class="col-12 p-0">
+                            <ul class="swatch-img size-swatch p-0">
+                                @foreach (var image in att.ConfigurableAttribute?.OrderBy(x => x.DisplayOrder))
+                                {
+                                    <li class="styled-input radio-input">
+                                        <input type="radio" class="ConfigurableAttribute" name="@att.AttributeCode" autocomplete="off" Onchange="Product.prototype.OnAttributeSelect(this);" id="@att.AttributeCode-@image.AttributeValue" code="@att.AttributeCode" value="@image.AttributeValue" @( att.SelectedAttributeValue.Contains(image.AttributeValue) ? "checked=checked" : "") />
+                                        <label for="@att.AttributeCode-@image.AttributeValue" class="scratch-text @( image.IsDisabled ? "scratchattribute" : "") @( att.SelectedAttributeValue.Contains(image.AttributeValue) ? "active" : "")">@image.AttributeValue</label>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                break;
+        }
+    }
+}
+@*@if (!string.IsNullOrEmpty(Model.CombinationErrorMessage))
+    {
+        <div class="col-12 p-0">
+            <span class="error-msg">
+                @Model.CombinationErrorMessage
+            </span>
+        </div>
+    }*@
+<script>
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>

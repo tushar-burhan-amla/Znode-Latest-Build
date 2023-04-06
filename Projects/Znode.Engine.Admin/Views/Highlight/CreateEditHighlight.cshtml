@@ -1,0 +1,131 @@
+﻿@model HighlightViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateEditHighlight", CancelUrl = "List", IsSaveCloseEnable = true };
+    string isActiveStatus = (!Equals(Model, null) && Model.IsActive) ? "checked='checked'" : string.Empty;
+    string mediapath = string.IsNullOrEmpty(Model?.MediaPath) ? ZnodeAdminSettings.DefaultImagePath : Model?.MediaPath;
+    int? mediaId = Model?.MediaId > 0 ? Model?.MediaId : 0;
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.ToLower().Contains("create"))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleHeaderHighlight)</h1>
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.TitleHeaderHighlight)<em class="z-minus"></em><span id="titleHighlightName">@Model.HighlightName</span></h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+
+<!--Main Container-->
+<div class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/Views/Highlight/_asideHighlightPanel.cshtml", Model)
+    <section class="main-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmCreateEditHighlight" }))
+        {
+            <div id="createForm">
+                @if (Model?.Locale?.Count > 0)
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(x => x.LocaleId, new { @data_test_selector = "lblLocaleId" })
+                            </div>
+                            <div class="control-md">
+                                @if (Model.HighlightId > 0)
+                                {
+                                    @Html.DropDownListFor(m => m.LocaleId, Model.Locale, new { @id = "ddl_locale_list_highlight", @data_test_selector = "drpLocaleId" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(m => m.LocaleId, Model.Locale, new { @id = "ddl_locale_list_highlight", disabled = "disabled", @data_test_selector = "drpLocaleId" })
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                @*<div class="form-group">
+                    <div class="col-sm-12 nopadding add-image">
+                        <div class="control-label">
+                            <label data-test-selector="lblImage">@Admin_Resources.LabelImage</label>
+                        </div>
+                        <div class="control-md">
+                            <div class="upload-images" id="divMediaId">
+                                <img id="MediaId" alt="Upload Image" onclick="EditableText.prototype.BrowseMedia('MediaId', 'False', 'True','True')" src="@mediapath" class="img-responsive upload-single-image" data-test-selector="imgImage">
+                                <span class="change-image" onclick="EditableText.prototype.BrowseMedia('MediaId', 'False', 'True','True')">@Admin_Resources.LinkChange</span>
+                                <input type="hidden" id="MediaId" name="MediaId" value="@mediaId">
+                                <input type='hidden' value=@AdminConstants.ImageExtensions Id='hdnMediaId' />
+                                @if (!Equals(mediapath, null) && !Equals(mediapath, ZnodeAdminSettings.DefaultImagePath))
+                                {
+                                    <a class="upload-images-close" data-toggle="tooltip" data-placement="top" title="Remove" onclick="EditableText.prototype.RemoveImage('MediaId')"><em class="z-close-circle"></em></a>
+                                }
+
+                            </div>
+                            <div id="UploadMediaId" class="appendMediaModel">
+
+                            </div>
+                            @Html.ValidationMessageFor(m => m.MediaId, null, new { @id = "mediaIdErrorMessage", @data_test_selector = "valImage" })
+                        </div>
+                    </div>
+                </div>*@
+                <div class="form-group">
+                    <div class="control-md control-non">
+                        <label>
+                            <input @isActiveStatus id="IsActive" name="IsActive" type="checkbox" value="true" data-test-selector="">
+                            <span class="lbl padding-8" data-test-selector="lblIsActive">@Admin_Resources.LabelIsActive</span>
+                            <input name="IsActive" type="hidden" value="false">
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" id="ruletype-content">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.HighlightTypeId, new { @data_test_selector = "lblHighlightTypeId" })
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.HighlightTypeId, Model.HighlightTypeList, new { @id = "ddlHighlightTypeList", @data_test_selector = "drpHighlightTypeId" })
+                            @Html.ValidationMessageFor(model => model.HighlightTypeId,"", new { @data_test_selector = "valHighlightTypeId" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.DisplayOrder, new { @class = "required", @data_test_selector = "lblDisplayOrder" })
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(m => m.DisplayOrder, new {@data_test_selector = "txtDisplayOrder" })
+                            @Html.ValidationMessageFor(m => m.DisplayOrder, "", new { @data_test_selector = "valDisplayOrder" })
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="div_highlight_for_locale">
+                    @{ Html.RenderPartial("_HighlightForLocale", Model); }
+                </div>
+
+                @Html.HiddenFor(m => m.HighlightId)
+                @Html.HiddenFor(model => model.LocaleId)
+                @Html.HiddenFor(model => model.DisplayPopup)
+                @Html.HiddenFor(model => model.HighlightCode)
+            </div>
+                        }
+    </section>
+
+</div>
+
+
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup">
+</div>

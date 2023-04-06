@@ -1,0 +1,18 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model GlobalAttributeValuesViewModel
+@{
+    bool? isRequiredClass = Model?.ControlProperty?.htmlAttributes?.Any(x => x.Key == "IsRequired" && x.Value.ToString() == "True");
+}
+
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding" data-test-selector="divAttribute">
+        <div class="control-label padding-right">
+            <label data-test-selector="lblAttributeName" for="@Model.ControlProperty.Name" @( isRequiredClass.Value ? "class=required" : "")>@Model.AttributeName</label>
+        </div>
+        @Html.CreateControl(@Model.ControlProperty)
+    </div>
+</div>
+
+
+

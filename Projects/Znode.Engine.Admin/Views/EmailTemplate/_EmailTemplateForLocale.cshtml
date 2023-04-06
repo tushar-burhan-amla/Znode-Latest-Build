@@ -1,0 +1,50 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model EmailTemplateViewModel
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.Descriptions, new { @data_test_selector = "lblDescriptions" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => m.Descriptions, new { @data_test_selector = "txtDescriptions" })
+            @Html.ValidationMessageFor(m => m.Descriptions, "", new { @data_test_selector = "valDescriptions" })
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.Subject, new { @class = "required", @data_test_selector = "lblSubject" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => m.Subject, new { @data_test_selector = "txtSubject" })
+            @Html.ValidationMessageFor(m => m.Subject, "", new { @data_test_selector = "valSubject" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.Html, new {@data_test_selector = "lblHtml" })
+        </div>
+        <div class="control-xxl">
+            @Html.EditorFor(m => m.Html, new { @data_test_selector = "txtHtml" })
+            @Html.ValidationMessageFor(m => m.Html, "", new { @data_test_selector = "valHtml" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.LabelFor(m => m.SmsContent, new {@data_test_selector = "lblSMSContent" })
+        </div>
+        <div class="control-xxl">
+            @Html.TextAreaFor(m => m.SmsContent, new { @data_test_selector = "txtSMSContent" , @rows = "20", @class = "sms-content-field" })
+            @Html.ValidationMessageFor(m => m.SmsContent, "", new { @data_test_selector = "valSMSContent" })
+        </div>
+    </div>
+</div>
+

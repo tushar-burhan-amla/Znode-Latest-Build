@@ -1,0 +1,83 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CaseRequestViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmReplyCustomer", CancelUrl = "/ServiceRequest/List", Callback = "FileUpload.ValidateFileSizeAndType" };
+    Model.EmailMessage = null;
+}
+<div id="grid-container">
+    <div class="col-sm-12 title-container">
+        <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelServiceRequest)<em class="z-minus"></em><span>@Model.Title</span></h1>
+        <div class="pull-right btn-container">
+            <a href="@actionModel.CancelUrl" data-test-selector="linkBack" class="btn-text-icon"><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+            <div class="pull-right padding-left">
+                @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.ButtonSave, actionModel.Action, actionModel.Controller, new { @id = "dvSave", @data_test_selector = "linkSave", @class = "btn-text btn-text-secondary", onclick = "SaveCancel.prototype.SubmitForm('" + @actionModel.FormId + "', '" + @actionModel.Callback + "')" })
+            </div>
+        </div>
+    </div>
+    <div class="main-wrapper">
+        <!--Left Panel-->
+        <aside>
+            <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+            <div class="slide-container">
+                @Html.Partial("~/views/ServiceRequest/_asideServiceRequestManagepanel.cshtml")
+            </div>
+        </aside>
+        <!--Main Container-->
+        <section class="main-container">
+            @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmReplyCustomer", enctype = "multipart/form-data" }))
+            {
+                <div id="loginForm">
+                    @Html.ValidationSummary(true)
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.EmailSubject, new { @class = "required", @data_test_selector = "lblEmailSubject" })
+                            </div>
+                            <div class="control-md">
+                                @Html.TextBoxFor(model => model.EmailSubject, new { @Value = Model.Title, @data_test_selector = "txtEmailSubject" })
+                                @Html.ValidationMessageFor(model => model.EmailSubject, "", new { @data_test_selector = "valEmailSubject" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.LabelFor(m => m.EmailMessage, new { @class = "required", @data_test_selector = "lblEmailMessage" })
+                            </div>
+                            <div class="control-md">
+                                @Html.EditorFor(model => model.EmailMessage)
+                                @Html.ValidationMessageFor(model => model.EmailMessage, "", new { @data_test_selector = "valEmailMessage" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label">
+                                @Html.Label("", Admin_Resources.LabelAttachments, new { @data_test_selector = "lblAttachment" })
+                            </div>
+                            <div class="control-md">
+                                @Html.EditorFor(model => model.FilePath, new { @id = "serviceRequestFilePath" })
+                                <span id="errorFileTypeAndSize" class="error-msg" />
+                            </div>
+                        </div>
+                    </div>
+                    @Html.HiddenFor(x => x.CaseRequestId)
+                    @Html.HiddenFor(x => x.CaseOrigin)
+                    @Html.HiddenFor(x => x.EmailId)
+                    @Html.HiddenFor(x => x.PortalId)
+                    @Html.HiddenFor(x => x.CaseStatusId)
+                    @Html.HiddenFor(x => x.CasePriorityId)
+                    @Html.HiddenFor(x => x.CaseTypeId)
+                    @Html.HiddenFor(x => x.FirstName)
+                    @Html.HiddenFor(x => x.LastName)
+                    @Html.HiddenFor(x => x.FilePath)
+                </div>
+            }
+        </section>
+    </div>
+</div>
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup"></div>

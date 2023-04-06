@@ -1,0 +1,344 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model ProductViewModel
+@{
+    string callForPricingMessage = Html.RenderMessage(WebStoreConstants.ProductCallForPricing)?.ToString();
+    bool IsCallForPricing = Convert.ToBoolean(Model.Attributes?.Value(ZnodeConstant.CallForPricing));
+    ProductPromotionViewModel promotionCallForPricing = Model?.Promotions?.FirstOrDefault(x => x.PromotionType == ZnodeConstant.PromotionCallForPricing);
+    if (HelperUtility.IsNotNull(promotionCallForPricing))
+    {
+        IsCallForPricing = true;
+        callForPricingMessage = string.IsNullOrEmpty(promotionCallForPricing.PromotionMessage) ? callForPricingMessage : promotionCallForPricing.PromotionMessage;
+    }
+    bool isObsolete = Convert.ToBoolean(Model.Attributes?.FirstOrDefault(x => x.AttributeCode == ZnodeConstant.IsObsolete)?.AttributeValues);
+    bool isDisplayVariantsOnGrid = Convert.ToBoolean(Model.Attributes?.FirstOrDefault(x => string.Equals(x.AttributeCode, ZnodeConstant.DisplayVariantsOnGrid, StringComparison.InvariantCultureIgnoreCase))?.AttributeValues) && Model.IsConfigurable;
+    string disable = isObsolete || IsCallForPricing || !Model.ShowAddToCart ? "disabled" : "";
+    bool isGroupProduct = string.Equals(Model.Attributes.SelectAttributeList(ZnodeConstant.ProductType)?.FirstOrDefault()?.Code, ZnodeConstant.GroupedProduct, StringComparison.OrdinalIgnoreCase);
+    bool isBundleProduct =  string.Equals(Model.Attributes?.SelectAttributeList(ZnodeConstant.ProductType)?.FirstOrDefault()?.Code, ZnodeConstant.BundleProduct, StringComparison.OrdinalIgnoreCase);
+    bool isSimpleProduct =  string.Equals(Model.Attributes?.SelectAttributeList(ZnodeConstant.ProductType)?.FirstOrDefault()?.Code, ZnodeConstant.SimpleProduct, StringComparison.OrdinalIgnoreCase);
+    var PersonalizeValues = Model?.Attributes?.Where(x => x.IsPersonalizable && x.AttributeTypeName == "Text").ToList();
+    string inventoryMessageClass = Model.ShowAddToCart ? "status-outofstock hvr-pulse success-msg" : "error-msg";
+    string UOM = Attributes.ValueFromSelectValue(Model?.Attributes, "UOM");
+    Model.CartParameter?.Add("IsRedirectToCart", "False");
+    Model.CartParameter?.Add("ProductName", Model.Name);
+    bool isShowPriceAndInventoryToLoggedInCustomersOnly = GlobalAttributeHelper.IsShowPriceAndInventoryToLoggedInUsersOnly();
+    string obsoleteMessage = Model.IsQuickView ? string.Format(WebStore_Resources.QuickViewObsoleteMessage, HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + Url.GetProductUrl(Model?.SEOUrl, Model?.PublishProductId.ToString())) : WebStore_Resources.ObsoleteMessage;
+    string obsoleteClass = isObsolete ? "cut-price" : "";
+    bool IsCloudflareEnabled = GlobalAttributeHelper.IsCloudflareEnabled();
+    string productSku = string.IsNullOrEmpty(Model.ConfigurableProductSKU) ? Model.SKU : Model.ConfigurableProductSKU;
+
+    string isDownlodableProduct = Model?.Attributes?.FirstOrDefault(a => a.AttributeCode == "IsDownloadable")?.AttributeValues;
+    bool isDownlodable = false;
+    Boolean.TryParse(isDownlodableProduct, out isDownlodable);
+    bool showDefaultAndAllLocationsInventory = GlobalAttributeHelper.IsShowAllLocationsInventory();
+    string typicalLeadTime = Convert.ToString(Model.Attributes?.FirstOrDefault(x => x.AttributeCode.Equals(ZnodeConstant.TypicalLeadTime, StringComparison.InvariantCultureIgnoreCase))?.AttributeValues);
+    string emailId = SessionHelper.GetDataFromSession<UserViewModel>(WebStoreConstants.UserAccountKey)?.Email;
+    bool isDisablePurchasing = Convert.ToBoolean(Model.Attributes?.FirstOrDefault(y => y.AttributeCode.Equals(ZnodeConstant.OutOfStockOptions, StringComparison.InvariantCultureIgnoreCase))?.SelectValues?.Where(x => x.Code.Equals(ZnodeConstant.DisablePurchasing, StringComparison.InvariantCultureIgnoreCase))?.Any());
+    string inventoryDetails = showDefaultAndAllLocationsInventory && Convert.ToBoolean(HelperUtility.IsNotNull(Model.Quantity)) && Model.Quantity.GetValueOrDefault() > 0 && isDisablePurchasing ? "inventory-details" : "";
+}
+<div class="col-12 product-info p-0" id="scrollReview">
+    <div class="row d-flex">
+        <div class="col-12 col-md-6 col-lg-7 col-xl-6">
+            @if (isObsolete)
+            {
+                <div class="col-12 product-price p-0">
+                    <div class="price"><h4 class="error-msg obsolete-msg pt-2 pb-2">@Html.RenderBlock(obsoleteMessage)</h4></div>
+                </div>
+            }
+            @*if store level flag - 'show price and inventory to logged-in users only' is set to yes and user is logged off then do not show price and inventory to users.*@
+            @if (isShowPriceAndInventoryToLoggedInCustomersOnly && !Request.IsAuthenticated)
+            {
+                <div class="loged-out-product-details">
+                    <div class="loged-out-product-title">@WebStore_Resources.TitleWhatsThePrice</div>
+                    <div class="loged-out-product-text">
+                        <a href="JavaScript:void(0);" data-target="#sign-in-nav" class="OpenNav" onclick="User.prototype.LoginInPopup()">@WebStore_Resources.LabelSignIn</a>
+                        @WebStore_Resources.TextOR
+                        <a href="/User/Signup/@("?returnUrl=" + (Model.IsQuickView ? Url.GetProductUrl(Model?.SEOUrl, Model?.PublishProductId.ToString()) : HttpContext.Current.Request.Url.PathAndQuery.ToString()))">@WebStore_Resources.LabelRegister</a>
+                        @WebStore_Resources.TextForPricingAndInventory
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-12 product-price p-0">
+                    @if (!IsCallForPricing && !isGroupProduct)
+                    {
+                        if (IsCloudflareEnabled)
+                        {
+                            <h2>
+                                <span class="cloudflareSpan" data-id="@Model.PublishProductId" data-type="simpleproduct" data-sku="@productSku">Loading..</span>
+                            </h2>
+                        }
+                        else
+                        {
+                            <h2>
+                                @if (!Equals(Model.SalesPrice, null))
+                                {
+                                    <span class="@obsoleteClass" data-test-selector="spnProductPrice" id="spnProductPrice">
+                                        @if (HelperUtility.IsNotNull(Model.PromotionalPrice))
+                                        {
+                                            @Helper.FormatPriceWithCurrency(Model.PromotionalPrice, Model.CultureCode, UOM)
+                                        }
+                                        else
+                                        {
+                                            @Helper.FormatPriceWithCurrency(Model.SalesPrice, Model.CultureCode, UOM)
+                                        }
+                                    </span>
+                                    if (Model.SalesPrice != @Model.RetailPrice)
+                                    {
+                                        <span class="cut-price" data-test-selector="spnCutPrice">
+                                            @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode, UOM)
+                                        </span>
+                                    }
+                                }
+                                else
+                                {
+                                    if (HelperUtility.IsNotNull(Model.PromotionalPrice))
+                                    {
+                                        <span class="@obsoleteClass" data-test-selector="spnProductPrice" id="spnProductPrice">
+                                            @Helper.FormatPriceWithCurrency(Model.PromotionalPrice, Model.CultureCode, UOM)
+                                        </span>
+                                        <span class="cut-price" data-test-selector="spnCutPrice">
+                                            @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode, UOM)
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        if (!isDisplayVariantsOnGrid)
+                                        {
+                                        <span class="@obsoleteClass" data-test-selector="spnProductPrice" id="spnProductPrice">
+                                            @Helper.FormatPriceWithCurrency(Model.RetailPrice, Model.CultureCode, UOM)
+                                        </span>
+                                        }
+                                    }
+                                }
+
+                            </h2>
+                        }
+                    }
+                    @if (isGroupProduct && !IsCallForPricing)
+                    {
+                        <h2>
+                            <span id="groupproductmessage" class="@obsoleteClass"></span>
+                        </h2>
+                    }
+                    @if (isDisplayVariantsOnGrid)
+                    {
+                        <h2>
+                            <span id="configurableproductmessage" class="@obsoleteClass"></span>
+                        </h2>
+                    }
+                    @if (IsCallForPricing)
+                    {
+                        <div class="price"><h4 class="error-msg">@callForPricingMessage</h4></div>
+                    }
+                </div>
+            }
+            <div class="product-rating">
+                @Html.Partial("_StarRating", Model.Rating)
+                @{
+                    int totalreviews = 0;
+                    totalreviews = (Model?.ProductReviews?.Count).GetValueOrDefault();
+                    string ratingText = Model.Rating > 0 ? string.Format(WebStore_Resources.TextRating, Math.Round(Model.Rating, 1), totalreviews) : string.Empty;
+                }
+                @if (Model.IsQuickView)
+                {
+                    @ratingText<a href="@Url.GetProductUrl(Model?.SEOUrl, Model.PublishProductId.ToString())#product-content" onclick="javascript: $('#tab-reviews').click();" class="read-reviews" data-test-selector="linkReviewText">@WebStore_Resources.LinkTextReadReviews</a>
+                }
+                else
+                {
+                    @ratingText<a href="#product-content" onclick="javascript: $('#tab-reviews').click();" class="read-reviews" data-test-selector="linkReviewText">@WebStore_Resources.LinkTextReadReviews</a>
+                                }
+                            </div>
+
+
+                            @if (PersonalizeValues?.Count > 0)
+                            {
+                                Dictionary<string, string>
+                                    PersonliseCodeValue = new Dictionary<string, string>
+                                        ();
+                                PersonalizeValues.ForEach(x => PersonliseCodeValue.Add(x.AttributeCode, x.AttributeValues));
+                                Html.RenderAction("GetPersonalisedAttributes", "Product", new { productId = Model.PublishProductId, PersonliseValues = PersonliseCodeValue });
+                            }
+
+                            @if (IsCloudflareEnabled)
+                            {
+                                <span id="CloudflareTierPriceSpan" class="row no-gutters" data-id="@Model.PublishProductId" data-type="simpleproduct" data-sku="@productSku">Loading..</span>
+                            }
+                            else if ((!isShowPriceAndInventoryToLoggedInCustomersOnly || Request.IsAuthenticated) && Model.TierPriceList?.Count > 0 && (isBundleProduct || isSimpleProduct))
+                            {
+                                <div class="col-12 p-0 my-2 b2b-price-list">
+                                    <div class="row no-gutters">
+                                        <div class="col-12 b2b-price-list-head" data-test-selector="divSpecialPriceOffer">
+                                            @WebStore_Resources.TitleSpecialPriceOffers
+                                        </div>
+
+                                        @foreach (var item in Model.TierPriceList)
+                                        {
+                                            <div class="b2b-price-list-body" data-test-selector="divSpecialPriceBuy">Buy @Convert.ToDouble(item.Quantity) or more</div>
+                                            <div class="b2b-price-list-body">
+                                                <span class="@obsoleteClass" data-test-selector="spnSpecialPrice">
+                                                    @Helper.FormatPriceWithCurrency(item.Price, Model?.CultureCode)/item
+                                                </span>
+                                            </div>
+                                            // Calculates the % savings on tier pricing
+                                            if (Model.ProductPrice != null)
+                                            {
+                                                <div class="b2b-price-list-body b2b-price-list-save" data-test-selector="divSpecialPriceOfferSave">Save @Math.Ceiling((decimal)(100 - ((100 / Model.ProductPrice) * item.Price)))%</div>
+                                            }
+                                        }
+
+                    </div>
+                </div>
+            }
+        </div>
+        @*if store level flag - 'show price and inventory to logged-in users only' is set to yes and user is logged off then do not show price and inventory to users.*@
+        @if (!isShowPriceAndInventoryToLoggedInCustomersOnly || Request.IsAuthenticated)
+        {
+            <div class="col-md-5 order-0 order-md-2 p-0 inventory-block">
+                @if (!isObsolete && HelperUtility.IsNull(Model?.ConfigurableData?.CombinationErrorMessage))
+                {
+                    if (!Equals(Model.ProductType, ZnodeConstant.GroupedProduct) && !isDownlodable && !isBundleProduct && !isDisplayVariantsOnGrid)
+                    {
+                        @Html.HiddenFor(m => m.PublishProductId)
+                        <div class="@inventoryMessageClass @inventoryDetails">
+
+                            @if (showDefaultAndAllLocationsInventory)
+                            {
+                                if (Model.IsConfigurable && HelperUtility.IsNotNull(Model.ConfigurableData.CombinationErrorMessage))
+                                {
+                                    <div class="error-msg">
+                                        @Model.ConfigurableData.CombinationErrorMessage
+                                    </div>
+                                }
+                                else
+                                {
+                                    if (HelperUtility.IsNotNull(Model.Quantity) && Model.Quantity.GetValueOrDefault() > 0 && isDisablePurchasing)
+                                    {
+                                            <div class="d-flex justify-content-between pb-1">
+                                                <div class="label-inventory">@WebStore_Resources.TitleInventory</div>
+                                                <div class="label-details"><a onclick="Product.prototype.DisplayAllLocationInveory()" class="read-reviews" data-test-selector="linkInventoryDetail">@WebStore_Resources.TextDetails</a></div>
+                                            </div>
+                                            <div class="d-flex">
+                                                @Html.Label(Convert.ToString(Model.DefaultInventoryCount ?? "0"), new { @id = "lblDefaultInventoryCount", @class = "label-locations" })
+                                                @Html.Label(Convert.ToString(Model.DefaultWarehouseName), new { @id = "lblDefaultLocationName", @class = "default-name pl-2" })
+                                            </div>
+                                            <div class="d-flex">
+                                                @Html.Label(Convert.ToString(Model.Quantity), new { @id = "lblAllInventoryCount", @class = "label-locations" })
+                                                <span class="default-name pl-2">@WebStore_Resources.LabelAllLocations</span>
+                                            </div>
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                if (Model.IsConfigurable && HelperUtility.IsNotNull(Model.ConfigurableData.CombinationErrorMessage))
+                                {
+                                    <div class="error-msg">
+                                        @Model.ConfigurableData.CombinationErrorMessage
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        }
+    </div>
+    <div class="col-12 p-0">
+        @if (!isGroupProduct && !isDisplayVariantsOnGrid)
+        {
+            <div class="col-12 p-0" id="dynamic-product-variations">
+                @Html.Partial("_ProductAttributes")
+            </div>
+        }
+            <div class="row mx-0 addons-attributs">
+                @if (isGroupProduct || isDisplayVariantsOnGrid)
+                {
+                    <div id="dynamic-inventory" class="@inventoryMessageClass"></div>
+                }
+                <div class="col-12 b2b-dynamic-addons" id="dynamic-product-addons">
+                    @Html.Partial("_AddOns")
+                </div>
+                <div class="col-12 p-0">
+                    @if (isGroupProduct)
+                    {
+                        var attributes = Model?.Attributes?.Where(x => x.IsConfigurable)?.ToList();
+                        <div class="b2b-group-products">
+                            <div id="groupProductList">
+                                @{Html.RenderAction("GetGroupProductList", "Product", new { productId = Model?.PublishProductId, IsCallForPricing = Model?.IsCallForPricing, isObsolete = isObsolete, isQuickView = Model.IsQuickView });}
+                            </div>
+                            @Html.HiddenFor(m => m.ShowAddToCart)
+
+                            <div class="grouped-product-add-to-cart p-4 text-right quotebutton">
+                                @Html.AddToCartAjaxRequest(WebStore_Resources.ButtonAddToCart, "/Product/AddToCartProduct", Model.CartParameter, "btn btn-primary", "Product.prototype.BindAddOnProductSKU(this,event)", disable, "Product.prototype.DisplayAddToCartMessage(data)")
+                            </div>
+                        </div>
+                    }
+                </div>
+                </div>
+                <div class="row mx-0">
+                    @if (isBundleProduct)
+                    {
+                        Html.RenderAction("GetBundleProduct", "Product", new { productId = Model?.PublishProductId, isObsolete, associatedPublishBundleViewModel = Model?.PublishBundleProducts });
+                    }
+                    @if (isDisplayVariantsOnGrid)
+                    {
+                        Html.RenderAction("GetAssociatedConfigurableVariants", "Product", new { productId = Model?.PublishProductId, isObsolete = isObsolete, isQuickView = Model.IsQuickView });
+
+                        <div class="grouped-product-add-to-cart p-4 text-right quotebutton">
+                            @Html.AddToCartAjaxRequest(WebStore_Resources.ButtonAddToCart, "/Product/AddToCartProduct", Model.CartParameter, "btn btn-primary", "ConfigurableProduct.prototype.ValidateConfigurableProduct(this)", disable, "Product.prototype.DisplayAddToCartMessage(data)")
+                        </div>
+                    }
+                </div>
+                @Html.Partial("_AddToWishList", Model)
+            </div>
+    <span id="QuickViewQuantiyErrorMessage" class="error-msg"></span>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="StockNoticeModal" role="dialog" data-test-selector="StockNoticeModal">
+    <div class="modal-dialog modal-dialog-centered">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="d-flex justify-content-between p-3 border-bottom">
+                <h5 class="modal-title text-uppercase">@WebStore_Resources.TitleStockNotice</h5>
+                <button type="button" id="btnClose" onclick="Product.prototype.ClearField()" class="btn btn-secondary" data-dismiss="modal" data-test-selector="btnClose">@WebStore_Resources.ButtonCancel</button>
+            </div>
+            <div class="modal-body pb-4 pt-3" data-test-selector="divStockNoticeModalBody">
+                <p class="px-2 pb-3">@Html.RenderBlock(WebStore_Resources.StockNoticeMessage)</p>
+                <div class="row align-items-end mx-0 p-2">
+                    <div class="col-5 pl-0">
+                        <label class="required mb-2" data-test-selector="lblEmail"><strong>@WebStore_Resources.LabelEmailAddress</strong></label>
+                        <input type="text" id="stockNoticeEmail" name="lname" data-test-selector="txtEmail" value="@emailId" onchange="Product.prototype.RemoveStockNoticeValidationCSS(this)" placeholder="@WebStore_Resources.EnterYourEmail">
+                    </div>
+                    <div class="col-3 pl-0">
+                        <label class="required mb-2" data-test-selector="lblQuantity"><strong>@WebStore_Resources.ColumnTitleQuantity</strong></label>
+                        <input type="text" id="stockNoticeQty" name="stockNoticeQty" data-test-selector="txtQty" onchange="Product.prototype.RemoveStockNoticeValidationCSS(this)" onkeypress="Product.prototype.CheckQty(this)" placeholder="1">
+                    </div>
+                    <div class="col-4 px-0">
+                        <button type="button" class="btn btn-primary" onclick="Product.prototype.SubmitStockRequest(this)" data-test-selector="txtSubmit">@WebStore_Resources.ButtonSubmit</button>
+                    </div>
+                </div>
+                <div class="pl-2">
+                    <span id="errorMessage" data-test-selector="valStockNotice"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        $(document).ready(function () {
+        var IsCloudflareEnabled = '@IsCloudflareEnabled'
+            if (IsCloudflareEnabled == 'True') {
+                Product.prototype.GetPrice('@obsoleteClass', '@(!string.IsNullOrEmpty(Model.MinQuantity) ? Model.MinQuantity: "1")');
+                Product.prototype.GetAllLocationInventory();
+        }
+        })
+        $(".read-reviews").click(function () {
+            $("html, body").animate(
+                { scrollTop: $('#product-content').offset().top - 140 }, 2000);
+        })
+</script>

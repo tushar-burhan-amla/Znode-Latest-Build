@@ -1,0 +1,895 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Znode.Multifront.PaymentApplication.Data.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ZNodeActivityLog">
+          <Key>
+            <PropertyRef Name="ActivityLogId" />
+          </Key>
+          <Property Name="ActivityLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PaymentSettingId" Type="int" />
+          <Property Name="PortalID" Type="int" />
+          <Property Name="URL" Type="nvarchar(max)" />
+          <Property Name="Data1" Type="nvarchar" MaxLength="255" />
+          <Property Name="Data2" Type="nvarchar" MaxLength="255" />
+          <Property Name="Data3" Type="nvarchar" MaxLength="255" />
+          <Property Name="Status" Type="nvarchar" MaxLength="255" />
+          <Property Name="LongData" Type="nvarchar(max)" />
+          <Property Name="Source" Type="nvarchar" MaxLength="255" />
+          <Property Name="Target" Type="nvarchar" MaxLength="255" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodeAuthToken">
+          <Key>
+            <PropertyRef Name="AuthTokenId" />
+          </Key>
+          <Property Name="AuthTokenId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AuthToken" Type="nvarchar" MaxLength="200" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="TotalAttempt" Type="int" />
+        </EntityType>
+        <EntityType Name="ZNodeDomain">
+          <Key>
+            <PropertyRef Name="DomainId" />
+          </Key>
+          <Property Name="DomainId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PortalId" Type="int" Nullable="false" />
+          <Property Name="DomainName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="ApiKey" Type="nvarchar" MaxLength="200" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePaymentAddress">
+          <Key>
+            <PropertyRef Name="CreditCardAddressId" />
+          </Key>
+          <Property Name="CreditCardAddressId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CardHolderFirstName" Type="varchar" MaxLength="60" />
+          <Property Name="CardHolderLastName" Type="varchar" MaxLength="60" />
+          <Property Name="AddressLine1" Type="varchar" MaxLength="200" />
+          <Property Name="AddressLine2" Type="varchar" MaxLength="200" />
+          <Property Name="City" Type="varchar" MaxLength="100" />
+          <Property Name="State" Type="varchar" MaxLength="100" />
+          <Property Name="Country" Type="varchar" MaxLength="100" />
+          <Property Name="ZipCode" Type="varchar" MaxLength="100" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePaymentCustomers">
+          <Key>
+            <PropertyRef Name="CustomersGUID" />
+          </Key>
+          <Property Name="CustomersGUID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="100" />
+          <Property Name="LastName" Type="varchar" MaxLength="100" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZNodePaymentGateway">
+          <Key>
+            <PropertyRef Name="PaymentGatewayId" />
+          </Key>
+          <Property Name="PaymentGatewayId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GatewayName" Type="varchar(max)" Nullable="false" />
+          <Property Name="WebsiteURL" Type="varchar(max)" />
+          <Property Name="ClassName" Type="varchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+          <Property Name="GatewayCode" Type="varchar" MaxLength="100" />
+          <Property Name="IsACHEnabled" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZnodePaymentMethods">
+          <Key>
+            <PropertyRef Name="PaymentGUID" />
+          </Key>
+          <Property Name="PaymentGUID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Token" Type="varchar(max)" />
+          <Property Name="CreditCardLastFourDigit" Type="varchar" MaxLength="4" />
+          <Property Name="CreditCardExpMonth" Type="int" />
+          <Property Name="CreditCardExpYear" Type="int" />
+          <Property Name="CreditCardAddressId" Type="uniqueidentifier" />
+          <Property Name="PaymentSettingID" Type="int" />
+          <Property Name="CustomersGUID" Type="uniqueidentifier" />
+          <Property Name="CustomerProfileId" Type="nvarchar" MaxLength="64" />
+          <Property Name="CreditCardImageUrl" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsSaveCreditCard" Type="bit" Nullable="false" />
+          <Property Name="CardType" Type="varchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+        </EntityType>
+        <EntityType Name="ZNodePaymentSetting">
+          <Key>
+            <PropertyRef Name="PaymentSettingId" />
+          </Key>
+          <Property Name="PaymentSettingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PaymentTypeId" Type="int" Nullable="false" />
+          <Property Name="PaymentGatewayId" Type="int" />
+          <Property Name="EnableVisa" Type="bit" />
+          <Property Name="EnableMasterCard" Type="bit" />
+          <Property Name="EnableAmex" Type="bit" />
+          <Property Name="EnableDiscover" Type="bit" />
+          <Property Name="EnableRecurringPayments" Type="bit" />
+          <Property Name="EnableVault" Type="bit" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="PreAuthorize" Type="bit" Nullable="false" />
+          <Property Name="IsRMACompatible" Type="bit" />
+          <Property Name="TestMode" Type="bit" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+          <Property Name="EnablePODocUpload" Type="bit" Nullable="false" />
+          <Property Name="IsPODocRequired" Type="bit" Nullable="false" />
+          <Property Name="PaymentCode" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="ZNodePaymentSettingCredential">
+          <Key>
+            <PropertyRef Name="PaymentSettingCredentialId" />
+          </Key>
+          <Property Name="PaymentSettingCredentialId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Partner" Type="nvarchar(max)" />
+          <Property Name="Vendor" Type="nvarchar(max)" />
+          <Property Name="TestMode" Type="bit" Nullable="false" />
+          <Property Name="PaymentSettingId" Type="int" />
+          <Property Name="GatewayUsername" Type="nvarchar(max)" />
+          <Property Name="GatewayPassword" Type="nvarchar(max)" />
+          <Property Name="TransactionKey" Type="nvarchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+          <Property Name="Custom1" Type="nvarchar(max)" />
+          <Property Name="Custom2" Type="nvarchar(max)" />
+          <Property Name="Custom3" Type="nvarchar(max)" />
+          <Property Name="Custom4" Type="nvarchar(max)" />
+          <Property Name="Custom5" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ZNodePaymentType">
+          <Key>
+            <PropertyRef Name="PaymentTypeId" />
+          </Key>
+          <Property Name="PaymentTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+          <Property Name="BehaviorType" Type="varchar" MaxLength="100" />
+          <Property Name="Code" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ZnodeTransactions">
+          <Key>
+            <PropertyRef Name="GUID" />
+          </Key>
+          <Property Name="GUID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CustomerProfileId" Type="nvarchar(max)" />
+          <Property Name="CustomerPaymentId" Type="nvarchar(max)" />
+          <Property Name="TransactionId" Type="nvarchar(max)" />
+          <Property Name="TransactionDate" Type="datetime" />
+          <Property Name="CaptureTransactionDate" Type="datetime" />
+          <Property Name="RefundTransactionDate" Type="datetime" />
+          <Property Name="ResponseText" Type="nvarchar(max)" />
+          <Property Name="ResponseCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Custom1" Type="nvarchar(max)" />
+          <Property Name="RefundTransactionId" Type="nvarchar(max)" />
+          <Property Name="CaptureTransactionId" Type="nvarchar(max)" />
+          <Property Name="Amount" Type="money" />
+          <Property Name="PaymentSettingId" Type="int" />
+          <Property Name="CurrencyCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="SubscriptionId" Type="nvarchar(max)" />
+          <Property Name="PaymentStatusId" Type="int" />
+          <Property Name="RefundAmount" Type="numeric" Precision="12" Scale="6" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_SC_PaymentSetting_SC_Gateway">
+          <End Role="ZNodePaymentGateway" Type="Self.ZNodePaymentGateway" Multiplicity="0..1" />
+          <End Role="ZNodePaymentSetting" Type="Self.ZNodePaymentSetting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZNodePaymentGateway">
+              <PropertyRef Name="PaymentGatewayId" />
+            </Principal>
+            <Dependent Role="ZNodePaymentSetting">
+              <PropertyRef Name="PaymentGatewayId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Znode_Transactions_ZNodePaymentSetting">
+          <End Role="ZNodePaymentSetting" Type="Self.ZNodePaymentSetting" Multiplicity="0..1" />
+          <End Role="ZnodeTransactions" Type="Self.ZnodeTransactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZNodePaymentSetting">
+              <PropertyRef Name="PaymentSettingId" />
+            </Principal>
+            <Dependent Role="ZnodeTransactions">
+              <PropertyRef Name="PaymentSettingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZnodePaymentMethods_CreditCardAddressId">
+          <End Role="ZnodePaymentAddress" Type="Self.ZnodePaymentAddress" Multiplicity="0..1" />
+          <End Role="ZnodePaymentMethods" Type="Self.ZnodePaymentMethods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZnodePaymentAddress">
+              <PropertyRef Name="CreditCardAddressId" />
+            </Principal>
+            <Dependent Role="ZnodePaymentMethods">
+              <PropertyRef Name="CreditCardAddressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZnodePaymentMethods_CustomersGUID">
+          <End Role="ZnodePaymentCustomers" Type="Self.ZnodePaymentCustomers" Multiplicity="0..1" />
+          <End Role="ZnodePaymentMethods" Type="Self.ZnodePaymentMethods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZnodePaymentCustomers">
+              <PropertyRef Name="CustomersGUID" />
+            </Principal>
+            <Dependent Role="ZnodePaymentMethods">
+              <PropertyRef Name="CustomersGUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZnodePaymentMethods_PaymentSettingID">
+          <End Role="ZNodePaymentSetting" Type="Self.ZNodePaymentSetting" Multiplicity="0..1" />
+          <End Role="ZnodePaymentMethods" Type="Self.ZnodePaymentMethods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZNodePaymentSetting">
+              <PropertyRef Name="PaymentSettingId" />
+            </Principal>
+            <Dependent Role="ZnodePaymentMethods">
+              <PropertyRef Name="PaymentSettingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZNodePaymentSetting_ZNodePaymentType">
+          <End Role="ZNodePaymentType" Type="Self.ZNodePaymentType" Multiplicity="1" />
+          <End Role="ZNodePaymentSetting" Type="Self.ZNodePaymentSetting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZNodePaymentType">
+              <PropertyRef Name="PaymentTypeId" />
+            </Principal>
+            <Dependent Role="ZNodePaymentSetting">
+              <PropertyRef Name="PaymentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZNodePaymentSettingCredential_ZNodePaymentSetting">
+          <End Role="ZNodePaymentSetting" Type="Self.ZNodePaymentSetting" Multiplicity="0..1" />
+          <End Role="ZNodePaymentSettingCredential" Type="Self.ZNodePaymentSettingCredential" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZNodePaymentSetting">
+              <PropertyRef Name="PaymentSettingId" />
+            </Principal>
+            <Dependent Role="ZNodePaymentSettingCredential">
+              <PropertyRef Name="PaymentSettingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Znode_DeleteAuthToken" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AuthToken" Type="nvarchar" Mode="In" />
+          <Parameter Name="Status" Type="bit" Mode="InOut" />
+        </Function>
+        <Function Name="Znode_InsertAuthToken" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Znode_ValidateAuthToken" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AuthToken" Type="nvarchar" Mode="In" />
+          <Parameter Name="TotalAttempt" Type="int" Mode="In" />
+          <Parameter Name="Status" Type="bit" Mode="InOut" />
+        </Function>
+        <EntityContainer Name="ZnodeMultifrontPaymentApplicationDataStoreContainer">
+          <EntitySet Name="ZNodeActivityLog" EntityType="Self.ZNodeActivityLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodeAuthToken" EntityType="Self.ZnodeAuthToken" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZNodeDomain" EntityType="Self.ZNodeDomain" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePaymentAddress" EntityType="Self.ZnodePaymentAddress" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePaymentCustomers" EntityType="Self.ZnodePaymentCustomers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZNodePaymentGateway" EntityType="Self.ZNodePaymentGateway" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodePaymentMethods" EntityType="Self.ZnodePaymentMethods" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZNodePaymentSetting" EntityType="Self.ZNodePaymentSetting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZNodePaymentSettingCredential" EntityType="Self.ZNodePaymentSettingCredential" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZNodePaymentType" EntityType="Self.ZNodePaymentType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZnodeTransactions" EntityType="Self.ZnodeTransactions" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SC_PaymentSetting_SC_Gateway" Association="Self.FK_SC_PaymentSetting_SC_Gateway">
+            <End Role="ZNodePaymentGateway" EntitySet="ZNodePaymentGateway" />
+            <End Role="ZNodePaymentSetting" EntitySet="ZNodePaymentSetting" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Znode_Transactions_ZNodePaymentSetting" Association="Self.FK_Znode_Transactions_ZNodePaymentSetting">
+            <End Role="ZNodePaymentSetting" EntitySet="ZNodePaymentSetting" />
+            <End Role="ZnodeTransactions" EntitySet="ZnodeTransactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZnodePaymentMethods_CreditCardAddressId" Association="Self.FK_ZnodePaymentMethods_CreditCardAddressId">
+            <End Role="ZnodePaymentAddress" EntitySet="ZnodePaymentAddress" />
+            <End Role="ZnodePaymentMethods" EntitySet="ZnodePaymentMethods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZnodePaymentMethods_CustomersGUID" Association="Self.FK_ZnodePaymentMethods_CustomersGUID">
+            <End Role="ZnodePaymentCustomers" EntitySet="ZnodePaymentCustomers" />
+            <End Role="ZnodePaymentMethods" EntitySet="ZnodePaymentMethods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZnodePaymentMethods_PaymentSettingID" Association="Self.FK_ZnodePaymentMethods_PaymentSettingID">
+            <End Role="ZNodePaymentSetting" EntitySet="ZNodePaymentSetting" />
+            <End Role="ZnodePaymentMethods" EntitySet="ZnodePaymentMethods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZNodePaymentSetting_ZNodePaymentType" Association="Self.FK_ZNodePaymentSetting_ZNodePaymentType">
+            <End Role="ZNodePaymentType" EntitySet="ZNodePaymentType" />
+            <End Role="ZNodePaymentSetting" EntitySet="ZNodePaymentSetting" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZNodePaymentSettingCredential_ZNodePaymentSetting" Association="Self.FK_ZNodePaymentSettingCredential_ZNodePaymentSetting">
+            <End Role="ZNodePaymentSetting" EntitySet="ZNodePaymentSetting" />
+            <End Role="ZNodePaymentSettingCredential" EntitySet="ZNodePaymentSettingCredential" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Znode.Multifront.PaymentApplication.Data" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="znode_multifront_paymentEntities" annotation:LazyLoadingEnabled="false">
+          <EntitySet Name="ZNodeActivityLogs" EntityType="Znode.Multifront.PaymentApplication.Data.ZNodeActivityLog" />
+          <EntitySet Name="ZNodeDomains" EntityType="Znode.Multifront.PaymentApplication.Data.ZNodeDomain" />
+          <EntitySet Name="ZnodePaymentAddresses" EntityType="Znode.Multifront.PaymentApplication.Data.ZnodePaymentAddress" />
+          <EntitySet Name="ZnodePaymentCustomers" EntityType="Znode.Multifront.PaymentApplication.Data.ZnodePaymentCustomer" />
+          <EntitySet Name="ZNodePaymentSettingCredentials" EntityType="Znode.Multifront.PaymentApplication.Data.ZNodePaymentSettingCredential" />
+          <EntitySet Name="ZNodePaymentTypes" EntityType="Znode.Multifront.PaymentApplication.Data.ZNodePaymentType" />
+          <EntitySet Name="ZnodeTransactions" EntityType="Znode.Multifront.PaymentApplication.Data.ZnodeTransaction" />
+          <EntitySet Name="ZnodePaymentMethods" EntityType="Znode.Multifront.PaymentApplication.Data.ZnodePaymentMethod" />
+          <AssociationSet Name="FK_ZnodePaymentMethods_CreditCardAddressId" Association="Znode.Multifront.PaymentApplication.Data.FK_ZnodePaymentMethods_CreditCardAddressId">
+            <End Role="ZnodePaymentAddress" EntitySet="ZnodePaymentAddresses" />
+            <End Role="ZnodePaymentMethod" EntitySet="ZnodePaymentMethods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZnodePaymentMethods_CustomersGUID" Association="Znode.Multifront.PaymentApplication.Data.FK_ZnodePaymentMethods_CustomersGUID">
+            <End Role="ZnodePaymentCustomer" EntitySet="ZnodePaymentCustomers" />
+            <End Role="ZnodePaymentMethod" EntitySet="ZnodePaymentMethods" />
+          </AssociationSet>
+          <EntitySet Name="ZNodePaymentGateways" EntityType="Znode.Multifront.PaymentApplication.Data.ZNodePaymentGateway" />
+          <EntitySet Name="ZNodePaymentSettings" EntityType="Znode.Multifront.PaymentApplication.Data.ZNodePaymentSetting" />
+          <AssociationSet Name="FK_SC_PaymentSetting_SC_Gateway" Association="Znode.Multifront.PaymentApplication.Data.FK_SC_PaymentSetting_SC_Gateway">
+            <End Role="ZNodePaymentGateway" EntitySet="ZNodePaymentGateways" />
+            <End Role="ZNodePaymentSetting" EntitySet="ZNodePaymentSettings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZnodePaymentMethods_PaymentSettingID" Association="Znode.Multifront.PaymentApplication.Data.FK_ZnodePaymentMethods_PaymentSettingID">
+            <End Role="ZNodePaymentSetting" EntitySet="ZNodePaymentSettings" />
+            <End Role="ZnodePaymentMethod" EntitySet="ZnodePaymentMethods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Znode_Transactions_ZNodePaymentSetting" Association="Znode.Multifront.PaymentApplication.Data.FK_Znode_Transactions_ZNodePaymentSetting">
+            <End Role="ZNodePaymentSetting" EntitySet="ZNodePaymentSettings" />
+            <End Role="ZnodeTransaction" EntitySet="ZnodeTransactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZNodePaymentSetting_ZNodePaymentType" Association="Znode.Multifront.PaymentApplication.Data.FK_ZNodePaymentSetting_ZNodePaymentType">
+            <End Role="ZNodePaymentType" EntitySet="ZNodePaymentTypes" />
+            <End Role="ZNodePaymentSetting" EntitySet="ZNodePaymentSettings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZNodePaymentSettingCredential_ZNodePaymentSetting" Association="Znode.Multifront.PaymentApplication.Data.FK_ZNodePaymentSettingCredential_ZNodePaymentSetting">
+            <End Role="ZNodePaymentSetting" EntitySet="ZNodePaymentSettings" />
+            <End Role="ZNodePaymentSettingCredential" EntitySet="ZNodePaymentSettingCredentials" />
+          </AssociationSet>
+          <FunctionImport Name="Znode_DeleteAuthToken">
+            <Parameter Name="AuthToken" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="InOut" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="Znode_InsertAuthToken" ReturnType="Collection(Znode.Multifront.PaymentApplication.Data.Znode_InsertAuthToken_Result)">
+          </FunctionImport>
+          <FunctionImport Name="Znode_ValidateAuthToken">
+            <Parameter Name="AuthToken" Mode="In" Type="String" />
+            <Parameter Name="TotalAttempt" Mode="In" Type="Int32" />
+            <Parameter Name="Status" Mode="InOut" Type="Boolean" />
+          </FunctionImport>
+          <EntitySet Name="ZnodeAuthTokens" EntityType="Znode.Multifront.PaymentApplication.Data.ZnodeAuthToken" />
+          </EntityContainer>
+        <EntityType Name="ZNodeActivityLog">
+          <Key>
+            <PropertyRef Name="ActivityLogId" />
+          </Key>
+          <Property Name="ActivityLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PaymentSettingId" Type="Int32" />
+          <Property Name="PortalID" Type="Int32" />
+          <Property Name="URL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Data1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Data2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Data3" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="LongData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Source" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Target" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="ZNodeDomain">
+          <Key>
+            <PropertyRef Name="DomainId" />
+          </Key>
+          <Property Name="DomainId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PortalId" Type="Int32" Nullable="false" />
+          <Property Name="DomainName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="ApiKey" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="ZnodePaymentAddress">
+          <Key>
+            <PropertyRef Name="CreditCardAddressId" />
+          </Key>
+          <Property Name="CreditCardAddressId" Type="Guid" Nullable="false" />
+          <Property Name="CardHolderFirstName" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="CardHolderLastName" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="AddressLine1" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AddressLine2" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ZipCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZnodePaymentMethods" Relationship="Znode.Multifront.PaymentApplication.Data.FK_ZnodePaymentMethods_CreditCardAddressId" FromRole="ZnodePaymentAddress" ToRole="ZnodePaymentMethod" />
+        </EntityType>
+        <EntityType Name="ZnodePaymentCustomer">
+          <Key>
+            <PropertyRef Name="CustomersGUID" />
+          </Key>
+          <Property Name="CustomersGUID" Type="Guid" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZnodePaymentMethods" Relationship="Znode.Multifront.PaymentApplication.Data.FK_ZnodePaymentMethods_CustomersGUID" FromRole="ZnodePaymentCustomer" ToRole="ZnodePaymentMethod" />
+        </EntityType>
+        <EntityType Name="ZNodePaymentSettingCredential">
+          <Key>
+            <PropertyRef Name="PaymentSettingCredentialId" />
+          </Key>
+          <Property Name="PaymentSettingCredentialId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Partner" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TestMode" Type="Boolean" Nullable="false" />
+          <Property Name="PaymentSettingId" Type="Int32" />
+          <Property Name="GatewayUsername" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GatewayPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TransactionKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZNodePaymentSetting" Relationship="Znode.Multifront.PaymentApplication.Data.FK_ZNodePaymentSettingCredential_ZNodePaymentSetting" FromRole="ZNodePaymentSettingCredential" ToRole="ZNodePaymentSetting" />
+          <Property Name="Custom1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Custom2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Custom3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Custom4" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Custom5" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ZNodePaymentType">
+          <Key>
+            <PropertyRef Name="PaymentTypeId" />
+          </Key>
+          <Property Name="PaymentTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZNodePaymentSettings" Relationship="Znode.Multifront.PaymentApplication.Data.FK_ZNodePaymentSetting_ZNodePaymentType" FromRole="ZNodePaymentType" ToRole="ZNodePaymentSetting" />
+          <Property Name="BehaviorType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ZnodeTransaction">
+          <Key>
+            <PropertyRef Name="GUID" />
+          </Key>
+          <Property Name="GUID" Type="Guid" Nullable="false" />
+          <Property Name="CustomerProfileId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerPaymentId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TransactionId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TransactionDate" Type="DateTime" Precision="3" />
+          <Property Name="CaptureTransactionDate" Type="DateTime" Precision="3" />
+          <Property Name="RefundTransactionDate" Type="DateTime" Precision="3" />
+          <Property Name="ResponseText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ResponseCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Custom1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RefundTransactionId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CaptureTransactionId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaymentSettingId" Type="Int32" />
+          <Property Name="CurrencyCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SubscriptionId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentStatusId" Type="Int32" />
+          <Property Name="RefundAmount" Type="Decimal" Precision="12" Scale="6" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZNodePaymentSetting" Relationship="Znode.Multifront.PaymentApplication.Data.FK_Znode_Transactions_ZNodePaymentSetting" FromRole="ZnodeTransaction" ToRole="ZNodePaymentSetting" />
+        </EntityType>
+        <EntityType Name="ZnodePaymentMethod">
+          <Key>
+            <PropertyRef Name="PaymentGUID" />
+          </Key>
+          <Property Name="PaymentGUID" Type="Guid" Nullable="false" />
+          <Property Name="Token" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreditCardLastFourDigit" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="CreditCardExpMonth" Type="Int32" />
+          <Property Name="CreditCardExpYear" Type="Int32" />
+          <Property Name="CreditCardAddressId" Type="Guid" />
+          <Property Name="PaymentSettingID" Type="Int32" />
+          <Property Name="CustomersGUID" Type="Guid" />
+          <Property Name="CustomerProfileId" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="CreditCardImageUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsSaveCreditCard" Type="Boolean" Nullable="false" />
+          <Property Name="CardType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserId" Type="Int32" />
+          <NavigationProperty Name="ZnodePaymentAddress" Relationship="Znode.Multifront.PaymentApplication.Data.FK_ZnodePaymentMethods_CreditCardAddressId" FromRole="ZnodePaymentMethod" ToRole="ZnodePaymentAddress" />
+          <NavigationProperty Name="ZnodePaymentCustomer" Relationship="Znode.Multifront.PaymentApplication.Data.FK_ZnodePaymentMethods_CustomersGUID" FromRole="ZnodePaymentMethod" ToRole="ZnodePaymentCustomer" />
+          <NavigationProperty Name="ZNodePaymentSetting" Relationship="Znode.Multifront.PaymentApplication.Data.FK_ZnodePaymentMethods_PaymentSettingID" FromRole="ZnodePaymentMethod" ToRole="ZNodePaymentSetting" />
+        </EntityType>
+        <Association Name="FK_ZnodePaymentMethods_CreditCardAddressId">
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZnodePaymentAddress" Role="ZnodePaymentAddress" Multiplicity="0..1" />
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZnodePaymentMethod" Role="ZnodePaymentMethod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZnodePaymentAddress">
+              <PropertyRef Name="CreditCardAddressId" />
+            </Principal>
+            <Dependent Role="ZnodePaymentMethod">
+              <PropertyRef Name="CreditCardAddressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZnodePaymentMethods_CustomersGUID">
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZnodePaymentCustomer" Role="ZnodePaymentCustomer" Multiplicity="0..1" />
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZnodePaymentMethod" Role="ZnodePaymentMethod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZnodePaymentCustomer">
+              <PropertyRef Name="CustomersGUID" />
+            </Principal>
+            <Dependent Role="ZnodePaymentMethod">
+              <PropertyRef Name="CustomersGUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ZNodePaymentGateway">
+          <Key>
+            <PropertyRef Name="PaymentGatewayId" />
+          </Key>
+          <Property Name="PaymentGatewayId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GatewayName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="WebsiteURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ClassName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="GatewayCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ZNodePaymentSettings" Relationship="Znode.Multifront.PaymentApplication.Data.FK_SC_PaymentSetting_SC_Gateway" FromRole="ZNodePaymentGateway" ToRole="ZNodePaymentSetting" />
+          <Property Name="IsACHEnabled" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZNodePaymentSetting">
+          <Key>
+            <PropertyRef Name="PaymentSettingId" />
+          </Key>
+          <Property Name="PaymentSettingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PaymentTypeId" Type="Int32" Nullable="false" />
+          <Property Name="PaymentGatewayId" Type="Int32" />
+          <Property Name="EnableVisa" Type="Boolean" />
+          <Property Name="EnableMasterCard" Type="Boolean" />
+          <Property Name="EnableAmex" Type="Boolean" />
+          <Property Name="EnableDiscover" Type="Boolean" />
+          <Property Name="EnableRecurringPayments" Type="Boolean" />
+          <Property Name="EnableVault" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="PreAuthorize" Type="Boolean" Nullable="false" />
+          <Property Name="IsRMACompatible" Type="Boolean" />
+          <Property Name="TestMode" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EnablePODocUpload" Type="Boolean" Nullable="false" />
+          <Property Name="IsPODocRequired" Type="Boolean" Nullable="false" />
+          <Property Name="PaymentCode" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ZNodePaymentGateway" Relationship="Znode.Multifront.PaymentApplication.Data.FK_SC_PaymentSetting_SC_Gateway" FromRole="ZNodePaymentSetting" ToRole="ZNodePaymentGateway" />
+          <NavigationProperty Name="ZnodePaymentMethods" Relationship="Znode.Multifront.PaymentApplication.Data.FK_ZnodePaymentMethods_PaymentSettingID" FromRole="ZNodePaymentSetting" ToRole="ZnodePaymentMethod" />
+          <NavigationProperty Name="ZnodeTransactions" Relationship="Znode.Multifront.PaymentApplication.Data.FK_Znode_Transactions_ZNodePaymentSetting" FromRole="ZNodePaymentSetting" ToRole="ZnodeTransaction" />
+          <NavigationProperty Name="ZNodePaymentType" Relationship="Znode.Multifront.PaymentApplication.Data.FK_ZNodePaymentSetting_ZNodePaymentType" FromRole="ZNodePaymentSetting" ToRole="ZNodePaymentType" />
+          <NavigationProperty Name="ZNodePaymentSettingCredentials" Relationship="Znode.Multifront.PaymentApplication.Data.FK_ZNodePaymentSettingCredential_ZNodePaymentSetting" FromRole="ZNodePaymentSetting" ToRole="ZNodePaymentSettingCredential" />
+        </EntityType>
+        <Association Name="FK_SC_PaymentSetting_SC_Gateway">
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZNodePaymentGateway" Role="ZNodePaymentGateway" Multiplicity="0..1" />
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZNodePaymentSetting" Role="ZNodePaymentSetting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZNodePaymentGateway">
+              <PropertyRef Name="PaymentGatewayId" />
+            </Principal>
+            <Dependent Role="ZNodePaymentSetting">
+              <PropertyRef Name="PaymentGatewayId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZnodePaymentMethods_PaymentSettingID">
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZNodePaymentSetting" Role="ZNodePaymentSetting" Multiplicity="0..1" />
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZnodePaymentMethod" Role="ZnodePaymentMethod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZNodePaymentSetting">
+              <PropertyRef Name="PaymentSettingId" />
+            </Principal>
+            <Dependent Role="ZnodePaymentMethod">
+              <PropertyRef Name="PaymentSettingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Znode_Transactions_ZNodePaymentSetting">
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZNodePaymentSetting" Role="ZNodePaymentSetting" Multiplicity="0..1" />
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZnodeTransaction" Role="ZnodeTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZNodePaymentSetting">
+              <PropertyRef Name="PaymentSettingId" />
+            </Principal>
+            <Dependent Role="ZnodeTransaction">
+              <PropertyRef Name="PaymentSettingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZNodePaymentSetting_ZNodePaymentType">
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZNodePaymentType" Role="ZNodePaymentType" Multiplicity="1" />
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZNodePaymentSetting" Role="ZNodePaymentSetting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZNodePaymentType">
+              <PropertyRef Name="PaymentTypeId" />
+            </Principal>
+            <Dependent Role="ZNodePaymentSetting">
+              <PropertyRef Name="PaymentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZNodePaymentSettingCredential_ZNodePaymentSetting">
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZNodePaymentSetting" Role="ZNodePaymentSetting" Multiplicity="0..1" />
+          <End Type="Znode.Multifront.PaymentApplication.Data.ZNodePaymentSettingCredential" Role="ZNodePaymentSettingCredential" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZNodePaymentSetting">
+              <PropertyRef Name="PaymentSettingId" />
+            </Principal>
+            <Dependent Role="ZNodePaymentSettingCredential">
+              <PropertyRef Name="PaymentSettingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="Znode_InsertAuthToken_Result">
+          <Property Type="Int32" Name="AuthTokenId" Nullable="false" />
+          <Property Type="String" Name="TokenId" Nullable="true" MaxLength="200" />
+          <Property Type="Boolean" Name="Status" Nullable="false" />
+          <Property Type="DateTime" Name="CreatedDate" Nullable="false" Precision="23" />
+        </ComplexType>
+        <EntityType Name="ZnodeAuthToken">
+          <Key>
+            <PropertyRef Name="AuthTokenId" />
+          </Key>
+          <Property Name="AuthTokenId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AuthToken" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TotalAttempt" Type="Int32" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ZnodeMultifrontPaymentApplicationDataStoreContainer" CdmEntityContainer="znode_multifront_paymentEntities">
+          <EntitySetMapping Name="ZNodeActivityLogs">
+            <EntityTypeMapping TypeName="Znode.Multifront.PaymentApplication.Data.ZNodeActivityLog">
+              <MappingFragment StoreEntitySet="ZNodeActivityLog">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Target" ColumnName="Target" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="LongData" ColumnName="LongData" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Data3" ColumnName="Data3" />
+                <ScalarProperty Name="Data2" ColumnName="Data2" />
+                <ScalarProperty Name="Data1" ColumnName="Data1" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="PortalID" ColumnName="PortalID" />
+                <ScalarProperty Name="PaymentSettingId" ColumnName="PaymentSettingId" />
+                <ScalarProperty Name="ActivityLogId" ColumnName="ActivityLogId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZNodeDomains">
+            <EntityTypeMapping TypeName="Znode.Multifront.PaymentApplication.Data.ZNodeDomain">
+              <MappingFragment StoreEntitySet="ZNodeDomain">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ApiKey" ColumnName="ApiKey" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="DomainName" ColumnName="DomainName" />
+                <ScalarProperty Name="PortalId" ColumnName="PortalId" />
+                <ScalarProperty Name="DomainId" ColumnName="DomainId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePaymentAddresses">
+            <EntityTypeMapping TypeName="Znode.Multifront.PaymentApplication.Data.ZnodePaymentAddress">
+              <MappingFragment StoreEntitySet="ZnodePaymentAddress">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="CardHolderLastName" ColumnName="CardHolderLastName" />
+                <ScalarProperty Name="CardHolderFirstName" ColumnName="CardHolderFirstName" />
+                <ScalarProperty Name="CreditCardAddressId" ColumnName="CreditCardAddressId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePaymentCustomers">
+            <EntityTypeMapping TypeName="Znode.Multifront.PaymentApplication.Data.ZnodePaymentCustomer">
+              <MappingFragment StoreEntitySet="ZnodePaymentCustomers">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="CustomersGUID" ColumnName="CustomersGUID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZNodePaymentSettingCredentials">
+            <EntityTypeMapping TypeName="Znode.Multifront.PaymentApplication.Data.ZNodePaymentSettingCredential">
+              <MappingFragment StoreEntitySet="ZNodePaymentSettingCredential">
+                <ScalarProperty Name="Custom5" ColumnName="Custom5" />
+                <ScalarProperty Name="Custom4" ColumnName="Custom4" />
+                <ScalarProperty Name="Custom3" ColumnName="Custom3" />
+                <ScalarProperty Name="Custom2" ColumnName="Custom2" />
+                <ScalarProperty Name="Custom1" ColumnName="Custom1" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="TransactionKey" ColumnName="TransactionKey" />
+                <ScalarProperty Name="GatewayPassword" ColumnName="GatewayPassword" />
+                <ScalarProperty Name="GatewayUsername" ColumnName="GatewayUsername" />
+                <ScalarProperty Name="PaymentSettingId" ColumnName="PaymentSettingId" />
+                <ScalarProperty Name="TestMode" ColumnName="TestMode" />
+                <ScalarProperty Name="Vendor" ColumnName="Vendor" />
+                <ScalarProperty Name="Partner" ColumnName="Partner" />
+                <ScalarProperty Name="PaymentSettingCredentialId" ColumnName="PaymentSettingCredentialId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZNodePaymentTypes">
+            <EntityTypeMapping TypeName="Znode.Multifront.PaymentApplication.Data.ZNodePaymentType">
+              <MappingFragment StoreEntitySet="ZNodePaymentType">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="BehaviorType" ColumnName="BehaviorType" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodeTransactions">
+            <EntityTypeMapping TypeName="Znode.Multifront.PaymentApplication.Data.ZnodeTransaction">
+              <MappingFragment StoreEntitySet="ZnodeTransactions">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="RefundAmount" ColumnName="RefundAmount" />
+                <ScalarProperty Name="PaymentStatusId" ColumnName="PaymentStatusId" />
+                <ScalarProperty Name="SubscriptionId" ColumnName="SubscriptionId" />
+                <ScalarProperty Name="CurrencyCode" ColumnName="CurrencyCode" />
+                <ScalarProperty Name="PaymentSettingId" ColumnName="PaymentSettingId" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="CaptureTransactionId" ColumnName="CaptureTransactionId" />
+                <ScalarProperty Name="RefundTransactionId" ColumnName="RefundTransactionId" />
+                <ScalarProperty Name="Custom1" ColumnName="Custom1" />
+                <ScalarProperty Name="ResponseCode" ColumnName="ResponseCode" />
+                <ScalarProperty Name="ResponseText" ColumnName="ResponseText" />
+                <ScalarProperty Name="RefundTransactionDate" ColumnName="RefundTransactionDate" />
+                <ScalarProperty Name="CaptureTransactionDate" ColumnName="CaptureTransactionDate" />
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="CustomerPaymentId" ColumnName="CustomerPaymentId" />
+                <ScalarProperty Name="CustomerProfileId" ColumnName="CustomerProfileId" />
+                <ScalarProperty Name="GUID" ColumnName="GUID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZnodePaymentMethods">
+            <EntityTypeMapping TypeName="Znode.Multifront.PaymentApplication.Data.ZnodePaymentMethod">
+              <MappingFragment StoreEntitySet="ZnodePaymentMethods">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CardType" ColumnName="CardType" />
+                <ScalarProperty Name="IsSaveCreditCard" ColumnName="IsSaveCreditCard" />
+                <ScalarProperty Name="CreditCardImageUrl" ColumnName="CreditCardImageUrl" />
+                <ScalarProperty Name="CustomerProfileId" ColumnName="CustomerProfileId" />
+                <ScalarProperty Name="CustomersGUID" ColumnName="CustomersGUID" />
+                <ScalarProperty Name="PaymentSettingID" ColumnName="PaymentSettingID" />
+                <ScalarProperty Name="CreditCardAddressId" ColumnName="CreditCardAddressId" />
+                <ScalarProperty Name="CreditCardExpYear" ColumnName="CreditCardExpYear" />
+                <ScalarProperty Name="CreditCardExpMonth" ColumnName="CreditCardExpMonth" />
+                <ScalarProperty Name="CreditCardLastFourDigit" ColumnName="CreditCardLastFourDigit" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="PaymentGUID" ColumnName="PaymentGUID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZNodePaymentGateways">
+            <EntityTypeMapping TypeName="Znode.Multifront.PaymentApplication.Data.ZNodePaymentGateway">
+              <MappingFragment StoreEntitySet="ZNodePaymentGateway">
+                <ScalarProperty Name="IsACHEnabled" ColumnName="IsACHEnabled" />
+                <ScalarProperty Name="GatewayCode" ColumnName="GatewayCode" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+                <ScalarProperty Name="WebsiteURL" ColumnName="WebsiteURL" />
+                <ScalarProperty Name="GatewayName" ColumnName="GatewayName" />
+                <ScalarProperty Name="PaymentGatewayId" ColumnName="PaymentGatewayId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZNodePaymentSettings">
+            <EntityTypeMapping TypeName="Znode.Multifront.PaymentApplication.Data.ZNodePaymentSetting">
+              <MappingFragment StoreEntitySet="ZNodePaymentSetting">
+                <ScalarProperty Name="PaymentCode" ColumnName="PaymentCode" />
+                <ScalarProperty Name="IsPODocRequired" ColumnName="IsPODocRequired" />
+                <ScalarProperty Name="EnablePODocUpload" ColumnName="EnablePODocUpload" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="TestMode" ColumnName="TestMode" />
+                <ScalarProperty Name="IsRMACompatible" ColumnName="IsRMACompatible" />
+                <ScalarProperty Name="PreAuthorize" ColumnName="PreAuthorize" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="EnableVault" ColumnName="EnableVault" />
+                <ScalarProperty Name="EnableRecurringPayments" ColumnName="EnableRecurringPayments" />
+                <ScalarProperty Name="EnableDiscover" ColumnName="EnableDiscover" />
+                <ScalarProperty Name="EnableAmex" ColumnName="EnableAmex" />
+                <ScalarProperty Name="EnableMasterCard" ColumnName="EnableMasterCard" />
+                <ScalarProperty Name="EnableVisa" ColumnName="EnableVisa" />
+                <ScalarProperty Name="PaymentGatewayId" ColumnName="PaymentGatewayId" />
+                <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
+                <ScalarProperty Name="PaymentSettingId" ColumnName="PaymentSettingId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Znode_DeleteAuthToken" FunctionName="Znode.Multifront.PaymentApplication.Data.Store.Znode_DeleteAuthToken" />
+          <FunctionImportMapping FunctionImportName="Znode_InsertAuthToken" FunctionName="Znode.Multifront.PaymentApplication.Data.Store.Znode_InsertAuthToken">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Znode.Multifront.PaymentApplication.Data.Znode_InsertAuthToken_Result">
+                <ScalarProperty Name="AuthTokenId" ColumnName="AuthTokenId" />
+                <ScalarProperty Name="TokenId" ColumnName="TokenId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Znode_ValidateAuthToken" FunctionName="Znode.Multifront.PaymentApplication.Data.Store.Znode_ValidateAuthToken" />
+          <EntitySetMapping Name="ZnodeAuthTokens">
+            <EntityTypeMapping TypeName="Znode.Multifront.PaymentApplication.Data.ZnodeAuthToken">
+              <MappingFragment StoreEntitySet="ZnodeAuthToken">
+                <ScalarProperty Name="TotalAttempt" ColumnName="TotalAttempt" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="AuthToken" ColumnName="AuthToken" />
+                <ScalarProperty Name="AuthTokenId" ColumnName="AuthTokenId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

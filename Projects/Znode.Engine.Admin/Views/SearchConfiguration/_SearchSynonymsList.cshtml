@@ -1,0 +1,21 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model SearchSynonymsListViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleMarketing + " | " + Admin_Resources.Multifront;
+}
+<div id="searchSettings">
+    <div class="title-container">
+        <h1>@Admin_Resources.LabelSearchSettings</h1>
+    </div>
+    <div class="main-wrapper">
+        <!--Left Panel-->
+        @Html.Partial("~/Views/SearchConfiguration/_asidePanel.cshtml")
+        <!--Main Container-->
+        <section class="main-container clearfix">
+            <div id="SearchSynonymsList">
+               @Html.Partial("~/Views/SearchConfiguration/_SynonymsList.cshtml", Model)
+            </div>
+        </section>
+    </div>
+</div>
+<div id="divCataloglistPopup" class="aside-popup-panel modal-dialog modal-lg"></div>

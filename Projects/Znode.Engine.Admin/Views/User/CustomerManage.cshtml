@@ -1,0 +1,17 @@
+﻿@model Znode.Engine.Admin.ViewModels.CustomerViewModel
+@using Znode.Engine.Admin.Helpers
+@{
+    ViewBag.Title = Admin_Resources.TitleCustomers + " | " + Admin_Resources.Multifront;
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div class="row">
+    <!--Left Panel-->
+    @Html.Partial("~/views/User/_asideCustomerManagePanel.cshtml")
+    <section class="main-container">
+        <div id="CustomerData">
+            @Html.Partial("_CustomerManage", Model)
+        </div>
+    </section>
+</div>
+
+

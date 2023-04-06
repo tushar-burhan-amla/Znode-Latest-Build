@@ -1,0 +1,17 @@
+﻿@model BaseViewModel
+
+@if (Model != null)
+{
+    if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div data-test-selector="divSuccessMessage" id="status-message" class="alert alert-success text-center">
+            @Model.SuccessMessage
+        </div>
+    }
+    if (!string.IsNullOrEmpty(Model.ErrorMessage) && Model.HasError)
+    {
+        <div data-test-selector="divSuccessMessage" id="status-message" class="alert alert-danger text-center">
+            @Model.ErrorMessage
+        </div>
+    }
+}

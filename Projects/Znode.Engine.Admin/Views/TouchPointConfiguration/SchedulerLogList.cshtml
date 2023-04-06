@@ -1,0 +1,48 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model TouchPointConfigurationListViewModel
+@using Znode.Libraries.Resources
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div id="@Model.GridModel.FrontObjectName">
+    <div class="col-sm-12 title-container">
+        <h1>
+            @Model.ERPClassName @ERP_Resources.TextSchedulerHistoryList<em class="z-minus"></em>
+            @if (string.IsNullOrEmpty(@Model.SchedulerName))
+            {
+                <span>@ERP_Resources.TextAllScheduler</span>
+            }
+            else
+            {
+                <span>@Model.SchedulerName</span>
+            }
+        </h1>
+    </div>
+    <div class="main-wrapper">
+        @Html.Partial("~/Views/TouchPointConfiguration/_asideERPconfiguration.cshtml", Model?.ERPClassName)
+        <!--Main Container-->
+        <section class="main-container">
+            @using (Ajax.BeginForm(actionName, controllerName, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+            {
+                <div id="filterComponent">
+                    @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                </div>
+            }
+            <div class="col-sm-12 list-container erp-configurator">
+                @{
+                    @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                }
+            </div>
+        </section>
+    </div>
+    <div id="divShowLogDetails" class="aside-popup-panel"></div>
+    <div id="divLogDetailsPopup" class="aside-popup-panel modal-dialog modal-xl"></div>
+</div>
+<script>
+    $(document).ready(function () {
+        TouchPointConfiguration.prototype.Init();
+        ERPConfigurator.prototype.RemoveHrefAttribute();
+    });
+</script>

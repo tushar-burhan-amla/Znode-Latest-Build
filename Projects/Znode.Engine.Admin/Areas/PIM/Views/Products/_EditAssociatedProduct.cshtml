@@ -1,0 +1,50 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model ProductTypeAssociationViewModel
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @action = "", enctype = "multipart/form-data", id = "frmEditAssociatedProduct" }))
+{
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+                <h4 class="modal-title">@PIM_Resources.HeaderAssociateProductSetting</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="col-sm-12 page-container">
+                    <div id="customFieldModel" class="col-sm-12 nopadding">
+                        <div class="col-sm-12 nopadding">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.DisplayOrder, new { @class = "required" })
+                                </div>
+                                <div class="control-md">
+                                    @Html.TextBoxFor(model => model.DisplayOrder)
+                                    @Html.ValidationMessageFor(model => model.DisplayOrder)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.PimProductId)
+            @Html.HiddenFor(model => model.PimProductTypeAssociationId)
+            @Html.HiddenFor(model => model.PimParentProductId)
+            @Html.HiddenFor(model => model.PimAttributeId)
+
+            <div class="modal-footer">
+                <div class="col-sm-12 nopadding">
+                    <div class="pull-right">
+                        @Html.PrototypeRawActionLink("<em class='z-save'></em>" + Admin_Resources.ButtonSave, "UpdateAssociatedProducts", "Products", "btn-text-icon", "Products.prototype.UpdateAssociatedProduct()")
+                        <button type="button" class="btn-text-icon" data-dismiss="modal"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    //Restrict enter button.
+    Products.prototype.RestrictEnterButton("#frmEditAssociatedProduct");
+</script>

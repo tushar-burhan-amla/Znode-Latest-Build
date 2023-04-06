@@ -1,0 +1,112 @@
+﻿@model Znode.Engine.Admin.ViewModels.SearchBoostAndBuryRuleViewModel
+@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.Extensions
+@using Znode.Engine.Admin.Helpers
+
+@using Znode.Engine.Admin.ViewModels;
+@{
+    Layout = null;
+    ViewBag.Title = Admin_Resources.TitleSearch + " | " + Admin_Resources.TitleMultifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateEditBoostAndBuryRule", Callback = "Search.prototype.ValidateRuleName" };
+}
+<div id="aside-popup-panel">
+    <div class="col-sm-12 title-container">
+        <h1>@Admin_Resources.LabelBoostandBuryConditions</h1>
+        <div class="pull-right btn-boost-bury">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+
+        </div>
+    </div>
+    <span id="boostandBuryError" class="field-validation-error boost-bury-error" />
+    <!--Main Container-->
+    <section class="col-sm-12 page-container boost-bury-section">
+        @using (Ajax.BeginForm(actionName, controllerName, new AjaxOptions()
+        {
+            HttpMethod = "post",
+            OnSuccess = "Search.prototype.BoostBuryAddResult",
+            InsertionMode = InsertionMode.Replace,
+        },
+new { @id = "frmCreateEditBoostAndBuryRule" }))
+        {
+
+        <div id="createForm">
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.RuleName, new { @class = "required", @data_test_selector = "lblRuleName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.RuleName, new { id = "hdnRuleName", @data_test_selector = "txtRuleName" })
+                        @Html.ValidationMessageFor(model => model.RuleName, "", new { @data_test_selector = "valRuleName" })
+                        <span id="errorSpanRuleName" class="field-validation-error" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(@Admin_Resources.LabelStartDate, new { @class = "required", @data_test_selector = "lblStartDate" })
+                    </div>
+                    <div class="control-sm">
+                        <div class="right-inner-icon">
+                            @Html.TextBox("StartDate", Model.StartDate != null ? Model.StartDate.ToDateTimeFormat() : string.Empty, new { @id = "ActivationDate", @mindate = DateTime.Now.ToDateTimeFormat(), @class = "datepicker", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtStartDate" })
+                            @Html.ValidationMessageFor(model => model.StartDate, "", new { @data_test_selector = "valStartDate" })
+                            <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                        </div>
+                        <span class="text-danger field-validation-error" id="spamDate"></span>
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.HelptextStartDate)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.Label(@Admin_Resources.LabelEndDate, new { @data_test_selector = "lblEndDate" })
+                    </div>
+                    <div class="control-sm">
+                        <div class="right-inner-icon">
+                            @Html.TextBox("EndDate", Model.EndDate != null ? Model.EndDate.ToDateTimeFormat() : string.Empty, new { @id = "ExpirationDate", @class = "datepicker", @maxdate = "", @group = "pricedate", @data_date_format = HelperMethods.GetDateFormat(), @data_test_selector = "txtEndDate" })
+                            <em class="z-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></em>
+                        </div>
+                    </div>
+                    @Html.Partial("_HelpText", @Admin_Resources.HelptextEndDate)
+                </div>
+              </div>
+            <div><strong>@Admin_Resources.LabelNote: </strong>@Admin_Resources.HelptextTimeZoneRule</div>
+            <div class="form-group dirtyignore">
+                <div class="col-sm-12 nopadding add-triggger-section">
+                    <h3 class="section-heading label-trigger">@Admin_Resources.LabelTrigger</h3>
+                    @Html.Partial("~/Areas/Search/Views/Search/_addTriggerForBoostAndBury.cshtml", Model)
+                </div>
+            </div>
+            <div class="form-group dirtyignore">
+                <div class="col-sm-12 nopadding add-triggger-section">
+             <h3 class="section-heading">@Admin_Resources.LabelBoostorBuryProducts</h3>
+                    <div>@Admin_Resources.HelptextSearchItemRule</div>
+                    <div><strong>@Admin_Resources.LabelNote: </strong>@Admin_Resources.HelptextSearchItemRuleNote</div>
+                    @Html.Partial("~/Areas/Search/Views/Search/_addSearchItemRuleForBoostAndBury.cshtml", Model)
+                </div>
+            </div>
+      </div>
+            @Html.HiddenFor(m => m.PublishCatalogId)
+            @Html.HiddenFor(m => m.CatalogName)
+            @Html.HiddenFor(m => m.SearchCatalogRuleId)
+            @Html.HiddenFor(m => m.IsSearchIndexExists)
+        }
+
+    </section>
+
+</div>
+
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+    Search.prototype.CanclePopUp();
+</script>
+@Scripts.Render("~/bundles/jqueryval")
+
+
+

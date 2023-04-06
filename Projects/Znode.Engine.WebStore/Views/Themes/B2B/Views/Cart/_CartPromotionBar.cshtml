@@ -1,0 +1,196 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model CartViewModel
+@{ //for shipping bar
+    string shippingMsg = string.Empty;
+    string showappliedoffer = string.Empty;
+    string discountStr = " You are only @DISAMTDIFF away from ";
+    var totalOrderAmt = Model.SubTotal;
+    string remainingAmtdisplay = null;
+    List<string> prefreeshippingStr = new List<string>();
+    Boolean nodeActive = false;
+    string addClass = string.Empty;
+    string OnHoverAppliedMsg = string.Empty;
+    string OnHoverAmtOffMsg = string.Empty;
+    string OnHoverAppliedAmount = string.Empty;
+    int loopcount = 0;
+    string DisAmtHover = "@DISAMT";
+    decimal? minimumOrder = 0;
+    string and = "and ", freeShpAmt = "";
+    int? profileId = Helper.GetProfileId();
+
+    List<PromotionViewModel> promotionList = Model?.ShippingModel?.PromotionList?.Where(x => (x.PromotionTypeName == "Percent Off Shipping" || x.PromotionTypeName == "Percent Off Shipping with carrier" || x.PromotionTypeName == "Amount Off Order") && x.IsCouponRequired == false).ToList();
+
+    string cultureCode = string.IsNullOrEmpty(Model.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+}
+@if (Model?.ShippingModel?.PromotionList?.Count > 0)
+{
+    <div class="col-xs-12 shipping-progress">
+
+        @foreach (var item in promotionList)
+        {
+            if (item?.ProfileId == 0 || item?.ProfileId == (profileId.HasValue? profileId.Value : 0))
+            {
+                <!--Start Step-->
+                if (loopcount == 0)
+                {
+                    <!--Start Step-->
+                    <div class="progress-start progress-step complete fist-child">
+                        <div class="starting-point">
+                            $0
+                        </div>
+                        <div class="text-center step-title">1</div>
+                        <div class="progress">
+                            <div class="progress-bar"></div>
+                        </div>
+                        <a href="#" data-trigger="hover" class="step-dot" data-toggle="popover" data-placement="top" title="" data-content="$0"></a>
+                        <div class="step-info text-center">
+                            1
+                        </div>
+                    </div>
+                    minimumOrder = promotionList[loopcount].OrderMinimum;
+
+                    and = "";
+                }
+                if (totalOrderAmt < item.OrderMinimum)
+                {
+                    var remainingAmt = item.OrderMinimum - totalOrderAmt;
+                    remainingAmtdisplay = remainingAmt.ToString();
+                    discountStr = discountStr.Replace("@DISAMTDIFF", @Helper.FormatPriceWithCurrency(remainingAmt, cultureCode));
+                    // discountStr = discountStr.Replace("@DISAMT", "$" + item.Discount.ToString() + "!");
+                    DisAmtHover = DisAmtHover.Replace("@DISAMT", "$" + item.Discount.ToString() + " off!");
+                    nodeActive = false;
+
+                }
+                else
+                {
+                    //make the node active
+                    nodeActive = true;
+                    var lastIndex = Model.ShippingModel.PromotionList.Count();
+                    var index = Model.ShippingModel.PromotionList.IndexOf(item);
+                    if (index != lastIndex - 1)
+                    {
+                        var nextItem = Model.ShippingModel.PromotionList[index + 1];
+                        minimumOrder = nextItem.OrderMinimum;
+                        and = "and ";
+                    }
+                    if (item.PromotionTypeName.IndexOf(WebStoreConstants.Percent, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        prefreeshippingStr.Add(item.Discount + "%off");
+                    }
+                    else
+                    {
+                        prefreeshippingStr.Add("$" + item.Discount + " off");
+                    }
+                    //OnHoverAppliedAmount = item.Discount.ToString
+                    OnHoverAppliedAmount = item.OrderMinimum.ToString();
+
+
+                }
+                addClass = nodeActive ? "active" : "disabled";
+                if (item.PromotionTypeName == "Percent Off Shipping With Carrier")
+                {
+                    if (item.Discount == 100)
+                    {
+                        //prefreeshippingStr = "Free Shipping applied! ";
+                        <div class="progress-step bar-15 @addClass">
+                            <div class="text-center step-title">free shipping</div>
+                            <div class="progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <a href="#" data-trigger="hover" class="step-dot" data-toggle="popover" data-placement="top" title="" data-content="free shipping"></a>
+                            <div class="step-info text-center">
+                                $@item.OrderMinimum
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    if (Model.ShippingModel.PromotionList.IndexOf(item) != Model.ShippingModel.PromotionList.Count - 1)
+                    {
+                        <!--Free Shipping Step-->
+                        <div class="progress-step bar-15 @addClass">
+                            @if (item.PromotionTypeName.IndexOf(WebStoreConstants.Percent, StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                <div class="text-center step-title">@item.Discount %off</div>
+                            }
+                            else
+                            {
+                                <div class="text-center step-title">$@item.Discount off</div>
+                            }                            
+                            <div class="progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <a href="#" data-trigger="hover" class="step-dot" data-toggle="popover" data-placement="top" title="" data-content="$@item.Discount off"></a>
+                            <div class="step-info text-center">
+                                $@item.OrderMinimum
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        // this is the last item
+                        <!--End Step-->
+                        <div class="progress-end progress-step @addClass">
+                            <div class="ending-point">
+                                @Html.RenderBlock("$" + (item.OrderMinimum + 1) + " +")
+                            </div>
+                            @if (item.PromotionTypeName.IndexOf(WebStoreConstants.Percent, StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                <div class="text-center step-title">@item.Discount %off</div>
+                            }
+                            else
+                            {
+                                <div class="text-center step-title">$@item.Discount off</div>
+                            }
+                            <div class="progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <a href="#" data-trigger="hover" class="step-dot" data-toggle="popover" data-placement="top" title="" data-content="$@item.Discount off"></a>
+                            <div class="step-info text-center">
+                                $@item.OrderMinimum
+                            </div>
+                        </div>
+                    }
+
+                }
+                loopcount = loopcount + 1;
+                //}
+            }
+        }
+    </div>
+
+
+    //set the display message for shipping and order off bar.
+    if (prefreeshippingStr.Count > 0)
+    {
+        if (prefreeshippingStr.Count == 1)
+        {
+            showappliedoffer = (prefreeshippingStr[0].Contains("$100 off") ? prefreeshippingStr[0].Replace("$100 off", "Free Shipping ") : prefreeshippingStr[0]);
+            OnHoverAppliedMsg = showappliedoffer + " on Order " + "$" + OnHoverAppliedAmount;
+        }
+        else
+        {
+            showappliedoffer = (prefreeshippingStr[0].Contains("$100 off") ? prefreeshippingStr[0].Replace("$100 off", "Free Shipping ") : prefreeshippingStr[0]) + " + " + prefreeshippingStr[prefreeshippingStr.Count - 1];
+        }
+    }
+}
+@{
+    var showappliedofferstrhtml = "<span class='wcn-green-underline' data-trigger='hover' data-toggle='popover' data-placement='bottom' title='" + @showappliedoffer + " applied!" + "'>" + showappliedoffer + "</span>";
+    DisAmtHover = DisAmtHover.Contains("$100 off!") ? DisAmtHover.Replace("$100 off!", "") : DisAmtHover;
+    freeShpAmt = DisAmtHover == "" ? "Free Shipping!" : DisAmtHover;
+    var showdisAmtstrhtml = "<span class='wcn-block-in-minicart'>" + discountStr + "</span>" + "<span class='wcn-green-underline' data-trigger='hover' data-toggle='popover' data-placement='bottom' data-content='*exclusions apply' title ='" + "Free Shipping " + and + @DisAmtHover + " on orders $" + minimumOrder + "+" + "'>" + freeShpAmt + "</span>";
+    var shopMore = "<a class='wcn-shop-more-btn' href='/' data-dismiss='modal'> Shop More <i class='zf-wcn-arrow-right-bold'></i></a>";
+    shippingMsg = showappliedoffer != "" ? showappliedofferstrhtml + " applied! " + showdisAmtstrhtml + shopMore : showdisAmtstrhtml + shopMore;
+}
+@if (shippingMsg.Contains("DISAMTDIFF"))
+{
+    shippingMsg = showappliedofferstrhtml + " applied! " + shopMore;
+}
+@if (loopcount > 0)
+{
+    <div class="col-xs-12 shipping-bar-status">@Html.RenderBlock(shippingMsg)</div>
+}
+<script>
+    $(document).ready(function () { $('[data-toggle="tooltip"]').tooltip(); $('[data-toggle="popover"]').popover(); });
+</script>

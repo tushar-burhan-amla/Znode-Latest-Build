@@ -1,0 +1,170 @@
+﻿@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Engine.Admin.ViewModels
+@model RMAReturnCartItemViewModel
+
+@{
+    string imagePath = string.IsNullOrEmpty(Model?.ImagePath) ? ZnodeAdminSettings.DefaultImagePath : Model?.ImagePath;
+    string inventoryRoundOff = DefaultSettingHelper.DefaultInventoryRoundOff;
+    string priceRoundOff = DefaultSettingHelper.DefaultPriceRoundOff;
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    string sku = string.IsNullOrEmpty(Model.ConfigurableProductSKUs) ? Model.SKU : Model.ConfigurableProductSKUs;
+    int isActiveProductCount = 0;
+}
+<td class="imageicon sp-image text-center">
+    <img src="@imagePath" alt="@Html.RenderBlock(Model.ProductName) Image" class="grid-img" />
+    @Html.Hidden("hdnCurrencySymbol_" + Model.ExternalId, (HelperMethods.FormatPriceWithCurrency(0.00M, cultureCode)).Replace("0.00", ""))
+</td>
+@if (Model.GroupProducts?.Count > 0)
+{
+    string mainProductName = Model.ProductName;
+    foreach (var product in Model.GroupProducts)
+    {
+        <td class="sp-sku text-center">
+            @Html.DisplayTextFor(model => product.Sku)
+        </td>
+        <td class="sp-product-name text-center">
+            <div class="">@Html.RenderBlock(mainProductName)</div>
+            @if (string.IsNullOrEmpty(Model.CartDescription))
+            {
+                <div><em class="zf-caret-right"></em>@Html.RenderBlock(product.ProductName)</div>
+            }
+            else
+            { <div class="cart-item-description">@Html.RenderBlock(Model.CartDescription)</div>
+            }
+            @if (!Model.IsActive)
+            {
+                isActiveProductCount++;
+                <span style="color: #cc0000">@Admin_Resources.ErrorMessageInactiveProduct</span>
+            }
+            @if (!Model.IsAllowedTerritories)
+            {
+                <div id="dynamic-allowesterritories" class="status-outofstock hvr-pulse error-msg">@Admin_Resources.AllowedTerritoriesProductError</div>
+            }
+        </td>
+        <td class="sp-lblreason text-center">
+            @if (!Equals(Model.ReasonForReturnItems, null))
+            {
+                @Html.DropDownListFor(model => model.ReasonForReturnId, Model.ReasonForReturnItems, new { @id = "ddlReasonList_" + Model.ExternalId })
+                <input type="hidden" id="oldReasonForReturnId_@Model.ExternalId" value="@Model.ReasonForReturnId" />
+            }
+        </td>
+        <td class="sp-unit-price text-center">
+            <span> @HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode)</span>
+            <input id="unitprice_@Model.ExternalId" value="@Model.UnitPrice" data-return-productid="@Model.ProductId" style="display:none" />
+            <div id="unit_price_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+        </td>
+        <td class="sp-lblavailableqty text-center">
+            <span>@Model.Quantity</span>
+            <input id="shippedquantity_@Model.ExternalId" value="@Model.Quantity" data-return-productid="@Model.ProductId" style="display:none" />
+
+        </td>
+        <td class="sp-lblreturnqty text-center">
+            @Html.TextBoxFor(model => model.ExpectedReturnQuantity, new { @id = "expectedReturnQuantity_" + Model.ExternalId, @style = "width : 20%", @onchange = "RMAReturn.prototype.ValidateCreateReturnLineItem('" + Model.ExternalId + "')" })
+            <div id="expectedReturnQuantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+            <input type="hidden" id="oldExpectedReturnQuantity_@Model.ExternalId" value="@Model.ExpectedReturnQuantity" />
+        </td>
+        @*<td class="sp-lblreturnqty">
+            <span id="returnTotalPrice_@Model.ExternalId" name="returnTotalPrice">@Model.TotalLineItemPriceWithCurrency</span>
+        </td>*@
+    }
+}
+else
+{
+    <td class="sp-sku text-center">
+        <label>@sku</label>
+    </td>
+    <td class="sp-product-name text-center">
+        <p>@Html.RenderBlock(Model.ProductName)</p>
+
+        @if (Model?.PersonaliseValuesDetail?.Count > 0)
+        {
+            foreach (var item in Model.PersonaliseValuesDetail)
+            {
+                if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                {
+                    <div class="cart-item-description">
+                        <p> @item.PersonalizeName : @item.PersonalizeValue </p>
+                    </div>
+                }
+            }
+        }
+        else if (Model?.PersonaliseValuesList?.Count > 0)
+        {
+            foreach (var item in Model.PersonaliseValuesList)
+            {
+                if (!Equals(item.Key, null) && !Equals(item.Value, string.Empty))
+                {
+                    <p> @item.Key : @item.Value </p>
+                }
+            }
+        }
+
+        @Html.RenderBlock(Model.CartDescription)
+
+        @if (Model.InsufficientQuantity)
+        {
+            <span class="error-msg">@Admin_Resources.ErrorOutOfStockMessage</span>
+        }
+        @if (!Model.IsActive)
+        {
+            isActiveProductCount++;
+            <span style="color: #cc0000">@Admin_Resources.ErrorMessageInactiveProduct</span>
+        }
+        @if (!Model.IsAllowedTerritories)
+        {
+            <div id="dynamic-allowesterritories" class="status-outofstock hvr-pulse error-msg">@Admin_Resources.AllowedTerritoriesProductError</div>
+        }
+        <div id="createReturnLineItem_error_msg_@Model.OmsOrderLineItemsId" style="color: #cc0000"></div>
+    </td>
+    <td class="sp-lblreason text-center">
+        @if (!Equals(Model.ReasonForReturnItems, null))
+        {
+            @Html.DropDownListFor(model => model.ReasonForReturnId, Model.ReasonForReturnItems, new { @id = "ddlReasonList_" + Model.ExternalId })
+            <input type="hidden" id="oldReasonForReturnId_@Model.ExternalId" value="@Model.ReasonForReturnId" />
+        }
+    </td>
+    <td class="sp-unit-price text-center">
+        <span> @HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode)</span>
+        <input id="unitprice_@Model.ExternalId" value="@Model.UnitPrice" data-return-productid="@Model.ProductId" style="display:none" />
+        <div id="unit_price_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+    </td>
+
+    if (!string.IsNullOrEmpty(Model.ConfigurableProductSKUs))
+    {
+        <td class="sp-lblavailableqty text-center">
+            <span>@Model.Quantity</span>
+            <input id="shippedquantity_@Model.ExternalId" value="@Model.Quantity" data-return-productid="@Model.ProductId" style="display:none" />
+        </td>
+        <td class="sp-lblreturnqty text-center">
+            @Html.TextBoxFor(model => model.ExpectedReturnQuantity, new { @id = "expectedReturnQuantity_" + Model.ExternalId, @style = "width : 20%", @onchange = "RMAReturn.prototype.ValidateCreateReturnLineItem('" + Model.ExternalId + "')" })
+            <div id="expectedReturnQuantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+            <input type="hidden" id="oldExpectedReturnQuantity_@Model.ExternalId" value="@Model.ExpectedReturnQuantity" />
+        </td>
+    }
+    else
+    {
+        <td class="sp-lblavailableqty text-center">
+            <span>@Model.Quantity</span>
+            <input id="shippedquantity_@Model.ExternalId" value="@Model.Quantity" data-return-productid="@Model.ProductId" style="display:none" />
+        </td>
+        <td class="sp-lblreturnqty text-center">
+            @Html.TextBoxFor(model => model.ExpectedReturnQuantity, new { @id = "expectedReturnQuantity_" + Model.ExternalId, @style = "width : 20%", @onchange = "RMAReturn.prototype.ValidateCreateReturnLineItem('" + Model.ExternalId + "')" })
+            <div id="expectedReturnQuantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+            <input type="hidden" id="oldExpectedReturnQuantity_@Model.ExternalId" value="@Model.ExpectedReturnQuantity" />
+        </td>
+    }
+}
+
+<td class="sp-total">
+    <span id="returnTotalPrice_@Model.ExternalId"> @Model.TotalLineItemPriceWithCurrency</span>
+</td>
+
+@Html.HiddenFor(model => model.ProductType)
+@Html.Hidden("OmsOrderLineItemsId_" + Model.ExternalId, Model.OmsOrderLineItemsId)
+@Html.Hidden("RmaReturnLineItemsId_" + Model.ExternalId, Model.RmaReturnLineItemsId)
+<script>
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>

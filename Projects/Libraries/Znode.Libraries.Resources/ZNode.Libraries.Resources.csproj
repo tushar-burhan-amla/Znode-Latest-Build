@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0461BA0D-6141-47D7-A78E-C166FF5A75F0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Znode.Libraries.Resources</RootNamespace>
+    <AssemblyName>Znode.Libraries.Resources</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Int|AnyCPU'">
+    <OutputPath>bin\Int\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'loadtest|AnyCPU'">
+    <OutputPath>bin\loadtest\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'automation|AnyCPU'">
+    <OutputPath>bin\automation\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'B2B|AnyCPU'">
+    <OutputPath>bin\B2B\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LB|AnyCPU'">
+    <OutputPath>bin\LB\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Znode.Libraries.Framework.Business.9.7.3\lib\net46\Znode.Libraries.Framework.Business.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Admin_Resources\Admin_Resources.de-DE.Designer.cs">
+      <DependentUpon>Admin_Resources.de-DE.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Admin_Resources\Admin_Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Admin_Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin_Resources\Admin_Resources.fr-FR.Designer.cs">
+      <DependentUpon>Admin_Resources.fr-FR.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="ERP_Resources\ERP_Resources.de-DE.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ERP_Resources.de-DE.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ERP_Resources\ERP_Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ERP_Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ERP_Resources\ERP_Resources.fr-FR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ERP_Resources.fr-FR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="WebStore_Resources\WebStore_Resources.de-DE.Designer.cs">
+      <DependentUpon>WebStore_Resources.de-DE.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="WebStore_Resources\WebStore_Resources.Designer.cs">
+      <DependentUpon>WebStore_Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="WebStore_Resources\WebStore_Resources.fr-FR.Designer.cs">
+      <DependentUpon>WebStore_Resources.fr-FR.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Helpers\CultureHelper.cs" />
+    <Compile Include="Helpers\ResourcesConstants.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourcesConstants.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Api_Resources\Api_Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Api_Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Api_Resources\Api_Resources.fr-FR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Api_Resources.fr-FR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Api_Resources\Api_Resources.de-DE.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Api_Resources.de-DE.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Attributes_Resources\Attributes_Resources.de-DE.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Attributes_Resources.de-DE.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Attributes_Resources\Attributes_Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Attributes_Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Attributes_Resources\Attributes_Resources.fr-FR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Attributes_Resources.fr-FR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSetting_Resources\GlobalSetting_Resources.de-DE.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GlobalSetting_Resources.de-DE.resx</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSetting_Resources\GlobalSetting_Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GlobalSetting_Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSetting_Resources\GlobalSetting_Resources.fr-FR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GlobalSetting_Resources.fr-FR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="MediaManager_Resources\MediaManager_Resources.de-DE.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MediaManager_Resources.de-DE.resx</DependentUpon>
+    </Compile>
+    <Compile Include="MediaManager_Resources\MediaManager_Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MediaManager_Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="MediaManager_Resources\MediaManager_Resources.fr-FR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MediaManager_Resources.fr-FR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="PIM_Resources\PIM_Resources.de-DE.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PIM_Resources.de-DE.resx</DependentUpon>
+    </Compile>
+    <Compile Include="PIM_Resources\PIM_Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PIM_Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="PIM_Resources\PIM_Resources.fr-FR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PIM_Resources.fr-FR.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Admin_Resources\Admin_Resources.de-DE.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Admin_Resources.de-DE.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin_Resources\Admin_Resources.fr-FR.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Admin_Resources.fr-FR.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin_Resources\Admin_Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+      <LastGenOutput>Admin_Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Api_Resources\Api_Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Api_Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Api_Resources\Api_Resources.fr-FR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Api_Resources.fr-FR.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Api_Resources\Api_Resources.de-DE.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Api_Resources.de-DE.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Attributes_Resources\Attributes_Resources.de-DE.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Attributes_Resources.de-DE.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Attributes_Resources\Attributes_Resources.fr-FR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Attributes_Resources.fr-FR.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Attributes_Resources\Attributes_Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Attributes_Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ERP_Resources\ERP_Resources.de-DE.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ERP_Resources.de-DE.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ERP_Resources\ERP_Resources.fr-FR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ERP_Resources.fr-FR.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ERP_Resources\ERP_Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+      <LastGenOutput>ERP_Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WebStore_Resources\WebStore_Resources.de-DE.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebStore_Resources.de-DE.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WebStore_Resources\WebStore_Resources.fr-FR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebStore_Resources.fr-FR.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WebStore_Resources\WebStore_Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebStore_Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+      <LastGenOutput>WebStore_Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GlobalSetting_Resources\GlobalSetting_Resources.de-DE.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GlobalSetting_Resources.de-DE.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GlobalSetting_Resources\GlobalSetting_Resources.fr-FR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GlobalSetting_Resources.fr-FR.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GlobalSetting_Resources\GlobalSetting_Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GlobalSetting_Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MediaManager_Resources\MediaManager_Resources.de-DE.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MediaManager_Resources.de-DE.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MediaManager_Resources\MediaManager_Resources.fr-FR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MediaManager_Resources.fr-FR.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MediaManager_Resources\MediaManager_Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MediaManager_Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PIM_Resources\PIM_Resources.de-DE.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PIM_Resources.de-DE.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PIM_Resources\PIM_Resources.fr-FR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PIM_Resources.fr-FR.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PIM_Resources\PIM_Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>Znode.Libraries.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+      <LastGenOutput>PIM_Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Helpers\ResourcesConstants.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ResourcesConstants.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

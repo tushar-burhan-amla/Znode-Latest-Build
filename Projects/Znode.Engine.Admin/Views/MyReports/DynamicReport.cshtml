@@ -1,0 +1,126 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers
+@model DynamicReportViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.LabelReport + " | " + Admin_Resources.LabelIndex;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmDynamicReport" };
+}
+<div class="col-sm-12 title-container">
+    @if (Equals("DynamicReport".ToLower(), actionName?.ToLower()))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleReport)</h1>
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.TitleReport)<em class="z-minus"></em><span>@Model.ReportName</span></h1>
+    }
+   @* <div class="pull-right">
+        <a class="btn-text-icon" onclick="MyReports.prototype.GenerateDynamicReports();"><em class="z-save"></em>@Admin_Resources.ButtonSave</a>
+        <a id="btnCancelForReports" href="/MyReports/List" class="btn-text-icon"><em class='z-cancel'></em>@Admin_Resources.ButtonCancel</a>
+    </div>*@
+    <div class="pull-right btn-container">
+        <a type="button" id="btnCancelForReports" href="/MyReports/List" class="btn-text-icon" data-dismiss="modal" data-test-selector="linkCancel"><em class="z-back"></em>@Admin_Resources.ButtonCancel</a>
+        <div class="pull-right padding-left">
+            <button type="submit" onclick="MyReports.prototype.GenerateDynamicReports();" class="btn-text btn-text-secondary" data-test-selector="linkSave">@Admin_Resources.ButtonSave</button>
+        </div>
+    </div>
+</div>
+<div class="col-sm-12 page-container">
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.LabelFor(model => model.ReportType)
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(model => model.ReportTypeId, Model.ReportTypeList, Admin_Resources.LabelPleaseSelect, new { id = "ddlReportType", @onchange = "MyReports.prototype.GetData()" })
+                <span class="field-validation-error" id="error-importname"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12 nopadding">
+        <div class="form-group">
+            <div class="control-label">
+                @Html.LabelFor(model => model.ReportName, new { @class = "required" })
+            </div>
+            <div class="control-md">
+                @Html.TextBoxFor(model => model.ReportName)
+                <span class="error-msg" id="reportNameError"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group" id="divLocale" style="display:none;">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                <label>@Admin_Resources.LabelLocaleId</label>
+            </div>
+            <div class="control-md">
+                @Html.DropDownListFor(model => model.LocaleId, new SelectList(Model?.Locale, "Value", "Text"))
+            </div>
+        </div>
+    </div>
+    <div id="divView">
+
+       @{
+
+            if (Model.CustomReportTemplateId > 0)
+            {
+                int? seletedValue = 0;
+                switch (Model.ReportType)
+                {
+                    case AdminConstants.Product:
+                        seletedValue = Model.CatalogId;
+                        break;
+                    case AdminConstants.Category:
+                        seletedValue = Model.CatalogId;
+                        break;
+                    case AdminConstants.Pricing:
+                        seletedValue = Model.PriceId;
+                        break;
+                    case AdminConstants.Inventory:
+                        seletedValue = Model.WarehouseId;
+                        break;
+                }
+                Html.RenderAction("GetReportView", "MyReports", new { reportType = Model.ReportType, seletedValue = seletedValue });
+            }
+        }
+    </div>
+
+   <div class="sorting-container">
+        <div class="col-sm-12 nopadding margin-top">
+            <ul>
+                <li>
+                    <div>
+                        <h3 class="section-heading-sub">@Admin_Resources.DynamicReportAvailableColumns</h3>
+                        <div id="divColumnList" name="ColumnList" class="col-sm-12 nopadding margin-bottom">
+                            @{Html.RenderPartial("~/Views/Shared/Controls/_ListView.cshtml");}
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    @{Html.RenderPartial("~/Views/Shared/Controls/_MoveLeftRightNavigations.cshtml");}
+                </li>
+                <li>
+                    <h3 class="section-heading-sub">@Admin_Resources.DynamicReportSelectedColumns</h3>
+                    <div id="divTargetColumnList" name="TargetColumnList" class="col-sm-12 nopadding margin-bottom">
+                        @{Html.RenderPartial("~/Views/Shared/Controls/_ListView.cshtml");}
+                        <span class="error-msg" id="targetColumnError"></span>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        @{Html.RenderPartial("~/Views/Shared/Controls/_MoveUpDownNavigations.cshtml");}
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        @{Html.RenderPartial("~/Views/MyReports/_Filters.cshtml");}
+    </div>
+    @Html.HiddenFor(model => model.CustomReportTemplateId)
+</div>

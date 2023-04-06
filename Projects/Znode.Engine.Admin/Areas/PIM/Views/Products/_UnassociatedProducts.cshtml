@@ -1,0 +1,61 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model ProductDetailsListViewModel
+@using Znode.Engine.Admin.Models
+<div id="@Model.GridModel.FrontObjectName">
+    <div id="aside-popup-panel">
+        <div class="col-sm-12 title-container">
+            @if (Model.ListType == 1)
+            {
+                <h1>Assign Link Products</h1>
+                <div class="pull-right" id="divSaveCancel">
+                    <button type="button" class="btn-text-icon" data-dismiss="modal" onclick="ZnodeBase.prototype.CancelUpload('UnassociatedProductAsidePannel')"><em class="z-back" data-test-selector="popLinkCancel"></em>@Admin_Resources.ButtonCancel</button>
+                    <div class="pull-right" id="divSave">
+                        <button type="button" class="btn-text btn-text-secondary" data-test-selector="popLinkSave" onclick="Products.prototype.AssignLinkProducts(@Model.AttributeId,'@Model.GridModel.FrontObjectName')">@Admin_Resources.ButtonSave</button>
+                    </div>
+                </div>
+            }
+            else if (Model.ListType == 2)
+            {
+                <h1>@PIM_Resources.AssociateProducts</h1>
+                <div class="pull-right" id="divSaveCancel">
+                    <button type="button" class="btn-text-icon" data-dismiss="modal" onclick="ZnodeBase.prototype.CancelUpload('UnassociatedProductAsidePannel')"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                    <div class="pull-right">
+                        <button type="button" class="btn-text btn-text-secondary" data-test-selector="popLinkSave" onclick="Products.prototype.AssociateProducts('@Model.GridModel.FrontObjectName')">@Admin_Resources.ButtonSave</button>
+                    </div>
+                </div>
+            }
+            else if (Model.ListType == 0)
+            {
+                <h1>@PIM_Resources.btnAssociateAddon</h1>
+                <div class="pull-right" id="divSaveCancel">
+                    <button type="button" class="btn-text-icon" data-dismiss="modal" onclick="ZnodeBase.prototype.CancelUpload('UnassociatedProductAsidePannel')"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                    <div class="pull-right">
+                        <button type="button" class="btn-text btn-text-secondary" id="associateAddonProduct">@Admin_Resources.ButtonSave</button>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-sm-12 page-container">
+            <div id="asidePannelmessageBoxContainerId" style="display:none">
+                <div class="col-sm-12 text-center error-msg margin-bottom" style="position:relative;">@PIM_Resources.ErrorSelectProduct</div>
+            </div>           
+            @using (Ajax.BeginForm("GetUnassociatedProducts", "Products", new { parentProductId = Model.ParentProductId, listType = Model.ListType, addonProductId = Model.AddonProductId, associatedProductIds = Model.AssociatedProductIds }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "" }, new { @id = "searchform" }))
+            {
+                <div id="filterComponent">
+                    @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                </div>
+            }            
+            <div class="list-container">
+                @{
+                    @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    Products.prototype.ShowHideSaveCancelButton();
+    ZnodeBase.prototype.SetNoImageForList();
+    ZnodeBase.prototype.AddClassToImageColumn('@Model.GridModel.FrontObjectName');
+</script>

@@ -1,0 +1,19 @@
+﻿@using Znode.Engine.Admin.ViewModels
+
+@model DynamicReportViewModel
+
+<tr>
+    <td>
+        @Html.DropDownList("Filter", Model.ReportFilter, @Admin_Resources.DropDownOptionPleaseSelect, new { @class = "ddlAttributes" })
+    </td>
+    <td>
+        @Html.DropDownList("Filter", Model.ReportOperator, @Admin_Resources.DropDownOptionPleaseSelect, new { @class = "ddlOperators" })
+    </td>
+
+    <td>
+        @Html.TextBox("Action", Model.FilterValue, new { @class = "txtValue" })
+    </td>
+    <td>
+        <a id="btnDeleteRowData" href="javascript:void(0)" class="btn-narrow-icon"><em class="z-close"></em></a>
+    </td>
+</tr>

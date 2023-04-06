@@ -1,0 +1,5 @@
+﻿@model WidgetParameter
+<div id="link-products" class="product-list-widget">
+    @{ Html.RenderAction("GetLinkProducts", "Product", new { productId = Model.CMSMappingId }); }
+    <script>InitbLazy();</script>
+</div>

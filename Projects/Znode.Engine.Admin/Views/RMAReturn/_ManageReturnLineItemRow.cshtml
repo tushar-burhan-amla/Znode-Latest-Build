@@ -1,0 +1,123 @@
+﻿@model Znode.Engine.Admin.ViewModels.RMAReturnLineItemViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@{
+    string imagePath = string.IsNullOrEmpty(Model?.ImagePath) ? ZnodeAdminSettings.DefaultImagePath : Model?.ImagePath;
+    string _displayPartialRefund = Model.IsOrderPartialRefund ? "display:block;" : "display:none;";
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+    string priceRoundOff = DefaultSettingHelper.DefaultPriceRoundOff;
+}
+<li class="imageicon sp-image">
+    <img src="@imagePath" alt="@Html.RenderBlock(Model.ProductName) Image" class="grid-img" />
+    @Html.Hidden("hdnCurrencySymbol_" + Model.ExternalId, (HelperMethods.FormatPriceWithCurrency(0.00M, cultureCode)).Replace("0.00", ""))
+</li>
+<li class="sp-sku">
+    <label>@Model.Sku</label>
+</li>
+<li class="sp-product-name">
+    <label class="ordered-product-name">
+        @Html.RenderBlock(Model.ProductName)
+    </label>
+    @if (Model?.PersonaliseValuesDetail?.Count > 0)
+    {
+        foreach (var item in Model.PersonaliseValuesDetail)
+        {
+            if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+            {
+                <div class="cart-item-description">
+                    <p> @item.PersonalizeName : @item.PersonalizeValue </p>
+                </div>
+            }
+        }
+    }
+    else if (Model?.PersonaliseValuesList?.Count > 0)
+    {
+        foreach (var item in Model.PersonaliseValuesList)
+        {
+            if (!Equals(item.Key, null) && !Equals(item.Value, string.Empty))
+            {
+                <p> @item.Key : @item.Value </p>
+            }
+        }
+    }
+    <br />
+    <div class="ordered-product-description">@Html.RenderBlock(Model.Description)</div>
+</li>
+<li class="sp-status">
+    @if (!Equals(Model.ReturnStatusList, null))
+    {
+        @Html.DropDownListFor(model => model.RmaReturnStateId, Model.ReturnStatusList, new { @id = "returnStatus_" + Model.ExternalId, @data_test_selector = "drpReturnStatusList" })
+        @Html.HiddenFor(m => m.RmaReturnStateId, new { @id = "savedReturnStatus_" + Model.ExternalId });
+    }
+</li>
+<li class="sp-returned-reason">
+    @Model.RmaReasonForReturn
+</li>
+<li class="sp-returned-reason">
+    @HelperMethods.FormatPriceWithCurrency(Model.Price, cultureCode)
+</li>
+<li class="sp-quantity">
+    <label>@Model.ExpectedReturnQuantity</label>
+    <input type="hidden" id="expectedReturnQuantity_@Model.ExternalId" value="@Model.ExpectedReturnQuantity" />
+</li>
+<li class="sp-quantity">
+    @if (Model.RmaReturnStateId == (int)ZnodeReturnStateEnum.REJECTED)
+    {
+        @Html.TextBoxFor(model => model.ExpectedReturnQuantity, new { @id = "returnedQuantity_" + Model.ExternalId, @data_test_selector = "txtReturnedQuantity", @class = "price-input", @disabled = "disabled" })
+    }
+    else
+    {
+        @Html.TextBoxFor(model => model.ReturnedQuantity, new { @id = "returnedQuantity_" + Model.ExternalId, @data_test_selector = "txtReturnedQuantity", @class = "price-input" })
+    }
+    <div id="returnedQuantity_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+</li>
+<li class="sp-shipping">
+    <span id="shippingcost_@Model.ExternalId">@HelperMethods.FormatPriceWithCurrency(Model.ShippingCost, cultureCode)</span>
+</li>
+<li class="sp-shipping-status">
+    <div class="col-sm-12 nopadding" id="returnShipping_@Model.ExternalId">
+        <label for="IsShippingReturn">
+            @if (Model.ShippingCost > 0 && (Model.RmaReturnStateId != (int)ZnodeReturnStateEnum.REJECTED))
+            {
+                if (Model.IsShippingReturn)
+                {
+                    <input type="checkbox" value="true" checked="checked" name="IsShippingReturn" id="IsShippingReturn_@Model.ExternalId">
+                }
+                else
+                {
+                    <input type="checkbox" value="false" name="IsShippingReturn" id="IsShippingReturn_@Model.ExternalId">
+                }
+            }
+            else
+            {
+                <input type="checkbox" disabled="disabled" value="true" name="IsShippingReturn" id="IsShippingReturn_@Model.ExternalId">
+            }
+            <span class="lbl padding-8"></span><input type="hidden" value="false" name="IsShippingReturn">
+        </label>
+    </div>
+</li>
+<li class="sp-refundlist" style="@_displayPartialRefund">
+    @if (Model.RefundAmount > 0)
+    {
+        @Html.TextBoxFor(model => model.RefundAmount, new { @id = "partialRefundAmount_" + Model.ExternalId, @data_test_selector = "txtPartialRefundAmount", @class = "price-input", @data_priceRoundOff = priceRoundOff })
+    }
+    else
+    {
+        @Html.TextBoxFor(model => model.RefundAmount, new { @id = "partialRefundAmount_" + Model.ExternalId, @data_test_selector = "txtPartialRefundAmount", @class = "price-input", @disabled = "disabled", @data_priceRoundOff = priceRoundOff, @style = "display:none" })
+    }   
+    <div id="partialRefundAmount_error_msg_@Model.ExternalId" style="color: #cc0000"></div>
+</li>
+<li class="sp-total">
+    <span id="returnTotalPriceSpan_@Model.ExternalId"> @HelperMethods.FormatPriceWithCurrency(Model.Total, cultureCode)</span>
+    <input type="hidden" id="returnTotalPrice_@Model.ExternalId" value="@Model.Total" />
+</li>
+
+@Html.Hidden("ShipSeperately_" + Model.ExternalId, Model.ShipSeperately)
+@Html.HiddenFor(model => model.ProductType)
+@Html.Hidden("OmsOrderLineItemsId_" + Model.ExternalId, Model.OmsOrderLineItemsId)
+@Html.Hidden("RmaReturnLineItemsId_" + Model.ExternalId, Model.RmaReturnLineItemsId)
+<script>
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>

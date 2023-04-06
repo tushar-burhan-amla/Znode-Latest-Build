@@ -1,0 +1,46 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model DownloadableProductKeyViewModel
+@{
+    ViewBag.Title = Admin_Resources.LabelPIM + " | " + Admin_Resources.TitleMultifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();    
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { Action = actionName, Controller = controllerName, ControlId = "dvSave", LinkType = LinkType.AuthorizedPrototypeRawActionLink, LinkDisplayName = @Admin_Resources.ButtonSave, DataTestSelector= "linkSave", OnClick = "SaveCancel.prototype.SubmitForm('" + "addDownloadableProductKeyForm" + "')" });
+}
+<div id="aside-popup-panel">
+    <div class="col-sm-12 title-container">
+        <h1>@PIM_Resources.KeysAdd</h1> 
+        <div class="pull-right">            
+            @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+        </div>
+        <div class="pull-right">
+            <button type="button" class="btn-text-icon margin-bottom" onclick="ZnodeBase.prototype.CancelUpload('divAsidePanelDownloadableProduct')" data-test-selector="linkBack"><em class='z-back'></em>@Admin_Resources.ButtonBack</button>           
+        </div>
+    </div>
+
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        <div id="createForm">
+            <div class="notification-msg">
+                <div id="downloadableProductError" class="error-msg text-center margin-bottom" style="display:none">@Admin_Resources.ErrorAddDownloadableProductKey</div>
+            </div>
+            <div class="form-group dirtyignore">
+                <div class="col-sm-12 nopadding">
+                    @Html.Partial("~/Views/Inventory/_AddMultipleDownloadableProductKeys.cshtml", Model)
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.PimDownloadableProductKeyId)
+            @Html.HiddenFor(m => m.SKU)
+        </div>
+    </section>
+</div>
+    <script>
+        $(document).ready(function () {
+            $("#btnCancel a").click(function (event) {
+                if ($(this).attr('href').indexOf("PIM/Products/Edit?PimProductId") != -1) {
+                    $("#divAsidePanelDownloadableProduct .popup-panel-close").click();
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>

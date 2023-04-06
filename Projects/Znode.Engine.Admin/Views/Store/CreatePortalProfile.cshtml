@@ -1,0 +1,60 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalProfileViewModel
+@using Znode.Engine.Admin.ViewModels;
+@using Znode.Libraries.Resources;
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formCreateEditPortalProfile", SaveHeader = Admin_Resources.ButtonAdd, CancelHeader = Admin_Resources.ButtonCancel };
+    string portalName = string.IsNullOrEmpty(Model?.PortalName) ? @Admin_Resources.TitleStore : Model?.PortalName;
+}
+<div class="col-sm-12 title-container">
+    @if (actionName.ToLower().Contains("edit"))
+    {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelPortalProfileList)<em class="z-minus"></em><span>@Model.ProfileName</span></h1>
+    }
+    else
+    {
+        <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelPortalProfileList)</h1>
+    }
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "formCreateEditPortalProfile" }))
+    {
+        <h3 class="section-heading">@Admin_Resources.HeaderProfileDetails</h3>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ProfileId, new { @class = "required" })
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.ProfileId, Model.Profiles)
+                    </div>
+                </div>
+                <div class="col-sm-12 nopadding">
+                    <div class="control-lg padding-top control-non">
+                        <label>
+                            <input @(Model.IsDefaultAnonymousProfile ? "checked='checked'" : "") id="IsDefaultAnonymousProfile" name="IsDefaultAnonymousProfile" type="checkbox" value="true">
+                            <span class="lbl padding-8">Is Default Anonymous Profile</span>
+                            <input name="IsDefaultAnonymousProfile" type="hidden" value="false">
+                        </label>
+                    </div>
+                    <div class="control-lg control-non">
+                        <label>
+                            <input @(Model.IsDefaultRegistedProfile ? "checked='checked'" : "") id="IsDefaultRegistedProfile" name="IsDefaultRegistedProfile" type="checkbox" value="true">
+                            <span class="lbl padding-8">Is Default Registered Profile</span>
+                            <input name="IsDefaultRegistedProfile" type="hidden" value="false">
+                        </label>
+                    </div>
+                </div>
+            </div>
+                    @Html.HiddenFor(model => model.PortalId)
+                    @Html.HiddenFor(model => model.PortalProfileID)
+                    @Html.HiddenFor(model => model.PortalName)
+    }
+</section>

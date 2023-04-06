@@ -1,0 +1,40 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CreateOrderViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+}
+
+<div id="layout-checkout-receipt">
+    <div class="col-sm-12 title-container">
+        <h1 class="left" data-test-selector ="hdgOrderReceipt">@Admin_Resources.TitleOrderReceipt</h1>
+        <div class="pull-right btn-container">
+            <button class="btn-text-icon" type="button" onclick="Order.prototype.PrintHandler(this)" data-test-selector ="linkPrintReceipt"><em class='z-print'></em>@Admin_Resources.LabelPrint</button>
+            <div class="pull-right padding-left">
+                @Html.AuthorizedRawActionLink(Admin_Resources.ButtonCreateOrder, "CreateOrder", "Order", null, new { @class = "btn-text btn-text-secondary", @data_test_selector = "linkCreateOrder" })
+            </div>
+        </div>
+    </div>
+    <div class="main-container">        
+        <div class="col-sm-12 nopadding" id="printContentDiv">
+            @if (HelperUtility.IsNotNull(Model))
+            {
+                
+                if (HelperUtility.IsNotNull(Model.ReceiptHtml))
+                {
+                    <div>
+                        @Html.RenderBlock(Model.ReceiptHtml)
+                    </div>
+                }
+            }
+            else
+            {
+                <h3>@Admin_Resources.ErrorUnablePlaceOrder</h3>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+

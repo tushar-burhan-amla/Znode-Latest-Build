@@ -1,0 +1,17 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ContentContainerDataViewModel
+@{
+    string containerKey = Model?.ContainerKey;
+    string HomePageTickerText = Model?.Attributes?.FirstOrDefault(x => x.AttributeCode == "HomePageTicker" && x.AttributeValue != null)?.AttributeValue;
+}
+@if (!string.IsNullOrEmpty(containerKey) && containerKey.Equals("HomePageTicker", StringComparison.InvariantCultureIgnoreCase))
+{
+    <div class="ticker-wrapper">
+        <div class="ticker">
+            <p class="ticker-text">
+                @Html.RenderBlock(HomePageTickerText)
+            </p>
+        </div>
+    </div>
+}
+

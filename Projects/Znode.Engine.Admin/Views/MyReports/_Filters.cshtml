@@ -1,0 +1,44 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model DynamicReportViewModel
+
+<div class="col-sm-12 nopadding">
+    @*<div class="pull-right margin-bottom">
+            <button type="button" id="btnReportFilters-add-new-row" onclick="MyReports.prototype.AppendTableRows();" class="btn-text-icon"><em class="z-add-circle"></em>@Admin_Resources.ButtonAdd</button>
+        </div>*@
+    <div class="pull-right margin-bottom">
+        <a class="btn-text btn-text-secondary" data-test-selector="btnAddNew" id="btnReportFilters-add-new-row" onclick="MyReports.prototype.AppendTableRows();">@Admin_Resources.AddNew</a>
+    </div>
+    <table id="tblReportFilters" class="table dynamic-report-tabel" aria-describedby="Filters Report Table">
+        <thead>
+            @if (Model.Parameters?.CustomReportParamList?.Count > 0)
+            {
+                <tr id="trTblReportFilters">
+                    <th scope="col">@Admin_Resources.LabelFilter</th>
+                    <th scope="col">@Admin_Resources.LabelOperator</th>
+                    <th scope="col">@Admin_Resources.LabelFilterValue</th>
+                    <th scope="col">@Admin_Resources.Delete</th>
+                </tr>
+            }
+            else
+            {
+                <tr id="trTblReportFilters" style="display: none">
+                    <th scope="col">@Admin_Resources.LabelFilter</th>
+                    <th scope="col">@Admin_Resources.LabelOperator</th>
+                    <th scope="col">@Admin_Resources.LabelFilterValue</th>
+                    <th scope="col">@Admin_Resources.Delete</th>
+                </tr>
+            }
+        </thead>
+        <tbody>
+
+            @if (Model?.Parameters?.CustomReportParamList?.Count > 0)
+            {
+                foreach (var _item in Model?.Parameters?.CustomReportParamList)
+                {
+                    Html.RenderAction("Filter", "MyReports", new { reportType = Model.ReportType, filterName = _item.Name, OperatorName = _item.Operator, filterValue = _item.Value });
+                }
+            }
+        </tbody>
+
+    </table>
+</div>

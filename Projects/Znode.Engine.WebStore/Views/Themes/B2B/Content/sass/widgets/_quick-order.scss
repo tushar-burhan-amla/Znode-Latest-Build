@@ -1,0 +1,120 @@
+﻿// Quick-Order Widget.
+.quick-order-pad-content { /*box-shadow:$box-shadow;*/
+    .btn-container {
+        padding: 20px 0px 13px;
+    }
+
+    .quick-rows {
+        //max-height: 350px;
+        overflow: visible;
+    }
+
+    .table-striped .form-group {
+        display: flex;
+        align-items: center;
+
+        .col-xs-8.col-sm-9 {
+            padding: 0;
+            flex: 0 0 66.66667%;
+            max-width: 66.66667%;
+        }
+
+        > div {
+            margin: 0;
+            float: left;
+        }
+
+        .col-xs-3.col-sm-2 {
+            flex: 0 0 25%;
+            max-width: 25%;
+            padding: 0 0.5rem !important
+        }
+
+        .col-xs-1 {
+            flex: 0 0 8.33333%;
+            max-width: 8.33333%;
+        }
+    }
+
+    .close-icon, .close-circle-icon {
+        font-style: normal;
+        cursor: pointer;
+        font-size: $base-font-size + 2;
+        margin: 0 5px;
+        line-height: 1.2;
+        display: flex;
+
+        &:before {
+            content: $close-circle-icon;
+        }
+    }
+
+    .clear-all-orders {
+        border: 0;
+        background-color: transparent;
+        padding: 0;
+        cursor: pointer;
+        line-height: 37px;
+    }
+
+    .close-circle-icon {
+        line-height: 37px;
+    }
+}
+
+.quick-order-container .quick-order {
+    display: block !important;
+}
+
+.b2b-quick-order-page .quick-order-pad .quick-order-page {
+    .b2b-form {
+        .quick-order-tab {
+            .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+                border-bottom: 2px solid #01579B;
+                color: #01579B;
+            }
+
+            .nav-tabs .nav-link {
+                border: 1px solid transparent;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                color: #454545;
+                text-transform: uppercase;
+            }
+        }
+
+        .tab-content .tab-pane {
+            .sub-heading-template {
+                background: #F8F8F8;
+
+                .icon-file-uploader, .icon-file-upload {
+                    font-size: 32px;
+                    color: #5db043;
+                }
+
+                .file-text {
+                    font-size: $base-font-size - 3 !important;
+
+                    .xlsx-link, .csv-link {
+                        font-size: $base-font-size - 1;
+                    }
+                }
+            }
+            .add-to-quick-list{
+                width: 100%;
+            }
+        }
+    }
+}
+
+@include screensize(small) {
+    .quick-order-pad-content .table-striped .form-group .col-xs-3.col-sm-2 {
+        flex: 0 0 25%;
+        max-width: 25%;
+        padding: 0 1rem !important
+    }
+
+    .b2b-quick-order-page  .quick-order-page .b2b-form .add-to-quick-list{
+        width: auto;
+    }
+}

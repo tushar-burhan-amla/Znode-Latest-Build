@@ -1,0 +1,183 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model OrderItemsRefundViewModel
+@using Znode.Engine.Admin.Helpers;
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel
+    {
+        Action = actionName,
+        Controller = controllerName,
+        FormId = "frmRefundPayment",
+        CancelUrl = "/Order/Manage?OmsOrderId=" + Model.OmsOrderId,
+        Callback = "Order.prototype.ValidateRefundOrder"
+    };
+}
+<!--Main Container-->
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmRefundPayment" }))
+    {
+        <div class="refund-order-layout">
+            <div class="col-sm-12 title-container">
+                <h1>@Admin_Resources.HeaderPartialRefund</h1>
+                <div class="pull-right">
+                    @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+                </div>
+            </div>
+            <section class="col-sm-12 page-container">
+                <table class="table refund-order-table" id="RefundOrderLineitems" aria-describedby="Refund Order Items Table">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelOrderItemId)
+                            </th>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelProductName)
+                            </th>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelRefundAmountLeft)
+                            </th>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelRefundAmount)
+                            </th>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelRefundNotes)
+                            </th>
+                        </tr>
+                    </thead>
+                    @for (int index = 0; index < Model.RefundOrderLineitems.Count; index++)
+                {
+                <tbody>
+                    <tr>
+                        <td>
+                            @Model.RefundOrderLineitems[index].OmsOrderLineItemsId
+                            @Html.HiddenFor(m => m.RefundOrderLineitems[index].OmsOrderLineItemsId)
+                        </td>
+                        <td>
+                            @Model.RefundOrderLineitems[index].ProductName
+                        </td>
+                        <td>
+                            @Model.RefundOrderLineitems[index].RefundableAmountLeft
+                            @Html.HiddenFor(m => m.RefundOrderLineitems[index].RefundableAmountLeft)
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => Model.RefundOrderLineitems[index].RefundAmount, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidAmountForRoundOff, Admin_Resources.ErrorValidAmount) })
+                            @Html.ValidationMessageFor(m => m.RefundOrderLineitems[index].RefundAmount, "", new { @id = "valRefundOrderLineitems_" + index })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => Model.RefundOrderLineitems[index].Notes)
+                        </td>
+                    </tr>
+                </tbody>
+                @Html.HiddenFor(m => m.RefundOrderLineitems[index].OmsOrderDetailsId)
+                @Html.HiddenFor(m => m.RefundOrderLineitems[index].OmsRefundTypeId)
+                }
+                </table>
+            </section>
+
+            <div class="col-sm-12 title-container">
+                <h1>@Admin_Resources.HeaderTotalRefund</h1>
+            </div>
+            <section class="col-sm-12 page-container">
+                <table class="table refund-order-table" aria-describedby="Label order and Refunds">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelOrderId)
+                            </th>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelOrderTotal)
+                            </th>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelOrderTotalLeft)
+                            </th>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelRefundAmount)
+                            </th>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelRefundNotes)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @Model.OrderNumber
+                            </td>
+                            <td>
+                                @Model.TotalRefundDetails.TotalAmount
+                            </td>
+                            <td>
+                                @Model.TotalRefundDetails.RefundableAmountLeft
+                                @Html.HiddenFor(m => m.TotalRefundDetails.RefundableAmountLeft)
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(model => model.TotalRefundDetails.RefundAmount, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidAmountForRoundOff, Admin_Resources.ErrorValidAmount) })
+                                @Html.ValidationMessageFor(m => m.TotalRefundDetails.RefundAmount, "", new { @id = "valRefundOrderTotal" })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.TotalRefundDetails.Notes)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            @if (Model.ShippingRefundDetails.OmsOrderDetailsId > 0)
+            {
+            <div class="col-sm-12 title-container">
+                <h1>@Admin_Resources.HeaderShippingRefund</h1>
+            </div>
+            <section class="col-sm-12 page-container">
+                <table class="table refund-order-table" id="ShippingRefundDetails" aria-describedby="Shipping Refund Details">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelOrderId)
+                            </th>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelTotalShipping)
+                            </th>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelShippingTotalLeft)
+                            </th>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelRefundAmount)
+                            </th>
+                            <th scope="col">
+                                @Html.Label(Admin_Resources.LabelRefundNotes)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @Model.ShippingRefundDetails.OmsOrderDetailsId
+                            </td>
+                            <td>
+                                @Model.ShippingRefundDetails.TotalAmount
+                            </td>
+                            <td>
+                                @Model.ShippingRefundDetails.RefundableAmountLeft
+                                @Html.HiddenFor(m => m.ShippingRefundDetails.RefundableAmountLeft)
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(model => model.ShippingRefundDetails.RefundAmount, new { @validationrule = "RoundOff", @RegularExpression = HelperMethods.GetRegexForDefaultRoundOffValForPrice(), @Message = HelperMethods.GetPriceFormatErorrMessage(Admin_Resources.ErrorValidAmountForRoundOff, Admin_Resources.ErrorValidAmount) })
+                                @Html.ValidationMessageFor(m => m.ShippingRefundDetails.RefundAmount, "", new { @id = "valRefundOrderShipping" })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.ShippingRefundDetails.Notes)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            @Html.HiddenFor(m => m.ShippingRefundDetails.OmsOrderDetailsId)
+            @Html.HiddenFor(m => m.ShippingRefundDetails.OmsRefundTypeId)
+            }
+        </div>
+        @Html.HiddenFor(m => m.TransactionId)
+        @Html.HiddenFor(m => m.OmsOrderDetailsId)
+        @Html.HiddenFor(m => m.OmsOrderId)
+        @Html.HiddenFor(m => m.TotalRefundDetails.OmsOrderDetailsId)
+        @Html.HiddenFor(m => m.TotalRefundDetails.OmsRefundTypeId)
+    }

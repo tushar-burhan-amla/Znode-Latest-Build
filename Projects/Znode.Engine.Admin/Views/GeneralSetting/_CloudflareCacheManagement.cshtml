@@ -1,0 +1,24 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Libraries.ECommerce.Utilities;
+@model CacheListViewModel
+@{
+    string applicationType = Model.CacheList.Where(x => x.ApplicationType == Convert.ToString(ApplicationCacheTypeEnum.CloudflareCache)).Select(x => x.ApplicationType).FirstOrDefault().Replace(" ", "");
+    int ApplicationCacheId = Model.CacheList.Where(x => x.ApplicationType == Convert.ToString(ApplicationCacheTypeEnum.CloudflareCache)).Select(x => x.ApplicationCacheId).FirstOrDefault();
+    string StartDate = Model.CacheList.Where(x => x.ApplicationType == Convert.ToString(ApplicationCacheTypeEnum.CloudflareCache)).Select(x => x.StartDate).FirstOrDefault();
+}
+<div class="col-sm-12 nopadding cache-management-block" id="div-@applicationType">
+    <div class="form-group">
+        <div class="col-sm-12 nopadding">
+            <div class="control-label">
+                @Html.Label(Admin_Resources.LabelRefreshCloudflareCache, new { @data_test_selector = "lblRefreshCache" })
+            </div>
+            <div class="control-md">
+                <input type="button" data-test-selector="txtRefreshCache" id="refresh-@ApplicationCacheId" name="@applicationType" class="btn-text btn-text-secondary" value="Refresh" onclick="GlobalConfiguration.prototype.GetCloudflareDomains(this)" />
+            </div>
+        </div>
+        @Html.Hidden(StartDate, new { @id = "hdnstartDate_" + ApplicationCacheId })
+    </div>
+</div>
+
+

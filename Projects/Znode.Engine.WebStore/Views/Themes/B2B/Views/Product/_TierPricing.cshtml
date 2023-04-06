@@ -1,0 +1,16 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model List<TierPriceViewModel>
+<table class="table table-bordered" aria-describedby="Tier Pricing">
+    <tr>
+        <th scope="col">Tier Quantity</th>       
+        <th scope="col">Tier Price</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Convert.ToDouble(item.Quantity)</td>
+           
+            <td>@Helper.FormatPriceWithCurrency(item.Price, ViewBag?.currencyCode)</td>
+        </tr>
+    }
+</table>

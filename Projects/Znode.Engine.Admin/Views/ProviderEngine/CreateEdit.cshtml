@@ -1,0 +1,162 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.Resources
+@model ProviderEngineViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront; ;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string cancelUrl = string.Empty;
+}
+<div class="col-sm-12 title-container">
+    @{
+        if (string.Equals(actionName.ToLower(), "createtaxruletype"))
+        {
+            cancelUrl = "/ProviderEngine/TaxRuleTypeList";
+            <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitleTaxRules)</h1>
+        }
+        else if (string.Equals(actionName.ToLower(), "createshippingtype"))
+        {
+            cancelUrl = "/ProviderEngine/ShippingTypeList";
+            <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.ShippingType)</h1>
+        }
+        else if (string.Equals(actionName.ToLower(), "createpromotiontype"))
+        {
+            cancelUrl = "/ProviderEngine/PromotionTypeList";
+            <h1>@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.TitlePromotionType)</h1>
+        }
+        else if (string.Equals(actionName.ToLower(), "editpromotiontype"))
+        {
+            cancelUrl = "/ProviderEngine/PromotionTypeList";
+            <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.TitlePromotionType)<em class="z-minus"></em><span>@Model.Name</span></h1>
+        }
+        else if (string.Equals(actionName.ToLower(), "edittaxruletype"))
+        {
+            cancelUrl = "/ProviderEngine/TaxRuleTypeList";
+            <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.TitleTaxRules)<em class="z-minus"></em><span>@Model.Name</span></h1>
+        }
+        else
+        {
+            cancelUrl = "/ProviderEngine/ShippingTypeList";
+            <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.ShippingType)<em class="z-minus"></em><span>@Model.Name</span></h1>
+        }
+    }
+    @{ ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmProviderEngine", CancelUrl = cancelUrl, IsSaveCloseEnable = true };}
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<div id="grid-container">
+    <!--Main Container-->
+    <section class="col-sm-12 page-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = "frmProviderEngine" }))
+            {
+                if (string.Equals(actionName.ToLower(), "createpromotiontype"))
+                {
+                <div class="form-group border-bottom">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelAvailablePromotionTypes, new { @data_test_selector = "lblAvailablePromotionTypes" })
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.ProviderEngineClass, Model.ProviderEngineClasses, new { @id = "ddlPromotionType", @data_test_selector = "drpAvailablePromotionTypes", @onchange = "javascript: var providerEngine = new ProviderEngine(); providerEngine.GetPromotionTypeByClassName();" })
+                            @Html.ValidationMessageFor(model => model.ProviderEngineClasses, "", new { @data_test_selector = "valAvailablePromotionTypes" })
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (string.Equals(actionName.ToLower(), "createtaxruletype"))
+            {
+                <div class="form-group border-bottom">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelAvailableTaxTypes, new { @data_test_selector = "lblAvailableTaxTypes" })
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.ProviderEngineClass, Model.ProviderEngineClasses, new { @id = "ddlTaxType", @data_test_selector = "drpAvailableTaxTypes", @onchange = "javascript: var providerEngine = new ProviderEngine(); providerEngine.GetTaxRuleTypeByClassName();" })
+                            @Html.ValidationMessageFor(model => model.ProviderEngineClasses, "", new { @data_test_selector = "valAvailableTaxTypes" })
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (string.Equals(actionName.ToLower(), "createshippingtype"))
+            {
+                <div class="form-group border-bottom">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Admin_Resources.LabelAvailableShippingTypes, new { @data_test_selector = "lblAvailableShippingTypes" })
+                        </div>
+                        <div class="control-md">
+                            @Html.DropDownListFor(model => model.ProviderEngineClass, Model.ProviderEngineClasses, new { @id = "ddlShippingType", @data_test_selector = "drpAvailableShippingTypes", @onchange = "javascript: var providerEngine = new ProviderEngine(); providerEngine.GetShippingTypeByClassName();" })
+                            @Html.ValidationMessageFor(model => model.ProviderEngineClasses, "", new { @data_test_selector = "valAvailableShippingTypes" })
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.ClassName, new { @class = "required", @data_test_selector = "lblClassName" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(model => model.ClassName, new { @readonly = "readonly", @class = "readonly", @data_test_selector = "txtClassName" })
+                        @Html.ValidationMessageFor(model => model.ClassName, "", new { @data_test_selector = "valClassName" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Name, new { @class = "required", @data_test_selector = "lblName" })
+                    </div>
+                    <div class="control-md">
+                        @if (string.Equals(actionName.ToLower(), "createpromotiontype") || string.Equals(actionName.ToLower(), "editpromotiontype"))
+                        {
+                            @Html.TextBoxFor(model => model.Name, new { @readonly = "readonly", @data_test_selector = "txtName", @class = "readonly" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.Name, new { @data_test_selector = "txtName" })
+                        }
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @data_test_selector = "valName" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(model => model.Description, new { @class = "required", @data_test_selector = "lblDescription" })
+                    </div>
+                    <div class="control-md">
+                        @Html.TextAreaFor(model => model.Description, new { @data_test_selector = "txtDescription" })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @data_test_selector = "valDescription" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control-md control-non">
+                    <label>
+                        <input id="IsActive" name="IsActive" data-test-selector="chkIsActive" checked="@Model.IsActive" type="checkbox" value="true">
+                        <span class="lbl padding-8" for="IsActive" data-test-selector="spnIsActive">@Admin_Resources.Activate</span>
+                        <input name="IsActive" type="hidden" value="false">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                @if (actionName.ToLower().Contains("edit"))
+                {
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.ClassType)
+                }
+            </div>
+            <div class="hidden">
+                @Html.TextAreaFor(model => model.ClassType)
+                @if (actionName.ToLower().Contains("promotion"))
+                {
+                    @Html.HiddenFor(model => model.ClassType)
+                }
+            </div>
+        }
+    </section>
+</div>

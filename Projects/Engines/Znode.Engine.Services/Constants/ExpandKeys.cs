@@ -1,0 +1,73 @@
+﻿namespace Znode.Engine.Services.Constants
+{
+    public struct ExpandKeys
+    {
+        public static string AttributeFamily { get; } = "attributefamily";
+        public static string Attributes { get; } = "mediaattributes";
+        public static string GroupLocale { get; } = "mediagrouplocale";
+        public static string Domain { get; } = "znodedomain";
+        public static string MediaServer { get; } = "mediaserver";
+        public static string GroupMappers { get; } = "groupmappers";
+        public static string AttributeGroup { get; } = "mediaattributegroup";
+        public static string AttributeLocales { get; } = "attributelocales";
+        public static string ZnodeMediaAttributeGroupMapper { get; } = "ZnodeMediaAttributeGroupMappers";
+        public static string ZnodeMediaDefaultAttributeValue { get; } = "ZnodeMediaDefaultAttributeValues";
+        public static string Profiles { get; } = "profiles";
+        public static string ZnodePIMAttributeGroupMapper { get; } = "ZnodePimAttributeGroupMappers";
+        public static string ZnodePIMDefaultAttributeValue { get; } = "ZnodePimDefaultAttributeValues";
+        public static string PIMAttributeGroup { get; } = "pimattributegroup";
+        public static string PIMGroupLocale { get; } = "pimgrouplocale";
+        public static string PIMAttribute { get; } = "attributes";
+        public static string MediaAttribute { get; } = "attributes";
+        public static string GlobalAttribute { get; } = "attributes";
+        public static string GlobalAttributeGroup { get; } = "globalattributegroup";
+        public static string GlobalAttributeGroupLocale { get; } = "globalattributegrouplocale";
+        public static string AttributeType { get; } = "attributetype";
+        public static string AttributeLocale { get; } = "attributelocale";
+        public static string PortalFeatures { get; } = "znodepotralfeature";
+        public static string CustomFieldLocales { get; } = "CustomFieldLocales";
+        public static string Portal { get; } = "portal";
+        public static string ZnodeAccountPermissionAccesses { get; } = "znodeaccountpermissionaccesses";
+        public static string ZnodeShipping { get; } = "znodeshipping";
+        public static string ZnodeUser { get; } = "znodeuser";
+        public static string Product { get; } = "product";
+        public static string Catalog { get; } = "catalog";
+        public static string Category { get; } = "category";
+        public static string Pricing { get; } = "pricing";
+        public static string Inventory { get; } = "inventory";
+        public static string Promotions { get; } = "promotions";
+        public static string Warehouses { get; } = "warehouses";
+        public static string ProductReviews { get; } = "productreviews";
+        public static string ProductTemplate { get; } = "producttemplate";
+        public static string ZnodeEmailTemplateLocale { get; } = "ZnodeEmailTemplateLocales";
+        public static string SEOUrl { get; } = "SEOUrl";
+        public static string Store { get; } = "store";
+        public static string PaymentType { get; } = "paymenttype";
+        public static string OmsOrderState { get; } = "omsorderstate";
+        public static string OrderLineItems { get; } = "orderlineitems";
+        public static string ShoppingCart { get; } = "shoppingcart";
+        public static string OrderShipment { get; } = "ordershipment";
+        public static string UserDetails { get; } = "userdetails";
+        public static string ZnodeImportTemplate { get; } = "ZnodeImportTemplate";
+        public static string OmsPaymentState { get; } = "omspaymentstate";
+        public static string ShippingType { get; } = "shippingtype";
+        public static string OrderNotes { get; } = "ordernotes";
+        public static string ZnodeOmsNotes { get; } = "znodeomsnotes";
+        public static string PaymentStateList { get; } = "paymentstatelist";
+        public static string IsFromOrderReceipt { get; } = "isfromorderreceipt";
+        public static string PortalTrackingPixel { get; } = "portaltrackingpixel";
+        public static string IsWebStoreOrderReceipt { get; } = "iswebstoreorderreceipt";
+        public static string ZnodeCMSThemeParent { get; } = "ZnodeCMSTheme2";
+        public static string ZnodeOmsOrderLinePersonalize { get; } = "znodeomsorderlinepersonalize";
+        public static string IsFromReOrder { get; } = "isfromreorder";
+        public static string Swatch_AttributeCode { get; } = "swatch_";
+        public static string ReturnItemList { get; } = "returnitemlist";
+        public static string ReturnShippingDetails { get; } = "returnshippingdetails";
+        public static string ReturnNotes { get; } = "returnnotes";
+        public static string ReturnProductImages { get; } = "returnproductimages";
+        public static string ReturnBarcode { get; } = "returnbarcode";
+        public static string GlobalAttributeFamily { get; } = "globalattributefamily";
+        public static string GlobalAttributeFamilyLocale { get; } = "globalattributefamilylocale";
+        public static string GlobalAttributeFamilyGroupMapper { get; } = "globalattributefamilygroupmapper";
+    }
+}

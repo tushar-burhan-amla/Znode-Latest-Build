@@ -1,0 +1,99 @@
+﻿@model Znode.Engine.Admin.ViewModels.PortalTrackingPixelViewModel
+@using Znode.Engine.Admin.ViewModels
+@{
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "formCreateTrackingPixel", CancelUrl = "/Store/List", Callback = null, IsSaveCloseEnable = true };
+    string portalName = string.IsNullOrEmpty(Model?.StoreName) ? @Admin_Resources.TitleStore : Model?.StoreName;
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelStore)<em class="z-minus"></em><span>@Model.StoreName</span></h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<div class="main-wrapper">
+    @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "formCreateTrackingPixel" }))
+        {
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.PixelId1)
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(m => m.PixelId1)
+                        @Html.ValidationMessageFor(m => m.PixelId1)
+                    </div>
+                    @Html.Partial("_HelpText", Model.HelpTextPixel1 ?? string.Empty)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.PixelId2)
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(m => m.PixelId2)
+                        @Html.ValidationMessageFor(model => model.PixelId2)
+                    </div>
+                    @Html.Partial("_HelpText", Model.HelpTextPixel2 ?? string.Empty)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.PixelId3)
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(m => m.PixelId3)
+                        @Html.ValidationMessageFor(model => model.PixelId3)
+                    </div>
+                    @Html.Partial("_HelpText", Model.HelpTextPixel3 ?? string.Empty)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label">
+                        @Html.LabelFor(m => m.PixelId4)
+                    </div>
+                    <div class="control-md">
+                        @Html.TextBoxFor(m => m.PixelId4)
+                        @Html.ValidationMessageFor(model => model.PixelId4)
+                    </div>
+                    @Html.Partial("_HelpText", Model.HelpTextPixel4 ?? string.Empty)
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.PixelId5)
+                        </div>
+                        <div class="control-md">
+                            @Html.TextBoxFor(m => m.PixelId5)
+                            @Html.ValidationMessageFor(model => model.PixelId5)
+                        </div>
+                        @Html.Partial("_HelpText", Model.HelpTextPixel5 ?? string.Empty)
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.PortalId)
+            @Html.HiddenFor(m => m.StoreName)
+            @Html.HiddenFor(m => m.PortalPixelTrackingId)
+            @Html.HiddenFor(m => m.HelpTextPixel1)
+            @Html.HiddenFor(m => m.HelpTextPixel2)
+            @Html.HiddenFor(m => m.HelpTextPixel3)
+            @Html.HiddenFor(m => m.HelpTextPixel4)
+            @Html.HiddenFor(m => m.HelpTextPixel5)
+            @Html.HiddenFor(m => m.CodePixel1)
+            @Html.HiddenFor(m => m.CodePixel2)
+            @Html.HiddenFor(m => m.CodePixel3)
+            @Html.HiddenFor(m => m.CodePixel4)
+            @Html.HiddenFor(m => m.CodePixel5)
+        }
+    </section>
+</div>
+
+

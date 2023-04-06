@@ -1,0 +1,362 @@
+﻿
+// Znode SVG Icon Font.
+
+@font-face {
+    font-family: $znode-icon-font;
+    src: url('../../fonts/B2B.eot?pa46i9');
+    src: url('../../fonts/B2B.eot?pa46i9#iefix') format('embedded-opentype'), url('../../fonts/B2B.ttf?pa46i9') format('truetype'), url('../../fonts/B2B.woff?pa46i9') format('woff'), url('../../fonts/B2B.svg?pa46i9#znode-web-store') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.icon {
+    color: $base-tertiary-light;
+    font-size: $base-font-size + 2;
+
+    &:hover {
+        color: $base-primary-light;
+    }
+}
+
+.secondary-icon {
+    &:before {
+        color: $white;
+        background-color: $base-primary;
+        padding: 15px;
+        font-size: $base-font-size + 4;
+    }
+
+    &:hover:before {
+        background-color: $base-primary-light;
+        cursor: pointer;
+    }
+}
+
+.profile-icon:before {
+    @include icon($profile-icon);
+}
+
+.cart-icon:before {
+    @include icon($cart-icon);
+}
+
+.left-icon:before {
+    @include icon($left-icon);
+}
+
+.up-icon:before, .zf-up:before {
+    @include icon($up-icon);
+}
+
+.down-icon:before, .zf-down:before {
+    @include icon($down-icon);
+}
+
+.right-icon:before {
+    @include icon($right-icon);
+}
+
+.location-icon:before {
+    @include icon($location-icon);
+}
+
+.grid-icon:before {
+    @include icon($grid-icon);
+}
+
+.list-icon:before {
+    @include icon($list-icon);
+}
+
+.search-icon:before, .zf-search:before {
+    @include icon($search-icon);
+}
+
+.hamburger-icon:before {
+    @include icon($hamburger-icon);
+}
+
+.close-icon:before, .zf-close:before, .inactive-icon:before {
+    @include icon($close-icon);
+}
+
+.close-circle-icon:before {
+    @include icon($close-circle-icon);
+}
+
+.star-full-icon:before {
+    @include icon($star-full-icon);
+}
+
+.star-empty-icon:before {
+    @include icon($star-empty-icon);
+}
+
+.star-half-icon:before {
+    @include icon($star-half-icon);
+}
+
+.home-icon:before {
+    @include icon($home-icon);
+}
+
+.heart-icon:before {
+    @include icon($heart-icon);
+}
+
+.stop-icon:before {
+    @include icon($stop-icon);
+}
+
+.active-icon:before {
+    @include icon($active-icon);
+}
+
+.edit-icon:before {
+    @include icon($edit-icon);
+}
+
+.delete-icon:before {
+    @include icon($delete-icon);
+}
+
+.view-icon:before, .zf-view:before {
+    @include icon($view-icon);
+}
+
+.refresh-icon:before, .zf-refresh:before {
+    @include icon($refresh-icon);
+}
+
+.settings-icon:before, .zf-manage:before, .z-setting:before {
+    @include icon($settings-icon);
+}
+
+.clock-icon:before {
+    @include icon($clock-icon);
+}
+
+.sort-icon:before, .zf-sortable:before {
+    @include icon($sort-icon);
+}
+
+.last-icon:before, .zf-last:before {
+    @include icon($last-icon);
+}
+
+.first-icon:before, .zf-backward:before {
+    @include icon($first-icon);
+}
+
+.next-icon:before, .zf-forward:before {
+    @include icon($next-icon);
+}
+
+.previous-icon:before, .zf-first:before {
+    @include icon($previous-icon);
+}
+
+.envelop-icon:before {
+    @include icon($envelop-icon)
+}
+
+.account-dashboard-icon:before {
+    @include icon($account-dashboard)
+}
+
+.my-orders-icon:before {
+    @include icon($my-orders)
+}
+
+.my-profile-icon:before {
+    @include icon($my-profile)
+}
+
+.pending-orders-path1-icon:before {
+    @include icon($pending-orders-path1)
+}
+
+.pending-orders-path2-icon:before {
+    @include icon($pending-orders-path2);
+    margin-left: -1em;
+}
+
+.pending-orders-path3-icon:before {
+    @include icon($pending-orders-path3);
+    margin-left: -1em;
+}
+
+.product-lists-icon:before {
+    @include icon($product-lists)
+}
+
+.quick-orders-path1-icon:before {
+    @include icon($quick-orders-path1)
+}
+
+.quick-orders-path2-icon:before {
+    @include icon($quick-orders-path2);
+    margin-left: -1em;
+}
+
+.order-templates-icon:before {
+    @include icon($order-templates)
+}
+
+.icon-scan:before {
+    @include icon($icon-scan)
+}
+
+.icon-voice:before {
+    @include icon($icon-voice)
+}
+
+.icon-return-webstore:before {
+    @include icon($icon-return-webstore)
+}
+
+.icon-quote:before {
+    @include icon($icon-quote )
+}
+
+.zf-return:before {
+    @include icon($icon-return-arrow)
+}
+
+.profile-icon:before{@include icon($profile-icon);}
+.cart-icon:before{@include icon($cart-icon);}
+.left-icon:before{@include icon($left-icon);}
+.up-icon:before,.zf-up:before{@include icon($up-icon);}
+.down-icon:before,.zf-down:before{@include icon($down-icon);}
+.right-icon:before{@include icon($right-icon);}
+.location-icon:before{@include icon($location-icon);}
+.grid-icon:before{@include icon($grid-icon);}
+.list-icon:before{@include icon($list-icon);}
+.search-icon:before,.zf-search:before{@include icon($search-icon);}
+.hamburger-icon:before{@include icon($hamburger-icon);}
+.close-icon:before,.zf-close:before,.inactive-icon:before{@include icon($close-icon);}
+.close-circle-icon:before{@include icon($close-circle-icon);}
+.star-full-icon:before{@include icon($star-full-icon);}
+.star-empty-icon:before{@include icon($star-empty-icon);}
+.star-half-icon:before{@include icon($star-half-icon);}
+.home-icon:before{@include icon($home-icon);}
+.heart-icon:before{@include icon($heart-icon);}
+.stop-icon:before{@include icon($stop-icon);}
+.active-icon:before{@include icon($active-icon);}
+.edit-icon:before{@include icon($edit-icon);}
+.delete-icon:before{@include icon($delete-icon);}
+.view-icon:before,.zf-view:before{@include icon($view-icon);}
+.refresh-icon:before,.zf-refresh:before{@include icon($refresh-icon);}
+.settings-icon:before,.zf-manage:before,.z-setting:before{@include icon($settings-icon);}
+.clock-icon:before{@include icon($clock-icon);}
+.sort-icon:before,.zf-sortable:before{@include icon($sort-icon);}
+.last-icon:before,.zf-last:before{@include icon($last-icon);}
+.first-icon:before,.zf-backward:before{@include icon($first-icon);}
+.next-icon:before,.zf-forward:before{@include icon($next-icon);}
+.previous-icon:before,.zf-first:before{@include icon($previous-icon);}
+.envelop-icon:before{@include icon($envelop-icon)}
+.account-dashboard-icon:before{@include icon($account-dashboard)}
+.my-orders-icon:before{@include icon($my-orders)}
+.my-profile-icon:before{@include icon($my-profile)}
+.pending-orders-path1-icon:before{@include icon($pending-orders-path1)}
+.pending-orders-path2-icon:before{@include icon($pending-orders-path2);margin-left:-1em;}
+.pending-orders-path3-icon:before{@include icon($pending-orders-path3);margin-left:-1em;}
+.product-lists-icon:before{@include icon($product-lists)}
+.quick-orders-path1-icon:before{@include icon($quick-orders-path1)}
+.quick-orders-path2-icon:before{@include icon($quick-orders-path2);margin-left:-1em;}
+.order-templates-icon:before{@include icon($order-templates)}
+.icon-scan:before{@include icon($icon-scan)}
+.icon-voice:before{@include icon($icon-voice)}
+.icon-calendar:before { @include icon($icon-calendar)}
+.icon-check-circle:before {@include icon($icon-check-circle)}
+.icon-calendar:before {
+    @include icon($icon-calendar)
+}
+.icon-check-circle:before {
+    @include icon($icon-check-circle)
+}
+.icon-voucher:before {
+    @include icon($icon-voucher)
+}
+.icon-compare:before {
+    @include icon($icon-compare)
+}
+.icon-file-uploader:before {
+    @include icon($icon-file-uploader)
+}
+.icon-help-circle:before {
+    @include icon($icon-help-circle)
+}
+.icon-track-order:before {
+    @include icon($icon-track-order)
+}
+.icon-printer:before {
+    @include icon($icon-printer)
+}
+.icon-mail-envelope:before {
+    @include icon($icon-mail-envelop)
+}
+.icon-see-more:before {
+    @include icon($icon-see-more)
+}
+.icon-text-view:before {
+    @include icon($icon-text-view)
+}
+.icon-image-widget:before {
+    @include icon($icon-image-widget)
+}
+.icon-banner-widget:before {
+    @include icon($icon-banner-widget)
+}
+.icon-categorylist-widget:before {
+    @include icon($icon-categorylist-widget)
+}
+.icon-content-container:before {
+    @include icon($icon-content-container)
+}
+.icon-form-widget:before {
+    @include icon($icon-form-widget)
+}
+.icon-link:before {
+    @include icon($icon-link)
+}
+.icon-productlist-widget:before {
+    @include icon($icon-productlist-widget)
+}
+.icon-richtext-widget:before {
+    @include icon($icon-richtext-widget)
+}
+.icon-search-widget:before {
+    @include icon($icon-search-widget)
+}
+.icon-text-widget:before {
+    @include icon($icon-text-widget)
+}
+.icon-video-widget:before {
+    @include icon($icon-video-widget)
+}
+.arrow-drop-up:before {
+    @include icon($icon-arrow-drop-up);
+}
+
+.arrow-drop-down:before {
+    @include icon($icon-arrow-drop-down);
+}
+.icon-up-left-arrow:before {
+    @include icon($icon-up-left-arrow);
+}
+.reset-icon:before, .zf-reset:before {
+    @include icon($reset-icon);
+}
+.disable-icon:before, .zf-disable:before {
+    @include icon($disable-icon);
+}
+.enable-icon:before, .zf-enable:before {
+    @include icon($enable-icon);
+}
+.icon-dollar:before, .zf-dollar:before {
+    @include icon($icon-dollar);
+}
+.icon-file-upload:before {
+    @include icon($icon-file-upload);
+}

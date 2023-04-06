@@ -1,0 +1,11 @@
+﻿<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">        
+        <ul class="aside-panel">
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelRequestDetails, "Edit", "ServiceRequest", new { @CaseRequestId = Model.CaseRequestId }, new { @data_test_selector = "linkRequestDetails" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelNotes, "GetNoteList", "ServiceRequest", new { @CaseRequestId = Model.CaseRequestId }, new { @data_test_selector = "linkNotes" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelReplyCustomer, "ReplyCustomer", "ServiceRequest", new { @CaseRequestId = Model.CaseRequestId }, new { @data_test_selector = "linkReplyCustomer" })</li>
+            <li>@Html.AuthorizedRawActionLink(@Admin_Resources.LabelHistory, "GetCaseRequestMailHistory", "ServiceRequest", new { @CaseRequestId = Model.CaseRequestId }, new { @data_test_selector = "linkHistory" })</li>
+        </ul>
+    </div>
+</aside>

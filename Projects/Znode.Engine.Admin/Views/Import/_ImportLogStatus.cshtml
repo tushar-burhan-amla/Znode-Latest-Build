@@ -1,0 +1,55 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model ImportProcessLogsListViewModel
+@using Znode.Engine.Admin.Models
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+<div class="modal-dialog modal-lg">
+    <div class="modal-content status-popup">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+            <h4 class="modal-title">@Admin_Resources.HeaderImportLogStatus</h4>
+        </div>
+        <div class="modal-body">
+            <div class="col-sm-12 list-container">
+                @{
+                    string Id = string.Empty;
+                    string Status = string.Empty;
+                    string StartDate = string.Empty;
+                    string EndDate = string.Empty;
+                    foreach (dynamic item in Model.GridModel.DataTableToList)
+                    {
+
+                        Id = Convert.ToString(item.ImportProcessLogId);
+                        Status = item.Status;
+                        StartDate = item.ProcessStartedDate?.ToString("MM/dd/yyyy hh:mm:ss tt");
+                        EndDate = item.ProcessCompletedDate?.ToString("MM/dd/yyyy hh:mm:ss tt");
+                    }
+
+                    <table class="table" aria-describedby="Log Status Table">
+                        <thead>
+                            <tr class="grid-header">
+                                <th scope="col">ID</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Start Date</th>
+                                <th scope="col">End Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@Id</td>
+                                <td>@Status</td>
+                                <td>@StartDate</td>
+                                <td>@EndDate</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+
+@model IEnumerable<CategorySubHeaderViewModel>
+@foreach (var subCategory in Model)
+{
+    <li class="itemLevel3 @((!Equals(subCategory.ChildCategoryItems, null) && subCategory.ChildCategoryItems.Count > 0) ? "hasSub" : "")">
+        <a href="@Url.GetCategoryUrl(subCategory.SEOPageName, null,subCategory.CategoryId)">@WebUtility.HtmlDecode(subCategory.CategoryName)</a>
+        @if (!Equals(subCategory.ChildCategoryItems, null) && subCategory.ChildCategoryItems.Count > 0)
+        {
+            <ul class="fourthLevel">
+                @Html.Partial("_HeaderSubNav3", subCategory.ChildCategoryItems)
+            </ul>
+        }
+    </li>
+}

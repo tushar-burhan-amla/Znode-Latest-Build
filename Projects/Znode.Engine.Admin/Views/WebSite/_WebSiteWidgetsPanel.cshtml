@@ -1,0 +1,67 @@
+﻿@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Libraries.Resources
+@using Znode.Engine.Admin.Helpers
+@using Znode.Engine.Admin.ViewModels
+@using System.Linq;
+
+@model Znode.Engine.Admin.ViewModels.WebSiteLogoViewModel
+@{
+    List<CMSWidgetsViewModel> lstAreas = WidgetHelper.GetConfigurableWidget(Model.Widgets);
+    List<string> parentDirectoryList = WidgetHelper.GetParentDirectoryList(lstAreas);
+    List<CMSWidgetsViewModel> childList = new List<CMSWidgetsViewModel>();
+    string fileDirectory = "";
+}
+@if (!Equals(lstAreas, null))
+{
+    foreach (string tabName in parentDirectoryList)
+    {
+        string DisplayName = string.IsNullOrEmpty(Admin_Resources.ResourceManager.GetString(tabName)) ? tabName : Admin_Resources.ResourceManager.GetString(tabName);
+
+        <li>
+            <a href="#@tabName" data-toggle="collapse" id="_@tabName">@DisplayName<em class="z-angle-down margin-left-10"></em></a>
+
+
+            <ul id="@tabName" class="collapse">
+
+                @foreach (var item in lstAreas)
+                {
+
+                    if (item.IsConfigurable)
+                    {
+                        string newTemplatePath = WidgetHelper.WidgetPathModifier(item.TemplatePath);
+                        if (newTemplatePath.Equals(tabName))
+                        {
+                            childList.Add(item);
+                            if (item.TemplateName.Replace(".cshtml", "").Equals(Model.FileName))
+                            {
+                                fileDirectory = '_' + tabName;
+                            }
+                        }
+                    }
+                }
+                @{
+                    foreach(var item in childList.OrderBy(x => x.DisplayName))
+                    {
+                        string newTemplateName = item.TemplateName.Replace(".cshtml", "");
+                        <li>
+                            @Ajax.AuthorizedRawActionLink(item.DisplayName,
+                                                      "GetPortalAssociatedWidgets", "WebSite", new { cmsMappingId = Model?.PortalId, typeOfMapping = Model.Widgets.TypeOFMapping, templatePath = item.TemplatePath, displayName = HttpUtility.UrlEncode(Model.Widgets.DisplayName), fileName = HttpUtility.UrlEncode(newTemplateName) },
+                                                      new AjaxOptions { UpdateTargetId = "WebSiteConfigurationDiv", InsertionMode = InsertionMode.Replace, OnSuccess = "ZnodeBase.prototype.activeAsidePannelAjax(this);" }, new { @id = newTemplateName, @data_test_selector = "link" + item.TemplateName.Replace("_", "") })
+                        </li>
+                    }
+                    childList.Clear();
+                }
+            </ul>
+        </li>
+    }
+}
+<script type="text/javascript">
+    $(window).on("load",function (){
+
+        var fileName = @Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(Model?.FileName));
+        var name = @Html.RenderBlock(Newtonsoft.Json.JsonConvert.SerializeObject(fileDirectory));
+        name ? $("#" + name).click() : "";
+        fileName ? $("#" + fileName).click() : "";
+
+    });
+</script>

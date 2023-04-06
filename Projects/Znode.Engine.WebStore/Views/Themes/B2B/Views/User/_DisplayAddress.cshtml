@@ -1,0 +1,32 @@
+﻿@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.WebStore.ViewModels
+@model AddressViewModel
+
+<div class="address-block p-0 py-2 w-100 text-break">
+    <div class="d-flex address-action-btns">
+        <p class="address-title w-auto" data-test-selector="paraAddressTitle">
+            @Model.DisplayName
+        </p>
+        <div class="address-change">
+            <div class="add-edit-action">
+                @if (ViewContext.RouteData.Values["controller"].ToString() != "Checkout" && ViewContext.RouteData.Values["action"].ToString() != "QuoteView" && ViewContext.RouteData.Values["action"].ToString() != "QuoteApprovalView")
+                {
+                    if (!Equals(Model, null) && Model.AddressId > 0 && !string.Equals(Model.RoleName, ZnodeRoleEnum.Manager.ToString(), StringComparison.CurrentCultureIgnoreCase) && !string.Equals(Model.RoleName, ZnodeRoleEnum.User.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        <a href="Address?id=@Model.AddressId" class="change-address edit-address-btn" data-test-selector="linkTextEditAddress"><span class="icon edit-icon" title="@WebStore_Resources.LinkTextEditAddress"></span></a>
+                        <form action="DeleteAddress" method="post" display="inline" id="delete-address" class="change-address delete-address-btn d-inline" data-test-selector="linkTextDeleteAddress">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="addressId" value="@Model.AddressId" />
+                            <button type="submit" class="icon delete-icon"></button>
+                        </form>   
+                    }
+                }
+                </div>
+        </div>
+    </div>
+    <p class="address-title" data-test-selector="paraCompanyName">@Model.CompanyName</p>
+    <p class="address-name" data-test-selector="paraFirstName">@Model.FirstName @Model.LastName</p>
+    <p class="address-street" data-test-selector="paraAddress1">@Model.Address1<br />@Model.Address2</p>
+    <p class="address-citystate" data-test-selector="paraCityName">@Model.CityName, @Model.StateName, @Model.CountryName @Model.PostalCode</p>
+    <p class="address-phonenumber" data-test-selector="paraPhoneNumber">Ph: @Model.PhoneNumber</p>
+</div>

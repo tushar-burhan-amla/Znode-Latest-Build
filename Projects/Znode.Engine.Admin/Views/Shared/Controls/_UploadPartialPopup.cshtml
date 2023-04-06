@@ -1,0 +1,42 @@
+﻿@using Znode.Engine.Admin.Models
+@model PopupModel
+
+<!-- Modal -->
+<div id="@Model.ModalPopUpId" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="btnClosePopup" class="close" data-dismiss="modal" onclick="@Model.OnCancelClickFunctionName"><em class="z-close-circle"></em></button>
+                <h4 class="modal-title">@Model.Title</h4>
+            </div>
+            <div class="modal-body">
+                <span id="@Model.SpanErrorDivName" class="text-danger field-validation-error" data-valmsg-replace="true" style="display:none">@Model.SpanError</span><br />
+                <div id="@Model.PartialDivName">
+
+                </div>
+
+            </div>
+            <div class="modal-footer right">
+                <div class="pull-right">
+                    @if (Model.Buttons?.Count > 0)
+                    {
+                        foreach (PopUpButtonModel button in Model.Buttons)
+                        {
+                            <button type="button" id="btnSubmitModel" class="btn-text-icon" onclick="@button.OnClickFunctionName"><em class="z-save"></em>@Admin_Resources.ButtonSave</button>
+                        }
+                    }
+                    @if (Model.IsErrorPopUp == false)
+                    {
+                        <button type="button" id="btn-cancel-popup" class="btn-text-icon" data-dismiss="modal" onclick="@Model.OnCancelClickFunctionName"><em class="z-cancel"></em>@Admin_Resources.ButtonCancel</button>
+                    }
+                    else
+                    {
+                        <button type="button" id="btn-cancel-popup" class="btn-text-icon" data-dismiss="modal"><em class="z-ok"></em>@Admin_Resources.TextOk</button>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

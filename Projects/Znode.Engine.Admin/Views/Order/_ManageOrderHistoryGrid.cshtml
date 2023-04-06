@@ -1,0 +1,41 @@
+﻿@model Znode.Engine.Admin.Models.GridModel
+
+<table id="manageOrderGrid" data-test-selector="tblManageOrderGrid" class="table" data-swhgajax="true" data-swhgcontainer="ZnodeOmsHistory" data-swhgcallback="DynamicGrid.prototype.SetSortOrder" aria-describedby="Manage Order History Table">
+    <thead>
+        <tr class="grid-header">
+            <th scope="col" data-test-selector="tblHdDate">
+                Date
+            </th>
+            <th scope="col" data-test-selector="tblHdUpdatedBy">
+                Updated By
+            </th>
+            <th scope="col" data-test-selector="tblHdMessage">
+                Message
+            </th>
+            <th scope="col" data-test-selector="tblHdNotes">
+                Notes
+            </th>
+            <th scope="col" data-test-selector="tblHdAmount">
+                Amount
+            </th>
+            <th scope="col" data-test-selector="tblHdTransactionID">
+                Transaction ID
+            </th>
+        </tr>
+    </thead>
+    <tbody data-test-selector="tblBdManageOrderGrid">
+        @foreach (var dataTable in Model.DataTableToList)
+        {
+            string message = dataTable.Message;
+            string notes = dataTable.Notes;
+            <tr>
+                <td>@dataTable.OrderDateWithTime</td>
+                <td>@dataTable.UpdatedBy</td>
+                <td class="td-break-word">@Html.RenderBlock(message)</td>
+                <td class="td-break-word">@Html.RenderBlock(notes)</td>
+                <td>@dataTable.OrderAmountWithCurrency</td>
+                <td>@dataTable.TransactionId</td>
+            </tr>
+        }
+    </tbody>
+</table>

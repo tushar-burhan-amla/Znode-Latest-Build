@@ -1,0 +1,17 @@
+﻿@model string
+<div class="help-text">
+    <em class="z-help-circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="@Model"></em>
+ </div>
+
+<script>
+    $(function () {
+        try
+        {
+            $('[data-toggle="tooltip"]').tooltip();
+        }
+        catch(ex)
+        {
+            console.warn('Help Text: ', ex);
+        }
+    })
+</script>

@@ -1,0 +1,102 @@
+﻿@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.WebStore.ViewModels
+@{
+    UserViewModel userViewModel = SessionHelper.GetDataFromSession<UserViewModel>(WebStoreConstants.UserAccountKey);
+    string accountType = userViewModel?.RoleName;
+    var approverDetails = SessionProxyHelper.GetApproverDetails(SessionHelper.GetDataFromSession<UserViewModel>(WebStoreConstants.UserAccountKey).UserId);
+    bool isQuoteRequestEnabled = GlobalAttributeHelper.IsQuoteRequestEnabled();
+    bool isEnableReturnRequest = GlobalAttributeHelper.EnableReturnRequest();
+}
+<div class="row">
+    <div class="col-12 p-0 my-accounts-nav account-dashboard">
+        <ul class="account-menu tabs-top p-md-3 d-flex flex-wrap list-unstyled justify-content-between">
+            <li>
+                <a href="@Url.Action("Dashboard", "User",null)">
+                    <span class="account-dashboard-icon dashboard-icons" data-test-selector="spnDashboard"></span>
+                    <label>@WebStore_Resources.LabelAccountDashboard</label>
+                </a>
+            </li>
+            @if (userViewModel.PendingOrdersCount > 0)
+            {
+                <li>
+                    <a href="@Url.Action("UserQuoteHistory", "User", null)" add-value="/User/QuoteHistory">
+                        <span class="pending-orders-icon dashboard-icons" data-test-selector="spnUserQuoteHistory"><span class="pending-orders-path1-icon"></span><span class="pending-orders-path2-icon"></span><span class="pending-orders-path3-icon"></span></span>
+                        <label>@WebStore_Resources.LabelPendingOrderApproval</label>
+                    </a>
+                </li>
+            }
+            @if (isQuoteRequestEnabled)
+            {
+             <li>
+                <a href="@Url.Action("QuoteHistory", "Quote", null)" add-value="/User/QuoteHistory">
+                    <span class="icon-quote dashboard-icons" data-test-selector="spnQuoteHistory"></span>
+                    <label>@WebStore_Resources.LabelQuotes</label>
+                </a>
+            </li>
+             }
+            <li>
+                <a href="@Url.Action("History", "User",null)" add-value="/User/OrderReceipt">
+                    <span class="my-orders-icon dashboard-icons" data-test-selector="spnHistory"></span>
+                    <label>@WebStore_Resources.LinkTextOrderHistory</label>
+                </a>
+            </li>
+
+            <li>
+                <a href="/Product/QuickOrderPad" add-value="/Product/QuickOrderPad">
+                    <span class="quick-orders-icon dashboard-icons" data-test-selector="spnQuickOrderPad"><span class="quick-orders-path1-icon"></span><span class="quick-orders-path2-icon"></span></span>
+                    <label>@WebStore_Resources.HeaderQuickOrder</label>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("TemplateList", "User",null)" add-value="/User/CreateTemplate,/User/EditTemplate,/User/ViewTemplate">
+                    <span class="order-templates-icon dashboard-icons" data-test-selector="spnTemplateList"></span>
+                    <label>@WebStore_Resources.LinkTextOrderTemplate</label>
+                </a>
+            </li>
+            @if (isEnableReturnRequest)
+            {
+            <li>
+                <a href="@Url.Action("GetReturnList", "RMAReturn",null)" add-value="/RMAReturn/GetReturnList">
+                    <span class="icon-return-webstore dashboard-icons" data-test-selector="spnReturnList"></span>
+                    <label>@WebStore_Resources.LinkTextReturns</label>
+                </a>
+            </li>
+            }
+            <li>
+                <a href="@Url.Action("Vouchers", "User",null)" add-value="User/GetVouchers">
+                    <span class="icon-voucher dashboard-icons" data-test-selector="spnVouchers"></span>
+                    <label>@WebStore_Resources.LinkTextVouchers</label>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Wishlist", "User",null)">
+                    <span class="product-lists-icon dashboard-icons" data-test-selector="spnWishlist"></span>
+                    <label>@WebStore_Resources.LinkTextWishlist</label>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("EditProfile", "User",null)" add-value="/User/ChangePassword">
+                    <span class="my-profile-icon dashboard-icons" data-test-selector="spnEditProfile"></span>
+                    <label>@WebStore_Resources.LabelMyProfile</label>
+                </a>
+            </li>
+            <li class="drop-dashboard-menu d-md-none border-left">
+                <div class="down-icon p-4"></div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    // Account Tab Selection
+    var selectedTabhref = ("/" + $("body").attr("id") + "/" + $("body").attr("class")).toLowerCase();
+    $(".account-dashboard .account-menu a").each(function () {
+        var arraySelectedTabs = $.trim($(this).attr("add-value")).split(",");
+        if ($.trim($(this).attr("href")).toLowerCase() === $.trim(selectedTabhref) || $.trim($(this).attr("add-value")) === $.trim(selectedTabhref) || arraySelectedTabs[0] === $.trim(selectedTabhref) || arraySelectedTabs[1] === $.trim(selectedTabhref) || arraySelectedTabs[2] === $.trim(selectedTabhref)) {
+            $(this).parent("li").addClass("selected");
+        }
+    });
+    $(document).on('click', '.drop-dashboard-menu', function () {
+        $(this).parent("ul").toggleClass("dashboard-menu-open");
+    });
+</script>

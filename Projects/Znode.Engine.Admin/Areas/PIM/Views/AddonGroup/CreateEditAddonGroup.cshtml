@@ -1,0 +1,51 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@model AddonGroupViewModel
+@{
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmCreateAttributeGroup", CancelUrl = "/PIM/AddonGroup/List", IsSaveCloseEnable = true };
+}
+<div id="Resultpartial">
+    <div class="col-sm-12 title-container">
+        @if (actionName.ToLower().Contains("create"))
+        {
+        <h1 data-test-selector="hdgAddAddOnGroups">@string.Format(@Admin_Resources.TitleAdd, Admin_Resources.LabelAddOnGroup)</h1>
+        }
+        else
+        {
+        <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelAddOnGroup)<em class="z-minus"></em><span>@Model.AddonGroupName</span></h1>
+        }
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+    <!--Main Container-->
+    <div class="main-wrapper">
+        @Html.Partial("~/Areas/PIM/Views/AddonGroup/_addonGroupAsidePanel.cshtml", Model)
+        <section class="main-container">
+            @using (@Html.BeginForm(actionName, controllerName, Model.PimAddonGroupId > 0 ? new { PimAddOnGroupId = Model.PimAddonGroupId } : null, FormMethod.Post, new { @id = "frmCreateAttributeGroup" }))
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(x => x.LocaleId, new {@data_test_selector = "lblLocalId"})
+                        </div>
+                        <div class="control-md">
+                            @if (Model.PimAddonGroupId > 0)
+                            {
+                                @Html.DropDownListFor(m => m.LocaleId, Model.Locale, new { @id = "ddlAddonLocale", @class = "dirtyignore", @Onchange = "AddonGroup.prototype.CultureChange()" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(m => m.LocaleId, Model.Locale, new { @id = "ddlAddonLocale", @class = "dirtyignore", disabled = "disabled", @data_test_selector = "drpLocalId" })
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                @Html.Partial("~/Areas/PIM/Views/AddonGroup/_CreateEditAddonGroup.cshtml", Model)
+            }
+        </section>
+    </div>
+</div>

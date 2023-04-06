@@ -1,0 +1,107 @@
+﻿.btn-text{
+  @include btn-text;
+  font-size:$base-font-size + 2;padding:0 15px;height:34px;line-height:34px;overflow:hidden;float:left;border-radius:2px;font-family:$base-font-family-condensed-bold;text-transform:uppercase;letter-spacing:0.5px;
+  background:$base-color-tertiary;color:$base-color-primary;border:1px solid $base-color-primary;
+  &:hover{background-color:$base-color-primary;color:$base-color-white;}
+}
+
+.btn-text-primary{background-color:$base-color-primary !important;border:none;color:$base-color-white;
+    &:hover,&:focus,&:active{color:$base-color-white;background-color:$base-bgcolor-button-hover}
+}
+.btn-text-secondary{background-color:$base-color-secondary!important;border:none;color:$base-color-white;
+    &:hover,&:active,&:focus{color:$base-color-white;background-color:$base-color-button-secondary !important;}
+}
+
+.btn-text-icon{background-color:transparent;height:34px;font-family:$base-font-family-condensed;color:$base-color-primary;border:0;font-size:$base-font-size + 2;display:inline-block;line-height:34px;text-transform:uppercase;margin-left:10px;vertical-align:middle;outline:none !important;
+    &:hover,&:focus,&:active{color:$base-color-secondary;}
+    i, em{padding-right:6px;vertical-align:middle;display:inline-block;margin-top:-2px;}
+
+}
+
+.btn-text-group{position:relative;display:inline-block;
+    .btn-text{border-top-right-radius:0;border-bottom-right-radius:0;}
+    .btn-text-dropdown{border:0;border-left:1px solid $base-color-white;height:34px;padding:15px 8px;border-top-left-radius:0;border-bottom-left-radius:0;background-color:$base-color-secondary;border-top-right-radius:2px;border-bottom-right-radius:2px;
+        &:hover{background:darken($base-color-secondary,10%);}
+        .caret{color:$base-color-white;vertical-align:top;}
+    }
+    .dropdown-menu{margin-top:0 !important;min-width:145px;}
+    .dropdown-menu > li > a {padding: 5px 11px !important;}
+    .btn-dropdwn-lst{background:transparent;font-family:$base-font-family-condensed; border:0;font-size:14px;vertical-align:middle;outline:none !important;color:$base-color-primary;font-weight:normal;white-space:nowrap;clear:both;}
+}
+.dropdown-button{display:inline-block;padding-left:10px;line-height:34px;}
+.btn-margin-left{margin-left:0px;}
+
+button[disabled], html input[disabled]{cursor:not-allowed;background-color:#e6e6e6;
+        &:hover{background-color:#dadada;}
+}
+
+.btn-narrow-icon{border:1px solid $base-color-secondary;border-radius:3px;display: inline-block !important;height:34px;width:34px;line-height:34px !important;margin-left: 5px;padding: 0 10px;text-align: center;background-color:$base-color-white;outline:none !important;
+    &:hover{color:$base-color-secondary;border:1px solid $base-color-secondary;}
+    &[class^="z-"], &[class*=" z-"]{line-height:25px;}
+}
+
+.GetBannerList .banner-btn-group .btn-text-group .dropdown-menu {
+    min-width: 116px;
+}
+
+
+/*.btn-text-color-icon {
+    &:hover {
+        color: $base-color-secondary !important;
+    }
+
+    i {
+        color: $base-color-secondary !important;
+    }
+}*/
+/*.btn-text-main-icon{font-family:$base-font-family-condensed;color:$base-color-primary;border:0;font-size:$base-font-size + 1;display:inline-block;line-height:10px;text-transform:uppercase;margin-left:10px;vertical-align:middle;outline:none !important;background-color:transparent;
+    &:hover{color:$base-color-secondary;}
+    i{color:$base-color-secondary !important;padding-right:6px;vertical-align:bottom;display:inline-block;}}*/
+
+/*
+
+.btn-text-group{ position:relative;margin:8px 0 0 10px;float:left;
+       .group-text { float:left;font-size: 14px;color: $base-color-primary;min-height: 30px;background-color:transparent;outline:none; display: inline-block;padding: 4px 8px;line-height: 1.42857143;cursor: pointer;border: 1px solid $btn-border-color;border-radius: 4px;}
+        .btn-sub-group {float:left;
+                .group-text{border-top-left-radius:0;border-bottom-left-radius:0;border-left:0;
+                        i{vertical-align:bottom;display:inline-block;line-height:19px;}
+                } }
+        & > .group-text{border-top-right-radius:0;border-bottom-right-radius:0;}
+        .dropdown-menu{padding:0;min-width:141px;
+               li { border-bottom:1px solid #c3c3c3;
+                    a{margin-left:0;padding:6px;
+                      &:hover{color:$base-color-primary;}
+                    } }}
+                &:hover{background-color:$base-color-tertiary;}
+    }
+.btn-section.open .dropdown-menu{display:block;}
+.change-lg{.dropdown-menu{min-width:94px !important;}}
+.btn-cancel{border: 1px solid $btn-border-color;border-radius: 4px;padding:8px;min-height: 30px;background-color:#f5f5f5;
+    &:hover{background-color:$base-color-tertiary}
+}*/
+
+//Primary button styling used in main pages and modal windows.
+/*.btn-primary{border-right:1.5px solid $base-color-white; font-size:14px;line-height:36px;letter-spacing:0.5px;vertical-align: middle;
+    &:hover{background:darken($base-color-secondary,10%);}
+}
+.btn-primary-main{margin-left:9px ;margin-top:5px;}
+.btn-primary-modal{margin-left:9px ;margin-top:1px;border:none;}
+
+.btn-primary-dropdown{
+    .dropdown-menu{min-width:115px;top:39px;}
+    .dropdown-menu > li > a {padding: 5px 11px !important;}
+    .btn-dropdwn-lst{background:transparent;font-family:$base-font-family-condensed; border:0;font-size:14px;vertical-align:middle;outline:none !important;color:$base-color-primary;font-weight:normal;white-space:nowrap;clear:both;}
+}*/
+
+//Secondary button to be used everywhere
+/*.btn-secondary{background:$base-color-tertiary !important;color:$base-color-primary !important;border:1px solid $base-color-primary;
+               &:hover{background-color:$base-color-primary !important;color:$base-color-white !important;}
+}*/
+//Secondary Button - Small Size with different styling and padding.
+/*.btn-small{font-size:12px;padding:0px 10px;line-height:25px;height: 25px;}*/
+
+//Button Clubbing
+/*.btn-toggle{background-color:$base-color-secondary;border-top-right-radius:2px;border-bottom-right-radius:2px;
+    &:hover{background:darken($base-color-secondary,10%);}
+    .caret{color:$base-color-white;}
+}*/

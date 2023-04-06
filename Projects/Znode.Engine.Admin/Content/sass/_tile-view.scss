@@ -1,0 +1,172 @@
+﻿.tile-view {
+    margin-top: 0px;
+    overflow-x: hidden;
+    background-color: $base-color-white;
+    padding: 5px;
+    box-shadow: 0px 0px 2px $box-border-shadow;
+
+    table {
+        width: 100%;
+
+        tbody {
+            display: flex;
+            flex-wrap: wrap;
+
+            tr {
+                float: left;
+                width: 20%;
+                display: flex;
+                pointer-events: none;
+                padding: 15px;
+
+                .imageicon {
+                    width: 100%;
+                    max-width: 100%;
+                }
+
+                td {
+                    margin: 0 auto;
+                }
+
+                .tile-view-container {
+                    border: 7px solid $tile-border-color;
+                    position: relative;
+                    cursor: pointer;
+                    pointer-events: visible;
+
+                    .img {
+                        height: 160px;
+                        width:100%;
+                        position: relative;
+                        padding: 16px 5px;
+                        margin: 0 auto;
+                        text-align: center;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        img {
+                            max-height: 100%;
+                            margin: 0 auto;
+                        }
+
+                        label {
+                            position: absolute;
+                            top: 0;
+                            right: 0;
+
+                            input[name="ProductId"] + .lbl {
+                                visibility: hidden;
+                            }
+
+                            input[type="checkbox"] + .lbl::before {
+                                float: right;
+                                margin-top: 6px;
+                                margin-right: 2px;
+                                background-color: transparent;
+                                border: none;
+                            }
+
+                            input[type=checkbox]:checked + .lbl::before, input[type=radio]:checked + .lbl::before {
+                                font-family: $znode-icon-font;
+                                content: '\f058';
+                                color: $base-color-primary;
+                                border: none;
+                                font-size: 22px;
+                            }
+
+                            input[type="checkbox"] + .lbl::before {
+                                background-color: transparent;
+                                font-family: $znode-icon-font;
+                                content: '\f058';
+                                color: $base-color-tertiary;
+                                font-size: 22px;
+                            }
+
+                            input[type="checkbox"]:checked + .lbl::before, input[type=radio]:checked + .lbl::before {
+                                color: $base-color-secondary;
+                                border: none;
+                            }
+                        }
+
+                        &.is-star:before {
+                            position: absolute;
+                            top: 5px;
+                            left: 5px;
+                            font-size: 16px;
+                            color: $base-color-secondary;
+                        }
+
+                        .z-audio {
+                            font-size: 100px;
+                            cursor: pointer;
+                            color: $base-color-tertiary;
+                        }
+
+                        .z-video {
+                            font-size: 100px;
+                            cursor: pointer;
+                            color: $base-color-secondary;
+                        }
+
+                        .z-file-text {
+                            font-size: 100px;
+                        }
+                    }
+
+                    .title {
+                        padding: 8px 5px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        max-width: 100%;
+                        text-overflow: ellipsis;
+                    }
+
+                    .tile-action {
+                        display: none;
+                        position: absolute;
+                        bottom: 32px;
+                        left: 0;
+                        right: 0;
+                        z-index: 100;
+                    }
+
+                    &:hover {
+                        border: 7px solid $border-bgcolor-default;
+                        box-shadow: 2px 3px 2px $box-border-shadow;
+
+                        .tile-action {
+                            display: block;
+                        }
+
+                        .action-ui {
+                            text-align: center;
+                        }
+                    }
+                }
+
+                .img-checked {
+                    border: 7px solid $border-bgcolor-default;
+                    box-shadow: 2px 3px 2px $box-border-shadow;
+                }
+            }
+        }
+    }
+}
+
+.uploader-tile-view .img label {
+    display: none;
+}
+
+//Media Query.
+@include screensize(desktop) {
+    .tile-view table tbody tr {
+        width: 16.666%;
+    }
+}
+
+@include screensize(xlarge) {
+    .tile-view table tbody tr {
+        width: 12.5%;
+    }
+}

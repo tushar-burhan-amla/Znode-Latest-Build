@@ -1,0 +1,57 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PaymentHistoryListViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    Layout = null;
+}
+@if (Model.List.Count > 0)
+{
+    <div id="paymentHistoryList">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="panel-heading">
+                <h4 class="panel-title panel-title-edit">@Admin_Resources.LabelPaymentHistory</h4>
+            </div>
+
+        </div>
+        <div class="col-sm-12 list-container" id="listcontainerId">
+            @{
+                if (Model?.List?.Count > 0)
+                {
+                    <table id="manageOrderGrid" data-test-selector="tblManageOrderGrid" class="table" data-swhgajax="true" data-swhgcontainer="ZnodePaymentHistory" data-swhgcallback="DynamicGrid.prototype.SetSortOrder" aria-describedby="Manage Payment History Table">
+                        <thead>
+                            <tr class="grid-header">
+                                <th scope="col" data-test-selector="tblHdDate">
+                                    @Admin_Resources.LabelDate.ToUpper()
+                                </th>
+                                <th scope="col" data-test-selector="tblHdUpdatedBy">
+                                    @Admin_Resources.LabelPaymentType.ToUpper()
+                                </th>
+                                <th scope="col" data-test-selector="tblHdMessage">
+                                    @Admin_Resources.LabelStatus.ToUpper()
+                                </th>
+                                <th scope="col" data-test-selector="tblHdNotes">
+                                    @Admin_Resources.LabelAmount.ToUpper()
+                                </th>
+                                <th scope="col" data-test-selector="tblHdAmount">
+                                    @Admin_Resources.LabelRemainingAmount.ToUpper()
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody data-test-selector="tblBdManageOrderGrid">
+                            @foreach (var dataTable in Model.List)
+                            {
+                                <tr>
+                                    <td>@dataTable.OrderDateWithTime</td>
+                                    <td>@dataTable.PaymentType</td>
+                                    <td class="td-break-word">@dataTable.TransactionStatus</td>
+                                    <td class="td-break-word">@dataTable.OrderAmountWithCurrency</td>
+                                    <td>@dataTable.RemainingAmountWithCurrency</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+    </div>
+}

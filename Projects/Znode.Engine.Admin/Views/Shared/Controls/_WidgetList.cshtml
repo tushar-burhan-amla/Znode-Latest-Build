@@ -1,0 +1,301 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Helpers;
+@model CMSWidgetsListViewModel
+
+@{
+    string PageDisplayName = @Model.FileName.Replace("_", "");
+}
+@if (!Equals(Model.CMSWidgetsList, null))
+{
+    WidgetHelper.SetWidgetActions(Model);
+    <div class="col-sm-12 title-container">
+        @if (Model.TypeOFMapping == ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())
+        {
+            <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelExperience)<em class="z-minus"></em><span>@Model.DisplayName</span></h1>
+        }
+        @if (Model.TypeOFMapping == ZnodeCMSTypeofMappingEnum.ContentPageMapping.ToString())
+        {
+            <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelWebsite)<em class="z-minus"></em><span>@Model.DisplayName</span></h1>
+        }
+        <div class="pull-right">
+            @if (Model.TypeOFMapping == ZnodeCMSTypeofMappingEnum.PortalMapping.ToString())
+            {
+                @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "List", "StoreExperience", null, new { @class = "btn-text-icon", @data_test_selector = "linkCancel" })
+            }
+            @if (Model.TypeOFMapping == ZnodeCMSTypeofMappingEnum.ContentPageMapping.ToString())
+            {
+                @Html.AuthorizedRawActionLink("<em class='z-cancel'></em>" + Admin_Resources.ButtonCancel, "ContentPageList", "Content", null, new { @class = "btn-text-icon", @data_test_selector = "linkCancel" })
+            }
+        </div>
+    </div>
+    <div class="col-sm-12 manage-website-container nopadding">
+        <div class="widgets-layout">
+            @if (Equals(PageDisplayName, "Header"))
+            {
+                <div class="header-widgets">
+                    @foreach (var widget in Model.CMSWidgetsList)
+                    {
+                        widget.DisplayName = string.IsNullOrEmpty(Admin_Resources.ResourceManager.GetString(string.Concat(AdminConstants.ZWidgetDisplayName, widget.DisplayName))) ? widget.DisplayName : Admin_Resources.ResourceManager.GetString(string.Concat(AdminConstants.ZWidgetDisplayName, widget.DisplayName));
+                        <div class="widgets-container">
+                            @if (widget.IsConfigurable)
+                            {
+                                <div class="widget-wrapper">
+                                    <div class="widget-name d-flex justify-content-center align-items-baseline">
+                                        @if (widget.Code.Equals(@Admin_Resources.TextEditor, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-text-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.LinkPanel, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-link-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.BannerSlider, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-banner-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.ProductList, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-productlist-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.CategoryList, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-categorylist-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.OfferBanner, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-banner-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.TemplateTextEditor, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-text-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.TemplateProductList, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-productlist-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.TemplateLinkPanel, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-link-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.FormWidget, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-form-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.SearchWidget, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-search-widget"></span>
+                                        }
+                                        <h3 class="text-uppercase">@widget.DisplayName</h3>
+                                    </div>
+                                    <img src="~/Content/Images/Widgets/@widget.FileName" alt="" class="img-responsive" />
+                                    <div class="configure-option" data-test-selector="div@(Model.DisplayName.Replace(" ", " "))">
+                                        <div class="configure-options d-flex">
+                                            <a class="edit-option margin-right-9 text-uppercase" href="@widget.WidgetActionUrl"> <em class="z-edit"></em>@Admin_Resources.ButtonEdit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="widget-wrapper">
+                                    <div class="widget-name d-flex justify-content-center align-items-baseline">
+                                        <a href="javascript:void(0)">
+                                            <h3 class="text-uppercase">@widget.DisplayName</h3>
+                                        </a>
+                                    </div>
+                                    <img src="~/Content/Images/Widgets/@widget.FileName" alt="" class="img-responsive" />
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="main-container-widgets">
+                    <div class="watermark-text"><p>Content</p></div>
+                </div>
+                <div class="footer-widgets"><div class="watermark-text"><p>Footer</p></div></div>
+            }
+            else if (Equals(PageDisplayName, "Footer"))
+            {
+                <div class="header-widgets"><div class="watermark-text"><p>Header</p></div></div>
+                <div class="main-container-widgets"><div class="watermark-text"><p>Content</p></div></div>
+                <div class="footer-widgets">
+                    @foreach (var widget in Model.CMSWidgetsList)
+                    {
+                        widget.DisplayName = string.IsNullOrEmpty(Admin_Resources.ResourceManager.GetString(string.Concat(AdminConstants.ZWidgetDisplayName, widget.DisplayName))) ? widget.DisplayName : Admin_Resources.ResourceManager.GetString(string.Concat(AdminConstants.ZWidgetDisplayName, widget.DisplayName));
+                        <div class="widgets-container">
+                            @if (widget.IsConfigurable)
+                            {
+                                <div class="widget-wrapper">
+                                    <div class="widget-name d-flex justify-content-center align-items-baseline">
+                                        @if (widget.Code.Equals(@Admin_Resources.TextEditor, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-text-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.LinkPanel, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-link-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.BannerSlider, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-banner-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.ProductList, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-productlist-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.CategoryList, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-categorylist-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.OfferBanner, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-banner-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.TemplateTextEditor, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-text-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.TemplateProductList, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-productlist-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.TemplateLinkPanel, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-link-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.FormWidget, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-form-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.SearchWidget, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-search-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(Admin_Resources.ContentContainer, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-container-widget"></span>
+                                        }
+                                        <h3 class="text-uppercase">@widget.DisplayName</h3>
+                                    </div>
+                                    <img src="~/Content/Images/Widgets/@widget.FileName" alt="" class="img-responsive" />
+
+                                    <div class="configure-option" data-test-selector="div@(Model.DisplayName.Replace(" ", " "))">
+                                        <div class="configure-options d-flex">
+                                            <a class="edit-option margin-right-9 text-uppercase" href="@widget.WidgetActionUrl"> <em class="z-edit"></em>@Admin_Resources.ButtonEdit</a>
+                                            @if (widget.Code.Equals(Admin_Resources.ContentContainer, StringComparison.InvariantCultureIgnoreCase))
+                                            {
+                                                <div class="remove-option text-uppercase" onclick="Content.prototype.RemoveWidgetData(@Model.CMSMappingId,@widget.MappingKey,'@widget.Code',true);"><em class="z-delete"></em>@Admin_Resources.LabelRemove</div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="widget-wrapper">
+                                    <div class="widget-name d-flex justify-content-center align-items-baseline">
+                                        <a href="javascript:void(0)">
+                                            <h3 class="text-uppercase">@widget.DisplayName</h3>
+                                        </a>
+                                    </div>
+                                    <img src="~/Content/Images/Widgets/@widget.FileName" alt="" class="img-responsive" />
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="header-widgets"><div class="watermark-text"><p>Header</p></div></div>
+                <div class="main-container-widgets">
+                    @foreach (var widget in Model.CMSWidgetsList)
+                    {
+                        widget.DisplayName = string.IsNullOrEmpty(Admin_Resources.ResourceManager.GetString(string.Concat(AdminConstants.ZWidgetDisplayName, widget.DisplayName))) ? widget.DisplayName : Admin_Resources.ResourceManager.GetString(string.Concat(AdminConstants.ZWidgetDisplayName, widget.DisplayName));
+                        <div class="widgets-container">
+                            @if (widget.IsConfigurable)
+                            {
+                                <div class="widget-wrapper">
+                                    <div class="widget-name d-flex justify-content-center align-items-baseline">
+                                        @if (widget.Code.Equals(@Admin_Resources.TextEditor, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-text-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.LinkPanel, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-link-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.BannerSlider, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-banner-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.ProductList, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-productlist-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.CategoryList, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-categorylist-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.OfferBanner, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-banner-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.TemplateTextEditor, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-text-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.TemplateProductList, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-productlist-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.TemplateLinkPanel, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-link-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.FormWidget, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-form-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.SearchWidget, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-search-widget"></span>
+                                        }
+                                        @if (widget.Code.Equals(@Admin_Resources.ContentContainer, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            <span class="z-container-widget"></span>
+                                        }
+                                        <h3 class="text-uppercase">@widget.DisplayName</h3>
+                                    </div>
+                                    <img src="~/Content/Images/Widgets/@widget.FileName" alt="" class="img-responsive" />
+                                    <div class="configure-option" data-test-selector="div@(Model.DisplayName.Replace(" ", " "))">
+                                        <div class="configure-options d-flex">
+                                            <a class="edit-option margin-right-9 text-uppercase" href="@widget.WidgetActionUrl"> <em class="z-edit"></em>@Admin_Resources.ButtonEdit</a>
+                                            @if (widget.Code.Equals(Admin_Resources.ContentContainer, StringComparison.InvariantCultureIgnoreCase))
+                                            {
+                                                <div class="remove-option text-uppercase" onclick="Content.prototype.RemoveWidgetData(@Model.CMSMappingId,@widget.MappingKey,'@widget.Code',true);"><em class="z-delete"></em>@Admin_Resources.LabelRemove</div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="widget-wrapper">
+                                    <div class="widget-name d-flex justify-content-center align-items-baseline">
+                                        <a href="javascript:void(0)">
+                                            <h3 class="text-uppercase">@widget.DisplayName</h3>
+                                        </a>
+                                    </div>
+                                    <img src="~/Content/Images/Widgets/@widget.FileName" alt="" class="img-responsive" />
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="footer-widgets"><div class="watermark-text"><p>Footer</p></div></div>
+            }
+        </div>
+    </div>
+    @Html.HiddenFor(x => x.TypeOFMapping)
+}

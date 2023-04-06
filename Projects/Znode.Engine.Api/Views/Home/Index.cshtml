@@ -1,0 +1,373 @@
+﻿<div id="body">
+    <section>
+        <h2>API Overview</h2>
+        <p>The Znode API is organized around REST and is designed to have predictable, resource-oriented URLs and to use HTTP response codes to indicate API errors. The API uses built-in HTTP features &mdash; such as headers, methods, and status codes &mdash; which can be understood by any off-the-shelf HTTP client. The Znode API only supports requests and responses in JSON format.</p>
+    </section>
+
+    <section>
+        <h2>Authentication</h2>
+        <p>The Znode API uses basic authentication with the <strong>Authorization header</strong> to validate requests. An example of the format for the Authorization header is shown below:</p>
+        <p><pre class="code">Authorization: Basic d3d3Lm15LXN0b3JlLmNvbXw1RDJCNEM1RS1EOEIzLTQ0ODgtOTA0RC02NDA5NDc2MkUxMzY=</pre></p>
+        <p>The value after the word "Basic" is a Base64 encoded string that consists of a username and password separated by a pipe character (username|password), as described below:</p>
+        <ul>
+            <li><strong>Username:</strong> This is the domain name for the store whose data will be retrieved during the request (i.e. www.my-store.com).</li>
+            <li><strong>Password:</strong> This is the API key for the domain, as found in the ZnodeDomain table in the Multifront database (i.e. 5D2B4C5E-D8B3-4488-904D-64094762E136).</li>
+        </ul>
+        <p>Any client of the Znode API must concatenate the domain name (username ) with the domain key (password), separated by a pipe, and then Base64 encode that string to pass along in the Authorization header.</p>
+        <p>When a request is made to an endpoint, the Znode API will look for the Authorization header and try to decode it. It will then split the decoded string into the domain name (username) and domain key (password), verify that they are a match, then process the request.</p>
+        <p>If the Authorization header isn't in the request or if either the domain name (username) or domain key (password) are empty, the API request will fail with the following information:</p>
+        <ul>
+            <li><strong>HTTP status code:</strong> 401 Unauthorized</li>
+            <li><strong>HTTP status description:</strong> Domain name and key are either incorrect or missing from the request Authorization header.</li>
+        </ul>
+
+        <h3>Disabling Authentication</h3>
+        <p>Authentication can be disabled by setting <strong>ValidateAuthHeader</strong> to false in the &lt;appSettings&gt; section of the API's web.config file. However, in most cases, this value should be set to true in production environments.</p>
+        <p><pre class="code">&lt;add key="ValidateAuthHeader" value="true" /&gt;</pre></p>
+
+        <h3>During Development</h3>
+        <p>When developing a client that uses the Znode API, it will be useful at times to open endpoints in a browser in order to see data. To ensure this is possible, you need to add an entry in the ZnodeDomain table for the domain of the API itself. In this case, simply disabling authentication will have no effect.</p>
+        <p>For example, if you have the API deployed locally at "api.localhost.com", you should add an entry in the ZnodeDomain table where the DomainName field is "api.localhost.com" with the relevant portal ID. This will be the context for retrieving data when viewing endpoints in a browser.</p>
+        <p><strong><em>IMPORTANT: This should be for development purposes only.</em></strong></p>
+
+        <h3>HTTPS and SSL</h3>
+        <p>The requirement to run under HTTPS is specific to your requirements and infrastructure; therefore, the Znode API doesn't force you to use HTTPS to run it. However, we strongly recommend it, especially for production environments. During development, it would be beneficial to create and install a local SSL certificate in order to properly mimic all calls to the Znode API.</p>
+    </section>
+
+    <section>
+        <h2>Caching</h2>
+        <p>The Znode API has its own caching layer in order to provide the best possible performance when retrieving data. Caching occurs only for GET requests; it is not supported for POST, PUT, or DELETE requests.</p>
+
+        <h3>Cache.config</h3>
+        <p>All cache settings are defined in the <strong>cache.config</strong> file, a portion of which is shown below:</p>
+        <p>
+            <pre class="code">
+&lt;ZnodeApiCache&gt;
+    &lt;cache enabled="true"&gt;
+        &lt;routes&gt;
+            &lt;route template="products/{productId}" enabled="true" sliding="true" duration="60" /&gt;
+            &lt;route template="products" enabled="true" sliding="true" duration="60" /&gt;
+        &lt;/routes&gt;
+    &lt;/cache&gt;
+&lt;/ZnodeApiCache&gt;
+</pre>
+        </p>
+        <p>The root <strong>&lt;cache&gt;</strong> node allows you to enable or disable the entire API caching mechanism. If set to false, then no caching will occur at all for any routes.</p>
+        <p>The <strong>&lt;routes&gt;</strong> node contains a list of <strong>&lt;route&gt;</strong> nodes, each with the following properties:</p>
+        <ul>
+            <li><strong>template</strong> - The route template as defined in the <strong>\App_Start\WebApiConfig.cs</strong> file.</li>
+            <li><strong>enabled</strong> - True/false value that determines if caching is enabled for the route (default = true).</li>
+            <li><strong>sliding</strong> - True/false value that determines if a sliding cache is used for the route; if false, absolute caching is used (default = true).</li>
+            <li><strong>duration</strong> - The number of seconds that the response data for the route should be kept in cache (default = 60 seconds).</li>
+        </ul>
+
+        <h3>Cache Refresh</h3>
+        <p>In addition to the caching settings defined in the cache.config file, you can refresh the cache for a route by using the <strong>cache</strong> parameter and setting its value to "refresh", such as in this example:</p>
+        <p><pre class="code">GET http://api.mysite.com/products/302?cache=refresh</pre></p>
+        <p>This will force the request to clear the cache for the route, retrieve fresh data, and then re-populate the cache for the route with the new data.</p>
+    </section>
+
+    <section>
+        <h2>Configuration</h2>
+        <p>The default configuration for the Znode API should work for most implementations. However, there are a couple configuration items worth noting:</p>
+        <p>
+            <pre class="code">
+&lt;add key="UriItemSeparator" value="," /&gt;
+&lt;add key="UriKeyValueSeparator" value="~" /&gt;</pre>
+        </p>
+        <p>Both of these settings are found in the &lt;appSettings&gt; section of the web.config file and are used to determine which characters to use to delimit the URI. For example, look at the following URI:</p>
+        <p><pre class="code">GET http://api.mysite.com/products?filter=name~cn~pea,saleprice~gt~4.99</pre></p>
+        <p>This request says to get the list of products where the product name contains "pea" and where the sale price is greater than $4.99. The filter part of the request (explained further below) is split into two items &mdash; name~cn~pea and saleprice~gt~4.99 &mdash; based on the <strong>UriItemSeparator</strong> setting, the default of which is the comma. Each of these is then split into three values, based on the <strong>UriKeyValueSeparator</strong>, the default of which is the tilde (~) character.</p>
+        <p>But what if the product catalog is for Great Britain, where the comma is used for decimal places instead of the period? This would make the above request look like this:</p>
+        <p><pre class="code">GET http://api.mysite.com/products?filter=name~cn~pea,saleprice~gt~4,99</pre></p>
+        <p>This will cause an error when splitting the URI; therefore, in cases such as this, the <strong>UriItemSeparator</strong> and <strong>UriKeyValueSeparator</strong> values should be changed. The Znode API will use those settings to split the request URI accordingly.</p>
+    </section>
+
+    <section>
+        <h2>HTTP Methods</h2>
+        <p>The Znode API uses standard HTTP methods as actions for all API requests, and most URIs accept multiple HTTP methods (one per request). The table below is a general rule of thumb for which HTTP methods are used and when.</p>
+
+        <table class="help-page-table" aria-describedby="HTTP Methods">
+            <thead>
+                <tr>
+                    <th scope="col" width="25%">Method</th>
+                    <th scope="col" width="75%">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td>Retrieves a single object or a list of objects.</td>
+                </tr>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td>Creates an object.</td>
+                </tr>
+                <tr>
+                    <td><strong>PUT</strong></td>
+                    <td>Updates an object.</td>
+                </tr>
+                <tr>
+                    <td><strong>DELETE</strong></td>
+                    <td>Deletes an object.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>HTTP Status Codes</h2>
+        <p>The Znode API uses standard HTTP response codes to indicate success or failure of an API request. In general, codes in the 2xx range indicate success, codes in the 4xx range indicate an error that resulted from the provided information, and codes in the 5xx range indicate a server error.</p>
+
+        <table class="help-page-table" aria-describedby="HTTP Status Codes">
+            <thead>
+                <tr>
+                    <th scope="col" width="25%">Code</th>
+                    <th scope="col" width="45%">Description</th>
+                    <th scope="col" width="30%">Method Usage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>200 OK</strong></td>
+                    <td>The request was successful.</td>
+                    <td>GET, PUT success</td>
+                </tr>
+                <tr>
+                    <td><strong>201 Created</strong></td>
+                    <td>The item sent in the request was successfully created.</td>
+                    <td>POST success</td>
+                </tr>
+                <tr>
+                    <td><strong>204 No Content</strong></td>
+                    <td>The request was successful, but there was nothing to return.</td>
+                    <td>DELETE success</td>
+                </tr>
+                <tr>
+                    <td><strong>403 Forbidden</strong></td>
+                    <td>API key was invalid or not supplied.</td>
+                    <td>Any</td>
+                </tr>
+                <tr>
+                    <td><strong>404 Not Found</strong></td>
+                    <td>The requested item doesn't exist.</td>
+                    <td>GET failure</td>
+                </tr>
+                <tr>
+                    <td><strong>500 Internal Server Error</strong></td>
+                    <td>Something went wrong processing the request.</td>
+                    <td>GET, POST, PUT, DELETE failure</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Errors</h2>
+        <p>The Znode API has robust error handling capabilities and will include additional information about the error if an HTTP 500 status code is returned. Every response from the Znode API includes the following properties:</p>
+        <table class="help-page-table" aria-describedby="Errors">
+            <thead>
+                <tr>
+                    <th scope="col" width="20%">Name</th>
+                    <th scope="col" width="80%">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>ErrorCode</strong></td>
+                    <td>An nullable integer that represents the error code for the error that occurred (default = null). Reserved for future use.</td>
+                </tr>
+                <tr>
+                    <td><strong>ErrorMessage</strong></td>
+                    <td>A string that represents the description or reason for the error (default = null).</td>
+                </tr>
+                <tr>
+                    <td><strong>HasError</strong></td>
+                    <td>A boolean that indicates whether or not there was an error while processing the request (default = false).</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Below is an example of what these properties look like as part of a response:</p>
+        <p>
+            <pre class="code">
+{
+    "ErrorCode": null,
+    "ErrorMessage": "SKU ID 304 does not exist.",
+    "HasError": true
+}
+</pre>
+        </p>
+    </section>
+
+    <section>
+        <h2>Expands</h2>
+        <p>The Znode API supports the concept of expands, which allows a client to retrieve related entities for a given item during the same request, and made possible with the <strong>expand</strong> parameter. For example, a client can retrieve a product (id = 329) and its images by using the following endpoint:</p>
+        <p><pre class="code">GET http://api.mysite.com/products/329?expand=images</pre></p>
+        <p>A client can request multiple expands by concatenating them together, separated by a comma. For example, to retrieve the same product, but with its images, addons, and promotions, a client would use the following endpoint:</p>
+        <p><pre class="code">GET http://api.mysite.com/products/329?expand=images,addons,promotions</pre></p>
+        <p>If an endpoint supports expands, there will be an Expands section as part of its help page; otherwise, no Expands section will be shown.</p>
+    </section>
+
+    <section>
+        <h2>Filters</h2>
+        <p>The Znode API also supports filters, which are essentially SQL where clauses that limit the results for a request. The <strong>filter</strong> parameter consists of tuples, with each item in the tuple separated by the ~ character. The filter tuple takes the following format:</p>
+        <p><pre class="code">key~operator~value</pre></p>
+        <p>Below is the list of supported filter operators:</p>
+        <table class="help-page-table" aria-describedby="Filters">
+            <thead>
+                <tr>
+                    <th scope="col" width="20%">Operator</th>
+                    <th scope="col" width="25%">Description</th>
+                    <th scope="col" width="55%">Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>eq</strong></td>
+                    <td>Equal to</td>
+                    <td>filter=name~eq~apple</td>
+                </tr>
+                <tr>
+                    <td><strong>ne</strong></td>
+                    <td>Not equal to</td>
+                    <td>filter=name~ne~apple</td>
+                </tr>
+                <tr>
+                    <td><strong>cn</strong></td>
+                    <td>Contains</td>
+                    <td>filter=name~cn~pea</td>
+                </tr>
+                <tr>
+                    <td><strong>gt</strong></td>
+                    <td>Greater than</td>
+                    <td>filter=retailprice~gt~4.99</td>
+                </tr>
+                <tr>
+                    <td><strong>ge</strong></td>
+                    <td>Greater than or equal to</td>
+                    <td>filter=retailprice~ge~5.00</td>
+                </tr>
+                <tr>
+                    <td><strong>lt</strong></td>
+                    <td>Less than</td>
+                    <td>filter=retailprice~lt~5.00</td>
+                </tr>
+                <tr>
+                    <td><strong>le</strong></td>
+                    <td>Less than or equal to</td>
+                    <td>filter=retailprice~le~4.99</td>
+                </tr>
+                <tr>
+                    <td><strong>sw</strong></td>
+                    <td>Starts with</td>
+                    <td>filter=name~sw~app</td>
+                </tr>
+                <tr>
+                    <td><strong>ew</strong></td>
+                    <td>Ends with</td>
+                    <td>filter=name~ew~pple</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>For example, to retrieve all products whose name contains "pea", a client will use the following endpoint:</p>
+        <p><pre class="code">GET http://api.mysite.com/products?filter=name~cn~pea</pre></p>
+        <p>A client can also use multiple filter tuples, separated by a comma, to limit results even further. For example, to retrieve all products whose name contains "pea" and whose sale price is greater than $4.99, a client will use the following endpoint:</p>
+        <p><pre class="code">GET http://api.mysite.com/products?filter=name~cn~pea,saleprice~gt~4.99</pre></p>
+        <p>The Znode API filters can also be used to query for nullable items by using a "null" value for the eq (equal to) and ne (not equal to) operators, as such:</p>
+        <p><pre class="code">GET http://api.mysite.com/products?filter=externalid~eq~null</pre></p>
+        <p><pre class="code">GET http://api.mysite.com/products?filter=externalid~ne~null</pre></p>
+        <p>If an endpoint supports filters, there will be a Filters section as part of its help page; otherwise, no Filters section will be shown.</p>
+    </section>
+
+    <section>
+        <h2>Sorting</h2>
+        <p>When retrieving lists of items, the Znode API supports using the <strong>sort</strong> parameter to sort the results. For example, to retrieve all products sorted by name in ascending order, a client will use the following endpoint:</p>
+        <p><pre class="code">GET http://api.mysite.com/products?sort=name~asc</pre></p>
+        <p>The sort parameter consists of key-value pairs, as separated by the ~ character. This allows a client to use multiple sorts on a set of results, with each key-value pair separated by a comma. For example, to retrieve all products sorted by name in ascending order and then by retail price in descending order, a client will use the following endpoint:</p>
+        <p><pre class="code">GET http://api.mysite.com/products?sort=name~asc,retailprice~desc</pre></p>
+        <p>If an endpoint supports sorting, there will be a Sorting section as part of its help page; otherwise, no Sorting section will be shown.</p>
+    </section>
+
+    <section>
+        <h2>Paging</h2>
+        <p>In many cases, retrieving lists of items needs to be done a page at a time, which the Znode API handles by providing the <strong>page</strong> parameter. For example, to retrieve page 4 of a list of products with a page size of 25, a client will use the following endpoint:</p>
+        <p><pre class="code">GET http://api.mysite.com/products?page=index~3,size~25</pre></p>
+        <p>The page parameter consists of two key-value pairs: index and size. Both key-value pairs are separated by the ~ character and should always be used together, separated by a comma. Note that the index key-value pair is 0-based.</p>
+        <p>For endpoints that support paging, the following properties will be returned in the response:</p>
+        <table class="help-page-table" aria-describedby="Paging">
+            <thead>
+                <tr>
+                    <th scope="col" width="20%">Property</th>
+                    <th scope="col" width="80%">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>PageIndex</strong></td>
+                    <td>The current page index that was requested.</td>
+                </tr>
+                <tr>
+                    <td><strong>PageSize</strong></td>
+                    <td>The current page size that was requested.</td>
+                </tr>
+                <tr>
+                    <td><strong>TotalPages</strong></td>
+                    <td>The total number of pages for the request.</td>
+                </tr>
+                <tr>
+                    <td><strong>TotalResults</strong></td>
+                    <td>The total number of results for the request.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>If an endpoint supports paging, there will be a Paging section as part of its help page; otherwise, no Paging section will be shown. Below is an example of what these properties look like as part of a response:</p>
+        <p>
+            <pre class="code">
+{
+    "PageIndex": 3,
+    "PageSize": 25,
+    "TotalPages": 5,
+    "TotalResults": 108,
+}
+</pre>
+        </p>
+    </section>
+
+    <section>
+        <h2>Indentation</h2>
+        <p>Because all responses in the Znode API are JSON strings, it can sometimes be hard to read responses with the human eye, especially for large responses. While this doesn't matter to machines, it can be useful at times to open an endpoint in a browser to see the results. For this, a client can use the <strong>indent</strong> parameter for better readability, as such:</p>
+        <p><pre class="code">GET http://api.mysite.com/attributes?indent=true</pre></p>
+        <p>Setting the indent parameter to true will produce a response with the JSON string properly indented, similar to this sample attributes response:</p>
+        <p>
+            <pre class="code">
+"Attributes": [
+    {
+        "AttributeId": 2,
+        "AttributeTypeId": 1,
+        "DisplayOrder": 1,
+        "ExternalId": null,
+        "IsActive": true,
+        "Name": "Red",
+        "OldAttributeId": null
+    }
+]</pre>
+        </p>
+    </section>
+
+    <section>
+        <h2>Examples</h2>
+        <p>Below are some examples that show how you can use different combinations of the expand, filter, sort, and page parameters to retrieve various sets of data.</p>
+
+        <p><strong>Get a list of products and their SKUs, where product name contains "pea", sorted by wholesale price in descending order</strong></p>
+        <p><pre class="code">GET http://api.mysite.com/products?expand=skus&filter=name~cn~pea&sort=wholesaleprice~desc</pre></p>
+
+        <p><strong>Get a list of products and their categories, where product name starts with "honey" and product number contains 234</strong></p>
+        <p><pre class="code">GET http://api.mysite.com/products?expand=categories&filter=name~sw~honey,number~cn~234</pre></p>
+
+        <p><strong>Get the 5th page of products (page size 10) sorted alphabetically by name</strong></p>
+        <p><pre class="code">GET http://api.mysite.com/products?page=index~4,size~10&sort=name~asc</pre></p>
+
+        <p><strong>Get the 1st page of products (page size 20) sorted by sale price (lowest to highest), including their addons, categories, and reviews</strong></p>
+        <p><pre class="code">GET http://api.mysite.com/products?page=index~0,size~20&sort=saleprice~asc&expand=addons,categories,reviews</pre></p>
+    </section>
+</div>

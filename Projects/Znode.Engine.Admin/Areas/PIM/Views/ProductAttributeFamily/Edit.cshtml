@@ -1,0 +1,90 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PIMAttributeFamilyViewModel
+
+@{
+    ViewBag.Title = PIM_Resources.TitlePIM + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, FormId = "frmEditPIMAttributeFamily", CancelUrl = controllerName == "ProductAttributeFamily" ? "/PIM/ProductAttributeFamily/List" : "/PIM/CategoryAttributeFamily/List", Callback = "CommonHelper.prototype.Validate", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleEdit, Admin_Resources.LabelAttributeFamily)<em class="z-minus"></em><span>@Html.DisplayFor(model => model.FamilyCode)</span></h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmEditPIMAttributeFamily" }))
+    {
+
+        <div id="loginForm" class="box-container">
+            <div class="col-sm-12 nopadding">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.Label(Attributes_Resources.LabelFamilyCode)
+                        </div>
+                        <div class="control-md">
+                            <input type="text" value="@Model.FamilyCode" disabled="disabled" />
+                            @Html.Hidden("FamilyCode", Model.FamilyCode)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*Div for creating tabs*@
+        <div class="col-sm-12 nopadding padding-top">
+            @Html.Hidden("PimAttributeFamilyId", Convert.ToInt32(Request.QueryString["PimAttributeFamilyId"]))
+            @{Html.RenderAction("GetTabStructure", controllerName, new { @pimAttributeFamilyId = @Model.PimAttributeFamilyId });}
+        </div>
+        @Html.HiddenFor(m => m.IsCategory)
+                }
+
+    <!-- Display order popup Modal -->
+    <div id="divEditDisplayOrderPopup" class="modal fade" style="display:none" role="dialog">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="btnClosePopup" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+                    <h4 class="modal-title">Attribute Group - Edit Display order</h4>
+                </div>
+                <div class="modal-body">
+                    <span id="spanError-DisplayOrder" class="text-danger field-validation-error" data-valmsg-replace="true" style="display:none"></span><br />
+                    <div id="divEditModelBody">
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    <label for="GroupCode" aria-required="true">@Admin_Resources.GroupCode</label>
+                                </div>
+                                <div class="control-md">
+                                    <input type="text" id="txtGroupCode" value="" disabled="disabled" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 nopadding">
+                                <div class="control-label">
+                                    <label class="required">@PIM_Resources.LabelDisplayOrder</label>
+                                </div>
+                                <div class="control-md">
+                                    <input type="text" value="" id="txtDisplayOrder" name="txtDisplayOrder">
+                                    <span class="error-msg field-validation-valid" data-valmsg-for="txtDisplayOrder" id="errorSpamtxtDisplayOrder"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type='hidden' id="hdnGroupCodeId" name='hdnGroupCodeId' value='' />
+                    </div>
+                </div>
+                <div class="modal-footer right">
+                    <div class="pull-right">
+                        <button type="button" id="btn-cancel-popup" class="btn-text-icon pull-left" data-dismiss="modal"><em class="z-back"></em>@Admin_Resources.ButtonCancel</button>
+                        <button type="button" id="btnSubmitModel" class="btn-text btn-text-secondary" onclick="PIMAttributeFamily.prototype.UpdateDisplayOrder()">@Admin_Resources.ButtonSave</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

@@ -1,0 +1,95 @@
+﻿@model Znode.Engine.Admin.ViewModels.PaymentSettingViewModel
+@{
+    string preAuthorize = Convert.ToBoolean(Model.PreAuthorize) ? "checked='checked'" : string.Empty;
+    string isRmaCompatible = Convert.ToBoolean(Model.IsRmaCompatible) ? "checked='checked'" : string.Empty;
+    string enableVisa = Convert.ToBoolean(Model.EnableVisa) ? "checked='checked'" : string.Empty;
+    string enableMasterCard = Convert.ToBoolean(Model.EnableMasterCard) ? "checked='checked'" : string.Empty;
+
+}
+
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.HeaderMerchantLogin, new { @class = "required" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => Model.GatewayUsername, new { required = "required" })
+            @Html.ValidationMessageFor(m => Model.GatewayUsername, @Admin_Resources.MerchantLoginName)
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelMerchantaccountpassword, new { @class = "required" })
+        </div>
+        <div class="control-md">
+            @Html.PasswordFor(m => Model.GatewayPassword, new { required = "required" })
+            @Html.ValidationMessageFor(m => Model.GatewayPassword, @Admin_Resources.MerchantPassword)
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelTransactionKey, new { @class = "required" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => Model.TransactionKey, new { required = "required" })
+            @Html.ValidationMessageFor(m => Model.TransactionKey, @Admin_Resources.TransactionKey)
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelPartner, new { @class = "required" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => Model.Partner, new { required = "required" })
+            @Html.ValidationMessageFor(m => Model.Partner, @Admin_Resources.Partner)
+        </div>
+        @Html.Partial("_HelpText", Admin_Resources.HelptextPartnerMessage)
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelVendor, new { @class = "required" })
+        </div>
+        <div class="control-md">
+            @Html.TextBoxFor(m => Model.Vendor, new { required = "required" })
+            @Html.ValidationMessageFor(m => Model.Vendor, @Admin_Resources.Vendor)
+        </div>
+        @Html.Partial("_HelpText", Admin_Resources.HelptextVendorMessage)
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12 nopadding">
+        <div class="control-label">
+            @Html.Label(@Admin_Resources.LabelAcceptCard, new { @class = "required" })
+        </div>
+        <div class="control-md">
+            <div class="col-sm-6 nopadding">
+                <label>
+                    <input @enableVisa data-val="true" id="EnableVisa" name="EnableVisa" type="checkbox" value="true">
+                    <span class="lbl padding-8"></span> @Admin_Resources.LabelCheckboxVisa
+                    <input name="EnableVisa" type="hidden" value="false">
+                </label>
+            </div>
+            <div class="col-sm-6 nopadding">
+                <label>
+                    <input @enableMasterCard data-val="true" id="EnableMasterCard" name="EnableMasterCard" type="checkbox" value="true">
+                    <span class="lbl padding-8"></span> @Admin_Resources.LabelCheckboxMasterCard
+                    <input name="EnableMasterCard" type="hidden" value="false">
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

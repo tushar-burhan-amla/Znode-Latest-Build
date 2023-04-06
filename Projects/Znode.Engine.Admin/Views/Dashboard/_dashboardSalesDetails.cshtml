@@ -1,0 +1,46 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model DashboardListViewModel
+@{
+    int labelTotalNewCust = Model?.DashboardViewModelList?.Count != 0 && Model.DashboardViewModelList.Any(x => string.Equals(x.Type, ZnodeConstant.Sales, StringComparison.InvariantCultureIgnoreCase)) ? Model.DashboardViewModelList.FirstOrDefault().TotalNewCustomer : 0;
+    string labelTotalSales = Model?.DashboardViewModelList?.Count != 0 && Model.DashboardViewModelList.Any(x => string.Equals(x.Type, ZnodeConstant.Sales, StringComparison.InvariantCultureIgnoreCase)) ? Model.DashboardViewModelList.FirstOrDefault().TotalSales : "0";
+    int labelTotalOrders = Model?.DashboardViewModelList?.Count != 0 && Model.DashboardViewModelList.Any(x => string.Equals(x.Type, ZnodeConstant.Sales, StringComparison.InvariantCultureIgnoreCase)) ? Model.DashboardViewModelList.FirstOrDefault().TotalOrders : 0;
+}
+<div id="salesDetailsOfSelectedPortal">
+    <div class="chart-container">
+        <ul class="chart sales">
+            <li><span style="height:25%"></span></li>
+            <li><span style="height:80%"></span></li>
+            <li><span style="height:45%"></span></li>
+            <li><span style="height:90%"></span></li>
+            <li><span style="height:67%"></span></li>
+            <li><span style="height:55%"></span></li>
+        </ul>
+        <label id="label2">@labelTotalNewCust</label>
+        <p>@Admin_Resources.LabelTotalNewCustomers</p>
+    </div>
+    <div class="chart-container">
+        <ul class="chart new-customers">
+            <li><span style="height:8%"></span></li>
+            <li><span style="height:90%"></span></li>
+            <li><span style="height:66%"></span></li>
+            <li><span style="height:32%"></span></li>
+            <li><span style="height:48%"></span></li>
+            <li><span style="height:95%"></span></li>
+        </ul>
+        <label id="label3">@labelTotalSales</label>
+        <p>@Admin_Resources.LabelTotalSales</p>
+    </div>
+    <div class="chart-container">
+        <ul class="chart order-value">
+            <li><span style="height:25%"></span></li>
+            <li><span style="height:50%"></span></li>
+            <li><span style="height:46%"></span></li>
+            <li><span style="height:75%"></span></li>
+            <li><span style="height:30%"></span></li>
+            <li><span style="height:75%"></span></li>
+        </ul>
+        <label id="label4">@labelTotalOrders</label>
+        <p>@Admin_Resources.LabelTotalOrders</p>
+    </div>
+</div>

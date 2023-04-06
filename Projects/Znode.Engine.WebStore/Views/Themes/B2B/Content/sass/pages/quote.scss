@@ -1,0 +1,113 @@
+﻿.single-page-checkout {
+    .in-hand-block {
+        .hand-date-picker {
+            position: relative;
+
+            .datepicker {
+                border: 1px solid #c5b7b7 !important;
+                padding: 5px 10px !important;
+                background-color: #FAFAFA !important;
+                min-width: 150px !important;
+                max-width: 350px !important;
+            }
+
+            span {
+                position: absolute;
+                right: 0;
+                top: 0;
+                padding: 10px;
+                height: 24px;
+                pointer-events: none;
+                color: $base-primary;
+                line-height: 14px;
+            }
+        }
+    }
+}
+.quote-main-table {
+    .b2b-section-header {
+        border-bottom: none !important;
+    }
+
+    .quote-table {
+        .table {
+            .table-heading {
+                border-bottom: 1px solid #dee2e6;
+                background: #F7F9F9;
+            }
+
+            tr th {
+                border-bottom: none !important;
+                color: $base-primary;
+
+                &.receipt-column-price {
+                    text-transform: capitalize;
+                }
+            }
+
+            tr td {
+                border-bottom: 1px solid #dee2e6 !important;
+                vertical-align: middle !important;
+
+                img {
+                    max-width: 75px;
+                    margin-right: 15px;
+                    min-height: 75px;
+                }
+            }
+        }
+    }
+
+    .receipt-item-list {
+        .receipt-totals .receipt-total {
+            border-top: 1px solid $border-light;
+        }
+    }
+}
+.account-dashboard .notes-details .notes-main-table {
+
+    .notes-list-table {
+        .table {
+            .table-heading {
+                border-bottom: 1px solid $border-light;
+                background: #F7F9F9;
+            }
+
+            tr th {
+                border-bottom: none !important;
+                color: $base-primary;
+            }
+
+            tr td {
+                border-bottom: 1px solid #dee2e6 !important;
+                vertical-align: middle !important;
+
+                img {
+                    max-width: 75px;
+                    margin-right: 15px;
+                    min-height: 75px;
+                }
+            }
+        }
+    }
+
+    .notes-list-table tbody {
+        border-left: 1px solid #c3c3c3;
+        border-right: 1px solid #c3c3c3;
+    }
+}
+
+.QuoteReceipt {
+    .checkout-receipt .account-dashboard .dashboard-content .shopping-cart .receipt-item-list .cart-total {
+        .receipt-total {
+            border-top: 1px solid $border-light;
+        }
+    }
+}
+
+// Print View
+@media print {
+    .order-receipt .quote-main-table > .col-lg-5 {
+        width: 50%;
+    }
+}

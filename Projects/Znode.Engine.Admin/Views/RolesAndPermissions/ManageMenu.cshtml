@@ -1,0 +1,40 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model MenuActionsPermissionViewModel
+
+@{
+    ViewBag.Title = Admin_Resources.LabelAdmin + " | " + Admin_Resources.Multifront;
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ActionModel actionModel = new ActionModel { Action = actionName, Controller = controllerName, CancelUrl = "/RoleAndAccessRight/MenuList", FormId = "frmManageMenu", Callback = "RoleAndAccessRight.prototype.GetActionPermissions", IsSaveCloseEnable = true };
+}
+<div class="col-sm-12 title-container">
+    <h1 data-test-selector="hdgManageMenu">@string.Format(@Admin_Resources.LabelManage, Admin_Resources.LabelMenu)<em class="z-minus"></em><span>@Model.MenuName</span></h1>
+    <div class="pull-right">
+        @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        @*<button type="button" class="btn-text grey" onclick="javascript: location.href = '/RoleAndAccessRight/MenuList'">@Admin_Resources.ButtonCancel</button>*@
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { @id = "frmManageMenu" }))
+    {
+        if (!Equals(Model.ActionList, null))
+        {
+            for (int index = 0; index < Model.ActionList.Count; index++)
+            {
+                <div class="form-group actionpermissions">
+                    <div class="control-label">
+                        <label id="actionPermission" data-test-selector="lbl@(Model.ActionList[index].Text.Replace(" ",""))" data-permissions="@Model.ActionList[index].Value">@Model.ActionList[index].Text</label>
+                    </div>
+                    <div class="control-md">
+                        @Html.DropDownListFor(model => model.ActionPermissionList[index].AccessPermissionId, Model.ActionPermissionList[index].AccessPermissionList , new { @id = "accessPermissionId", @data_test_selector = "drp" + @Model.ActionList[index].Text.Replace(" ", "") })
+                    </div>
+                </div>
+            }
+        }
+        @Html.HiddenFor(model => model.MenuId)
+        @Html.HiddenFor(model => model.MenuName)
+        @Html.HiddenFor(model => model.ActionPermissions)
+
+    }
+</section>

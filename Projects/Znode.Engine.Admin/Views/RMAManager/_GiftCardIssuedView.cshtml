@@ -1,0 +1,11 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model IssuedGiftCardViewModel
+@using Znode.Engine.Admin.Extensions
+@using Znode.Engine.Admin.Helpers;
+
+@{ 
+    var ammount = Convert.ToDecimal(AdminExtention.ToPriceRoundOff(Model.Amount));
+}
+
+<p>@Admin_Resources.LabelGiftCardIssued: @Model.CardNumber for @HelperMethods.FormatPriceWithCurrency(ammount, Model.CultureCode) </p>
+<p>@Admin_Resources.LabelExpirationDate : @Model.ExpirationDate</p>

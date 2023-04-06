@@ -1,0 +1,25 @@
+﻿@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString().ToLower();
+}
+<aside>
+    <button id="slide-menu" class="slide-menu-btn" data-toggle="tooltip" data-placement="right" title="Expand/Collapse"><em class="z-left-collaps-arrow"></em></button>
+    <div class="slide-container">
+      
+        @if (controllerName == "productattribute" || controllerName == "productattributegroup" || controllerName == "productattributefamily")
+        {            
+            <ul class="aside-panel">
+                <li><a href="/PIM/ProductAttributeFamily/List">@Attributes_Resources.TitleAttributeFamily</a></li>
+                <li><a href="/PIM/ProductAttributeGroup/List">@Attributes_Resources.TitleAttributeGroups</a></li>
+                <li><a href="/PIM/ProductAttribute/List">@Attributes_Resources.LabelAttributes</a></li>
+            </ul>
+        }
+        else
+        {            
+            <ul class="aside-panel">
+                <li><a href="/PIM/CategoryAttributeFamily/List">@Attributes_Resources.TitleAttributeFamily</a></li>
+                <li><a href="/PIM/CategoryAttributeGroup/List">@Attributes_Resources.TitleAttributeGroups</a></li>
+                <li><a href="/PIM/CategoryAttribute/List">@Attributes_Resources.LabelAttributes</a></li>
+            </ul>
+        }
+    </div>
+</aside>

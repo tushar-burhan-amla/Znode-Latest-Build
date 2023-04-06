@@ -1,0 +1,20 @@
+﻿@model Znode.Engine.Admin.ViewModels.MediaManagerBreadCrumListViewModel
+
+@if (Model?.BreadCrumList?.Count() > 0)
+{
+    <ul>        
+        <li>@Html.AuthorizedRawActionLink(Admin_Resources.TitleDashboard, "Dashboard", "Dashboard", null)</li>   
+        <li>@Html.AuthorizedRawActionLink(MediaManager_Resources.TitleMediaManager, "List", "MediaManager", null)</li>
+        @foreach (var item in Model.BreadCrumList)
+        {
+            if (!Equals(item, Model.BreadCrumList.Last()))
+            {
+                <li><a href="#" onclick="OnNodeSelect(@item.MediaPathId)">@item.MediaPath</a></li>
+            }
+            else
+            {
+                <li><span>@item.MediaPath</span></li>
+            }
+        }
+    </ul>
+}

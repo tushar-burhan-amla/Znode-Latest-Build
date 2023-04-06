@@ -1,0 +1,132 @@
+﻿@using Znode.Engine.Admin.ViewModels;
+@using Znode.Engine.Admin.Helpers;
+@model DownloadableProductKeyViewModel
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+@using (Ajax.BeginForm("AddDownloadableProductKeys", controllerName, new AjaxOptions()
+{
+    HttpMethod = "post",
+    OnSuccess = "Inventory.prototype.AddDownloadableProductKeyResult",
+    InsertionMode = InsertionMode.Replace,
+},
+                                                                                                                                                  new { @id = "addDownloadableProductKeyForm" }))
+{
+    @Html.HiddenFor(m => m.PimDownloadableProductKeyId)
+    @Html.HiddenFor(m => m.SKU)
+    <div class="col-sm-12 nopadding">
+        <button type="button" id="defaultValue-add-new-row" data-test-selector = "btnAddDownloadableProductkeys" class="btn-text-icon btn-text-color-icon pull-right margin-bottom"><em class='z-add-circle'></em>@Admin_Resources.ButtonAdd</button>
+        <table id="downloadableProductkeys" class="display table table-striped product-keys-table" aria-describedby="Product Keys Table">
+            <thead>
+                <tr>
+                    <th scope="col">Product Key</th>
+                    <th scope="col">Download URL</th>
+                    <th scope="col" class="grid-action">Action</th>
+                    <th scope="col" style="display:none"></th>
+                </tr>
+            </thead>
+            <tbody id="dwnProductKey">
+
+                @if (Equals(actionName, "AddDownloadableProductKeys"))
+                {
+                    Model.DownloadableProductKeyList = new List<DownloadableProductKeyViewModel> { new DownloadableProductKeyViewModel() };
+                    <tr>
+                        <td>
+                            @Html.TextBoxFor(m => m.DownloadableProductKeyList[0].DownloadableProductKey, new { @id = "productKey", onkeyup = "Inventory.prototype.ValidateDownloadableProductKey()", @data_test_selector = "txtProductKey" })
+
+                            @Html.ValidationMessageFor(model => model.DownloadableProductKeyList[0].DownloadableProductKey, "", new { @data_test_selector = "valProductKey" })
+                            <span id="error-productKey_0" class="field-validation-error" />
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.DownloadableProductKeyList[0].DownloadableProductURL, new { @id = "productURL", @validationrule = "RoundOff", @RegularExpression = AdminConstants.URLValidation, @Message = "Please enter a valid URL." , @data_test_selector = "txtProductURL" })
+                            @Html.ValidationMessageFor(model => model.DownloadableProductKeyList[0].DownloadableProductURL, "", new { @data_test_selector = "valProductURL" })
+                            <span id="error-productURL" class="field-validation-error" />
+                        </td>
+                        <td class="grid-action"><a href="#" class="img-icon-delete" title="@Admin_Resources.ButtonDelete"><em class="z-delete"></em></a></td>
+
+                        <td style="display:none">@Html.TextBoxFor(m => m.DownloadableProductKeyList[0].PimDownloadableProductKeyId, new { @hidden = "hidden", @class = "pimDownloadableProductKeyId" })</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+}
+<script src="~/Scripts/References/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        var productURL= $('#downloadableProductkeys').DataTable({"pageLength": 100});
+        var counter = @Model.DownloadableProductKeyList.Count;
+
+        if(counter==0)
+        {
+            counter =  @Model.DownloadableProductKeyList.Count + 1;
+        }
+
+        $('#defaultValue-add-new-row').on('click', function () {
+
+            if($('#downloadableProductkeys > tbody > tr').length < 20)
+            {
+                $('#downloadableProductkeys > tbody').append('<tr><td><input data-val="true"" data-val-required="Product Key is required." data-val-maxlength="Maximum length of Product Key is 1000 character." data-val-maxlength-max="1000" id="productKey" name="DownloadableProductKeyList['+counter+'].DownloadableProductKey" type="text" value="" ><span class="field-validation-valid" data-valmsg-for="DownloadableProductKeyList['+counter+'].DownloadableProductKey" id="error-productKey_'+counter+'" type="text" value="" data-valmsg-replace="true"></span></td>'+
+                                                  '<td><input data-val="true" data-val-maxlength="Maximum length of Download URL is 200 character." data-val-maxlength-max="200" data-val-regex-pattern = "(https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]\\.[^\\s]{2,})" data-val-regex="Enter a Valid URL." id="productURL" name="DownloadableProductKeyList['+counter+'].DownloadableProductURL" type="text" ><span class="field-validation-valid" data-valmsg-for="DownloadableProductKeyList['+counter+'].DownloadableProductURL" data-valmsg-replace="true"></span></td>'+
+                                                   '<td><a href="#" class="img-icon-delete dirtyignore" title="@Admin_Resources.ButtonDelete"><i class="z-delete"></i></a></td>'+
+                                                   '<td><input class="pimDownloadableProductKeyId" style="display:none" data-val="true" data-val-number="The field PimDownloadableProductKeyId must be a number." id="pimDownloadableProductKeyId" name="DownloadableProductKeyList['+counter+'].PimDownloadableProductKeyId" type="text" value=""></td></tr>');
+                counter++;
+                var form = $("#addDownloadableProductKeyForm")
+                 .removeData("validator") /* added by the raw jquery.validate plugin */
+                 .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin */
+
+                $.validator.unobtrusive.parse(form);
+
+                var AddDownloadableProductKey = $("#frmDownloadableProductKey")
+                .removeData("validator") /* added by the raw jquery.validate plugin */
+                .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin */
+
+                $.validator.unobtrusive.parse(AddDownloadableProductKey);
+            }
+
+        });
+        $.validator.unobtrusive.parse($("#addDownloadableProductKeyForm"));
+        $('#downloadableProductkeys tbody').on('click', '.img-icon-delete', function () {
+            var deletedRow = $(this).closest('tr')[0].rowIndex;
+
+            for (var remove = deletedRow - 1; remove <= counter - 1; remove++) {
+
+                $(this).closest('tr').remove();
+
+                var productKey = $('#dwnProductKey tr').eq(remove).find('#productKey').val();
+                var productURL = $('#dwnProductKey tr').eq(remove).find('#productURL').val();
+
+                if (remove + 1 == 1) {
+
+                    var newRow = $('<tr><td><input data-val="true" onkeyup="Inventory.prototype.ValidateDownloadableProductKey()" id="productKey" name="DownloadableProductKeyList[0].DownloadableProductKey" type="text" value=' + productKey + '><span class="field-validation-valid" data-valmsg-for="DownloadableProductKeyList[0].DownloadableProductKey" id="error-productKey_0" type="text" text="text" value=""</td><td><input data-val="true" data-val-maxlength="Maximum length of Download URL is 200 character." data-val-maxlength-max="200" data-val-regex-pattern = "(https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]\\.[^\\s]{2,})" data-val-regex="Enter a Valid URL." id="productURL" name="DownloadableProductKeyList[0].DownloadableProductURL" type="text" value=' + productURL + ' ><span class="field-validation-valid" data-valmsg-for="DownloadableProductKeyList[0].DownloadableProductURL" data-valmsg-replace="true"></span></td><td><a href="#" class="img-icon-delete dirtyignore" title="@Admin_Resources.ButtonDelete"><i class="z-delete"></i></a></td><td><class="pimDownloadableProductKeyId" style="display:none" data-val="true" id="pimDownloadableProductKeyId" name="DownloadableProductKeyList[0].PimDownloadableProductKeyId" type="text"></td></tr> ');
+
+                    newRow.insertBefore($('#downloadableProductkeys tbody tr:nth(0)'));
+                    $("#downloadableProductkeys tbody tr:eq(" + deletedRow + ")").remove();
+
+                }
+                else {
+
+                        var newRow = $('<tr><td><input data-val="true"" data-val-required="Product Key is required." data-val-maxlength="Maximum length of Product Key is 1000 character." data-val-maxlength-max="1000" id="productKey" name="DownloadableProductKeyList[' + remove + '].DownloadableProductKey" type="text" value=' + productKey + ' ><span class="field-validation-valid" data-valmsg-for="DownloadableProductKeyList[' + remove + '].DownloadableProductKey" id="error-productKey_' + remove + '" type="text" value="" text="text" data-valmsg-replace="true"></span></td>' +
+                            '<td><input data-val="true" data-val-maxlength="Maximum length of Download URL is 200 character." data-val-maxlength-max="200" data-val-regex-pattern = "(https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]\\.[^\\s]{2,})" data-val-regex="Enter a Valid URL." id="productURL" name="DownloadableProductKeyList[' + remove + '].DownloadableProductURL" type="text" value=' + productURL + ' ><span class="field-validation-valid" data-valmsg-for="DownloadableProductKeyList[' + remove + '].DownloadableProductURL" data-valmsg-replace="true"></span></td>' +
+                            '<td><a href="#" class="img-icon-delete dirtyignore" title="@Admin_Resources.ButtonDelete"><i class="z-delete"></i></a></td>' +
+                            '<td><input class="pimDownloadableProductKeyId" style="display:none" data-val="true" data-val-number="The field PimDownloadableProductKeyId must be a number." id="pimDownloadableProductKeyId" name="DownloadableProductKeyList[' + remove + '].PimDownloadableProductKeyId" type="text" ></td></tr>');
+
+                        newRow.insertBefore($('#downloadableProductkeys tbody tr:nth(' + remove + ')'));
+
+                        var rowToRemove = remove + 1;
+                    $("#downloadableProductkeys tbody tr:eq(" + rowToRemove + ")").remove();
+                }
+            }
+        });
+
+        $.validator.unobtrusive.parse($("#frmDownloadableProductKey"));
+
+        $('#btnCancel').click(function(){
+            event.preventDefault();
+            ZnodeBase.prototype.CancelUpload("divAsidePanelDownloadableProduct")
+        });
+    });
+</script>

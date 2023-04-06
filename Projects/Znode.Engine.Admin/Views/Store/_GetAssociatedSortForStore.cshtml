@@ -1,0 +1,48 @@
+﻿@using Znode.Engine.Admin.Models
+@model Znode.Engine.Admin.ViewModels.PortalSortSettingListViewModel
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+}
+<div id="associateSort">
+    <div id="@Model.GridModel.FrontObjectName" tabchild="true">
+        <div class="col-sm-12 page-container">
+            <div class="pull-right margin-bottom-25">
+                @*@Html.AuthorizedPrototypeRawActionLink("<em class='z-price-management'></em>" + @Admin_Resources.LabelAssociateSortList, "GetUnassociatedSortList", "Store", new { @class = "btn-text-icon", @id = "associateSortSettings", onclick = "ZnodeBase.prototype.BrowseAsidePoupPanel('/Store/GetUnassociatedSortList?portalId=" + Model.PortalId + "','DivGetUnAssociatedSortSettingListForStore')" })*@
+                @Html.AuthorizedPrototypeRawActionLink(@Admin_Resources.LabelAssociateSortList, "GetUnassociatedSortList", "Store", new { @id = "GetUnassociatedSortList", @class = "btn-text btn-text-secondary", @value = "Create XML", onclick = "Store.prototype.GetUnassociatedSortList(" + @Model.PortalId + ")", @data_test_selector = "linkAssociatePrice" })
+            </div>
+            <div>
+                @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                        new PopupModel()
+                        {
+                            Title = @Admin_Resources.HeaderConfirmDelete,
+                            Description = @Admin_Resources.TextConfirmDelete,
+                            ModalPopUpId = "StoreSortSettingPopup",
+                            Buttons = new List<PopUpButtonModel>() {
+                                new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Store.prototype.RemoveAssociatedSortSetting(this)"}
+                             }
+                        })
+                @Html.HiddenFor(m => m.PortalId)
+            </div>
+            @using (Ajax.BeginForm(actionName, controllerName, new { portalId = Model.PortalId }, new AjaxOptions() { UpdateTargetId = Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+            {
+                <div id="filterComponent">
+                    @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                </div>
+            }
+            <div class="col-sm-12 list-container">
+                @{
+                    @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div id="DivGetUnAssociatedSortSettingListForStore" class="aside-popup-panel modal-dialog modal-lg"></div>
+<script>
+    DynamicGrid.prototype.ClearCheckboxArray();
+    EditableGridEvent.Init();
+    $(".input-text").change(function () {
+        validateForm = Store.prototype.ValidatePrecedanceField(this);
+    });
+</script>

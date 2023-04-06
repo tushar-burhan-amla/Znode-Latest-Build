@@ -1,0 +1,62 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model CMSTextWidgetConfigurationViewModel
+
+@{
+    string actionName = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    ViewBag.Title = Admin_Resources.TitleStoreAndReps + " | " + Admin_Resources.Multifront;
+    ActionModel actionModel = new ActionModel { Action = "SaveTagManagerConfiguration", Controller = "Store", CancelUrl = "/Store/List", FormId = "formCmsTextWidgetConfiguration" , IsSaveCloseEnable = true};
+}
+<div class="col-sm-12 title-container">
+    <h1>@string.Format(@Admin_Resources.TitleManage, Admin_Resources.LabelStore)<em class="z-minus"></em><span>@Model.PortalName</span></h1>
+    <div class="pull-right">
+        <div class="pull-right">
+            @Html.Partial("~/Views/Shared/Controls/_SaveCancelButtons.cshtml", actionModel)
+        </div>
+    </div>
+</div>
+<!--Main Container-->
+<div id="TextWidgetConfigurationDiv" class="main-wrapper">
+    <!--Left Panel-->
+    @Html.Partial("~/views/store/_asidestoremanagepanel.cshtml")
+    <!--Main Container-->
+    <section class="main-container">
+        @using (Html.BeginForm("SaveTagManagerConfiguration", "Store", FormMethod.Post, new { id = "formCmsTextWidgetConfiguration" }))
+            {
+                if (Model?.Locales?.Count > 0)
+                {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label">
+                            @Html.LabelFor(x => x.LocaleId)
+                        </div>
+                        <div class="control-md">
+                            @if (Model.CMSTextWidgetConfigurationId > 0)
+                            {
+                                @Html.DropDownListFor(m => m.LocaleId, Model.Locales, new { @id = "ddl_locale_list" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(m => m.LocaleId, Model.Locales, new { @id = "ddl_locale_list", @readonly = "readonly", disabled = "disabled" })
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            <div id="div_text_widget">
+                @{ Html.RenderPartial("~/Views/WebSite/_TextWidget.cshtml", Model); }
+            </div>
+                @Html.HiddenFor(model => model.CMSMappingId)
+                    @Html.HiddenFor(model => model.CMSTextWidgetConfigurationId)
+                    @Html.HiddenFor(model => model.CMSWidgetsId)
+                    @Html.HiddenFor(model => model.TypeOFMapping)
+                    @Html.HiddenFor(model => model.WidgetsKey)
+                    @Html.HiddenFor(model => model.DisplayName)
+                    @Html.HiddenFor(model => model.WidgetName)
+                    }
+    </section>
+</div>
+@*Important Div to render media upload popup*@
+<div id="divMediaUploaderPopup">
+</div>

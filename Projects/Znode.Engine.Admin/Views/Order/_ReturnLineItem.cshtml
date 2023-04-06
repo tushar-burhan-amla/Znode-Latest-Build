@@ -1,0 +1,145 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@model ReturnOrderLineItemViewModel
+
+@{
+    string imagePath = string.IsNullOrEmpty(Model?.ImagePath) ? ZnodeAdminSettings.DefaultImagePath : Model?.ImagePath;
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+}
+<li class="sp-return-number dirtyignore">
+    <span><a href="/RMAReturn/ManageReturn?ReturnNumber=@Model.ReturnNumber" target="_blank">@Model.ReturnNumber</a></span>
+</li>
+<li class="imageicon sp-image">
+    <img src="@imagePath" alt="@Html.RenderBlock(Model.ProductName) Image" class="grid-img" />
+</li>
+@if (Model.GroupProducts?.Count > 0)
+{
+    string mainProductName = Model.ProductName;
+    foreach (var product in Model.GroupProducts)
+    {
+        <li class="sp-sku">
+            <span>@product.Sku</span>
+        </li>
+        <li class="sp-product-name">
+            <div class="">@Html.RenderBlock(mainProductName)</div>
+            <div><em class="zf-caret-right"></em>@Html.RenderBlock(product.ProductName)</div>
+            <div class="cart-item-description">@Html.RenderBlock(Model.CartDescription)</div>
+        </li>
+        <li class="sp-status">
+            <span>
+                @if (!string.IsNullOrEmpty(Model.RmaReturnLineItemStatus))
+                {
+                    @Model.RmaReturnLineItemStatus
+                }
+                else
+                {
+                    @Model.OrderLineItemStatus
+                }
+            </span>
+        </li>
+        <li class="sp-returned-reason">
+            <span>@Model.ReasonForReturn</span>
+        </li>
+        <li class="sp-tracking-number">
+            <span>@Model.TrackingNumber</span>
+        </li>
+        <li class="sp-unit-price">
+            <span>@HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.UnitPrice), cultureCode)</span>
+        </li>
+        <li class="sp-quantity">
+            <span>@product.Quantity</span>
+        </li>
+        <li class="sp-shipping">
+            <span>@HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.ShippingCost), cultureCode)</span>
+        </li>
+        <li class="sp-shipping">
+            <label for="IsShippingReturn">
+                <input type="checkbox" value="true" disabled="disabled" @(Model.IsShippingReturn ? "checked" : "" ) name="IsShippingReturn" class="ReturnList_IsShippingReturn" onchange="Order.prototype.UpdateReturnShippingHistory(@Model.OmsOrderLineItemsId, this)" id="ReturnList_IsShippingReturn_@Model.OmsOrderLineItemsId">
+                <span class="lbl padding-8"></span><input type="hidden" value="false" name="IsShippingReturn">
+            </label>
+        </li>
+    }
+}
+else
+{
+    <li class="sp-sku">
+        @if (!string.IsNullOrEmpty(Model?.ConfigurableProductSKUs))
+        {
+            <span>@Model.ConfigurableProductSKUs</span>
+        }
+        else
+        {
+            <span>@Model.SKU</span>
+        }
+    </li>
+    <li class="sp-product-name">
+        <span>@Html.RenderBlock(Model.ProductName)</span>
+        <div class="cart-item-description">
+            @if (Model?.PersonaliseValuesDetail?.Count > 0)
+            {
+                foreach (var item in Model.PersonaliseValuesDetail)
+                {
+                    if (!Equals(item.PersonalizeName, null) && !Equals(item.PersonalizeValue, string.Empty))
+                    {
+                        <p> @item.PersonalizeName : @item.PersonalizeValue </p>
+                    }
+                }
+            }
+            else if (Model?.PersonaliseValuesList?.Count > 0)
+            {
+                foreach (var item in Model.PersonaliseValuesList)
+                {
+                    if (!Equals(item.Value, null) && !Equals(item.Value, string.Empty))
+                    {
+                        <p> @item.Key : @item.Value </p>
+                    }
+                }
+            }
+        </div>
+        @Html.RenderBlock(Model.CartDescription)
+    </li>
+    <li class="sp-status">
+        <span>
+            @if (!string.IsNullOrEmpty(Model.RmaReturnLineItemStatus))
+            {
+                @Model.RmaReturnLineItemStatus
+            }
+            else
+            {
+                @Model.OrderLineItemStatus
+            }
+        </span>
+    </li>
+    <li class="sp-returned-reason">
+        <span>@Model.ReasonForReturn</span>
+    </li>
+    <li class="sp-tracking-number">
+        <span>@Model.TrackingNumber</span>
+    </li>
+    <li class="sp-unit-price">
+        <span>@HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.UnitPrice), cultureCode)</span>
+    </li>
+    <li class="sp-quantity">
+        <span>@Model.Quantity</span>
+    </li>
+    <li class="sp-shipping">
+        <span>@HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.ShippingCost), cultureCode)</span>
+    </li>
+    <li class="sp-shipping">
+        <label for="IsShippingReturn">
+            <input type="checkbox" value="true" disabled="disabled" @(Model.IsShippingReturn ? "checked" : "" ) name="IsShippingReturn" class="ReturnList_IsShippingReturn" onchange="Order.prototype.UpdateReturnShippingHistory(@Model.OmsOrderLineItemsId, this)" id="ReturnList_IsShippingReturn_@Model.OmsOrderLineItemsId">
+            <span class="lbl padding-8"></span><input type="hidden" value="false" name="IsShippingReturn">
+        </label>
+    </li>
+}
+<li class="sp-total">
+    <span id="extendedPrice_@Model.ExternalId"> @HelperMethods.FormatPriceWithCurrency(Convert.ToDecimal(Model.ExtendedPrice), cultureCode)</span>
+</li>
+@Html.HiddenFor(model => model.ProductType)
+<script>
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>
+

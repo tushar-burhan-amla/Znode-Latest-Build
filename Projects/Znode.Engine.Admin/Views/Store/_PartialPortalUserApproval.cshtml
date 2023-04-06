@@ -1,0 +1,35 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model UserApproverViewModel
+
+@using (Ajax.BeginForm("CreateUpdatePortalApproverUser", "Store", new AjaxOptions()
+{
+    HttpMethod = "post",
+    OnSuccess = "Store.prototype.AreaMapperAddResult(data,this)",
+    InsertionMode = InsertionMode.Replace,
+
+}, new { id = "frmApprovalArea_" + Model.UserApproverId }))
+{
+    <div class="col-xs-12 padding-top-bottom tr-div approver-rows nopadding dynamic-approvers dynamic-approverUserId" id="PartialPage_@Model.UserApproverId">
+        <div class="col-xs-4">
+            @Html.TextBoxFor(m => Model.ApproverName, new { @placeholder = "Enter Approver User", @id = "approverUser_" + Model.UserApproverId + "", @class = "txtApproverUser" })
+            @Html.ValidationMessageFor(model => Model.ApproverName)
+            <input class="txtApproverUserId" id="ApproverUserId" data_userId="@Model.IsActive.ToString()" name="ApproverUserId" type="hidden" value="@Model.ApproverUserId" data_userapproverId="@Model.UserApproverId" />
+        </div>
+        <div class="col-xs-4"></div>
+        <div class="col-xs-4 text-right">
+            @Html.AuthorizedPrototypeRawActionLink(" ", "DeletePortalApproverUser", "Store", new { id = "deleteAreaMapping_" + Model.UserApproverId + "", @class = "img-icon-delete btn-narrow-icon z-delete", title = Admin_Resources.ButtonDelete, onclick = "Store.prototype.DeleteAreaMapping(" + Model.UserApproverId + "," + "this" + ")" })
+        </div>
+    </div>
+    @Html.HiddenFor(x => x.UserApproverId)
+    @*@Html.HiddenFor(x => x.PortalApprovalId)*@
+}
+<script>
+    $(document).ready(function () {
+        $('.txtApproverUser').keypress(
+            function (event) {
+                if (event.which == '13') {
+                    event.preventDefault();
+                }
+            });
+    });
+</script>

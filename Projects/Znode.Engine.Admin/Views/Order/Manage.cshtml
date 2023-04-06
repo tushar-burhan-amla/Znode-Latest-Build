@@ -1,0 +1,271 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@using Znode.Engine.Admin.Helpers;
+@using Znode.Libraries.ECommerce.Utilities
+@using Znode.Engine.Admin.Agents
+@model OrderViewModel
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+    string _displayReturnItems = Model?.ReturnOrderLineItems?.ReturnItemList?.Count > 0 ? "display: block" : "display: none";
+    string paymentApiRequestHeader = ViewBag.PaymentApiRequestHeader;
+    bool isCancelled = string.Equals(Model.OrderState.ToString(), ZnodeOrderStatusEnum.CANCELED.ToString(), StringComparison.InvariantCultureIgnoreCase);
+    PrimaryPageActionModel primaryPageAction = new PrimaryPageActionModel();
+    primaryPageAction.PageActions.Add(new PageAction { ControlId = "btnUpdateOrder", DataTestSelector = "linkSave", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.ButtonSaveOrder, OnClick = "Order.prototype.OnConfirmSubmitOrder()" });
+    if (Model.OrderState.ToUpper() == ZnodeOrderStatusEnum.SHIPPED.ToString())
+    {
+        primaryPageAction.PageActions.Add(new PageAction { ControlId = "packingSlipLink", HrefLink = "#", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.TitlePrintPackagingSlip, OnClick = "Order.prototype.PrintOnPackageSlip('')" });
+    }
+    primaryPageAction.PageActions.Add(new PageAction { Action = "ResendOrderConfirmationEmail", Controller = "Order", DataTestSelector = "linkResendEmail", LinkType = LinkType.UrlAction, LinkDisplayName = @Admin_Resources.ResendOrderConfirmationEmail, RouteParameters = new { OmsOrderId = Model.OmsOrderId } });
+
+    primaryPageAction.PageActions.Add(new PageAction { DataTestSelector = "linkPrint", HrefLink = "#", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.LabelPrint, OnClick = "Order.prototype.PrintOnManange();" });
+    primaryPageAction.PageActions.Add(new PageAction { DataTestSelector = "linkCreateReturn", HrefLink = "#", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.ButtonCreateReturn, OnClick = "RMAReturn.prototype.ShowCreateReturnPopUp();" , ControlId = "btnCreateReturn"});
+    primaryPageAction.PageActions.Add(new PageAction { DataTestSelector = "linkReorder", HrefLink = "#", LinkType = LinkType.OnClick, LinkDisplayName = @Admin_Resources.LabelReOrder, OnClick = "Order.prototype.ReorderCompleteOrder();" });
+    if (!Model.IsCaptureDisable)  //Model.PaymentType != ZnodeConstant.PAYPAL_EXPRESS.ToString() &&
+    {
+        if (Model.PaymentType == ZnodeConstant.CreditCard.ToString() || Model.PaymentType == ZnodeConstant.PAYPAL_EXPRESS.ToString())
+        {
+            if (Model.PaymentStatus == ZnodeConstant.AUTHORIZED.ToString())
+            {
+                primaryPageAction.PageActions.Add(new PageAction { ControlId = "creditCardCapturedPayment", DataTestSelector = "linkCapturePayment", HrefLink = "#", LinkType = LinkType.OnClick, LinkDisplayName = "Capture", OnClick = "Order.prototype.OnCapturedSubmitOrder()" });
+            }
+        }
+    }
+}
+<div class="col-sm-12 title-container order-manage-title">
+    <h1>@Admin_Resources.LabelManage<em class="z-minus"></em><span class="order-tag-no">@Model.OrderNumber</span></h1>
+    <div class="pull-right btn-container d-flex">
+
+        @switch (Model.UpdatePageType)
+        {
+            case (AdminConstants.Quotes):@Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "AccountQuoteList", "Quote", null, new { @class = "btn-text-icon" })break;
+        case (AdminConstants.AccountQuotes):@Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "AccountQuoteList", "Account", new { accountId = Model.AccountId }, new { @class = "btn-text-icon" })break;
+    case (AdminConstants.OrderHistory): @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "AccountUserOrderList", "Account", new { userId = Model.UserId, accountId = Model.AccountId }, new { @class = "btn-text-icon" })break;
+case (AdminConstants.QuoteHistory): @Html.AuthorizedRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "AccountQuoteList", "Account", new { userId = Model.UserId, accountId = Model.AccountId }, new { @class = "btn-text-icon" }) break;
+case (AdminConstants.CustomerOrderHistory): @Html.AuthorizedPrototypeRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "GetOrderList", "Customer" ,new { @class = "btn-text-icon dirtyignore", @id = "btnCancelCustomerOrderId", onclick = "OrderSidePanel.prototype.ConfirmCancelCustomerOrderPopUp(PopUpConfirmCancelCustomerOrder);" }) break;
+case (AdminConstants.AccountOrderHistory): @Html.AuthorizedPrototypeRawActionLink("<em class='z-back'></em>" + Admin_Resources.ButtonCancel, "AccountUserOrderList", "Account", new { @class = "btn-text-icon dirtyignore", onclick = "OrderSidePanel.prototype.ConfirmCancelAccountOrderHistoryPopUp(PopUpConfirmCancelAccountOrderHistory);" }) break;
+default: <a href="javascript:void(0)" class="btn-text-icon dirtyignore" id="btnCancelOrderId" onclick="OrderSidePanel.prototype.ConfirmCancelOrderPopUp(PopUpConfirmCancelOrder);" data-test-selector="linkCancel"><em class='z-back'></em>@Admin_Resources.ButtonCancel</a>break;
+}
+
+        @if (isCancelled)
+        {
+            <button type="button" class="btn-text btn-text-primary margin-left-10" disabled="disabled" id="Addnote" onclick="Order.prototype.CancelOrder()" data-test-selector="btnCancelOrder">@Admin_Resources.LabelCancelOrder</button>
+        }
+        else
+        {
+            <button type="button" class="btn-text btn-text-primary margin-left-10" id="Addnote" onclick="Order.prototype.CancelOrder()" data-test-selector="btnCancelOrder">@Admin_Resources.LabelCancelOrder</button>
+        }
+
+        @Html.Partial("~/Views/Shared/Controls/_PrimaryPageAction.cshtml", primaryPageAction)
+    </div>
+</div>
+<!--Main Container-->
+<section class="col-sm-12 page-container">
+    <div id="printContentDiv" class="order-manage-container order-page-details ">
+        <div class="col-sm-12 nopadding d-flex flex-wrap">
+            <div class="order-information">
+                <div id="orderInformation" data-test-selector="divOrderInformation" class="col-sm-12 nopadding d-flex h-100">
+                    @Html.Partial("_ManageOrderInformation", Model.OrderInformation)
+                </div>
+            </div>
+            <div class="customer-information">
+                <div id="customerInformation" data-test-selector="divCustomerInformation" class="d-flex h-100">
+                    @Html.Partial("_ManageCustomerInformation", Model.CustomerInformation)
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 nopadding panel panel-default productInfoPage margin-top-20">
+            <div id="orderLineItems" data-test-selector="divOrderLineItems">
+                @Html.Partial("_OrderLineItemList", Model.CartInformation)
+            </div>
+        </div>
+        <div class="col-sm-12 nopadding panel panel-default returnTablePage margin-top-20">
+            <div id="returnLineItems" style="@_displayReturnItems" data-test-selector="divReturnLineItems">
+                @Html.Partial("ReturnItemList", Model.ReturnOrderLineItems)
+            </div>
+        </div>
+        @if (!String.IsNullOrEmpty(Model.PaymentType) && (Model.PaymentType.Equals("PURCHASE_ORDER", StringComparison.InvariantCultureIgnoreCase) || Model.PaymentType.Equals("Invoice Me", StringComparison.InvariantCultureIgnoreCase)))
+        {
+            <div class="col-sm-12 nopadding">
+                <div class="col-sm-12 nopadding panel panel-default productInfoPage margin-top-20">
+                    <div id="paymentHistory" data-test-selector="divPaymentHistory">
+                        @{Html.RenderAction("GetPaymentHistory", "Order", new { orderId = Model.OmsOrderId });}
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="col-sm-12 nopadding">
+            <div class="col-sm-12 nopadding panel panel-default productInfoPage margin-top-20">
+                <div id="orderHistory" data-test-selector="divOrderHistory">
+                    @{Html.RenderAction("GetOrderHistory", "Order", new { orderId = Model.OmsOrderId });}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+        new PopupModel()
+        {
+            Title = @Admin_Resources.ConfirmText,
+            Description = @Admin_Resources.TextConfirmCancelOrderNew,
+            ModalPopUpId = "PopUpConfirmCancelOrder",
+            Buttons = new List<PopUpButtonModel>() {
+            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "OrderSidePanel.prototype.ConfirmCancelOrder()" },
+            }
+        })
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+        new PopupModel()
+        {
+            Title = @Admin_Resources.ConfirmText,
+            Description = @Admin_Resources.TextConfirmCancelOrderNew,
+            ModalPopUpId = "PopUpConfirmCancelCustomerOrder",
+            Buttons = new List<PopUpButtonModel>() {
+            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "OrderSidePanel.prototype.ConfirmCancelCustomerOrder()" },
+            }
+        })
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+        new PopupModel()
+        {
+            Title = @Admin_Resources.ConfirmText,
+            Description = @Admin_Resources.TextConfirmSubmitOrder,
+            ModalPopUpId = "PopUpConfirmSubmitOrder",
+            Buttons = new List<PopUpButtonModel>() {
+            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "Order.prototype.SubmitEditOrder()" },
+            }
+        })
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+        new PopupModel()
+        {
+            Title = @Admin_Resources.ConfirmText,
+            Description = @Admin_Resources.TaxExemptConfirm,
+            ModalPopUpId = "PopUpTaxExemptSubmitOrder",
+            Buttons = new List<PopUpButtonModel>() {
+            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "Order.prototype.ConfirmTaxExemptOrder()" },
+            }
+        })
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+        new PopupModel()
+        {
+            Title = @Admin_Resources.ConfirmText,
+            Description = @Admin_Resources.TextCapturedSubmitOrder,
+            ModalPopUpId = "PopUpCapturedSubmitOrder",
+            Buttons = new List<PopUpButtonModel>() {
+            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "Order.prototype.ConfirmCapturedOrder('"+Model.OmsOrderId+"','"+Model.PaymentTransactionToken+"','"+Model.PaymentStatus+"')" },
+            }
+        })
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+        new PopupModel()
+        {
+            Title = @Admin_Resources.ConfirmText,
+            Description = @Admin_Resources.TextCreateReturn,
+            ModalPopUpId = "PopUpCreateReturn",
+            Buttons = new List<PopUpButtonModel>
+            () {
+            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "RMAReturn.prototype.CheckOrderEligibiltyForReturn();" },
+            }
+        })
+    </div>
+    <div>
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+        new PopupModel()
+        {
+            Title = @Admin_Resources.ConfirmText,
+            Description = @Admin_Resources.TextConfirmCancelOrderNew,
+            ModalPopUpId = "PopUpConfirmCancelAccountOrderHistory",
+            Buttons = new List<PopUpButtonModel>() {
+            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, OnClickFunctionName = "OrderSidePanel.prototype.ConfirmCancelAccountOrderHistory();" },
+            }
+        })
+    </div>
+
+</section>
+@* Here Customer address Details will display *@
+<div id="addressDetails" class="aside-popup-panel modal-dialog modal-lg">
+</div>
+<div id="paymentStatusPanel" class="aside-popup-panel payment-status-panel modal-dialog modal-lg">
+</div>
+<div id="ShippingPanel" class="aside-popup-panel modal-dialog modal-md">
+</div>
+<div id="AdditionalNotes" class="aside-popup-panel modal-dialog modal-md">
+</div>
+<div id="getProductsList" class="aside-popup-panel modal-dialog modal-lg">
+</div>
+<div id="productDetailsPanel" class="aside-popup-panel modal-dialog modal-md">
+</div>
+
+<!--Error Payment Modal-->
+<div class="modal fade" id="ErrorPaymentModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><em class="z-close-circle"></em></button>
+                <h4 class="modal-title">@Admin_Resources.LabelPaymentApplication</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" class="btn-text btn-text-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="PaymentModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@Admin_Resources.LabelPaymentApplication</h4>
+            </div>
+            <div class="modal-body">
+                <p>@Admin_Resources.TextPaymentMethod</p>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("hdnPortalId", Model.PortalId)
+@Html.HiddenFor(model => model.OrderNumber, new { @id = "hdnOrderNumber" })
+@Html.HiddenFor(model => model.PortalId)
+@Html.HiddenFor(model => model.AccountId, new { @id = "hdnAccountId" })
+@Html.HiddenFor(model => model.OmsOrderId, new { @id = "hdnManageOmsOrderId" })
+@Html.HiddenFor(model => model.PortalCatalogId)
+@Html.HiddenFor(model => model.IsLineItemShipped)
+@Html.HiddenFor(model => model.CustomerPaymentGUID, new { @id = "hdnCustomerGUID" })
+@Html.HiddenFor(model => model.IsTaxCostEdited, new { @id = "hdnTaxCostEdited" })
+@Html.HiddenFor(model => model.OmsOrderStateId, new { @id = "hdnOmsOrderStateId" })
+@Html.HiddenFor(model => model.IsValidForRma, new { @id = "hdnIsValidForRma" })
+@Html.HiddenFor(model => model.BillingAddress.StateCode, new { @id = "hdnstateCode" })
+@Html.HiddenFor(model => model.Email, new { @id = "hdnEmailId" })
+@Html.HiddenFor(model => model.AdditionalNotes)
+@Html.HiddenFor(model => model.IsAnyPendingReturn)
+@Html.HiddenFor(model => model.IsOldOrder, new { @id = "hdnIsOldOrder" })
+@Html.HiddenFor(model => model.UserId, new { @id = "hdnUserId" })
+@Html.Hidden("hdnPaymentApiRequestHeader", paymentApiRequestHeader)
+@Html.HiddenFor(model => model.IsTradeCentricUser)
+@Html.Hidden("hdnIsShipping")
+
+@Html.HiddenFor(m => m.EstimateShippingCost, new { @id = "hdnEstimateShippingCost" })
+@Scripts.Render("~/Scripts/References/jquery.payment.min.js")
+<script>
+    $(document).ready(function () {
+        Order.prototype.BindOrderData('@Model.ShippingTypeName');
+        Order.prototype.ShowOldOrderNotification('@Model.IsOldOrder');
+        if ($("#paymentHistoryList").length == 1) {
+            $("#btnCreateReturn").hide();
+        }
+    });
+</script>

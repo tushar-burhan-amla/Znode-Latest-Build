@@ -1,0 +1,20 @@
+﻿@model Znode.Engine.WebStore.ViewModels.WidgetMediaViewModel
+@{
+    string type = WebStoreConstants.ImageExtensions.ToLower();
+}
+
+<div class="item">
+    @if (!string.IsNullOrEmpty(Model?.MediaPath))
+    {
+        if (type.Contains(Path.GetExtension(Model.MediaPath)))
+        {
+            <image src="@Model.MediaPath" alt="@Model.DisplayName" width="600" />
+        }
+        else
+        {
+            <video width="600" controls>
+                <source src="@Model.MediaPath">
+            </video>
+        }
+    }
+</div>

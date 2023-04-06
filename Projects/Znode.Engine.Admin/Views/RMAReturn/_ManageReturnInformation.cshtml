@@ -1,0 +1,138 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers
+@model RMAReturnViewModel
+@{
+    Layout = null;
+    string disabled = (Model.RmaReturnStateId == (int)ZnodeReturnStateEnum.APPROVED || Model.RmaReturnStateId == (int)ZnodeReturnStateEnum.PARTIALLY_APPROVED) ? "" : "disabled";
+}
+<div class="col-sm-12 nopadding dashboard-panel ">
+    <div class=" dashboard-panel-heading">
+        <h4 class="dashboard-panel-title" data-test-selector="hdgOrderInformation">@Model.StoreName @Admin_Resources.LabelReturnInformation</h4>
+    </div>
+    <div class="col-sm-12 nopadding margin-bottom-15">
+        <div class="order-subtitle">
+            <h4>@Admin_Resources.LabelReturnSummary</h4>
+        </div>
+        <div class="col-xs-12">
+            <div class="col-xs-6 padding-none">
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding ">
+                        <div class="control-label order-label">
+                            @Html.Label(Admin_Resources.LabelReturnDate, new { @data_test_selector = "lblReturnDate" })
+                        </div>
+                        <div class="control-lg update-order-status dirtyignore order-controLg-width" data-test-selector="divReturnDate">
+                            @Html.RenderBlock(Model.ReturnDateWithTime)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label order-label">
+                            @Html.LabelFor(model => Model.ReturnNumber, new { @data_test_selector = "lblReturnNumber" })
+                        </div>
+                        <div class="control-lg update-order-status dirtyignore order-controLg-width" data-test-selector="divReturnNumber">
+                            @Html.RenderBlock(Model.ReturnNumber)
+                            @if (!string.IsNullOrEmpty(Model.BarcodeImage))
+                            {
+                                <img src="@Model.BarcodeImage" alt="" class="img-fluid" style="display:none" />
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label order-label">
+                            @Html.Label(Admin_Resources.LabelTotalReturnQuantity, new { @data_test_selector = "lblTotalReturnQuantity" })
+                        </div>
+                        <div class="control-lg update-order-status dirtyignore order-controLg-width" data-test-selector="divTotalReturnQuantity">
+                            @Html.RenderBlock(Convert.ToString(Model.TotalExpectedReturnQuantity))
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 padding-none">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label order-label">
+                                @Html.Label(Admin_Resources.LabelReturnStatus, new { @data_test_selector = "lblReturnStatus" })
+                            </div>
+                            <div class="control-lg update-order-status dirtyignore orderInfo-control-lg order-controLg-width">
+                                @{Html.RenderAction("ManageReturnStatus", "RMAReturn", new { returnStatus = Model.ReturnStatus });}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="order-created-by">
+                            <div class="control-label order-label">
+                                @Html.Label(Admin_Resources.LabelReturnCreatedBy, new { @data_test_selector = "lblReturnCreatedBy" })
+                            </div>
+                            <div class="control-lg update-order-status dirtyignore" data-test-selector="divReturnCreatedBy">
+                                @Html.RenderBlock(Model.CreatedByName)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 nopadding">
+                            <div class="control-label order-label">
+                                @Html.LabelFor(model => Model.OrderNumber, new { @data_test_selector = "lblOrderNumber" })
+                            </div>
+                            <div class="control-lg update-order-status dirtyignore order-controLg-width" data-test-selector="divOrderNumber">
+                                <a href="/Order/Manage?OmsOrderId=@Model.OmsOrderId" target="_blank">@Html.RenderBlock(Model.OrderNumber)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-12 nopadding margin-bottom-15">
+        <div class="order-subtitle">
+            <h4 style="display:flex ;width:100%; align-items:flex-end; justify-content:space-between;">
+                @Admin_Resources.LabelProcessRefund
+                <button type="button" class="btn-text btn-text-secondary" id="ProcessRefund" onclick="RMAReturn.prototype.ProcessRefund()" @disabled= "@disabled" data-test-selector="btnProcessRefund">@Admin_Resources.LabelProcessRefund</button>
+            </h4>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        @Html.Label(Admin_Resources.LabelAmount, new { @data_test_selector = "lblAmount" })
+                    </div>
+                    <div class="control-lg" data-test-selector="divAmount" id="total-return-amount">
+                        @Html.RenderBlock(HelperUtility.IsNull(Model.TotalReturnAmount) ? string.Empty : Convert.ToString(HelperMethods.FormatPriceWithCurrency(Model.TotalReturnAmount, Model.CultureCode)))
+                    </div>
+                    @Html.HiddenFor(m=>m.TotalReturnAmount, new { @id= "hdntotalreturnamount" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 nopadding">
+                    <div class="control-label padding-left">
+                        @Html.Label(Admin_Resources.LabelPaymentMethod, new { @data_test_selector = "lblPaymentMethod" })
+                    </div>
+                    <div class="control-lg update-order-status dirtyignore">
+                        <span id="spanPaymentType" data-test-selector="spnPaymentMethod">
+                            @Html.RenderBlock(HelperUtility.IsNull(Model.PaymentDisplayName) ? string.Empty : Model.PaymentDisplayName)
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.PaymentType == ZnodeConstant.CreditCard)
+            {
+                <div class="form-group">
+                    <div class="col-sm-12 nopadding">
+                        <div class="control-label padding-left">
+                            @Html.Label(Admin_Resources.LabelCreditCardNumber, new { @data_test_selector = "lblCreditCardNumber" })
+                        </div>
+                        <div class="control-lg">
+                            xxx-xxx-xxx-@Html.RenderBlock(Model.CreditCardNumber)
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

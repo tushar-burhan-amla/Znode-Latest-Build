@@ -1,0 +1,153 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@using Znode.Libraries.ECommerce.Utilities
+@model ProductViewModel
+@{
+    string productSku = string.IsNullOrEmpty(Model.ConfigurableProductSKU) ? Model.SKU : Model.ConfigurableProductSKU;
+    int addonGroupId = 1;
+    string UOM = Attributes.ValueFromSelectValue(Model?.Attributes, "UOM");
+    bool isObsolete = Convert.ToBoolean(Model.Attributes?.FirstOrDefault(x => x.AttributeCode == ZnodeConstant.IsObsolete)?.AttributeValues);
+    string disabledAddon = isObsolete ? "disabled" : "";
+    bool isShowPriceAndInventoryToLoggedInCustomersOnly = GlobalAttributeHelper.IsShowPriceAndInventoryToLoggedInUsersOnly();
+    string obsoleteClass = isObsolete ? "cut-price" : "";
+}
+@if (Model?.AddOns?.Count > 0)
+{
+    if ((Model?.AddOns?.Any(x => x.IsAutoAddon == false)).GetValueOrDefault())
+    {
+        <h4 class="section-header">@WebStore_Resources.TitleAddonOption</h4>
+    }
+    foreach (var addon in Model.AddOns)
+    {
+        if (!addon.IsAutoAddon)
+        {
+            if (addon.DisplayType == "DropDown")
+            {
+                <div class="col-12 p-0">
+                    <div class="form-group">
+                        <div class="col-12 p-0">
+                            <label for="AddOn-@addonGroupId">@addon.GroupName</label>
+                        </div>
+                        <div class="col-12 p-0">
+                            <div class="chk-product-addons" id="chk-@addonGroupId" data-addOnGroupId=@addonGroupId data-displaytype="@addon.DisplayType" data-isoptional="@addon.IsRequired" data-addonid="@addon.GroupName" data-test-selector="divChkProductAddons">
+                                @if (addon.IsRequired)
+                                {
+                                    <div class="col-12 p-0">
+                                        <select id="AddonId_@addonGroupId" data-addOnGroupId=@addonGroupId data-sku="@productSku" data-parentsku="@Model.SKU" data-parentProductId="@Model.ParentProductId" class="AddOn w-100" data-errormsgdivid="paraCommentDropDown-" onchange="Product.prototype.OnAddonSelect(this)" disabled="@isObsolete">
+                                            @if (!addon.AddOnValues.Any(x => x.IsDefault))
+                                            {
+                                                <option value="0">@WebStore_Resources.TextSelect</option>
+                                            }
+                                            @foreach (var addonValues in addon.AddOnValues)
+                                            {
+                                                string addonText = addonValues.SalesPrice > 0 ? $"{addonValues.Name}{" + "}{@Helper.FormatPriceWithCurrency(addonValues.SalesPrice, addonValues.CultureCode, UOM)}" : addonValues.Name;
+
+                                                <option value="@addonValues.SKU" data-addonsku="@addonValues.SKU" @(addonValues.IsDefault ? "selected=selected" : "")>@addonText</option>
+
+                                            }
+                                        </select>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-12 p-0">
+                                        <select id="AddonId_@addonGroupId" data-addOnGroupId=@addonGroupId data-sku="@productSku" data-parentsku="@Model.SKU" data-parentProductId="@Model.ParentProductId" class="AddOn w-100" data-errormsgdivid="paraCommentDropDown-" onchange="Product.prototype.OnAddonSelect(this)" disabled="@isObsolete">
+                                            <option value="0">@WebStore_Resources.TextSelect</option>
+                                            @foreach (var addonValues in addon.AddOnValues)
+                                            {
+                                                string addonText = addonValues.SalesPrice > 0 ? $"{addonValues.Name}{" + "}{@Helper.FormatPriceWithCurrency(addonValues.SalesPrice, addonValues.CultureCode, UOM)}" : addonValues.Name;
+                                                <option value="@addonValues.SKU" data-addonsku="@addonValues.SKU">@addonText</option>
+                                            }
+                                        </select>
+                                    </div>
+                                }
+                                <p id="paraCommentDropDown-@addonGroupId" style="display:none" class="error-msg" data-test-selector="paraCommentDropDown">@string.Format(WebStore_Resources.AddOnRequiredError, addon.GroupName)</p>
+                                <div id="dynamic-addOninventory" style="display:none" class="error-msg" data-test-selector="divDynamicAddonInventory"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                addonGroupId++;
+            }
+
+            if (addon.DisplayType == "RadioButton")
+            {
+                <div class="col-12 p-0">
+                    <div class="form-group">
+                        <div class="col-12 p-0">
+                            <label>@addon.GroupName</label>
+                        </div>
+                        <div class="col-12 p-0">
+                            <div class="chk-product-addons" id="chk-@addonGroupId" data-addOnGroupId=@addonGroupId data-displaytype="@addon.DisplayType" data-isoptional="@addon.IsRequired" data-addonid="@addon.GroupName">
+                                @foreach (var addonValues in addon.AddOnValues)
+                                {
+                                    <div class="col-12 p-0">
+                                        <div class="styled-input">
+                                            <input type="radio" id="AddOnValue-@addonValues.PublishProductId" data-addOnGroupId=@addonGroupId data-sku="@productSku" data-parentsku="@Model.SKU" data-errormsgdivid="paraCommentRadioButton-" data-parentProductId="@Model.ParentProductId" name="AddOnValue_@addon.GroupName" value="@addonValues.SKU" data-value="@addonValues.SKU" class="AddOn" @((addon.IsRequired && addonValues.IsDefault) ? "checked=checked" : "") onchange="Product.prototype.OnAddonSelect(this)" @disabledAddon/>
+                                            @if (!Equals(addonValues.SalesPrice, null))
+                                            {
+                                                <label for="AddOnValue-@addonValues.PublishProductId" data-test-selector="lblAddOnValueTitle">@addonValues.Name (+@Helper.FormatPriceWithCurrency(addonValues.SalesPrice, addonValues.CultureCode, UOM))</label>
+                                            }
+                                            else
+                                            {
+                                                <label for="AddOnValue-@addonValues.PublishProductId" data-test-selector="lblAddOnValueTitle">@addonValues.Name</label>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                <p id="paraCommentRadioButton-@addonGroupId" style="display:none" class="error-msg" data-test-selector="paraCommentRadioButton">@string.Format(WebStore_Resources.AddOnRequiredError, addon.GroupName)</p>
+                                <div id="dynamic-addOninventory" style="display:none" class="error-msg" data-test-selector="divDynamicAddonInventory"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            if (addon.DisplayType == "CheckBox")
+            {
+                <div class="col-12 p-0">
+                    <div class="form-group">
+                        <div class="col-12 p-0">
+                            <label>@addon.GroupName</label>
+                        </div>
+                        <div class="col-12 p-0">
+                            <div class="chk-product-addons" id="chk-@addonGroupId" data-addOnGroupId=@addonGroupId data-displaytype="@addon.DisplayType" data-isoptional="@addon.IsRequired" data-addonid="@addon.GroupName">
+                                @foreach (var addonValues in addon.AddOnValues)
+                                {
+                                    <div class="col-12 p-0">
+                                        <div class="styled-input">
+                                            <input type="checkbox" id="AddOnChk-@addonValues.PublishProductId" data-addOnGroupId=@addonGroupId data-sku="@productSku" data-parentsku="@Model.SKU" data-parentProductId="@Model.ParentProductId" data-errormsgdivid="paraCommentCheckBox-" name="AddOnValueId_@addon.GroupName" value="@addonValues.SKU" data-value="@addonValues.SKU" class="AddOn" @((addon.IsRequired && addonValues.IsDefault) ? "checked=checked" : "") onchange="Product.prototype.OnAddonSelect(this)" @disabledAddon />
+                                            @if ((!Equals(addonValues.SalesPrice, null)) && ((isShowPriceAndInventoryToLoggedInCustomersOnly && Request.IsAuthenticated) || (!isShowPriceAndInventoryToLoggedInCustomersOnly)))
+                                            {
+                                                <label for="AddOnChk-@addonValues.PublishProductId">@addonValues.Name (+@Helper.FormatPriceWithCurrency(addonValues.SalesPrice, addonValues.CultureCode, UOM))</label>
+                                            }
+                                            else
+                                            {
+                                                <label for="AddOnChk-@addonValues.PublishProductId">@addonValues.Name</label>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <p id="paraCommentCheckBox-@addonGroupId" style="display:none" class="error-msg" data-test-selector="paraCommentCheckBox">@string.Format(WebStore_Resources.rfvAddOnCheckBox, addon.GroupName)</p>
+                            <div id="dynamic-addOninventory" style="display:none" class="error-msg" data-test-selector="divDynamicAddonInventory"></div>
+                        </div>
+                    </div>
+                </div>
+                addonGroupId++;
+            }
+        }
+         else
+        {
+            <div class="col-12 p-0">
+                <select id="AddonId_@addonGroupId" data-addOnGroupId=@addonGroupId data-sku="@productSku" data-parentsku="@Model.SKU" data-parentProductId="@Model.ParentProductId" class="AddOn w-100" data-errormsgdivid="paraCommentDropDown-" onchange="Product.prototype.OnAddonSelect(this)" disabled="@isObsolete">
+                    <option value="0">@WebStore_Resources.TextSelect</option>
+                    @foreach (var addonValues in addon.AddOnValues)
+                    {
+                        string addonText = addonValues.SalesPrice > 0 ? $"{addonValues.Name}{" + "}{@Helper.FormatPriceWithCurrency(addonValues.SalesPrice, addonValues.CultureCode, UOM)}" : addonValues.Name;
+                        <option value="@addonValues.SKU" data-addonsku="@addonValues.SKU">@addonText</option>
+                    }
+                </select>
+            </div>
+        }
+    }
+}

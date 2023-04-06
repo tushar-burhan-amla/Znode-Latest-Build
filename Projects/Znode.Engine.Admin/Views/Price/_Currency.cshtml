@@ -1,0 +1,3 @@
+﻿@model List<SelectListItem>
+
+    @Html.DropDownList("CurrencyId", Model, new { @id = "ddlCurrencyType", @onChange = "Store.prototype.BindCurrencyInfo()" ,@data_test_selector = "drpCurrency"})

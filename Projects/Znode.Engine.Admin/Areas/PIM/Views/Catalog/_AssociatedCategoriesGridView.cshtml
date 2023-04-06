@@ -1,0 +1,36 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@using Znode.Engine.Admin.Models
+@model CatalogAssociateCategoryListViewModel
+
+
+<div id="@Model.GridModel.FrontObjectName">
+    <div class="col-sm-12 page-container">
+        <div class="col-sm-12 title-container">
+            <h3 class="section-heading">@PIM_Resources.TitlePIMCatalogCategoryAssociation</h3>
+        </div>
+        @using (Ajax.BeginForm("GetAssociatedCategoryList", "Catalog", new { catalogId = Model.PimCatalogId }, new AjaxOptions() { UpdateTargetId = "categoryunassociatedcatalog", OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+            {
+            <div id="filterComponent">
+                @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+            </div>
+        }
+        @Html.Partial("~/Views/Shared/Controls/_PopUp.cshtml",
+                    new PopupModel()
+                    {
+                        Title = @Admin_Resources.HeaderConfirmDelete,
+                        Description = @Admin_Resources.TextConfirmDelete,
+                        ModalPopUpId = "CatalogAssociatedCategoryDeletePopup",
+                        Buttons = new List<PopUpButtonModel>() {
+                            new PopUpButtonModel { ButtonText = @Admin_Resources.TextOk, ButtonAttributes="data-dismiss=modal",OnClickFunctionName = "Catalog.prototype.DeleteMultipleCatalogAssociatedCategories(this);"}
+                         }
+                    })
+        <div class="col-sm-12 list-container">
+            @{
+                @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+            }
+        </div>
+    </div>
+</div>
+<script>
+    Catalog.prototype.GetAssociatedCategoryDetails();
+</script>

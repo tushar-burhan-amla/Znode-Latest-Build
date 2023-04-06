@@ -1,0 +1,65 @@
+﻿@model QuoteListViewModel
+@using Znode.Engine.Admin.ViewModels
+@using Znode.Libraries.ECommerce.Utilities;
+
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+}
+
+<div id="quoteList">
+    <div id=@Model.GridModel.FrontObjectName>
+        <div class="col-sm-12 title-container">
+            <h1>@Admin_Resources.TitleQuoteList<span class="total-count"><p>@Model.GridModel.TotalRecordCount</p></span></h1>
+            <div class="pull-right btn-container">
+                @Html.AuthorizedRawActionLink(Admin_Resources.ButtonCreateQuote, "CreateQuoteRequest", "Quote", null, new { @class = "btn-text btn-text-secondary", @data_test_selector = "linkCreateQuote" })
+            </div>
+
+        </div>
+        <!--Main Container-->
+        <section class="col-sm-12 page-container">
+            <div class="col-xs-12 nopadding quote-filters-container">
+                <div class="d-flex date-filter justify-content-around">
+                    <div class="store-selector">
+                        @Html.FastSelectFor(model => model.PortalName, model => model.PortalId, "GetSuggestions", "Typeahead", "Quote.prototype.OnSelectPortalDataBind", 1, true,
+                        new {
+                        htmlAttributes = new { @placeholder = Admin_Resources.LabelSelectStore, @class = "", @Name = "SearchTerm", @id = "txtPortalName", @data_test_selector = "txtPortal_Name" },
+                        parameters = new { @type = ZnodeTypeAheadEnum.StoreList.ToString(), additionalOptions = ZnodeTypeAheadListGenericOptions.All.ToString()}
+                        })
+                    </div>
+
+                    <div class="date-daterange-selector">
+                        @Html.DateTimeRangePicker(Model.GridModel)
+                    </div>
+
+                </div>
+                @using (Ajax.BeginForm("QuoteList", "Quote", new AjaxOptions() { UpdateTargetId = @Model.GridModel.FrontObjectName, OnSuccess = "GridPager.prototype.GridUpdateHandler" }, new { @id = "searchform" }))
+                {
+
+                    <div id="filterComponent">
+                        @Html.Partial("~/Views/DynamicGrid/_FilterComponent.cshtml", Model.GridModel.FilterColumn)
+                    </div>
+                    <input type="hidden" name="DataOperatorId" value="92" />
+                }
+            </div>
+
+            <div class="col-sm-12 list-container" id="listcontainerId">
+                @{
+                    @Html.Partial("~/Views/DynamicGrid/_DynamicGrid.cshtml", Model.GridModel)
+                }
+            </div>
+
+        </section>
+    </div>
+    @Html.HiddenFor(m => m.PortalId, new { @id = "hdnPortalId" })
+    @Html.HiddenFor(m => m.PortalName, new { @id = "hdnPortalName" })
+    <script>
+        $(document).ready(function () {
+            $('*[data-url]').each(function () { fastselectwrapper($(this), $(this).data("onselect-function")); });
+            // filter border
+            if ($("#filter-content-main li").length > 0) {
+                $("#filter-content-main").css("border-bottom", "1px solid #DBDDDD");               
+            }
+            Quote.prototype.SetFastSelectFilter("portalId", $("#hdnPortalId").val());
+        });
+    </script>
+</div>

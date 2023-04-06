@@ -1,0 +1,31 @@
+﻿@using Znode.Libraries.ECommerce.Utilities
+<form name="SearchPaging">
+
+    @{
+        string pageSize = Request.QueryString["PageSize"] ?? "1";
+
+        if (!Equals(SessionHelper.GetDataFromSession<int?>("PageSizeValue"), null))
+        {
+            pageSize = Convert.ToString(SessionHelper.GetDataFromSession<int?>("PageSizeValue"));
+        }
+    }
+</form>
+<script>
+    $(document).ready(function () {
+        totalPages = parseInt($("#hdnTotalPages").val(), 10);
+        var pageno = ZSearch.prototype.GetQueryStringParameterByName("pagenumber");
+        if (totalPages == 1) {
+            $('.prev-page-search').addClass('disabled');
+            $('.next-page-search').addClass('disabled');
+            return false;
+        }
+        if (parseInt(pageno) == 1 || pageno == "") {
+            $('.prev-page-search').addClass('disabled');
+            return false;
+        }
+        if (parseInt(pageno) == (totalPages)) {
+            $('.next-page-search').addClass('disabled');
+            return false;
+        }
+    });
+</script>

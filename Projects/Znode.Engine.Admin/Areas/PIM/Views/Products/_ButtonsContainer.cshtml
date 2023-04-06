@@ -1,0 +1,47 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model PIMFamilyDetailsViewModel
+@{
+    string cancleUrl = "/PIM/Products/List";
+    if (Model.PimCatalogId > 0)
+    {
+        string categoryId = (Model.CategoryId > 0) ? "&pimCategoryId=" + Model.CategoryId : string.Empty;
+        cancleUrl = cancleUrl = "/PIM/Catalog/Manage?pimCatalogId=" + Model.PimCatalogId + categoryId;
+    }
+}
+
+<div id="AssignCutomAttributes" style="display:none" class="associted-btn lowerContainer">
+    <a id="addCustomField" data-productid="@Model.ProductId" class="btn-text btn-text-secondary" onclick="">@PIM_Resources.ButtonAddCustomField</a>
+</div>
+
+<div id="assignProduct" style="display:none" class="associted-btn lowerContainer">
+    <button type="button" class="btn-text btn-text-secondary">PIM_Resources.ButtonAssignProduct</button>
+</div>
+
+<div id="associateProduct" style="display:none" class="associted-btn lowerContainer">
+    <a class="btn-text btn-text-secondary"  data-test-selector="linkAssociateProduct" onclick="ZnodeBase.prototype.BrowseAsidePoupPanel('/PIM/Products/GetUnassociatedProducts?parentProductId=@Model.ProductId&listType=2&addonProductId=0&associatedProductIds='+$('#AssociatedProductIds').val(), 'UnassociatedProductAsidePannel')">@PIM_Resources.AssociateProducts</a>
+</div>
+
+<div id="associateConfigureProducts" style="display:none" class="associted-btn lowerContainer">
+    <a class="btn-text btn-text-secondary" data-test-selector="linkAssociateConfigureProducts" onclick="ZnodeBase.prototype.BrowseAsidePoupPanel('/PIM/Products/GetUnassociatedConfigureProducts?parentProductId=@Model.ProductId&attributeIds=' + $('#ConfigureAttributeIds').val()+'&associatedProductIds='+$('#AssociatedProductIds').val(), 'UnassociatedProductAsidePannel')">@PIM_Resources.AssociateProducts</a>
+</div>
+
+<div id="associateAddonGroups" style="display:none" class="associted-btn lowerContainer">
+    @Html.AuthorizedPrototypeRawActionLink("Associate Add-on Groups", "GetUnassociatedAddonGroups", "Products", new { @Model.ProductId, @class = "btn-text btn-text-secondary", onclick = "ZnodeBase.prototype.BrowseAsidePoupPanel('/PIM/Products/GetUnassociatedAddonGroups?parentProductId=" + @Model.ProductId + "','UnassociatedAddonGroups')", @data_test_selector = "linkAssociateAddonGroups" })
+</div>
+<div id="addAddonGroup" style="display:none" class="associted-btn lowerContainer">
+    <a class="btn-text btn-text-secondary" data-toggle="modal" data-target="#AddAddonGroup">@PIM_Resources.LabelAddAddonGroup</a>
+</div>
+
+<div id="divAssociateCategory" style="display:none" class="associted-btn lowerContainer">
+    @Html.AuthorizedPrototypeRawActionLink(Admin_Resources.LabelAssociate, "GetUnAssociatedCategoriesToProduct", "Category", new { @class = "btn-text btn-text-secondary", onclick = "ZnodeBase.prototype.BrowseAsidePoupPanel('/Category/GetUnAssociatedCategoriesToProduct?isAssociateCategories=true&productId=" + @Model.ProductId + "','divAssociateWarehoueseInventory')", @data_test_selector = "linkAssociateCategory" })
+</div>
+
+
+@foreach (var group in Model.Groups.Where(x => x.GroupType == "Link").Select(x => x))
+{
+    string dataTargetId = "AssignedLinkProductPopup" + group.PimAttributeGroupId;
+    string buttonId = "assignLinkProducts" + group.PimAttributeGroupId;
+    <div id="@buttonId" style="display:none" class="associted-btn assignLinks">
+        <a class="btn-text btn-text-secondary" data-test-selector="linkAssignedLinkProductPopup" onclick="ZnodeBase.prototype.BrowseAsidePoupPanel('/PIM/Products/GetUnassociatedProducts?parentProductId=@Model.ProductId&listType=1&addonProductId=0&associatedProductIds=@group.PimAttributeGroupId', 'UnassociatedProductAsidePannel')">Assign Link Products</a>
+    </div>
+}

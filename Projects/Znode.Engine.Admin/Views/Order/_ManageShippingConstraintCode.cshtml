@@ -1,0 +1,35 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model OrderInfoViewModel
+@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("UpdateShippingConstraintCode", "Order", new AjaxOptions
+{
+    UpdateTargetId = "labelShippingConstraintCode",
+    HttpMethod = "POST",
+    OnSuccess = "Order.prototype.ChangeShippingConstraintCodeSuccessCallback"
+}, new { @class = "dirtylisten dirty", @id = "ShippingConstraintCodeView" }))
+{
+<div class="col-sm-12 nopadding">
+    @if (Model?.ShippingConstraints?.Count > 0)
+    {
+        var selectedShippingConstraint = Model.ShippingConstraints.FirstOrDefault(w => w.IsSelected == true);
+
+        for (int i = 0; i < Model.ShippingConstraints.Count; i++)
+        {
+            <div id="div_@Model.ShippingConstraints[i].ShippingConstraintCode" data-test-selector="div_@Model.ShippingConstraints[i].ShippingConstraintCode">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label>
+                            <input type="radio" id="@Model.ShippingConstraints[i].ShippingConstraintCode.Replace(" ", "_")" name="ShippingConstraintCode" value="@Model.ShippingConstraints[i].ShippingConstraintCode" @(((selectedShippingConstraint == null && i == 0) || Model.ShippingConstraints[i].IsSelected) ? "checked=checked" : "") data-shipping-name="@WebUtility.HtmlDecode(Model.ShippingConstraints[i].Description)" data-test-selector="chk@(Model.ShippingConstraints[i].ShippingConstraintCode)" onchange="Order.prototype.SaveFields(this)" />
+                            <span class="lbl padding-8" for="@Model.ShippingConstraints[i].ShippingConstraintCode.Replace(" ", "_")" data-test-selector="spn@(Model.ShippingConstraints[i].ShippingConstraintCode)">@WebUtility.HtmlDecode(Model.ShippingConstraints[i].Description)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @Html.HiddenFor(model => model.OmsOrderId, new { @id = "hdnShippingConstraintCodeOrderId" })
+    }
+</div>
+}

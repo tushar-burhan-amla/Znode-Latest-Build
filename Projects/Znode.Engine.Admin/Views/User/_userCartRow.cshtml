@@ -1,0 +1,74 @@
+﻿@model Znode.Engine.Admin.ViewModels.CartItemViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@using Znode.Engine.Admin.Helpers;
+@{
+    string imagePath = string.IsNullOrEmpty(Model?.ImagePath) ? ZnodeAdminSettings.DefaultImagePath : Model?.ImagePath;
+    string cultureCode = string.IsNullOrEmpty(Model?.CultureCode) ? DefaultSettingHelper.DefaultCulture : Model.CultureCode;
+}
+
+
+<li class="product-image">
+    <img src="@imagePath" alt="@Html.RenderBlock(Model.ProductName) Image" class="grid-img" />
+</li>
+@if (Model.GroupProducts?.Count > 0)
+{
+    foreach (var product in Model.GroupProducts)
+    {
+        <li class="product-label">
+            <div class="">@Html.RenderBlock(Model.ProductName)</div>
+            <div><em class="zf-caret-right"></em>@Html.RenderBlock(product.ProductName)</div>
+            <div class="cart-item-description">@Html.RenderBlock(Model.CartDescription)</div>
+
+        </li>
+        <li class="product-unit-price">
+            @HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode)
+        </li>
+        <li class="product-quantity">
+            @Html.RenderBlock((Model.Quantity).ToString())
+
+        </li>
+    }
+}
+else
+{
+    <li class="product-label">
+        @Html.RenderBlock(Model.ProductName)
+        <div class="cart-item-description">
+            @if (Model?.PersonaliseValuesDetail?.Count > 0)
+            {
+                foreach (var item in Model.PersonaliseValuesDetail)
+                {
+                    if (!Equals(item.PersonalizeCode, null) && !Equals(item.PersonalizeValue, string.Empty))
+                    {
+                        <p> @item.PersonalizeCode : @item.PersonalizeValue </p>
+                    }
+                }
+            }
+        </div>
+        @Html.RenderBlock(Model.CartDescription)
+    </li>
+    <li class="product-unit-price">
+        @HelperMethods.FormatPriceWithCurrency(Model.UnitPrice, cultureCode)
+    </li>
+    if (!string.IsNullOrEmpty(Model.ConfigurableProductSKUs))
+    {
+        <li class="product-quantity">
+            @Html.RenderBlock((Model.Quantity).ToString())
+
+        </li>
+    }
+    else
+    {
+        <li class="product-quantity">
+            @Html.RenderBlock((Model.Quantity).ToString())
+        </li>
+    }
+}
+<li class="product-total">
+    @HelperMethods.FormatPriceWithCurrency(Model.ExtendedPrice, cultureCode)
+</li>
+<script>
+    jQuery('img').on('error', function (e) {
+        this.src = window.location.protocol + "//" + window.location.host + "/Content/Images/no-image.png";
+    });
+</script>

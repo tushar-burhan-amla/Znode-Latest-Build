@@ -1,0 +1,38 @@
+﻿@using Znode.Engine.Admin.ViewModels
+@model CreateOrderViewModel
+@using Znode.Libraries.ECommerce.Utilities;
+@{
+    ViewBag.Title = Admin_Resources.TitleOMS + " | " + Admin_Resources.Multifront;
+}
+
+<div id="layout-checkout-receipt">
+    <div class="col-sm-12 title-container">
+        <h1 class="left">@Admin_Resources.TitleOrderReceipt</h1>
+        <div class="pull-right">
+            @*@Html.AuthorizedRawActionLink("<em class='z-add-circle'></em>" + Admin_Resources.LabelCreateQuote, "CreateQuote", "Quote", null, new { @class = "btn-text-icon" })*@
+            <button class="btn-text-icon" type="button" onclick="Order.prototype.PrintHandler(this)"><em class='z-print'></em>@Admin_Resources.LabelPrint</button>
+        </div>
+    </div>
+    <div class="main-container">        
+        <div class="col-sm-12 nopadding" id="printContentDiv">
+            @if (HelperUtility.IsNotNull(Model))
+            {
+                
+                if (HelperUtility.IsNotNull(Model.ReceiptHtml))
+                {
+                    <div>
+                        @Html.RenderBlock(Model.ReceiptHtml)
+                    </div>
+                }
+            }
+            else
+            {
+                <h3>@Admin_Resources.ErrorUnablePlaceOrder</h3>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+

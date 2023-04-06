@@ -1,0 +1,526 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4FF2A227-F7EB-41EE-ADA9-F46A297E7BE8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Znode.Engine.Api.Client</RootNamespace>
+    <AssemblyName>Znode.Engine.Api.Client</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Int|AnyCPU'">
+    <OutputPath>bin\Int\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'loadtest|AnyCPU'">
+    <OutputPath>bin\loadtest\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'automation|AnyCPU'">
+    <OutputPath>bin\automation\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'B2B|AnyCPU'">
+    <OutputPath>bin\B2B\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LB|AnyCPU'">
+    <OutputPath>bin\LB\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Znode.Libraries.Framework.Business, Version=9.7.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Znode.Libraries.Framework.Business.9.7.5\lib\net48\Znode.Libraries.Framework.Business.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Clients\Clients\Account\AccessPermissionClient.cs" />
+    <Compile Include="Clients\Clients\Account\AccountQuoteClient.cs" />
+    <Compile Include="Clients\Clients\Address\AddressClient.cs" />
+    <Compile Include="Clients\Clients\ApiStatus.cs" />
+    <Compile Include="Clients\Clients\CMS\BlogNewsClient\BlogNewsClient.cs" />
+    <Compile Include="Clients\Clients\CMS\CMSWidgetsClient.cs" />
+    <Compile Include="Clients\Clients\CMS\CustomerReviewClient\CustomerReviewClient.cs" />
+    <Compile Include="Clients\Clients\CMS\EmailTemplate\EmailTemplateClient.cs" />
+    <Compile Include="Clients\Clients\CMS\ManageMessageClient.cs" />
+    <Compile Include="Clients\Clients\CMS\RecommendationClient.cs" />
+    <Compile Include="Clients\Clients\CMS\SEOSetting\SEOSettingClient.cs" />
+    <Compile Include="Clients\Clients\CMS\SEOSetting\UrlRedirectClient.cs" />
+    <Compile Include="Clients\Clients\CMS\SliderClient.cs" />
+    <Compile Include="Clients\Clients\CMS\ContentPageClient\ContentPageClient.cs" />
+    <Compile Include="Clients\Clients\CMS\TemplateClient.cs" />
+    <Compile Include="Clients\Clients\CMS\ThemeClient\ThemeClient.cs" />
+    <Compile Include="Clients\Clients\CMS\WebSiteClient\CMSWidgetConfigurationClient.cs" />
+    <Compile Include="Clients\Clients\CMS\WebSiteClient\WebSiteClient.cs" />
+    <Compile Include="Clients\Clients\CMS\Container\ContentContainerClient.cs" />
+    <Compile Include="Clients\Clients\CMS\Container\ContainerTemplateClient.cs" />
+    <Compile Include="Clients\Clients\CustomerClient\CustomerClient.cs" />
+    <Compile Include="Clients\Clients\Dashboard\DashboardClient.cs" />
+    <Compile Include="Clients\Clients\DevExpressReport\DevExpressReportClient.cs" />
+    <Compile Include="Clients\Clients\Diagnostics\DiagnosticsClient.cs" />
+    <Compile Include="Clients\Clients\DomainClient.cs" />
+    <Compile Include="Clients\Clients\DynamicContent\DynamicContentClient.cs" />
+    <Compile Include="Clients\Clients\ECert\ECertClient.cs" />
+    <Compile Include="Clients\Clients\Ecommerce\EcommerceCatalogClient.cs" />
+    <Compile Include="Clients\Clients\Ecommerce\PublishBrandClient.cs" />
+    <Compile Include="Clients\Clients\Ecommerce\PublishCatalogClient.cs" />
+    <Compile Include="Clients\Clients\Ecommerce\PublishCategoryClient.cs" />
+    <Compile Include="Clients\Clients\Ecommerce\PublishProductClient.cs" />
+    <Compile Include="Clients\Clients\ERPConfigurator\ERPConnectorClient.cs" />
+    <Compile Include="Clients\Clients\ERPConfigurator\ERPTaskSchedulerClient.cs" />
+    <Compile Include="Clients\Clients\ERPConfigurator\TouchPointConfigurationClient.cs" />
+    <Compile Include="Clients\Clients\Export\ExportClient.cs" />
+    <Compile Include="Clients\Clients\FormBuilder\FormBuilderClient.cs" />
+    <Compile Include="Clients\Clients\FormSubmission\FormSubmissionClient.cs" />
+    <Compile Include="Clients\Clients\GiftCard\GiftCardClient.cs" />
+    <Compile Include="Clients\Clients\GlobalAttribute\GlobalAttributeClient.cs" />
+    <Compile Include="Clients\Clients\GlobalAttribute\GlobalAttributeEntity\GlobalAttributeEntityClient.cs" />
+    <Compile Include="Clients\Clients\GlobalAttribute\GlobalAttributeFamilyClient.cs" />
+    <Compile Include="Clients\Clients\GlobalAttribute\GlobalAttributeGroupClient.cs" />
+    <Compile Include="Clients\Clients\GlobalSettings\CityClient.cs" />
+    <Compile Include="Clients\Clients\GlobalSettings\GeneralSettingClient.cs" />
+    <Compile Include="Clients\Clients\GlobalSettings\StateClient.cs" />
+    <Compile Include="Clients\Clients\GlobalSettings\WeightUnitClient.cs" />
+    <Compile Include="Clients\Clients\Helper\HelperClient.cs" />
+    <Compile Include="Clients\Clients\Highlight\HighlightClient.cs" />
+    <Compile Include="Clients\Clients\Import\ImportClient.cs" />
+    <Compile Include="Clients\Clients\Inventory\InventoryClient.cs" />
+    <Compile Include="Clients\Clients\LicenseClient.cs" />
+    <Compile Include="Clients\Clients\LogMessage\LogMessageClient.cs" />
+    <Compile Include="Clients\Clients\Maintenance\MaintenanceClient.cs" />
+    <Compile Include="Clients\Clients\OMS\OrderClient\OrderClient.cs" />
+    <Compile Include="Clients\Clients\OMS\QuoteClient\QuoteClient.cs" />
+    <Compile Include="Clients\Clients\OMS\RMAConfigurationClient\RMAConfigurationClient.cs" />
+    <Compile Include="Clients\Clients\OMS\RMAConfigurationClient\RMARequestClient.cs" />
+    <Compile Include="Clients\Clients\OMS\RMAConfigurationClient\RMARequestItemClient.cs" />
+    <Compile Include="Clients\Clients\OMS\ShoppingCartClient\ShoppingCartClient.cs" />
+    <Compile Include="Clients\Clients\PIM\AddonGroupClient\AddonGroupClient.cs" />
+    <Compile Include="Clients\Clients\PIM\BrandClient\BrandClient.cs" />
+    <Compile Include="Clients\Clients\PIM\VendorClient\VendorClient.cs" />
+    <Compile Include="Clients\Clients\Portal\PortalCountryClient.cs" />
+    <Compile Include="Clients\Clients\Portal\SMSClient.cs" />
+    <Compile Include="Clients\Clients\Portal\PortalUnitClient.cs" />
+    <Compile Include="Clients\Clients\Portal\StoreLocatorClient.cs" />
+    <Compile Include="Clients\Clients\Portal\TagManagerClient.cs" />
+    <Compile Include="Clients\Clients\Price\PriceClient.cs" />
+    <Compile Include="Clients\Clients\GlobalSettings\CountryClient.cs" />
+    <Compile Include="Clients\Clients\GlobalSettings\CurrencyClient.cs" />
+    <Compile Include="Clients\Clients\GlobalSettings\DefaultGlobalConfigClient.cs" />
+    <Compile Include="Clients\Clients\GlobalSettings\LocaleClient.cs" />
+    <Compile Include="Clients\Clients\MediaManager\AttributesClients\AttributeFamilyClient.cs" />
+    <Compile Include="Clients\Clients\MediaManager\AttributesClients\AttributeGroupClient.cs" />
+    <Compile Include="Clients\Clients\MediaManager\AttributesClients\AttributesClient.cs" />
+    <Compile Include="Clients\Clients\MediaManager\MediaManagerClients\MediaConfigurationClient.cs" />
+    <Compile Include="Clients\Clients\MediaManager\MediaManagerClients\MediaManagerClient.cs" />
+    <Compile Include="Clients\Clients\Payment\PaymentClient.cs" />
+    <Compile Include="Clients\Clients\PIM\AttributesClient\PIMAttributeClient.cs" />
+    <Compile Include="Clients\Clients\PIM\CatalogClient\CatalogClient.cs" />
+    <Compile Include="Clients\Clients\PIM\AttributesClient\PIMAttributeFamilyClient.cs" />
+    <Compile Include="Clients\Clients\PIM\CatalogClient\CatalogHistoryClient.cs" />
+    <Compile Include="Clients\Clients\PIM\CategoryClient\CategoryClient.cs" />
+    <Compile Include="Clients\Clients\PIM\AttributesClient\PIMAttributeGroupClient.cs" />
+    <Compile Include="Clients\Clients\PIM\CategoryClient\CategoryHistoryClient.cs" />
+    <Compile Include="Clients\Clients\Portal\PortalClient.cs" />
+    <Compile Include="Clients\Clients\Portal\SMTPClient.cs" />
+    <Compile Include="Clients\Clients\ProductFeedClient\ProductFeedClient.cs" />
+    <Compile Include="Clients\Clients\Promotion\PromotionClient.cs" />
+    <Compile Include="Clients\Clients\ERPConfigurator\ERPConfiguratorClient.cs" />
+    <Compile Include="Clients\Clients\PublishHistory\PublishHistoryClient.cs" />
+    <Compile Include="Clients\Clients\QuickOrder\QuickOrderClient.cs" />
+    <Compile Include="Clients\Clients\TradeCentric\TradeCentricClient.cs" />
+    <Compile Include="Clients\Clients\Report\ReportClient.cs" />
+    <Compile Include="Clients\Clients\SavedCart\SavedCartClient.cs" />
+    <Compile Include="Clients\Clients\SaveForLater\SaveForLaterClient.cs" />
+    <Compile Include="Clients\Clients\Search\CMSPageSearchClient.cs" />
+    <Compile Include="Clients\Clients\RMA\RMAReturnClient.cs" />
+    <Compile Include="Clients\Clients\Search\SearchBoostAndBuryClient.cs" />
+    <Compile Include="Clients\Clients\Search\SearchClient.cs" />
+    <Compile Include="Clients\Clients\Search\SearchProfileClient.cs" />
+    <Compile Include="Clients\Clients\Search\SearchReportClient.cs" />
+    <Compile Include="Clients\Clients\Shipping\ShippingClient.cs" />
+    <Compile Include="Clients\Clients\SiteMap\SiteMapClient.cs" />
+    <Compile Include="Clients\Clients\Typeahead\TypeaheadClient.cs" />
+    <Compile Include="Clients\Clients\User\UserClient.cs" />
+    <Compile Include="Clients\Clients\Warehouse\WarehouseClient.cs" />
+    <Compile Include="Clients\Clients\WebStore\WebStoreUserClient.cs" />
+    <Compile Include="Clients\Clients\WebStore\WebStoreCaseRequestClient.cs" />
+    <Compile Include="Clients\Clients\WebStore\WebStoreCategoryClient.cs" />
+    <Compile Include="Clients\Clients\WebStore\WebStoreMessageClient.cs" />
+    <Compile Include="Clients\Clients\WebStore\WebStorePortalClient.cs" />
+    <Compile Include="Clients\Clients\WebStore\WebStoreProductClient.cs" />
+    <Compile Include="Clients\Clients\WebStore\WebStoreWidgetClient.cs" />
+    <Compile Include="Clients\Clients\WebStore\WebStoreLocatorClient.cs" />
+    <Compile Include="Clients\Clients\WebStore\WishListClient.cs" />
+    <Compile Include="Clients\IClients\IAccount\IAccessPermissionClient.cs" />
+    <Compile Include="Clients\IClients\IAccount\IAccountQuoteClient.cs" />
+    <Compile Include="Clients\IClients\IAddress\IAddressClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\IBlogNewsClient\IBlogNewsClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\ICMSWidgetsClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\ICMSContainer\IContentContainerClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\ICMSContainer\IContainerTemplateClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\ICustomerReviewClient\ICustomerReviewClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\IEmailTemplate\IEmailTemplateClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\IManageMessageClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\IRecommendationClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\ISEOSettingClient\ISEOSettingClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\ISEOSettingClient\IUrlRedirectClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\ISliderClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\IContentPageClient\IContentPageClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\ITemplateClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\IThemeClient\IThemeClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\IWebSiteClient\ICMSWidgetConfigurationClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\IWebSiteClient\IWebSiteClient.cs" />
+    <Compile Include="Clients\IClients\ICustomerClient\ICustomerClient.cs" />
+    <Compile Include="Clients\IClients\IDashboard\IDashboardClient.cs" />
+    <Compile Include="Clients\IClients\IDevExpressReport\IDevExpressReportClient.cs" />
+    <Compile Include="Clients\IClients\IDiagnosticsClient\IDiagnosticsClient.cs" />
+    <Compile Include="Clients\IClients\IDomainClient.cs" />
+    <Compile Include="Clients\Clients\PIM\ProductClient\ProductReviewStateClient.cs" />
+    <Compile Include="Clients\Clients\CMS\CSSClient.cs" />
+    <Compile Include="Clients\Clients\Portal\OrderStateClient.cs" />
+    <Compile Include="Clients\Clients\Portal\PortalProfileClient.cs" />
+    <Compile Include="Clients\Clients\ProviderEngine\PromotionTypeClient.cs" />
+    <Compile Include="Clients\Clients\ProviderEngine\ShippingTypeClient.cs" />
+    <Compile Include="Clients\Clients\Taxes\TaxClassClient.cs" />
+    <Compile Include="Clients\Clients\ProviderEngine\TaxRuleTypeClient.cs" />
+    <Compile Include="Clients\Clients\Account\AccountClient.cs" />
+    <Compile Include="Clients\Clients\Shared\BaseClient.cs" />
+    <Compile Include="Clients\Clients\Shared\DemoClient.cs" />
+    <Compile Include="Clients\Clients\Shared\NavigationClient.cs" />
+    <Compile Include="Clients\Clients\Account\ProfileClient.cs" />
+    <Compile Include="Clients\IClients\IDynamicContent\IDynamicContentClient.cs" />
+    <Compile Include="Clients\IClients\IECert\IECertClient.cs" />
+    <Compile Include="Clients\IClients\IEcommerce\IEcommerceCatalogClient.cs" />
+    <Compile Include="Clients\IClients\IEcommerce\IPublishBrandClient.cs" />
+    <Compile Include="Clients\IClients\IEcommerce\IPublishCatalogClient.cs" />
+    <Compile Include="Clients\IClients\IEcommerce\IPublishCategoryClient.cs" />
+    <Compile Include="Clients\IClients\IEcommerce\IPublishProductClient.cs" />
+    <Compile Include="Clients\IClients\IERPConfigurator\IERPConnectorClient.cs" />
+    <Compile Include="Clients\IClients\IERPConfigurator\IERPTaskSchedulerClient.cs" />
+    <Compile Include="Clients\IClients\IERPConfigurator\ITouchPointConfigurationClient.cs" />
+    <Compile Include="Clients\IClients\IExport\IExportClient.cs" />
+    <Compile Include="Clients\IClients\IFormBuilder\IFormBuilderClient.cs" />
+    <Compile Include="Clients\IClients\IFormSubmission\IFormSubmissionClient.cs" />
+    <Compile Include="Clients\IClients\IGiftCard\IGiftCardClient.cs" />
+    <Compile Include="Clients\IClients\IGlobalAttributeClient\GlobalAttributeEntity\IGlobalAttributeEntityClient.cs" />
+    <Compile Include="Clients\IClients\IGlobalAttributeClient\IGlobalAttributeClient.cs" />
+    <Compile Include="Clients\IClients\IGlobalAttributeClient\IGlobalAttributeFamilyClient.cs" />
+    <Compile Include="Clients\IClients\IGlobalAttributeClient\IGlobalAttributeGroupClient.cs" />
+    <Compile Include="Clients\IClients\IGlobalSettings\ICityClient.cs" />
+    <Compile Include="Clients\IClients\IGlobalSettings\IGeneralSettingClient.cs" />
+    <Compile Include="Clients\IClients\IGlobalSettings\IStateClient.cs" />
+    <Compile Include="Clients\IClients\IGlobalSettings\IWeightUnitClient.cs" />
+    <Compile Include="Clients\IClients\IHelper\IHelperClient.cs" />
+    <Compile Include="Clients\IClients\IHighlight\IHighlightClient.cs" />
+    <Compile Include="Clients\IClients\IImport\IImportClient.cs" />
+    <Compile Include="Clients\IClients\IInventory\IInventoryClient.cs" />
+    <Compile Include="Clients\IClients\ILicenseClient.cs" />
+    <Compile Include="Clients\IClients\ILogMessage\ILogMessageClient.cs" />
+    <Compile Include="Clients\IClients\IMaintenance\IMaintenanceClient.cs" />
+    <Compile Include="Clients\IClients\IOMS\IQuoteClient\IQuoteClient.cs" />
+    <Compile Include="Clients\IClients\IOMS\IRMAConfigurationClient\IRMAConfigurationClient.cs" />
+    <Compile Include="Clients\IClients\IOMS\IRMAConfigurationClient\IRMARequestClient.cs" />
+    <Compile Include="Clients\IClients\IOMS\IRMAConfigurationClient\IRMARequestItemClient.cs" />
+    <Compile Include="Clients\IClients\IOMS\OrderClient\IOrderClient.cs" />
+    <Compile Include="Clients\IClients\IOMS\ShoppingCartClient\IShoppingCartClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\IAddonGroupClient\IAddonGroupClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\IBrandClient\IBrandClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\IVendorClient\IVendorClient.cs" />
+    <Compile Include="Clients\IClients\IPortal\IPortalCountryClient.cs" />
+    <Compile Include="Clients\IClients\IPortal\ISMSClient.cs" />
+    <Compile Include="Clients\IClients\IPortal\IPortalUnitClient.cs" />
+    <Compile Include="Clients\IClients\IPortal\IStoreLocatorClient.cs" />
+    <Compile Include="Clients\IClients\IPortal\ITagManagerClient.cs" />
+    <Compile Include="Clients\IClients\IPrice\IPriceClient.cs" />
+    <Compile Include="Clients\IClients\IGlobalSettings\IDefaultGlobalConfigClient.cs" />
+    <Compile Include="Clients\IClients\IGlobalSettings\ILocaleClient.cs" />
+    <Compile Include="Clients\IClients\IGlobalSettings\ICountryClient.cs" />
+    <Compile Include="Clients\IClients\IGlobalSettings\ICurrencyClient.cs" />
+    <Compile Include="Clients\IClients\IPayment\IPaymentClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\IProductClient\IProductHistoryClient.cs" />
+    <Compile Include="Clients\Clients\PIM\ProductClient\ProductHistoryClient.cs" />
+    <Compile Include="Clients\Clients\PIM\ProductClient\ProductsClient.cs" />
+    <Compile Include="Clients\Clients\ServerValidation\ServerValidationClient.cs" />
+    <Compile Include="Clients\Clients\WebGrid\ApplicationSettingsClient.cs" />
+    <Compile Include="Clients\Clients\RolesAndPermissions\RoleClient.cs" />
+    <Compile Include="Clients\IClients\IMediaManager\IAttributesClients\IAttributeFamilyClient.cs" />
+    <Compile Include="Clients\IClients\IMediaManager\IAttributesClients\IAttributeGroupClient.cs" />
+    <Compile Include="Clients\IClients\IMediaManager\IAttributesClients\IAttributesClient.cs" />
+    <Compile Include="Clients\IClients\IMediaManager\IMediaManagerClients\IMediaConfigurationClient.cs" />
+    <Compile Include="Clients\IClients\IMediaManager\IMediaManagerClients\IMediaManagerClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\IAttributeClient\IPIMAttributeClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\IAttributeClient\IPIMAttributeFamilyClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\ICatalogClient\ICatalogHistoryClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\ICategoryClient\ICategoryHistoryClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\ICatalogClient\ICatalogClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\ICategoryClient\ICategoryClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\IProductClient\IProductReviewStateClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\IProductClient\IProductsClient.cs" />
+    <Compile Include="Clients\IClients\IPIM\IAttributeClient\IPIMAttributeGroupClient.cs" />
+    <Compile Include="Clients\IClients\ICMS\ICSSClient.cs" />
+    <Compile Include="Clients\IClients\IPortal\IOrderStateClient.cs" />
+    <Compile Include="Clients\IClients\IPortal\IPortalClient.cs" />
+    <Compile Include="Clients\IClients\IPortal\IPortalProfileClient.cs" />
+    <Compile Include="Clients\IClients\IPortal\ISMTPClient.cs" />
+    <Compile Include="Clients\IClients\IProductFeed\IProductFeedClient.cs" />
+    <Compile Include="Clients\IClients\IPromotion\IPromotionClient.cs" />
+    <Compile Include="Clients\IClients\IERPConfigurator\IERPConfiguratorClient.cs" />
+    <Compile Include="Clients\IClients\IProviderEngine\IPromotionTypeClient.cs" />
+    <Compile Include="Clients\IClients\IProviderEngine\IShippingTypeClient.cs" />
+    <Compile Include="Clients\IClients\IPublishHistory\IPublishHistoryClient.cs" />
+    <Compile Include="Clients\IClients\IQuickOrder\IQuickOrderClient.cs" />
+    <Compile Include="Clients\IClients\ITradeCentric\ITradeCentricClient.cs" />
+    <Compile Include="Clients\IClients\IReport\IReportClient.cs" />
+    <Compile Include="Clients\IClients\ISavedCart\ISavedCartClient.cs" />
+    <Compile Include="Clients\IClients\ISearch\ICMSPageSearchClient.cs" />
+    <Compile Include="Clients\IClients\IRMA\IRMAReturnClient.cs" />
+    <Compile Include="Clients\IClients\ISearch\ISearchBoostAndBuryClient.cs" />
+    <Compile Include="Clients\IClients\ISearch\ISearchClient.cs" />
+    <Compile Include="Clients\IClients\ISearch\ISearchProfileClient.cs" />
+    <Compile Include="Clients\IClients\ISearch\ISearchReportClient.cs" />
+    <Compile Include="Clients\IClients\ISiteMap\ISiteMapClient.cs" />
+    <Compile Include="Clients\IClients\ITaxes\ITaxClassClient.cs" />
+    <Compile Include="Clients\IClients\IProviderEngine\ITaxRuleTypeClient.cs" />
+    <Compile Include="Clients\IClients\IAccount\IAccountClient.cs" />
+    <Compile Include="Clients\IClients\IShared\IBaseClient.cs" />
+    <Compile Include="Clients\IClients\IShared\IDemoClient.cs" />
+    <Compile Include="Clients\IClients\IShared\INavigationClient.cs" />
+    <Compile Include="Clients\IClients\IAccount\IProfileClient.cs" />
+    <Compile Include="Clients\IClients\IShipping\IShippingClient.cs" />
+    <Compile Include="Clients\IClients\ITypeahead\ITypeaheadClient.cs" />
+    <Compile Include="Clients\IClients\IUser\IUserClient.cs" />
+    <Compile Include="Clients\IClients\IWarehouse\IWarehouseClient.cs" />
+    <Compile Include="Clients\IClients\IWebGrid\IApplicationSettingsClient.cs" />
+    <Compile Include="Clients\Clients\RolesAndPermissions\MenuClient.cs" />
+    <Compile Include="Clients\IClients\IRolesAndPermissions\IMenuClient.cs" />
+    <Compile Include="Clients\IClients\IRolesAndPermissions\IRoleClient.cs" />
+    <Compile Include="Clients\IClients\IServerValidation\IServerValidationClient.cs" />
+    <Compile Include="Clients\IClients\IWebStore\IWebStoreAccountClient.cs" />
+    <Compile Include="Clients\IClients\IWebStore\IWebStoreCaseRequestClient.cs" />
+    <Compile Include="Clients\IClients\IWebStore\IWebStoreLocatorClient.cs" />
+    <Compile Include="Clients\IClients\IWebStore\IWebStoreCategoryClient.cs" />
+    <Compile Include="Clients\IClients\IWebStore\IWebStoreMessageClient.cs" />
+    <Compile Include="Clients\IClients\IWebStore\IWebStorePortalClient.cs" />
+    <Compile Include="Clients\IClients\IWebStore\IWebStoreProductClient.cs" />
+    <Compile Include="Clients\IClients\IWebStore\IWebStoreWidgetClient.cs" />
+    <Compile Include="Clients\IClients\IWebStore\IWishListClient.cs" />
+    <Compile Include="Clients\IClients\ISaveForLater\ISaveForLaterClient.cs" />
+    <Compile Include="Endpoints\Account\AccessPermissionEndpoint.cs" />
+    <Compile Include="Endpoints\Account\AccountQuoteEndpoint.cs" />
+    <Compile Include="Endpoints\Address\AddressEndPoint.cs" />
+    <Compile Include="Endpoints\CMSPageSearchEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\BlogNewsEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\CMSWidgetConfigurationEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\CMSWidgetsEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\ContentContainerEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\ManageMessageEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\CustomerReviewEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\EmailTemplateEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\RecommendationEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\SEOSettingEndpoints.cs" />
+    <Compile Include="Endpoints\CMS\SliderEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\ContentPageEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\TemplateEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\ThemeEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\UrlRedirectEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\WebSiteEndpoint.cs" />
+    <Compile Include="Endpoints\CMS\ContainerTemplateEndpoint.cs" />
+    <Compile Include="Endpoints\Customer\CustomerEndpoint.cs" />
+    <Compile Include="Endpoints\Dashboard\DashboardEndpoint.cs" />
+    <Compile Include="Endpoints\DevExpressReport\DevExpressReportEndpoint.cs" />
+    <Compile Include="Endpoints\Diagnostics\DiagnosticsEndpoint.cs" />
+    <Compile Include="Endpoints\DomainEndpoint.cs" />
+    <Compile Include="Endpoints\DynamicContent\DynamicContentEndpoint.cs" />
+    <Compile Include="Endpoints\ECert\ECertEndpoint.cs" />
+    <Compile Include="Endpoints\Ecommerce\EcommerceCatalogEndpoint.cs" />
+    <Compile Include="Endpoints\Ecommerce\PublishBrandEndpoint.cs" />
+    <Compile Include="Endpoints\Ecommerce\PublishCatalogEndpoint.cs" />
+    <Compile Include="Endpoints\Ecommerce\PublishCategoryEndpoint.cs" />
+    <Compile Include="Endpoints\Ecommerce\PublishProductEndpoint.cs" />
+    <Compile Include="Endpoints\ERPConfigurator\ERPConnectorEndpoint.cs" />
+    <Compile Include="Endpoints\ERPConfigurator\ERPTaskSchedulerEndpoint.cs" />
+    <Compile Include="Endpoints\Export\ExportEndpoint.cs" />
+    <Compile Include="Endpoints\FormBuilder\FormBuilderEndpoint.cs" />
+    <Compile Include="Endpoints\FormSubmission\FormSubmissionEndpoint.cs" />
+    <Compile Include="Endpoints\GiftCard\GiftCardEndpoint.cs" />
+    <Compile Include="Endpoints\GlobalAttribute\GlobalAttributeEndpoint.cs" />
+    <Compile Include="Endpoints\GlobalAttribute\GlobalAttributeFamilyEndpoint.cs" />
+    <Compile Include="Endpoints\GlobalAttribute\GlobalAttributeGroupEndpoint.cs" />
+    <Compile Include="Endpoints\GlobalSettings\CityEndpoint.cs" />
+    <Compile Include="Endpoints\GlobalSettings\CountryEndpoint.cs" />
+    <Compile Include="Endpoints\GlobalSettings\CurrencyEndpoint.cs" />
+    <Compile Include="Endpoints\GlobalSettings\DefaultGlobalConfigEndpoint.cs" />
+    <Compile Include="Endpoints\GlobalSettings\GeneralSettingEndpoint.cs" />
+    <Compile Include="Endpoints\GlobalSettings\LocaleEndpoint.cs" />
+    <Compile Include="Endpoints\GlobalSettings\StateEndpoint.cs" />
+    <Compile Include="Endpoints\GlobalSettings\WeightUnitEndpoint.cs" />
+    <Compile Include="Endpoints\HelperEndpoint.cs" />
+    <Compile Include="Endpoints\Highlight\HighlightEndpoint.cs" />
+    <Compile Include="Endpoints\Import\ImportEndpoint.cs" />
+    <Compile Include="Endpoints\Inventory\InventoryEndpoint.cs" />
+    <Compile Include="Endpoints\LicenseEndpoint.cs" />
+    <Compile Include="Endpoints\LogMessage\LogMessageEndpoint.cs" />
+    <Compile Include="Endpoints\Maintenance\MaintenanceEndpoint.cs" />
+    <Compile Include="Endpoints\MediaManager\AttributesEndpoints\AttributeFamilyEndpoint.cs" />
+    <Compile Include="Endpoints\MediaManager\AttributesEndpoints\AttributeGroupEndpoint.cs" />
+    <Compile Include="Endpoints\MediaManager\AttributesEndpoints\AttributesEndpoint.cs" />
+    <Compile Include="Endpoints\MediaManager\MediaManagerEndpoint\MediaConfigurationEndpoint.cs" />
+    <Compile Include="Endpoints\MediaManager\MediaManagerEndpoint\MediaManagerEndpoints.cs" />
+    <Compile Include="Endpoints\OMS\OrderEndpoint\OrderEndpoint.cs" />
+    <Compile Include="Endpoints\OMS\QuoteEndpoint\QuoteEndpoint.cs" />
+    <Compile Include="Endpoints\OMS\RMAConfigurationEndpoint\RMAConfigurationEndpoint.cs" />
+    <Compile Include="Endpoints\OMS\RMAConfigurationEndpoint\RMARequestEndpoint.cs" />
+    <Compile Include="Endpoints\OMS\RMAConfigurationEndpoint\RMARequestItemEndpoint.cs" />
+    <Compile Include="Endpoints\OMS\ShoppingCartEndpoint\ShoppingCartEndpoint.cs" />
+    <Compile Include="Endpoints\PIM\AttributesEndpoint\PIMAttributeEndpoint.cs" />
+    <Compile Include="Endpoints\PIM\BrandEndPoints\BrandEndpoint.cs" />
+    <Compile Include="Endpoints\PIM\PIMEndPoints\AddonGroupEndPoint.cs" />
+    <Compile Include="Endpoints\PIM\PIMEndPoints\CatalogEndpoint.cs" />
+    <Compile Include="Endpoints\PIM\AttributesEndpoint\PIMAttributeFamilyEndpoint.cs" />
+    <Compile Include="Endpoints\PIM\PIMEndPoints\CatalogHistoryEndpoint.cs" />
+    <Compile Include="Endpoints\PIM\PIMEndPoints\CategoryEndpoint.cs" />
+    <Compile Include="Endpoints\PIM\PIMEndPoints\CategoryHistoryEndpoint.cs" />
+    <Compile Include="Endpoints\PIM\PIMEndPoints\ProductHistoryEndpoint.cs" />
+    <Compile Include="Endpoints\PIM\PIMEndPoints\ProductReviewStateEndpoint.cs" />
+    <Compile Include="Endpoints\PIM\PIMEndPoints\ProductsEndpoint.cs" />
+    <Compile Include="Endpoints\PIM\AttributesEndpoint\PIMAttributeGroupEndpoints.cs" />
+    <Compile Include="Endpoints\CMS\CSSEndpoint.cs" />
+    <Compile Include="Endpoints\PIM\VendorEndpoint\VendorEndpoint.cs" />
+    <Compile Include="Endpoints\Portal\OrderStateEndpoint.cs" />
+    <Compile Include="Endpoints\Portal\PortalEndpoint.cs" />
+    <Compile Include="Endpoints\Portal\PortalProfileEndpoint.cs" />
+    <Compile Include="Endpoints\Portal\PortalUnitEndpoint.cs" />
+    <Compile Include="Endpoints\ERPConfigurator\ERPConfiguratorEndpoint.cs" />
+    <Compile Include="Endpoints\Portal\SMSEndpoint.cs" />
+    <Compile Include="Endpoints\Portal\TagManagerEndpoint.cs" />
+    <Compile Include="Endpoints\ProductFeed\ProductFeedEndpoint.cs" />
+    <Compile Include="Endpoints\ProviderEngine\PromotionTypeEndpoint.cs" />
+    <Compile Include="Endpoints\ProviderEngine\ShippingTypeEndpoint.cs" />
+    <Compile Include="Endpoints\Portal\StoreLocatorEndpoint.cs" />
+    <Compile Include="Endpoints\Portal\SMTPEndpoint.cs" />
+    <Compile Include="Endpoints\Promotion\PromotionEndpoint.cs" />
+    <Compile Include="Endpoints\PublishHistory\LogMessageEndpoint.cs" />
+    <Compile Include="Endpoints\TradeCentric\TradeCentricEndpoint.cs" />
+    <Compile Include="Endpoints\Report\ReportEndpoint.cs" />
+    <Compile Include="Endpoints\RMA\RMAReturnEndpoint.cs" />
+    <Compile Include="Endpoints\SavedCart\SavedCartEndpoint.cs" />
+    <Compile Include="Endpoints\SaveForLater\SaveForLaterEndpoint.cs" />
+    <Compile Include="Endpoints\SearchEndpoint.cs" />
+    <Compile Include="Endpoints\SearchProfile\SearchBoostAndBuryRuleEndpoint.cs" />
+    <Compile Include="Endpoints\SearchProfile\SearchProfileEndpoint.cs" />
+    <Compile Include="Endpoints\SearchReport\SearchReportEndpoint.cs" />
+    <Compile Include="Endpoints\Sitemap\SiteMapEndpoint.cs" />
+    <Compile Include="Endpoints\Taxes\TaxClassEndpoint.cs" />
+    <Compile Include="Endpoints\ProviderEngine\TaxRuleTypeEndpoint.cs" />
+    <Compile Include="Endpoints\Price\PriceEndpoint.cs" />
+    <Compile Include="Endpoints\ProfileEndPoint.cs" />
+    <Compile Include="Endpoints\RolesAndPermissions\MenuEndpoint.cs" />
+    <Compile Include="Endpoints\RolesAndPermissions\RoleEndpoint.cs" />
+    <Compile Include="Endpoints\ServerValidation\ServerValidationEndpoint.cs" />
+    <Compile Include="Endpoints\Account\AccountsEndpoint.cs" />
+    <Compile Include="Endpoints\Shared\BaseEndpoint.cs" />
+    <Compile Include="Endpoints\Shared\NavigationEndpoint.cs" />
+    <Compile Include="Endpoints\Payment\PaymentEndpoint.cs" />
+    <Compile Include="Endpoints\TokenEndpoint.cs" />
+    <Compile Include="Endpoints\Typeahead\TypeaheadEndpoint.cs" />
+    <Compile Include="Endpoints\User\UsersEndpoint.cs" />
+    <Compile Include="Endpoints\Shipping\ShippingEndpoint.cs" />
+    <Compile Include="Endpoints\Warehouse\WarehouseEndpoint.cs" />
+    <Compile Include="Endpoints\WebGrid\ApplicationSettingsEndpoint.cs" />
+    <Compile Include="Endpoints\WebStore\WebStoreUserEndpoint.cs" />
+    <Compile Include="Endpoints\WebStore\WebStoreCaseRequestEndpoint.cs" />
+    <Compile Include="Endpoints\WebStore\WebStoreCategoryEndpoint.cs" />
+    <Compile Include="Endpoints\WebStore\WebStoreLocatorEndpoint.cs" />
+    <Compile Include="Endpoints\WebStore\WebStoreMessageEndpoint.cs" />
+    <Compile Include="Endpoints\WebStore\WebStorePortalEndpoint.cs" />
+    <Compile Include="Endpoints\WebStore\WebStoreProductEndpoints.cs" />
+    <Compile Include="Endpoints\WebStore\WebStoreWidgetEndpoint.cs" />
+    <Compile Include="Endpoints\WebStore\WishListEndPoint.cs" />
+    <Compile Include="Expands\ExpandCollection.cs" />
+    <Compile Include="Expands\ExpandKeys.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sorts\SortCollection.cs" />
+    <Compile Include="Sorts\SortDirections.cs" />
+    <Compile Include="Sorts\SortKeys.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\ZNode.Libraries.ECommerce.Utilities\Znode.Libraries.ECommerce.Utilities.csproj">
+      <Project>{f3703cce-eec4-46b0-a54f-83857d4014df}</Project>
+      <Name>Znode.Libraries.ECommerce.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Engine.Api.Models\Znode.Engine.Api.Models.csproj">
+      <Project>{05a4b1d5-82d1-4e47-afd9-4b01ac5917bd}</Project>
+      <Name>Znode.Engine.Api.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Znode.Engine.Exceptions\Znode.Engine.Exceptions.csproj">
+      <Project>{5dd35fd8-feeb-46b2-87c5-97f05e80aa6b}</Project>
+      <Name>Znode.Engine.Exceptions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

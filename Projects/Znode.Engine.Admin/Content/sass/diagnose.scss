@@ -1,0 +1,45 @@
+﻿.diagnose-page {
+    .pulse {
+        display: block;
+        width: 25px;
+        height: 25px;
+        border-radius: 100%;
+        cursor: pointer;
+        box-shadow: 0 0 0 rgb(191, 63, 63);
+        animation: pulse 2s infinite;
+    }
+
+    @-webkit-keyframes pulse {
+        0% {
+            -webkit-box-shadow: 0 0 0 0 rgb(191, 63, 63);
+            box-shadow: 0 0 0 0 rgb(191, 63, 63);
+        }
+
+        70% {
+            -webkit-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+            box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+        }
+
+        100% {
+            -webkit-box-shadow: 0 0 0 0 rgb(82, 19, 19);
+            box-shadow: 0 0 0 0 rgb(82, 19, 19);
+        }
+    }
+
+    @keyframes pulse {
+        0% {
+            -moz-box-shadow: 0 0 0 0 rgb(191, 63, 63);
+            box-shadow: 0 0 0 0 rgb(191, 63, 63);
+        }
+
+        70% {
+            -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+            box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+        }
+
+        100% {
+            -moz-box-shadow: 0 0 0 0 rgb(82, 19, 19);
+            box-shadow: 0 0 0 0 rgb(82, 19, 19);
+        }
+    }
+}

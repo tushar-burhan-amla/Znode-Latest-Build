@@ -1,0 +1,54 @@
+﻿@using Znode.Engine.WebStore.ViewModels
+@model ImportViewModel
+@using Znode.Engine.WebStore.Agents;
+<div id="layout-account-quotehistory" class="main-wrapper">
+    <div class="row">
+        <div class="container-fluid profile-dashboard">
+            <div class="row">
+                <div class="container">
+                    @Html.Partial("_AccountMenuDashboard")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row user-account">
+            <div class="col-12 account-dashboard p-0">
+                <div class="col-12 col-md-9 order-history right-container">
+                    <div class="col-12 p-0">
+                        <h1 class="page-title">@WebStore_Resources.LabelImportShippingAddress</h1>
+                    </div>
+                    <div id="divimport-shipping-address" class="col-12 p-0">
+                        <div class="col-12 col-md-8 p-0 shipping-address-import">
+                            @using (Html.BeginForm("ImportShippingAddress", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                                <div class="form-group mt-3" id="divImportShippingAddressUpload">
+
+                                    <div class="import-control-label">
+                                        @Html.LabelFor(model => model.ImportData, new { @id = "lblSelectFile", @class = "required" })
+                                        <span class="sub">@WebStore_Resources.SelectCSVFileInstructionText</span>
+                                    </div>
+
+                                    <div class="import-input">
+                                        @Html.Partial("_ImportData", Model)
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                        <div class="col-12 col-md-4 p-0 shipping-download-template text-right">
+                            <form method="post" action="~/User/DownloadShippingAddressTemplate">
+                                <button id="downloadImportTemplate" type="submit" class="btn btn-primary mt-3">@WebStore_Resources.LabelDownloadTemplate</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <div class="col-12">
+                        <p class="key-PromoSpot">@Html.RenderMessage("PromoSpot")</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
