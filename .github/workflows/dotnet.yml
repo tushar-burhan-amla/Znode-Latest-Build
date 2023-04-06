@@ -1,0 +1,13 @@
+name: learn-github-actions
+on: [push]
+jobs:
+  check-bats-version:
+    runs-on: self-hosted
+    steps:
+      - run: d:
+      - run: cd Znode-Baseline-Build
+      - run: git pull
+      - run: cd D:\Znode-Latest-Build
+      - run: git pull
+      - run: cd D:\Ndepend
+      - run: NDepend.Console.exe "D:\Znode-Latest-Build\Projects\Znode.Multifront.ndproj"
