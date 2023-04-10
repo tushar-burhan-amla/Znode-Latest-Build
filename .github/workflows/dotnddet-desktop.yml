@@ -1,0 +1,11 @@
+name: NDepend-DailyBuildAnalyis-Results
+on:
+  schedule:
+    - cron: "*/2 * * * *"
+jobs:
+  cron:
+    runs-on: self-hosted
+    steps:
+      - name: Run a PowerShell script
+        shell: pwsh
+        run: D:\NDependDailyBuild.ps1
