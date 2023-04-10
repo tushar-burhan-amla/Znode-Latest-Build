@@ -1,9 +1,7 @@
 name: NDepend-DailyBuildAnalyis-Results
-on:
-  schedule:
-    - cron: "*/2 * * * *"
+on: [push]
 jobs:
-  cron:
+  check-bats-version:
     runs-on: self-hosted
     steps:
       - name: Run a PowerShell script
